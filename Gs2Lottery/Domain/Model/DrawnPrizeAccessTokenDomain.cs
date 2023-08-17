@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -57,33 +55,30 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Lottery.Domain.Model
 {
 
-    public partial class ProbabilityAccessTokenDomain {
+    public partial class DrawnPrizeAccessTokenDomain {
         private readonly CacheDatabase _cache;
         private readonly JobQueueDomain _jobQueueDomain;
         private readonly StampSheetConfiguration _stampSheetConfiguration;
         private readonly Gs2RestSession _session;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
-        private readonly string _lotteryName;
-        private readonly string _prizeId;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
+        private readonly int _index;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
-        public string LotteryName => _lotteryName;
-        public string PrizeId => _prizeId;
-        public string UserId => _accessToken?.UserId;
+        public string UserId => _accessToken.UserId;
+        public int Index => _index;
 
-        public ProbabilityAccessTokenDomain(
+        public DrawnPrizeAccessTokenDomain(
             CacheDatabase cache,
             JobQueueDomain jobQueueDomain,
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
             AccessToken accessToken,
-            string lotteryName,
-            string prizeId
+            int index
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -94,20 +89,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._lotteryName = lotteryName;
-            this._prizeId = prizeId;
-            this._parentKey = CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._accessToken?.UserId?.ToString(),
-                this._lotteryName?.ToString(),
-                "Probability"
+            this._index = index;
+            this._parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                this.NamespaceName,
+                "DrawnPrize"
             );
         }
 
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string lotteryName,
+            string prizeId,
             string childType
         )
         {
@@ -116,7 +108,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 "lottery",
                 namespaceName ?? "null",
                 userId ?? "null",
-                lotteryName ?? "null",
+                prizeId ?? "null",
                 childType
             );
         }
@@ -133,21 +125,29 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.Probability> Model() {
+        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize> Model() {
             #else
-        public IFuture<Gs2.Gs2Lottery.Model.Probability> Model() {
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> Model() {
             #endif
         #else
-        public async Task<Gs2.Gs2Lottery.Model.Probability> Model() {
+        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize> Model() {
         #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.Probability> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> self)
             {
         #endif
-            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.Probability>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._cache.GetLockObject<Gs2.Gs2Lottery.Model.DrawnPrize>(
+                       _parentKey,
+                       Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
+                            this.Index
+                        )).LockAsync())
+            {
+        # endif
+            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                    this._prizeId
+                Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
+                    this.Index
                 )
             );
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -156,9 +156,12 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #else
             return value;
         #endif
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
+        #endif
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.Probability>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize>(Impl);
         #endif
         }
 

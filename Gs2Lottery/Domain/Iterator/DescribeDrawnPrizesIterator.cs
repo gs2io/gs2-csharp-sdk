@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -63,38 +61,32 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeProbabilitiesIterator : Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> {
+    public class DescribeDrawnPrizesIterator : Gs2Iterator<Gs2.Gs2Lottery.Model.DrawnPrize> {
     #else
-    public class DescribeProbabilitiesIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> {
+    public class DescribeDrawnPrizesIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.DrawnPrize> {
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
-        private readonly string _lotteryName;
-        private readonly AccessToken _accessToken;
         public string NamespaceName => _namespaceName;
-        public string LotteryName => _lotteryName;
-        public string UserId => _accessToken?.UserId;
+        private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Lottery.Model.Probability[] _result;
+        private Gs2.Gs2Lottery.Model.DrawnPrize[] _result;
 
         int? fetchSize;
 
-        public DescribeProbabilitiesIterator(
+        public DescribeDrawnPrizesIterator(
             CacheDatabase cache,
             Gs2LotteryRestClient client,
-            string namespaceName,
-            string lotteryName,
-            AccessToken accessToken
+            string namespaceName
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
-            this._lotteryName = lotteryName;
-            this._accessToken = accessToken;
+            this._pageToken = null;
             this._last = false;
-            this._result = new Gs2.Gs2Lottery.Model.Probability[]{};
+            this._result = new Gs2.Gs2Lottery.Model.DrawnPrize[]{};
 
             this.fetchSize = null;
         }
@@ -110,60 +102,28 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Lottery.Domain.Model.ProbabilityAccessTokenDomain.CreateCacheParentKey(
+            var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
-                this.UserId,
-                this.LotteryName,
-                "Probability"
+                "DrawnPrize"
             );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Lottery.Model.Probability>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Lottery.Model.DrawnPrize>
             (
                     parentKey,
                     out var list
             )) {
                 this._result = list
                     .ToArray();
+                this._pageToken = null;
                 this._last = true;
             } else {
-
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeProbabilitiesFuture(
-                #else
-                var r = await this._client.DescribeProbabilitiesAsync(
-                #endif
-                    new Gs2.Gs2Lottery.Request.DescribeProbabilitiesRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithLotteryName(this._lotteryName)
-                        .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
-                );
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return future;
-                if (future.Error != null)
-                {
-                    Error = future.Error;
-                    yield break;
-                }
-                var r = future.Result;
-                #endif
-                this._result = r.Items;
+                this._result = new Gs2.Gs2Lottery.Model.DrawnPrize[]{}
+                    .ToArray();
+                this._pageToken = null;
                 this._last = true;
-                foreach (var item in this._result) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                                item.Prize.PrizeId
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-
-                if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Lottery.Model.Probability>(
-                            parentKey
-                    );
-                }
             }
+#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            yield return null;
+#endif
         }
 
         private bool _hasNext()
@@ -182,7 +142,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Lottery.Model.Probability>> callback
+            Action<AsyncResult<Gs2.Gs2Lottery.Model.DrawnPrize>> callback
         )
         {
             Gs2Exception error = null;
@@ -196,7 +156,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Lottery.Model.Probability ret = this._result[0];
+                        Gs2.Gs2Lottery.Model.DrawnPrize ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -209,7 +169,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     }
                 }
             );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Lottery.Model.Probability>(
+            callback.Invoke(new AsyncResult<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 Current,
                 error
             ));
@@ -218,22 +178,22 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.DrawnPrize> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
         protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Lottery.Model.Probability>> callback
+            Action<AsyncResult<Gs2.Gs2Lottery.Model.DrawnPrize>> callback
             #endif
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Lottery.Model.Probability> GetAsyncEnumerator(
+        public async IAsyncEnumerator<Gs2.Gs2Lottery.Model.DrawnPrize> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         #endif
         )
         {
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Lottery.Model.Probability>(async (writer, token) =>
+            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Lottery.Model.DrawnPrize>(async (writer, token) =>
             {
             #endif
         #endif
@@ -250,7 +210,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     Current = null;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Lottery.Model.Probability>(
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Lottery.Model.DrawnPrize>(
                         Current,
                         Error
                     ));
@@ -259,7 +219,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Lottery.Model.Probability ret = this._result[0];
+                Gs2.Gs2Lottery.Model.DrawnPrize ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -273,7 +233,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 await writer.YieldAsync(ret);
             #else
                 Current = ret;
-                callback.Invoke(new AsyncResult<Gs2.Gs2Lottery.Model.Probability>(
+                callback.Invoke(new AsyncResult<Gs2.Gs2Lottery.Model.DrawnPrize>(
                     Current,
                     Error
                 ));
