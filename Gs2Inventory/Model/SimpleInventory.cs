@@ -34,8 +34,10 @@ namespace Gs2.Gs2Inventory.Model
         public string InventoryId { set; get; }
         public string InventoryName { set; get; }
         public string UserId { set; get; }
+        public Gs2.Gs2Inventory.Model.SimpleItem[] SimpleItems { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public SimpleInventory WithInventoryId(string inventoryId) {
             this.InventoryId = inventoryId;
             return this;
@@ -48,12 +50,20 @@ namespace Gs2.Gs2Inventory.Model
             this.UserId = userId;
             return this;
         }
+        public SimpleInventory WithSimpleItems(Gs2.Gs2Inventory.Model.SimpleItem[] simpleItems) {
+            this.SimpleItems = simpleItems;
+            return this;
+        }
         public SimpleInventory WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
         public SimpleInventory WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        public SimpleInventory WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -154,8 +164,12 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInventoryId(!data.Keys.Contains("inventoryId") || data["inventoryId"] == null ? null : data["inventoryId"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithSimpleItems(!data.Keys.Contains("simpleItems") || data["simpleItems"] == null ? new Gs2.Gs2Inventory.Model.SimpleItem[]{} : data["simpleItems"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inventory.Model.SimpleItem.FromJson(v);
+                }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -164,8 +178,15 @@ namespace Gs2.Gs2Inventory.Model
                 ["inventoryId"] = InventoryId,
                 ["inventoryName"] = InventoryName,
                 ["userId"] = UserId,
+                ["simpleItems"] = SimpleItems == null ? null : new JsonData(
+                        SimpleItems.Select(v => {
+                            //noinspection Convert2MethodRef
+                            return v.ToJson();
+                        }).ToArray()
+                    ),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -184,6 +205,17 @@ namespace Gs2.Gs2Inventory.Model
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (SimpleItems != null) {
+                writer.WritePropertyName("simpleItems");
+                writer.WriteArrayStart();
+                foreach (var simpleItem in SimpleItems)
+                {
+                    if (simpleItem != null) {
+                        simpleItem.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
@@ -191,6 +223,10 @@ namespace Gs2.Gs2Inventory.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -223,6 +259,18 @@ namespace Gs2.Gs2Inventory.Model
             {
                 diff += UserId.CompareTo(other.UserId);
             }
+            if (SimpleItems == null && SimpleItems == other.SimpleItems)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SimpleItems.Length - other.SimpleItems.Length;
+                for (var i = 0; i < SimpleItems.Length; i++)
+                {
+                    diff += SimpleItems[i].CompareTo(other.SimpleItems[i]);
+                }
+            }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
                 // null and null
@@ -238,6 +286,14 @@ namespace Gs2.Gs2Inventory.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

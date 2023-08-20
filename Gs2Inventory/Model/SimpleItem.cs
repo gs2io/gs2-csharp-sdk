@@ -35,6 +35,7 @@ namespace Gs2.Gs2Inventory.Model
         public string UserId { set; get; }
         public string ItemName { set; get; }
         public long? Count { set; get; }
+        public long? Revision { set; get; }
         public SimpleItem WithItemId(string itemId) {
             this.ItemId = itemId;
             return this;
@@ -49,6 +50,10 @@ namespace Gs2.Gs2Inventory.Model
         }
         public SimpleItem WithCount(long? count) {
             this.Count = count;
+            return this;
+        }
+        public SimpleItem WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -166,7 +171,8 @@ namespace Gs2.Gs2Inventory.Model
                 .WithItemId(!data.Keys.Contains("itemId") || data["itemId"] == null ? null : data["itemId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -176,6 +182,7 @@ namespace Gs2.Gs2Inventory.Model
                 ["userId"] = UserId,
                 ["itemName"] = ItemName,
                 ["count"] = Count,
+                ["revision"] = Revision,
             };
         }
 
@@ -197,6 +204,10 @@ namespace Gs2.Gs2Inventory.Model
             if (Count != null) {
                 writer.WritePropertyName("count");
                 writer.Write(long.Parse(Count.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -236,6 +247,14 @@ namespace Gs2.Gs2Inventory.Model
             else
             {
                 diff += (int)(Count - other.Count);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

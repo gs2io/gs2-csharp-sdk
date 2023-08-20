@@ -2645,6 +2645,1043 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class CreateBigInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.CreateBigInventoryModelMasterRequest, Result.CreateBigInventoryModelMasterResult>
+        {
+	        public CreateBigInventoryModelMasterTask(IGs2Session session, Request.CreateBigInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateBigInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigInventoryModelMaster",
+                    "createBigInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateBigInventoryModelMaster(
+                Request.CreateBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new CreateBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterFuture(
+                Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+			return new CreateBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
+            Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateBigInventoryModelMasterTask CreateBigInventoryModelMasterAsync(
+                Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+			return new CreateBigInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
+            Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new CreateBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.GetBigInventoryModelMasterRequest, Result.GetBigInventoryModelMasterResult>
+        {
+	        public GetBigInventoryModelMasterTask(IGs2Session session, Request.GetBigInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetBigInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigInventoryModelMaster",
+                    "getBigInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigInventoryModelMaster(
+                Request.GetBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new GetBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterFuture(
+                Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+			return new GetBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
+            Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new GetBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBigInventoryModelMasterTask GetBigInventoryModelMasterAsync(
+                Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+			return new GetBigInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
+            Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new GetBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateBigInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateBigInventoryModelMasterRequest, Result.UpdateBigInventoryModelMasterResult>
+        {
+	        public UpdateBigInventoryModelMasterTask(IGs2Session session, Request.UpdateBigInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateBigInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigInventoryModelMaster",
+                    "updateBigInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateBigInventoryModelMaster(
+                Request.UpdateBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterFuture(
+                Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
+            Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateBigInventoryModelMasterTask UpdateBigInventoryModelMasterAsync(
+                Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateBigInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
+            Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new UpdateBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteBigInventoryModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteBigInventoryModelMasterRequest, Result.DeleteBigInventoryModelMasterResult>
+        {
+	        public DeleteBigInventoryModelMasterTask(IGs2Session session, Request.DeleteBigInventoryModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteBigInventoryModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigInventoryModelMaster",
+                    "deleteBigInventoryModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteBigInventoryModelMaster(
+                Request.DeleteBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterFuture(
+                Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteBigInventoryModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
+            Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteBigInventoryModelMasterTask DeleteBigInventoryModelMasterAsync(
+                Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteBigInventoryModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
+            Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+		    var task = new DeleteBigInventoryModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateBigItemModelMasterTask : Gs2WebSocketSessionTask<Request.CreateBigItemModelMasterRequest, Result.CreateBigItemModelMasterResult>
+        {
+	        public CreateBigItemModelMasterTask(IGs2Session session, Request.CreateBigItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateBigItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItemModelMaster",
+                    "createBigItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateBigItemModelMaster(
+                Request.CreateBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new CreateBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterFuture(
+                Request.CreateBigItemModelMasterRequest request
+        )
+		{
+			return new CreateBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
+            Request.CreateBigItemModelMasterRequest request
+        )
+		{
+		    var task = new CreateBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateBigItemModelMasterTask CreateBigItemModelMasterAsync(
+                Request.CreateBigItemModelMasterRequest request
+        )
+		{
+			return new CreateBigItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
+            Request.CreateBigItemModelMasterRequest request
+        )
+		{
+		    var task = new CreateBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemModelMasterTask : Gs2WebSocketSessionTask<Request.GetBigItemModelMasterRequest, Result.GetBigItemModelMasterResult>
+        {
+	        public GetBigItemModelMasterTask(IGs2Session session, Request.GetBigItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetBigItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItemModelMaster",
+                    "getBigItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItemModelMaster(
+                Request.GetBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new GetBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemModelMasterResult> GetBigItemModelMasterFuture(
+                Request.GetBigItemModelMasterRequest request
+        )
+		{
+			return new GetBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
+            Request.GetBigItemModelMasterRequest request
+        )
+		{
+		    var task = new GetBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBigItemModelMasterTask GetBigItemModelMasterAsync(
+                Request.GetBigItemModelMasterRequest request
+        )
+		{
+			return new GetBigItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
+            Request.GetBigItemModelMasterRequest request
+        )
+		{
+		    var task = new GetBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateBigItemModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateBigItemModelMasterRequest, Result.UpdateBigItemModelMasterResult>
+        {
+	        public UpdateBigItemModelMasterTask(IGs2Session session, Request.UpdateBigItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateBigItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItemModelMaster",
+                    "updateBigItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateBigItemModelMaster(
+                Request.UpdateBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterFuture(
+                Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+			return new UpdateBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
+            Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+		    var task = new UpdateBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateBigItemModelMasterTask UpdateBigItemModelMasterAsync(
+                Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+			return new UpdateBigItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
+            Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+		    var task = new UpdateBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteBigItemModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteBigItemModelMasterRequest, Result.DeleteBigItemModelMasterResult>
+        {
+	        public DeleteBigItemModelMasterTask(IGs2Session session, Request.DeleteBigItemModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteBigItemModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItemModelMaster",
+                    "deleteBigItemModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteBigItemModelMaster(
+                Request.DeleteBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterFuture(
+                Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+			return new DeleteBigItemModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
+            Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+		    var task = new DeleteBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteBigItemModelMasterTask DeleteBigItemModelMasterAsync(
+                Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+			return new DeleteBigItemModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
+            Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+		    var task = new DeleteBigItemModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemModelTask : Gs2WebSocketSessionTask<Request.GetBigItemModelRequest, Result.GetBigItemModelResult>
+        {
+	        public GetBigItemModelTask(IGs2Session session, Request.GetBigItemModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetBigItemModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItemModel",
+                    "getBigItemModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItemModel(
+                Request.GetBigItemModelRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemModelResult>> callback
+        )
+		{
+			var task = new GetBigItemModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemModelResult> GetBigItemModelFuture(
+                Request.GetBigItemModelRequest request
+        )
+		{
+			return new GetBigItemModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemModelResult> GetBigItemModelAsync(
+            Request.GetBigItemModelRequest request
+        )
+		{
+		    var task = new GetBigItemModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBigItemModelTask GetBigItemModelAsync(
+                Request.GetBigItemModelRequest request
+        )
+		{
+			return new GetBigItemModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemModelResult> GetBigItemModelAsync(
+            Request.GetBigItemModelRequest request
+        )
+		{
+		    var task = new GetBigItemModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetInventoryTask : Gs2WebSocketSessionTask<Request.GetInventoryRequest, Result.GetInventoryResult>
         {
 	        public GetInventoryTask(IGs2Session session, Request.GetInventoryRequest request) : base(session, request)
@@ -3807,6 +4844,903 @@ namespace Gs2.Gs2Inventory
         )
 		{
 		    var task = new DeleteSimpleItemsByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemTask : Gs2WebSocketSessionTask<Request.GetBigItemRequest, Result.GetBigItemResult>
+        {
+	        public GetBigItemTask(IGs2Session session, Request.GetBigItemRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetBigItemRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "getBigItem",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItem(
+                Request.GetBigItemRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemResult>> callback
+        )
+		{
+			var task = new GetBigItemTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemResult> GetBigItemFuture(
+                Request.GetBigItemRequest request
+        )
+		{
+			return new GetBigItemTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemResult> GetBigItemAsync(
+            Request.GetBigItemRequest request
+        )
+		{
+		    var task = new GetBigItemTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBigItemTask GetBigItemAsync(
+                Request.GetBigItemRequest request
+        )
+		{
+			return new GetBigItemTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemResult> GetBigItemAsync(
+            Request.GetBigItemRequest request
+        )
+		{
+		    var task = new GetBigItemTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemByUserIdTask : Gs2WebSocketSessionTask<Request.GetBigItemByUserIdRequest, Result.GetBigItemByUserIdResult>
+        {
+	        public GetBigItemByUserIdTask(IGs2Session session, Request.GetBigItemByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetBigItemByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "getBigItemByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItemByUserId(
+                Request.GetBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new GetBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemByUserIdResult> GetBigItemByUserIdFuture(
+                Request.GetBigItemByUserIdRequest request
+        )
+		{
+			return new GetBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
+            Request.GetBigItemByUserIdRequest request
+        )
+		{
+		    var task = new GetBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetBigItemByUserIdTask GetBigItemByUserIdAsync(
+                Request.GetBigItemByUserIdRequest request
+        )
+		{
+			return new GetBigItemByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
+            Request.GetBigItemByUserIdRequest request
+        )
+		{
+		    var task = new GetBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireBigItemByUserIdTask : Gs2WebSocketSessionTask<Request.AcquireBigItemByUserIdRequest, Result.AcquireBigItemByUserIdResult>
+        {
+	        public AcquireBigItemByUserIdTask(IGs2Session session, Request.AcquireBigItemByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AcquireBigItemByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.AcquireCount != null)
+                {
+                    jsonWriter.WritePropertyName("acquireCount");
+                    jsonWriter.Write(request.AcquireCount.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "acquireBigItemByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireBigItemByUserId(
+                Request.AcquireBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AcquireBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new AcquireBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdFuture(
+                Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+			return new AcquireBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
+            Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+		    var task = new AcquireBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AcquireBigItemByUserIdTask AcquireBigItemByUserIdAsync(
+                Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+			return new AcquireBigItemByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
+            Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+		    var task = new AcquireBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeBigItemTask : Gs2WebSocketSessionTask<Request.ConsumeBigItemRequest, Result.ConsumeBigItemResult>
+        {
+	        public ConsumeBigItemTask(IGs2Session session, Request.ConsumeBigItemRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ConsumeBigItemRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ConsumeCount != null)
+                {
+                    jsonWriter.WritePropertyName("consumeCount");
+                    jsonWriter.Write(request.ConsumeCount.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "consumeBigItem",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
+                    base.OnError(new Exception.InsufficientException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeBigItem(
+                Request.ConsumeBigItemRequest request,
+                UnityAction<AsyncResult<Result.ConsumeBigItemResult>> callback
+        )
+		{
+			var task = new ConsumeBigItemTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeBigItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeBigItemResult> ConsumeBigItemFuture(
+                Request.ConsumeBigItemRequest request
+        )
+		{
+			return new ConsumeBigItemTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
+            Request.ConsumeBigItemRequest request
+        )
+		{
+		    var task = new ConsumeBigItemTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ConsumeBigItemTask ConsumeBigItemAsync(
+                Request.ConsumeBigItemRequest request
+        )
+		{
+			return new ConsumeBigItemTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
+            Request.ConsumeBigItemRequest request
+        )
+		{
+		    var task = new ConsumeBigItemTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeBigItemByUserIdTask : Gs2WebSocketSessionTask<Request.ConsumeBigItemByUserIdRequest, Result.ConsumeBigItemByUserIdResult>
+        {
+	        public ConsumeBigItemByUserIdTask(IGs2Session session, Request.ConsumeBigItemByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ConsumeBigItemByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ConsumeCount != null)
+                {
+                    jsonWriter.WritePropertyName("consumeCount");
+                    jsonWriter.Write(request.ConsumeCount.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "consumeBigItemByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
+                    base.OnError(new Exception.InsufficientException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeBigItemByUserId(
+                Request.ConsumeBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ConsumeBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new ConsumeBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdFuture(
+                Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+			return new ConsumeBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
+            Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+		    var task = new ConsumeBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ConsumeBigItemByUserIdTask ConsumeBigItemByUserIdAsync(
+                Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+			return new ConsumeBigItemByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
+            Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+		    var task = new ConsumeBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteBigItemByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteBigItemByUserIdRequest, Result.DeleteBigItemByUserIdResult>
+        {
+	        public DeleteBigItemByUserIdTask(IGs2Session session, Request.DeleteBigItemByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteBigItemByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "deleteBigItemByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteBigItemByUserId(
+                Request.DeleteBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdFuture(
+                Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+			return new DeleteBigItemByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
+            Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+		    var task = new DeleteBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteBigItemByUserIdTask DeleteBigItemByUserIdAsync(
+                Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+			return new DeleteBigItemByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
+            Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+		    var task = new DeleteBigItemByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireBigItemByStampSheetTask : Gs2WebSocketSessionTask<Request.AcquireBigItemByStampSheetRequest, Result.AcquireBigItemByStampSheetResult>
+        {
+	        public AcquireBigItemByStampSheetTask(IGs2Session session, Request.AcquireBigItemByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AcquireBigItemByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "bigItem",
+                    "acquireBigItemByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireBigItemByStampSheet(
+                Request.AcquireBigItemByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.AcquireBigItemByStampSheetResult>> callback
+        )
+		{
+			var task = new AcquireBigItemByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireBigItemByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetFuture(
+                Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+			return new AcquireBigItemByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
+            Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+		    var task = new AcquireBigItemByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AcquireBigItemByStampSheetTask AcquireBigItemByStampSheetAsync(
+                Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+			return new AcquireBigItemByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
+            Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+		    var task = new AcquireBigItemByStampSheetTask(
 		        Gs2WebSocketSession,
 		        request
             );

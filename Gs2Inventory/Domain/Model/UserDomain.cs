@@ -157,6 +157,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
+        public Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain BigInventory(
+            string inventoryName
+        ) {
+            return new Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain(
+                this._cache,
+                this._jobQueueDomain,
+                this._stampSheetConfiguration,
+                this._session,
+                this.NamespaceName,
+                this.UserId,
+                inventoryName
+            );
+        }
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

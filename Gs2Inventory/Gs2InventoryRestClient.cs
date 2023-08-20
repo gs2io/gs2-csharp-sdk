@@ -3999,6 +3999,1591 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class DescribeBigInventoryModelMastersTask : Gs2RestSessionTask<DescribeBigInventoryModelMastersRequest, DescribeBigInventoryModelMastersResult>
+        {
+            public DescribeBigInventoryModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBigInventoryModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBigInventoryModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBigInventoryModelMasters(
+                Request.DescribeBigInventoryModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeBigInventoryModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeBigInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBigInventoryModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersFuture(
+                Request.DescribeBigInventoryModelMastersRequest request
+        )
+		{
+			return new DescribeBigInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersAsync(
+                Request.DescribeBigInventoryModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBigInventoryModelMastersResult> result = null;
+			await DescribeBigInventoryModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBigInventoryModelMastersTask DescribeBigInventoryModelMastersAsync(
+                Request.DescribeBigInventoryModelMastersRequest request
+        )
+		{
+			return new DescribeBigInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersAsync(
+                Request.DescribeBigInventoryModelMastersRequest request
+        )
+		{
+			var task = new DescribeBigInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateBigInventoryModelMasterTask : Gs2RestSessionTask<CreateBigInventoryModelMasterRequest, CreateBigInventoryModelMasterResult>
+        {
+            public CreateBigInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateBigInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateBigInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateBigInventoryModelMaster(
+                Request.CreateBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new CreateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterFuture(
+                Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+			return new CreateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
+                Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateBigInventoryModelMasterResult> result = null;
+			await CreateBigInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateBigInventoryModelMasterTask CreateBigInventoryModelMasterAsync(
+                Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+			return new CreateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
+                Request.CreateBigInventoryModelMasterRequest request
+        )
+		{
+			var task = new CreateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigInventoryModelMasterTask : Gs2RestSessionTask<GetBigInventoryModelMasterRequest, GetBigInventoryModelMasterResult>
+        {
+            public GetBigInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetBigInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBigInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigInventoryModelMaster(
+                Request.GetBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new GetBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterFuture(
+                Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+			return new GetBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
+                Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetBigInventoryModelMasterResult> result = null;
+			await GetBigInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBigInventoryModelMasterTask GetBigInventoryModelMasterAsync(
+                Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+			return new GetBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
+                Request.GetBigInventoryModelMasterRequest request
+        )
+		{
+			var task = new GetBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateBigInventoryModelMasterTask : Gs2RestSessionTask<UpdateBigInventoryModelMasterRequest, UpdateBigInventoryModelMasterResult>
+        {
+            public UpdateBigInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateBigInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateBigInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateBigInventoryModelMaster(
+                Request.UpdateBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterFuture(
+                Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
+                Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateBigInventoryModelMasterResult> result = null;
+			await UpdateBigInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateBigInventoryModelMasterTask UpdateBigInventoryModelMasterAsync(
+                Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+			return new UpdateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
+                Request.UpdateBigInventoryModelMasterRequest request
+        )
+		{
+			var task = new UpdateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteBigInventoryModelMasterTask : Gs2RestSessionTask<DeleteBigInventoryModelMasterRequest, DeleteBigInventoryModelMasterResult>
+        {
+            public DeleteBigInventoryModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteBigInventoryModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteBigInventoryModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteBigInventoryModelMaster(
+                Request.DeleteBigInventoryModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteBigInventoryModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBigInventoryModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterFuture(
+                Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
+                Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteBigInventoryModelMasterResult> result = null;
+			await DeleteBigInventoryModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteBigInventoryModelMasterTask DeleteBigInventoryModelMasterAsync(
+                Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+			return new DeleteBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
+                Request.DeleteBigInventoryModelMasterRequest request
+        )
+		{
+			var task = new DeleteBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBigInventoryModelsTask : Gs2RestSessionTask<DescribeBigInventoryModelsRequest, DescribeBigInventoryModelsResult>
+        {
+            public DescribeBigInventoryModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBigInventoryModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBigInventoryModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/big/inventory";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBigInventoryModels(
+                Request.DescribeBigInventoryModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeBigInventoryModelsResult>> callback
+        )
+		{
+			var task = new DescribeBigInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBigInventoryModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsFuture(
+                Request.DescribeBigInventoryModelsRequest request
+        )
+		{
+			return new DescribeBigInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsAsync(
+                Request.DescribeBigInventoryModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBigInventoryModelsResult> result = null;
+			await DescribeBigInventoryModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBigInventoryModelsTask DescribeBigInventoryModelsAsync(
+                Request.DescribeBigInventoryModelsRequest request
+        )
+		{
+			return new DescribeBigInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsAsync(
+                Request.DescribeBigInventoryModelsRequest request
+        )
+		{
+			var task = new DescribeBigInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigInventoryModelTask : Gs2RestSessionTask<GetBigInventoryModelRequest, GetBigInventoryModelResult>
+        {
+            public GetBigInventoryModelTask(IGs2Session session, RestSessionRequestFactory factory, GetBigInventoryModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBigInventoryModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/big/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigInventoryModel(
+                Request.GetBigInventoryModelRequest request,
+                UnityAction<AsyncResult<Result.GetBigInventoryModelResult>> callback
+        )
+		{
+			var task = new GetBigInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigInventoryModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigInventoryModelResult> GetBigInventoryModelFuture(
+                Request.GetBigInventoryModelRequest request
+        )
+		{
+			return new GetBigInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigInventoryModelResult> GetBigInventoryModelAsync(
+                Request.GetBigInventoryModelRequest request
+        )
+		{
+            AsyncResult<Result.GetBigInventoryModelResult> result = null;
+			await GetBigInventoryModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBigInventoryModelTask GetBigInventoryModelAsync(
+                Request.GetBigInventoryModelRequest request
+        )
+		{
+			return new GetBigInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigInventoryModelResult> GetBigInventoryModelAsync(
+                Request.GetBigInventoryModelRequest request
+        )
+		{
+			var task = new GetBigInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBigItemModelMastersTask : Gs2RestSessionTask<DescribeBigItemModelMastersRequest, DescribeBigItemModelMastersResult>
+        {
+            public DescribeBigItemModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBigItemModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBigItemModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBigItemModelMasters(
+                Request.DescribeBigItemModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeBigItemModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeBigItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBigItemModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersFuture(
+                Request.DescribeBigItemModelMastersRequest request
+        )
+		{
+			return new DescribeBigItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersAsync(
+                Request.DescribeBigItemModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBigItemModelMastersResult> result = null;
+			await DescribeBigItemModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBigItemModelMastersTask DescribeBigItemModelMastersAsync(
+                Request.DescribeBigItemModelMastersRequest request
+        )
+		{
+			return new DescribeBigItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersAsync(
+                Request.DescribeBigItemModelMastersRequest request
+        )
+		{
+			var task = new DescribeBigItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateBigItemModelMasterTask : Gs2RestSessionTask<CreateBigItemModelMasterRequest, CreateBigItemModelMasterResult>
+        {
+            public CreateBigItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateBigItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateBigItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateBigItemModelMaster(
+                Request.CreateBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new CreateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterFuture(
+                Request.CreateBigItemModelMasterRequest request
+        )
+		{
+			return new CreateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
+                Request.CreateBigItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateBigItemModelMasterResult> result = null;
+			await CreateBigItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateBigItemModelMasterTask CreateBigItemModelMasterAsync(
+                Request.CreateBigItemModelMasterRequest request
+        )
+		{
+			return new CreateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
+                Request.CreateBigItemModelMasterRequest request
+        )
+		{
+			var task = new CreateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemModelMasterTask : Gs2RestSessionTask<GetBigItemModelMasterRequest, GetBigItemModelMasterResult>
+        {
+            public GetBigItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetBigItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBigItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItemModelMaster(
+                Request.GetBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new GetBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemModelMasterResult> GetBigItemModelMasterFuture(
+                Request.GetBigItemModelMasterRequest request
+        )
+		{
+			return new GetBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
+                Request.GetBigItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetBigItemModelMasterResult> result = null;
+			await GetBigItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBigItemModelMasterTask GetBigItemModelMasterAsync(
+                Request.GetBigItemModelMasterRequest request
+        )
+		{
+			return new GetBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
+                Request.GetBigItemModelMasterRequest request
+        )
+		{
+			var task = new GetBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateBigItemModelMasterTask : Gs2RestSessionTask<UpdateBigItemModelMasterRequest, UpdateBigItemModelMasterResult>
+        {
+            public UpdateBigItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateBigItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateBigItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateBigItemModelMaster(
+                Request.UpdateBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterFuture(
+                Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+			return new UpdateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
+                Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateBigItemModelMasterResult> result = null;
+			await UpdateBigItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateBigItemModelMasterTask UpdateBigItemModelMasterAsync(
+                Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+			return new UpdateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
+                Request.UpdateBigItemModelMasterRequest request
+        )
+		{
+			var task = new UpdateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteBigItemModelMasterTask : Gs2RestSessionTask<DeleteBigItemModelMasterRequest, DeleteBigItemModelMasterResult>
+        {
+            public DeleteBigItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteBigItemModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteBigItemModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/big/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteBigItemModelMaster(
+                Request.DeleteBigItemModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteBigItemModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBigItemModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterFuture(
+                Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+			return new DeleteBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
+                Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteBigItemModelMasterResult> result = null;
+			await DeleteBigItemModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteBigItemModelMasterTask DeleteBigItemModelMasterAsync(
+                Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+			return new DeleteBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
+                Request.DeleteBigItemModelMasterRequest request
+        )
+		{
+			var task = new DeleteBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBigItemModelsTask : Gs2RestSessionTask<DescribeBigItemModelsRequest, DescribeBigItemModelsResult>
+        {
+            public DescribeBigItemModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBigItemModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBigItemModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/big/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBigItemModels(
+                Request.DescribeBigItemModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeBigItemModelsResult>> callback
+        )
+		{
+			var task = new DescribeBigItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBigItemModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBigItemModelsResult> DescribeBigItemModelsFuture(
+                Request.DescribeBigItemModelsRequest request
+        )
+		{
+			return new DescribeBigItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBigItemModelsResult> DescribeBigItemModelsAsync(
+                Request.DescribeBigItemModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBigItemModelsResult> result = null;
+			await DescribeBigItemModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBigItemModelsTask DescribeBigItemModelsAsync(
+                Request.DescribeBigItemModelsRequest request
+        )
+		{
+			return new DescribeBigItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBigItemModelsResult> DescribeBigItemModelsAsync(
+                Request.DescribeBigItemModelsRequest request
+        )
+		{
+			var task = new DescribeBigItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemModelTask : Gs2RestSessionTask<GetBigItemModelRequest, GetBigItemModelResult>
+        {
+            public GetBigItemModelTask(IGs2Session session, RestSessionRequestFactory factory, GetBigItemModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBigItemModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/big/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItemModel(
+                Request.GetBigItemModelRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemModelResult>> callback
+        )
+		{
+			var task = new GetBigItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemModelResult> GetBigItemModelFuture(
+                Request.GetBigItemModelRequest request
+        )
+		{
+			return new GetBigItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemModelResult> GetBigItemModelAsync(
+                Request.GetBigItemModelRequest request
+        )
+		{
+            AsyncResult<Result.GetBigItemModelResult> result = null;
+			await GetBigItemModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBigItemModelTask GetBigItemModelAsync(
+                Request.GetBigItemModelRequest request
+        )
+		{
+			return new GetBigItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemModelResult> GetBigItemModelAsync(
+                Request.GetBigItemModelRequest request
+        )
+		{
+			var task = new GetBigItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ExportMasterTask : Gs2RestSessionTask<ExportMasterRequest, ExportMasterResult>
         {
             public ExportMasterTask(IGs2Session session, RestSessionRequestFactory factory, ExportMasterRequest request) : base(session, factory, request)
@@ -10021,6 +11606,1237 @@ namespace Gs2.Gs2Inventory
         )
 		{
 			var task = new ConsumeSimpleItemsByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBigItemsTask : Gs2RestSessionTask<DescribeBigItemsRequest, DescribeBigItemsResult>
+        {
+            public DescribeBigItemsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBigItemsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBigItemsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/big/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBigItems(
+                Request.DescribeBigItemsRequest request,
+                UnityAction<AsyncResult<Result.DescribeBigItemsResult>> callback
+        )
+		{
+			var task = new DescribeBigItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBigItemsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBigItemsResult> DescribeBigItemsFuture(
+                Request.DescribeBigItemsRequest request
+        )
+		{
+			return new DescribeBigItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBigItemsResult> DescribeBigItemsAsync(
+                Request.DescribeBigItemsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBigItemsResult> result = null;
+			await DescribeBigItems(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBigItemsTask DescribeBigItemsAsync(
+                Request.DescribeBigItemsRequest request
+        )
+		{
+			return new DescribeBigItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBigItemsResult> DescribeBigItemsAsync(
+                Request.DescribeBigItemsRequest request
+        )
+		{
+			var task = new DescribeBigItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeBigItemsByUserIdTask : Gs2RestSessionTask<DescribeBigItemsByUserIdRequest, DescribeBigItemsByUserIdResult>
+        {
+            public DescribeBigItemsByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeBigItemsByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeBigItemsByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/item";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeBigItemsByUserId(
+                Request.DescribeBigItemsByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeBigItemsByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeBigItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeBigItemsByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdFuture(
+                Request.DescribeBigItemsByUserIdRequest request
+        )
+		{
+			return new DescribeBigItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdAsync(
+                Request.DescribeBigItemsByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeBigItemsByUserIdResult> result = null;
+			await DescribeBigItemsByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeBigItemsByUserIdTask DescribeBigItemsByUserIdAsync(
+                Request.DescribeBigItemsByUserIdRequest request
+        )
+		{
+			return new DescribeBigItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdAsync(
+                Request.DescribeBigItemsByUserIdRequest request
+        )
+		{
+			var task = new DescribeBigItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemTask : Gs2RestSessionTask<GetBigItemRequest, GetBigItemResult>
+        {
+            public GetBigItemTask(IGs2Session session, RestSessionRequestFactory factory, GetBigItemRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBigItemRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/big/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItem(
+                Request.GetBigItemRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemResult>> callback
+        )
+		{
+			var task = new GetBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemResult> GetBigItemFuture(
+                Request.GetBigItemRequest request
+        )
+		{
+			return new GetBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemResult> GetBigItemAsync(
+                Request.GetBigItemRequest request
+        )
+		{
+            AsyncResult<Result.GetBigItemResult> result = null;
+			await GetBigItem(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBigItemTask GetBigItemAsync(
+                Request.GetBigItemRequest request
+        )
+		{
+			return new GetBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemResult> GetBigItemAsync(
+                Request.GetBigItemRequest request
+        )
+		{
+			var task = new GetBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetBigItemByUserIdTask : Gs2RestSessionTask<GetBigItemByUserIdRequest, GetBigItemByUserIdResult>
+        {
+            public GetBigItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, GetBigItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBigItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/item/{itemName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBigItemByUserId(
+                Request.GetBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.GetBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new GetBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetBigItemByUserIdResult> GetBigItemByUserIdFuture(
+                Request.GetBigItemByUserIdRequest request
+        )
+		{
+			return new GetBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
+                Request.GetBigItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.GetBigItemByUserIdResult> result = null;
+			await GetBigItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetBigItemByUserIdTask GetBigItemByUserIdAsync(
+                Request.GetBigItemByUserIdRequest request
+        )
+		{
+			return new GetBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
+                Request.GetBigItemByUserIdRequest request
+        )
+		{
+			var task = new GetBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireBigItemByUserIdTask : Gs2RestSessionTask<AcquireBigItemByUserIdRequest, AcquireBigItemByUserIdResult>
+        {
+            public AcquireBigItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, AcquireBigItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AcquireBigItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/{itemName}/acquire";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.AcquireCount != null)
+                {
+                    jsonWriter.WritePropertyName("acquireCount");
+                    jsonWriter.Write(request.AcquireCount);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireBigItemByUserId(
+                Request.AcquireBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AcquireBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new AcquireBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdFuture(
+                Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+			return new AcquireBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
+                Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.AcquireBigItemByUserIdResult> result = null;
+			await AcquireBigItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AcquireBigItemByUserIdTask AcquireBigItemByUserIdAsync(
+                Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+			return new AcquireBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
+                Request.AcquireBigItemByUserIdRequest request
+        )
+		{
+			var task = new AcquireBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeBigItemTask : Gs2RestSessionTask<ConsumeBigItemRequest, ConsumeBigItemResult>
+        {
+            public ConsumeBigItemTask(IGs2Session session, RestSessionRequestFactory factory, ConsumeBigItemRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ConsumeBigItemRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/big/inventory/{inventoryName}/{itemName}/consume";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ConsumeCount != null)
+                {
+                    jsonWriter.WritePropertyName("consumeCount");
+                    jsonWriter.Write(request.ConsumeCount);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
+                    base.OnError(new Exception.InsufficientException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeBigItem(
+                Request.ConsumeBigItemRequest request,
+                UnityAction<AsyncResult<Result.ConsumeBigItemResult>> callback
+        )
+		{
+			var task = new ConsumeBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeBigItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeBigItemResult> ConsumeBigItemFuture(
+                Request.ConsumeBigItemRequest request
+        )
+		{
+			return new ConsumeBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
+                Request.ConsumeBigItemRequest request
+        )
+		{
+            AsyncResult<Result.ConsumeBigItemResult> result = null;
+			await ConsumeBigItem(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ConsumeBigItemTask ConsumeBigItemAsync(
+                Request.ConsumeBigItemRequest request
+        )
+		{
+			return new ConsumeBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
+                Request.ConsumeBigItemRequest request
+        )
+		{
+			var task = new ConsumeBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeBigItemByUserIdTask : Gs2RestSessionTask<ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult>
+        {
+            public ConsumeBigItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ConsumeBigItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ConsumeBigItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/{itemName}/consume";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ConsumeCount != null)
+                {
+                    jsonWriter.WritePropertyName("consumeCount");
+                    jsonWriter.Write(request.ConsumeCount);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
+                    base.OnError(new Exception.InsufficientException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeBigItemByUserId(
+                Request.ConsumeBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ConsumeBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new ConsumeBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdFuture(
+                Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+			return new ConsumeBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
+                Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ConsumeBigItemByUserIdResult> result = null;
+			await ConsumeBigItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ConsumeBigItemByUserIdTask ConsumeBigItemByUserIdAsync(
+                Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+			return new ConsumeBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
+                Request.ConsumeBigItemByUserIdRequest request
+        )
+		{
+			var task = new ConsumeBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteBigItemByUserIdTask : Gs2RestSessionTask<DeleteBigItemByUserIdRequest, DeleteBigItemByUserIdResult>
+        {
+            public DeleteBigItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteBigItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteBigItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteBigItemByUserId(
+                Request.DeleteBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdFuture(
+                Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+			return new DeleteBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
+                Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteBigItemByUserIdResult> result = null;
+			await DeleteBigItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteBigItemByUserIdTask DeleteBigItemByUserIdAsync(
+                Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+			return new DeleteBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
+                Request.DeleteBigItemByUserIdRequest request
+        )
+		{
+			var task = new DeleteBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireBigItemByStampSheetTask : Gs2RestSessionTask<AcquireBigItemByStampSheetRequest, AcquireBigItemByStampSheetResult>
+        {
+            public AcquireBigItemByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AcquireBigItemByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AcquireBigItemByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/big/item/acquire";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireBigItemByStampSheet(
+                Request.AcquireBigItemByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.AcquireBigItemByStampSheetResult>> callback
+        )
+		{
+			var task = new AcquireBigItemByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireBigItemByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetFuture(
+                Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+			return new AcquireBigItemByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
+                Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.AcquireBigItemByStampSheetResult> result = null;
+			await AcquireBigItemByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AcquireBigItemByStampSheetTask AcquireBigItemByStampSheetAsync(
+                Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+			return new AcquireBigItemByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
+                Request.AcquireBigItemByStampSheetRequest request
+        )
+		{
+			var task = new AcquireBigItemByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ConsumeBigItemByStampTaskTask : Gs2RestSessionTask<ConsumeBigItemByStampTaskRequest, ConsumeBigItemByStampTaskResult>
+        {
+            public ConsumeBigItemByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, ConsumeBigItemByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ConsumeBigItemByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/big/item/consume";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ConsumeBigItemByStampTask(
+                Request.ConsumeBigItemByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.ConsumeBigItemByStampTaskResult>> callback
+        )
+		{
+			var task = new ConsumeBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ConsumeBigItemByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskFuture(
+                Request.ConsumeBigItemByStampTaskRequest request
+        )
+		{
+			return new ConsumeBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskAsync(
+                Request.ConsumeBigItemByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.ConsumeBigItemByStampTaskResult> result = null;
+			await ConsumeBigItemByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ConsumeBigItemByStampTaskTask ConsumeBigItemByStampTaskAsync(
+                Request.ConsumeBigItemByStampTaskRequest request
+        )
+		{
+			return new ConsumeBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskAsync(
+                Request.ConsumeBigItemByStampTaskRequest request
+        )
+		{
+			var task = new ConsumeBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
