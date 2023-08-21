@@ -40,6 +40,7 @@ namespace Gs2.Gs2Distributor.Model
         public string SheetResult { set; get; }
         public string NextTransactionId { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public StampSheetResult WithStampSheetResultId(string stampSheetResultId) {
             this.StampSheetResultId = stampSheetResultId;
             return this;
@@ -74,6 +75,10 @@ namespace Gs2.Gs2Distributor.Model
         }
         public StampSheetResult WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public StampSheetResult WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -183,7 +188,8 @@ namespace Gs2.Gs2Distributor.Model
                 }).ToArray())
                 .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString())
                 .WithNextTransactionId(!data.Keys.Contains("nextTransactionId") || data["nextTransactionId"] == null ? null : data["nextTransactionId"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -207,6 +213,7 @@ namespace Gs2.Gs2Distributor.Model
                 ["sheetResult"] = SheetResult,
                 ["nextTransactionId"] = NextTransactionId,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -262,6 +269,10 @@ namespace Gs2.Gs2Distributor.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -349,6 +360,14 @@ namespace Gs2.Gs2Distributor.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

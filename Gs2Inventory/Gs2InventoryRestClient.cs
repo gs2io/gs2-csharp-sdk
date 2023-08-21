@@ -12070,7 +12070,7 @@ namespace Gs2.Gs2Inventory
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "inventory")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/{itemName}/acquire";
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/item/{itemName}/acquire";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
@@ -12209,7 +12209,7 @@ namespace Gs2.Gs2Inventory
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "inventory")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/big/inventory/{inventoryName}/{itemName}/consume";
+                    + "/{namespaceName}/user/me/big/inventory/{inventoryName}/item/{itemName}/consume";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
@@ -12354,7 +12354,7 @@ namespace Gs2.Gs2Inventory
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "inventory")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/{itemName}/consume";
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/item/{itemName}/consume";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
@@ -12496,7 +12496,7 @@ namespace Gs2.Gs2Inventory
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "inventory")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}";
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/item/{itemName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");

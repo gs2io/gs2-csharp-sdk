@@ -36,6 +36,7 @@ namespace Gs2.Gs2Datastore.Model
         public string Generation { set; get; }
         public long? ContentLength { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public DataObjectHistory WithDataObjectHistoryId(string dataObjectHistoryId) {
             this.DataObjectHistoryId = dataObjectHistoryId;
             return this;
@@ -54,6 +55,10 @@ namespace Gs2.Gs2Datastore.Model
         }
         public DataObjectHistory WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public DataObjectHistory WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -172,7 +177,8 @@ namespace Gs2.Gs2Datastore.Model
                 .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
                 .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString())
                 .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)long.Parse(data["contentLength"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -183,6 +189,7 @@ namespace Gs2.Gs2Datastore.Model
                 ["generation"] = Generation,
                 ["contentLength"] = ContentLength,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -208,6 +215,10 @@ namespace Gs2.Gs2Datastore.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -255,6 +266,14 @@ namespace Gs2.Gs2Datastore.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

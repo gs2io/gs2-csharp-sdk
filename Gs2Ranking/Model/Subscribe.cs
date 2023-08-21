@@ -37,6 +37,7 @@ namespace Gs2.Gs2Ranking.Model
         public string[] TargetUserIds { set; get; }
         public string[] SubscribedUserIds { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Subscribe WithSubscribeId(string subscribeId) {
             this.SubscribeId = subscribeId;
             return this;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Ranking.Model
         }
         public Subscribe WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Subscribe WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -165,7 +170,8 @@ namespace Gs2.Gs2Ranking.Model
                 .WithSubscribedUserIds(!data.Keys.Contains("subscribedUserIds") || data["subscribedUserIds"] == null ? new string[]{} : data["subscribedUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -185,6 +191,7 @@ namespace Gs2.Gs2Ranking.Model
                         }).ToArray()
                     ),
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -228,6 +235,10 @@ namespace Gs2.Gs2Ranking.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -291,6 +302,14 @@ namespace Gs2.Gs2Ranking.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

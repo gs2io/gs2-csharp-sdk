@@ -36,6 +36,7 @@ namespace Gs2.Gs2Schedule.Model
         public string UserId { set; get; }
         public long? CreatedAt { set; get; }
         public long? ExpiresAt { set; get; }
+        public long? Revision { set; get; }
         public Trigger WithTriggerId(string triggerId) {
             this.TriggerId = triggerId;
             return this;
@@ -54,6 +55,10 @@ namespace Gs2.Gs2Schedule.Model
         }
         public Trigger WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public Trigger WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -155,7 +160,8 @@ namespace Gs2.Gs2Schedule.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -166,6 +172,7 @@ namespace Gs2.Gs2Schedule.Model
                 ["userId"] = UserId,
                 ["createdAt"] = CreatedAt,
                 ["expiresAt"] = ExpiresAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -191,6 +198,10 @@ namespace Gs2.Gs2Schedule.Model
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -238,6 +249,14 @@ namespace Gs2.Gs2Schedule.Model
             else
             {
                 diff += (int)(ExpiresAt - other.ExpiresAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

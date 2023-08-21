@@ -34,6 +34,7 @@ namespace Gs2.Gs2Identifier.Model
         public string UserId { set; get; }
         public string[] SecurityPolicyIds { set; get; }
         public long? AttachedAt { set; get; }
+        public long? Revision { set; get; }
         public AttachSecurityPolicy WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -44,6 +45,10 @@ namespace Gs2.Gs2Identifier.Model
         }
         public AttachSecurityPolicy WithAttachedAt(long? attachedAt) {
             this.AttachedAt = attachedAt;
+            return this;
+        }
+        public AttachSecurityPolicy WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -94,7 +99,8 @@ namespace Gs2.Gs2Identifier.Model
                 .WithSecurityPolicyIds(!data.Keys.Contains("securityPolicyIds") || data["securityPolicyIds"] == null ? new string[]{} : data["securityPolicyIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithAttachedAt(!data.Keys.Contains("attachedAt") || data["attachedAt"] == null ? null : (long?)long.Parse(data["attachedAt"].ToString()));
+                .WithAttachedAt(!data.Keys.Contains("attachedAt") || data["attachedAt"] == null ? null : (long?)long.Parse(data["attachedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Identifier.Model
                         }).ToArray()
                     ),
                 ["attachedAt"] = AttachedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -131,6 +138,10 @@ namespace Gs2.Gs2Identifier.Model
             if (AttachedAt != null) {
                 writer.WritePropertyName("attachedAt");
                 writer.Write(long.Parse(AttachedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -166,6 +177,14 @@ namespace Gs2.Gs2Identifier.Model
             else
             {
                 diff += (int)(AttachedAt - other.AttachedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Account.Model
         public int? TimeOffset { set; get; }
         public bool? Banned { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Account WithAccountId(string accountId) {
             this.AccountId = accountId;
             return this;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Account.Model
         }
         public Account WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Account WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -144,7 +149,8 @@ namespace Gs2.Gs2Account.Model
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()))
                 .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -156,6 +162,7 @@ namespace Gs2.Gs2Account.Model
                 ["timeOffset"] = TimeOffset,
                 ["banned"] = Banned,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -185,6 +192,10 @@ namespace Gs2.Gs2Account.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -240,6 +251,14 @@ namespace Gs2.Gs2Account.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

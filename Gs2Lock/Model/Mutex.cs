@@ -36,6 +36,7 @@ namespace Gs2.Gs2Lock.Model
         public string PropertyId { set; get; }
         public string TransactionId { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Mutex WithMutexId(string mutexId) {
             this.MutexId = mutexId;
             return this;
@@ -54,6 +55,10 @@ namespace Gs2.Gs2Lock.Model
         }
         public Mutex WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Mutex WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -155,7 +160,8 @@ namespace Gs2.Gs2Lock.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -166,6 +172,7 @@ namespace Gs2.Gs2Lock.Model
                 ["propertyId"] = PropertyId,
                 ["transactionId"] = TransactionId,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -191,6 +198,10 @@ namespace Gs2.Gs2Lock.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -238,6 +249,14 @@ namespace Gs2.Gs2Lock.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

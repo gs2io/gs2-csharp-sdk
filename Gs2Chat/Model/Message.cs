@@ -38,6 +38,7 @@ namespace Gs2.Gs2Chat.Model
         public int? Category { set; get; }
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Message WithMessageId(string messageId) {
             this.MessageId = messageId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Chat.Model
         }
         public Message WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Message WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -167,7 +172,8 @@ namespace Gs2.Gs2Chat.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)int.Parse(data["category"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -180,6 +186,7 @@ namespace Gs2.Gs2Chat.Model
                 ["category"] = Category,
                 ["metadata"] = Metadata,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -213,6 +220,10 @@ namespace Gs2.Gs2Chat.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -276,6 +287,14 @@ namespace Gs2.Gs2Chat.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

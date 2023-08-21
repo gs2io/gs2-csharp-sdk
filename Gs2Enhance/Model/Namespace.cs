@@ -44,6 +44,7 @@ namespace Gs2.Gs2Enhance.Model
         public string QueueNamespaceId { set; get; }
         [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
+        public long? Revision { set; get; }
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
@@ -88,6 +89,10 @@ namespace Gs2.Gs2Enhance.Model
         [Obsolete("This method is deprecated")]
         public Namespace WithKeyId(string keyId) {
             this.KeyId = keyId;
+            return this;
+        }
+        public Namespace WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -161,7 +166,8 @@ namespace Gs2.Gs2Enhance.Model
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -178,6 +184,7 @@ namespace Gs2.Gs2Enhance.Model
                 ["updatedAt"] = UpdatedAt,
                 ["queueNamespaceId"] = QueueNamespaceId,
                 ["keyId"] = KeyId,
+                ["revision"] = Revision,
             };
         }
 
@@ -227,6 +234,10 @@ namespace Gs2.Gs2Enhance.Model
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -322,6 +333,14 @@ namespace Gs2.Gs2Enhance.Model
             else
             {
                 diff += KeyId.CompareTo(other.KeyId);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

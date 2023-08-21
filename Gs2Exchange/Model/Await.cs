@@ -37,6 +37,7 @@ namespace Gs2.Gs2Exchange.Model
         public string Name { set; get; }
         public int? Count { set; get; }
         public long? ExchangedAt { set; get; }
+        public long? Revision { set; get; }
         public Await WithAwaitId(string awaitId) {
             this.AwaitId = awaitId;
             return this;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Exchange.Model
         }
         public Await WithExchangedAt(long? exchangedAt) {
             this.ExchangedAt = exchangedAt;
+            return this;
+        }
+        public Await WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -161,7 +166,8 @@ namespace Gs2.Gs2Exchange.Model
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
-                .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : (long?)long.Parse(data["exchangedAt"].ToString()));
+                .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : (long?)long.Parse(data["exchangedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -173,6 +179,7 @@ namespace Gs2.Gs2Exchange.Model
                 ["name"] = Name,
                 ["count"] = Count,
                 ["exchangedAt"] = ExchangedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -202,6 +209,10 @@ namespace Gs2.Gs2Exchange.Model
             if (ExchangedAt != null) {
                 writer.WritePropertyName("exchangedAt");
                 writer.Write(long.Parse(ExchangedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -257,6 +268,14 @@ namespace Gs2.Gs2Exchange.Model
             else
             {
                 diff += (int)(ExchangedAt - other.ExchangedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

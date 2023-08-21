@@ -35,6 +35,7 @@ namespace Gs2.Gs2News.Model
         public string Name { set; get; }
         public string Text { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Output WithOutputId(string outputId) {
             this.OutputId = outputId;
             return this;
@@ -49,6 +50,10 @@ namespace Gs2.Gs2News.Model
         }
         public Output WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Output WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -149,7 +154,8 @@ namespace Gs2.Gs2News.Model
                 .WithOutputId(!data.Keys.Contains("outputId") || data["outputId"] == null ? null : data["outputId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithText(!data.Keys.Contains("text") || data["text"] == null ? null : data["text"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -159,6 +165,7 @@ namespace Gs2.Gs2News.Model
                 ["name"] = Name,
                 ["text"] = Text,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -180,6 +187,10 @@ namespace Gs2.Gs2News.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -219,6 +230,14 @@ namespace Gs2.Gs2News.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

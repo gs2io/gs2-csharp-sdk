@@ -40,6 +40,7 @@ namespace Gs2.Gs2Formation.Model
         public string FormModelName { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public MoldModelMaster WithMoldModelId(string moldModelId) {
             this.MoldModelId = moldModelId;
             return this;
@@ -74,6 +75,10 @@ namespace Gs2.Gs2Formation.Model
         }
         public MoldModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        public MoldModelMaster WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -162,7 +167,8 @@ namespace Gs2.Gs2Formation.Model
                 .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
                 .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -177,6 +183,7 @@ namespace Gs2.Gs2Formation.Model
                 ["formModelName"] = FormModelName,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -218,6 +225,10 @@ namespace Gs2.Gs2Formation.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -297,6 +308,14 @@ namespace Gs2.Gs2Formation.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

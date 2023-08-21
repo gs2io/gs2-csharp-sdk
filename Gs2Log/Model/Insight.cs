@@ -38,6 +38,7 @@ namespace Gs2.Gs2Log.Model
         public string Password { set; get; }
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public Insight WithInsightId(string insightId) {
             this.InsightId = insightId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Log.Model
         }
         public Insight WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public Insight WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -150,7 +155,8 @@ namespace Gs2.Gs2Log.Model
                 .WithHost(!data.Keys.Contains("host") || data["host"] == null ? null : data["host"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -163,6 +169,7 @@ namespace Gs2.Gs2Log.Model
                 ["password"] = Password,
                 ["status"] = Status,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -196,6 +203,10 @@ namespace Gs2.Gs2Log.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -259,6 +270,14 @@ namespace Gs2.Gs2Log.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

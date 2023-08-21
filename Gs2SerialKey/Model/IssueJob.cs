@@ -38,6 +38,7 @@ namespace Gs2.Gs2SerialKey.Model
         public int? IssueRequestCount { set; get; }
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
         public IssueJob WithIssueJobId(string issueJobId) {
             this.IssueJobId = issueJobId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2SerialKey.Model
         }
         public IssueJob WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public IssueJob WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -167,7 +172,8 @@ namespace Gs2.Gs2SerialKey.Model
                 .WithIssuedCount(!data.Keys.Contains("issuedCount") || data["issuedCount"] == null ? null : (int?)int.Parse(data["issuedCount"].ToString()))
                 .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : (int?)int.Parse(data["issueRequestCount"].ToString()))
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -180,6 +186,7 @@ namespace Gs2.Gs2SerialKey.Model
                 ["issueRequestCount"] = IssueRequestCount,
                 ["status"] = Status,
                 ["createdAt"] = CreatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -213,6 +220,10 @@ namespace Gs2.Gs2SerialKey.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write(long.Parse(CreatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -276,6 +287,14 @@ namespace Gs2.Gs2SerialKey.Model
             else
             {
                 diff += (int)(CreatedAt - other.CreatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

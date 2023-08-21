@@ -36,6 +36,7 @@ namespace Gs2.Gs2Showcase.Model
         public string SalesItemName { set; get; }
         public string SalesItemGroupName { set; get; }
         public string SalesPeriodEventId { set; get; }
+        public long? Revision { set; get; }
         public DisplayItemMaster WithDisplayItemId(string displayItemId) {
             this.DisplayItemId = displayItemId;
             return this;
@@ -56,6 +57,10 @@ namespace Gs2.Gs2Showcase.Model
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;
         }
+        public DisplayItemMaster WithRevision(long? revision) {
+            this.Revision = revision;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -70,7 +75,8 @@ namespace Gs2.Gs2Showcase.Model
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithSalesItemName(!data.Keys.Contains("salesItemName") || data["salesItemName"] == null ? null : data["salesItemName"].ToString())
                 .WithSalesItemGroupName(!data.Keys.Contains("salesItemGroupName") || data["salesItemGroupName"] == null ? null : data["salesItemGroupName"].ToString())
-                .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString());
+                .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString())
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -81,6 +87,7 @@ namespace Gs2.Gs2Showcase.Model
                 ["salesItemName"] = SalesItemName,
                 ["salesItemGroupName"] = SalesItemGroupName,
                 ["salesPeriodEventId"] = SalesPeriodEventId,
+                ["revision"] = Revision,
             };
         }
 
@@ -106,6 +113,10 @@ namespace Gs2.Gs2Showcase.Model
             if (SalesPeriodEventId != null) {
                 writer.WritePropertyName("salesPeriodEventId");
                 writer.Write(SalesPeriodEventId.ToString());
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -153,6 +164,14 @@ namespace Gs2.Gs2Showcase.Model
             else
             {
                 diff += SalesPeriodEventId.CompareTo(other.SalesPeriodEventId);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

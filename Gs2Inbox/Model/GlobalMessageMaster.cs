@@ -38,6 +38,7 @@ namespace Gs2.Gs2Inbox.Model
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public long? CreatedAt { set; get; }
         public long? ExpiresAt { set; get; }
+        public long? Revision { set; get; }
         public GlobalMessageMaster WithGlobalMessageId(string globalMessageId) {
             this.GlobalMessageId = globalMessageId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Inbox.Model
         }
         public GlobalMessageMaster WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public GlobalMessageMaster WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -152,7 +157,8 @@ namespace Gs2.Gs2Inbox.Model
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()));
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -170,6 +176,7 @@ namespace Gs2.Gs2Inbox.Model
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["expiresAt"] = ExpiresAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -210,6 +217,10 @@ namespace Gs2.Gs2Inbox.Model
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write(long.Parse(ExpiresAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -277,6 +288,14 @@ namespace Gs2.Gs2Inbox.Model
             else
             {
                 diff += (int)(ExpiresAt - other.ExpiresAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

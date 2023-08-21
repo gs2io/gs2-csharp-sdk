@@ -37,6 +37,7 @@ namespace Gs2.Gs2Deploy.Model
         public string Type { set; get; }
         public string Message { set; get; }
         public long? EventAt { set; get; }
+        public long? Revision { set; get; }
         public Event WithEventId(string eventId) {
             this.EventId = eventId;
             return this;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Deploy.Model
         }
         public Event WithEventAt(long? eventAt) {
             this.EventAt = eventAt;
+            return this;
+        }
+        public Event WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -144,7 +149,8 @@ namespace Gs2.Gs2Deploy.Model
                 .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithMessage(!data.Keys.Contains("message") || data["message"] == null ? null : data["message"].ToString())
-                .WithEventAt(!data.Keys.Contains("eventAt") || data["eventAt"] == null ? null : (long?)long.Parse(data["eventAt"].ToString()));
+                .WithEventAt(!data.Keys.Contains("eventAt") || data["eventAt"] == null ? null : (long?)long.Parse(data["eventAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -156,6 +162,7 @@ namespace Gs2.Gs2Deploy.Model
                 ["type"] = Type,
                 ["message"] = Message,
                 ["eventAt"] = EventAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -185,6 +192,10 @@ namespace Gs2.Gs2Deploy.Model
             if (EventAt != null) {
                 writer.WritePropertyName("eventAt");
                 writer.Write(long.Parse(EventAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -240,6 +251,14 @@ namespace Gs2.Gs2Deploy.Model
             else
             {
                 diff += (int)(EventAt - other.EventAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

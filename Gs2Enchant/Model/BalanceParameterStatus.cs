@@ -38,6 +38,7 @@ namespace Gs2.Gs2Enchant.Model
         public Gs2.Gs2Enchant.Model.BalanceParameterValue[] ParameterValues { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public BalanceParameterStatus WithBalanceParameterStatusId(string balanceParameterStatusId) {
             this.BalanceParameterStatusId = balanceParameterStatusId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Enchant.Model
         }
         public BalanceParameterStatus WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        public BalanceParameterStatus WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -186,7 +191,8 @@ namespace Gs2.Gs2Enchant.Model
                     return Gs2.Gs2Enchant.Model.BalanceParameterValue.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -204,6 +210,7 @@ namespace Gs2.Gs2Enchant.Model
                     ),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -244,6 +251,10 @@ namespace Gs2.Gs2Enchant.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -311,6 +322,14 @@ namespace Gs2.Gs2Enchant.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Stamina.Model
         public int[] Values { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public RecoverValueTableMaster WithRecoverValueTableId(string recoverValueTableId) {
             this.RecoverValueTableId = recoverValueTableId;
             return this;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Stamina.Model
         }
         public RecoverValueTableMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        public RecoverValueTableMaster WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -158,7 +163,8 @@ namespace Gs2.Gs2Stamina.Model
                     return int.Parse(v.ToString());
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -176,6 +182,7 @@ namespace Gs2.Gs2Stamina.Model
                     ),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -220,6 +227,10 @@ namespace Gs2.Gs2Stamina.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -295,6 +306,14 @@ namespace Gs2.Gs2Stamina.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

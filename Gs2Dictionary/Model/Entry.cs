@@ -35,6 +35,7 @@ namespace Gs2.Gs2Dictionary.Model
         public string UserId { set; get; }
         public string Name { set; get; }
         public long? AcquiredAt { set; get; }
+        public long? Revision { set; get; }
         public Entry WithEntryId(string entryId) {
             this.EntryId = entryId;
             return this;
@@ -49,6 +50,10 @@ namespace Gs2.Gs2Dictionary.Model
         }
         public Entry WithAcquiredAt(long? acquiredAt) {
             this.AcquiredAt = acquiredAt;
+            return this;
+        }
+        public Entry WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -149,7 +154,8 @@ namespace Gs2.Gs2Dictionary.Model
                 .WithEntryId(!data.Keys.Contains("entryId") || data["entryId"] == null ? null : data["entryId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithAcquiredAt(!data.Keys.Contains("acquiredAt") || data["acquiredAt"] == null ? null : (long?)long.Parse(data["acquiredAt"].ToString()));
+                .WithAcquiredAt(!data.Keys.Contains("acquiredAt") || data["acquiredAt"] == null ? null : (long?)long.Parse(data["acquiredAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -159,6 +165,7 @@ namespace Gs2.Gs2Dictionary.Model
                 ["userId"] = UserId,
                 ["name"] = Name,
                 ["acquiredAt"] = AcquiredAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -180,6 +187,10 @@ namespace Gs2.Gs2Dictionary.Model
             if (AcquiredAt != null) {
                 writer.WritePropertyName("acquiredAt");
                 writer.Write(long.Parse(AcquiredAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -219,6 +230,14 @@ namespace Gs2.Gs2Dictionary.Model
             else
             {
                 diff += (int)(AcquiredAt - other.AcquiredAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }

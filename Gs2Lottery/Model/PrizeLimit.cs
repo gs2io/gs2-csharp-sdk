@@ -36,6 +36,7 @@ namespace Gs2.Gs2Lottery.Model
         public int? DrawnCount { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public PrizeLimit WithPrizeLimitId(string prizeLimitId) {
             this.PrizeLimitId = prizeLimitId;
             return this;
@@ -54,6 +55,10 @@ namespace Gs2.Gs2Lottery.Model
         }
         public PrizeLimit WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        public PrizeLimit WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -155,7 +160,8 @@ namespace Gs2.Gs2Lottery.Model
                 .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
                 .WithDrawnCount(!data.Keys.Contains("drawnCount") || data["drawnCount"] == null ? null : (int?)int.Parse(data["drawnCount"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
         public JsonData ToJson()
@@ -166,6 +172,7 @@ namespace Gs2.Gs2Lottery.Model
                 ["drawnCount"] = DrawnCount,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -191,6 +198,10 @@ namespace Gs2.Gs2Lottery.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write(long.Parse(Revision.ToString()));
             }
             writer.WriteObjectEnd();
         }
@@ -238,6 +249,14 @@ namespace Gs2.Gs2Lottery.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
             }
             return diff;
         }
