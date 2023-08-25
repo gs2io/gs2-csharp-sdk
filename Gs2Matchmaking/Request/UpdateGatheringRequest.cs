@@ -79,16 +79,20 @@ namespace Gs2.Gs2Matchmaking.Request
 
         public override JsonData ToJson()
         {
+            JsonData attributeRangesJsonData = null;
+            if (AttributeRanges != null)
+            {
+                attributeRangesJsonData = new JsonData();
+                foreach (var attributeRange in AttributeRanges)
+                {
+                    attributeRangesJsonData.Add(attributeRange.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["gatheringName"] = GatheringName,
                 ["accessToken"] = AccessToken,
-                ["attributeRanges"] = AttributeRanges == null ? null : new JsonData(
-                        AttributeRanges.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["attributeRanges"] = attributeRangesJsonData,
             };
         }
 

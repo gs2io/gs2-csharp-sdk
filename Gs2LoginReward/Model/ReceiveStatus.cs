@@ -180,15 +180,20 @@ namespace Gs2.Gs2LoginReward.Model
 
         public JsonData ToJson()
         {
+            JsonData receivedStepsJsonData = null;
+            if (ReceivedSteps != null)
+            {
+                receivedStepsJsonData = new JsonData();
+                foreach (var receivedStep in ReceivedSteps)
+                {
+                    receivedStepsJsonData.Add(receivedStep);
+                }
+            }
             return new JsonData {
                 ["receiveStatusId"] = ReceiveStatusId,
                 ["bonusModelName"] = BonusModelName,
                 ["userId"] = UserId,
-                ["receivedSteps"] = ReceivedSteps == null ? null : new JsonData(
-                        ReceivedSteps.Select(v => {
-                            return new JsonData((bool?)bool.Parse(v.ToString()));
-                        }).ToArray()
-                    ),
+                ["receivedSteps"] = receivedStepsJsonData,
                 ["lastReceivedAt"] = LastReceivedAt,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,

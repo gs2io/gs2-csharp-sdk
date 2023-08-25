@@ -183,6 +183,24 @@ namespace Gs2.Gs2Deploy.Model
 
         public JsonData ToJson()
         {
+            JsonData rollbackAfterJsonData = null;
+            if (RollbackAfter != null)
+            {
+                rollbackAfterJsonData = new JsonData();
+                foreach (var rollbackAfter in RollbackAfter)
+                {
+                    rollbackAfterJsonData.Add(rollbackAfter);
+                }
+            }
+            JsonData outputFieldsJsonData = null;
+            if (OutputFields != null)
+            {
+                outputFieldsJsonData = new JsonData();
+                foreach (var outputField in OutputFields)
+                {
+                    outputFieldsJsonData.Add(outputField.ToJson());
+                }
+            }
             return new JsonData {
                 ["resourceId"] = ResourceId,
                 ["type"] = Type,
@@ -191,17 +209,8 @@ namespace Gs2.Gs2Deploy.Model
                 ["response"] = Response,
                 ["rollbackContext"] = RollbackContext,
                 ["rollbackRequest"] = RollbackRequest,
-                ["rollbackAfter"] = RollbackAfter == null ? null : new JsonData(
-                        RollbackAfter.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
-                ["outputFields"] = OutputFields == null ? null : new JsonData(
-                        OutputFields.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["rollbackAfter"] = rollbackAfterJsonData,
+                ["outputFields"] = outputFieldsJsonData,
                 ["workId"] = WorkId,
                 ["createdAt"] = CreatedAt,
             };

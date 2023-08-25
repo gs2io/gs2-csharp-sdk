@@ -145,16 +145,20 @@ namespace Gs2.Gs2Mission.Model
 
         public JsonData ToJson()
         {
+            JsonData scopesJsonData = null;
+            if (Scopes != null)
+            {
+                scopesJsonData = new JsonData();
+                foreach (var scope in Scopes)
+                {
+                    scopesJsonData.Add(scope.ToJson());
+                }
+            }
             return new JsonData {
                 ["counterId"] = CounterId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["scopes"] = Scopes == null ? null : new JsonData(
-                        Scopes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["scopes"] = scopesJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }

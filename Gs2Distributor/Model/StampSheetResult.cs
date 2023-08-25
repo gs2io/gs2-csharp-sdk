@@ -194,22 +194,31 @@ namespace Gs2.Gs2Distributor.Model
 
         public JsonData ToJson()
         {
+            JsonData taskRequestsJsonData = null;
+            if (TaskRequests != null)
+            {
+                taskRequestsJsonData = new JsonData();
+                foreach (var taskRequest in TaskRequests)
+                {
+                    taskRequestsJsonData.Add(taskRequest.ToJson());
+                }
+            }
+            JsonData taskResultsJsonData = null;
+            if (TaskResults != null)
+            {
+                taskResultsJsonData = new JsonData();
+                foreach (var taskResult in TaskResults)
+                {
+                    taskResultsJsonData.Add(taskResult);
+                }
+            }
             return new JsonData {
                 ["stampSheetResultId"] = StampSheetResultId,
                 ["userId"] = UserId,
                 ["transactionId"] = TransactionId,
-                ["taskRequests"] = TaskRequests == null ? null : new JsonData(
-                        TaskRequests.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["taskRequests"] = taskRequestsJsonData,
                 ["sheetRequest"] = SheetRequest?.ToJson(),
-                ["taskResults"] = TaskResults == null ? null : new JsonData(
-                        TaskResults.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["taskResults"] = taskResultsJsonData,
                 ["sheetResult"] = SheetResult,
                 ["nextTransactionId"] = NextTransactionId,
                 ["createdAt"] = CreatedAt,

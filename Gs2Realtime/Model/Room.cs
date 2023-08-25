@@ -169,17 +169,22 @@ namespace Gs2.Gs2Realtime.Model
 
         public JsonData ToJson()
         {
+            JsonData notificationUserIdsJsonData = null;
+            if (NotificationUserIds != null)
+            {
+                notificationUserIdsJsonData = new JsonData();
+                foreach (var notificationUserId in NotificationUserIds)
+                {
+                    notificationUserIdsJsonData.Add(notificationUserId);
+                }
+            }
             return new JsonData {
                 ["roomId"] = RoomId,
                 ["name"] = Name,
                 ["ipAddress"] = IpAddress,
                 ["port"] = Port,
                 ["encryptionKey"] = EncryptionKey,
-                ["notificationUserIds"] = NotificationUserIds == null ? null : new JsonData(
-                        NotificationUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["notificationUserIds"] = notificationUserIdsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

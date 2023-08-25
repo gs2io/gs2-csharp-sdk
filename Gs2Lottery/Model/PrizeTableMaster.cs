@@ -163,17 +163,21 @@ namespace Gs2.Gs2Lottery.Model
 
         public JsonData ToJson()
         {
+            JsonData prizesJsonData = null;
+            if (Prizes != null)
+            {
+                prizesJsonData = new JsonData();
+                foreach (var prize in Prizes)
+                {
+                    prizesJsonData.Add(prize.ToJson());
+                }
+            }
             return new JsonData {
                 ["prizeTableId"] = PrizeTableId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["description"] = Description,
-                ["prizes"] = Prizes == null ? null : new JsonData(
-                        Prizes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["prizes"] = prizesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

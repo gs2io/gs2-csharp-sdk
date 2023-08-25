@@ -121,6 +121,15 @@ namespace Gs2.Gs2Exchange.Request
 
         public override JsonData ToJson()
         {
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
@@ -133,12 +142,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["calculateScriptId"] = CalculateScriptId,
                 ["exchangeCountId"] = ExchangeCountId,
                 ["maximumExchangeCount"] = MaximumExchangeCount,
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActions"] = acquireActionsJsonData,
             };
         }
 

@@ -180,18 +180,22 @@ namespace Gs2.Gs2JobQueue.Model
 
         public JsonData ToJson()
         {
+            JsonData resultJsonData = null;
+            if (Result != null)
+            {
+                resultJsonData = new JsonData();
+                foreach (var resul in Result)
+                {
+                    resultJsonData.Add(resul.ToJson());
+                }
+            }
             return new JsonData {
                 ["deadLetterJobId"] = DeadLetterJobId,
                 ["name"] = Name,
                 ["userId"] = UserId,
                 ["scriptId"] = ScriptId,
                 ["args"] = Args,
-                ["result"] = Result == null ? null : new JsonData(
-                        Result.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["result"] = resultJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };

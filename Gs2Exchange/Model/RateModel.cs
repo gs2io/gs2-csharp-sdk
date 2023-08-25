@@ -173,31 +173,43 @@ namespace Gs2.Gs2Exchange.Model
 
         public JsonData ToJson()
         {
+            JsonData consumeActionsJsonData = null;
+            if (ConsumeActions != null)
+            {
+                consumeActionsJsonData = new JsonData();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    consumeActionsJsonData.Add(consumeAction.ToJson());
+                }
+            }
+            JsonData skipConsumeActionsJsonData = null;
+            if (SkipConsumeActions != null)
+            {
+                skipConsumeActionsJsonData = new JsonData();
+                foreach (var skipConsumeAction in SkipConsumeActions)
+                {
+                    skipConsumeActionsJsonData.Add(skipConsumeAction.ToJson());
+                }
+            }
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["rateModelId"] = RateModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
-                        ConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["consumeActions"] = consumeActionsJsonData,
                 ["timingType"] = TimingType,
                 ["lockTime"] = LockTime,
                 ["enableSkip"] = EnableSkip,
-                ["skipConsumeActions"] = SkipConsumeActions == null ? null : new JsonData(
-                        SkipConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["skipConsumeActions"] = skipConsumeActionsJsonData,
+                ["acquireActions"] = acquireActionsJsonData,
             };
         }
 

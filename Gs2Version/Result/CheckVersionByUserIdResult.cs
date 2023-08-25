@@ -72,20 +72,28 @@ namespace Gs2.Gs2Version.Result
 
         public JsonData ToJson()
         {
+            JsonData warningsJsonData = null;
+            if (Warnings != null)
+            {
+                warningsJsonData = new JsonData();
+                foreach (var warning in Warnings)
+                {
+                    warningsJsonData.Add(warning.ToJson());
+                }
+            }
+            JsonData errorsJsonData = null;
+            if (Errors != null)
+            {
+                errorsJsonData = new JsonData();
+                foreach (var error in Errors)
+                {
+                    errorsJsonData.Add(error.ToJson());
+                }
+            }
             return new JsonData {
                 ["projectToken"] = ProjectToken,
-                ["warnings"] = Warnings == null ? null : new JsonData(
-                        Warnings.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["errors"] = Errors == null ? null : new JsonData(
-                        Errors.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["warnings"] = warningsJsonData,
+                ["errors"] = errorsJsonData,
             };
         }
 

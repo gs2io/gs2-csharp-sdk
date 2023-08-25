@@ -103,6 +103,15 @@ namespace Gs2.Gs2Experience.Request
 
         public override JsonData ToJson()
         {
+            JsonData acquireActionRatesJsonData = null;
+            if (AcquireActionRates != null)
+            {
+                acquireActionRatesJsonData = new JsonData();
+                foreach (var acquireActionRate in AcquireActionRates)
+                {
+                    acquireActionRatesJsonData.Add(acquireActionRate.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["experienceName"] = ExperienceName,
@@ -112,12 +121,7 @@ namespace Gs2.Gs2Experience.Request
                 ["defaultRankCap"] = DefaultRankCap,
                 ["maxRankCap"] = MaxRankCap,
                 ["rankThresholdName"] = RankThresholdName,
-                ["acquireActionRates"] = AcquireActionRates == null ? null : new JsonData(
-                        AcquireActionRates.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActionRates"] = acquireActionRatesJsonData,
             };
         }
 

@@ -85,16 +85,21 @@ namespace Gs2.Gs2Enchant.Request
 
         public override JsonData ToJson()
         {
+            JsonData fixedParameterNamesJsonData = null;
+            if (FixedParameterNames != null)
+            {
+                fixedParameterNamesJsonData = new JsonData();
+                foreach (var fixedParameterName in FixedParameterNames)
+                {
+                    fixedParameterNamesJsonData.Add(fixedParameterName);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["parameterName"] = ParameterName,
                 ["propertyId"] = PropertyId,
-                ["fixedParameterNames"] = FixedParameterNames == null ? null : new JsonData(
-                        FixedParameterNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["fixedParameterNames"] = fixedParameterNamesJsonData,
             };
         }
 

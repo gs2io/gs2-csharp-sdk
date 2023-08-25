@@ -73,15 +73,19 @@ namespace Gs2.Gs2Version.Request
 
         public override JsonData ToJson()
         {
+            JsonData targetVersionsJsonData = null;
+            if (TargetVersions != null)
+            {
+                targetVersionsJsonData = new JsonData();
+                foreach (var targetVersion in TargetVersions)
+                {
+                    targetVersionsJsonData.Add(targetVersion.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["targetVersions"] = TargetVersions == null ? null : new JsonData(
-                        TargetVersions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["targetVersions"] = targetVersionsJsonData,
             };
         }
 

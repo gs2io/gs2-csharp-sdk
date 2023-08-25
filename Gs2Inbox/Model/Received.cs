@@ -151,14 +151,19 @@ namespace Gs2.Gs2Inbox.Model
 
         public JsonData ToJson()
         {
+            JsonData receivedGlobalMessageNamesJsonData = null;
+            if (ReceivedGlobalMessageNames != null)
+            {
+                receivedGlobalMessageNamesJsonData = new JsonData();
+                foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)
+                {
+                    receivedGlobalMessageNamesJsonData.Add(receivedGlobalMessageName);
+                }
+            }
             return new JsonData {
                 ["receivedId"] = ReceivedId,
                 ["userId"] = UserId,
-                ["receivedGlobalMessageNames"] = ReceivedGlobalMessageNames == null ? null : new JsonData(
-                        ReceivedGlobalMessageNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["receivedGlobalMessageNames"] = receivedGlobalMessageNamesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

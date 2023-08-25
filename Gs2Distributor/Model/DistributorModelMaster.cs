@@ -169,17 +169,22 @@ namespace Gs2.Gs2Distributor.Model
 
         public JsonData ToJson()
         {
+            JsonData whiteListTargetIdsJsonData = null;
+            if (WhiteListTargetIds != null)
+            {
+                whiteListTargetIdsJsonData = new JsonData();
+                foreach (var whiteListTargetId in WhiteListTargetIds)
+                {
+                    whiteListTargetIdsJsonData.Add(whiteListTargetId);
+                }
+            }
             return new JsonData {
                 ["distributorModelId"] = DistributorModelId,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["inboxNamespaceId"] = InboxNamespaceId,
-                ["whiteListTargetIds"] = WhiteListTargetIds == null ? null : new JsonData(
-                        WhiteListTargetIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["whiteListTargetIds"] = whiteListTargetIdsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

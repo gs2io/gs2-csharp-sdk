@@ -177,6 +177,24 @@ namespace Gs2.Gs2LoginReward.Model
 
         public JsonData ToJson()
         {
+            JsonData rewardsJsonData = null;
+            if (Rewards != null)
+            {
+                rewardsJsonData = new JsonData();
+                foreach (var reward in Rewards)
+                {
+                    rewardsJsonData.Add(reward.ToJson());
+                }
+            }
+            JsonData missedReceiveReliefConsumeActionsJsonData = null;
+            if (MissedReceiveReliefConsumeActions != null)
+            {
+                missedReceiveReliefConsumeActionsJsonData = new JsonData();
+                foreach (var missedReceiveReliefConsumeAction in MissedReceiveReliefConsumeActions)
+                {
+                    missedReceiveReliefConsumeActionsJsonData.Add(missedReceiveReliefConsumeAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["bonusModelId"] = BonusModelId,
                 ["name"] = Name,
@@ -185,19 +203,9 @@ namespace Gs2.Gs2LoginReward.Model
                 ["periodEventId"] = PeriodEventId,
                 ["resetHour"] = ResetHour,
                 ["repeat"] = Repeat,
-                ["rewards"] = Rewards == null ? null : new JsonData(
-                        Rewards.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["rewards"] = rewardsJsonData,
                 ["missedReceiveRelief"] = MissedReceiveRelief,
-                ["missedReceiveReliefConsumeActions"] = MissedReceiveReliefConsumeActions == null ? null : new JsonData(
-                        MissedReceiveReliefConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["missedReceiveReliefConsumeActions"] = missedReceiveReliefConsumeActionsJsonData,
             };
         }
 

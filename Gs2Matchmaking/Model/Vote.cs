@@ -168,16 +168,20 @@ namespace Gs2.Gs2Matchmaking.Model
 
         public JsonData ToJson()
         {
+            JsonData writtenBallotsJsonData = null;
+            if (WrittenBallots != null)
+            {
+                writtenBallotsJsonData = new JsonData();
+                foreach (var writtenBallot in WrittenBallots)
+                {
+                    writtenBallotsJsonData.Add(writtenBallot.ToJson());
+                }
+            }
             return new JsonData {
                 ["voteId"] = VoteId,
                 ["ratingName"] = RatingName,
                 ["gatheringName"] = GatheringName,
-                ["writtenBallots"] = WrittenBallots == null ? null : new JsonData(
-                        WrittenBallots.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["writtenBallots"] = writtenBallotsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };

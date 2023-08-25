@@ -145,16 +145,20 @@ namespace Gs2.Gs2Quest.Model
 
         public JsonData ToJson()
         {
+            JsonData questsJsonData = null;
+            if (Quests != null)
+            {
+                questsJsonData = new JsonData();
+                foreach (var quest in Quests)
+                {
+                    questsJsonData.Add(quest.ToJson());
+                }
+            }
             return new JsonData {
                 ["questGroupModelId"] = QuestGroupModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["quests"] = Quests == null ? null : new JsonData(
-                        Quests.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["quests"] = questsJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }

@@ -63,12 +63,17 @@ namespace Gs2.Gs2Distributor.Result
 
         public JsonData ToJson()
         {
+            JsonData taskResultsJsonData = null;
+            if (TaskResults != null)
+            {
+                taskResultsJsonData = new JsonData();
+                foreach (var taskResult in TaskResults)
+                {
+                    taskResultsJsonData.Add(taskResult);
+                }
+            }
             return new JsonData {
-                ["taskResults"] = TaskResults == null ? null : new JsonData(
-                        TaskResults.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["taskResults"] = taskResultsJsonData,
                 ["sheetResult"] = SheetResult,
             };
         }

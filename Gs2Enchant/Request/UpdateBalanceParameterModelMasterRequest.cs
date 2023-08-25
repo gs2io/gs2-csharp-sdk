@@ -91,6 +91,15 @@ namespace Gs2.Gs2Enchant.Request
 
         public override JsonData ToJson()
         {
+            JsonData parametersJsonData = null;
+            if (Parameters != null)
+            {
+                parametersJsonData = new JsonData();
+                foreach (var parameter in Parameters)
+                {
+                    parametersJsonData.Add(parameter.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["parameterName"] = ParameterName,
@@ -98,12 +107,7 @@ namespace Gs2.Gs2Enchant.Request
                 ["metadata"] = Metadata,
                 ["totalValue"] = TotalValue,
                 ["initialValueStrategy"] = InitialValueStrategy,
-                ["parameters"] = Parameters == null ? null : new JsonData(
-                        Parameters.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["parameters"] = parametersJsonData,
             };
         }
 

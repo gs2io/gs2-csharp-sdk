@@ -97,17 +97,22 @@ namespace Gs2.Gs2Datastore.Request
 
         public override JsonData ToJson()
         {
+            JsonData allowUserIdsJsonData = null;
+            if (AllowUserIds != null)
+            {
+                allowUserIdsJsonData = new JsonData();
+                foreach (var allowUserId in AllowUserIds)
+                {
+                    allowUserIdsJsonData.Add(allowUserId);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["name"] = Name,
                 ["contentType"] = ContentType,
                 ["scope"] = Scope,
-                ["allowUserIds"] = AllowUserIds == null ? null : new JsonData(
-                        AllowUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["allowUserIds"] = allowUserIdsJsonData,
                 ["updateIfExists"] = UpdateIfExists,
             };
         }

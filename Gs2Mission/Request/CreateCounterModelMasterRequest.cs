@@ -85,17 +85,21 @@ namespace Gs2.Gs2Mission.Request
 
         public override JsonData ToJson()
         {
+            JsonData scopesJsonData = null;
+            if (Scopes != null)
+            {
+                scopesJsonData = new JsonData();
+                foreach (var scope in Scopes)
+                {
+                    scopesJsonData.Add(scope.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["description"] = Description,
-                ["scopes"] = Scopes == null ? null : new JsonData(
-                        Scopes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["scopes"] = scopesJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }

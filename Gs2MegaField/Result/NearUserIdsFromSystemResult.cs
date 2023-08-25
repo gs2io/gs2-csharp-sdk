@@ -56,12 +56,17 @@ namespace Gs2.Gs2MegaField.Result
 
         public JsonData ToJson()
         {
+            JsonData itemsJsonData = null;
+            if (Items != null)
+            {
+                itemsJsonData = new JsonData();
+                foreach (var item in Items)
+                {
+                    itemsJsonData.Add(item);
+                }
+            }
             return new JsonData {
-                ["items"] = Items == null ? null : new JsonData(
-                        Items.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["items"] = itemsJsonData,
             };
         }
 

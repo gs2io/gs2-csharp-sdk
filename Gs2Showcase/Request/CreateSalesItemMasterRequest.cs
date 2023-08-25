@@ -87,23 +87,31 @@ namespace Gs2.Gs2Showcase.Request
 
         public override JsonData ToJson()
         {
+            JsonData consumeActionsJsonData = null;
+            if (ConsumeActions != null)
+            {
+                consumeActionsJsonData = new JsonData();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    consumeActionsJsonData.Add(consumeAction.ToJson());
+                }
+            }
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
-                        ConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["consumeActions"] = consumeActionsJsonData,
+                ["acquireActions"] = acquireActionsJsonData,
             };
         }
 

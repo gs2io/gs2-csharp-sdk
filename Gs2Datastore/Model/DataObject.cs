@@ -198,16 +198,21 @@ namespace Gs2.Gs2Datastore.Model
 
         public JsonData ToJson()
         {
+            JsonData allowUserIdsJsonData = null;
+            if (AllowUserIds != null)
+            {
+                allowUserIdsJsonData = new JsonData();
+                foreach (var allowUserId in AllowUserIds)
+                {
+                    allowUserIdsJsonData.Add(allowUserId);
+                }
+            }
             return new JsonData {
                 ["dataObjectId"] = DataObjectId,
                 ["name"] = Name,
                 ["userId"] = UserId,
                 ["scope"] = Scope,
-                ["allowUserIds"] = AllowUserIds == null ? null : new JsonData(
-                        AllowUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["allowUserIds"] = allowUserIdsJsonData,
                 ["status"] = Status,
                 ["generation"] = Generation,
                 ["previousGeneration"] = PreviousGeneration,

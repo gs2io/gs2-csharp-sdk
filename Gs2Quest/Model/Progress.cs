@@ -175,18 +175,22 @@ namespace Gs2.Gs2Quest.Model
 
         public JsonData ToJson()
         {
+            JsonData rewardsJsonData = null;
+            if (Rewards != null)
+            {
+                rewardsJsonData = new JsonData();
+                foreach (var reward in Rewards)
+                {
+                    rewardsJsonData.Add(reward.ToJson());
+                }
+            }
             return new JsonData {
                 ["progressId"] = ProgressId,
                 ["userId"] = UserId,
                 ["transactionId"] = TransactionId,
                 ["questModelId"] = QuestModelId,
                 ["randomSeed"] = RandomSeed,
-                ["rewards"] = Rewards == null ? null : new JsonData(
-                        Rewards.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["rewards"] = rewardsJsonData,
                 ["metadata"] = Metadata,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,

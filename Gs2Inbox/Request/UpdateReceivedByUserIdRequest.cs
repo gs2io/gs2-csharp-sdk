@@ -73,14 +73,19 @@ namespace Gs2.Gs2Inbox.Request
 
         public override JsonData ToJson()
         {
+            JsonData receivedGlobalMessageNamesJsonData = null;
+            if (ReceivedGlobalMessageNames != null)
+            {
+                receivedGlobalMessageNamesJsonData = new JsonData();
+                foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)
+                {
+                    receivedGlobalMessageNamesJsonData.Add(receivedGlobalMessageName);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["receivedGlobalMessageNames"] = ReceivedGlobalMessageNames == null ? null : new JsonData(
-                        ReceivedGlobalMessageNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["receivedGlobalMessageNames"] = receivedGlobalMessageNamesJsonData,
             };
         }
 

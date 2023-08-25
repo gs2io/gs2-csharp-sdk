@@ -65,15 +65,19 @@ namespace Gs2.Gs2Showcase.Model
 
         public JsonData ToJson()
         {
+            JsonData salesItemsJsonData = null;
+            if (SalesItems != null)
+            {
+                salesItemsJsonData = new JsonData();
+                foreach (var salesItem in SalesItems)
+                {
+                    salesItemsJsonData.Add(salesItem.ToJson());
+                }
+            }
             return new JsonData {
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["salesItems"] = SalesItems == null ? null : new JsonData(
-                        SalesItems.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["salesItems"] = salesItemsJsonData,
             };
         }
 

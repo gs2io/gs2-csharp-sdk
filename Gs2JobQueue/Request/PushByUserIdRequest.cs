@@ -73,15 +73,19 @@ namespace Gs2.Gs2JobQueue.Request
 
         public override JsonData ToJson()
         {
+            JsonData jobsJsonData = null;
+            if (Jobs != null)
+            {
+                jobsJsonData = new JsonData();
+                foreach (var job in Jobs)
+                {
+                    jobsJsonData.Add(job.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["jobs"] = Jobs == null ? null : new JsonData(
-                        Jobs.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["jobs"] = jobsJsonData,
             };
         }
 

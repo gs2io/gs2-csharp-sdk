@@ -197,17 +197,21 @@ namespace Gs2.Gs2Enchant.Model
 
         public JsonData ToJson()
         {
+            JsonData parameterValuesJsonData = null;
+            if (ParameterValues != null)
+            {
+                parameterValuesJsonData = new JsonData();
+                foreach (var parameterValue in ParameterValues)
+                {
+                    parameterValuesJsonData.Add(parameterValue.ToJson());
+                }
+            }
             return new JsonData {
                 ["rarityParameterStatusId"] = RarityParameterStatusId,
                 ["userId"] = UserId,
                 ["parameterName"] = ParameterName,
                 ["propertyId"] = PropertyId,
-                ["parameterValues"] = ParameterValues == null ? null : new JsonData(
-                        ParameterValues.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["parameterValues"] = parameterValuesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

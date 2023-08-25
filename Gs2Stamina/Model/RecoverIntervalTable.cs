@@ -71,15 +71,20 @@ namespace Gs2.Gs2Stamina.Model
 
         public JsonData ToJson()
         {
+            JsonData valuesJsonData = null;
+            if (Values != null)
+            {
+                valuesJsonData = new JsonData();
+                foreach (var value in Values)
+                {
+                    valuesJsonData.Add(value);
+                }
+            }
             return new JsonData {
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["experienceModelId"] = ExperienceModelId,
-                ["values"] = Values == null ? null : new JsonData(
-                        Values.Select(v => {
-                            return new JsonData((int?)int.Parse(v.ToString()));
-                        }).ToArray()
-                    ),
+                ["values"] = valuesJsonData,
             };
         }
 

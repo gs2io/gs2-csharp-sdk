@@ -56,13 +56,17 @@ namespace Gs2.Gs2Project.Result
 
         public JsonData ToJson()
         {
+            JsonData itemsJsonData = null;
+            if (Items != null)
+            {
+                itemsJsonData = new JsonData();
+                foreach (var item in Items)
+                {
+                    itemsJsonData.Add(item.ToJson());
+                }
+            }
             return new JsonData {
-                ["items"] = Items == null ? null : new JsonData(
-                        Items.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["items"] = itemsJsonData,
             };
         }
 

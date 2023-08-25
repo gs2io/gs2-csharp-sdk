@@ -53,13 +53,17 @@ namespace Gs2.Gs2Idle.Model
 
         public JsonData ToJson()
         {
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActions"] = acquireActionsJsonData,
             };
         }
 

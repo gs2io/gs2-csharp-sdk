@@ -105,13 +105,18 @@ namespace Gs2.Gs2Identifier.Model
 
         public JsonData ToJson()
         {
+            JsonData securityPolicyIdsJsonData = null;
+            if (SecurityPolicyIds != null)
+            {
+                securityPolicyIdsJsonData = new JsonData();
+                foreach (var securityPolicyId in SecurityPolicyIds)
+                {
+                    securityPolicyIdsJsonData.Add(securityPolicyId);
+                }
+            }
             return new JsonData {
                 ["userId"] = UserId,
-                ["securityPolicyIds"] = SecurityPolicyIds == null ? null : new JsonData(
-                        SecurityPolicyIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["securityPolicyIds"] = securityPolicyIdsJsonData,
                 ["attachedAt"] = AttachedAt,
                 ["revision"] = Revision,
             };

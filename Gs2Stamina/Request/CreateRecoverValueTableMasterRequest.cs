@@ -85,17 +85,22 @@ namespace Gs2.Gs2Stamina.Request
 
         public override JsonData ToJson()
         {
+            JsonData valuesJsonData = null;
+            if (Values != null)
+            {
+                valuesJsonData = new JsonData();
+                foreach (var value in Values)
+                {
+                    valuesJsonData.Add(value);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["experienceModelId"] = ExperienceModelId,
-                ["values"] = Values == null ? null : new JsonData(
-                        Values.Select(v => {
-                            return new JsonData((int?)int.Parse(v.ToString()));
-                        }).ToArray()
-                    ),
+                ["values"] = valuesJsonData,
             };
         }
 

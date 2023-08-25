@@ -79,17 +79,21 @@ namespace Gs2.Gs2Lottery.Request
 
         public override JsonData ToJson()
         {
+            JsonData prizesJsonData = null;
+            if (Prizes != null)
+            {
+                prizesJsonData = new JsonData();
+                foreach (var prize in Prizes)
+                {
+                    prizesJsonData.Add(prize.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["prizeTableName"] = PrizeTableName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["prizes"] = Prizes == null ? null : new JsonData(
-                        Prizes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["prizes"] = prizesJsonData,
             };
         }
 

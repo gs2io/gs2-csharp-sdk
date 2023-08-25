@@ -65,14 +65,18 @@ namespace Gs2.Gs2Quest.Model
 
         public JsonData ToJson()
         {
+            JsonData completeAcquireActionsJsonData = null;
+            if (CompleteAcquireActions != null)
+            {
+                completeAcquireActionsJsonData = new JsonData();
+                foreach (var completeAcquireAction in CompleteAcquireActions)
+                {
+                    completeAcquireActionsJsonData.Add(completeAcquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["metadata"] = Metadata,
-                ["completeAcquireActions"] = CompleteAcquireActions == null ? null : new JsonData(
-                        CompleteAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["completeAcquireActions"] = completeAcquireActionsJsonData,
                 ["weight"] = Weight,
             };
         }

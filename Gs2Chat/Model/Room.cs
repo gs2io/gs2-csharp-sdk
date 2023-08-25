@@ -169,17 +169,22 @@ namespace Gs2.Gs2Chat.Model
 
         public JsonData ToJson()
         {
+            JsonData whiteListUserIdsJsonData = null;
+            if (WhiteListUserIds != null)
+            {
+                whiteListUserIdsJsonData = new JsonData();
+                foreach (var whiteListUserId in WhiteListUserIds)
+                {
+                    whiteListUserIdsJsonData.Add(whiteListUserId);
+                }
+            }
             return new JsonData {
                 ["roomId"] = RoomId,
                 ["name"] = Name,
                 ["userId"] = UserId,
                 ["metadata"] = Metadata,
                 ["password"] = Password,
-                ["whiteListUserIds"] = WhiteListUserIds == null ? null : new JsonData(
-                        WhiteListUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["whiteListUserIds"] = whiteListUserIdsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

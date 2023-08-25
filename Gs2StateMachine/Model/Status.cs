@@ -200,23 +200,31 @@ namespace Gs2.Gs2StateMachine.Model
 
         public JsonData ToJson()
         {
+            JsonData stacksJsonData = null;
+            if (Stacks != null)
+            {
+                stacksJsonData = new JsonData();
+                foreach (var stack in Stacks)
+                {
+                    stacksJsonData.Add(stack.ToJson());
+                }
+            }
+            JsonData variablesJsonData = null;
+            if (Variables != null)
+            {
+                variablesJsonData = new JsonData();
+                foreach (var variable in Variables)
+                {
+                    variablesJsonData.Add(variable.ToJson());
+                }
+            }
             return new JsonData {
                 ["statusId"] = StatusId,
                 ["userId"] = UserId,
                 ["name"] = Name,
                 ["stateMachineVersion"] = StateMachineVersion,
-                ["stacks"] = Stacks == null ? null : new JsonData(
-                        Stacks.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["variables"] = Variables == null ? null : new JsonData(
-                        Variables.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["stacks"] = stacksJsonData,
+                ["variables"] = variablesJsonData,
                 ["status"] = Value,
                 ["lastError"] = LastError,
                 ["transitionCount"] = TransitionCount,

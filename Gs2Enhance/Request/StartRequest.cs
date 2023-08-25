@@ -99,24 +99,32 @@ namespace Gs2.Gs2Enhance.Request
 
         public override JsonData ToJson()
         {
+            JsonData materialsJsonData = null;
+            if (Materials != null)
+            {
+                materialsJsonData = new JsonData();
+                foreach (var material in Materials)
+                {
+                    materialsJsonData.Add(material.ToJson());
+                }
+            }
+            JsonData configJsonData = null;
+            if (Config != null)
+            {
+                configJsonData = new JsonData();
+                foreach (var confi in Config)
+                {
+                    configJsonData.Add(confi.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["rateName"] = RateName,
                 ["targetItemSetId"] = TargetItemSetId,
-                ["materials"] = Materials == null ? null : new JsonData(
-                        Materials.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["materials"] = materialsJsonData,
                 ["accessToken"] = AccessToken,
                 ["force"] = Force,
-                ["config"] = Config == null ? null : new JsonData(
-                        Config.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["config"] = configJsonData,
             };
         }
 

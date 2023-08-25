@@ -169,16 +169,20 @@ namespace Gs2.Gs2Mission.Model
 
         public JsonData ToJson()
         {
+            JsonData tasksJsonData = null;
+            if (Tasks != null)
+            {
+                tasksJsonData = new JsonData();
+                foreach (var task in Tasks)
+                {
+                    tasksJsonData.Add(task.ToJson());
+                }
+            }
             return new JsonData {
                 ["missionGroupId"] = MissionGroupId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["tasks"] = Tasks == null ? null : new JsonData(
-                        Tasks.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["tasks"] = tasksJsonData,
                 ["resetType"] = ResetType,
                 ["resetDayOfMonth"] = ResetDayOfMonth,
                 ["resetDayOfWeek"] = ResetDayOfWeek,

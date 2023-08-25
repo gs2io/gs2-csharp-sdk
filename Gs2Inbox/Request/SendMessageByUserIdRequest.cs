@@ -91,16 +91,20 @@ namespace Gs2.Gs2Inbox.Request
 
         public override JsonData ToJson()
         {
+            JsonData readAcquireActionsJsonData = null;
+            if (ReadAcquireActions != null)
+            {
+                readAcquireActionsJsonData = new JsonData();
+                foreach (var readAcquireAction in ReadAcquireActions)
+                {
+                    readAcquireActionsJsonData.Add(readAcquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["metadata"] = Metadata,
-                ["readAcquireActions"] = ReadAcquireActions == null ? null : new JsonData(
-                        ReadAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresAt"] = ExpiresAt,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
             };

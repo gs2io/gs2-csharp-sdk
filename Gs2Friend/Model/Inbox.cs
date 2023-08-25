@@ -151,14 +151,19 @@ namespace Gs2.Gs2Friend.Model
 
         public JsonData ToJson()
         {
+            JsonData fromUserIdsJsonData = null;
+            if (FromUserIds != null)
+            {
+                fromUserIdsJsonData = new JsonData();
+                foreach (var fromUserId in FromUserIds)
+                {
+                    fromUserIdsJsonData.Add(fromUserId);
+                }
+            }
             return new JsonData {
                 ["inboxId"] = InboxId,
                 ["userId"] = UserId,
-                ["fromUserIds"] = FromUserIds == null ? null : new JsonData(
-                        FromUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["fromUserIds"] = fromUserIdsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

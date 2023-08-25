@@ -91,17 +91,22 @@ namespace Gs2.Gs2Chat.Request
 
         public override JsonData ToJson()
         {
+            JsonData whiteListUserIdsJsonData = null;
+            if (WhiteListUserIds != null)
+            {
+                whiteListUserIdsJsonData = new JsonData();
+                foreach (var whiteListUserId in WhiteListUserIds)
+                {
+                    whiteListUserIdsJsonData.Add(whiteListUserId);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
                 ["userId"] = UserId,
                 ["metadata"] = Metadata,
                 ["password"] = Password,
-                ["whiteListUserIds"] = WhiteListUserIds == null ? null : new JsonData(
-                        WhiteListUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["whiteListUserIds"] = whiteListUserIdsJsonData,
             };
         }
 

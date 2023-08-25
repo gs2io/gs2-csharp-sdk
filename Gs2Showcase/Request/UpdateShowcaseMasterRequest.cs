@@ -85,17 +85,21 @@ namespace Gs2.Gs2Showcase.Request
 
         public override JsonData ToJson()
         {
+            JsonData displayItemsJsonData = null;
+            if (DisplayItems != null)
+            {
+                displayItemsJsonData = new JsonData();
+                foreach (var displayItem in DisplayItems)
+                {
+                    displayItemsJsonData.Add(displayItem.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["showcaseName"] = ShowcaseName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["displayItems"] = DisplayItems == null ? null : new JsonData(
-                        DisplayItems.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["displayItems"] = displayItemsJsonData,
                 ["salesPeriodEventId"] = SalesPeriodEventId,
             };
         }

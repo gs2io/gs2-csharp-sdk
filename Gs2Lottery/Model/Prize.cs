@@ -89,15 +89,19 @@ namespace Gs2.Gs2Lottery.Model
 
         public JsonData ToJson()
         {
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["prizeId"] = PrizeId,
                 ["type"] = Type,
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActions"] = acquireActionsJsonData,
                 ["drawnLimit"] = DrawnLimit,
                 ["limitFailOverPrizeId"] = LimitFailOverPrizeId,
                 ["prizeTableName"] = PrizeTableName,

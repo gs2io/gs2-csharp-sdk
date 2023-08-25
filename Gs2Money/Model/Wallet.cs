@@ -186,18 +186,22 @@ namespace Gs2.Gs2Money.Model
 
         public JsonData ToJson()
         {
+            JsonData detailJsonData = null;
+            if (Detail != null)
+            {
+                detailJsonData = new JsonData();
+                foreach (var detai in Detail)
+                {
+                    detailJsonData.Add(detai.ToJson());
+                }
+            }
             return new JsonData {
                 ["walletId"] = WalletId,
                 ["userId"] = UserId,
                 ["slot"] = Slot,
                 ["paid"] = Paid,
                 ["free"] = Free,
-                ["detail"] = Detail == null ? null : new JsonData(
-                        Detail.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["detail"] = detailJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

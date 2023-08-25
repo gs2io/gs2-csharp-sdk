@@ -113,6 +113,33 @@ namespace Gs2.Gs2Exchange.Request
 
         public override JsonData ToJson()
         {
+            JsonData skipConsumeActionsJsonData = null;
+            if (SkipConsumeActions != null)
+            {
+                skipConsumeActionsJsonData = new JsonData();
+                foreach (var skipConsumeAction in SkipConsumeActions)
+                {
+                    skipConsumeActionsJsonData.Add(skipConsumeAction.ToJson());
+                }
+            }
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
+            JsonData consumeActionsJsonData = null;
+            if (ConsumeActions != null)
+            {
+                consumeActionsJsonData = new JsonData();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    consumeActionsJsonData.Add(consumeAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["rateName"] = RateName,
@@ -121,24 +148,9 @@ namespace Gs2.Gs2Exchange.Request
                 ["timingType"] = TimingType,
                 ["lockTime"] = LockTime,
                 ["enableSkip"] = EnableSkip,
-                ["skipConsumeActions"] = SkipConsumeActions == null ? null : new JsonData(
-                        SkipConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
-                        ConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["skipConsumeActions"] = skipConsumeActionsJsonData,
+                ["acquireActions"] = acquireActionsJsonData,
+                ["consumeActions"] = consumeActionsJsonData,
             };
         }
 

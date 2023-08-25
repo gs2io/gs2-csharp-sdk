@@ -232,6 +232,15 @@ namespace Gs2.Gs2Inventory.Model
 
         public JsonData ToJson()
         {
+            JsonData referenceOfJsonData = null;
+            if (ReferenceOf != null)
+            {
+                referenceOfJsonData = new JsonData();
+                foreach (var referenceO in ReferenceOf)
+                {
+                    referenceOfJsonData.Add(referenceO);
+                }
+            }
             return new JsonData {
                 ["itemSetId"] = ItemSetId,
                 ["name"] = Name,
@@ -239,11 +248,7 @@ namespace Gs2.Gs2Inventory.Model
                 ["userId"] = UserId,
                 ["itemName"] = ItemName,
                 ["count"] = Count,
-                ["referenceOf"] = ReferenceOf == null ? null : new JsonData(
-                        ReferenceOf.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["referenceOf"] = referenceOfJsonData,
                 ["sortValue"] = SortValue,
                 ["expiresAt"] = ExpiresAt,
                 ["createdAt"] = CreatedAt,

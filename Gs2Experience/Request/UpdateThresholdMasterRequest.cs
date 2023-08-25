@@ -79,16 +79,21 @@ namespace Gs2.Gs2Experience.Request
 
         public override JsonData ToJson()
         {
+            JsonData valuesJsonData = null;
+            if (Values != null)
+            {
+                valuesJsonData = new JsonData();
+                foreach (var value in Values)
+                {
+                    valuesJsonData.Add(value);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["thresholdName"] = ThresholdName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["values"] = Values == null ? null : new JsonData(
-                        Values.Select(v => {
-                            return new JsonData((long?)long.Parse(v.ToString()));
-                        }).ToArray()
-                    ),
+                ["values"] = valuesJsonData,
             };
         }
 

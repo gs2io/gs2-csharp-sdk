@@ -59,13 +59,18 @@ namespace Gs2.Gs2Experience.Model
 
         public JsonData ToJson()
         {
+            JsonData ratesJsonData = null;
+            if (Rates != null)
+            {
+                ratesJsonData = new JsonData();
+                foreach (var rate in Rates)
+                {
+                    ratesJsonData.Add(rate);
+                }
+            }
             return new JsonData {
                 ["name"] = Name,
-                ["rates"] = Rates == null ? null : new JsonData(
-                        Rates.Select(v => {
-                            return new JsonData((double?)double.Parse(v.ToString()));
-                        }).ToArray()
-                    ),
+                ["rates"] = ratesJsonData,
             };
         }
 

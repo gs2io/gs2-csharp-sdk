@@ -139,16 +139,20 @@ namespace Gs2.Gs2Inventory.Model
 
         public JsonData ToJson()
         {
+            JsonData bigItemModelsJsonData = null;
+            if (BigItemModels != null)
+            {
+                bigItemModelsJsonData = new JsonData();
+                foreach (var bigItemModel in BigItemModels)
+                {
+                    bigItemModelsJsonData.Add(bigItemModel.ToJson());
+                }
+            }
             return new JsonData {
                 ["inventoryModelId"] = InventoryModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["bigItemModels"] = BigItemModels == null ? null : new JsonData(
-                        BigItemModels.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["bigItemModels"] = bigItemModelsJsonData,
             };
         }
 

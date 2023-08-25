@@ -84,16 +84,21 @@ namespace Gs2.Gs2Script.Result
 
         public JsonData ToJson()
         {
+            JsonData outputJsonData = null;
+            if (Output != null)
+            {
+                outputJsonData = new JsonData();
+                foreach (var outpu in Output)
+                {
+                    outputJsonData.Add(outpu);
+                }
+            }
             return new JsonData {
                 ["code"] = Code,
                 ["result"] = Result,
                 ["executeTime"] = ExecuteTime,
                 ["charged"] = Charged,
-                ["output"] = Output == null ? null : new JsonData(
-                        Output.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["output"] = outputJsonData,
             };
         }
 

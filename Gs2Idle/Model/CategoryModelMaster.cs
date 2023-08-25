@@ -187,6 +187,15 @@ namespace Gs2.Gs2Idle.Model
 
         public JsonData ToJson()
         {
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["categoryModelId"] = CategoryModelId,
                 ["name"] = Name,
@@ -194,12 +203,7 @@ namespace Gs2.Gs2Idle.Model
                 ["metadata"] = Metadata,
                 ["rewardIntervalMinutes"] = RewardIntervalMinutes,
                 ["defaultMaximumIdleMinutes"] = DefaultMaximumIdleMinutes,
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActions"] = acquireActionsJsonData,
                 ["idlePeriodScheduleId"] = IdlePeriodScheduleId,
                 ["receivePeriodScheduleId"] = ReceivePeriodScheduleId,
                 ["createdAt"] = CreatedAt,

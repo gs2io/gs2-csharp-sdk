@@ -87,22 +87,30 @@ namespace Gs2.Gs2Quest.Request
 
         public override JsonData ToJson()
         {
+            JsonData rewardsJsonData = null;
+            if (Rewards != null)
+            {
+                rewardsJsonData = new JsonData();
+                foreach (var reward in Rewards)
+                {
+                    rewardsJsonData.Add(reward.ToJson());
+                }
+            }
+            JsonData configJsonData = null;
+            if (Config != null)
+            {
+                configJsonData = new JsonData();
+                foreach (var confi in Config)
+                {
+                    configJsonData.Add(confi.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["rewards"] = Rewards == null ? null : new JsonData(
-                        Rewards.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["rewards"] = rewardsJsonData,
                 ["isComplete"] = IsComplete,
-                ["config"] = Config == null ? null : new JsonData(
-                        Config.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["config"] = configJsonData,
             };
         }
 

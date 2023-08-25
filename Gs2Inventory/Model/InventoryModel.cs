@@ -157,6 +157,15 @@ namespace Gs2.Gs2Inventory.Model
 
         public JsonData ToJson()
         {
+            JsonData itemModelsJsonData = null;
+            if (ItemModels != null)
+            {
+                itemModelsJsonData = new JsonData();
+                foreach (var itemModel in ItemModels)
+                {
+                    itemModelsJsonData.Add(itemModel.ToJson());
+                }
+            }
             return new JsonData {
                 ["inventoryModelId"] = InventoryModelId,
                 ["name"] = Name,
@@ -164,12 +173,7 @@ namespace Gs2.Gs2Inventory.Model
                 ["initialCapacity"] = InitialCapacity,
                 ["maxCapacity"] = MaxCapacity,
                 ["protectReferencedItem"] = ProtectReferencedItem,
-                ["itemModels"] = ItemModels == null ? null : new JsonData(
-                        ItemModels.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["itemModels"] = itemModelsJsonData,
             };
         }
 

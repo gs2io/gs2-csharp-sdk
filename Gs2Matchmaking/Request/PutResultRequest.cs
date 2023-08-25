@@ -67,15 +67,19 @@ namespace Gs2.Gs2Matchmaking.Request
 
         public override JsonData ToJson()
         {
+            JsonData gameResultsJsonData = null;
+            if (GameResults != null)
+            {
+                gameResultsJsonData = new JsonData();
+                foreach (var gameResult in GameResults)
+                {
+                    gameResultsJsonData.Add(gameResult.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["ratingName"] = RatingName,
-                ["gameResults"] = GameResults == null ? null : new JsonData(
-                        GameResults.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["gameResults"] = gameResultsJsonData,
             };
         }
 

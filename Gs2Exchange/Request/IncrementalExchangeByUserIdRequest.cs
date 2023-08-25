@@ -85,17 +85,21 @@ namespace Gs2.Gs2Exchange.Request
 
         public override JsonData ToJson()
         {
+            JsonData configJsonData = null;
+            if (Config != null)
+            {
+                configJsonData = new JsonData();
+                foreach (var confi in Config)
+                {
+                    configJsonData.Add(confi.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["rateName"] = RateName,
                 ["userId"] = UserId,
                 ["count"] = Count,
-                ["config"] = Config == null ? null : new JsonData(
-                        Config.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["config"] = configJsonData,
             };
         }
 

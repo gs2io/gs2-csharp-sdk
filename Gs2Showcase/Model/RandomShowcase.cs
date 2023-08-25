@@ -163,17 +163,21 @@ namespace Gs2.Gs2Showcase.Model
 
         public JsonData ToJson()
         {
+            JsonData displayItemsJsonData = null;
+            if (DisplayItems != null)
+            {
+                displayItemsJsonData = new JsonData();
+                foreach (var displayItem in DisplayItems)
+                {
+                    displayItemsJsonData.Add(displayItem.ToJson());
+                }
+            }
             return new JsonData {
                 ["randomShowcaseId"] = RandomShowcaseId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["maximumNumberOfChoice"] = MaximumNumberOfChoice,
-                ["displayItems"] = DisplayItems == null ? null : new JsonData(
-                        DisplayItems.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["displayItems"] = displayItemsJsonData,
                 ["baseTimestamp"] = BaseTimestamp,
                 ["resetIntervalHours"] = ResetIntervalHours,
                 ["salesPeriodEventId"] = SalesPeriodEventId,

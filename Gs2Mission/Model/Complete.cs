@@ -188,20 +188,30 @@ namespace Gs2.Gs2Mission.Model
 
         public JsonData ToJson()
         {
+            JsonData completedMissionTaskNamesJsonData = null;
+            if (CompletedMissionTaskNames != null)
+            {
+                completedMissionTaskNamesJsonData = new JsonData();
+                foreach (var completedMissionTaskName in CompletedMissionTaskNames)
+                {
+                    completedMissionTaskNamesJsonData.Add(completedMissionTaskName);
+                }
+            }
+            JsonData receivedMissionTaskNamesJsonData = null;
+            if (ReceivedMissionTaskNames != null)
+            {
+                receivedMissionTaskNamesJsonData = new JsonData();
+                foreach (var receivedMissionTaskName in ReceivedMissionTaskNames)
+                {
+                    receivedMissionTaskNamesJsonData.Add(receivedMissionTaskName);
+                }
+            }
             return new JsonData {
                 ["completeId"] = CompleteId,
                 ["userId"] = UserId,
                 ["missionGroupName"] = MissionGroupName,
-                ["completedMissionTaskNames"] = CompletedMissionTaskNames == null ? null : new JsonData(
-                        CompletedMissionTaskNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
-                ["receivedMissionTaskNames"] = ReceivedMissionTaskNames == null ? null : new JsonData(
-                        ReceivedMissionTaskNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["completedMissionTaskNames"] = completedMissionTaskNamesJsonData,
+                ["receivedMissionTaskNames"] = receivedMissionTaskNamesJsonData,
                 ["nextResetAt"] = NextResetAt,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,

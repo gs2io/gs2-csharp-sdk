@@ -79,16 +79,20 @@ namespace Gs2.Gs2Inventory.Request
 
         public override JsonData ToJson()
         {
+            JsonData consumeCountsJsonData = null;
+            if (ConsumeCounts != null)
+            {
+                consumeCountsJsonData = new JsonData();
+                foreach (var consumeCount in ConsumeCounts)
+                {
+                    consumeCountsJsonData.Add(consumeCount.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["inventoryName"] = InventoryName,
                 ["userId"] = UserId,
-                ["consumeCounts"] = ConsumeCounts == null ? null : new JsonData(
-                        ConsumeCounts.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["consumeCounts"] = consumeCountsJsonData,
             };
         }
 

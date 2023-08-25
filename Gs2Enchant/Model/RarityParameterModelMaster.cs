@@ -177,24 +177,32 @@ namespace Gs2.Gs2Enchant.Model
 
         public JsonData ToJson()
         {
+            JsonData parameterCountsJsonData = null;
+            if (ParameterCounts != null)
+            {
+                parameterCountsJsonData = new JsonData();
+                foreach (var parameterCount in ParameterCounts)
+                {
+                    parameterCountsJsonData.Add(parameterCount.ToJson());
+                }
+            }
+            JsonData parametersJsonData = null;
+            if (Parameters != null)
+            {
+                parametersJsonData = new JsonData();
+                foreach (var parameter in Parameters)
+                {
+                    parametersJsonData.Add(parameter.ToJson());
+                }
+            }
             return new JsonData {
                 ["rarityParameterModelId"] = RarityParameterModelId,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["maximumParameterCount"] = MaximumParameterCount,
-                ["parameterCounts"] = ParameterCounts == null ? null : new JsonData(
-                        ParameterCounts.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["parameters"] = Parameters == null ? null : new JsonData(
-                        Parameters.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["parameterCounts"] = parameterCountsJsonData,
+                ["parameters"] = parametersJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

@@ -79,15 +79,20 @@ namespace Gs2.Gs2MegaField.Request
 
         public override JsonData ToJson()
         {
+            JsonData userIdsJsonData = null;
+            if (UserIds != null)
+            {
+                userIdsJsonData = new JsonData();
+                foreach (var userId in UserIds)
+                {
+                    userIdsJsonData.Add(userId);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["areaModelName"] = AreaModelName,
                 ["layerModelName"] = LayerModelName,
-                ["userIds"] = UserIds == null ? null : new JsonData(
-                        UserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["userIds"] = userIdsJsonData,
             };
         }
 

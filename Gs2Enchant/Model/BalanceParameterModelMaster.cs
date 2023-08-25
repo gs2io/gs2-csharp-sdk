@@ -175,6 +175,15 @@ namespace Gs2.Gs2Enchant.Model
 
         public JsonData ToJson()
         {
+            JsonData parametersJsonData = null;
+            if (Parameters != null)
+            {
+                parametersJsonData = new JsonData();
+                foreach (var parameter in Parameters)
+                {
+                    parametersJsonData.Add(parameter.ToJson());
+                }
+            }
             return new JsonData {
                 ["balanceParameterModelId"] = BalanceParameterModelId,
                 ["name"] = Name,
@@ -182,12 +191,7 @@ namespace Gs2.Gs2Enchant.Model
                 ["metadata"] = Metadata,
                 ["totalValue"] = TotalValue,
                 ["initialValueStrategy"] = InitialValueStrategy,
-                ["parameters"] = Parameters == null ? null : new JsonData(
-                        Parameters.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["parameters"] = parametersJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

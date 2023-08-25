@@ -146,16 +146,20 @@ namespace Gs2.Gs2Ranking.Model
 
         public JsonData ToJson()
         {
+            JsonData lastCalculatedAtsJsonData = null;
+            if (LastCalculatedAts != null)
+            {
+                lastCalculatedAtsJsonData = new JsonData();
+                foreach (var lastCalculatedAt in LastCalculatedAts)
+                {
+                    lastCalculatedAtsJsonData.Add(lastCalculatedAt.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["lastCalculatedAts"] = LastCalculatedAts == null ? null : new JsonData(
-                        LastCalculatedAts.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["lastCalculatedAts"] = lastCalculatedAtsJsonData,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,

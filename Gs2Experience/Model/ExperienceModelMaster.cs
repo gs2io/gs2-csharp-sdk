@@ -187,6 +187,15 @@ namespace Gs2.Gs2Experience.Model
 
         public JsonData ToJson()
         {
+            JsonData acquireActionRatesJsonData = null;
+            if (AcquireActionRates != null)
+            {
+                acquireActionRatesJsonData = new JsonData();
+                foreach (var acquireActionRate in AcquireActionRates)
+                {
+                    acquireActionRatesJsonData.Add(acquireActionRate.ToJson());
+                }
+            }
             return new JsonData {
                 ["experienceModelId"] = ExperienceModelId,
                 ["name"] = Name,
@@ -196,12 +205,7 @@ namespace Gs2.Gs2Experience.Model
                 ["defaultRankCap"] = DefaultRankCap,
                 ["maxRankCap"] = MaxRankCap,
                 ["rankThresholdName"] = RankThresholdName,
-                ["acquireActionRates"] = AcquireActionRates == null ? null : new JsonData(
-                        AcquireActionRates.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActionRates"] = acquireActionRatesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

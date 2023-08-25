@@ -219,6 +219,24 @@ namespace Gs2.Gs2Ranking.Model
 
         public JsonData ToJson()
         {
+            JsonData additionalScopesJsonData = null;
+            if (AdditionalScopes != null)
+            {
+                additionalScopesJsonData = new JsonData();
+                foreach (var additionalScope in AdditionalScopes)
+                {
+                    additionalScopesJsonData.Add(additionalScope.ToJson());
+                }
+            }
+            JsonData ignoreUserIdsJsonData = null;
+            if (IgnoreUserIds != null)
+            {
+                ignoreUserIdsJsonData = new JsonData();
+                foreach (var ignoreUserId in IgnoreUserIds)
+                {
+                    ignoreUserIdsJsonData.Add(ignoreUserId);
+                }
+            }
             return new JsonData {
                 ["categoryModelId"] = CategoryModelId,
                 ["name"] = Name,
@@ -232,19 +250,10 @@ namespace Gs2.Gs2Ranking.Model
                 ["calculateFixedTimingHour"] = CalculateFixedTimingHour,
                 ["calculateFixedTimingMinute"] = CalculateFixedTimingMinute,
                 ["calculateIntervalMinutes"] = CalculateIntervalMinutes,
-                ["additionalScopes"] = AdditionalScopes == null ? null : new JsonData(
-                        AdditionalScopes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["additionalScopes"] = additionalScopesJsonData,
                 ["entryPeriodEventId"] = EntryPeriodEventId,
                 ["accessPeriodEventId"] = AccessPeriodEventId,
-                ["ignoreUserIds"] = IgnoreUserIds == null ? null : new JsonData(
-                        IgnoreUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["ignoreUserIds"] = ignoreUserIdsJsonData,
                 ["generation"] = Generation,
             };
         }

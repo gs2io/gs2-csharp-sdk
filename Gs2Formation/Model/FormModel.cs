@@ -139,16 +139,20 @@ namespace Gs2.Gs2Formation.Model
 
         public JsonData ToJson()
         {
+            JsonData slotsJsonData = null;
+            if (Slots != null)
+            {
+                slotsJsonData = new JsonData();
+                foreach (var slot in Slots)
+                {
+                    slotsJsonData.Add(slot.ToJson());
+                }
+            }
             return new JsonData {
                 ["formModelId"] = FormModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["slots"] = Slots == null ? null : new JsonData(
-                        Slots.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["slots"] = slotsJsonData,
             };
         }
 

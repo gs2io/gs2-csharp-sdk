@@ -75,20 +75,28 @@ namespace Gs2.Gs2Matchmaking.Request
 
         public override JsonData ToJson()
         {
+            JsonData signedBallotsJsonData = null;
+            if (SignedBallots != null)
+            {
+                signedBallotsJsonData = new JsonData();
+                foreach (var signedBallot in SignedBallots)
+                {
+                    signedBallotsJsonData.Add(signedBallot.ToJson());
+                }
+            }
+            JsonData gameResultsJsonData = null;
+            if (GameResults != null)
+            {
+                gameResultsJsonData = new JsonData();
+                foreach (var gameResult in GameResults)
+                {
+                    gameResultsJsonData.Add(gameResult.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["signedBallots"] = SignedBallots == null ? null : new JsonData(
-                        SignedBallots.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["gameResults"] = GameResults == null ? null : new JsonData(
-                        GameResults.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["signedBallots"] = signedBallotsJsonData,
+                ["gameResults"] = gameResultsJsonData,
                 ["keyId"] = KeyId,
             };
         }

@@ -56,13 +56,17 @@ namespace Gs2.Gs2Inbox.Result
 
         public JsonData ToJson()
         {
+            JsonData itemJsonData = null;
+            if (Item != null)
+            {
+                itemJsonData = new JsonData();
+                foreach (var ite in Item)
+                {
+                    itemJsonData.Add(ite.ToJson());
+                }
+            }
             return new JsonData {
-                ["item"] = Item == null ? null : new JsonData(
-                        Item.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["item"] = itemJsonData,
             };
         }
 

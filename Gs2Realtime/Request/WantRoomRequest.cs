@@ -67,14 +67,19 @@ namespace Gs2.Gs2Realtime.Request
 
         public override JsonData ToJson()
         {
+            JsonData notificationUserIdsJsonData = null;
+            if (NotificationUserIds != null)
+            {
+                notificationUserIdsJsonData = new JsonData();
+                foreach (var notificationUserId in NotificationUserIds)
+                {
+                    notificationUserIdsJsonData.Add(notificationUserId);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
-                ["notificationUserIds"] = NotificationUserIds == null ? null : new JsonData(
-                        NotificationUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["notificationUserIds"] = notificationUserIdsJsonData,
             };
         }
 

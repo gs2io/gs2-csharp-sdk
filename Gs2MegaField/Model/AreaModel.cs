@@ -139,16 +139,20 @@ namespace Gs2.Gs2MegaField.Model
 
         public JsonData ToJson()
         {
+            JsonData layerModelsJsonData = null;
+            if (LayerModels != null)
+            {
+                layerModelsJsonData = new JsonData();
+                foreach (var layerModel in LayerModels)
+                {
+                    layerModelsJsonData.Add(layerModel.ToJson());
+                }
+            }
             return new JsonData {
                 ["areaModelId"] = AreaModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["layerModels"] = LayerModels == null ? null : new JsonData(
-                        LayerModels.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["layerModels"] = layerModelsJsonData,
             };
         }
 

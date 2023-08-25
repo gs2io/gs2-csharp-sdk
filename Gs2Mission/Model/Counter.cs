@@ -174,16 +174,20 @@ namespace Gs2.Gs2Mission.Model
 
         public JsonData ToJson()
         {
+            JsonData valuesJsonData = null;
+            if (Values != null)
+            {
+                valuesJsonData = new JsonData();
+                foreach (var value in Values)
+                {
+                    valuesJsonData.Add(value.ToJson());
+                }
+            }
             return new JsonData {
                 ["counterId"] = CounterId,
                 ["userId"] = UserId,
                 ["name"] = Name,
-                ["values"] = Values == null ? null : new JsonData(
-                        Values.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["values"] = valuesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

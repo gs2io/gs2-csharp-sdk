@@ -91,18 +91,22 @@ namespace Gs2.Gs2Experience.Request
 
         public override JsonData ToJson()
         {
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["experienceName"] = ExperienceName,
                 ["propertyId"] = PropertyId,
                 ["rateName"] = RateName,
-                ["acquireActions"] = AcquireActions == null ? null : new JsonData(
-                        AcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["acquireActions"] = acquireActionsJsonData,
             };
         }
 

@@ -107,27 +107,40 @@ namespace Gs2.Gs2Matchmaking.Request
 
         public override JsonData ToJson()
         {
+            JsonData attributeRangesJsonData = null;
+            if (AttributeRanges != null)
+            {
+                attributeRangesJsonData = new JsonData();
+                foreach (var attributeRange in AttributeRanges)
+                {
+                    attributeRangesJsonData.Add(attributeRange.ToJson());
+                }
+            }
+            JsonData capacityOfRolesJsonData = null;
+            if (CapacityOfRoles != null)
+            {
+                capacityOfRolesJsonData = new JsonData();
+                foreach (var capacityOfRole in CapacityOfRoles)
+                {
+                    capacityOfRolesJsonData.Add(capacityOfRole.ToJson());
+                }
+            }
+            JsonData allowUserIdsJsonData = null;
+            if (AllowUserIds != null)
+            {
+                allowUserIdsJsonData = new JsonData();
+                foreach (var allowUserId in AllowUserIds)
+                {
+                    allowUserIdsJsonData.Add(allowUserId);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["player"] = Player?.ToJson(),
-                ["attributeRanges"] = AttributeRanges == null ? null : new JsonData(
-                        AttributeRanges.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["capacityOfRoles"] = CapacityOfRoles == null ? null : new JsonData(
-                        CapacityOfRoles.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["allowUserIds"] = AllowUserIds == null ? null : new JsonData(
-                        AllowUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["attributeRanges"] = attributeRangesJsonData,
+                ["capacityOfRoles"] = capacityOfRolesJsonData,
+                ["allowUserIds"] = allowUserIdsJsonData,
                 ["expiresAt"] = ExpiresAt,
                 ["expiresAtTimeSpan"] = ExpiresAtTimeSpan?.ToJson(),
             };

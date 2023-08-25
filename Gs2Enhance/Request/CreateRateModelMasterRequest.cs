@@ -111,6 +111,24 @@ namespace Gs2.Gs2Enhance.Request
 
         public override JsonData ToJson()
         {
+            JsonData acquireExperienceHierarchyJsonData = null;
+            if (AcquireExperienceHierarchy != null)
+            {
+                acquireExperienceHierarchyJsonData = new JsonData();
+                foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
+                {
+                    acquireExperienceHierarchyJsonData.Add(acquireExperienceHierarch);
+                }
+            }
+            JsonData bonusRatesJsonData = null;
+            if (BonusRates != null)
+            {
+                bonusRatesJsonData = new JsonData();
+                foreach (var bonusRate in BonusRates)
+                {
+                    bonusRatesJsonData.Add(bonusRate.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
@@ -119,18 +137,9 @@ namespace Gs2.Gs2Enhance.Request
                 ["targetInventoryModelId"] = TargetInventoryModelId,
                 ["acquireExperienceSuffix"] = AcquireExperienceSuffix,
                 ["materialInventoryModelId"] = MaterialInventoryModelId,
-                ["acquireExperienceHierarchy"] = AcquireExperienceHierarchy == null ? null : new JsonData(
-                        AcquireExperienceHierarchy.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["acquireExperienceHierarchy"] = acquireExperienceHierarchyJsonData,
                 ["experienceModelId"] = ExperienceModelId,
-                ["bonusRates"] = BonusRates == null ? null : new JsonData(
-                        BonusRates.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["bonusRates"] = bonusRatesJsonData,
             };
         }
 

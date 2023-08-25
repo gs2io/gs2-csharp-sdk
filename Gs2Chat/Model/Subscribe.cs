@@ -168,16 +168,20 @@ namespace Gs2.Gs2Chat.Model
 
         public JsonData ToJson()
         {
+            JsonData notificationTypesJsonData = null;
+            if (NotificationTypes != null)
+            {
+                notificationTypesJsonData = new JsonData();
+                foreach (var notificationType in NotificationTypes)
+                {
+                    notificationTypesJsonData.Add(notificationType.ToJson());
+                }
+            }
             return new JsonData {
                 ["subscribeId"] = SubscribeId,
                 ["userId"] = UserId,
                 ["roomName"] = RoomName,
-                ["notificationTypes"] = NotificationTypes == null ? null : new JsonData(
-                        NotificationTypes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["notificationTypes"] = notificationTypesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };

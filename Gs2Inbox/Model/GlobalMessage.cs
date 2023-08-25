@@ -151,16 +151,20 @@ namespace Gs2.Gs2Inbox.Model
 
         public JsonData ToJson()
         {
+            JsonData readAcquireActionsJsonData = null;
+            if (ReadAcquireActions != null)
+            {
+                readAcquireActionsJsonData = new JsonData();
+                foreach (var readAcquireAction in ReadAcquireActions)
+                {
+                    readAcquireActionsJsonData.Add(readAcquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["globalMessageId"] = GlobalMessageId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
-                ["readAcquireActions"] = ReadAcquireActions == null ? null : new JsonData(
-                        ReadAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
                 ["expiresAt"] = ExpiresAt,
             };

@@ -159,18 +159,22 @@ namespace Gs2.Gs2Project.Model
 
         public JsonData ToJson()
         {
+            JsonData regionsJsonData = null;
+            if (Regions != null)
+            {
+                regionsJsonData = new JsonData();
+                foreach (var region in Regions)
+                {
+                    regionsJsonData.Add(region.ToJson());
+                }
+            }
             return new JsonData {
                 ["projectId"] = ProjectId,
                 ["accountName"] = AccountName,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["plan"] = Plan,
-                ["regions"] = Regions == null ? null : new JsonData(
-                        Regions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["regions"] = regionsJsonData,
                 ["billingMethodName"] = BillingMethodName,
                 ["enableEventBridge"] = EnableEventBridge,
                 ["currency"] = Currency,

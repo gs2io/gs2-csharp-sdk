@@ -174,15 +174,20 @@ namespace Gs2.Gs2Quest.Model
 
         public JsonData ToJson()
         {
+            JsonData completeQuestNamesJsonData = null;
+            if (CompleteQuestNames != null)
+            {
+                completeQuestNamesJsonData = new JsonData();
+                foreach (var completeQuestName in CompleteQuestNames)
+                {
+                    completeQuestNamesJsonData.Add(completeQuestName);
+                }
+            }
             return new JsonData {
                 ["completedQuestListId"] = CompletedQuestListId,
                 ["userId"] = UserId,
                 ["questGroupName"] = QuestGroupName,
-                ["completeQuestNames"] = CompleteQuestNames == null ? null : new JsonData(
-                        CompleteQuestNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["completeQuestNames"] = completeQuestNamesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,

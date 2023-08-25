@@ -73,20 +73,29 @@ namespace Gs2.Gs2Matchmaking.Model
 
         public JsonData ToJson()
         {
+            JsonData attributesJsonData = null;
+            if (Attributes != null)
+            {
+                attributesJsonData = new JsonData();
+                foreach (var attribute in Attributes)
+                {
+                    attributesJsonData.Add(attribute.ToJson());
+                }
+            }
+            JsonData denyUserIdsJsonData = null;
+            if (DenyUserIds != null)
+            {
+                denyUserIdsJsonData = new JsonData();
+                foreach (var denyUserId in DenyUserIds)
+                {
+                    denyUserIdsJsonData.Add(denyUserId);
+                }
+            }
             return new JsonData {
                 ["userId"] = UserId,
-                ["attributes"] = Attributes == null ? null : new JsonData(
-                        Attributes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["attributes"] = attributesJsonData,
                 ["roleName"] = RoleName,
-                ["denyUserIds"] = DenyUserIds == null ? null : new JsonData(
-                        DenyUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["denyUserIds"] = denyUserIdsJsonData,
             };
         }
 

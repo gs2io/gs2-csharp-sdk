@@ -73,14 +73,19 @@ namespace Gs2.Gs2Dictionary.Request
 
         public override JsonData ToJson()
         {
+            JsonData entryModelNamesJsonData = null;
+            if (EntryModelNames != null)
+            {
+                entryModelNamesJsonData = new JsonData();
+                foreach (var entryModelName in EntryModelNames)
+                {
+                    entryModelNamesJsonData.Add(entryModelName);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["entryModelNames"] = EntryModelNames == null ? null : new JsonData(
-                        EntryModelNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["entryModelNames"] = entryModelNamesJsonData,
             };
         }
 

@@ -192,18 +192,22 @@ namespace Gs2.Gs2Inbox.Model
 
         public JsonData ToJson()
         {
+            JsonData readAcquireActionsJsonData = null;
+            if (ReadAcquireActions != null)
+            {
+                readAcquireActionsJsonData = new JsonData();
+                foreach (var readAcquireAction in ReadAcquireActions)
+                {
+                    readAcquireActionsJsonData.Add(readAcquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["messageId"] = MessageId,
                 ["name"] = Name,
                 ["userId"] = UserId,
                 ["metadata"] = Metadata,
                 ["isRead"] = IsRead,
-                ["readAcquireActions"] = ReadAcquireActions == null ? null : new JsonData(
-                        ReadAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["receivedAt"] = ReceivedAt,
                 ["readAt"] = ReadAt,
                 ["expiresAt"] = ExpiresAt,

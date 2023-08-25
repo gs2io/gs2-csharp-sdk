@@ -61,19 +61,27 @@ namespace Gs2.Gs2News.Model
 
         public JsonData ToJson()
         {
+            JsonData contentsJsonData = null;
+            if (Contents != null)
+            {
+                contentsJsonData = new JsonData();
+                foreach (var content in Contents)
+                {
+                    contentsJsonData.Add(content.ToJson());
+                }
+            }
+            JsonData removeContentsJsonData = null;
+            if (RemoveContents != null)
+            {
+                removeContentsJsonData = new JsonData();
+                foreach (var removeContent in RemoveContents)
+                {
+                    removeContentsJsonData.Add(removeContent.ToJson());
+                }
+            }
             return new JsonData {
-                ["contents"] = Contents == null ? null : new JsonData(
-                        Contents.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["removeContents"] = RemoveContents == null ? null : new JsonData(
-                        RemoveContents.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["contents"] = contentsJsonData,
+                ["removeContents"] = removeContentsJsonData,
             };
         }
 

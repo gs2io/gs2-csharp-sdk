@@ -73,20 +73,29 @@ namespace Gs2.Gs2Matchmaking.Model
 
         public JsonData ToJson()
         {
+            JsonData roleAliasesJsonData = null;
+            if (RoleAliases != null)
+            {
+                roleAliasesJsonData = new JsonData();
+                foreach (var roleAlias in RoleAliases)
+                {
+                    roleAliasesJsonData.Add(roleAlias);
+                }
+            }
+            JsonData participantsJsonData = null;
+            if (Participants != null)
+            {
+                participantsJsonData = new JsonData();
+                foreach (var participant in Participants)
+                {
+                    participantsJsonData.Add(participant.ToJson());
+                }
+            }
             return new JsonData {
                 ["roleName"] = RoleName,
-                ["roleAliases"] = RoleAliases == null ? null : new JsonData(
-                        RoleAliases.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["roleAliases"] = roleAliasesJsonData,
                 ["capacity"] = Capacity,
-                ["participants"] = Participants == null ? null : new JsonData(
-                        Participants.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["participants"] = participantsJsonData,
             };
         }
 

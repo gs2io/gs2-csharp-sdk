@@ -91,18 +91,22 @@ namespace Gs2.Gs2Showcase.Request
 
         public override JsonData ToJson()
         {
+            JsonData configJsonData = null;
+            if (Config != null)
+            {
+                configJsonData = new JsonData();
+                foreach (var confi in Config)
+                {
+                    configJsonData.Add(confi.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["showcaseName"] = ShowcaseName,
                 ["displayItemId"] = DisplayItemId,
                 ["userId"] = UserId,
                 ["quantity"] = Quantity,
-                ["config"] = Config == null ? null : new JsonData(
-                        Config.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["config"] = configJsonData,
             };
         }
 

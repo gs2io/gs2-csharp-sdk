@@ -176,20 +176,30 @@ namespace Gs2.Gs2Ranking.Model
 
         public JsonData ToJson()
         {
+            JsonData targetUserIdsJsonData = null;
+            if (TargetUserIds != null)
+            {
+                targetUserIdsJsonData = new JsonData();
+                foreach (var targetUserId in TargetUserIds)
+                {
+                    targetUserIdsJsonData.Add(targetUserId);
+                }
+            }
+            JsonData subscribedUserIdsJsonData = null;
+            if (SubscribedUserIds != null)
+            {
+                subscribedUserIdsJsonData = new JsonData();
+                foreach (var subscribedUserId in SubscribedUserIds)
+                {
+                    subscribedUserIdsJsonData.Add(subscribedUserId);
+                }
+            }
             return new JsonData {
                 ["subscribeId"] = SubscribeId,
                 ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
-                ["targetUserIds"] = TargetUserIds == null ? null : new JsonData(
-                        TargetUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
-                ["subscribedUserIds"] = SubscribedUserIds == null ? null : new JsonData(
-                        SubscribedUserIds.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["targetUserIds"] = targetUserIdsJsonData,
+                ["subscribedUserIds"] = subscribedUserIdsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };

@@ -95,6 +95,15 @@ namespace Gs2.Gs2Log.Model
 
         public JsonData ToJson()
         {
+            JsonData tasksJsonData = null;
+            if (Tasks != null)
+            {
+                tasksJsonData = new JsonData();
+                foreach (var task in Tasks)
+                {
+                    tasksJsonData.Add(task);
+                }
+            }
             return new JsonData {
                 ["timestamp"] = Timestamp,
                 ["transactionId"] = TransactionId,
@@ -103,11 +112,7 @@ namespace Gs2.Gs2Log.Model
                 ["userId"] = UserId,
                 ["action"] = Action,
                 ["args"] = Args,
-                ["tasks"] = Tasks == null ? null : new JsonData(
-                        Tasks.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["tasks"] = tasksJsonData,
             };
         }
 

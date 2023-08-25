@@ -91,18 +91,22 @@ namespace Gs2.Gs2MegaField.Request
 
         public override JsonData ToJson()
         {
+            JsonData scopesJsonData = null;
+            if (Scopes != null)
+            {
+                scopesJsonData = new JsonData();
+                foreach (var scope in Scopes)
+                {
+                    scopesJsonData.Add(scope.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["areaModelName"] = AreaModelName,
                 ["layerModelName"] = LayerModelName,
                 ["position"] = Position?.ToJson(),
-                ["scopes"] = Scopes == null ? null : new JsonData(
-                        Scopes.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["scopes"] = scopesJsonData,
             };
         }
 

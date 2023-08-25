@@ -123,42 +123,63 @@ namespace Gs2.Gs2Quest.Request
 
         public override JsonData ToJson()
         {
+            JsonData contentsJsonData = null;
+            if (Contents != null)
+            {
+                contentsJsonData = new JsonData();
+                foreach (var content in Contents)
+                {
+                    contentsJsonData.Add(content.ToJson());
+                }
+            }
+            JsonData firstCompleteAcquireActionsJsonData = null;
+            if (FirstCompleteAcquireActions != null)
+            {
+                firstCompleteAcquireActionsJsonData = new JsonData();
+                foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
+                {
+                    firstCompleteAcquireActionsJsonData.Add(firstCompleteAcquireAction.ToJson());
+                }
+            }
+            JsonData consumeActionsJsonData = null;
+            if (ConsumeActions != null)
+            {
+                consumeActionsJsonData = new JsonData();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    consumeActionsJsonData.Add(consumeAction.ToJson());
+                }
+            }
+            JsonData failedAcquireActionsJsonData = null;
+            if (FailedAcquireActions != null)
+            {
+                failedAcquireActionsJsonData = new JsonData();
+                foreach (var failedAcquireAction in FailedAcquireActions)
+                {
+                    failedAcquireActionsJsonData.Add(failedAcquireAction.ToJson());
+                }
+            }
+            JsonData premiseQuestNamesJsonData = null;
+            if (PremiseQuestNames != null)
+            {
+                premiseQuestNamesJsonData = new JsonData();
+                foreach (var premiseQuestName in PremiseQuestNames)
+                {
+                    premiseQuestNamesJsonData.Add(premiseQuestName);
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["questGroupName"] = QuestGroupName,
                 ["name"] = Name,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
-                ["contents"] = Contents == null ? null : new JsonData(
-                        Contents.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["contents"] = contentsJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
-                ["firstCompleteAcquireActions"] = FirstCompleteAcquireActions == null ? null : new JsonData(
-                        FirstCompleteAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["consumeActions"] = ConsumeActions == null ? null : new JsonData(
-                        ConsumeActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["failedAcquireActions"] = FailedAcquireActions == null ? null : new JsonData(
-                        FailedAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
-                ["premiseQuestNames"] = PremiseQuestNames == null ? null : new JsonData(
-                        PremiseQuestNames.Select(v => {
-                            return new JsonData(v.ToString());
-                        }).ToArray()
-                    ),
+                ["firstCompleteAcquireActions"] = firstCompleteAcquireActionsJsonData,
+                ["consumeActions"] = consumeActionsJsonData,
+                ["failedAcquireActions"] = failedAcquireActionsJsonData,
+                ["premiseQuestNames"] = premiseQuestNamesJsonData,
             };
         }
 

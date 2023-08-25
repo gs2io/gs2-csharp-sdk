@@ -115,6 +115,15 @@ namespace Gs2.Gs2Mission.Request
 
         public override JsonData ToJson()
         {
+            JsonData completeAcquireActionsJsonData = null;
+            if (CompleteAcquireActions != null)
+            {
+                completeAcquireActionsJsonData = new JsonData();
+                foreach (var completeAcquireAction in CompleteAcquireActions)
+                {
+                    completeAcquireActionsJsonData.Add(completeAcquireAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["missionGroupName"] = MissionGroupName,
@@ -124,12 +133,7 @@ namespace Gs2.Gs2Mission.Request
                 ["counterName"] = CounterName,
                 ["targetResetType"] = TargetResetType,
                 ["targetValue"] = TargetValue,
-                ["completeAcquireActions"] = CompleteAcquireActions == null ? null : new JsonData(
-                        CompleteAcquireActions.Select(v => {
-                            //noinspection Convert2MethodRef
-                            return v.ToJson();
-                        }).ToArray()
-                    ),
+                ["completeAcquireActions"] = completeAcquireActionsJsonData,
                 ["challengePeriodEventId"] = ChallengePeriodEventId,
                 ["premiseMissionTaskName"] = PremiseMissionTaskName,
             };
