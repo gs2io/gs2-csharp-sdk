@@ -15,6 +15,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Model;
 using Gs2.Util.LitJson;
 
@@ -31,7 +32,7 @@ namespace Gs2.Core.Exception
 			}
 		}
 		
-		protected Gs2Exception(RequestError[] errors) : base(errors.ToString())
+		protected Gs2Exception(RequestError[] errors) : base(string.Join(", ", errors.Select(v => v.ToString()).ToArray()))
 		{
 			this.errors = errors;
 		}

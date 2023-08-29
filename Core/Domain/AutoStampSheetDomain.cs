@@ -83,21 +83,22 @@ namespace Gs2.Core.Domain
                     _transactionId
                 ).Model();
 #endif
-                for (var i = 0; i < result.TaskRequests.Length; i++)
-                {
-                    var stampTask = result.TaskRequests[i];
-                    if (i < result.TaskResults.Length) {
-                        _stampTaskEvent.Invoke(
-                            _cache,
-                            _transactionId + "[" + i + "]",
-                            stampTask.Action,
-                            stampTask.Request,
-                            result.TaskResults[i]
-                        );
+                if (result.TaskRequests != null) {
+                    for (var i = 0; i < result.TaskRequests.Length; i++) {
+                        var stampTask = result.TaskRequests[i];
+                        if (i < result.TaskResults.Length) {
+                            _stampTaskEvent.Invoke(
+                                _cache,
+                                _transactionId + "[" + i + "]",
+                                stampTask.Action,
+                                stampTask.Request,
+                                result.TaskResults[i]
+                            );
+                        }
                     }
                 }
 
-                string action = null;
+            string action = null;
                 JsonData requestJson = null;
                 _stampSheetEvent.Invoke(
                     _cache,
