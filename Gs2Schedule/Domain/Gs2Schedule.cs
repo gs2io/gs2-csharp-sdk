@@ -202,6 +202,12 @@ namespace Gs2.Gs2Schedule.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, TriggerByUserIdRequest, TriggerByUserIdResult> TriggerByUserIdComplete = new UnityEvent<string, TriggerByUserIdRequest, TriggerByUserIdResult>();
+    #else
+        public static Action<string, TriggerByUserIdRequest, TriggerByUserIdResult> TriggerByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string transactionId,
@@ -209,6 +215,39 @@ namespace Gs2.Gs2Schedule.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "TriggerByUserId": {
+                        var requestModel = TriggerByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = TriggerByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Trigger"
+                            );
+                            var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                            cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
+                                parentKey.Replace("Trigger", "Event")
+                            );
+                        }
+
+                        TriggerByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromStampTask(
@@ -226,6 +265,39 @@ namespace Gs2.Gs2Schedule.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+            switch (method) {
+                case "trigger_by_user_id": {
+                    var requestModel = TriggerByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = TriggerByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Trigger"
+                        );
+                        var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                        cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
+                            parentKey.Replace("Trigger", "Event")
+                        );
+                    }
+
+                    TriggerByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+            }
         }
 
         public void HandleNotification(

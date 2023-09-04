@@ -2002,6 +2002,131 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
+        public class TriggerByStampSheetTask : Gs2RestSessionTask<TriggerByStampSheetRequest, TriggerByStampSheetResult>
+        {
+            public TriggerByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, TriggerByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(TriggerByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "schedule")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/trigger";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator TriggerByStampSheet(
+                Request.TriggerByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.TriggerByStampSheetResult>> callback
+        )
+		{
+			var task = new TriggerByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.TriggerByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.TriggerByStampSheetResult> TriggerByStampSheetFuture(
+                Request.TriggerByStampSheetRequest request
+        )
+		{
+			return new TriggerByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.TriggerByStampSheetResult> TriggerByStampSheetAsync(
+                Request.TriggerByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.TriggerByStampSheetResult> result = null;
+			await TriggerByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public TriggerByStampSheetTask TriggerByStampSheetAsync(
+                Request.TriggerByStampSheetRequest request
+        )
+		{
+			return new TriggerByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.TriggerByStampSheetResult> TriggerByStampSheetAsync(
+                Request.TriggerByStampSheetRequest request
+        )
+		{
+			var task = new TriggerByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteTriggerTask : Gs2RestSessionTask<DeleteTriggerRequest, DeleteTriggerResult>
         {
             public DeleteTriggerTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTriggerRequest request) : base(session, factory, request)

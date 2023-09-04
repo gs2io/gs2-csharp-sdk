@@ -1402,6 +1402,114 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
+        public class TriggerByStampSheetTask : Gs2WebSocketSessionTask<Request.TriggerByStampSheetRequest, Result.TriggerByStampSheetResult>
+        {
+	        public TriggerByStampSheetTask(IGs2Session session, Request.TriggerByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.TriggerByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "schedule",
+                    "trigger",
+                    "triggerByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator TriggerByStampSheet(
+                Request.TriggerByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.TriggerByStampSheetResult>> callback
+        )
+		{
+			var task = new TriggerByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.TriggerByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.TriggerByStampSheetResult> TriggerByStampSheetFuture(
+                Request.TriggerByStampSheetRequest request
+        )
+		{
+			return new TriggerByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.TriggerByStampSheetResult> TriggerByStampSheetAsync(
+            Request.TriggerByStampSheetRequest request
+        )
+		{
+		    var task = new TriggerByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public TriggerByStampSheetTask TriggerByStampSheetAsync(
+                Request.TriggerByStampSheetRequest request
+        )
+		{
+			return new TriggerByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.TriggerByStampSheetResult> TriggerByStampSheetAsync(
+            Request.TriggerByStampSheetRequest request
+        )
+		{
+		    var task = new TriggerByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteTriggerTask : Gs2WebSocketSessionTask<Request.DeleteTriggerRequest, Result.DeleteTriggerResult>
         {
 	        public DeleteTriggerTask(IGs2Session session, Request.DeleteTriggerRequest request) : base(session, request)
