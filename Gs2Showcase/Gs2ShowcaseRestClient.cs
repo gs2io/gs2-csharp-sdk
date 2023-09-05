@@ -4539,6 +4539,135 @@ namespace Gs2.Gs2Showcase
 #endif
 
 
+        public class DecrementPurchaseCountByUserIdTask : Gs2RestSessionTask<DecrementPurchaseCountByUserIdRequest, DecrementPurchaseCountByUserIdResult>
+        {
+            public DecrementPurchaseCountByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DecrementPurchaseCountByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DecrementPurchaseCountByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "showcase")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/random/showcase/user/{userId}/status/{showcaseName}/{displayItemName}/purchase/count/decrease";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{showcaseName}", !string.IsNullOrEmpty(request.ShowcaseName) ? request.ShowcaseName.ToString() : "null");
+                url = url.Replace("{displayItemName}", !string.IsNullOrEmpty(request.DisplayItemName) ? request.DisplayItemName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecrementPurchaseCountByUserId(
+                Request.DecrementPurchaseCountByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DecrementPurchaseCountByUserIdResult>> callback
+        )
+		{
+			var task = new DecrementPurchaseCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecrementPurchaseCountByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecrementPurchaseCountByUserIdResult> DecrementPurchaseCountByUserIdFuture(
+                Request.DecrementPurchaseCountByUserIdRequest request
+        )
+		{
+			return new DecrementPurchaseCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecrementPurchaseCountByUserIdResult> DecrementPurchaseCountByUserIdAsync(
+                Request.DecrementPurchaseCountByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DecrementPurchaseCountByUserIdResult> result = null;
+			await DecrementPurchaseCountByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecrementPurchaseCountByUserIdTask DecrementPurchaseCountByUserIdAsync(
+                Request.DecrementPurchaseCountByUserIdRequest request
+        )
+		{
+			return new DecrementPurchaseCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecrementPurchaseCountByUserIdResult> DecrementPurchaseCountByUserIdAsync(
+                Request.DecrementPurchaseCountByUserIdRequest request
+        )
+		{
+			var task = new DecrementPurchaseCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class IncrementPurchaseCountByStampTaskTask : Gs2RestSessionTask<IncrementPurchaseCountByStampTaskRequest, IncrementPurchaseCountByStampTaskResult>
         {
             public IncrementPurchaseCountByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, IncrementPurchaseCountByStampTaskRequest request) : base(session, factory, request)
@@ -4655,6 +4784,131 @@ namespace Gs2.Gs2Showcase
         )
 		{
 			var task = new IncrementPurchaseCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DecrementPurchaseCountByStampSheetTask : Gs2RestSessionTask<DecrementPurchaseCountByStampSheetRequest, DecrementPurchaseCountByStampSheetResult>
+        {
+            public DecrementPurchaseCountByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, DecrementPurchaseCountByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DecrementPurchaseCountByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "showcase")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/random/showcase/status/purchase/count/decrease";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecrementPurchaseCountByStampSheet(
+                Request.DecrementPurchaseCountByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.DecrementPurchaseCountByStampSheetResult>> callback
+        )
+		{
+			var task = new DecrementPurchaseCountByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecrementPurchaseCountByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecrementPurchaseCountByStampSheetResult> DecrementPurchaseCountByStampSheetFuture(
+                Request.DecrementPurchaseCountByStampSheetRequest request
+        )
+		{
+			return new DecrementPurchaseCountByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecrementPurchaseCountByStampSheetResult> DecrementPurchaseCountByStampSheetAsync(
+                Request.DecrementPurchaseCountByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.DecrementPurchaseCountByStampSheetResult> result = null;
+			await DecrementPurchaseCountByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecrementPurchaseCountByStampSheetTask DecrementPurchaseCountByStampSheetAsync(
+                Request.DecrementPurchaseCountByStampSheetRequest request
+        )
+		{
+			return new DecrementPurchaseCountByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecrementPurchaseCountByStampSheetResult> DecrementPurchaseCountByStampSheetAsync(
+                Request.DecrementPurchaseCountByStampSheetRequest request
+        )
+		{
+			var task = new DecrementPurchaseCountByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

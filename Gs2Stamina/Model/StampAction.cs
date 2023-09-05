@@ -26,6 +26,8 @@ namespace Gs2.Gs2Stamina.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Stamina:DecreaseMaxValueByUserId":
+                    return DecreaseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Stamina:ConsumeStaminaByUserId":
                     return ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

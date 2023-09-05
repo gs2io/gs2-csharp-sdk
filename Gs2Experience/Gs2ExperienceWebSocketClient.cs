@@ -1382,6 +1382,134 @@ namespace Gs2.Gs2Experience
 #endif
 
 
+        public class SubExperienceByUserIdTask : Gs2WebSocketSessionTask<Request.SubExperienceByUserIdRequest, Result.SubExperienceByUserIdResult>
+        {
+	        public SubExperienceByUserIdTask(IGs2Session session, Request.SubExperienceByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SubExperienceByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ExperienceName != null)
+                {
+                    jsonWriter.WritePropertyName("experienceName");
+                    jsonWriter.Write(request.ExperienceName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.ExperienceValue != null)
+                {
+                    jsonWriter.WritePropertyName("experienceValue");
+                    jsonWriter.Write(request.ExperienceValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "experience",
+                    "status",
+                    "subExperienceByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubExperienceByUserId(
+                Request.SubExperienceByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SubExperienceByUserIdResult>> callback
+        )
+		{
+			var task = new SubExperienceByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubExperienceByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubExperienceByUserIdResult> SubExperienceByUserIdFuture(
+                Request.SubExperienceByUserIdRequest request
+        )
+		{
+			return new SubExperienceByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubExperienceByUserIdResult> SubExperienceByUserIdAsync(
+            Request.SubExperienceByUserIdRequest request
+        )
+		{
+		    var task = new SubExperienceByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubExperienceByUserIdTask SubExperienceByUserIdAsync(
+                Request.SubExperienceByUserIdRequest request
+        )
+		{
+			return new SubExperienceByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubExperienceByUserIdResult> SubExperienceByUserIdAsync(
+            Request.SubExperienceByUserIdRequest request
+        )
+		{
+		    var task = new SubExperienceByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SetExperienceByUserIdTask : Gs2WebSocketSessionTask<Request.SetExperienceByUserIdRequest, Result.SetExperienceByUserIdResult>
         {
 	        public SetExperienceByUserIdTask(IGs2Session session, Request.SetExperienceByUserIdRequest request) : base(session, request)
@@ -1630,6 +1758,134 @@ namespace Gs2.Gs2Experience
         )
 		{
 		    var task = new AddRankCapByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SubRankCapByUserIdTask : Gs2WebSocketSessionTask<Request.SubRankCapByUserIdRequest, Result.SubRankCapByUserIdResult>
+        {
+	        public SubRankCapByUserIdTask(IGs2Session session, Request.SubRankCapByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SubRankCapByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ExperienceName != null)
+                {
+                    jsonWriter.WritePropertyName("experienceName");
+                    jsonWriter.Write(request.ExperienceName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.RankCapValue != null)
+                {
+                    jsonWriter.WritePropertyName("rankCapValue");
+                    jsonWriter.Write(request.RankCapValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "experience",
+                    "status",
+                    "subRankCapByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubRankCapByUserId(
+                Request.SubRankCapByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SubRankCapByUserIdResult>> callback
+        )
+		{
+			var task = new SubRankCapByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubRankCapByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubRankCapByUserIdResult> SubRankCapByUserIdFuture(
+                Request.SubRankCapByUserIdRequest request
+        )
+		{
+			return new SubRankCapByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubRankCapByUserIdResult> SubRankCapByUserIdAsync(
+            Request.SubRankCapByUserIdRequest request
+        )
+		{
+		    var task = new SubRankCapByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SubRankCapByUserIdTask SubRankCapByUserIdAsync(
+                Request.SubRankCapByUserIdRequest request
+        )
+		{
+			return new SubRankCapByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubRankCapByUserIdResult> SubRankCapByUserIdAsync(
+            Request.SubRankCapByUserIdRequest request
+        )
+		{
+		    var task = new SubRankCapByUserIdTask(
 		        Gs2WebSocketSession,
 		        request
             );

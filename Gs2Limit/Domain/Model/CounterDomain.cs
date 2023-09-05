@@ -247,6 +247,80 @@ namespace Gs2.Gs2Limit.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Limit.Domain.Model.CounterDomain> CountDownAsync(
+            #else
+        public IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> CountDown(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Limit.Domain.Model.CounterDomain> CountDownAsync(
+        #endif
+            CountDownByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithLimitName(this.LimitName)
+                .WithCounterName(this.CounterName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.CountDownByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.CountDownByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Counter"
+                    );
+                    var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                        resultModel.Item.LimitName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            Gs2.Gs2Limit.Domain.Model.CounterDomain domain = this;
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Limit.Domain.Model.CounterDomain> DeleteAsync(
             #else
         public IFuture<Gs2.Gs2Limit.Domain.Model.CounterDomain> Delete(

@@ -204,6 +204,12 @@ namespace Gs2.Gs2Mission.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, RevertReceiveByUserIdRequest, RevertReceiveByUserIdResult> RevertReceiveByUserIdComplete = new UnityEvent<string, RevertReceiveByUserIdRequest, RevertReceiveByUserIdResult>();
+    #else
+        public static Action<string, RevertReceiveByUserIdRequest, RevertReceiveByUserIdResult> RevertReceiveByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, IncreaseCounterByUserIdRequest, IncreaseCounterByUserIdResult> IncreaseCounterByUserIdComplete = new UnityEvent<string, IncreaseCounterByUserIdRequest, IncreaseCounterByUserIdResult>();
     #else
         public static Action<string, IncreaseCounterByUserIdRequest, IncreaseCounterByUserIdResult> IncreaseCounterByUserIdComplete;
@@ -217,6 +223,34 @@ namespace Gs2.Gs2Mission.Domain
                 string result
         ) {
                 switch (method) {
+                    case "RevertReceiveByUserId": {
+                        var requestModel = RevertReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = RevertReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Complete"
+                            );
+                            var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                                resultModel.Item.MissionGroupName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        RevertReceiveByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "IncreaseCounterByUserId": {
                         var requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -257,6 +291,12 @@ namespace Gs2.Gs2Mission.Domain
         public static Action<string, ReceiveByUserIdRequest, ReceiveByUserIdResult> ReceiveByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete = new UnityEvent<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult>();
+    #else
+        public static Action<string, DecreaseCounterByUserIdRequest, DecreaseCounterByUserIdResult> DecreaseCounterByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -293,6 +333,34 @@ namespace Gs2.Gs2Mission.Domain
                         );
                         break;
                     }
+                    case "DecreaseCounterByUserId": {
+                        var requestModel = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DecreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Counter"
+                            );
+                            var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        DecreaseCounterByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                 }
         }
 
@@ -303,6 +371,34 @@ namespace Gs2.Gs2Mission.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
             switch (method) {
+                case "revert_receive_by_user_id": {
+                    var requestModel = RevertReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = RevertReceiveByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Complete"
+                        );
+                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                            resultModel.Item.MissionGroupName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    RevertReceiveByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
                 case "increase_counter_by_user_id": {
                     var requestModel = IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = IncreaseCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));

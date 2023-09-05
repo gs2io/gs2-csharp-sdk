@@ -327,6 +327,80 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusDomain> SubExperienceAsync(
+            #else
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> SubExperience(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusDomain> SubExperienceAsync(
+        #endif
+            SubExperienceByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.SubExperienceByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.SubExperienceByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.Item.ExperienceName.ToString(),
+                        resultModel.Item.PropertyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            Gs2.Gs2Experience.Domain.Model.StatusDomain domain = this;
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusDomain> SetExperienceAsync(
             #else
         public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> SetExperience(
@@ -433,6 +507,80 @@ namespace Gs2.Gs2Experience.Domain.Model
             var result = future.Result;
             #else
             var result = await this._client.AddRankCapByUserIdAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.Item.ExperienceName.ToString(),
+                        resultModel.Item.PropertyId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            Gs2.Gs2Experience.Domain.Model.StatusDomain domain = this;
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusDomain> SubRankCapAsync(
+            #else
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> SubRankCap(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusDomain> SubRankCapAsync(
+        #endif
+            SubRankCapByUserIdRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
+            {
+        #endif
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.SubRankCapByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.SubRankCapByUserIdAsync(
                 request
             );
             #endif

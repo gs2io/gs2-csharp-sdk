@@ -203,6 +203,12 @@ namespace Gs2.Gs2Limit.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, CountDownByUserIdRequest, CountDownByUserIdResult> CountDownByUserIdComplete = new UnityEvent<string, CountDownByUserIdRequest, CountDownByUserIdResult>();
+    #else
+        public static Action<string, CountDownByUserIdRequest, CountDownByUserIdResult> CountDownByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult> DeleteCounterByUserIdComplete = new UnityEvent<string, DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult>();
     #else
         public static Action<string, DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult> DeleteCounterByUserIdComplete;
@@ -216,6 +222,35 @@ namespace Gs2.Gs2Limit.Domain
                 string result
         ) {
                 switch (method) {
+                    case "CountDownByUserId": {
+                        var requestModel = CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = CountDownByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Counter"
+                            );
+                            var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                                resultModel.Item.LimitName.ToString(),
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        CountDownByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "DeleteCounterByUserId": {
                         var requestModel = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = DeleteCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -296,6 +331,35 @@ namespace Gs2.Gs2Limit.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
             switch (method) {
+                case "count_down_by_user_id": {
+                    var requestModel = CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = CountDownByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Counter"
+                        );
+                        var key = Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                            resultModel.Item.LimitName.ToString(),
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    CountDownByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
                 case "delete_counter_by_user_id": {
                     var requestModel = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DeleteCounterByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));

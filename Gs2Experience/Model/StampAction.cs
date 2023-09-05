@@ -26,6 +26,10 @@ namespace Gs2.Gs2Experience.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Experience:SubExperienceByUserId":
+                    return SubExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Experience:SubRankCapByUserId":
+                    return SubRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

@@ -250,6 +250,12 @@ namespace Gs2.Gs2Schedule.Domain
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult> DeleteTriggerByUserIdComplete = new UnityEvent<string, DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult>();
+    #else
+        public static Action<string, DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult> DeleteTriggerByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -257,6 +263,31 @@ namespace Gs2.Gs2Schedule.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "DeleteTriggerByUserId": {
+                        var requestModel = DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DeleteTriggerByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Trigger"
+                            );
+                            var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(parentKey, key);
+                        }
+
+                        DeleteTriggerByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(

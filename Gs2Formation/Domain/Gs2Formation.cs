@@ -397,6 +397,12 @@ namespace Gs2.Gs2Formation.Domain
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SubMoldCapacityByUserIdRequest, SubMoldCapacityByUserIdResult> SubMoldCapacityByUserIdComplete = new UnityEvent<string, SubMoldCapacityByUserIdRequest, SubMoldCapacityByUserIdResult>();
+    #else
+        public static Action<string, SubMoldCapacityByUserIdRequest, SubMoldCapacityByUserIdResult> SubMoldCapacityByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -404,6 +410,51 @@ namespace Gs2.Gs2Formation.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "SubMoldCapacityByUserId": {
+                        var requestModel = SubMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SubMoldCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Mold"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        if (resultModel.MoldModel != null) {
+                            var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "MoldModel"
+                            );
+                            var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                                resultModel.MoldModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.MoldModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        SubMoldCapacityByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(

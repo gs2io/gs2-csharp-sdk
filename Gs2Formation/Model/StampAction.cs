@@ -26,6 +26,8 @@ namespace Gs2.Gs2Formation.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Formation:SubMoldCapacityByUserId":
+                    return SubMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

@@ -34,9 +34,15 @@ namespace Gs2.Gs2Enchant.Result
 	public class ReDrawBalanceParameterStatusByUserIdResult : IResult
 	{
         public Gs2.Gs2Enchant.Model.BalanceParameterStatus Item { set; get; }
+        public Gs2.Gs2Enchant.Model.BalanceParameterStatus Old { set; get; }
 
         public ReDrawBalanceParameterStatusByUserIdResult WithItem(Gs2.Gs2Enchant.Model.BalanceParameterStatus item) {
             this.Item = item;
+            return this;
+        }
+
+        public ReDrawBalanceParameterStatusByUserIdResult WithOld(Gs2.Gs2Enchant.Model.BalanceParameterStatus old) {
+            this.Old = old;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Enchant.Result
                 return null;
             }
             return new ReDrawBalanceParameterStatusByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(data["old"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
             };
         }
 
@@ -64,6 +72,9 @@ namespace Gs2.Gs2Enchant.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

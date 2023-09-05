@@ -3545,6 +3545,134 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class SubMoldCapacityByUserIdTask : Gs2RestSessionTask<SubMoldCapacityByUserIdRequest, SubMoldCapacityByUserIdResult>
+        {
+            public SubMoldCapacityByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SubMoldCapacityByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SubMoldCapacityByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/mold/{moldName}/sub";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{moldName}", !string.IsNullOrEmpty(request.MoldName) ? request.MoldName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Capacity != null)
+                {
+                    jsonWriter.WritePropertyName("capacity");
+                    jsonWriter.Write(request.Capacity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubMoldCapacityByUserId(
+                Request.SubMoldCapacityByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SubMoldCapacityByUserIdResult>> callback
+        )
+		{
+			var task = new SubMoldCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubMoldCapacityByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubMoldCapacityByUserIdResult> SubMoldCapacityByUserIdFuture(
+                Request.SubMoldCapacityByUserIdRequest request
+        )
+		{
+			return new SubMoldCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubMoldCapacityByUserIdResult> SubMoldCapacityByUserIdAsync(
+                Request.SubMoldCapacityByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SubMoldCapacityByUserIdResult> result = null;
+			await SubMoldCapacityByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SubMoldCapacityByUserIdTask SubMoldCapacityByUserIdAsync(
+                Request.SubMoldCapacityByUserIdRequest request
+        )
+		{
+			return new SubMoldCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubMoldCapacityByUserIdResult> SubMoldCapacityByUserIdAsync(
+                Request.SubMoldCapacityByUserIdRequest request
+        )
+		{
+			var task = new SubMoldCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteMoldTask : Gs2RestSessionTask<DeleteMoldRequest, DeleteMoldResult>
         {
             public DeleteMoldTask(IGs2Session session, RestSessionRequestFactory factory, DeleteMoldRequest request) : base(session, factory, request)
@@ -3884,6 +4012,131 @@ namespace Gs2.Gs2Formation
         )
 		{
 			var task = new AddCapacityByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SubCapacityByStampTaskTask : Gs2RestSessionTask<SubCapacityByStampTaskRequest, SubCapacityByStampTaskResult>
+        {
+            public SubCapacityByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, SubCapacityByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SubCapacityByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/mold/capacity/sub";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SubCapacityByStampTask(
+                Request.SubCapacityByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.SubCapacityByStampTaskResult>> callback
+        )
+		{
+			var task = new SubCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SubCapacityByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SubCapacityByStampTaskResult> SubCapacityByStampTaskFuture(
+                Request.SubCapacityByStampTaskRequest request
+        )
+		{
+			return new SubCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SubCapacityByStampTaskResult> SubCapacityByStampTaskAsync(
+                Request.SubCapacityByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.SubCapacityByStampTaskResult> result = null;
+			await SubCapacityByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SubCapacityByStampTaskTask SubCapacityByStampTaskAsync(
+                Request.SubCapacityByStampTaskRequest request
+        )
+		{
+			return new SubCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SubCapacityByStampTaskResult> SubCapacityByStampTaskAsync(
+                Request.SubCapacityByStampTaskRequest request
+        )
+		{
+			var task = new SubCapacityByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

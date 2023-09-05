@@ -34,10 +34,16 @@ namespace Gs2.Gs2Formation.Result
 	public class SetCapacityByStampSheetResult : IResult
 	{
         public Gs2.Gs2Formation.Model.Mold Item { set; get; }
+        public Gs2.Gs2Formation.Model.Mold Old { set; get; }
         public Gs2.Gs2Formation.Model.MoldModel MoldModel { set; get; }
 
         public SetCapacityByStampSheetResult WithItem(Gs2.Gs2Formation.Model.Mold item) {
             this.Item = item;
+            return this;
+        }
+
+        public SetCapacityByStampSheetResult WithOld(Gs2.Gs2Formation.Model.Mold old) {
+            this.Old = old;
             return this;
         }
 
@@ -56,6 +62,7 @@ namespace Gs2.Gs2Formation.Result
             }
             return new SetCapacityByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Formation.Model.Mold.FromJson(data["old"]))
                 .WithMoldModel(!data.Keys.Contains("moldModel") || data["moldModel"] == null ? null : Gs2.Gs2Formation.Model.MoldModel.FromJson(data["moldModel"]));
         }
 
@@ -63,6 +70,7 @@ namespace Gs2.Gs2Formation.Result
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
                 ["moldModel"] = MoldModel?.ToJson(),
             };
         }
@@ -72,6 +80,9 @@ namespace Gs2.Gs2Formation.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             if (MoldModel != null) {
                 MoldModel.WriteJson(writer);

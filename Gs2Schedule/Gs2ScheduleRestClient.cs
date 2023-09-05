@@ -2350,6 +2350,131 @@ namespace Gs2.Gs2Schedule
 #endif
 
 
+        public class DeleteTriggerByStampTaskTask : Gs2RestSessionTask<DeleteTriggerByStampTaskRequest, DeleteTriggerByStampTaskResult>
+        {
+            public DeleteTriggerByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTriggerByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteTriggerByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "schedule")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/trigger/delete";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteTriggerByStampTask(
+                Request.DeleteTriggerByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.DeleteTriggerByStampTaskResult>> callback
+        )
+		{
+			var task = new DeleteTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteTriggerByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteTriggerByStampTaskResult> DeleteTriggerByStampTaskFuture(
+                Request.DeleteTriggerByStampTaskRequest request
+        )
+		{
+			return new DeleteTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTriggerByStampTaskResult> DeleteTriggerByStampTaskAsync(
+                Request.DeleteTriggerByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTriggerByStampTaskResult> result = null;
+			await DeleteTriggerByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTriggerByStampTaskTask DeleteTriggerByStampTaskAsync(
+                Request.DeleteTriggerByStampTaskRequest request
+        )
+		{
+			return new DeleteTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteTriggerByStampTaskResult> DeleteTriggerByStampTaskAsync(
+                Request.DeleteTriggerByStampTaskRequest request
+        )
+		{
+			var task = new DeleteTriggerByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribeEventsTask : Gs2RestSessionTask<DescribeEventsRequest, DescribeEventsResult>
         {
             public DescribeEventsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeEventsRequest request) : base(session, factory, request)

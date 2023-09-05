@@ -855,6 +855,129 @@ namespace Gs2.Gs2Idle
 #endif
 
 
+        public class DecreaseMaximumIdleMinutesByUserIdTask : Gs2WebSocketSessionTask<Request.DecreaseMaximumIdleMinutesByUserIdRequest, Result.DecreaseMaximumIdleMinutesByUserIdResult>
+        {
+	        public DecreaseMaximumIdleMinutesByUserIdTask(IGs2Session session, Request.DecreaseMaximumIdleMinutesByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DecreaseMaximumIdleMinutesByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.CategoryName != null)
+                {
+                    jsonWriter.WritePropertyName("categoryName");
+                    jsonWriter.Write(request.CategoryName.ToString());
+                }
+                if (request.DecreaseMinutes != null)
+                {
+                    jsonWriter.WritePropertyName("decreaseMinutes");
+                    jsonWriter.Write(request.DecreaseMinutes.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "idle",
+                    "status",
+                    "decreaseMaximumIdleMinutesByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecreaseMaximumIdleMinutesByUserId(
+                Request.DecreaseMaximumIdleMinutesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DecreaseMaximumIdleMinutesByUserIdResult>> callback
+        )
+		{
+			var task = new DecreaseMaximumIdleMinutesByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecreaseMaximumIdleMinutesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecreaseMaximumIdleMinutesByUserIdResult> DecreaseMaximumIdleMinutesByUserIdFuture(
+                Request.DecreaseMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+			return new DecreaseMaximumIdleMinutesByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecreaseMaximumIdleMinutesByUserIdResult> DecreaseMaximumIdleMinutesByUserIdAsync(
+            Request.DecreaseMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+		    var task = new DecreaseMaximumIdleMinutesByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DecreaseMaximumIdleMinutesByUserIdTask DecreaseMaximumIdleMinutesByUserIdAsync(
+                Request.DecreaseMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+			return new DecreaseMaximumIdleMinutesByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecreaseMaximumIdleMinutesByUserIdResult> DecreaseMaximumIdleMinutesByUserIdAsync(
+            Request.DecreaseMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+		    var task = new DecreaseMaximumIdleMinutesByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class IncreaseMaximumIdleMinutesByStampSheetTask : Gs2WebSocketSessionTask<Request.IncreaseMaximumIdleMinutesByStampSheetRequest, Result.IncreaseMaximumIdleMinutesByStampSheetResult>
         {
 	        public IncreaseMaximumIdleMinutesByStampSheetTask(IGs2Session session, Request.IncreaseMaximumIdleMinutesByStampSheetRequest request) : base(session, request)

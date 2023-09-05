@@ -5018,6 +5018,134 @@ namespace Gs2.Gs2Stamina
 #endif
 
 
+        public class DecreaseMaxValueByUserIdTask : Gs2RestSessionTask<DecreaseMaxValueByUserIdRequest, DecreaseMaxValueByUserIdResult>
+        {
+            public DecreaseMaxValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DecreaseMaxValueByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DecreaseMaxValueByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/stamina/{staminaName}/decrease";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{staminaName}", !string.IsNullOrEmpty(request.StaminaName) ? request.StaminaName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.DecreaseValue != null)
+                {
+                    jsonWriter.WritePropertyName("decreaseValue");
+                    jsonWriter.Write(request.DecreaseValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecreaseMaxValueByUserId(
+                Request.DecreaseMaxValueByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DecreaseMaxValueByUserIdResult>> callback
+        )
+		{
+			var task = new DecreaseMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecreaseMaxValueByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecreaseMaxValueByUserIdResult> DecreaseMaxValueByUserIdFuture(
+                Request.DecreaseMaxValueByUserIdRequest request
+        )
+		{
+			return new DecreaseMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecreaseMaxValueByUserIdResult> DecreaseMaxValueByUserIdAsync(
+                Request.DecreaseMaxValueByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DecreaseMaxValueByUserIdResult> result = null;
+			await DecreaseMaxValueByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecreaseMaxValueByUserIdTask DecreaseMaxValueByUserIdAsync(
+                Request.DecreaseMaxValueByUserIdRequest request
+        )
+		{
+			return new DecreaseMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecreaseMaxValueByUserIdResult> DecreaseMaxValueByUserIdAsync(
+                Request.DecreaseMaxValueByUserIdRequest request
+        )
+		{
+			var task = new DecreaseMaxValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SetMaxValueByUserIdTask : Gs2RestSessionTask<SetMaxValueByUserIdRequest, SetMaxValueByUserIdResult>
         {
             public SetMaxValueByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetMaxValueByUserIdRequest request) : base(session, factory, request)
@@ -6176,6 +6304,131 @@ namespace Gs2.Gs2Stamina
         )
 		{
 			var task = new RaiseMaxValueByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DecreaseMaxValueByStampTaskTask : Gs2RestSessionTask<DecreaseMaxValueByStampTaskRequest, DecreaseMaxValueByStampTaskResult>
+        {
+            public DecreaseMaxValueByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DecreaseMaxValueByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DecreaseMaxValueByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "stamina")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamina/decrease";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DecreaseMaxValueByStampTask(
+                Request.DecreaseMaxValueByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.DecreaseMaxValueByStampTaskResult>> callback
+        )
+		{
+			var task = new DecreaseMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DecreaseMaxValueByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DecreaseMaxValueByStampTaskResult> DecreaseMaxValueByStampTaskFuture(
+                Request.DecreaseMaxValueByStampTaskRequest request
+        )
+		{
+			return new DecreaseMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DecreaseMaxValueByStampTaskResult> DecreaseMaxValueByStampTaskAsync(
+                Request.DecreaseMaxValueByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.DecreaseMaxValueByStampTaskResult> result = null;
+			await DecreaseMaxValueByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DecreaseMaxValueByStampTaskTask DecreaseMaxValueByStampTaskAsync(
+                Request.DecreaseMaxValueByStampTaskRequest request
+        )
+		{
+			return new DecreaseMaxValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DecreaseMaxValueByStampTaskResult> DecreaseMaxValueByStampTaskAsync(
+                Request.DecreaseMaxValueByStampTaskRequest request
+        )
+		{
+			var task = new DecreaseMaxValueByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

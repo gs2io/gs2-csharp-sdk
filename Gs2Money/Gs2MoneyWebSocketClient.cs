@@ -1569,5 +1569,231 @@ namespace Gs2.Gs2Money
 			return await task.Invoke();
         }
 #endif
+
+
+        public class RevertRecordReceiptTask : Gs2WebSocketSessionTask<Request.RevertRecordReceiptRequest, Result.RevertRecordReceiptResult>
+        {
+	        public RevertRecordReceiptTask(IGs2Session session, Request.RevertRecordReceiptRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RevertRecordReceiptRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Receipt != null)
+                {
+                    jsonWriter.WritePropertyName("receipt");
+                    jsonWriter.Write(request.Receipt.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money",
+                    "receipt",
+                    "revertRecordReceipt",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertRecordReceipt(
+                Request.RevertRecordReceiptRequest request,
+                UnityAction<AsyncResult<Result.RevertRecordReceiptResult>> callback
+        )
+		{
+			var task = new RevertRecordReceiptTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertRecordReceiptResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertRecordReceiptResult> RevertRecordReceiptFuture(
+                Request.RevertRecordReceiptRequest request
+        )
+		{
+			return new RevertRecordReceiptTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertRecordReceiptResult> RevertRecordReceiptAsync(
+            Request.RevertRecordReceiptRequest request
+        )
+		{
+		    var task = new RevertRecordReceiptTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RevertRecordReceiptTask RevertRecordReceiptAsync(
+                Request.RevertRecordReceiptRequest request
+        )
+		{
+			return new RevertRecordReceiptTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertRecordReceiptResult> RevertRecordReceiptAsync(
+            Request.RevertRecordReceiptRequest request
+        )
+		{
+		    var task = new RevertRecordReceiptTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RevertRecordReceiptByStampSheetTask : Gs2WebSocketSessionTask<Request.RevertRecordReceiptByStampSheetRequest, Result.RevertRecordReceiptByStampSheetResult>
+        {
+	        public RevertRecordReceiptByStampSheetTask(IGs2Session session, Request.RevertRecordReceiptByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RevertRecordReceiptByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "money",
+                    "receipt",
+                    "revertRecordReceiptByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertRecordReceiptByStampSheet(
+                Request.RevertRecordReceiptByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.RevertRecordReceiptByStampSheetResult>> callback
+        )
+		{
+			var task = new RevertRecordReceiptByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertRecordReceiptByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertRecordReceiptByStampSheetResult> RevertRecordReceiptByStampSheetFuture(
+                Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+			return new RevertRecordReceiptByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertRecordReceiptByStampSheetResult> RevertRecordReceiptByStampSheetAsync(
+            Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+		    var task = new RevertRecordReceiptByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RevertRecordReceiptByStampSheetTask RevertRecordReceiptByStampSheetAsync(
+                Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+			return new RevertRecordReceiptByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertRecordReceiptByStampSheetResult> RevertRecordReceiptByStampSheetAsync(
+            Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+		    var task = new RevertRecordReceiptByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

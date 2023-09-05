@@ -202,6 +202,12 @@ namespace Gs2.Gs2SerialKey.Domain
             );
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, RevertUseByUserIdRequest, RevertUseByUserIdResult> RevertUseByUserIdComplete = new UnityEvent<string, RevertUseByUserIdRequest, RevertUseByUserIdResult>();
+    #else
+        public static Action<string, RevertUseByUserIdRequest, RevertUseByUserIdResult> RevertUseByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string transactionId,
@@ -209,6 +215,51 @@ namespace Gs2.Gs2SerialKey.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "RevertUseByUserId": {
+                        var requestModel = RevertUseByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = RevertUseByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "SerialKey"
+                            );
+                            var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
+                                resultModel.Item.Code.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        if (resultModel.CampaignModel != null) {
+                            var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "CampaignModel"
+                            );
+                            var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
+                                resultModel.CampaignModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.CampaignModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        RevertUseByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
     #if UNITY_2017_1_OR_NEWER
@@ -277,6 +328,51 @@ namespace Gs2.Gs2SerialKey.Domain
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
+            switch (method) {
+                case "revert_use_by_user_id": {
+                    var requestModel = RevertUseByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = RevertUseByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "SerialKey"
+                        );
+                        var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
+                            resultModel.Item.Code.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.CampaignModel != null) {
+                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "CampaignModel"
+                        );
+                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
+                            resultModel.CampaignModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.CampaignModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    RevertUseByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+            }
         }
 
         public void HandleNotification(

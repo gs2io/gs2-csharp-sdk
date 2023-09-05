@@ -105,15 +105,29 @@ namespace Gs2.Gs2JobQueue.Request
         }
 
         protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DeleteJobByUserIdRequest");
-            }
-            return this;
+            return new DeleteJobByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                JobName = JobName,
+            };
         }
 
         protected override Gs2Request DoAdd(Gs2Request x) {
             var y = (DeleteJobByUserIdRequest)x;
-            return this;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values DeleteJobByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values DeleteJobByUserIdRequest::userId");
+            }
+            if (JobName != y.JobName) {
+                throw new ArithmeticException("mismatch parameter values DeleteJobByUserIdRequest::jobName");
+            }
+            return new DeleteJobByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                JobName = JobName,
+            };
         }
     }
 }

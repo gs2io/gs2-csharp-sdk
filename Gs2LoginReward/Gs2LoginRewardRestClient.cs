@@ -3625,6 +3625,134 @@ namespace Gs2.Gs2LoginReward
 #endif
 
 
+        public class UnmarkReceivedByUserIdTask : Gs2RestSessionTask<UnmarkReceivedByUserIdRequest, UnmarkReceivedByUserIdResult>
+        {
+            public UnmarkReceivedByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UnmarkReceivedByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnmarkReceivedByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "login-reward")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/receiveStatus/{bonusModelName}/unmark";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{bonusModelName}", !string.IsNullOrEmpty(request.BonusModelName) ? request.BonusModelName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StepNumber != null)
+                {
+                    jsonWriter.WritePropertyName("stepNumber");
+                    jsonWriter.Write(request.StepNumber.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnmarkReceivedByUserId(
+                Request.UnmarkReceivedByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UnmarkReceivedByUserIdResult>> callback
+        )
+		{
+			var task = new UnmarkReceivedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnmarkReceivedByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnmarkReceivedByUserIdResult> UnmarkReceivedByUserIdFuture(
+                Request.UnmarkReceivedByUserIdRequest request
+        )
+		{
+			return new UnmarkReceivedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnmarkReceivedByUserIdResult> UnmarkReceivedByUserIdAsync(
+                Request.UnmarkReceivedByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UnmarkReceivedByUserIdResult> result = null;
+			await UnmarkReceivedByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnmarkReceivedByUserIdTask UnmarkReceivedByUserIdAsync(
+                Request.UnmarkReceivedByUserIdRequest request
+        )
+		{
+			return new UnmarkReceivedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnmarkReceivedByUserIdResult> UnmarkReceivedByUserIdAsync(
+                Request.UnmarkReceivedByUserIdRequest request
+        )
+		{
+			var task = new UnmarkReceivedByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class MarkReceivedByStampTaskTask : Gs2RestSessionTask<MarkReceivedByStampTaskRequest, MarkReceivedByStampTaskResult>
         {
             public MarkReceivedByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, MarkReceivedByStampTaskRequest request) : base(session, factory, request)
@@ -3741,6 +3869,131 @@ namespace Gs2.Gs2LoginReward
         )
 		{
 			var task = new MarkReceivedByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnmarkReceivedByStampSheetTask : Gs2RestSessionTask<UnmarkReceivedByStampSheetRequest, UnmarkReceivedByStampSheetResult>
+        {
+            public UnmarkReceivedByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, UnmarkReceivedByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnmarkReceivedByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "login-reward")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/receiveStatus/unmark";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnmarkReceivedByStampSheet(
+                Request.UnmarkReceivedByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.UnmarkReceivedByStampSheetResult>> callback
+        )
+		{
+			var task = new UnmarkReceivedByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnmarkReceivedByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnmarkReceivedByStampSheetResult> UnmarkReceivedByStampSheetFuture(
+                Request.UnmarkReceivedByStampSheetRequest request
+        )
+		{
+			return new UnmarkReceivedByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnmarkReceivedByStampSheetResult> UnmarkReceivedByStampSheetAsync(
+                Request.UnmarkReceivedByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.UnmarkReceivedByStampSheetResult> result = null;
+			await UnmarkReceivedByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnmarkReceivedByStampSheetTask UnmarkReceivedByStampSheetAsync(
+                Request.UnmarkReceivedByStampSheetRequest request
+        )
+		{
+			return new UnmarkReceivedByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnmarkReceivedByStampSheetResult> UnmarkReceivedByStampSheetAsync(
+                Request.UnmarkReceivedByStampSheetRequest request
+        )
+		{
+			var task = new UnmarkReceivedByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

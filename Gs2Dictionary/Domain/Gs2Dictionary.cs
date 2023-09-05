@@ -248,6 +248,12 @@ namespace Gs2.Gs2Dictionary.Domain
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteEntriesByUserIdRequest, DeleteEntriesByUserIdResult> DeleteEntriesByUserIdComplete = new UnityEvent<string, DeleteEntriesByUserIdRequest, DeleteEntriesByUserIdResult>();
+    #else
+        public static Action<string, DeleteEntriesByUserIdRequest, DeleteEntriesByUserIdResult> DeleteEntriesByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -255,6 +261,35 @@ namespace Gs2.Gs2Dictionary.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "DeleteEntriesByUserId": {
+                        var requestModel = DeleteEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DeleteEntriesByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        {
+                            var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Entry"
+                            );
+                            foreach (var item in resultModel.Items) {
+                                var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                                    item.Name.ToString()
+                                );
+                                cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
+                                    parentKey,
+                                    key
+                                );
+                            }
+                        }
+
+                        DeleteEntriesByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(

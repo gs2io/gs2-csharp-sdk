@@ -247,6 +247,12 @@ namespace Gs2.Gs2Idle.Domain
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DecreaseMaximumIdleMinutesByUserIdRequest, DecreaseMaximumIdleMinutesByUserIdResult> DecreaseMaximumIdleMinutesByUserIdComplete = new UnityEvent<string, DecreaseMaximumIdleMinutesByUserIdRequest, DecreaseMaximumIdleMinutesByUserIdResult>();
+    #else
+        public static Action<string, DecreaseMaximumIdleMinutesByUserIdRequest, DecreaseMaximumIdleMinutesByUserIdResult> DecreaseMaximumIdleMinutesByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -254,6 +260,36 @@ namespace Gs2.Gs2Idle.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "DecreaseMaximumIdleMinutesByUserId": {
+                        var requestModel = DecreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DecreaseMaximumIdleMinutesByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.CategoryName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        DecreaseMaximumIdleMinutesByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(

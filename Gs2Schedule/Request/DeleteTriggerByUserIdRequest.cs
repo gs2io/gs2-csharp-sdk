@@ -105,15 +105,29 @@ namespace Gs2.Gs2Schedule.Request
         }
 
         protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DeleteTriggerByUserIdRequest");
-            }
-            return this;
+            return new DeleteTriggerByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                TriggerName = TriggerName,
+            };
         }
 
         protected override Gs2Request DoAdd(Gs2Request x) {
             var y = (DeleteTriggerByUserIdRequest)x;
-            return this;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values DeleteTriggerByUserIdRequest::namespaceName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values DeleteTriggerByUserIdRequest::userId");
+            }
+            if (TriggerName != y.TriggerName) {
+                throw new ArithmeticException("mismatch parameter values DeleteTriggerByUserIdRequest::triggerName");
+            }
+            return new DeleteTriggerByUserIdRequest {
+                NamespaceName = NamespaceName,
+                UserId = UserId,
+                TriggerName = TriggerName,
+            };
         }
     }
 }

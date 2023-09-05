@@ -28,12 +28,16 @@ namespace Gs2.Gs2Mission.Model
             switch (action.Action) {
                 case "Gs2Mission:ReceiveByUserId":
                     return ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Mission:DecreaseCounterByUserId":
+                    return DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
+                case "Gs2Mission:RevertReceiveByUserId":
+                    return RevertReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Mission:IncreaseCounterByUserId":
                     return IncreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

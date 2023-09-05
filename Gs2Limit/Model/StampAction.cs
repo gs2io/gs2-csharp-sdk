@@ -34,6 +34,8 @@ namespace Gs2.Gs2Limit.Model
 
         public static Gs2Request ToRequest(Gs2.Core.Model.AcquireAction action) {
             switch (action.Action) {
+                case "Gs2Limit:CountDownByUserId":
+                    return CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Limit:DeleteCounterByUserId":
                     return DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

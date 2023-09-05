@@ -36,6 +36,8 @@ namespace Gs2.Gs2LoginReward.Model
             switch (action.Action) {
                 case "Gs2LoginReward:DeleteReceiveStatusByUserId":
                     return DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2LoginReward:UnmarkReceivedByUserId":
+                    return UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

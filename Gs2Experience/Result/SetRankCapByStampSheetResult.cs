@@ -34,9 +34,15 @@ namespace Gs2.Gs2Experience.Result
 	public class SetRankCapByStampSheetResult : IResult
 	{
         public Gs2.Gs2Experience.Model.Status Item { set; get; }
+        public Gs2.Gs2Experience.Model.Status Old { set; get; }
 
         public SetRankCapByStampSheetResult WithItem(Gs2.Gs2Experience.Model.Status item) {
             this.Item = item;
+            return this;
+        }
+
+        public SetRankCapByStampSheetResult WithOld(Gs2.Gs2Experience.Model.Status old) {
+            this.Old = old;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Experience.Result
                 return null;
             }
             return new SetRankCapByStampSheetResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["old"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
             };
         }
 
@@ -64,6 +72,9 @@ namespace Gs2.Gs2Experience.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

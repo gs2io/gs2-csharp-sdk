@@ -1013,6 +1013,134 @@ namespace Gs2.Gs2Limit
 #endif
 
 
+        public class CountDownByUserIdTask : Gs2WebSocketSessionTask<Request.CountDownByUserIdRequest, Result.CountDownByUserIdResult>
+        {
+	        public CountDownByUserIdTask(IGs2Session session, Request.CountDownByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CountDownByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.LimitName != null)
+                {
+                    jsonWriter.WritePropertyName("limitName");
+                    jsonWriter.Write(request.LimitName.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.CountDownValue != null)
+                {
+                    jsonWriter.WritePropertyName("countDownValue");
+                    jsonWriter.Write(request.CountDownValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "limit",
+                    "counter",
+                    "countDownByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CountDownByUserId(
+                Request.CountDownByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CountDownByUserIdResult>> callback
+        )
+		{
+			var task = new CountDownByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CountDownByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CountDownByUserIdResult> CountDownByUserIdFuture(
+                Request.CountDownByUserIdRequest request
+        )
+		{
+			return new CountDownByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountDownByUserIdResult> CountDownByUserIdAsync(
+            Request.CountDownByUserIdRequest request
+        )
+		{
+		    var task = new CountDownByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CountDownByUserIdTask CountDownByUserIdAsync(
+                Request.CountDownByUserIdRequest request
+        )
+		{
+			return new CountDownByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CountDownByUserIdResult> CountDownByUserIdAsync(
+            Request.CountDownByUserIdRequest request
+        )
+		{
+		    var task = new CountDownByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteCounterByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteCounterByUserIdRequest, Result.DeleteCounterByUserIdResult>
         {
 	        public DeleteCounterByUserIdTask(IGs2Session session, Request.DeleteCounterByUserIdRequest request) : base(session, request)
@@ -1128,6 +1256,114 @@ namespace Gs2.Gs2Limit
         )
 		{
 		    var task = new DeleteCounterByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CountDownByStampSheetTask : Gs2WebSocketSessionTask<Request.CountDownByStampSheetRequest, Result.CountDownByStampSheetResult>
+        {
+	        public CountDownByStampSheetTask(IGs2Session session, Request.CountDownByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CountDownByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "limit",
+                    "counter",
+                    "countDownByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CountDownByStampSheet(
+                Request.CountDownByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.CountDownByStampSheetResult>> callback
+        )
+		{
+			var task = new CountDownByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CountDownByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CountDownByStampSheetResult> CountDownByStampSheetFuture(
+                Request.CountDownByStampSheetRequest request
+        )
+		{
+			return new CountDownByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountDownByStampSheetResult> CountDownByStampSheetAsync(
+            Request.CountDownByStampSheetRequest request
+        )
+		{
+		    var task = new CountDownByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CountDownByStampSheetTask CountDownByStampSheetAsync(
+                Request.CountDownByStampSheetRequest request
+        )
+		{
+			return new CountDownByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CountDownByStampSheetResult> CountDownByStampSheetAsync(
+            Request.CountDownByStampSheetRequest request
+        )
+		{
+		    var task = new CountDownByStampSheetTask(
 		        Gs2WebSocketSession,
 		        request
             );

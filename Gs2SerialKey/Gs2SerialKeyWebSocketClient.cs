@@ -1187,6 +1187,232 @@ namespace Gs2.Gs2SerialKey
 #endif
 
 
+        public class RevertUseByUserIdTask : Gs2WebSocketSessionTask<Request.RevertUseByUserIdRequest, Result.RevertUseByUserIdResult>
+        {
+	        public RevertUseByUserIdTask(IGs2Session session, Request.RevertUseByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RevertUseByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Code != null)
+                {
+                    jsonWriter.WritePropertyName("code");
+                    jsonWriter.Write(request.Code.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "revertUseByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertUseByUserId(
+                Request.RevertUseByUserIdRequest request,
+                UnityAction<AsyncResult<Result.RevertUseByUserIdResult>> callback
+        )
+		{
+			var task = new RevertUseByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertUseByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertUseByUserIdResult> RevertUseByUserIdFuture(
+                Request.RevertUseByUserIdRequest request
+        )
+		{
+			return new RevertUseByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertUseByUserIdResult> RevertUseByUserIdAsync(
+            Request.RevertUseByUserIdRequest request
+        )
+		{
+		    var task = new RevertUseByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RevertUseByUserIdTask RevertUseByUserIdAsync(
+                Request.RevertUseByUserIdRequest request
+        )
+		{
+			return new RevertUseByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertUseByUserIdResult> RevertUseByUserIdAsync(
+            Request.RevertUseByUserIdRequest request
+        )
+		{
+		    var task = new RevertUseByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RevertUseByStampSheetTask : Gs2WebSocketSessionTask<Request.RevertUseByStampSheetRequest, Result.RevertUseByStampSheetResult>
+        {
+	        public RevertUseByStampSheetTask(IGs2Session session, Request.RevertUseByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RevertUseByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "serialKey",
+                    "serialKey",
+                    "revertUseByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertUseByStampSheet(
+                Request.RevertUseByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.RevertUseByStampSheetResult>> callback
+        )
+		{
+			var task = new RevertUseByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertUseByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertUseByStampSheetResult> RevertUseByStampSheetFuture(
+                Request.RevertUseByStampSheetRequest request
+        )
+		{
+			return new RevertUseByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertUseByStampSheetResult> RevertUseByStampSheetAsync(
+            Request.RevertUseByStampSheetRequest request
+        )
+		{
+		    var task = new RevertUseByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RevertUseByStampSheetTask RevertUseByStampSheetAsync(
+                Request.RevertUseByStampSheetRequest request
+        )
+		{
+			return new RevertUseByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertUseByStampSheetResult> RevertUseByStampSheetAsync(
+            Request.RevertUseByStampSheetRequest request
+        )
+		{
+		    var task = new RevertUseByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetCampaignModelTask : Gs2WebSocketSessionTask<Request.GetCampaignModelRequest, Result.GetCampaignModelResult>
         {
 	        public GetCampaignModelTask(IGs2Session session, Request.GetCampaignModelRequest request) : base(session, request)

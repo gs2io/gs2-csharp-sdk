@@ -208,6 +208,12 @@ namespace Gs2.Gs2Money.Domain
         public static Action<string, DepositByUserIdRequest, DepositByUserIdResult> DepositByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, RevertRecordReceiptRequest, RevertRecordReceiptResult> RevertRecordReceiptComplete = new UnityEvent<string, RevertRecordReceiptRequest, RevertRecordReceiptResult>();
+    #else
+        public static Action<string, RevertRecordReceiptRequest, RevertRecordReceiptResult> RevertRecordReceiptComplete;
+    #endif
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string transactionId,
@@ -238,6 +244,34 @@ namespace Gs2.Gs2Money.Domain
                         }
 
                         DepositByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "RevertRecordReceipt": {
+                        var requestModel = RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = RevertRecordReceiptResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Receipt"
+                            );
+                            var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                                resultModel.Item.TransactionId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        RevertRecordReceiptComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -355,6 +389,34 @@ namespace Gs2.Gs2Money.Domain
                     }
 
                     DepositByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "revert_record_receipt": {
+                    var requestModel = RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = RevertRecordReceiptResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "Receipt"
+                        );
+                        var key = Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                            resultModel.Item.TransactionId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    RevertRecordReceiptComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

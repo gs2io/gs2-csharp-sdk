@@ -1677,6 +1677,133 @@ namespace Gs2.Gs2SerialKey
 #endif
 
 
+        public class RevertUseByUserIdTask : Gs2RestSessionTask<RevertUseByUserIdRequest, RevertUseByUserIdResult>
+        {
+            public RevertUseByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, RevertUseByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RevertUseByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "serial-key")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/serialKey/revert";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Code != null)
+                {
+                    jsonWriter.WritePropertyName("code");
+                    jsonWriter.Write(request.Code);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertUseByUserId(
+                Request.RevertUseByUserIdRequest request,
+                UnityAction<AsyncResult<Result.RevertUseByUserIdResult>> callback
+        )
+		{
+			var task = new RevertUseByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertUseByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertUseByUserIdResult> RevertUseByUserIdFuture(
+                Request.RevertUseByUserIdRequest request
+        )
+		{
+			return new RevertUseByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertUseByUserIdResult> RevertUseByUserIdAsync(
+                Request.RevertUseByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.RevertUseByUserIdResult> result = null;
+			await RevertUseByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RevertUseByUserIdTask RevertUseByUserIdAsync(
+                Request.RevertUseByUserIdRequest request
+        )
+		{
+			return new RevertUseByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertUseByUserIdResult> RevertUseByUserIdAsync(
+                Request.RevertUseByUserIdRequest request
+        )
+		{
+			var task = new RevertUseByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UseByStampTaskTask : Gs2RestSessionTask<UseByStampTaskRequest, UseByStampTaskResult>
         {
             public UseByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, UseByStampTaskRequest request) : base(session, factory, request)
@@ -1793,6 +1920,131 @@ namespace Gs2.Gs2SerialKey
         )
 		{
 			var task = new UseByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RevertUseByStampSheetTask : Gs2RestSessionTask<RevertUseByStampSheetRequest, RevertUseByStampSheetResult>
+        {
+            public RevertUseByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, RevertUseByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RevertUseByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "serial-key")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/serialKey/use";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertUseByStampSheet(
+                Request.RevertUseByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.RevertUseByStampSheetResult>> callback
+        )
+		{
+			var task = new RevertUseByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertUseByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertUseByStampSheetResult> RevertUseByStampSheetFuture(
+                Request.RevertUseByStampSheetRequest request
+        )
+		{
+			return new RevertUseByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertUseByStampSheetResult> RevertUseByStampSheetAsync(
+                Request.RevertUseByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.RevertUseByStampSheetResult> result = null;
+			await RevertUseByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RevertUseByStampSheetTask RevertUseByStampSheetAsync(
+                Request.RevertUseByStampSheetRequest request
+        )
+		{
+			return new RevertUseByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertUseByStampSheetResult> RevertUseByStampSheetAsync(
+                Request.RevertUseByStampSheetRequest request
+        )
+		{
+			var task = new RevertUseByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

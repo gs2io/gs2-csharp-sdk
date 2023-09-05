@@ -28,6 +28,8 @@ namespace Gs2.Gs2Inbox.Model
             switch (action.Action) {
                 case "Gs2Inbox:OpenMessageByUserId":
                     return OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inbox:DeleteMessageByUserId":
+                    return DeleteMessageByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

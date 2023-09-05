@@ -203,6 +203,12 @@ namespace Gs2.Gs2Showcase.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DecrementPurchaseCountByUserIdRequest, DecrementPurchaseCountByUserIdResult> DecrementPurchaseCountByUserIdComplete = new UnityEvent<string, DecrementPurchaseCountByUserIdRequest, DecrementPurchaseCountByUserIdResult>();
+    #else
+        public static Action<string, DecrementPurchaseCountByUserIdRequest, DecrementPurchaseCountByUserIdResult> DecrementPurchaseCountByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, ForceReDrawByUserIdRequest, ForceReDrawByUserIdResult> ForceReDrawByUserIdComplete = new UnityEvent<string, ForceReDrawByUserIdRequest, ForceReDrawByUserIdResult>();
     #else
         public static Action<string, ForceReDrawByUserIdRequest, ForceReDrawByUserIdResult> ForceReDrawByUserIdComplete;
@@ -216,6 +222,35 @@ namespace Gs2.Gs2Showcase.Domain
                 string result
         ) {
                 switch (method) {
+                    case "DecrementPurchaseCountByUserId": {
+                        var requestModel = DecrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DecrementPurchaseCountByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.ShowcaseName,
+                                "RandomDisplayItem"
+                            );
+                            var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        DecrementPurchaseCountByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "ForceReDrawByUserId": {
                         var requestModel = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ForceReDrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -302,6 +337,35 @@ namespace Gs2.Gs2Showcase.Domain
                 Gs2.Gs2JobQueue.Model.JobResultBody result
         ) {
             switch (method) {
+                case "decrement_purchase_count_by_user_id": {
+                    var requestModel = DecrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = DecrementPurchaseCountByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            requestModel.ShowcaseName,
+                            "RandomDisplayItem"
+                        );
+                        var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    DecrementPurchaseCountByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
                 case "force_re_draw_by_user_id": {
                     var requestModel = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ForceReDrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));

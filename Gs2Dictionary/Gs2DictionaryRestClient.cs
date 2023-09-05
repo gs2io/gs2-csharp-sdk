@@ -2450,6 +2450,138 @@ namespace Gs2.Gs2Dictionary
 #endif
 
 
+        public class DeleteEntriesByUserIdTask : Gs2RestSessionTask<DeleteEntriesByUserIdRequest, DeleteEntriesByUserIdResult>
+        {
+            public DeleteEntriesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteEntriesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteEntriesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/entry/delete";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteEntriesByUserId(
+                Request.DeleteEntriesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteEntriesByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteEntriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteEntriesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteEntriesByUserIdResult> DeleteEntriesByUserIdFuture(
+                Request.DeleteEntriesByUserIdRequest request
+        )
+		{
+			return new DeleteEntriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteEntriesByUserIdResult> DeleteEntriesByUserIdAsync(
+                Request.DeleteEntriesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteEntriesByUserIdResult> result = null;
+			await DeleteEntriesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteEntriesByUserIdTask DeleteEntriesByUserIdAsync(
+                Request.DeleteEntriesByUserIdRequest request
+        )
+		{
+			return new DeleteEntriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteEntriesByUserIdResult> DeleteEntriesByUserIdAsync(
+                Request.DeleteEntriesByUserIdRequest request
+        )
+		{
+			var task = new DeleteEntriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AddEntriesByStampSheetTask : Gs2RestSessionTask<AddEntriesByStampSheetRequest, AddEntriesByStampSheetResult>
         {
             public AddEntriesByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AddEntriesByStampSheetRequest request) : base(session, factory, request)
@@ -2566,6 +2698,131 @@ namespace Gs2.Gs2Dictionary
         )
 		{
 			var task = new AddEntriesByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteEntriesByStampTaskTask : Gs2RestSessionTask<DeleteEntriesByStampTaskRequest, DeleteEntriesByStampTaskResult>
+        {
+            public DeleteEntriesByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DeleteEntriesByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteEntriesByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/entry/delete";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteEntriesByStampTask(
+                Request.DeleteEntriesByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.DeleteEntriesByStampTaskResult>> callback
+        )
+		{
+			var task = new DeleteEntriesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteEntriesByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteEntriesByStampTaskResult> DeleteEntriesByStampTaskFuture(
+                Request.DeleteEntriesByStampTaskRequest request
+        )
+		{
+			return new DeleteEntriesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteEntriesByStampTaskResult> DeleteEntriesByStampTaskAsync(
+                Request.DeleteEntriesByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.DeleteEntriesByStampTaskResult> result = null;
+			await DeleteEntriesByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteEntriesByStampTaskTask DeleteEntriesByStampTaskAsync(
+                Request.DeleteEntriesByStampTaskRequest request
+        )
+		{
+			return new DeleteEntriesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteEntriesByStampTaskResult> DeleteEntriesByStampTaskAsync(
+                Request.DeleteEntriesByStampTaskRequest request
+        )
+		{
+			var task = new DeleteEntriesByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

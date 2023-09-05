@@ -254,6 +254,12 @@ namespace Gs2.Gs2Inbox.Domain
         public static Action<string, OpenMessageByUserIdRequest, OpenMessageByUserIdResult> OpenMessageByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteMessageByUserIdRequest, DeleteMessageByUserIdResult> DeleteMessageByUserIdComplete = new UnityEvent<string, DeleteMessageByUserIdRequest, DeleteMessageByUserIdResult>();
+    #else
+        public static Action<string, DeleteMessageByUserIdRequest, DeleteMessageByUserIdResult> DeleteMessageByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -282,6 +288,29 @@ namespace Gs2.Gs2Inbox.Domain
                         }
 
                         OpenMessageByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "DeleteMessageByUserId": {
+                        var requestModel = DeleteMessageByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DeleteMessageByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Message"
+                            );
+                            var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                        }
+
+                        DeleteMessageByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

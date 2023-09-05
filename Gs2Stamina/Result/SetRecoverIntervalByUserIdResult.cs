@@ -34,10 +34,16 @@ namespace Gs2.Gs2Stamina.Result
 	public class SetRecoverIntervalByUserIdResult : IResult
 	{
         public Gs2.Gs2Stamina.Model.Stamina Item { set; get; }
+        public Gs2.Gs2Stamina.Model.Stamina Old { set; get; }
         public Gs2.Gs2Stamina.Model.StaminaModel StaminaModel { set; get; }
 
         public SetRecoverIntervalByUserIdResult WithItem(Gs2.Gs2Stamina.Model.Stamina item) {
             this.Item = item;
+            return this;
+        }
+
+        public SetRecoverIntervalByUserIdResult WithOld(Gs2.Gs2Stamina.Model.Stamina old) {
+            this.Old = old;
             return this;
         }
 
@@ -56,6 +62,7 @@ namespace Gs2.Gs2Stamina.Result
             }
             return new SetRecoverIntervalByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["old"]))
                 .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]));
         }
 
@@ -63,6 +70,7 @@ namespace Gs2.Gs2Stamina.Result
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
                 ["staminaModel"] = StaminaModel?.ToJson(),
             };
         }
@@ -72,6 +80,9 @@ namespace Gs2.Gs2Stamina.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             if (StaminaModel != null) {
                 StaminaModel.WriteJson(writer);

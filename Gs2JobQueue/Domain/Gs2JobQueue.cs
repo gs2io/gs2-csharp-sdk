@@ -251,6 +251,12 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DeleteJobByUserIdRequest, DeleteJobByUserIdResult> DeleteJobByUserIdComplete = new UnityEvent<string, DeleteJobByUserIdRequest, DeleteJobByUserIdResult>();
+    #else
+        public static Action<string, DeleteJobByUserIdRequest, DeleteJobByUserIdResult> DeleteJobByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -258,6 +264,31 @@ namespace Gs2.Gs2JobQueue.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "DeleteJobByUserId": {
+                        var requestModel = DeleteJobByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DeleteJobByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Job"
+                            );
+                            var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                        }
+
+                        DeleteJobByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(

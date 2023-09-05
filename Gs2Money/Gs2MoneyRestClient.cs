@@ -2317,6 +2317,133 @@ namespace Gs2.Gs2Money
 #endif
 
 
+        public class RevertRecordReceiptTask : Gs2RestSessionTask<RevertRecordReceiptRequest, RevertRecordReceiptResult>
+        {
+            public RevertRecordReceiptTask(IGs2Session session, RestSessionRequestFactory factory, RevertRecordReceiptRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RevertRecordReceiptRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/receipt/revert";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Receipt != null)
+                {
+                    jsonWriter.WritePropertyName("receipt");
+                    jsonWriter.Write(request.Receipt);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertRecordReceipt(
+                Request.RevertRecordReceiptRequest request,
+                UnityAction<AsyncResult<Result.RevertRecordReceiptResult>> callback
+        )
+		{
+			var task = new RevertRecordReceiptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertRecordReceiptResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertRecordReceiptResult> RevertRecordReceiptFuture(
+                Request.RevertRecordReceiptRequest request
+        )
+		{
+			return new RevertRecordReceiptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertRecordReceiptResult> RevertRecordReceiptAsync(
+                Request.RevertRecordReceiptRequest request
+        )
+		{
+            AsyncResult<Result.RevertRecordReceiptResult> result = null;
+			await RevertRecordReceipt(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RevertRecordReceiptTask RevertRecordReceiptAsync(
+                Request.RevertRecordReceiptRequest request
+        )
+		{
+			return new RevertRecordReceiptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertRecordReceiptResult> RevertRecordReceiptAsync(
+                Request.RevertRecordReceiptRequest request
+        )
+		{
+			var task = new RevertRecordReceiptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class RecordReceiptByStampTaskTask : Gs2RestSessionTask<RecordReceiptByStampTaskRequest, RecordReceiptByStampTaskResult>
         {
             public RecordReceiptByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, RecordReceiptByStampTaskRequest request) : base(session, factory, request)
@@ -2433,6 +2560,131 @@ namespace Gs2.Gs2Money
         )
 		{
 			var task = new RecordReceiptByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RevertRecordReceiptByStampSheetTask : Gs2RestSessionTask<RevertRecordReceiptByStampSheetRequest, RevertRecordReceiptByStampSheetResult>
+        {
+            public RevertRecordReceiptByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, RevertRecordReceiptByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RevertRecordReceiptByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "money")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/receipt/record/revert";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RevertRecordReceiptByStampSheet(
+                Request.RevertRecordReceiptByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.RevertRecordReceiptByStampSheetResult>> callback
+        )
+		{
+			var task = new RevertRecordReceiptByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RevertRecordReceiptByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RevertRecordReceiptByStampSheetResult> RevertRecordReceiptByStampSheetFuture(
+                Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+			return new RevertRecordReceiptByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RevertRecordReceiptByStampSheetResult> RevertRecordReceiptByStampSheetAsync(
+                Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.RevertRecordReceiptByStampSheetResult> result = null;
+			await RevertRecordReceiptByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RevertRecordReceiptByStampSheetTask RevertRecordReceiptByStampSheetAsync(
+                Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+			return new RevertRecordReceiptByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RevertRecordReceiptByStampSheetResult> RevertRecordReceiptByStampSheetAsync(
+                Request.RevertRecordReceiptByStampSheetRequest request
+        )
+		{
+			var task = new RevertRecordReceiptByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

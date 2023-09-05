@@ -1620,6 +1620,131 @@ namespace Gs2.Gs2JobQueue
 #endif
 
 
+        public class DeleteByStampTaskTask : Gs2RestSessionTask<DeleteByStampTaskRequest, DeleteByStampTaskResult>
+        {
+            public DeleteByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, DeleteByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "job-queue")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/job/delete";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteByStampTask(
+                Request.DeleteByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.DeleteByStampTaskResult>> callback
+        )
+		{
+			var task = new DeleteByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteByStampTaskResult> DeleteByStampTaskFuture(
+                Request.DeleteByStampTaskRequest request
+        )
+		{
+			return new DeleteByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteByStampTaskResult> DeleteByStampTaskAsync(
+                Request.DeleteByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.DeleteByStampTaskResult> result = null;
+			await DeleteByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteByStampTaskTask DeleteByStampTaskAsync(
+                Request.DeleteByStampTaskRequest request
+        )
+		{
+			return new DeleteByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteByStampTaskResult> DeleteByStampTaskAsync(
+                Request.DeleteByStampTaskRequest request
+        )
+		{
+			var task = new DeleteByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetJobResultTask : Gs2RestSessionTask<GetJobResultRequest, GetJobResultResult>
         {
             public GetJobResultTask(IGs2Session session, RestSessionRequestFactory factory, GetJobResultRequest request) : base(session, factory, request)

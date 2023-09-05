@@ -1478,6 +1478,135 @@ namespace Gs2.Gs2Limit
 #endif
 
 
+        public class CountDownByUserIdTask : Gs2RestSessionTask<CountDownByUserIdRequest, CountDownByUserIdResult>
+        {
+            public CountDownByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CountDownByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CountDownByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "limit")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/counter/{limitName}/{counterName}/decrease";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{limitName}", !string.IsNullOrEmpty(request.LimitName) ? request.LimitName.ToString() : "null");
+                url = url.Replace("{counterName}", !string.IsNullOrEmpty(request.CounterName) ? request.CounterName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.CountDownValue != null)
+                {
+                    jsonWriter.WritePropertyName("countDownValue");
+                    jsonWriter.Write(request.CountDownValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CountDownByUserId(
+                Request.CountDownByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CountDownByUserIdResult>> callback
+        )
+		{
+			var task = new CountDownByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CountDownByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CountDownByUserIdResult> CountDownByUserIdFuture(
+                Request.CountDownByUserIdRequest request
+        )
+		{
+			return new CountDownByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountDownByUserIdResult> CountDownByUserIdAsync(
+                Request.CountDownByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.CountDownByUserIdResult> result = null;
+			await CountDownByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountDownByUserIdTask CountDownByUserIdAsync(
+                Request.CountDownByUserIdRequest request
+        )
+		{
+			return new CountDownByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CountDownByUserIdResult> CountDownByUserIdAsync(
+                Request.CountDownByUserIdRequest request
+        )
+		{
+			var task = new CountDownByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteCounterByUserIdTask : Gs2RestSessionTask<DeleteCounterByUserIdRequest, DeleteCounterByUserIdResult>
         {
             public DeleteCounterByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCounterByUserIdRequest request) : base(session, factory, request)
@@ -1705,6 +1834,131 @@ namespace Gs2.Gs2Limit
         )
 		{
 			var task = new CountUpByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CountDownByStampSheetTask : Gs2RestSessionTask<CountDownByStampSheetRequest, CountDownByStampSheetResult>
+        {
+            public CountDownByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, CountDownByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CountDownByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "limit")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/counter/decrease";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CountDownByStampSheet(
+                Request.CountDownByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.CountDownByStampSheetResult>> callback
+        )
+		{
+			var task = new CountDownByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CountDownByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CountDownByStampSheetResult> CountDownByStampSheetFuture(
+                Request.CountDownByStampSheetRequest request
+        )
+		{
+			return new CountDownByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CountDownByStampSheetResult> CountDownByStampSheetAsync(
+                Request.CountDownByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.CountDownByStampSheetResult> result = null;
+			await CountDownByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CountDownByStampSheetTask CountDownByStampSheetAsync(
+                Request.CountDownByStampSheetRequest request
+        )
+		{
+			return new CountDownByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CountDownByStampSheetResult> CountDownByStampSheetAsync(
+                Request.CountDownByStampSheetRequest request
+        )
+		{
+			var task = new CountDownByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

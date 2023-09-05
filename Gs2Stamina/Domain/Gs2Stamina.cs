@@ -459,6 +459,12 @@ namespace Gs2.Gs2Stamina.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, DecreaseMaxValueByUserIdRequest, DecreaseMaxValueByUserIdResult> DecreaseMaxValueByUserIdComplete = new UnityEvent<string, DecreaseMaxValueByUserIdRequest, DecreaseMaxValueByUserIdResult>();
+    #else
+        public static Action<string, DecreaseMaxValueByUserIdRequest, DecreaseMaxValueByUserIdResult> DecreaseMaxValueByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdComplete = new UnityEvent<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult>();
     #else
         public static Action<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdComplete;
@@ -472,6 +478,49 @@ namespace Gs2.Gs2Stamina.Domain
                 string result
         ) {
                 switch (method) {
+                    case "DecreaseMaxValueByUserId": {
+                        var requestModel = DecreaseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = DecreaseMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Stamina"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                                resultModel.Item.StaminaName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        if (resultModel.StaminaModel != null) {
+                            var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "StaminaModel"
+                            );
+                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                                resultModel.StaminaModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.StaminaModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        DecreaseMaxValueByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "ConsumeStaminaByUserId": {
                         var requestModel = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ConsumeStaminaByUserIdResult.FromJson(JsonMapper.ToObject(result));

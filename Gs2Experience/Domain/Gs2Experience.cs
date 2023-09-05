@@ -336,6 +336,18 @@ namespace Gs2.Gs2Experience.Domain
                 }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SubExperienceByUserIdRequest, SubExperienceByUserIdResult> SubExperienceByUserIdComplete = new UnityEvent<string, SubExperienceByUserIdRequest, SubExperienceByUserIdResult>();
+    #else
+        public static Action<string, SubExperienceByUserIdRequest, SubExperienceByUserIdResult> SubExperienceByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SubRankCapByUserIdRequest, SubRankCapByUserIdResult> SubRankCapByUserIdComplete = new UnityEvent<string, SubRankCapByUserIdRequest, SubRankCapByUserIdResult>();
+    #else
+        public static Action<string, SubRankCapByUserIdRequest, SubRankCapByUserIdResult> SubRankCapByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -343,6 +355,66 @@ namespace Gs2.Gs2Experience.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "SubExperienceByUserId": {
+                        var requestModel = SubExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SubExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        SubExperienceByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "SubRankCapByUserId": {
+                        var requestModel = SubRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SubRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.Item.ExperienceName.ToString(),
+                                resultModel.Item.PropertyId.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        SubRankCapByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public static void UpdateCacheFromJobResult(

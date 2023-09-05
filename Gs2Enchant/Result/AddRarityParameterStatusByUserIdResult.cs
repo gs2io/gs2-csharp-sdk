@@ -34,9 +34,15 @@ namespace Gs2.Gs2Enchant.Result
 	public class AddRarityParameterStatusByUserIdResult : IResult
 	{
         public Gs2.Gs2Enchant.Model.RarityParameterStatus Item { set; get; }
+        public Gs2.Gs2Enchant.Model.RarityParameterStatus Old { set; get; }
 
         public AddRarityParameterStatusByUserIdResult WithItem(Gs2.Gs2Enchant.Model.RarityParameterStatus item) {
             this.Item = item;
+            return this;
+        }
+
+        public AddRarityParameterStatusByUserIdResult WithOld(Gs2.Gs2Enchant.Model.RarityParameterStatus old) {
+            this.Old = old;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Enchant.Result
                 return null;
             }
             return new AddRarityParameterStatusByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(data["old"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
             };
         }
 
@@ -64,6 +72,9 @@ namespace Gs2.Gs2Enchant.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

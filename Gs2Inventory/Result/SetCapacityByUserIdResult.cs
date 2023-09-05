@@ -34,9 +34,15 @@ namespace Gs2.Gs2Inventory.Result
 	public class SetCapacityByUserIdResult : IResult
 	{
         public Gs2.Gs2Inventory.Model.Inventory Item { set; get; }
+        public Gs2.Gs2Inventory.Model.Inventory Old { set; get; }
 
         public SetCapacityByUserIdResult WithItem(Gs2.Gs2Inventory.Model.Inventory item) {
             this.Item = item;
+            return this;
+        }
+
+        public SetCapacityByUserIdResult WithOld(Gs2.Gs2Inventory.Model.Inventory old) {
+            this.Old = old;
             return this;
         }
 
@@ -49,13 +55,15 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new SetCapacityByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["item"]))
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["old"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["old"] = Old?.ToJson(),
             };
         }
 
@@ -64,6 +72,9 @@ namespace Gs2.Gs2Inventory.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (Old != null) {
+                Old.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

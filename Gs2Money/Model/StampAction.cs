@@ -38,6 +38,8 @@ namespace Gs2.Gs2Money.Model
             switch (action.Action) {
                 case "Gs2Money:DepositByUserId":
                     return DepositByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Money:RevertRecordReceipt":
+                    return RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

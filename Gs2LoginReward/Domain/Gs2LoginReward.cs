@@ -208,6 +208,12 @@ namespace Gs2.Gs2LoginReward.Domain
         public static Action<string, DeleteReceiveStatusByUserIdRequest, DeleteReceiveStatusByUserIdResult> DeleteReceiveStatusByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, UnmarkReceivedByUserIdRequest, UnmarkReceivedByUserIdResult> UnmarkReceivedByUserIdComplete = new UnityEvent<string, UnmarkReceivedByUserIdRequest, UnmarkReceivedByUserIdResult>();
+    #else
+        public static Action<string, UnmarkReceivedByUserIdRequest, UnmarkReceivedByUserIdResult> UnmarkReceivedByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampSheet(
                 CacheDatabase cache,
                 string transactionId,
@@ -243,6 +249,49 @@ namespace Gs2.Gs2LoginReward.Domain
                         }
 
                         DeleteReceiveStatusByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "UnmarkReceivedByUserId": {
+                        var requestModel = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = UnmarkReceivedByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                "ReceiveStatus"
+                            );
+                            var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
+                                resultModel.Item.BonusModelName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        if (resultModel.BonusModel != null) {
+                            var parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "BonusModel"
+                            );
+                            var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
+                                resultModel.BonusModel.Name.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.BonusModel,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        UnmarkReceivedByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -346,6 +395,49 @@ namespace Gs2.Gs2LoginReward.Domain
                     }
 
                     DeleteReceiveStatusByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "unmark_received_by_user_id": {
+                    var requestModel = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = UnmarkReceivedByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            "ReceiveStatus"
+                        );
+                        var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
+                            resultModel.Item.BonusModelName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.BonusModel != null) {
+                        var parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "BonusModel"
+                        );
+                        var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
+                            resultModel.BonusModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.BonusModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    UnmarkReceivedByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel
