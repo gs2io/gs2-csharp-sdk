@@ -124,7 +124,6 @@ namespace Gs2.Gs2Limit.Request
             key += LimitName + ":";
             key += CounterName + ":";
             key += UserId + ":";
-            key += CountDownValue + ":";
             return key;
         }
 
@@ -134,7 +133,7 @@ namespace Gs2.Gs2Limit.Request
                 LimitName = LimitName,
                 CounterName = CounterName,
                 UserId = UserId,
-                CountDownValue = CountDownValue,
+                CountDownValue = CountDownValue * x,
             };
         }
 
@@ -152,15 +151,12 @@ namespace Gs2.Gs2Limit.Request
             if (UserId != y.UserId) {
                 throw new ArithmeticException("mismatch parameter values CountDownByUserIdRequest::userId");
             }
-            if (CountDownValue != y.CountDownValue) {
-                throw new ArithmeticException("mismatch parameter values CountDownByUserIdRequest::countDownValue");
-            }
             return new CountDownByUserIdRequest {
                 NamespaceName = NamespaceName,
                 LimitName = LimitName,
                 CounterName = CounterName,
                 UserId = UserId,
-                CountDownValue = CountDownValue,
+                CountDownValue = CountDownValue + y.CountDownValue,
             };
         }
     }
