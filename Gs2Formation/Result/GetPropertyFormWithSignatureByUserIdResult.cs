@@ -36,7 +36,7 @@ namespace Gs2.Gs2Formation.Result
         public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
         public string Body { set; get; }
         public string Signature { set; get; }
-        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyFormModel PropertyFormModel { set; get; }
 
         public GetPropertyFormWithSignatureByUserIdResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;
@@ -53,8 +53,8 @@ namespace Gs2.Gs2Formation.Result
             return this;
         }
 
-        public GetPropertyFormWithSignatureByUserIdResult WithFormModel(Gs2.Gs2Formation.Model.FormModel formModel) {
-            this.FormModel = formModel;
+        public GetPropertyFormWithSignatureByUserIdResult WithPropertyFormModel(Gs2.Gs2Formation.Model.PropertyFormModel propertyFormModel) {
+            this.PropertyFormModel = propertyFormModel;
             return this;
         }
 
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Formation.Result
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.PropertyForm.FromJson(data["item"]))
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
                 .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
-                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]));
+                .WithPropertyFormModel(!data.Keys.Contains("propertyFormModel") || data["propertyFormModel"] == null ? null : Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(data["propertyFormModel"]));
         }
 
         public JsonData ToJson()
@@ -79,7 +79,7 @@ namespace Gs2.Gs2Formation.Result
                 ["item"] = Item?.ToJson(),
                 ["body"] = Body,
                 ["signature"] = Signature,
-                ["formModel"] = FormModel?.ToJson(),
+                ["propertyFormModel"] = PropertyFormModel?.ToJson(),
             };
         }
 
@@ -97,8 +97,8 @@ namespace Gs2.Gs2Formation.Result
                 writer.WritePropertyName("signature");
                 writer.Write(Signature.ToString());
             }
-            if (FormModel != null) {
-                FormModel.WriteJson(writer);
+            if (PropertyFormModel != null) {
+                PropertyFormModel.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

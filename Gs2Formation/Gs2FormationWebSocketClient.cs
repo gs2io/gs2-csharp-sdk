@@ -529,6 +529,11 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("namespaceName");
                     jsonWriter.Write(request.NamespaceName.ToString());
                 }
+                if (request.MoldModelName != null)
+                {
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
+                }
                 if (request.FormModelName != null)
                 {
                     jsonWriter.WritePropertyName("formModelName");
@@ -1109,10 +1114,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("namespaceName");
                     jsonWriter.Write(request.NamespaceName.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1350,10 +1355,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("namespaceName");
                     jsonWriter.Write(request.NamespaceName.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1458,10 +1463,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("namespaceName");
                     jsonWriter.Write(request.NamespaceName.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.Description != null)
                 {
@@ -1591,10 +1596,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("namespaceName");
                     jsonWriter.Write(request.NamespaceName.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1681,6 +1686,586 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class GetPropertyFormModelTask : Gs2WebSocketSessionTask<Request.GetPropertyFormModelRequest, Result.GetPropertyFormModelResult>
+        {
+	        public GetPropertyFormModelTask(IGs2Session session, Request.GetPropertyFormModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetPropertyFormModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PropertyFormModelName != null)
+                {
+                    jsonWriter.WritePropertyName("propertyFormModelName");
+                    jsonWriter.Write(request.PropertyFormModelName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "propertyFormModel",
+                    "getPropertyFormModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPropertyFormModel(
+                Request.GetPropertyFormModelRequest request,
+                UnityAction<AsyncResult<Result.GetPropertyFormModelResult>> callback
+        )
+		{
+			var task = new GetPropertyFormModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPropertyFormModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPropertyFormModelResult> GetPropertyFormModelFuture(
+                Request.GetPropertyFormModelRequest request
+        )
+		{
+			return new GetPropertyFormModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPropertyFormModelResult> GetPropertyFormModelAsync(
+            Request.GetPropertyFormModelRequest request
+        )
+		{
+		    var task = new GetPropertyFormModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPropertyFormModelTask GetPropertyFormModelAsync(
+                Request.GetPropertyFormModelRequest request
+        )
+		{
+			return new GetPropertyFormModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPropertyFormModelResult> GetPropertyFormModelAsync(
+            Request.GetPropertyFormModelRequest request
+        )
+		{
+		    var task = new GetPropertyFormModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreatePropertyFormModelMasterTask : Gs2WebSocketSessionTask<Request.CreatePropertyFormModelMasterRequest, Result.CreatePropertyFormModelMasterResult>
+        {
+	        public CreatePropertyFormModelMasterTask(IGs2Session session, Request.CreatePropertyFormModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreatePropertyFormModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.Slots != null)
+                {
+                    jsonWriter.WritePropertyName("slots");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Slots)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "propertyFormModelMaster",
+                    "createPropertyFormModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreatePropertyFormModelMaster(
+                Request.CreatePropertyFormModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreatePropertyFormModelMasterResult>> callback
+        )
+		{
+			var task = new CreatePropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreatePropertyFormModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreatePropertyFormModelMasterResult> CreatePropertyFormModelMasterFuture(
+                Request.CreatePropertyFormModelMasterRequest request
+        )
+		{
+			return new CreatePropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreatePropertyFormModelMasterResult> CreatePropertyFormModelMasterAsync(
+            Request.CreatePropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new CreatePropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreatePropertyFormModelMasterTask CreatePropertyFormModelMasterAsync(
+                Request.CreatePropertyFormModelMasterRequest request
+        )
+		{
+			return new CreatePropertyFormModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreatePropertyFormModelMasterResult> CreatePropertyFormModelMasterAsync(
+            Request.CreatePropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new CreatePropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetPropertyFormModelMasterTask : Gs2WebSocketSessionTask<Request.GetPropertyFormModelMasterRequest, Result.GetPropertyFormModelMasterResult>
+        {
+	        public GetPropertyFormModelMasterTask(IGs2Session session, Request.GetPropertyFormModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetPropertyFormModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PropertyFormModelName != null)
+                {
+                    jsonWriter.WritePropertyName("propertyFormModelName");
+                    jsonWriter.Write(request.PropertyFormModelName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "propertyFormModelMaster",
+                    "getPropertyFormModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetPropertyFormModelMaster(
+                Request.GetPropertyFormModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetPropertyFormModelMasterResult>> callback
+        )
+		{
+			var task = new GetPropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetPropertyFormModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetPropertyFormModelMasterResult> GetPropertyFormModelMasterFuture(
+                Request.GetPropertyFormModelMasterRequest request
+        )
+		{
+			return new GetPropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetPropertyFormModelMasterResult> GetPropertyFormModelMasterAsync(
+            Request.GetPropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new GetPropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetPropertyFormModelMasterTask GetPropertyFormModelMasterAsync(
+                Request.GetPropertyFormModelMasterRequest request
+        )
+		{
+			return new GetPropertyFormModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetPropertyFormModelMasterResult> GetPropertyFormModelMasterAsync(
+            Request.GetPropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new GetPropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdatePropertyFormModelMasterTask : Gs2WebSocketSessionTask<Request.UpdatePropertyFormModelMasterRequest, Result.UpdatePropertyFormModelMasterResult>
+        {
+	        public UpdatePropertyFormModelMasterTask(IGs2Session session, Request.UpdatePropertyFormModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdatePropertyFormModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PropertyFormModelName != null)
+                {
+                    jsonWriter.WritePropertyName("propertyFormModelName");
+                    jsonWriter.Write(request.PropertyFormModelName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.Slots != null)
+                {
+                    jsonWriter.WritePropertyName("slots");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Slots)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "propertyFormModelMaster",
+                    "updatePropertyFormModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdatePropertyFormModelMaster(
+                Request.UpdatePropertyFormModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdatePropertyFormModelMasterResult>> callback
+        )
+		{
+			var task = new UpdatePropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdatePropertyFormModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdatePropertyFormModelMasterResult> UpdatePropertyFormModelMasterFuture(
+                Request.UpdatePropertyFormModelMasterRequest request
+        )
+		{
+			return new UpdatePropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdatePropertyFormModelMasterResult> UpdatePropertyFormModelMasterAsync(
+            Request.UpdatePropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new UpdatePropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdatePropertyFormModelMasterTask UpdatePropertyFormModelMasterAsync(
+                Request.UpdatePropertyFormModelMasterRequest request
+        )
+		{
+			return new UpdatePropertyFormModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdatePropertyFormModelMasterResult> UpdatePropertyFormModelMasterAsync(
+            Request.UpdatePropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new UpdatePropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeletePropertyFormModelMasterTask : Gs2WebSocketSessionTask<Request.DeletePropertyFormModelMasterRequest, Result.DeletePropertyFormModelMasterResult>
+        {
+	        public DeletePropertyFormModelMasterTask(IGs2Session session, Request.DeletePropertyFormModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeletePropertyFormModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.PropertyFormModelName != null)
+                {
+                    jsonWriter.WritePropertyName("propertyFormModelName");
+                    jsonWriter.Write(request.PropertyFormModelName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "propertyFormModelMaster",
+                    "deletePropertyFormModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeletePropertyFormModelMaster(
+                Request.DeletePropertyFormModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeletePropertyFormModelMasterResult>> callback
+        )
+		{
+			var task = new DeletePropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeletePropertyFormModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeletePropertyFormModelMasterResult> DeletePropertyFormModelMasterFuture(
+                Request.DeletePropertyFormModelMasterRequest request
+        )
+		{
+			return new DeletePropertyFormModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeletePropertyFormModelMasterResult> DeletePropertyFormModelMasterAsync(
+            Request.DeletePropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new DeletePropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeletePropertyFormModelMasterTask DeletePropertyFormModelMasterAsync(
+                Request.DeletePropertyFormModelMasterRequest request
+        )
+		{
+			return new DeletePropertyFormModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeletePropertyFormModelMasterResult> DeletePropertyFormModelMasterAsync(
+            Request.DeletePropertyFormModelMasterRequest request
+        )
+		{
+		    var task = new DeletePropertyFormModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetMoldTask : Gs2WebSocketSessionTask<Request.GetMoldRequest, Result.GetMoldResult>
         {
 	        public GetMoldTask(IGs2Session session, Request.GetMoldRequest request) : base(session, request)
@@ -1704,10 +2289,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1822,10 +2407,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1935,10 +2520,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.Capacity != null)
                 {
@@ -2058,10 +2643,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.Capacity != null)
                 {
@@ -2181,10 +2766,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.Capacity != null)
                 {
@@ -2304,10 +2889,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("accessToken");
                     jsonWriter.Write(request.AccessToken.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2427,10 +3012,10 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
-                if (request.MoldName != null)
+                if (request.MoldModelName != null)
                 {
-                    jsonWriter.WritePropertyName("moldName");
-                    jsonWriter.Write(request.MoldName.ToString());
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
                 }
                 if (request.ContextStack != null)
                 {

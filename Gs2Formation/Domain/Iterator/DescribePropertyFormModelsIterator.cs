@@ -61,9 +61,9 @@ namespace Gs2.Gs2Formation.Domain.Iterator
 {
 
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeFormModelsIterator : Gs2Iterator<Gs2.Gs2Formation.Model.FormModel> {
+    public class DescribePropertyFormModelsIterator : Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModel> {
     #else
-    public class DescribeFormModelsIterator : IAsyncEnumerable<Gs2.Gs2Formation.Model.FormModel> {
+    public class DescribePropertyFormModelsIterator : IAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel> {
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2FormationRestClient _client;
@@ -71,11 +71,11 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         public string NamespaceName => _namespaceName;
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Formation.Model.FormModel[] _result;
+        private Gs2.Gs2Formation.Model.PropertyFormModel[] _result;
 
         int? fetchSize;
 
-        public DescribeFormModelsIterator(
+        public DescribePropertyFormModelsIterator(
             CacheDatabase cache,
             Gs2FormationRestClient client,
             string namespaceName
@@ -84,7 +84,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
             this._client = client;
             this._namespaceName = namespaceName;
             this._last = false;
-            this._result = new Gs2.Gs2Formation.Model.FormModel[]{};
+            this._result = new Gs2.Gs2Formation.Model.PropertyFormModel[]{};
 
             this.fetchSize = null;
         }
@@ -102,9 +102,9 @@ namespace Gs2.Gs2Formation.Domain.Iterator
             this._isCacheChecked = true;
             var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                 this.NamespaceName,
-                "FormModel"
+                "PropertyFormModel"
             );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Formation.Model.FormModel>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Formation.Model.PropertyFormModel>
             (
                     parentKey,
                     out var list
@@ -115,11 +115,11 @@ namespace Gs2.Gs2Formation.Domain.Iterator
             } else {
 
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeFormModelsFuture(
+                var future = this._client.DescribePropertyFormModelsFuture(
                 #else
-                var r = await this._client.DescribeFormModelsAsync(
+                var r = await this._client.DescribePropertyFormModelsAsync(
                 #endif
-                    new Gs2.Gs2Formation.Request.DescribeFormModelsRequest()
+                    new Gs2.Gs2Formation.Request.DescribePropertyFormModelsRequest()
                         .WithNamespaceName(this._namespaceName)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 foreach (var item in this._result) {
                     this._cache.Put(
                             parentKey,
-                            Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
+                            Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                                     item.Name?.ToString()
                             ),
                             item,
@@ -145,7 +145,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Formation.Model.FormModel>(
+                    this._cache.SetListCached<Gs2.Gs2Formation.Model.PropertyFormModel>(
                             parentKey
                     );
                 }
@@ -168,7 +168,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Formation.Model.FormModel>> callback
+            Action<AsyncResult<Gs2.Gs2Formation.Model.PropertyFormModel>> callback
         )
         {
             Gs2Exception error = null;
@@ -182,7 +182,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Formation.Model.FormModel ret = this._result[0];
+                        Gs2.Gs2Formation.Model.PropertyFormModel ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -195,7 +195,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                     }
                 }
             );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Formation.Model.FormModel>(
+            callback.Invoke(new AsyncResult<Gs2.Gs2Formation.Model.PropertyFormModel>(
                 Current,
                 error
             ));
@@ -204,22 +204,22 @@ namespace Gs2.Gs2Formation.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.FormModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
         protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Formation.Model.FormModel>> callback
+            Action<AsyncResult<Gs2.Gs2Formation.Model.PropertyFormModel>> callback
             #endif
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Formation.Model.FormModel> GetAsyncEnumerator(
+        public async IAsyncEnumerator<Gs2.Gs2Formation.Model.PropertyFormModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         #endif
         )
         {
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Formation.Model.FormModel>(async (writer, token) =>
+            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Formation.Model.PropertyFormModel>(async (writer, token) =>
             {
             #endif
         #endif
@@ -236,7 +236,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 if (this._result.Length == 0) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     Current = null;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Formation.Model.FormModel>(
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Formation.Model.PropertyFormModel>(
                         Current,
                         Error
                     ));
@@ -245,7 +245,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Formation.Model.FormModel ret = this._result[0];
+                Gs2.Gs2Formation.Model.PropertyFormModel ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -259,7 +259,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 await writer.YieldAsync(ret);
             #else
                 Current = ret;
-                callback.Invoke(new AsyncResult<Gs2.Gs2Formation.Model.FormModel>(
+                callback.Invoke(new AsyncResult<Gs2.Gs2Formation.Model.PropertyFormModel>(
                     Current,
                     Error
                 ));

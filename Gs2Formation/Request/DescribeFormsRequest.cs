@@ -34,7 +34,7 @@ namespace Gs2.Gs2Formation.Request
 	public class DescribeFormsRequest : Gs2Request<DescribeFormsRequest>
 	{
         public string NamespaceName { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public string AccessToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
@@ -42,8 +42,8 @@ namespace Gs2.Gs2Formation.Request
             this.NamespaceName = namespaceName;
             return this;
         }
-        public DescribeFormsRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public DescribeFormsRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
         public DescribeFormsRequest WithAccessToken(string accessToken) {
@@ -69,7 +69,7 @@ namespace Gs2.Gs2Formation.Request
             }
             return new DescribeFormsRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
@@ -79,7 +79,7 @@ namespace Gs2.Gs2Formation.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
                 ["accessToken"] = AccessToken,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
@@ -93,9 +93,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             if (AccessToken != null) {
                 writer.WritePropertyName("accessToken");
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Formation.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             key += AccessToken + ":";
             key += PageToken + ":";
             key += Limit + ":";

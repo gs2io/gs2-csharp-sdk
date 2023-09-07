@@ -34,13 +34,13 @@ namespace Gs2.Gs2Formation.Request
 	public class DeleteMoldModelMasterRequest : Gs2Request<DeleteMoldModelMasterRequest>
 	{
         public string NamespaceName { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public DeleteMoldModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public DeleteMoldModelMasterRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public DeleteMoldModelMasterRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
 
@@ -54,14 +54,14 @@ namespace Gs2.Gs2Formation.Request
             }
             return new DeleteMoldModelMasterRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString());
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
             };
         }
 
@@ -72,9 +72,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -82,7 +82,7 @@ namespace Gs2.Gs2Formation.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             return key;
         }
 

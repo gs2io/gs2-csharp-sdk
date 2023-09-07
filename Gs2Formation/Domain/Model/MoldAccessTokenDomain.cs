@@ -64,7 +64,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         private readonly string _namespaceName;
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
-        private readonly string _moldName;
+        private readonly string _moldModelName;
 
         private readonly String _parentKey;
         public string TransactionId { get; set; }
@@ -72,7 +72,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
-        public string MoldName => _moldName;
+        public string MoldModelName => _moldModelName;
 
         public MoldAccessTokenDomain(
             CacheDatabase cache,
@@ -81,7 +81,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             AccessToken accessToken,
-            string moldName
+            string moldModelName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -92,7 +92,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._moldName = moldName;
+            this._moldModelName = moldModelName;
             this._parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithMoldName(this.MoldName);
+                .WithMoldModelName(this.MoldModelName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetMoldFuture(
                 request
@@ -203,7 +203,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
-                .WithMoldName(this.MoldName);
+                .WithMoldModelName(this.MoldModelName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteMoldFuture(
                 request
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
                 if (future.Error is Gs2.Core.Exception.NotFoundException) {
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                        request.MoldName.ToString()
+                        request.MoldModelName.ToString()
                     );
                     _cache.Put<Gs2.Gs2Formation.Model.Mold>(
                         _parentKey,
@@ -238,7 +238,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 if (e.errors[0].component == "mold")
                 {
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                        request.MoldName.ToString()
+                        request.MoldModelName.ToString()
                     );
                     _cache.Put<Gs2.Gs2Formation.Model.Mold>(
                         _parentKey,
@@ -292,7 +292,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._cache,
                 this._client,
                 this.NamespaceName,
-                this.MoldName,
+                this.MoldModelName,
                 this.AccessToken
             );
         }
@@ -310,7 +310,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._cache,
                 this._client,
                 this.NamespaceName,
-                this.MoldName,
+                this.MoldModelName,
                 this.AccessToken
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -333,7 +333,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._session,
                 this.NamespaceName,
                 this._accessToken,
-                this.MoldName,
+                this.MoldModelName,
                 index
             );
         }
@@ -341,7 +341,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string moldName,
+            string moldModelName,
             string childType
         )
         {
@@ -350,18 +350,18 @@ namespace Gs2.Gs2Formation.Domain.Model
                 "formation",
                 namespaceName ?? "null",
                 userId ?? "null",
-                moldName ?? "null",
+                moldModelName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string moldName
+            string moldModelName
         )
         {
             return string.Join(
                 ":",
-                moldName ?? "null"
+                moldModelName ?? "null"
             );
         }
 
@@ -382,14 +382,14 @@ namespace Gs2.Gs2Formation.Domain.Model
             using (await this._cache.GetLockObject<Gs2.Gs2Formation.Model.Mold>(
                        _parentKey,
                        Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            this.MoldName?.ToString()
+                            this.MoldModelName?.ToString()
                         )).LockAsync())
             {
         # endif
             var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                    this.MoldName?.ToString()
+                    this.MoldModelName?.ToString()
                 )
             );
             if (!find) {
@@ -408,7 +408,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
                             var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                                    this.MoldName?.ToString()
+                                    this.MoldModelName?.ToString()
                                 );
                             _cache.Put<Gs2.Gs2Formation.Model.Mold>(
                                 _parentKey,
@@ -431,7 +431,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         #else
                 } catch(Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                            this.MoldName?.ToString()
+                            this.MoldModelName?.ToString()
                         );
                     _cache.Put<Gs2.Gs2Formation.Model.Mold>(
                         _parentKey,
@@ -448,7 +448,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Mold>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
-                        this.MoldName?.ToString()
+                        this.MoldModelName?.ToString()
                     )
                 );
             }

@@ -328,7 +328,7 @@ namespace Gs2.Gs2Formation.Domain
                             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
                                 requestModel.UserId,
-                                requestModel.MoldName,
+                                requestModel.MoldModelName,
                                 "Form"
                             );
                             var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -558,7 +558,7 @@ namespace Gs2.Gs2Formation.Domain
                         var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                             requestModel.NamespaceName,
                             requestModel.UserId,
-                            requestModel.MoldName,
+                            requestModel.MoldModelName,
                             "Form"
                         );
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(

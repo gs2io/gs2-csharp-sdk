@@ -63,7 +63,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
-        private readonly string _moldName;
+        private readonly string _moldModelName;
         private readonly int? _index;
 
         private readonly String _parentKey;
@@ -73,7 +73,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
-        public string MoldName => _moldName;
+        public string MoldModelName => _moldModelName;
         public int? Index => _index;
 
         public FormDomain(
@@ -83,7 +83,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             Gs2RestSession session,
             string namespaceName,
             string userId,
-            string moldName,
+            string moldModelName,
             int? index
         ) {
             this._cache = cache;
@@ -95,12 +95,12 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
-            this._moldName = moldName;
+            this._moldModelName = moldModelName;
             this._index = index;
             this._parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
-                this.MoldName,
+                this.MoldModelName,
                 "Form"
             );
         }
@@ -124,7 +124,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithMoldName(this.MoldName)
+                .WithMoldModelName(this.MoldModelName)
                 .WithIndex(this.Index);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetFormByUserIdFuture(
@@ -151,7 +151,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.MoldName,
+                        this.MoldModelName,
                         "Form"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -196,8 +196,9 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                 }
                 if (resultModel.FormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.MoldModelName,
                         "FormModel"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
@@ -241,7 +242,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithMoldName(this.MoldName)
+                .WithMoldModelName(this.MoldModelName)
                 .WithIndex(this.Index);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetFormWithSignatureByUserIdFuture(
@@ -268,7 +269,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.MoldName,
+                        this.MoldModelName,
                         "Form"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -313,8 +314,9 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                 }
                 if (resultModel.FormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.MoldModelName,
                         "FormModel"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
@@ -363,7 +365,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithMoldName(this.MoldName)
+                .WithMoldModelName(this.MoldModelName)
                 .WithIndex(this.Index);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.SetFormByUserIdFuture(
@@ -390,7 +392,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.MoldName,
+                        this.MoldModelName,
                         "Form"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -435,8 +437,9 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                 }
                 if (resultModel.FormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.MoldModelName,
                         "FormModel"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
@@ -483,7 +486,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithMoldName(this.MoldName)
+                .WithMoldModelName(this.MoldModelName)
                 .WithIndex(this.Index);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.AcquireActionsToFormPropertiesFuture(
@@ -510,7 +513,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.MoldName,
+                        this.MoldModelName,
                         "Form"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -597,7 +600,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithMoldName(this.MoldName)
+                .WithMoldModelName(this.MoldModelName)
                 .WithIndex(this.Index);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteFormByUserIdFuture(
@@ -657,7 +660,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.MoldName,
+                        this.MoldModelName,
                         "Form"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
@@ -687,8 +690,9 @@ namespace Gs2.Gs2Formation.Domain.Model
                     cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(parentKey, key);
                 }
                 if (resultModel.FormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.MoldModelName,
                         "FormModel"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
@@ -714,7 +718,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
-            string moldName,
+            string moldModelName,
             string index,
             string childType
         )
@@ -724,7 +728,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 "formation",
                 namespaceName ?? "null",
                 userId ?? "null",
-                moldName ?? "null",
+                moldModelName ?? "null",
                 index ?? "null",
                 childType
             );

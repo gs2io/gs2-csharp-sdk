@@ -34,7 +34,7 @@ namespace Gs2.Gs2Formation.Request
 	public class UpdateMoldModelMasterRequest : Gs2Request<UpdateMoldModelMasterRequest>
 	{
         public string NamespaceName { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
         public string FormModelName { set; get; }
@@ -44,8 +44,8 @@ namespace Gs2.Gs2Formation.Request
             this.NamespaceName = namespaceName;
             return this;
         }
-        public UpdateMoldModelMasterRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public UpdateMoldModelMasterRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
         public UpdateMoldModelMasterRequest WithDescription(string description) {
@@ -79,7 +79,7 @@ namespace Gs2.Gs2Formation.Request
             }
             return new UpdateMoldModelMasterRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
@@ -91,7 +91,7 @@ namespace Gs2.Gs2Formation.Request
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
                 ["formModelName"] = FormModelName,
@@ -107,9 +107,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             if (Description != null) {
                 writer.WritePropertyName("description");
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Formation.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             key += Description + ":";
             key += Metadata + ":";
             key += FormModelName + ":";

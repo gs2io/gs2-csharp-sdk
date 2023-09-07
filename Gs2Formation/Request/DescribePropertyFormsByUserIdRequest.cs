@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string FormModelName { set; get; }
+        public string PropertyFormModelName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
         public DescribePropertyFormsByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -46,8 +46,8 @@ namespace Gs2.Gs2Formation.Request
             this.UserId = userId;
             return this;
         }
-        public DescribePropertyFormsByUserIdRequest WithFormModelName(string formModelName) {
-            this.FormModelName = formModelName;
+        public DescribePropertyFormsByUserIdRequest WithPropertyFormModelName(string propertyFormModelName) {
+            this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
         public DescribePropertyFormsByUserIdRequest WithPageToken(string pageToken) {
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Formation.Request
             return new DescribePropertyFormsByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithPropertyFormModelName(!data.Keys.Contains("propertyFormModelName") || data["propertyFormModelName"] == null ? null : data["propertyFormModelName"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["formModelName"] = FormModelName,
+                ["propertyFormModelName"] = PropertyFormModelName,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -97,9 +97,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (FormModelName != null) {
-                writer.WritePropertyName("formModelName");
-                writer.Write(FormModelName.ToString());
+            if (PropertyFormModelName != null) {
+                writer.WritePropertyName("propertyFormModelName");
+                writer.Write(PropertyFormModelName.ToString());
             }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
@@ -116,7 +116,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += FormModelName + ":";
+            key += PropertyFormModelName + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;

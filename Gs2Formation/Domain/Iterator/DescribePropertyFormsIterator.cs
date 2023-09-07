@@ -69,10 +69,10 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
-        private readonly string _formModelName;
+        private readonly string _propertyFormModelName;
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken?.UserId;
-        public string FormModelName => _formModelName;
+        public string PropertyFormModelName => _propertyFormModelName;
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -85,13 +85,13 @@ namespace Gs2.Gs2Formation.Domain.Iterator
             Gs2FormationRestClient client,
             string namespaceName,
             AccessToken accessToken,
-            string formModelName
+            string propertyFormModelName
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
-            this._formModelName = formModelName;
+            this._propertyFormModelName = propertyFormModelName;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Formation.Model.PropertyForm[]{};
@@ -121,7 +121,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._formModelName == null || item.Name == this._formModelName)
+                    .Where(item => this._propertyFormModelName == null || item.Name == this._propertyFormModelName)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -135,7 +135,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                     new Gs2.Gs2Formation.Request.DescribePropertyFormsRequest()
                         .WithNamespaceName(this._namespaceName)
                         .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
-                        .WithFormModelName(this._formModelName)
+                        .WithPropertyFormModelName(this._propertyFormModelName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );

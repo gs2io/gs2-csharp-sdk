@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public int? Index { set; get; }
         public Gs2.Gs2Formation.Model.Slot[] Slots { set; get; }
         public string DuplicationAvoider { set; get; }
@@ -47,8 +47,8 @@ namespace Gs2.Gs2Formation.Request
             this.UserId = userId;
             return this;
         }
-        public SetFormByUserIdRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public SetFormByUserIdRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
         public SetFormByUserIdRequest WithIndex(int? index) {
@@ -76,7 +76,7 @@ namespace Gs2.Gs2Formation.Request
             return new SetFormByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
                 .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)int.Parse(data["index"].ToString()))
                 .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null ? new Gs2.Gs2Formation.Model.Slot[]{} : data["slots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.Slot.FromJson(v);
@@ -97,7 +97,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
                 ["index"] = Index,
                 ["slots"] = slotsJsonData,
             };
@@ -114,9 +114,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             if (Index != null) {
                 writer.WritePropertyName("index");
@@ -137,7 +137,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             key += Index + ":";
             key += Slots + ":";
             return key;

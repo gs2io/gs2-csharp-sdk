@@ -34,15 +34,15 @@ namespace Gs2.Gs2Formation.Result
 	public class DeletePropertyFormByUserIdResult : IResult
 	{
         public Gs2.Gs2Formation.Model.PropertyForm Item { set; get; }
-        public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
+        public Gs2.Gs2Formation.Model.PropertyFormModel PropertyFormModel { set; get; }
 
         public DeletePropertyFormByUserIdResult WithItem(Gs2.Gs2Formation.Model.PropertyForm item) {
             this.Item = item;
             return this;
         }
 
-        public DeletePropertyFormByUserIdResult WithFormModel(Gs2.Gs2Formation.Model.FormModel formModel) {
-            this.FormModel = formModel;
+        public DeletePropertyFormByUserIdResult WithPropertyFormModel(Gs2.Gs2Formation.Model.PropertyFormModel propertyFormModel) {
+            this.PropertyFormModel = propertyFormModel;
             return this;
         }
 
@@ -56,14 +56,14 @@ namespace Gs2.Gs2Formation.Result
             }
             return new DeletePropertyFormByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Formation.Model.PropertyForm.FromJson(data["item"]))
-                .WithFormModel(!data.Keys.Contains("formModel") || data["formModel"] == null ? null : Gs2.Gs2Formation.Model.FormModel.FromJson(data["formModel"]));
+                .WithPropertyFormModel(!data.Keys.Contains("propertyFormModel") || data["propertyFormModel"] == null ? null : Gs2.Gs2Formation.Model.PropertyFormModel.FromJson(data["propertyFormModel"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
-                ["formModel"] = FormModel?.ToJson(),
+                ["propertyFormModel"] = PropertyFormModel?.ToJson(),
             };
         }
 
@@ -73,8 +73,8 @@ namespace Gs2.Gs2Formation.Result
             if (Item != null) {
                 Item.WriteJson(writer);
             }
-            if (FormModel != null) {
-                FormModel.WriteJson(writer);
+            if (PropertyFormModel != null) {
+                PropertyFormModel.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

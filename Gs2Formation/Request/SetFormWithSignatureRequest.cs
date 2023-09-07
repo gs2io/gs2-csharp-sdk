@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public int? Index { set; get; }
         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
         public string KeyId { set; get; }
@@ -48,8 +48,8 @@ namespace Gs2.Gs2Formation.Request
             this.AccessToken = accessToken;
             return this;
         }
-        public SetFormWithSignatureRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public SetFormWithSignatureRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
         public SetFormWithSignatureRequest WithIndex(int? index) {
@@ -81,7 +81,7 @@ namespace Gs2.Gs2Formation.Request
             return new SetFormWithSignatureRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
                 .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)int.Parse(data["index"].ToString()))
                 .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null ? new Gs2.Gs2Formation.Model.SlotWithSignature[]{} : data["slots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.SlotWithSignature.FromJson(v);
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
                 ["index"] = Index,
                 ["slots"] = slotsJsonData,
                 ["keyId"] = KeyId,
@@ -121,9 +121,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             if (Index != null) {
                 writer.WritePropertyName("index");
@@ -148,7 +148,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += AccessToken + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             key += Index + ":";
             key += Slots + ":";
             key += KeyId + ":";

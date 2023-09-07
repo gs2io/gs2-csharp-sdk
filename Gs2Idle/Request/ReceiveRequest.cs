@@ -36,7 +36,7 @@ namespace Gs2.Gs2Idle.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string CategoryName { set; get; }
-        public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+        public Gs2.Gs2Idle.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
         public ReceiveRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,7 +50,7 @@ namespace Gs2.Gs2Idle.Request
             this.CategoryName = categoryName;
             return this;
         }
-        public ReceiveRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
+        public ReceiveRequest WithConfig(Gs2.Gs2Idle.Model.Config[] config) {
             this.Config = config;
             return this;
         }
@@ -72,8 +72,8 @@ namespace Gs2.Gs2Idle.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Quest.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Quest.Model.Config.FromJson(v);
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Idle.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Idle.Model.Config.FromJson(v);
                 }).ToArray());
         }
 

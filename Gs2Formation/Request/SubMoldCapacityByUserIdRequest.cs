@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public int? Capacity { set; get; }
         public string DuplicationAvoider { set; get; }
         public SubMoldCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -46,8 +46,8 @@ namespace Gs2.Gs2Formation.Request
             this.UserId = userId;
             return this;
         }
-        public SubMoldCapacityByUserIdRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public SubMoldCapacityByUserIdRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
         public SubMoldCapacityByUserIdRequest WithCapacity(int? capacity) {
@@ -71,7 +71,7 @@ namespace Gs2.Gs2Formation.Request
             return new SubMoldCapacityByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString())
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
                 .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()));
         }
 
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
                 ["capacity"] = Capacity,
             };
         }
@@ -96,9 +96,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             if (Capacity != null) {
                 writer.WritePropertyName("capacity");
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             return key;
         }
 
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Formation.Request
             return new SubMoldCapacityByUserIdRequest {
                 NamespaceName = NamespaceName,
                 UserId = UserId,
-                MoldName = MoldName,
+                MoldModelName = MoldModelName,
                 Capacity = Capacity * x,
             };
         }
@@ -132,13 +132,13 @@ namespace Gs2.Gs2Formation.Request
             if (UserId != y.UserId) {
                 throw new ArithmeticException("mismatch parameter values SubMoldCapacityByUserIdRequest::userId");
             }
-            if (MoldName != y.MoldName) {
-                throw new ArithmeticException("mismatch parameter values SubMoldCapacityByUserIdRequest::moldName");
+            if (MoldModelName != y.MoldModelName) {
+                throw new ArithmeticException("mismatch parameter values SubMoldCapacityByUserIdRequest::moldModelName");
             }
             return new SubMoldCapacityByUserIdRequest {
                 NamespaceName = NamespaceName,
                 UserId = UserId,
-                MoldName = MoldName,
+                MoldModelName = MoldModelName,
                 Capacity = Capacity + y.Capacity,
             };
         }

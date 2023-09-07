@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-        public string FormModelName { set; get; }
+        public string PropertyFormModelName { set; get; }
         public string PropertyId { set; get; }
         public string KeyId { set; get; }
         public GetPropertyFormWithSignatureRequest WithNamespaceName(string namespaceName) {
@@ -46,8 +46,8 @@ namespace Gs2.Gs2Formation.Request
             this.AccessToken = accessToken;
             return this;
         }
-        public GetPropertyFormWithSignatureRequest WithFormModelName(string formModelName) {
-            this.FormModelName = formModelName;
+        public GetPropertyFormWithSignatureRequest WithPropertyFormModelName(string propertyFormModelName) {
+            this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
         public GetPropertyFormWithSignatureRequest WithPropertyId(string propertyId) {
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Formation.Request
             return new GetPropertyFormWithSignatureRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithPropertyFormModelName(!data.Keys.Contains("propertyFormModelName") || data["propertyFormModelName"] == null ? null : data["propertyFormModelName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
         }
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["formModelName"] = FormModelName,
+                ["propertyFormModelName"] = PropertyFormModelName,
                 ["propertyId"] = PropertyId,
                 ["keyId"] = KeyId,
             };
@@ -97,9 +97,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
-            if (FormModelName != null) {
-                writer.WritePropertyName("formModelName");
-                writer.Write(FormModelName.ToString());
+            if (PropertyFormModelName != null) {
+                writer.WritePropertyName("propertyFormModelName");
+                writer.Write(PropertyFormModelName.ToString());
             }
             if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
@@ -116,7 +116,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += AccessToken + ":";
-            key += FormModelName + ":";
+            key += PropertyFormModelName + ":";
             key += PropertyId + ":";
             key += KeyId + ":";
             return key;

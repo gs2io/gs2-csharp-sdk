@@ -68,10 +68,10 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         private readonly CacheDatabase _cache;
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
-        private readonly string _moldName;
+        private readonly string _moldModelName;
         private readonly AccessToken _accessToken;
         public string NamespaceName => _namespaceName;
-        public string MoldName => _moldName;
+        public string MoldModelName => _moldModelName;
         public string UserId => _accessToken?.UserId;
         private string _pageToken;
         private bool _isCacheChecked;
@@ -84,13 +84,13 @@ namespace Gs2.Gs2Formation.Domain.Iterator
             CacheDatabase cache,
             Gs2FormationRestClient client,
             string namespaceName,
-            string moldName,
+            string moldModelName,
             AccessToken accessToken
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
-            this._moldName = moldName;
+            this._moldModelName = moldModelName;
             this._accessToken = accessToken;
             this._pageToken = null;
             this._last = false;
@@ -113,7 +113,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
             var parentKey = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,
-                this.MoldName,
+                this.MoldModelName,
                 "Form"
             );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Formation.Model.Form>
@@ -134,7 +134,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
                 #endif
                     new Gs2.Gs2Formation.Request.DescribeFormsRequest()
                         .WithNamespaceName(this._namespaceName)
-                        .WithMoldName(this._moldName)
+                        .WithMoldModelName(this._moldModelName)
                         .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)

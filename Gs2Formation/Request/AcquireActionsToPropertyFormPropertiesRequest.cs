@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string FormModelName { set; get; }
+        public string PropertyFormModelName { set; get; }
         public string PropertyId { set; get; }
         public Gs2.Core.Model.AcquireAction AcquireAction { set; get; }
         public Gs2.Gs2Formation.Model.AcquireActionConfig[] Config { set; get; }
@@ -48,8 +48,8 @@ namespace Gs2.Gs2Formation.Request
             this.UserId = userId;
             return this;
         }
-        public AcquireActionsToPropertyFormPropertiesRequest WithFormModelName(string formModelName) {
-            this.FormModelName = formModelName;
+        public AcquireActionsToPropertyFormPropertiesRequest WithPropertyFormModelName(string propertyFormModelName) {
+            this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
         public AcquireActionsToPropertyFormPropertiesRequest WithPropertyId(string propertyId) {
@@ -81,7 +81,7 @@ namespace Gs2.Gs2Formation.Request
             return new AcquireActionsToPropertyFormPropertiesRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithPropertyFormModelName(!data.Keys.Contains("propertyFormModelName") || data["propertyFormModelName"] == null ? null : data["propertyFormModelName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithAcquireAction(!data.Keys.Contains("acquireAction") || data["acquireAction"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["acquireAction"]))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Formation.Model.AcquireActionConfig[]{} : data["config"].Cast<JsonData>().Select(v => {
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["formModelName"] = FormModelName,
+                ["propertyFormModelName"] = PropertyFormModelName,
                 ["propertyId"] = PropertyId,
                 ["acquireAction"] = AcquireAction?.ToJson(),
                 ["config"] = configJsonData,
@@ -121,9 +121,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (FormModelName != null) {
-                writer.WritePropertyName("formModelName");
-                writer.Write(FormModelName.ToString());
+            if (PropertyFormModelName != null) {
+                writer.WritePropertyName("propertyFormModelName");
+                writer.Write(PropertyFormModelName.ToString());
             }
             if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
@@ -147,7 +147,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += FormModelName + ":";
+            key += PropertyFormModelName + ":";
             key += PropertyId + ":";
             key += AcquireAction + ":";
             key += Config + ":";
@@ -158,7 +158,7 @@ namespace Gs2.Gs2Formation.Request
             return new AcquireActionsToPropertyFormPropertiesRequest {
                 NamespaceName = NamespaceName,
                 UserId = UserId,
-                FormModelName = FormModelName,
+                PropertyFormModelName = PropertyFormModelName,
                 PropertyId = PropertyId,
                 AcquireAction = AcquireAction,
                 Config = Config,
@@ -173,8 +173,8 @@ namespace Gs2.Gs2Formation.Request
             if (UserId != y.UserId) {
                 throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::userId");
             }
-            if (FormModelName != y.FormModelName) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::formModelName");
+            if (PropertyFormModelName != y.PropertyFormModelName) {
+                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::propertyFormModelName");
             }
             if (PropertyId != y.PropertyId) {
                 throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::propertyId");
@@ -188,7 +188,7 @@ namespace Gs2.Gs2Formation.Request
             return new AcquireActionsToPropertyFormPropertiesRequest {
                 NamespaceName = NamespaceName,
                 UserId = UserId,
-                FormModelName = FormModelName,
+                PropertyFormModelName = PropertyFormModelName,
                 PropertyId = PropertyId,
                 AcquireAction = AcquireAction,
                 Config = Config,

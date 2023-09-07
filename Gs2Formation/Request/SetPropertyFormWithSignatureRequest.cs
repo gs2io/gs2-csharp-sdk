@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
-        public string FormModelName { set; get; }
+        public string PropertyFormModelName { set; get; }
         public string PropertyId { set; get; }
         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
         public string KeyId { set; get; }
@@ -48,8 +48,8 @@ namespace Gs2.Gs2Formation.Request
             this.AccessToken = accessToken;
             return this;
         }
-        public SetPropertyFormWithSignatureRequest WithFormModelName(string formModelName) {
-            this.FormModelName = formModelName;
+        public SetPropertyFormWithSignatureRequest WithPropertyFormModelName(string propertyFormModelName) {
+            this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
         public SetPropertyFormWithSignatureRequest WithPropertyId(string propertyId) {
@@ -81,7 +81,7 @@ namespace Gs2.Gs2Formation.Request
             return new SetPropertyFormWithSignatureRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithPropertyFormModelName(!data.Keys.Contains("propertyFormModelName") || data["propertyFormModelName"] == null ? null : data["propertyFormModelName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithSlots(!data.Keys.Contains("slots") || data["slots"] == null ? new Gs2.Gs2Formation.Model.SlotWithSignature[]{} : data["slots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.SlotWithSignature.FromJson(v);
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["formModelName"] = FormModelName,
+                ["propertyFormModelName"] = PropertyFormModelName,
                 ["propertyId"] = PropertyId,
                 ["slots"] = slotsJsonData,
                 ["keyId"] = KeyId,
@@ -121,9 +121,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
-            if (FormModelName != null) {
-                writer.WritePropertyName("formModelName");
-                writer.Write(FormModelName.ToString());
+            if (PropertyFormModelName != null) {
+                writer.WritePropertyName("propertyFormModelName");
+                writer.Write(PropertyFormModelName.ToString());
             }
             if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
@@ -148,7 +148,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += AccessToken + ":";
-            key += FormModelName + ":";
+            key += PropertyFormModelName + ":";
             key += PropertyId + ":";
             key += Slots + ":";
             key += KeyId + ":";

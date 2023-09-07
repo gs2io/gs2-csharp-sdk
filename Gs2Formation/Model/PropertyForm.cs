@@ -73,7 +73,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<formModelName>.+):(?<propertyId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<propertyFormModelName>.+):(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -90,7 +90,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<formModelName>.+):(?<propertyId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<propertyFormModelName>.+):(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -107,7 +107,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<formModelName>.+):(?<propertyId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<propertyFormModelName>.+):(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -124,7 +124,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<formModelName>.+):(?<propertyId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<propertyFormModelName>.+):(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -140,25 +140,25 @@ namespace Gs2.Gs2Formation.Model
             return match.Groups["userId"].Value;
         }
 
-        private static System.Text.RegularExpressions.Regex _formModelNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<formModelName>.+):(?<propertyId>.+)",
+        private static System.Text.RegularExpressions.Regex _propertyFormModelNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<propertyFormModelName>.+):(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
-        public static string GetFormModelNameFromGrn(
+        public static string GetPropertyFormModelNameFromGrn(
             string grn
         )
         {
-            var match = _formModelNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["formModelName"].Success)
+            var match = _propertyFormModelNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["propertyFormModelName"].Success)
             {
                 return null;
             }
-            return match.Groups["formModelName"].Value;
+            return match.Groups["propertyFormModelName"].Value;
         }
 
         private static System.Text.RegularExpressions.Regex _propertyIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<formModelName>.+):(?<propertyId>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):propertyForm:(?<propertyFormModelName>.+):(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 

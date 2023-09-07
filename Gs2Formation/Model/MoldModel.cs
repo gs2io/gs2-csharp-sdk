@@ -63,7 +63,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -97,7 +97,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldName>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -113,21 +113,21 @@ namespace Gs2.Gs2Formation.Model
             return match.Groups["namespaceName"].Value;
         }
 
-        private static System.Text.RegularExpressions.Regex _moldNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldName>.+)",
+        private static System.Text.RegularExpressions.Regex _moldModelNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):model:mold:(?<moldModelName>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
-        public static string GetMoldNameFromGrn(
+        public static string GetMoldModelNameFromGrn(
             string grn
         )
         {
-            var match = _moldNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["moldName"].Success)
+            var match = _moldModelNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["moldModelName"].Success)
             {
                 return null;
             }
-            return match.Groups["moldName"].Value;
+            return match.Groups["moldModelName"].Value;
         }
 
 #if UNITY_2017_1_OR_NEWER

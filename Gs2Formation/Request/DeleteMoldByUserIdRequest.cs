@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string MoldName { set; get; }
+        public string MoldModelName { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteMoldByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -45,8 +45,8 @@ namespace Gs2.Gs2Formation.Request
             this.UserId = userId;
             return this;
         }
-        public DeleteMoldByUserIdRequest WithMoldName(string moldName) {
-            this.MoldName = moldName;
+        public DeleteMoldByUserIdRequest WithMoldModelName(string moldModelName) {
+            this.MoldModelName = moldModelName;
             return this;
         }
 
@@ -66,7 +66,7 @@ namespace Gs2.Gs2Formation.Request
             return new DeleteMoldByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMoldName(!data.Keys.Contains("moldName") || data["moldName"] == null ? null : data["moldName"].ToString());
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString());
         }
 
         public override JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["moldName"] = MoldName,
+                ["moldModelName"] = MoldModelName,
             };
         }
 
@@ -89,9 +89,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (MoldName != null) {
-                writer.WritePropertyName("moldName");
-                writer.Write(MoldName.ToString());
+            if (MoldModelName != null) {
+                writer.WritePropertyName("moldModelName");
+                writer.Write(MoldModelName.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -100,7 +100,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += MoldName + ":";
+            key += MoldModelName + ":";
             return key;
         }
 

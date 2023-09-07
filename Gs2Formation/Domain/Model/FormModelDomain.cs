@@ -62,10 +62,12 @@ namespace Gs2.Gs2Formation.Domain.Model
         private readonly Gs2RestSession _session;
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
+        private readonly string _moldModelName;
         private readonly string _formModelName;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
+        public string MoldModelName => _moldModelName;
         public string FormModelName => _formModelName;
 
         public FormModelDomain(
@@ -74,6 +76,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
+            string moldModelName,
             string formModelName
         ) {
             this._cache = cache;
@@ -84,9 +87,11 @@ namespace Gs2.Gs2Formation.Domain.Model
                 session
             );
             this._namespaceName = namespaceName;
+            this._moldModelName = moldModelName;
             this._formModelName = formModelName;
-            this._parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+            this._parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                 this.NamespaceName,
+                this.MoldModelName,
                 "FormModel"
             );
         }
@@ -109,6 +114,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
             request
                 .WithNamespaceName(this.NamespaceName)
+                .WithMoldModelName(this.MoldModelName)
                 .WithFormModelName(this.FormModelName);
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetFormModelFuture(
@@ -132,8 +138,9 @@ namespace Gs2.Gs2Formation.Domain.Model
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                         this.NamespaceName,
+                        this.MoldModelName,
                         "FormModel"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
@@ -160,6 +167,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public static string CreateCacheParentKey(
             string namespaceName,
+            string moldModelName,
             string formModelName,
             string childType
         )
@@ -168,6 +176,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 ":",
                 "formation",
                 namespaceName ?? "null",
+                moldModelName ?? "null",
                 formModelName ?? "null",
                 childType
             );

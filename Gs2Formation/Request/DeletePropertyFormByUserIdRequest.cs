@@ -35,7 +35,7 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
-        public string FormModelName { set; get; }
+        public string PropertyFormModelName { set; get; }
         public string PropertyId { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeletePropertyFormByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -46,8 +46,8 @@ namespace Gs2.Gs2Formation.Request
             this.UserId = userId;
             return this;
         }
-        public DeletePropertyFormByUserIdRequest WithFormModelName(string formModelName) {
-            this.FormModelName = formModelName;
+        public DeletePropertyFormByUserIdRequest WithPropertyFormModelName(string propertyFormModelName) {
+            this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
         public DeletePropertyFormByUserIdRequest WithPropertyId(string propertyId) {
@@ -71,7 +71,7 @@ namespace Gs2.Gs2Formation.Request
             return new DeletePropertyFormByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithFormModelName(!data.Keys.Contains("formModelName") || data["formModelName"] == null ? null : data["formModelName"].ToString())
+                .WithPropertyFormModelName(!data.Keys.Contains("propertyFormModelName") || data["propertyFormModelName"] == null ? null : data["propertyFormModelName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString());
         }
 
@@ -80,7 +80,7 @@ namespace Gs2.Gs2Formation.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
-                ["formModelName"] = FormModelName,
+                ["propertyFormModelName"] = PropertyFormModelName,
                 ["propertyId"] = PropertyId,
             };
         }
@@ -96,9 +96,9 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            if (FormModelName != null) {
-                writer.WritePropertyName("formModelName");
-                writer.Write(FormModelName.ToString());
+            if (PropertyFormModelName != null) {
+                writer.WritePropertyName("propertyFormModelName");
+                writer.Write(PropertyFormModelName.ToString());
             }
             if (PropertyId != null) {
                 writer.WritePropertyName("propertyId");
@@ -111,7 +111,7 @@ namespace Gs2.Gs2Formation.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += FormModelName + ":";
+            key += PropertyFormModelName + ":";
             key += PropertyId + ":";
             return key;
         }

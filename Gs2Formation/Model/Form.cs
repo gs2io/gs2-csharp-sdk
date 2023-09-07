@@ -68,7 +68,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldName>.+):form:(?<index>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldModelName>.+):form:(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -85,7 +85,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldName>.+):form:(?<index>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldModelName>.+):form:(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldName>.+):form:(?<index>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldModelName>.+):form:(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -119,7 +119,7 @@ namespace Gs2.Gs2Formation.Model
         }
 
         private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldName>.+):form:(?<index>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldModelName>.+):form:(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -135,25 +135,25 @@ namespace Gs2.Gs2Formation.Model
             return match.Groups["userId"].Value;
         }
 
-        private static System.Text.RegularExpressions.Regex _moldNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldName>.+):form:(?<index>.+)",
+        private static System.Text.RegularExpressions.Regex _moldModelNameRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldModelName>.+):form:(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
-        public static string GetMoldNameFromGrn(
+        public static string GetMoldModelNameFromGrn(
             string grn
         )
         {
-            var match = _moldNameRegex.Match(grn);
-            if (!match.Success || !match.Groups["moldName"].Success)
+            var match = _moldModelNameRegex.Match(grn);
+            if (!match.Success || !match.Groups["moldModelName"].Success)
             {
                 return null;
             }
-            return match.Groups["moldName"].Value;
+            return match.Groups["moldModelName"].Value;
         }
 
         private static System.Text.RegularExpressions.Regex _indexRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldName>.+):form:(?<index>.+)",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):formation:(?<namespaceName>.+):user:(?<userId>.+):mold:(?<moldModelName>.+):form:(?<index>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
