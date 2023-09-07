@@ -34,6 +34,7 @@ namespace Gs2.Gs2Inventory.Model
         public string InventoryId { set; get; }
         public string InventoryName { set; get; }
         public string UserId { set; get; }
+        public Gs2.Gs2Inventory.Model.BigItem[] BigItems { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public BigInventory WithInventoryId(string inventoryId) {
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Inventory.Model
         }
         public BigInventory WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public BigInventory WithBigItems(Gs2.Gs2Inventory.Model.BigItem[] bigItems) {
+            this.BigItems = bigItems;
             return this;
         }
         public BigInventory WithCreatedAt(long? createdAt) {
@@ -154,16 +159,29 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInventoryId(!data.Keys.Contains("inventoryId") || data["inventoryId"] == null ? null : data["inventoryId"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithBigItems(!data.Keys.Contains("bigItems") || data["bigItems"] == null ? new Gs2.Gs2Inventory.Model.BigItem[]{} : data["bigItems"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Inventory.Model.BigItem.FromJson(v);
+                }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
         }
 
         public JsonData ToJson()
         {
+            JsonData bigItemsJsonData = null;
+            if (BigItems != null)
+            {
+                bigItemsJsonData = new JsonData();
+                foreach (var bigItem in BigItems)
+                {
+                    bigItemsJsonData.Add(bigItem.ToJson());
+                }
+            }
             return new JsonData {
                 ["inventoryId"] = InventoryId,
                 ["inventoryName"] = InventoryName,
                 ["userId"] = UserId,
+                ["bigItems"] = bigItemsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -183,6 +201,17 @@ namespace Gs2.Gs2Inventory.Model
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (BigItems != null) {
+                writer.WritePropertyName("bigItems");
+                writer.WriteArrayStart();
+                foreach (var bigItem in BigItems)
+                {
+                    if (bigItem != null) {
+                        bigItem.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -222,6 +251,18 @@ namespace Gs2.Gs2Inventory.Model
             else
             {
                 diff += UserId.CompareTo(other.UserId);
+            }
+            if (BigItems == null && BigItems == other.BigItems)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += BigItems.Length - other.BigItems.Length;
+                for (var i = 0; i < BigItems.Length; i++)
+                {
+                    diff += BigItems[i].CompareTo(other.BigItems[i]);
+                }
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
