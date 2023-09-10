@@ -279,13 +279,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Inbox.Model.Message> Messages(
+            bool? isRead
         )
         {
             return new DescribeMessagesByUserIdIterator(
                 this._cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                isRead
             );
         }
 
@@ -296,13 +298,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #else
         public DescribeMessagesByUserIdIterator Messages(
         #endif
+            bool? isRead
         )
         {
             return new DescribeMessagesByUserIdIterator(
                 this._cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                isRead
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();

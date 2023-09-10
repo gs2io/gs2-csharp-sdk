@@ -35,6 +35,7 @@ namespace Gs2.Gs2Inbox.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+        public bool? IsRead { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
         public DescribeMessagesByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -43,6 +44,10 @@ namespace Gs2.Gs2Inbox.Request
         }
         public DescribeMessagesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public DescribeMessagesByUserIdRequest WithIsRead(bool? isRead) {
+            this.IsRead = isRead;
             return this;
         }
         public DescribeMessagesByUserIdRequest WithPageToken(string pageToken) {
@@ -65,6 +70,7 @@ namespace Gs2.Gs2Inbox.Request
             return new DescribeMessagesByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithIsRead(!data.Keys.Contains("isRead") || data["isRead"] == null ? null : (bool?)bool.Parse(data["isRead"].ToString()))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
                 .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
         }
@@ -74,6 +80,7 @@ namespace Gs2.Gs2Inbox.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["isRead"] = IsRead,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
             };
@@ -90,6 +97,10 @@ namespace Gs2.Gs2Inbox.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (IsRead != null) {
+                writer.WritePropertyName("isRead");
+                writer.Write(bool.Parse(IsRead.ToString()));
+            }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
                 writer.Write(PageToken.ToString());
@@ -105,6 +116,7 @@ namespace Gs2.Gs2Inbox.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += IsRead + ":";
             key += PageToken + ":";
             key += Limit + ":";
             return key;

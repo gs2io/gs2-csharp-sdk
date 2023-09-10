@@ -839,6 +839,9 @@ namespace Gs2.Gs2Inbox
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.IsRead != null) {
+                    sessionRequest.AddQueryString("isRead", $"{request.IsRead}");
+                }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
                 }
@@ -955,6 +958,9 @@ namespace Gs2.Gs2Inbox
                 }
                 if (request.UserId != null) {
                     sessionRequest.AddQueryString("userId", $"{request.UserId}");
+                }
+                if (request.IsRead != null) {
+                    sessionRequest.AddQueryString("isRead", $"{request.IsRead}");
                 }
                 if (request.PageToken != null) {
                     sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");

@@ -13,8 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,8 +69,10 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
         private readonly Gs2InboxRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
+        private readonly bool? _isRead;
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;
+        public bool? IsRead => _isRead;
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -84,12 +84,14 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
             CacheDatabase cache,
             Gs2InboxRestClient client,
             string namespaceName,
-            string userId
+            string userId,
+            bool? isRead
         ) {
             this._cache = cache;
             this._client = client;
             this._namespaceName = namespaceName;
             this._userId = userId;
+            this._isRead = isRead;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Inbox.Model.Message[]{};
@@ -119,6 +121,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
                     out var list
             )) {
                 this._result = list
+                    .Where(item => this._isRead == null || item.IsRead == this._isRead)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -144,10 +147,12 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .Where(item => this._isRead == null || item.IsRead == this._isRead)
+                    .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result) {
+                foreach (var item in r.Items) {
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
