@@ -127,7 +127,9 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             }
             var r = future.Result;
             #endif
-            this._result = r.Items;
+            this._result = r.Items
+                .Where(item => this._roomName == null || item.RoomName == this._roomName)
+                .ToArray();
             this._pageToken = r.NextPageToken;
             this._last = this._pageToken == null;
         }

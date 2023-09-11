@@ -153,9 +153,6 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 #endif
                     new Gs2.Gs2Log.Request.QueryAccessLogRequest()
                         .WithNamespaceName(this._namespaceName)
-                        .WithService(this._service)
-                        .WithMethod(this._method)
-                        .WithUserId(this._userId)
                         .WithBegin(this._begin)
                         .WithEnd(this._end)
                         .WithLongTerm(this._longTerm)
@@ -171,10 +168,16 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .Where(item => this._service == null || item.Service == this._service)
+                    .Where(item => this._method == null || item.Method == this._method)
+                    .Where(item => this._userId == null || item.UserId == this._userId)
+                    .Where(item => this._begin == null || item.Timestamp >= this._begin)
+                    .Where(item => this._end == null || item.Timestamp <= this._end)
+                    .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result) {
+                foreach (var item in r.Items) {
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Log.Domain.Model.AccessLogDomain.CreateCacheKey(

@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -138,14 +140,13 @@ namespace Gs2.Gs2Log.Domain.Iterator
             #endif
                 new Gs2.Gs2Log.Request.CountExecuteStampSheetLogRequest()
                     .WithNamespaceName(this._namespaceName)
+                    .WithPageToken(this._pageToken)
                     .WithService(this._service)
                     .WithMethod(this._method)
-                    .WithUserId(this._userId)
                     .WithAction(this._action)
+                    .WithUserId(this._userId)
                     .WithBegin(this._begin)
                     .WithEnd(this._end)
-                    .WithLongTerm(this._longTerm)
-                    .WithPageToken(this._pageToken)
                     .WithLimit(this.fetchSize)
             );
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -157,7 +158,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
             }
             var r = future.Result;
             #endif
-            this._result = r.Items;
+            this._result = r.Items
+                .ToArray();
             this._pageToken = r.NextPageToken;
             this._last = this._pageToken == null;
         }

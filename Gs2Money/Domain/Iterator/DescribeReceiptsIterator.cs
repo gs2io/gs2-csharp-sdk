@@ -145,7 +145,6 @@ namespace Gs2.Gs2Money.Domain.Iterator
                     new Gs2.Gs2Money.Request.DescribeReceiptsRequest()
                         .WithNamespaceName(this._namespaceName)
                         .WithUserId(this._userId)
-                        .WithSlot(this._slot)
                         .WithBegin(this._begin)
                         .WithEnd(this._end)
                         .WithPageToken(this._pageToken)
@@ -160,10 +159,14 @@ namespace Gs2.Gs2Money.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .Where(item => this._slot == null || item.Slot == this._slot)
+                    .Where(item => this._begin == null || item.CreatedAt >= this._begin)
+                    .Where(item => this._end == null || item.CreatedAt <= this._end)
+                    .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result) {
+                foreach (var item in r.Items) {
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(

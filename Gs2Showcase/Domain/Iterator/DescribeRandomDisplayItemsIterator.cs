@@ -143,9 +143,10 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .ToArray();
                 this._last = true;
-                foreach (var item in this._result) {
+                foreach (var item in r.Items) {
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(

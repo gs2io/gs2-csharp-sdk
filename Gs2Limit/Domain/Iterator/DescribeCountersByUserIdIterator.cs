@@ -135,7 +135,6 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                     new Gs2.Gs2Limit.Request.DescribeCountersByUserIdRequest()
                         .WithNamespaceName(this._namespaceName)
                         .WithUserId(this._userId)
-                        .WithLimitName(this._limitName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -148,10 +147,12 @@ namespace Gs2.Gs2Limit.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .Where(item => this._limitName == null || item.LimitName == this._limitName)
+                    .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result) {
+                foreach (var item in r.Items) {
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(

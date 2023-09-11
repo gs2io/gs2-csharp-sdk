@@ -148,10 +148,12 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .Where(item => this._campaignModelName == null || item.CampaignModelName == this._campaignModelName)
+                    .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result) {
+                foreach (var item in r.Items) {
                     this._cache.Put(
                             parentKey,
                             Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
