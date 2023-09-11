@@ -65,6 +65,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Script.Domain.Gs2Script Script;
         public readonly Gs2SerialKey.Domain.Gs2SerialKey SerialKey;
         public readonly Gs2Showcase.Domain.Gs2Showcase Showcase;
+        public readonly Gs2SkillTree.Domain.Gs2SkillTree SkillTree;
         public readonly Gs2Stamina.Domain.Gs2Stamina Stamina;
         public readonly Gs2StateMachine.Domain.Gs2StateMachine StateMachine;
         public readonly Gs2Version.Domain.Gs2Version Version;
@@ -127,6 +128,7 @@ namespace Gs2.Core.Domain
             Script = new Gs2Script.Domain.Gs2Script(_cache, _jobQueueDomain, _sheetConfiguration, session);
             SerialKey = new Gs2SerialKey.Domain.Gs2SerialKey(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Showcase = new Gs2Showcase.Domain.Gs2Showcase(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            SkillTree = new Gs2SkillTree.Domain.Gs2SkillTree(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Stamina = new Gs2Stamina.Domain.Gs2Stamina(_cache, _jobQueueDomain, _sheetConfiguration, session);
             StateMachine = new Gs2StateMachine.Domain.Gs2StateMachine(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Version = new Gs2Version.Domain.Gs2Version(_cache, _jobQueueDomain, _sheetConfiguration, session);
@@ -251,6 +253,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Showcase":
                                 Showcase.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2SkillTree":
+                                SkillTree.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Stamina":
                                 Stamina.HandleNotification(_cache, method, message.payload);
@@ -563,6 +568,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Showcase":
                         Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
+                    case "Gs2SkillTree":
+                        Gs2SkillTree.Domain.Gs2SkillTree.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
+                        break;
                     case "Gs2Stamina":
                         Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
@@ -711,6 +719,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Showcase":
                         Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromStampTask(cache, taskId, method, request, result);
+                        break;
+                    case "Gs2SkillTree":
+                        Gs2SkillTree.Domain.Gs2SkillTree.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Stamina":
                         Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromStampTask(cache, taskId, method, request, result);
@@ -864,6 +875,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "showcase":
                                 Gs2Showcase.Domain.Gs2Showcase.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "skill_tree":
+                                Gs2SkillTree.Domain.Gs2SkillTree.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "stamina":
                                 Gs2Stamina.Domain.Gs2Stamina.UpdateCacheFromJobResult(cache, method, job, result);
