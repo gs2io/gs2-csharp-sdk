@@ -29,6 +29,7 @@ namespace Gs2.Core.Domain
         private readonly Gs2WebSocketSession _webSocketSession;
 
         public readonly Gs2Account.Domain.Gs2Account Account;
+        public readonly Gs2AdReward.Domain.Gs2AdReward AdReward;
         public readonly Gs2Auth.Domain.Gs2Auth Auth;
         public readonly Gs2Chat.Domain.Gs2Chat Chat;
         public readonly Gs2Datastore.Domain.Gs2Datastore Datastore;
@@ -85,6 +86,7 @@ namespace Gs2.Core.Domain
             _jobQueueDomain = new JobQueueDomain(this);
 
             Account = new Gs2Account.Domain.Gs2Account(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            AdReward = new Gs2AdReward.Domain.Gs2AdReward(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Auth = new Gs2Auth.Domain.Gs2Auth(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Chat = new Gs2Chat.Domain.Gs2Chat(_cache, _jobQueueDomain, _sheetConfiguration, session);
             Datastore = new Gs2Datastore.Domain.Gs2Datastore(_cache, _jobQueueDomain, _sheetConfiguration, session);
@@ -145,6 +147,9 @@ namespace Gs2.Core.Domain
                         {
                             case "Gs2Account":
                                 Account.HandleNotification(_cache, method, message.payload);
+                                break;
+                            case "Gs2AdReward":
+                                AdReward.HandleNotification(_cache, method, message.payload);
                                 break;
                             case "Gs2Auth":
                                 Auth.HandleNotification(_cache, method, message.payload);
@@ -460,6 +465,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Account":
                         Gs2Account.Domain.Gs2Account.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
+                    case "Gs2AdReward":
+                        Gs2AdReward.Domain.Gs2AdReward.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
+                        break;
                     case "Gs2Auth":
                         Gs2Auth.Domain.Gs2Auth.UpdateCacheFromStampSheet(cache, transactionId, method, request, result);
                         break;
@@ -611,6 +619,9 @@ namespace Gs2.Core.Domain
                 {
                     case "Gs2Account":
                         Gs2Account.Domain.Gs2Account.UpdateCacheFromStampTask(cache, taskId, method, request, result);
+                        break;
+                    case "Gs2AdReward":
+                        Gs2AdReward.Domain.Gs2AdReward.UpdateCacheFromStampTask(cache, taskId, method, request, result);
                         break;
                     case "Gs2Auth":
                         Gs2Auth.Domain.Gs2Auth.UpdateCacheFromStampTask(cache, taskId, method, request, result);
@@ -764,6 +775,9 @@ namespace Gs2.Core.Domain
                         {
                             case "account":
                                 Gs2Account.Domain.Gs2Account.UpdateCacheFromJobResult(cache, method, job, result);
+                                break;
+                            case "ad_reward":
+                                Gs2AdReward.Domain.Gs2AdReward.UpdateCacheFromJobResult(cache, method, job, result);
                                 break;
                             case "auth":
                                 Gs2Auth.Domain.Gs2Auth.UpdateCacheFromJobResult(cache, method, job, result);
