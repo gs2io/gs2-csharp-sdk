@@ -885,6 +885,128 @@ namespace Gs2.Gs2Deploy
 #endif
 
 
+        public class ChangeSetTask : Gs2RestSessionTask<ChangeSetRequest, ChangeSetResult>
+        {
+            public ChangeSetTask(IGs2Session session, RestSessionRequestFactory factory, ChangeSetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ChangeSetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "deploy")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stack/{stackName}";
+
+                url = url.Replace("{stackName}", !string.IsNullOrEmpty(request.StackName) ? request.StackName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Template != null)
+                {
+                    jsonWriter.WritePropertyName("template");
+                    jsonWriter.Write(request.Template);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ChangeSet(
+                Request.ChangeSetRequest request,
+                UnityAction<AsyncResult<Result.ChangeSetResult>> callback
+        )
+		{
+			var task = new ChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ChangeSetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ChangeSetResult> ChangeSetFuture(
+                Request.ChangeSetRequest request
+        )
+		{
+			return new ChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ChangeSetResult> ChangeSetAsync(
+                Request.ChangeSetRequest request
+        )
+		{
+            AsyncResult<Result.ChangeSetResult> result = null;
+			await ChangeSet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ChangeSetTask ChangeSetAsync(
+                Request.ChangeSetRequest request
+        )
+		{
+			return new ChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ChangeSetResult> ChangeSetAsync(
+                Request.ChangeSetRequest request
+        )
+		{
+			var task = new ChangeSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class UpdateStackFromGitHubTask : Gs2RestSessionTask<UpdateStackFromGitHubRequest, UpdateStackFromGitHubResult>
         {
             public UpdateStackFromGitHubTask(IGs2Session session, RestSessionRequestFactory factory, UpdateStackFromGitHubRequest request) : base(session, factory, request)

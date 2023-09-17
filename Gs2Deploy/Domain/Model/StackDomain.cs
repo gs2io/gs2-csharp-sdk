@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -274,6 +276,59 @@ namespace Gs2.Gs2Deploy.Domain.Model
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
             return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        #endif
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
+            #else
+        public IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSet(
+            #endif
+        #else
+        public async Task<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
+        #endif
+            ChangeSetRequest request
+        ) {
+
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> self)
+            {
+        #endif
+            request
+                .WithStackName(this.StackName);
+            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            var future = this._client.ChangeSetFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var result = await this._client.ChangeSetAsync(
+                request
+            );
+            #endif
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+            var domain = result?.Items;
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            self.OnComplete(domain);
+            yield return null;
+        #else
+            return domain;
+        #endif
+        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.ChangeSet[]>(Impl);
         #endif
         }
 
