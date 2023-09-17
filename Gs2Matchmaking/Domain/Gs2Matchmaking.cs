@@ -313,16 +313,16 @@ namespace Gs2.Gs2Matchmaking.Domain
                     break;
                 }
                 case "ChangeRatingNotification": {
-                    var changeRatingNotification = ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload));
                     var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        changeRatingNotification.NamespaceName,
-                        changeRatingNotification.UserId,
+                        notification.NamespaceName,
+                        notification.UserId,
                         "Rating"
                     );
                     cache.ClearListCache <Gs2.Gs2Matchmaking.Model.Rating>(
                         parentKey
                     );
-                    onChangeRatingNotification.Invoke(ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onChangeRatingNotification.Invoke(notification);
                     break;
                 }
             }

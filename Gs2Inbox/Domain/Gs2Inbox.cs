@@ -382,16 +382,16 @@ namespace Gs2.Gs2Inbox.Domain
     #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "ReceiveNotification": {
-                    var recieveNotification = ReceiveNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = ReceiveNotification.FromJson(JsonMapper.ToObject(payload));
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                        recieveNotification.NamespaceName,
-                        recieveNotification.UserId,
+                        notification.NamespaceName,
+                        notification.UserId,
                         "Message"
                     );
                     cache.ClearListCache <Message>(
                         parentKey
                     );
-                    onReceiveNotification.Invoke(ReceiveNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onReceiveNotification.Invoke(notification);
                     break;
                 }
             }

@@ -253,16 +253,16 @@ namespace Gs2.Gs2Chat.Domain
     #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "Post": {
-                    var postNotification = PostNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = PostNotification.FromJson(JsonMapper.ToObject(payload));
                     _cache.RequireListCacheUpdate<Message>(
                         Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
-                            postNotification.NamespaceName,
+                            notification.NamespaceName,
                             "Singleton",
-                            postNotification.RoomName,
+                            notification.RoomName,
                             "Message"
                         )
                     );
-                    onPostNotification.Invoke(postNotification);
+                    onPostNotification.Invoke(notification);
                     break;
                 }
             }

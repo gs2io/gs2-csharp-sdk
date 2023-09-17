@@ -352,7 +352,17 @@ namespace Gs2.Gs2AdReward.Domain
     #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "ChangePoint": {
-                    onChangePointNotification.Invoke(ChangePointNotification.FromJson(JsonMapper.ToObject(payload)));
+                    var notification = ChangePointNotification.FromJson(JsonMapper.ToObject(payload));
+                    var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                        notification.NamespaceName,
+                        notification.UserId,
+                        "Point"
+                    );
+                    cache.Delete<Gs2.Gs2AdReward.Model.Point>(
+                        parentKey,
+                        Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey()
+                    );
+                    onChangePointNotification.Invoke(notification);
                     break;
                 }
             }
