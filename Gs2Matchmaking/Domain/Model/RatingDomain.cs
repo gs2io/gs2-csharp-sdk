@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,175 +97,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Matchmaking.Model.Rating> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Matchmaking.Model.Rating> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Matchmaking.Model.Rating> GetAsync(
-        #endif
-            GetRatingByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Rating> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithRatingName(this.RatingName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetRatingByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetRatingByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Rating"
-                    );
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Rating>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> DeleteAsync(
-        #endif
-            DeleteRatingRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithRatingName(this.RatingName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteRatingFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                        request.RatingName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteRatingResult result = null;
-            try {
-                result = await this._client.DeleteRatingAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "rating")
-                {
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                        request.RatingName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Rating"
-                    );
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Matchmaking.Model.Rating>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Matchmaking.Domain.Model.RatingDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -292,43 +124,418 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
+    }
+
+    public partial class RatingDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Matchmaking.Model.Rating> Model() {
-            #else
-        public IFuture<Gs2.Gs2Matchmaking.Model.Rating> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Matchmaking.Model.Rating> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2Matchmaking.Model.Rating> GetFuture(
+            GetRatingByUserIdRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Rating> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Rating>(
-                       _parentKey,
-                       Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                            this.RatingName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                    this.RatingName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRatingName(this.RatingName);
+                var future = this._client.GetRatingByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                            request.RatingName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "rating")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRatingName(this.RatingName);
+                GetRatingByUserIdResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetRatingByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        request.RatingName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "rating")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Rating"
+                        );
+                        var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Rating>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Matchmaking.Model.Rating> GetAsync(
+            GetRatingByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRatingName(this.RatingName);
+            var future = this._client.GetRatingByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        request.RatingName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "rating")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRatingName(this.RatingName);
+            GetRatingByUserIdResult result = null;
+            try {
+                result = await this._client.GetRatingByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                    request.RatingName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "rating")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Rating"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> DeleteFuture(
+            DeleteRatingRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRatingName(this.RatingName);
+                var future = this._client.DeleteRatingFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                            request.RatingName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "rating")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRatingName(this.RatingName);
+                DeleteRatingResult result = null;
+                try {
+                    result = await this._client.DeleteRatingAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        request.RatingName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "rating")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Rating"
+                        );
+                        var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Matchmaking.Model.Rating>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> DeleteAsync(
+            DeleteRatingRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRatingName(this.RatingName);
+            var future = this._client.DeleteRatingFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        request.RatingName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "rating")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRatingName(this.RatingName);
+            DeleteRatingResult result = null;
+            try {
+                result = await this._client.DeleteRatingAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                    request.RatingName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "rating")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Rating"
+                    );
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Matchmaking.Model.Rating>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> DeleteAsync(
+            DeleteRatingRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.RatingDomain> Delete(
+            DeleteRatingRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class RatingDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Model.Rating> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Rating> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        this.RatingName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetRatingByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -347,6 +554,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                             if (e.errors[0].component != "rating")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -355,44 +563,89 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _parentKey,
+                        Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
                             this.RatingName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Rating>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Matchmaking.Model.Rating> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                        this.RatingName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetRatingByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                                    this.RatingName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Matchmaking.Model.Rating>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "rating")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
-                    _parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
-                        this.RatingName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Matchmaking.Model.Rating>(
+                        _parentKey,
+                        Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                            this.RatingName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Rating>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Matchmaking.Model.Rating> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Matchmaking.Model.Rating> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Matchmaking.Model.Rating> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Matchmaking.Model.Rating> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

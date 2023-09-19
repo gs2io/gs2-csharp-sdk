@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,25 +97,90 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> RunAsync(
-            #else
-        public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> Run(
-            #endif
-        #else
-        public async Task<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> RunAsync(
-        #endif
+        public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> RunFuture(
             RunRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                var future = this._client.RunFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                RunResult result = null;
+                try {
+                    result = await this._client.RunAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Job"
+                        );
+                        var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                    }
+                }
+                if (result?.Item != null) {
+                    Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
+                            _cache,
+                            result?.Item,
+                            result?.Result
+                    );
+                }
+                var domain = new Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    this._accessToken,
+                    result?.Item?.Name
+                );
+                domain.IsLastJob = result?.IsLastJob;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> RunAsync(
+            RunRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.RunFuture(
                 request
             );
@@ -130,21 +196,18 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             }
             var result = future.Result;
             #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
             RunResult result = null;
             try {
                 result = await this._client.RunAsync(
                     request
                 );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "job")
-                {
-                }
-                else
-                {
-                    throw e;
-                }
+            } catch (Gs2.Core.Exception.NotFoundException e) {
             }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -169,28 +232,41 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                         result?.Result
                 );
             }
-            var domain = new Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                request.NamespaceName,
-                this._accessToken,
-                result?.Item?.Name
-            );
+                var domain = new Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    this._accessToken,
+                    result?.Item?.Name
+                );
             domain.IsLastJob = result?.IsLastJob;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> RunAsync(
+            RunRequest request
+        ) {
+            var future = RunFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to RunFuture.")]
+        public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain> Run(
+            RunRequest request
+        ) {
+            return RunFuture(request);
+        }
+        #endif
 
         public Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain Job(
             string jobName

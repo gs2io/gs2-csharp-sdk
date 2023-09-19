@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -87,275 +88,6 @@ namespace Gs2.Gs2Idle.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMasterAsync(
-            #else
-        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMaster(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMasterAsync(
-        #endif
-            ExportMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.ExportMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.ExportMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentCategoryMaster"
-                    );
-                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Idle.Model.CurrentCategoryMaster> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Idle.Model.CurrentCategoryMaster> GetAsync(
-        #endif
-            GetCurrentCategoryMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetCurrentCategoryMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetCurrentCategoryMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentCategoryMaster"
-                    );
-                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateAsync(
-        #endif
-            UpdateCurrentCategoryMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCurrentCategoryMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateCurrentCategoryMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentCategoryMaster"
-                    );
-                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubAsync(
-            #else
-        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHub(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubAsync(
-        #endif
-            UpdateCurrentCategoryMasterFromGitHubRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCurrentCategoryMasterFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateCurrentCategoryMasterFromGitHubAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentCategoryMaster"
-                    );
-                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string childType
@@ -375,41 +107,583 @@ namespace Gs2.Gs2Idle.Domain.Model
             return "Singleton";
         }
 
+    }
+
+    public partial class CurrentCategoryMasterDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMasterFuture(
+            ExportMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.ExportMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                ExportMasterResult result = null;
+                    result = await this._client.ExportMasterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentCategoryMaster"
+                        );
+                        var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMasterAsync(
+            ExportMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.ExportMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            ExportMasterResult result = null;
+                result = await this._client.ExportMasterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentCategoryMaster"
+                    );
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Model() {
-            #else
-        public IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Model() {
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMasterAsync(
+            ExportMasterRequest request
+        ) {
+            var future = ExportMasterFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Model() {
+        [Obsolete("The name has been changed to ExportMasterFuture.")]
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> ExportMaster(
+            ExportMasterRequest request
+        ) {
+            return ExportMasterFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> GetFuture(
+            GetCurrentCategoryMasterRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
-                       _parentKey,
-                       Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
-                _parentKey,
-                Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.GetCurrentCategoryMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "currentCategoryMaster")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                GetCurrentCategoryMasterResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetCurrentCategoryMasterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                    _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "currentCategoryMaster")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentCategoryMaster"
+                        );
+                        var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Idle.Model.CurrentCategoryMaster> GetAsync(
+            GetCurrentCategoryMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.GetCurrentCategoryMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "currentCategoryMaster")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            GetCurrentCategoryMasterResult result = null;
+            try {
+                result = await this._client.GetCurrentCategoryMasterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "currentCategoryMaster")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentCategoryMaster"
+                    );
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFuture(
+            UpdateCurrentCategoryMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.UpdateCurrentCategoryMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                UpdateCurrentCategoryMasterResult result = null;
+                    result = await this._client.UpdateCurrentCategoryMasterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentCategoryMaster"
+                        );
+                        var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateAsync(
+            UpdateCurrentCategoryMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.UpdateCurrentCategoryMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            UpdateCurrentCategoryMasterResult result = null;
+                result = await this._client.UpdateCurrentCategoryMasterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentCategoryMaster"
+                    );
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateAsync(
+            UpdateCurrentCategoryMasterRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> Update(
+            UpdateCurrentCategoryMasterRequest request
+        ) {
+            return UpdateFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubFuture(
+            UpdateCurrentCategoryMasterFromGitHubRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.UpdateCurrentCategoryMasterFromGitHubFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                UpdateCurrentCategoryMasterFromGitHubResult result = null;
+                    result = await this._client.UpdateCurrentCategoryMasterFromGitHubAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentCategoryMaster"
+                        );
+                        var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubAsync(
+            UpdateCurrentCategoryMasterFromGitHubRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.UpdateCurrentCategoryMasterFromGitHubFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            UpdateCurrentCategoryMasterFromGitHubResult result = null;
+                result = await this._client.UpdateCurrentCategoryMasterFromGitHubAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentCategoryMaster"
+                    );
+                    var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHubAsync(
+            UpdateCurrentCategoryMasterFromGitHubRequest request
+        ) {
+            var future = UpdateFromGitHubFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
+        public IFuture<Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain> UpdateFromGitHub(
+            UpdateCurrentCategoryMasterFromGitHubRequest request
+        ) {
+            return UpdateFromGitHubFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class CurrentCategoryMasterDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                    _parentKey,
+                    Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetCurrentCategoryMasterRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -427,6 +701,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                             if (e.errors[0].component != "currentCategoryMaster")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -435,42 +710,85 @@ namespace Gs2.Gs2Idle.Domain.Model
                             yield break;
                         }
                     }
+                    (value, _) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                        _parentKey,
+                        Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(Impl);
+        }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
+        public async Task<Gs2.Gs2Idle.Model.CurrentCategoryMaster> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                    _parentKey,
+                    Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetCurrentCategoryMasterRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                        );
+                                );
                     _cache.Put<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "currentCategoryMaster")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
-                    _parentKey,
-                    Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                        _parentKey,
+                        Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Idle.Model.CurrentCategoryMaster> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Idle.Model.CurrentCategoryMaster> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

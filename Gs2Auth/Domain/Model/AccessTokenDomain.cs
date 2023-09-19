@@ -38,6 +38,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -83,132 +84,6 @@ namespace Gs2.Gs2Auth.Domain.Model
             this._parentKey = "auth:AccessToken";
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginAsync(
-            #else
-        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> Login(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginAsync(
-        #endif
-            LoginRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
-            {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.LoginFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.LoginAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            Gs2.Gs2Auth.Domain.Model.AccessTokenDomain domain = this;
-            this._cache.Put(
-                this._parentKey,
-                AccessTokenDomain.CreateCacheKey(),
-                new AccessToken()
-                        .WithToken(result?.Token)
-                        .WithUserId(result?.UserId)
-                        .WithExpire(result?.Expire),
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * 15
-            );
-            this.Token = domain.Token = result?.Token;
-            this.UserId = domain.UserId = result?.UserId;
-            this.Expire = domain.Expire = result?.Expire;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureAsync(
-            #else
-        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignature(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureAsync(
-        #endif
-            LoginBySignatureRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
-            {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.LoginBySignatureFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.LoginBySignatureAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            Gs2.Gs2Auth.Domain.Model.AccessTokenDomain domain = this;
-            this._cache.Put(
-                this._parentKey,
-                AccessTokenDomain.CreateCacheKey(),
-                new AccessToken()
-                        .WithToken(result?.Token)
-                        .WithUserId(result?.UserId)
-                        .WithExpire(result?.Expire),
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * 15
-            );
-            this.Token = domain.Token = result?.Token;
-            this.UserId = domain.UserId = result?.UserId;
-            this.Expire = domain.Expire = result?.Expire;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string childType
         )
@@ -226,50 +101,310 @@ namespace Gs2.Gs2Auth.Domain.Model
             return "Singleton";
         }
 
+    }
+
+    public partial class AccessTokenDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginFuture(
+            LoginRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.LoginFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                LoginResult result = null;
+                    result = await this._client.LoginAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this._cache.Put(
+                    this._parentKey,
+                    AccessTokenDomain.CreateCacheKey(),
+                    new AccessToken()
+                            .WithToken(result?.Token)
+                            .WithUserId(result?.UserId)
+                            .WithExpire(result?.Expire),
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * 15
+                );
+                this.Token = domain.Token = result?.Token;
+                this.UserId = domain.UserId = result?.UserId;
+                this.Expire = domain.Expire = result?.Expire;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginAsync(
+            LoginRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.LoginFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            LoginResult result = null;
+                result = await this._client.LoginAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this._cache.Put(
+                this._parentKey,
+                AccessTokenDomain.CreateCacheKey(),
+                new AccessToken()
+                        .WithToken(result?.Token)
+                        .WithUserId(result?.UserId)
+                        .WithExpire(result?.Expire),
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * 15
+            );
+            this.Token = domain.Token = result?.Token;
+            this.UserId = domain.UserId = result?.UserId;
+            this.Expire = domain.Expire = result?.Expire;
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Auth.Model.AccessToken> Model() {
-            #else
-        public IFuture<Gs2.Gs2Auth.Model.AccessToken> Model() {
+        public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginAsync(
+            LoginRequest request
+        ) {
+            var future = LoginFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Auth.Model.AccessToken> Model() {
+        [Obsolete("The name has been changed to LoginFuture.")]
+        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> Login(
+            LoginRequest request
+        ) {
+            return LoginFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureFuture(
+            LoginBySignatureRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.LoginBySignatureFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                LoginBySignatureResult result = null;
+                    result = await this._client.LoginBySignatureAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this._cache.Put(
+                    this._parentKey,
+                    AccessTokenDomain.CreateCacheKey(),
+                    new AccessToken()
+                            .WithToken(result?.Token)
+                            .WithUserId(result?.UserId)
+                            .WithExpire(result?.Expire),
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * 15
+                );
+                this.Token = domain.Token = result?.Token;
+                this.UserId = domain.UserId = result?.UserId;
+                this.Expire = domain.Expire = result?.Expire;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureAsync(
+            LoginBySignatureRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.LoginBySignatureFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            LoginBySignatureResult result = null;
+                result = await this._client.LoginBySignatureAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this._cache.Put(
+                this._parentKey,
+                AccessTokenDomain.CreateCacheKey(),
+                new AccessToken()
+                        .WithToken(result?.Token)
+                        .WithUserId(result?.UserId)
+                        .WithExpire(result?.Expire),
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * 15
+            );
+            this.Token = domain.Token = result?.Token;
+            this.UserId = domain.UserId = result?.UserId;
+            this.Expire = domain.Expire = result?.Expire;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureAsync(
+            LoginBySignatureRequest request
+        ) {
+            var future = LoginBySignatureFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to LoginBySignatureFuture.")]
+        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignature(
+            LoginBySignatureRequest request
+        ) {
+            return LoginBySignatureFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class AccessTokenDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Auth.Model.AccessToken> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Auth.Model.AccessToken> self)
             {
-        #endif
+                var parentKey = string.Join(
+                    ":",
+                    "auth",
+                    "AccessToken"
+                );
+                var (value, find) = _cache.Get<Gs2.Gs2Auth.Model.AccessToken>(
+                    parentKey,
+                    Gs2.Gs2Auth.Domain.Model.AccessTokenDomain.CreateCacheKey(
+                    )
+                );
+                self.OnComplete(value);
+                return null;
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Auth.Model.AccessToken>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Auth.Model.AccessToken> ModelAsync()
+        {
             var parentKey = string.Join(
                 ":",
                 "auth",
                 "AccessToken"
             );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Auth.Model.AccessToken>(
-                       _parentKey,
-                       Gs2.Gs2Auth.Domain.Model.AccessTokenDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Auth.Model.AccessToken>(
-                parentKey,
-                Gs2.Gs2Auth.Domain.Model.AccessTokenDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
+                    parentKey,
+                    Gs2.Gs2Auth.Domain.Model.AccessTokenDomain.CreateCacheKey(
+                    )
+                );
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Model.AccessToken>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Auth.Model.AccessToken> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Auth.Model.AccessToken> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Auth.Model.AccessToken> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Auth.Model.AccessToken> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

@@ -57,10 +57,6 @@ namespace Gs2.Core.Net
                     OnError(new UserCancelException(new RequestError[0]));
                     yield break;
                 }
-
-#if UNITY_2017_1_OR_NEWER
-                yield return new WaitForSeconds(0.05f);
-#endif
             }
             var response = Session.MarkRead(request);
             if (response.IsSuccess)

@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -92,160 +93,6 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Domain.Model.BlackListDomain> RegisterAsync(
-            #else
-        public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> Register(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Friend.Domain.Model.BlackListDomain> RegisterAsync(
-        #endif
-            RegisterBlackListByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.RegisterBlackListByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.RegisterBlackListByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "BlackList"
-                    );
-                    var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                cache.ClearListCache<string>(
-                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName?.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                        "BlackList"
-                    )
-                );
-            }
-            Gs2.Gs2Friend.Domain.Model.BlackListDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Domain.Model.BlackListDomain> UnregisterAsync(
-            #else
-        public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> Unregister(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Friend.Domain.Model.BlackListDomain> UnregisterAsync(
-        #endif
-            UnregisterBlackListByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UnregisterBlackListByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UnregisterBlackListByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "BlackList"
-                    );
-                    var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                cache.ClearListCache<string>(
-                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName?.ToString(),
-                        resultModel.Item.UserId.ToString(),
-                        "BlackList"
-                    )
-                );
-            }
-            Gs2.Gs2Friend.Domain.Model.BlackListDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -267,45 +114,368 @@ namespace Gs2.Gs2Friend.Domain.Model
             return "Singleton";
         }
 
+    }
+
+    public partial class BlackListDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> RegisterFuture(
+            RegisterBlackListByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.RegisterBlackListByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                RegisterBlackListByUserIdResult result = null;
+                    result = await this._client.RegisterBlackListByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "BlackList"
+                        );
+                        var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    cache.ClearListCache<string>(
+                        Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName?.ToString(),
+                            resultModel.Item.UserId.ToString(),
+                            "BlackList"
+                        )
+                    );
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.BlackListDomain> RegisterAsync(
+            RegisterBlackListByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.RegisterBlackListByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            RegisterBlackListByUserIdResult result = null;
+                result = await this._client.RegisterBlackListByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "BlackList"
+                    );
+                    var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                cache.ClearListCache<string>(
+                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName?.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "BlackList"
+                    )
+                );
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Model.BlackList> Model() {
-            #else
-        public IFuture<Gs2.Gs2Friend.Model.BlackList> Model() {
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.BlackListDomain> RegisterAsync(
+            RegisterBlackListByUserIdRequest request
+        ) {
+            var future = RegisterFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Friend.Model.BlackList> Model() {
+        [Obsolete("The name has been changed to RegisterFuture.")]
+        public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> Register(
+            RegisterBlackListByUserIdRequest request
+        ) {
+            return RegisterFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> UnregisterFuture(
+            UnregisterBlackListByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.UnregisterBlackListByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                UnregisterBlackListByUserIdResult result = null;
+                    result = await this._client.UnregisterBlackListByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "BlackList"
+                        );
+                        var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    cache.ClearListCache<string>(
+                        Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName?.ToString(),
+                            resultModel.Item.UserId.ToString(),
+                            "BlackList"
+                        )
+                    );
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.BlackListDomain> UnregisterAsync(
+            UnregisterBlackListByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.UnregisterBlackListByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            UnregisterBlackListByUserIdResult result = null;
+                result = await this._client.UnregisterBlackListByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "BlackList"
+                    );
+                    var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                cache.ClearListCache<string>(
+                    Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName?.ToString(),
+                        resultModel.Item.UserId.ToString(),
+                        "BlackList"
+                    )
+                );
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.BlackListDomain> UnregisterAsync(
+            UnregisterBlackListByUserIdRequest request
+        ) {
+            var future = UnregisterFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UnregisterFuture.")]
+        public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListDomain> Unregister(
+            UnregisterBlackListByUserIdRequest request
+        ) {
+            return UnregisterFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class BlackListDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Model.BlackList> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.BlackList> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Friend.Model.BlackList>(
-                       _parentKey,
-                       Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.BlackList>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.BlackList>(
+                    _parentKey,
+                    Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Friend.Model.BlackList>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2Friend.Model.BlackList> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.BlackList>(
+                    _parentKey,
+                    Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Model.BlackList> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Friend.Model.BlackList> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Friend.Model.BlackList> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Friend.Model.BlackList> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

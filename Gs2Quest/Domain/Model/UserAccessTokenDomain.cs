@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,25 +97,77 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
-            #else
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Start(
-            #endif
-        #else
-        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
-        #endif
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> StartFuture(
             StartRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                var future = this._client.StartFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                StartResult result = null;
+                    result = await this._client.StartAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this.AccessToken,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+
+                );
+                if (result?.StampSheet != null)
+                {
+                    var future2 = stampSheet.Wait();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+
+            self.OnComplete(stampSheet);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
+            StartRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.StartFuture(
                 request
             );
@@ -126,10 +179,15 @@ namespace Gs2.Gs2Quest.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.StartAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            StartResult result = null;
+                result = await this._client.StartAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -150,29 +208,33 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
             if (result?.StampSheet != null)
             {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future2 = stampSheet.Wait();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-        #else
                 await stampSheet.WaitAsync();
-        #endif
             }
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(stampSheet);
-        #else
             return stampSheet;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
+            StartRequest request
+        ) {
+            var future = StartFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to StartFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Start(
+            StartRequest request
+        ) {
+            return StartFuture(request);
+        }
+        #endif
 
         public Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain Progress(
         ) {

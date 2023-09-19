@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -92,239 +93,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Inbox.Model.Received> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Inbox.Model.Received> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Inbox.Model.Received> GetAsync(
-        #endif
-            GetReceivedByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.Received> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetReceivedByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetReceivedByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Received"
-                    );
-                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Model.Received>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> UpdateAsync(
-        #endif
-            UpdateReceivedByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateReceivedByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateReceivedByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Received"
-                    );
-                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Inbox.Domain.Model.ReceivedDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> DeleteAsync(
-        #endif
-            DeleteReceivedByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteReceivedByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    );
-                    _cache.Put<Gs2.Gs2Inbox.Model.Received>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteReceivedByUserIdResult result = null;
-            try {
-                result = await this._client.DeleteReceivedByUserIdAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "received")
-                {
-                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    );
-                    _cache.Put<Gs2.Gs2Inbox.Model.Received>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Received"
-                    );
-                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    );
-                    cache.Delete<Gs2.Gs2Inbox.Model.Received>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Inbox.Domain.Model.ReceivedDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -346,41 +114,531 @@ namespace Gs2.Gs2Inbox.Domain.Model
             return "Singleton";
         }
 
+    }
+
+    public partial class ReceivedDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inbox.Model.Received> Model() {
-            #else
-        public IFuture<Gs2.Gs2Inbox.Model.Received> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Inbox.Model.Received> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2Inbox.Model.Received> GetFuture(
+            GetReceivedByUserIdRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.Received> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Inbox.Model.Received>(
-                       _parentKey,
-                       Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
-                _parentKey,
-                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.GetReceivedByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "received")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                GetReceivedByUserIdResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetReceivedByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                    _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "received")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Received"
+                        );
+                        var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inbox.Model.Received>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Inbox.Model.Received> GetAsync(
+            GetReceivedByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.GetReceivedByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "received")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            GetReceivedByUserIdResult result = null;
+            try {
+                result = await this._client.GetReceivedByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "received")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Received"
+                    );
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> UpdateFuture(
+            UpdateReceivedByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.UpdateReceivedByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                UpdateReceivedByUserIdResult result = null;
+                    result = await this._client.UpdateReceivedByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Received"
+                        );
+                        var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> UpdateAsync(
+            UpdateReceivedByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.UpdateReceivedByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            UpdateReceivedByUserIdResult result = null;
+                result = await this._client.UpdateReceivedByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Received"
+                    );
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> UpdateAsync(
+            UpdateReceivedByUserIdRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> Update(
+            UpdateReceivedByUserIdRequest request
+        ) {
+            return UpdateFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> DeleteFuture(
+            DeleteReceivedByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.DeleteReceivedByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "received")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                DeleteReceivedByUserIdResult result = null;
+                try {
+                    result = await this._client.DeleteReceivedByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                    _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "received")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Received"
+                        );
+                        var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        );
+                        cache.Delete<Gs2.Gs2Inbox.Model.Received>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> DeleteAsync(
+            DeleteReceivedByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.DeleteReceivedByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "received")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            DeleteReceivedByUserIdResult result = null;
+            try {
+                result = await this._client.DeleteReceivedByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                _cache.Put<Gs2.Gs2Inbox.Model.Received>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "received")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Received"
+                    );
+                    var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    );
+                    cache.Delete<Gs2.Gs2Inbox.Model.Received>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> DeleteAsync(
+            DeleteReceivedByUserIdRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Inbox.Domain.Model.ReceivedDomain> Delete(
+            DeleteReceivedByUserIdRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class ReceivedDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inbox.Model.Received> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.Received> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+                    _parentKey,
+                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetReceivedByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -398,6 +656,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                             if (e.errors[0].component != "received")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -406,42 +665,85 @@ namespace Gs2.Gs2Inbox.Domain.Model
                             yield break;
                         }
                     }
+                    (value, _) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+                        _parentKey,
+                        Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inbox.Model.Received>(Impl);
+        }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
+        public async Task<Gs2.Gs2Inbox.Model.Received> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+                    _parentKey,
+                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetReceivedByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                        );
+                                );
                     _cache.Put<Gs2.Gs2Inbox.Model.Received>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "received")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
-                    _parentKey,
-                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+                        _parentKey,
+                        Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Model.Received>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inbox.Model.Received> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Inbox.Model.Received> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Inbox.Model.Received> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Inbox.Model.Received> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

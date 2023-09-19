@@ -85,22 +85,68 @@ namespace Gs2.Gs2Deploy.Domain
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStack(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackAsync(
-        #endif
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFuture(
             CreateStackRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CreateStackFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CreateStackResult result = null;
+                    result = await this._client.CreateStackAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackAsync(
+            CreateStackRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.CreateStackFuture(
                 request
             );
@@ -112,10 +158,12 @@ namespace Gs2.Gs2Deploy.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateStackAsync(
-                request
-            );
+            CreateStackResult result = null;
+                result = await this._client.CreateStackAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -138,42 +186,101 @@ namespace Gs2.Gs2Deploy.Domain
                     );
                 }
             }
-            var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                result?.Item?.Name
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHub(
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackAsync(
+            CreateStackRequest request
+        ) {
+            var future = CreateStackFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubAsync(
+        [Obsolete("The name has been changed to CreateStackFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStack(
+            CreateStackRequest request
+        ) {
+            return CreateStackFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubFuture(
             CreateStackFromGitHubRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CreateStackFromGitHubFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CreateStackFromGitHubResult result = null;
+                    result = await this._client.CreateStackFromGitHubAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubAsync(
+            CreateStackFromGitHubRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.CreateStackFromGitHubFuture(
                 request
             );
@@ -185,10 +292,12 @@ namespace Gs2.Gs2Deploy.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateStackFromGitHubAsync(
-                request
-            );
+            CreateStackFromGitHubResult result = null;
+                result = await this._client.CreateStackFromGitHubAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -211,42 +320,79 @@ namespace Gs2.Gs2Deploy.Domain
                     );
                 }
             }
-            var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                result?.Item?.Name
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Deploy> ValidateAsync(
-            #else
-        public IFuture<Gs2Deploy> Validate(
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubAsync(
+            CreateStackFromGitHubRequest request
+        ) {
+            var future = CreateStackFromGitHubFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2Deploy> ValidateAsync(
+        [Obsolete("The name has been changed to CreateStackFromGitHubFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHub(
+            CreateStackFromGitHubRequest request
+        ) {
+            return CreateStackFromGitHubFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Deploy> ValidateFuture(
             ValidateRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2Deploy> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.ValidateFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                ValidateResult result = null;
+                    result = await this._client.ValidateAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Deploy>(Impl);
+        }
+        #else
+        public async Task<Gs2Deploy> ValidateAsync(
+            ValidateRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.ValidateFuture(
                 request
             );
@@ -258,28 +404,43 @@ namespace Gs2.Gs2Deploy.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.ValidateAsync(
-                request
-            );
+            ValidateResult result = null;
+                result = await this._client.ValidateAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
             if (resultModel != null) {
                 
             }
-            Gs2Deploy domain = this;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = this;
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2Deploy>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Deploy> ValidateAsync(
+            ValidateRequest request
+        ) {
+            var future = ValidateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to ValidateFuture.")]
+        public IFuture<Gs2Deploy> Validate(
+            ValidateRequest request
+        ) {
+            return ValidateFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Deploy.Model.Stack> Stacks(

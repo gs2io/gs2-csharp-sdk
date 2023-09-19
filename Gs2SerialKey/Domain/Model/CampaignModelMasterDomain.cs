@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -91,241 +92,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2SerialKey.Model.CampaignModelMaster> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2SerialKey.Model.CampaignModelMaster> GetAsync(
-        #endif
-            GetCampaignModelMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithCampaignModelName(this.CampaignModelName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetCampaignModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetCampaignModelMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CampaignModelMaster"
-                    );
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> UpdateAsync(
-        #endif
-            UpdateCampaignModelMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithCampaignModelName(this.CampaignModelName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCampaignModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateCampaignModelMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CampaignModelMaster"
-                    );
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> DeleteAsync(
-        #endif
-            DeleteCampaignModelMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithCampaignModelName(this.CampaignModelName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteCampaignModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        request.CampaignModelName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteCampaignModelMasterResult result = null;
-            try {
-                result = await this._client.DeleteCampaignModelMasterAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "campaignModelMaster")
-                {
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        request.CampaignModelName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CampaignModelMaster"
-                    );
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
-                }
-            }
-            Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string campaignModelName,
@@ -351,43 +117,540 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
         }
 
+    }
+
+    public partial class CampaignModelMasterDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Model() {
-            #else
-        public IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> GetFuture(
+            GetCampaignModelMasterRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
-                       _parentKey,
-                       Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                            this.CampaignModelName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
-                _parentKey,
-                Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                    this.CampaignModelName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCampaignModelName(this.CampaignModelName);
+                var future = this._client.GetCampaignModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                            request.CampaignModelName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "campaignModelMaster")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCampaignModelName(this.CampaignModelName);
+                GetCampaignModelMasterResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetCampaignModelMasterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        request.CampaignModelName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "campaignModelMaster")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CampaignModelMaster"
+                        );
+                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2SerialKey.Model.CampaignModelMaster> GetAsync(
+            GetCampaignModelMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
+            var future = this._client.GetCampaignModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        request.CampaignModelName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "campaignModelMaster")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
+            GetCampaignModelMasterResult result = null;
+            try {
+                result = await this._client.GetCampaignModelMasterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                    request.CampaignModelName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "campaignModelMaster")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CampaignModelMaster"
+                    );
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> UpdateFuture(
+            UpdateCampaignModelMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCampaignModelName(this.CampaignModelName);
+                var future = this._client.UpdateCampaignModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCampaignModelName(this.CampaignModelName);
+                UpdateCampaignModelMasterResult result = null;
+                    result = await this._client.UpdateCampaignModelMasterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CampaignModelMaster"
+                        );
+                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> UpdateAsync(
+            UpdateCampaignModelMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
+            var future = this._client.UpdateCampaignModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
+            UpdateCampaignModelMasterResult result = null;
+                result = await this._client.UpdateCampaignModelMasterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CampaignModelMaster"
+                    );
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> UpdateAsync(
+            UpdateCampaignModelMasterRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> Update(
+            UpdateCampaignModelMasterRequest request
+        ) {
+            return UpdateFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> DeleteFuture(
+            DeleteCampaignModelMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCampaignModelName(this.CampaignModelName);
+                var future = this._client.DeleteCampaignModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                            request.CampaignModelName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "campaignModelMaster")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithCampaignModelName(this.CampaignModelName);
+                DeleteCampaignModelMasterResult result = null;
+                try {
+                    result = await this._client.DeleteCampaignModelMasterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        request.CampaignModelName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "campaignModelMaster")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CampaignModelMaster"
+                        );
+                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> DeleteAsync(
+            DeleteCampaignModelMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
+            var future = this._client.DeleteCampaignModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        request.CampaignModelName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "campaignModelMaster")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithCampaignModelName(this.CampaignModelName);
+            DeleteCampaignModelMasterResult result = null;
+            try {
+                result = await this._client.DeleteCampaignModelMasterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                    request.CampaignModelName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "campaignModelMaster")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CampaignModelMaster"
+                    );
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> DeleteAsync(
+            DeleteCampaignModelMasterRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain> Delete(
+            DeleteCampaignModelMasterRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class CampaignModelMasterDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                    _parentKey,
+                    Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        this.CampaignModelName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetCampaignModelMasterRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -406,6 +669,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                             if (e.errors[0].component != "campaignModelMaster")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -414,44 +678,89 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        _parentKey,
+                        Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
                             this.CampaignModelName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2SerialKey.Model.CampaignModelMaster> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                    _parentKey,
+                    Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                        this.CampaignModelName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetCampaignModelMasterRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                                    this.CampaignModelName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "campaignModelMaster")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
-                        this.CampaignModelName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                        _parentKey,
+                        Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                            this.CampaignModelName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2SerialKey.Model.CampaignModelMaster> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2SerialKey.Model.CampaignModelMaster> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

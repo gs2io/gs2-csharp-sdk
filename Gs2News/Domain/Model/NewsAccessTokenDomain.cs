@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,25 +97,103 @@ namespace Gs2.Gs2News.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrantAsync(
-            #else
-        public IFuture<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrant(
-            #endif
-        #else
-        public async Task<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrantAsync(
-        #endif
+        public IFuture<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrantFuture(
             WantGrantRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                var future = this._client.WantGrantFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                WantGrantResult result = null;
+                    result = await this._client.WantGrantAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    {
+                        var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "SetCookieRequestEntry"
+                        );
+                        foreach (var item in resultModel.Items) {
+                            var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                                item.Key.ToString(),
+                                item.Value.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    }
+                }
+                var domain = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[result?.Items.Length ?? 0];
+                for (int i=0; i<result?.Items.Length; i++)
+                {
+                    domain[i] = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain(
+                        this._cache,
+                        this._jobQueueDomain,
+                        this._stampSheetConfiguration,
+                        this._session,
+                        request.NamespaceName,
+                        this._accessToken,
+                        result.Items[i]?.Key,
+                        result.Items[i]?.Value
+                    );
+                    var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "SetCookieRequestEntry"
+                    );
+                    var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                        result.Items[i].Key.ToString(),
+                        result.Items[i].Value.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        result.Items[i],
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                this.BrowserUrl = result?.BrowserUrl;
+                this.ZipUrl = result?.ZipUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrantAsync(
+            WantGrantRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.WantGrantFuture(
                 request
             );
@@ -126,10 +205,15 @@ namespace Gs2.Gs2News.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.WantGrantAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            WantGrantResult result = null;
+                result = await this._client.WantGrantAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -154,48 +238,61 @@ namespace Gs2.Gs2News.Domain.Model
                     }
                 }
             }
-            var domain = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[result?.Items.Length ?? 0];
-            for (int i=0; i<result?.Items.Length; i++)
-            {
-                domain[i] = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
-                    request.NamespaceName,
-                    this._accessToken,
-                    result.Items[i]?.Key,
-                    result.Items[i]?.Value
-                );
-                var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "SetCookieRequestEntry"
-            );
-                var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
-                    result.Items[i].Key.ToString(),
-                    result.Items[i].Value.ToString()
-                );
-                cache.Put(
-                    parentKey,
-                    key,
-                    result.Items[i],
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-            }
+                var domain = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[result?.Items.Length ?? 0];
+                for (int i=0; i<result?.Items.Length; i++)
+                {
+                    domain[i] = new Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain(
+                        this._cache,
+                        this._jobQueueDomain,
+                        this._stampSheetConfiguration,
+                        this._session,
+                        request.NamespaceName,
+                        this._accessToken,
+                        result.Items[i]?.Key,
+                        result.Items[i]?.Value
+                    );
+                    var parentKey = Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "SetCookieRequestEntry"
+                    );
+                    var key = Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                        result.Items[i].Key.ToString(),
+                        result.Items[i].Value.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        result.Items[i],
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             this.BrowserUrl = result?.BrowserUrl;
             this.ZipUrl = result?.ZipUrl;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrantAsync(
+            WantGrantRequest request
+        ) {
+            var future = WantGrantFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to WantGrantFuture.")]
+        public IFuture<Gs2.Gs2News.Domain.Model.SetCookieRequestEntryAccessTokenDomain[]> WantGrant(
+            WantGrantRequest request
+        ) {
+            return WantGrantFuture(request);
+        }
+        #endif
 
         public static string CreateCacheParentKey(
             string namespaceName,
@@ -219,44 +316,63 @@ namespace Gs2.Gs2News.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Model.News> Model() {
-            #else
-        public IFuture<Gs2.Gs2News.Model.News> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2News.Model.News> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2News.Model.News> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2News.Model.News> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2News.Model.News>(
-                       _parentKey,
-                       Gs2.Gs2News.Domain.Model.NewsDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2News.Model.News>(
-                _parentKey,
-                Gs2.Gs2News.Domain.Model.NewsDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2News.Model.News>(
+                    _parentKey,
+                    Gs2.Gs2News.Domain.Model.NewsDomain.CreateCacheKey(
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2News.Model.News>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2News.Model.News> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2News.Model.News>(
+                    _parentKey,
+                    Gs2.Gs2News.Domain.Model.NewsDomain.CreateCacheKey(
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2News.Model.News> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2News.Model.News> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2News.Model.News> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2News.Model.News> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

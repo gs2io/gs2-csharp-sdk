@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -84,241 +85,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this._parentKey = "identifier:SecurityPolicy";
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> UpdateAsync(
-        #endif
-            UpdateSecurityPolicyRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
-            {
-        #endif
-            request
-                .WithSecurityPolicyName(this.SecurityPolicyName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateSecurityPolicyAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "SecurityPolicy"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Identifier.Model.SecurityPolicy> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Identifier.Model.SecurityPolicy> GetAsync(
-        #endif
-            GetSecurityPolicyRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> self)
-            {
-        #endif
-            request
-                .WithSecurityPolicyName(this.SecurityPolicyName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetSecurityPolicyAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "SecurityPolicy"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.SecurityPolicy>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> DeleteAsync(
-        #endif
-            DeleteSecurityPolicyRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
-            {
-        #endif
-            request
-                .WithSecurityPolicyName(this.SecurityPolicyName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                        request.SecurityPolicyName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteSecurityPolicyResult result = null;
-            try {
-                result = await this._client.DeleteSecurityPolicyAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "securityPolicy")
-                {
-                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                        request.SecurityPolicyName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "SecurityPolicy"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string securityPolicyName,
             string childType
@@ -342,48 +108,539 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
         }
 
+    }
+
+    public partial class SecurityPolicyDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> UpdateFuture(
+            UpdateSecurityPolicyRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithSecurityPolicyName(this.SecurityPolicyName);
+                var future = this._client.UpdateSecurityPolicyFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithSecurityPolicyName(this.SecurityPolicyName);
+                UpdateSecurityPolicyResult result = null;
+                    result = await this._client.UpdateSecurityPolicyAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "identifier",
+                            "SecurityPolicy"
+                        );
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> UpdateAsync(
+            UpdateSecurityPolicyRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithSecurityPolicyName(this.SecurityPolicyName);
+            var future = this._client.UpdateSecurityPolicyFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithSecurityPolicyName(this.SecurityPolicyName);
+            UpdateSecurityPolicyResult result = null;
+                result = await this._client.UpdateSecurityPolicyAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "SecurityPolicy"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Model.SecurityPolicy> Model() {
-            #else
-        public IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> Model() {
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> UpdateAsync(
+            UpdateSecurityPolicyRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Model.SecurityPolicy> Model() {
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> Update(
+            UpdateSecurityPolicyRequest request
+        ) {
+            return UpdateFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> GetFuture(
+            GetSecurityPolicyRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> self)
             {
-        #endif
-            var parentKey = string.Join(
-                ":",
-                "identifier",
-                "SecurityPolicy"
-            );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                       _parentKey,
-                       Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                            this.SecurityPolicyName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                parentKey,
-                Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                    this.SecurityPolicyName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithSecurityPolicyName(this.SecurityPolicyName);
+                var future = this._client.GetSecurityPolicyFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            request.SecurityPolicyName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "securityPolicy")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithSecurityPolicyName(this.SecurityPolicyName);
+                GetSecurityPolicyResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetSecurityPolicyAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        request.SecurityPolicyName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "securityPolicy")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "identifier",
+                            "SecurityPolicy"
+                        );
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.SecurityPolicy>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Identifier.Model.SecurityPolicy> GetAsync(
+            GetSecurityPolicyRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithSecurityPolicyName(this.SecurityPolicyName);
+            var future = this._client.GetSecurityPolicyFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        request.SecurityPolicyName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "securityPolicy")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithSecurityPolicyName(this.SecurityPolicyName);
+            GetSecurityPolicyResult result = null;
+            try {
+                result = await this._client.GetSecurityPolicyAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    request.SecurityPolicyName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "securityPolicy")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "SecurityPolicy"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> DeleteFuture(
+            DeleteSecurityPolicyRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithSecurityPolicyName(this.SecurityPolicyName);
+                var future = this._client.DeleteSecurityPolicyFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            request.SecurityPolicyName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "securityPolicy")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithSecurityPolicyName(this.SecurityPolicyName);
+                DeleteSecurityPolicyResult result = null;
+                try {
+                    result = await this._client.DeleteSecurityPolicyAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        request.SecurityPolicyName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "securityPolicy")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "identifier",
+                            "SecurityPolicy"
+                        );
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> DeleteAsync(
+            DeleteSecurityPolicyRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithSecurityPolicyName(this.SecurityPolicyName);
+            var future = this._client.DeleteSecurityPolicyFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        request.SecurityPolicyName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "securityPolicy")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithSecurityPolicyName(this.SecurityPolicyName);
+            DeleteSecurityPolicyResult result = null;
+            try {
+                result = await this._client.DeleteSecurityPolicyAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    request.SecurityPolicyName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "securityPolicy")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "identifier",
+                        "SecurityPolicy"
+                    );
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Identifier.Model.SecurityPolicy>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> DeleteAsync(
+            DeleteSecurityPolicyRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> Delete(
+            DeleteSecurityPolicyRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class SecurityPolicyDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> self)
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "identifier",
+                    "SecurityPolicy"
+                );
+                var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                    parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        this.SecurityPolicyName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetSecurityPolicyRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -402,6 +659,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                             if (e.errors[0].component != "securityPolicy")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -410,44 +668,94 @@ namespace Gs2.Gs2Identifier.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        parentKey,
+                        Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                             this.SecurityPolicyName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.SecurityPolicy>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Model.SecurityPolicy> ModelAsync()
+        {
+            var parentKey = string.Join(
+                ":",
+                "identifier",
+                "SecurityPolicy"
+            );
+            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                    parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                        this.SecurityPolicyName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetSecurityPolicyRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                                    this.SecurityPolicyName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                         parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "securityPolicy")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
-                    parentKey,
-                    Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
-                        this.SecurityPolicyName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                        parentKey,
+                        Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            this.SecurityPolicyName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.SecurityPolicy>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Identifier.Model.SecurityPolicy> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Identifier.Model.SecurityPolicy> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Model.SecurityPolicy> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Identifier.Model.SecurityPolicy> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

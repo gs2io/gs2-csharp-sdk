@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -101,43 +102,205 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
+        public static string CreateCacheParentKey(
+            string namespaceName,
+            string userId,
+            string withProfile,
+            string targetUserId,
+            string childType
+        )
+        {
+            return string.Join(
+                ":",
+                "friend",
+                namespaceName ?? "null",
+                userId ?? "null",
+                withProfile ?? "null",
+                targetUserId ?? "null",
+                childType
+            );
+        }
+
+        public static string CreateCacheKey(
+            string targetUserId
+        )
+        {
+            return string.Join(
+                ":",
+                targetUserId ?? "null"
+            );
+        }
+
+    }
+
+    public partial class FriendUserDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Friend.Model.FriendUser> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Friend.Model.FriendUser> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Friend.Model.FriendUser> GetAsync(
-        #endif
+        private IFuture<Gs2.Gs2Friend.Model.FriendUser> GetFuture(
             GetFriendByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendUser> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithWithProfile(this.WithProfile)
+                    .WithTargetUserId(this.TargetUserId);
+                var future = this._client.GetFriendByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            request.TargetUserId.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "friendUser")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithWithProfile(this.WithProfile)
+                    .WithTargetUserId(this.TargetUserId);
+                GetFriendByUserIdResult result = null;
+                try {
+                    result = await this._client.GetFriendByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        request.TargetUserId.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "friendUser")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.WithProfile?.ToString() ?? "False",
+                            "FriendUser"
+                        );
+                        var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            resultModel.Item.UserId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.FriendUser>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Friend.Model.FriendUser> GetAsync(
+            GetFriendByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithWithProfile(this.WithProfile)
                 .WithTargetUserId(this.TargetUserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetFriendByUserIdFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        request.TargetUserId.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "friendUser")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetFriendByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithWithProfile(this.WithProfile)
+                .WithTargetUserId(this.TargetUserId);
+            GetFriendByUserIdResult result = null;
+            try {
+                result = await this._client.GetFriendByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                    request.TargetUserId.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "friendUser")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -161,38 +324,146 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.FriendUser>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteAsync(
-        #endif
+        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteFuture(
             DeleteFriendByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithTargetUserId(this.TargetUserId);
+                var future = this._client.DeleteFriendByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            request.TargetUserId.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "friendUser")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithTargetUserId(this.TargetUserId);
+                DeleteFriendByUserIdResult result = null;
+                try {
+                    result = await this._client.DeleteFriendByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        request.TargetUserId.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "friendUser")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.WithProfile?.ToString() ?? "False",
+                            "FriendUser"
+                        );
+                        var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            resultModel.Item.UserId.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(parentKey, key);
+                    }
+                    {
+                        var parentKey = Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.WithProfile?.ToString() ?? "False",
+                            "FriendUser"
+                        );
+                        var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            resultModel.Item.UserId.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(parentKey, key);
+                    }
+                    cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
+                        Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                            this.NamespaceName?.ToString(),
+                            resultModel?.Item?.UserId?.ToString(),
+                            "False",
+                            "FriendUser"
+                        ),
+                        Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            this.UserId?.ToString()
+                        )
+                    );
+                    cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
+                        Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                            this.NamespaceName?.ToString(),
+                            resultModel?.Item?.UserId?.ToString(),
+                            "True",
+                            "FriendUser"
+                        ),
+                        Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            this.UserId?.ToString()
+                        )
+                    );
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteAsync(
+            DeleteFriendByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithTargetUserId(this.TargetUserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteFriendByUserIdFuture(
                 request
             );
@@ -209,6 +480,12 @@ namespace Gs2.Gs2Friend.Domain.Model
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
+                    if (future.Error.Errors[0].Component != "friendUser")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
                 }
                 else {
                     self.OnError(future.Error);
@@ -217,30 +494,33 @@ namespace Gs2.Gs2Friend.Domain.Model
             }
             var result = future.Result;
             #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithTargetUserId(this.TargetUserId);
             DeleteFriendByUserIdResult result = null;
             try {
                 result = await this._client.DeleteFriendByUserIdAsync(
                     request
                 );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "friendUser")
-                {
-                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                        request.TargetUserId.ToString()
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                    request.TargetUserId.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
+                _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "friendUser")
                 {
-                    throw e;
+                    throw;
                 }
             }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -293,86 +573,52 @@ namespace Gs2.Gs2Friend.Domain.Model
                     )
                 );
             }
-            Gs2.Gs2Friend.Domain.Model.FriendUserDomain domain = this;
+                var domain = this;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain>(Impl);
-        #endif
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string withProfile,
-            string targetUserId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "friend",
-                namespaceName ?? "null",
-                userId ?? "null",
-                withProfile ?? "null",
-                targetUserId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string targetUserId
-        )
-        {
-            return string.Join(
-                ":",
-                targetUserId ?? "null"
-            );
-        }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Model.FriendUser> Model() {
-            #else
-        public IFuture<Gs2.Gs2Friend.Model.FriendUser> Model() {
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> DeleteAsync(
+            DeleteFriendByUserIdRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Friend.Model.FriendUser> Model() {
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendUserDomain> Delete(
+            DeleteFriendByUserIdRequest request
+        ) {
+            return DeleteFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+    }
+
+    public partial class FriendUserDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Model.FriendUser> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendUser> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Friend.Model.FriendUser>(
-                       _parentKey,
-                       Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                            this.TargetUserId?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                    this.TargetUserId?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
+                    _parentKey,
+                    Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        this.TargetUserId?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetFriendByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -391,6 +637,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                             if (e.errors[0].component != "friendUser")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -399,44 +646,89 @@ namespace Gs2.Gs2Friend.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
+                        _parentKey,
+                        Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
                             this.TargetUserId?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.FriendUser>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Friend.Model.FriendUser> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
+                    _parentKey,
+                    Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                        this.TargetUserId?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetFriendByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                                    this.TargetUserId?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Friend.Model.FriendUser>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "friendUser")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
-                    _parentKey,
-                    Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
-                        this.TargetUserId?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
+                        _parentKey,
+                        Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                            this.TargetUserId?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.FriendUser>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Model.FriendUser> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Friend.Model.FriendUser> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Friend.Model.FriendUser> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Friend.Model.FriendUser> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

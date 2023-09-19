@@ -85,22 +85,68 @@ namespace Gs2.Gs2News.Domain
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            #else
-        public IFuture<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespace(
-            #endif
-        #else
-        public async Task<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-        #endif
+        public IFuture<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.NamespaceDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CreateNamespaceFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CreateNamespaceResult result = null;
+                    result = await this._client.CreateNamespaceAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "news",
+                            "Namespace"
+                        );
+                        var key = Gs2.Gs2News.Domain.Model.NamespaceDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2News.Domain.Model.NamespaceDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.NamespaceDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            CreateNamespaceRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.CreateNamespaceFuture(
                 request
             );
@@ -112,10 +158,12 @@ namespace Gs2.Gs2News.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateNamespaceAsync(
-                request
-            );
+            CreateNamespaceResult result = null;
+                result = await this._client.CreateNamespaceAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -138,24 +186,37 @@ namespace Gs2.Gs2News.Domain
                     );
                 }
             }
-            var domain = new Gs2.Gs2News.Domain.Model.NamespaceDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                result?.Item?.Name
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = new Gs2.Gs2News.Domain.Model.NamespaceDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.NamespaceDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            CreateNamespaceRequest request
+        ) {
+            var future = CreateNamespaceFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CreateNamespaceFuture.")]
+        public IFuture<Gs2.Gs2News.Domain.Model.NamespaceDomain> CreateNamespace(
+            CreateNamespaceRequest request
+        ) {
+            return CreateNamespaceFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2News.Model.Namespace> Namespaces(

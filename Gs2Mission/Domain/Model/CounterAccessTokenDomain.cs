@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -98,41 +99,166 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Mission.Model.Counter> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Mission.Model.Counter> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Mission.Model.Counter> GetAsync(
-        #endif
+        private IFuture<Gs2.Gs2Mission.Model.Counter> GetFuture(
             GetCounterRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Counter> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCounterName(this.CounterName);
+                var future = this._client.GetCounterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                            request.CounterName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Mission.Model.Counter>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "counter")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCounterName(this.CounterName);
+                GetCounterResult result = null;
+                try {
+                    result = await this._client.GetCounterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                        request.CounterName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Mission.Model.Counter>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "counter")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Counter"
+                        );
+                        var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Counter>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Mission.Model.Counter> GetAsync(
+            GetCounterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithCounterName(this.CounterName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetCounterFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                        request.CounterName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Mission.Model.Counter>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "counter")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetCounterAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithCounterName(this.CounterName);
+            GetCounterResult result = null;
+            try {
+                result = await this._client.GetCounterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                    request.CounterName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Mission.Model.Counter>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "counter")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -155,16 +281,9 @@ namespace Gs2.Gs2Mission.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Counter>(Impl);
-        #endif
         }
+        #endif
 
         public static string CreateCacheParentKey(
             string namespaceName,
@@ -194,42 +313,20 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Mission.Model.Counter> Model() {
-            #else
-        public IFuture<Gs2.Gs2Mission.Model.Counter> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Mission.Model.Counter> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Mission.Model.Counter> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Counter> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Mission.Model.Counter>(
-                       _parentKey,
-                       Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                            this.CounterName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Counter>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                    this.CounterName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Counter>(
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                        this.CounterName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetCounterRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -248,6 +345,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                             if (e.errors[0].component != "counter")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -256,44 +354,89 @@ namespace Gs2.Gs2Mission.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Mission.Model.Counter>(
+                        _parentKey,
+                        Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                             this.CounterName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Counter>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Mission.Model.Counter> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Counter>(
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                        this.CounterName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetCounterRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                                    this.CounterName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Mission.Model.Counter>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "counter")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Counter>(
-                    _parentKey,
-                    Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                        this.CounterName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Mission.Model.Counter>(
+                        _parentKey,
+                        Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
+                            this.CounterName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Counter>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Mission.Model.Counter> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Mission.Model.Counter> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Mission.Model.Counter> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Mission.Model.Counter> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

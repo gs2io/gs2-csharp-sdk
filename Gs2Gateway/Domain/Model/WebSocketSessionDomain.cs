@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -101,88 +102,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserIdAsync(
-            #else
-        public IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserId(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserIdAsync(
-        #endif
-            SetUserIdByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> self)
-            {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future2 = Model();
-            yield return future2;
-            if (future2.Error != null)
-            {
-                self.OnError(future2.Error);
-                yield break;
-            }
-            var model = future2.Result;
-            #else
-            var model = await Model();
-            #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.SetUserIdByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.SetUserIdByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "WebSocketSession"
-                    );
-                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -204,45 +123,224 @@ namespace Gs2.Gs2Gateway.Domain.Model
             return "Singleton";
         }
 
+    }
+
+    public partial class WebSocketSessionDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserIdFuture(
+            SetUserIdByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future2 = ModelFuture();
+                yield return future2;
+                if (future2.Error != null)
+                {
+                    self.OnError(future2.Error);
+                    yield break;
+                }
+                var model = future2.Result;
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.SetUserIdByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                var model = await ModelAsync();
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                SetUserIdByUserIdResult result = null;
+                    result = await this._client.SetUserIdByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "WebSocketSession"
+                        );
+                        var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserIdAsync(
+            SetUserIdByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future2 = ModelFuture();
+            yield return future2;
+            if (future2.Error != null)
+            {
+                self.OnError(future2.Error);
+                yield break;
+            }
+            var model = future2.Result;
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.SetUserIdByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            var model = await ModelAsync();
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            SetUserIdByUserIdResult result = null;
+                result = await this._client.SetUserIdByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "WebSocketSession"
+                    );
+                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Gateway.Model.WebSocketSession> Model() {
-            #else
-        public IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> Model() {
+        public async UniTask<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserIdAsync(
+            SetUserIdByUserIdRequest request
+        ) {
+            var future = SetUserIdFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Gateway.Model.WebSocketSession> Model() {
+        [Obsolete("The name has been changed to SetUserIdFuture.")]
+        public IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain> SetUserId(
+            SetUserIdByUserIdRequest request
+        ) {
+            return SetUserIdFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+    }
+
+    public partial class WebSocketSessionDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                       _parentKey,
-                       Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                _parentKey,
-                Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
+                    _parentKey,
+                    Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Gateway.Model.WebSocketSession>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2Gateway.Model.WebSocketSession> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
+                    _parentKey,
+                    Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Gateway.Model.WebSocketSession> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Gateway.Model.WebSocketSession> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Gateway.Model.WebSocketSession> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

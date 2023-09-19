@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -91,73 +92,6 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2SkillTree.Model.NodeModel> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2SkillTree.Model.NodeModel> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2SkillTree.Model.NodeModel> GetAsync(
-        #endif
-            GetNodeModelRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Model.NodeModel> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithNodeModelName(this.NodeModelName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetNodeModelFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetNodeModelAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "NodeModel"
-                    );
-                    var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SkillTree.Model.NodeModel>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string nodeModelName,
@@ -183,43 +117,210 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             );
         }
 
+    }
+
+    public partial class NodeModelDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SkillTree.Model.NodeModel> Model() {
-            #else
-        public IFuture<Gs2.Gs2SkillTree.Model.NodeModel> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2SkillTree.Model.NodeModel> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2SkillTree.Model.NodeModel> GetFuture(
+            GetNodeModelRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Model.NodeModel> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2SkillTree.Model.NodeModel>(
-                       _parentKey,
-                       Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
-                            this.NodeModelName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2SkillTree.Model.NodeModel>(
-                _parentKey,
-                Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
-                    this.NodeModelName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithNodeModelName(this.NodeModelName);
+                var future = this._client.GetNodeModelFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                            request.NodeModelName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2SkillTree.Model.NodeModel>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "nodeModel")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithNodeModelName(this.NodeModelName);
+                GetNodeModelResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetNodeModelAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                        request.NodeModelName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2SkillTree.Model.NodeModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "nodeModel")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "NodeModel"
+                        );
+                        var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SkillTree.Model.NodeModel>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2SkillTree.Model.NodeModel> GetAsync(
+            GetNodeModelRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithNodeModelName(this.NodeModelName);
+            var future = this._client.GetNodeModelFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                        request.NodeModelName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2SkillTree.Model.NodeModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "nodeModel")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithNodeModelName(this.NodeModelName);
+            GetNodeModelResult result = null;
+            try {
+                result = await this._client.GetNodeModelAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                    request.NodeModelName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2SkillTree.Model.NodeModel>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "nodeModel")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "NodeModel"
+                    );
+                    var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+    }
+
+    public partial class NodeModelDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SkillTree.Model.NodeModel> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Model.NodeModel> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2SkillTree.Model.NodeModel>(
+                    _parentKey,
+                    Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                        this.NodeModelName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetNodeModelRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -238,6 +339,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                             if (e.errors[0].component != "nodeModel")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -246,44 +348,89 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2SkillTree.Model.NodeModel>(
+                        _parentKey,
+                        Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
                             this.NodeModelName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SkillTree.Model.NodeModel>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2SkillTree.Model.NodeModel> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2SkillTree.Model.NodeModel>(
+                    _parentKey,
+                    Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                        this.NodeModelName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetNodeModelRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                                    this.NodeModelName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2SkillTree.Model.NodeModel>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "nodeModel")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2SkillTree.Model.NodeModel>(
-                    _parentKey,
-                    Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
-                        this.NodeModelName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2SkillTree.Model.NodeModel>(
+                        _parentKey,
+                        Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                            this.NodeModelName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SkillTree.Model.NodeModel>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2SkillTree.Model.NodeModel> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2SkillTree.Model.NodeModel> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2SkillTree.Model.NodeModel> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2SkillTree.Model.NodeModel> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

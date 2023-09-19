@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,25 +97,54 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
-            #else
-        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> Prediction(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
-        #endif
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionFuture(
             PredictionRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                var future = this._client.PredictionFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                PredictionResult result = null;
+                    result = await this._client.PredictionAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                self.OnComplete(result?.Items);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
+            PredictionRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.PredictionFuture(
                 request
             );
@@ -126,26 +156,45 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.PredictionAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            PredictionResult result = null;
+                result = await this._client.PredictionAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
             if (resultModel != null) {
                 
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Items);
-        #else
             return result?.Items;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
+            PredictionRequest request
+        ) {
+            var future = PredictionFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to PredictionFuture.")]
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> Prediction(
+            PredictionRequest request
+        ) {
+            return PredictionFuture(request);
+        }
+        #endif
 
         public static string CreateCacheParentKey(
             string namespaceName,

@@ -87,22 +87,68 @@ namespace Gs2.Gs2Inventory.Domain
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            #else
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespace(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-        #endif
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CreateNamespaceFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CreateNamespaceResult result = null;
+                    result = await this._client.CreateNamespaceAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "inventory",
+                            "Namespace"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            CreateNamespaceRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.CreateNamespaceFuture(
                 request
             );
@@ -114,10 +160,12 @@ namespace Gs2.Gs2Inventory.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateNamespaceAsync(
-                request
-            );
+            CreateNamespaceResult result = null;
+                result = await this._client.CreateNamespaceAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -140,24 +188,37 @@ namespace Gs2.Gs2Inventory.Domain
                     );
                 }
             }
-            var domain = new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                result?.Item?.Name
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            CreateNamespaceRequest request
+        ) {
+            var future = CreateNamespaceFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CreateNamespaceFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.NamespaceDomain> CreateNamespace(
+            CreateNamespaceRequest request
+        ) {
+            return CreateNamespaceFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
@@ -238,6 +299,12 @@ namespace Gs2.Gs2Inventory.Domain
         public static UnityEvent<string, AcquireSimpleItemsByUserIdRequest, AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdComplete = new UnityEvent<string, AcquireSimpleItemsByUserIdRequest, AcquireSimpleItemsByUserIdResult>();
     #else
         public static Action<string, AcquireSimpleItemsByUserIdRequest, AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, AcquireBigItemByUserIdRequest, AcquireBigItemByUserIdResult> AcquireBigItemByUserIdComplete = new UnityEvent<string, AcquireBigItemByUserIdRequest, AcquireBigItemByUserIdResult>();
+    #else
+        public static Action<string, AcquireBigItemByUserIdRequest, AcquireBigItemByUserIdResult> AcquireBigItemByUserIdComplete;
     #endif
 
         public static void UpdateCacheFromStampSheet(
@@ -535,6 +602,35 @@ namespace Gs2.Gs2Inventory.Domain
                         );
                         break;
                     }
+                    case "AcquireBigItemByUserId": {
+                        var requestModel = AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = AcquireBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.InventoryName,
+                                "BigItem"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                                resultModel.Item.ItemName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        AcquireBigItemByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                 }
         }
 
@@ -554,6 +650,12 @@ namespace Gs2.Gs2Inventory.Domain
         public static UnityEvent<string, ConsumeSimpleItemsByUserIdRequest, ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdComplete = new UnityEvent<string, ConsumeSimpleItemsByUserIdRequest, ConsumeSimpleItemsByUserIdResult>();
     #else
         public static Action<string, ConsumeSimpleItemsByUserIdRequest, ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdComplete = new UnityEvent<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult>();
+    #else
+        public static Action<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdComplete;
     #endif
 
         public static void UpdateCacheFromStampTask(
@@ -728,6 +830,35 @@ namespace Gs2.Gs2Inventory.Domain
                         }
 
                         ConsumeSimpleItemsByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "ConsumeBigItemByUserId": {
+                        var requestModel = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ConsumeBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                requestModel.UserId,
+                                requestModel.InventoryName,
+                                "BigItem"
+                            );
+                            var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                                resultModel.Item.ItemName.ToString()
+                            );
+                            cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        ConsumeBigItemByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel
@@ -1025,6 +1156,35 @@ namespace Gs2.Gs2Inventory.Domain
                     }
 
                     AcquireSimpleItemsByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "acquire_big_item_by_user_id": {
+                    var requestModel = AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = AcquireBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            requestModel.UserId,
+                            requestModel.InventoryName,
+                            "BigItem"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                            resultModel.Item.ItemName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    AcquireBigItemByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

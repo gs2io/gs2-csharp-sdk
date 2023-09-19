@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -87,275 +88,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMasterAsync(
-            #else
-        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMaster(
-            #endif
-        #else
-        public async Task<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMasterAsync(
-        #endif
-            ExportMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.ExportMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.ExportMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentFieldMaster"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2MegaField.Model.CurrentFieldMaster> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2MegaField.Model.CurrentFieldMaster> GetAsync(
-        #endif
-            GetCurrentFieldMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetCurrentFieldMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetCurrentFieldMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentFieldMaster"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateAsync(
-        #endif
-            UpdateCurrentFieldMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCurrentFieldMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateCurrentFieldMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentFieldMaster"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHubAsync(
-            #else
-        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHub(
-            #endif
-        #else
-        public async Task<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHubAsync(
-        #endif
-            UpdateCurrentFieldMasterFromGitHubRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateCurrentFieldMasterFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateCurrentFieldMasterFromGitHubAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentFieldMaster"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string childType
@@ -375,41 +107,583 @@ namespace Gs2.Gs2MegaField.Domain.Model
             return "Singleton";
         }
 
+    }
+
+    public partial class CurrentFieldMasterDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMasterFuture(
+            ExportMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.ExportMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                ExportMasterResult result = null;
+                    result = await this._client.ExportMasterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentFieldMaster"
+                        );
+                        var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMasterAsync(
+            ExportMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.ExportMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            ExportMasterResult result = null;
+                result = await this._client.ExportMasterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFieldMaster"
+                    );
+                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Model() {
-            #else
-        public IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Model() {
+        public async UniTask<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMasterAsync(
+            ExportMasterRequest request
+        ) {
+            var future = ExportMasterFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Model() {
+        [Obsolete("The name has been changed to ExportMasterFuture.")]
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> ExportMaster(
+            ExportMasterRequest request
+        ) {
+            return ExportMasterFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> GetFuture(
+            GetCurrentFieldMasterRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
-                       _parentKey,
-                       Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
-                _parentKey,
-                Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.GetCurrentFieldMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        );
+                        _cache.Put<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "currentFieldMaster")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                GetCurrentFieldMasterResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetCurrentFieldMasterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        );
+                    _cache.Put<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "currentFieldMaster")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentFieldMaster"
+                        );
+                        var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2MegaField.Model.CurrentFieldMaster> GetAsync(
+            GetCurrentFieldMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.GetCurrentFieldMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    );
+                    _cache.Put<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "currentFieldMaster")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            GetCurrentFieldMasterResult result = null;
+            try {
+                result = await this._client.GetCurrentFieldMasterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    );
+                _cache.Put<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "currentFieldMaster")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFieldMaster"
+                    );
+                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFuture(
+            UpdateCurrentFieldMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.UpdateCurrentFieldMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                UpdateCurrentFieldMasterResult result = null;
+                    result = await this._client.UpdateCurrentFieldMasterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentFieldMaster"
+                        );
+                        var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateAsync(
+            UpdateCurrentFieldMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.UpdateCurrentFieldMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            UpdateCurrentFieldMasterResult result = null;
+                result = await this._client.UpdateCurrentFieldMasterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFieldMaster"
+                    );
+                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateAsync(
+            UpdateCurrentFieldMasterRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> Update(
+            UpdateCurrentFieldMasterRequest request
+        ) {
+            return UpdateFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHubFuture(
+            UpdateCurrentFieldMasterFromGitHubRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.UpdateCurrentFieldMasterFromGitHubFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                UpdateCurrentFieldMasterFromGitHubResult result = null;
+                    result = await this._client.UpdateCurrentFieldMasterFromGitHubAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "CurrentFieldMaster"
+                        );
+                        var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHubAsync(
+            UpdateCurrentFieldMasterFromGitHubRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName);
+            var future = this._client.UpdateCurrentFieldMasterFromGitHubFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName);
+            UpdateCurrentFieldMasterFromGitHubResult result = null;
+                result = await this._client.UpdateCurrentFieldMasterFromGitHubAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "CurrentFieldMaster"
+                    );
+                    var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHubAsync(
+            UpdateCurrentFieldMasterFromGitHubRequest request
+        ) {
+            var future = UpdateFromGitHubFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
+        public IFuture<Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain> UpdateFromGitHub(
+            UpdateCurrentFieldMasterFromGitHubRequest request
+        ) {
+            return UpdateFromGitHubFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class CurrentFieldMasterDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                    _parentKey,
+                    Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetCurrentFieldMasterRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -427,6 +701,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                             if (e.errors[0].component != "currentFieldMaster")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -435,42 +710,85 @@ namespace Gs2.Gs2MegaField.Domain.Model
                             yield break;
                         }
                     }
+                    (value, _) = _cache.Get<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                        _parentKey,
+                        Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(Impl);
+        }
         #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
+        public async Task<Gs2.Gs2MegaField.Model.CurrentFieldMaster> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                    _parentKey,
+                    Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetCurrentFieldMasterRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                        );
+                                );
                     _cache.Put<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "currentFieldMaster")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
-                    _parentKey,
-                    Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(
+                        _parentKey,
+                        Gs2.Gs2MegaField.Domain.Model.CurrentFieldMasterDomain.CreateCacheKey(
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2MegaField.Model.CurrentFieldMaster> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2MegaField.Model.CurrentFieldMaster> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

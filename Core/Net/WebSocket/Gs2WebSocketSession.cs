@@ -536,8 +536,9 @@ namespace Gs2.Core.Net
                     this._inflightRequest.Remove(sessionRequest.TaskId);
                 }
             }
-
-            yield return null;
+            if (false) {
+                yield return null;
+            }
         }
         
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK

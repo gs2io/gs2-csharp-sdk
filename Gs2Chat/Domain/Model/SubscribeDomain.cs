@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,319 +97,6 @@ namespace Gs2.Gs2Chat.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> SubscribeAsync(
-            #else
-        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> Subscribe(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> SubscribeAsync(
-        #endif
-            SubscribeByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithRoomName(this.RoomName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.SubscribeByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.SubscribeByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Subscribe"
-                    );
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        resultModel.Item.RoomName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Chat.Domain.Model.SubscribeDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Chat.Model.Subscribe> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Chat.Model.Subscribe> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Chat.Model.Subscribe> GetAsync(
-        #endif
-            GetSubscribeByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithRoomName(this.RoomName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetSubscribeByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetSubscribeByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Subscribe"
-                    );
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        resultModel.Item.RoomName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Subscribe>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationTypeAsync(
-            #else
-        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationType(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationTypeAsync(
-        #endif
-            UpdateNotificationTypeByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithRoomName(this.RoomName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateNotificationTypeByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateNotificationTypeByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Subscribe"
-                    );
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        resultModel.Item.RoomName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Chat.Domain.Model.SubscribeDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UnsubscribeAsync(
-            #else
-        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> Unsubscribe(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UnsubscribeAsync(
-        #endif
-            UnsubscribeByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithRoomName(this.RoomName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UnsubscribeByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        request.RoomName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            UnsubscribeByUserIdResult result = null;
-            try {
-                result = await this._client.UnsubscribeByUserIdAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "subscribe")
-                {
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        request.RoomName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Subscribe"
-                    );
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        resultModel.Item.RoomName.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Chat.Domain.Model.SubscribeDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -436,43 +124,698 @@ namespace Gs2.Gs2Chat.Domain.Model
             );
         }
 
+    }
+
+    public partial class SubscribeDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> SubscribeFuture(
+            SubscribeByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                var future = this._client.SubscribeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                SubscribeByUserIdResult result = null;
+                    result = await this._client.SubscribeByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Subscribe"
+                        );
+                        var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            resultModel.Item.RoomName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> SubscribeAsync(
+            SubscribeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            var future = this._client.SubscribeByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            SubscribeByUserIdResult result = null;
+                result = await this._client.SubscribeByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Chat.Model.Subscribe> Model() {
-            #else
-        public IFuture<Gs2.Gs2Chat.Model.Subscribe> Model() {
+        public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> SubscribeAsync(
+            SubscribeByUserIdRequest request
+        ) {
+            var future = SubscribeFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Chat.Model.Subscribe> Model() {
+        [Obsolete("The name has been changed to SubscribeFuture.")]
+        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> Subscribe(
+            SubscribeByUserIdRequest request
+        ) {
+            return SubscribeFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Chat.Model.Subscribe> GetFuture(
+            GetSubscribeByUserIdRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Chat.Model.Subscribe>(
-                       _parentKey,
-                       Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                            this.RoomName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
-                _parentKey,
-                Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.RoomName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                var future = this._client.GetSubscribeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            request.RoomName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "subscribe")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                GetSubscribeByUserIdResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetSubscribeByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        request.RoomName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "subscribe")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Subscribe"
+                        );
+                        var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            resultModel.Item.RoomName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Subscribe>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Chat.Model.Subscribe> GetAsync(
+            GetSubscribeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            var future = this._client.GetSubscribeByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        request.RoomName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "subscribe")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            GetSubscribeByUserIdResult result = null;
+            try {
+                result = await this._client.GetSubscribeByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    request.RoomName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "subscribe")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationTypeFuture(
+            UpdateNotificationTypeByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                var future = this._client.UpdateNotificationTypeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                UpdateNotificationTypeByUserIdResult result = null;
+                    result = await this._client.UpdateNotificationTypeByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Subscribe"
+                        );
+                        var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            resultModel.Item.RoomName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationTypeAsync(
+            UpdateNotificationTypeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            var future = this._client.UpdateNotificationTypeByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            UpdateNotificationTypeByUserIdResult result = null;
+                result = await this._client.UpdateNotificationTypeByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationTypeAsync(
+            UpdateNotificationTypeByUserIdRequest request
+        ) {
+            var future = UpdateNotificationTypeFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateNotificationTypeFuture.")]
+        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UpdateNotificationType(
+            UpdateNotificationTypeByUserIdRequest request
+        ) {
+            return UpdateNotificationTypeFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UnsubscribeFuture(
+            UnsubscribeByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                var future = this._client.UnsubscribeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            request.RoomName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "subscribe")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithRoomName(this.RoomName);
+                UnsubscribeByUserIdResult result = null;
+                try {
+                    result = await this._client.UnsubscribeByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        request.RoomName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "subscribe")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Subscribe"
+                        );
+                        var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            resultModel.Item.RoomName.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UnsubscribeAsync(
+            UnsubscribeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            var future = this._client.UnsubscribeByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        request.RoomName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "subscribe")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithRoomName(this.RoomName);
+            UnsubscribeByUserIdResult result = null;
+            try {
+                result = await this._client.UnsubscribeByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    request.RoomName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "subscribe")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Subscribe"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        resultModel.Item.RoomName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> UnsubscribeAsync(
+            UnsubscribeByUserIdRequest request
+        ) {
+            var future = UnsubscribeFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UnsubscribeFuture.")]
+        public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeDomain> Unsubscribe(
+            UnsubscribeByUserIdRequest request
+        ) {
+            return UnsubscribeFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class SubscribeDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Chat.Model.Subscribe> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
+                    _parentKey,
+                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        this.RoomName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetSubscribeByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -491,6 +834,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                             if (e.errors[0].component != "subscribe")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -499,44 +843,89 @@ namespace Gs2.Gs2Chat.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
+                        _parentKey,
+                        Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
                             this.RoomName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Subscribe>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Chat.Model.Subscribe> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
+                    _parentKey,
+                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        this.RoomName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetSubscribeByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                                    this.RoomName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Chat.Model.Subscribe>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "subscribe")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
-                    _parentKey,
-                    Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        this.RoomName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Chat.Model.Subscribe>(
+                        _parentKey,
+                        Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                            this.RoomName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Subscribe>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Chat.Model.Subscribe> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Chat.Model.Subscribe> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Chat.Model.Subscribe> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Chat.Model.Subscribe> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

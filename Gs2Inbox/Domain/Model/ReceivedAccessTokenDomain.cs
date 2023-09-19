@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -115,44 +116,63 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inbox.Model.Received> Model() {
-            #else
-        public IFuture<Gs2.Gs2Inbox.Model.Received> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Inbox.Model.Received> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Inbox.Model.Received> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Model.Received> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Inbox.Model.Received>(
-                       _parentKey,
-                       Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
-                _parentKey,
-                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+                    _parentKey,
+                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Inbox.Model.Received>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2Inbox.Model.Received> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Inbox.Model.Received>(
+                    _parentKey,
+                    Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inbox.Model.Received> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Inbox.Model.Received> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Inbox.Model.Received> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Inbox.Model.Received> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

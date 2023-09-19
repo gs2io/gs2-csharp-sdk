@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -99,26 +100,75 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateAsync(
-            #else
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> Create(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateAsync(
-        #endif
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateFuture(
             CreateTakeOverRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                var future = this._client.CreateTakeOverFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                CreateTakeOverResult result = null;
+                    result = await this._client.CreateTakeOverAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "TakeOver"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            resultModel.Item.Type.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateAsync(
+            CreateTakeOverRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithType(this.Type);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateTakeOverFuture(
                 request
             );
@@ -130,10 +180,16 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateTakeOverAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithType(this.Type);
+            CreateTakeOverResult result = null;
+                result = await this._client.CreateTakeOverAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -156,56 +212,136 @@ namespace Gs2.Gs2Account.Domain.Model
                     );
                 }
             }
-            Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain domain = this;
+                var domain = this;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Account.Model.TakeOver> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Account.Model.TakeOver> Get(
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> CreateAsync(
+            CreateTakeOverRequest request
+        ) {
+            var future = CreateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        private async Task<Gs2.Gs2Account.Model.TakeOver> GetAsync(
+        [Obsolete("The name has been changed to CreateFuture.")]
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> Create(
+            CreateTakeOverRequest request
+        ) {
+            return CreateFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Account.Model.TakeOver> GetFuture(
             GetTakeOverRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOver> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                var future = this._client.GetTakeOverFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                GetTakeOverResult result = null;
+                try {
+                    result = await this._client.GetTakeOverAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "TakeOver"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            resultModel.Item.Type.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Account.Model.TakeOver> GetAsync(
+            GetTakeOverRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithType(this.Type);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetTakeOverFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetTakeOverAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithType(this.Type);
+            GetTakeOverResult result = null;
+            try {
+                result = await this._client.GetTakeOverAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -228,38 +364,80 @@ namespace Gs2.Gs2Account.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> UpdateAsync(
-        #endif
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> UpdateFuture(
             UpdateTakeOverRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                var future = this._client.UpdateTakeOverFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                UpdateTakeOverResult result = null;
+                    result = await this._client.UpdateTakeOverAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "TakeOver"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            resultModel.Item.Type.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> UpdateAsync(
+            UpdateTakeOverRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithType(this.Type);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UpdateTakeOverFuture(
                 request
             );
@@ -271,10 +449,16 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.UpdateTakeOverAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithType(this.Type);
+            UpdateTakeOverResult result = null;
+                result = await this._client.UpdateTakeOverAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -297,41 +481,105 @@ namespace Gs2.Gs2Account.Domain.Model
                     );
                 }
             }
-            Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain domain = this;
+                var domain = this;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> Delete(
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> UpdateAsync(
+            UpdateTakeOverRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteAsync(
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> Update(
+            UpdateTakeOverRequest request
+        ) {
+            return UpdateFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteFuture(
             DeleteTakeOverRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                var future = this._client.DeleteTakeOverFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithType(this.Type);
+                DeleteTakeOverResult result = null;
+                try {
+                    result = await this._client.DeleteTakeOverAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "TakeOver"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            resultModel.Item.Type.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteAsync(
+            DeleteTakeOverRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithType(this.Type);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.DeleteTakeOverFuture(
                 request
             );
@@ -347,21 +595,19 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             var result = future.Result;
             #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithType(this.Type);
             DeleteTakeOverResult result = null;
             try {
                 result = await this._client.DeleteTakeOverAsync(
                     request
                 );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "takeOver")
-                {
-                }
-                else
-                {
-                    throw e;
-                }
+            } catch (Gs2.Core.Exception.NotFoundException e) {
             }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -379,19 +625,32 @@ namespace Gs2.Gs2Account.Domain.Model
                     cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
                 }
             }
-            Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain domain = this;
+                var domain = this;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> DeleteAsync(
+            DeleteTakeOverRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> Delete(
+            DeleteTakeOverRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
 
         public static string CreateCacheParentKey(
             string namespaceName,
@@ -421,42 +680,20 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Model.TakeOver> Model() {
-            #else
-        public IFuture<Gs2.Gs2Account.Model.TakeOver> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Account.Model.TakeOver> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Account.Model.TakeOver> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOver> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Account.Model.TakeOver>(
-                       _parentKey,
-                       Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                            this.Type?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    this.Type?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
+                    _parentKey,
+                    Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                        this.Type?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetTakeOverRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -475,6 +712,7 @@ namespace Gs2.Gs2Account.Domain.Model
                             if (e.errors[0].component != "takeOver")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -483,44 +721,89 @@ namespace Gs2.Gs2Account.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
+                        _parentKey,
+                        Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                             this.Type?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
+                    _parentKey,
+                    Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                        this.Type?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetTakeOverRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                                    this.Type?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Account.Model.TakeOver>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "takeOver")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                    _parentKey,
-                    Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                        this.Type?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Account.Model.TakeOver>(
+                        _parentKey,
+                        Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            this.Type?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Account.Model.TakeOver> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Account.Model.TakeOver> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Account.Model.TakeOver> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

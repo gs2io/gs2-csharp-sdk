@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -125,46 +126,65 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Ranking.Model.Subscribe> Model() {
-            #else
-        public IFuture<Gs2.Gs2Ranking.Model.Subscribe> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Ranking.Model.Subscribe> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Ranking.Model.Subscribe> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Subscribe> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Ranking.Model.Subscribe>(
-                       _parentKey,
-                       Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                            this.CategoryName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
+                    _parentKey,
+                    Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        this.CategoryName?.ToString()
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.Subscribe>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2Ranking.Model.Subscribe> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
+                    _parentKey,
+                    Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
+                        this.CategoryName?.ToString()
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Ranking.Model.Subscribe> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Ranking.Model.Subscribe> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Ranking.Model.Subscribe> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Ranking.Model.Subscribe> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

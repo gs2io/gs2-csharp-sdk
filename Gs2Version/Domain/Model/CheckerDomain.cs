@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -97,63 +98,6 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionAsync(
-            #else
-        public IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersion(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionAsync(
-        #endif
-            CheckVersionByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.CheckVersionByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.CheckVersionByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            Gs2.Gs2Version.Domain.Model.CheckerDomain domain = this;
-            this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
-            this.Warnings = domain.Warnings = result?.Warnings;
-            this.Errors = domain.Errors = result?.Errors;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -174,6 +118,122 @@ namespace Gs2.Gs2Version.Domain.Model
         {
             return "Singleton";
         }
+
+    }
+
+    public partial class CheckerDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionFuture(
+            CheckVersionByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.CheckVersionByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                CheckVersionByUserIdResult result = null;
+                    result = await this._client.CheckVersionByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
+                this.Warnings = domain.Warnings = result?.Warnings;
+                this.Errors = domain.Errors = result?.Errors;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionAsync(
+            CheckVersionByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.CheckVersionByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            CheckVersionByUserIdResult result = null;
+                result = await this._client.CheckVersionByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
+            this.Warnings = domain.Warnings = result?.Warnings;
+            this.Errors = domain.Errors = result?.Errors;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionAsync(
+            CheckVersionByUserIdRequest request
+        ) {
+            var future = CheckVersionFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckVersionFuture.")]
+        public IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersion(
+            CheckVersionByUserIdRequest request
+        ) {
+            return CheckVersionFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class CheckerDomain {
 
     }
 }

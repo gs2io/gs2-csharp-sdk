@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -100,26 +101,80 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> CompleteAsync(
-            #else
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Complete(
-            #endif
-        #else
-        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> CompleteAsync(
-        #endif
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> CompleteFuture(
             CompleteRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithMissionGroupName(this.MissionGroupName);
+                var future = this._client.CompleteFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithMissionGroupName(this.MissionGroupName);
+                CompleteResult result = null;
+                    result = await this._client.CompleteAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this.AccessToken,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+
+                );
+                if (result?.StampSheet != null)
+                {
+                    var future2 = stampSheet.Wait();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+
+            self.OnComplete(stampSheet);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> CompleteAsync(
+            CompleteRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithMissionGroupName(this.MissionGroupName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CompleteFuture(
                 request
             );
@@ -131,10 +186,16 @@ namespace Gs2.Gs2Mission.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.CompleteAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithMissionGroupName(this.MissionGroupName);
+            CompleteResult result = null;
+                result = await this._client.CompleteAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -155,66 +216,195 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
             if (result?.StampSheet != null)
             {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future2 = stampSheet.Wait();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-        #else
                 await stampSheet.WaitAsync();
-        #endif
             }
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(stampSheet);
-        #else
             return stampSheet;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Mission.Model.Complete> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Mission.Model.Complete> Get(
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> CompleteAsync(
+            CompleteRequest request
+        ) {
+            var future = CompleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        private async Task<Gs2.Gs2Mission.Model.Complete> GetAsync(
+        [Obsolete("The name has been changed to CompleteFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Complete(
+            CompleteRequest request
+        ) {
+            return CompleteFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Mission.Model.Complete> GetFuture(
             GetCompleteRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Complete> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithMissionGroupName(this.MissionGroupName);
+                var future = this._client.GetCompleteFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                            request.MissionGroupName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Mission.Model.Complete>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "complete")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithMissionGroupName(this.MissionGroupName);
+                GetCompleteResult result = null;
+                try {
+                    result = await this._client.GetCompleteAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        request.MissionGroupName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Mission.Model.Complete>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "complete")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Complete"
+                        );
+                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                            resultModel.Item.MissionGroupName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Complete>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Mission.Model.Complete> GetAsync(
+            GetCompleteRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithMissionGroupName(this.MissionGroupName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetCompleteFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        request.MissionGroupName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Mission.Model.Complete>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "complete")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetCompleteAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithMissionGroupName(this.MissionGroupName);
+            GetCompleteResult result = null;
+            try {
+                result = await this._client.GetCompleteAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                    request.MissionGroupName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Mission.Model.Complete>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "complete")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -237,16 +427,9 @@ namespace Gs2.Gs2Mission.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Complete>(Impl);
-        #endif
         }
+        #endif
 
         public static string CreateCacheParentKey(
             string namespaceName,
@@ -276,42 +459,20 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Mission.Model.Complete> Model() {
-            #else
-        public IFuture<Gs2.Gs2Mission.Model.Complete> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Mission.Model.Complete> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Mission.Model.Complete> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Complete> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Mission.Model.Complete>(
-                       _parentKey,
-                       Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            this.MissionGroupName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    this.MissionGroupName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        this.MissionGroupName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetCompleteRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -330,6 +491,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                             if (e.errors[0].component != "complete")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -338,44 +500,89 @@ namespace Gs2.Gs2Mission.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
+                        _parentKey,
+                        Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
                             this.MissionGroupName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Complete>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Mission.Model.Complete> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
+                    _parentKey,
+                    Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                        this.MissionGroupName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetCompleteRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                                    this.MissionGroupName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Mission.Model.Complete>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "complete")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                    _parentKey,
-                    Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        this.MissionGroupName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Mission.Model.Complete>(
+                        _parentKey,
+                        Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
+                            this.MissionGroupName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Complete>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Mission.Model.Complete> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Mission.Model.Complete> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Mission.Model.Complete> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Mission.Model.Complete> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

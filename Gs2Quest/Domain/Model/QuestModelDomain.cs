@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,75 +97,6 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Quest.Model.QuestModel> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Quest.Model.QuestModel> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Quest.Model.QuestModel> GetAsync(
-        #endif
-            GetQuestModelRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestModel> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithQuestGroupName(this.QuestGroupName)
-                .WithQuestName(this.QuestName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetQuestModelFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetQuestModelAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.QuestGroupName,
-                        "QuestModel"
-                    );
-                    var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.QuestModel>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string questGroupName,
@@ -192,43 +124,216 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
+    }
+
+    public partial class QuestModelDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Quest.Model.QuestModel> Model() {
-            #else
-        public IFuture<Gs2.Gs2Quest.Model.QuestModel> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Quest.Model.QuestModel> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2Quest.Model.QuestModel> GetFuture(
+            GetQuestModelRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestModel> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Quest.Model.QuestModel>(
-                       _parentKey,
-                       Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                            this.QuestName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
-                _parentKey,
-                Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                    this.QuestName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithQuestGroupName(this.QuestGroupName)
+                    .WithQuestName(this.QuestName);
+                var future = this._client.GetQuestModelFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                            request.QuestName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "questModel")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithQuestGroupName(this.QuestGroupName)
+                    .WithQuestName(this.QuestName);
+                GetQuestModelResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetQuestModelAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                        request.QuestName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "questModel")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.QuestGroupName,
+                            "QuestModel"
+                        );
+                        var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.QuestModel>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Quest.Model.QuestModel> GetAsync(
+            GetQuestModelRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithQuestGroupName(this.QuestGroupName)
+                .WithQuestName(this.QuestName);
+            var future = this._client.GetQuestModelFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                        request.QuestName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "questModel")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithQuestGroupName(this.QuestGroupName)
+                .WithQuestName(this.QuestName);
+            GetQuestModelResult result = null;
+            try {
+                result = await this._client.GetQuestModelAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                    request.QuestName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "questModel")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.QuestGroupName,
+                        "QuestModel"
+                    );
+                    var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+    }
+
+    public partial class QuestModelDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Quest.Model.QuestModel> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestModel> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
+                    _parentKey,
+                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                        this.QuestName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetQuestModelRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -247,6 +352,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                             if (e.errors[0].component != "questModel")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -255,44 +361,89 @@ namespace Gs2.Gs2Quest.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
+                        _parentKey,
+                        Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                             this.QuestName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.QuestModel>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Quest.Model.QuestModel> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
+                    _parentKey,
+                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                        this.QuestName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetQuestModelRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                                    this.QuestName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Quest.Model.QuestModel>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "questModel")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                        this.QuestName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Quest.Model.QuestModel>(
+                        _parentKey,
+                        Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                            this.QuestName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.QuestModel>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Quest.Model.QuestModel> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Quest.Model.QuestModel> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Quest.Model.QuestModel> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Quest.Model.QuestModel> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

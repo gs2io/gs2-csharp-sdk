@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -103,43 +104,221 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
+        public static string CreateCacheParentKey(
+            string namespaceName,
+            string userId,
+            string inventoryName,
+            string itemName,
+            string childType
+        )
+        {
+            return string.Join(
+                ":",
+                "inventory",
+                namespaceName ?? "null",
+                userId ?? "null",
+                inventoryName ?? "null",
+                itemName ?? "null",
+                childType
+            );
+        }
+
+        public static string CreateCacheKey(
+            string itemName
+        )
+        {
+            return string.Join(
+                ":",
+                itemName ?? "null"
+            );
+        }
+
+    }
+
+    public partial class SimpleItemDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Inventory.Model.SimpleItem> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Inventory.Model.SimpleItem> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Inventory.Model.SimpleItem> GetAsync(
-        #endif
+        private IFuture<Gs2.Gs2Inventory.Model.SimpleItem> GetFuture(
             GetSimpleItemByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleItem> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                var future = this._client.GetSimpleItemByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                            request.ItemName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "simpleItem")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                GetSimpleItemByUserIdResult result = null;
+                try {
+                    result = await this._client.GetSimpleItemByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                        request.ItemName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "simpleItem")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.InventoryName,
+                            "SimpleItem"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                            resultModel.Item.ItemName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.ItemModel != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.InventoryName,
+                            "SimpleItemModel"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelDomain.CreateCacheKey(
+                            resultModel.ItemModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ItemModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleItem>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Inventory.Model.SimpleItem> GetAsync(
+            GetSimpleItemByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetSimpleItemByUserIdFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                        request.ItemName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "simpleItem")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetSimpleItemByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            GetSimpleItemByUserIdResult result = null;
+            try {
+                result = await this._client.GetSimpleItemByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                    request.ItemName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "simpleItem")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -179,54 +358,196 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleItem>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignatureAsync(
-            #else
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignature(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignatureAsync(
-        #endif
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignatureFuture(
             GetSimpleItemWithSignatureByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                var future = this._client.GetSimpleItemWithSignatureByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                            request.ItemName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "simpleItem")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                GetSimpleItemWithSignatureByUserIdResult result = null;
+                try {
+                    result = await this._client.GetSimpleItemWithSignatureByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                        request.ItemName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "simpleItem")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.InventoryName,
+                            "SimpleItem"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                            resultModel.Item.ItemName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.SimpleItemModel != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.InventoryName,
+                            "SimpleItemModel"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelDomain.CreateCacheKey(
+                            resultModel.SimpleItemModel.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.SimpleItemModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+                domain.Body = result?.Body;
+                domain.Signature = result?.Signature;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignatureAsync(
+            GetSimpleItemWithSignatureByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetSimpleItemWithSignatureByUserIdFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                        request.ItemName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "simpleItem")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetSimpleItemWithSignatureByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            GetSimpleItemWithSignatureByUserIdResult result = null;
+            try {
+                result = await this._client.GetSimpleItemWithSignatureByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                    request.ItemName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "simpleItem")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -266,88 +587,54 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     );
                 }
             }
-            Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain domain = this;
+                var domain = this;
             domain.Body = result?.Body;
             domain.Signature = result?.Signature;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>(Impl);
-        #endif
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string inventoryName,
-            string itemName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "inventory",
-                namespaceName ?? "null",
-                userId ?? "null",
-                inventoryName ?? "null",
-                itemName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string itemName
-        )
-        {
-            return string.Join(
-                ":",
-                itemName ?? "null"
-            );
-        }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inventory.Model.SimpleItem> Model() {
-            #else
-        public IFuture<Gs2.Gs2Inventory.Model.SimpleItem> Model() {
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignatureAsync(
+            GetSimpleItemWithSignatureByUserIdRequest request
+        ) {
+            var future = GetWithSignatureFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Inventory.Model.SimpleItem> Model() {
+        [Obsolete("The name has been changed to GetWithSignatureFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> GetWithSignature(
+            GetSimpleItemWithSignatureByUserIdRequest request
+        ) {
+            return GetWithSignatureFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+    }
+
+    public partial class SimpleItemDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Model.SimpleItem> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleItem> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Inventory.Model.SimpleItem>(
-                       _parentKey,
-                       Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                            this.ItemName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.SimpleItem>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                    this.ItemName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.SimpleItem>(
+                    _parentKey,
+                    Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                        this.ItemName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetSimpleItemByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -366,6 +653,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             if (e.errors[0].component != "simpleItem")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -374,44 +662,89 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Inventory.Model.SimpleItem>(
+                        _parentKey,
+                        Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
                             this.ItemName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleItem>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Model.SimpleItem> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.SimpleItem>(
+                    _parentKey,
+                    Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                        this.ItemName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetSimpleItemByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                                    this.ItemName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "simpleItem")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.SimpleItem>(
-                    _parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                        this.ItemName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Inventory.Model.SimpleItem>(
+                        _parentKey,
+                        Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
+                            this.ItemName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleItem>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Model.SimpleItem> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Inventory.Model.SimpleItem> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Model.SimpleItem> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Inventory.Model.SimpleItem> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

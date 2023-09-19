@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,247 +97,6 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> AcceptAsync(
-            #else
-        public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> Accept(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> AcceptAsync(
-        #endif
-            AcceptByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithVersionName(this.VersionName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.AcceptByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.AcceptByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "AcceptVersion"
-                    );
-                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                        resultModel.Item.VersionName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Version.Domain.Model.AcceptVersionDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Version.Model.AcceptVersion> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Version.Model.AcceptVersion> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Version.Model.AcceptVersion> GetAsync(
-        #endif
-            GetAcceptVersionByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithVersionName(this.VersionName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetAcceptVersionByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetAcceptVersionByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "AcceptVersion"
-                    );
-                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                        resultModel.Item.VersionName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Model.AcceptVersion>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> DeleteAsync(
-        #endif
-            DeleteAcceptVersionByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithVersionName(this.VersionName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteAcceptVersionByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                        request.VersionName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteAcceptVersionByUserIdResult result = null;
-            try {
-                result = await this._client.DeleteAcceptVersionByUserIdAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "acceptVersion")
-                {
-                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                        request.VersionName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "AcceptVersion"
-                    );
-                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                        resultModel.Item.VersionName.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Version.Domain.Model.AcceptVersionDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -364,43 +124,558 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
+    }
+
+    public partial class AcceptVersionDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> AcceptFuture(
+            AcceptByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithVersionName(this.VersionName);
+                var future = this._client.AcceptByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithVersionName(this.VersionName);
+                AcceptByUserIdResult result = null;
+                    result = await this._client.AcceptByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "AcceptVersion"
+                        );
+                        var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            resultModel.Item.VersionName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> AcceptAsync(
+            AcceptByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
+            var future = this._client.AcceptByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
+            AcceptByUserIdResult result = null;
+                result = await this._client.AcceptByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "AcceptVersion"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        resultModel.Item.VersionName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Model.AcceptVersion> Model() {
-            #else
-        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> Model() {
+        public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> AcceptAsync(
+            AcceptByUserIdRequest request
+        ) {
+            var future = AcceptFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Version.Model.AcceptVersion> Model() {
+        [Obsolete("The name has been changed to AcceptFuture.")]
+        public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> Accept(
+            AcceptByUserIdRequest request
+        ) {
+            return AcceptFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Version.Model.AcceptVersion> GetFuture(
+            GetAcceptVersionByUserIdRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Version.Model.AcceptVersion>(
-                       _parentKey,
-                       Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                            this.VersionName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
-                _parentKey,
-                Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                    this.VersionName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithVersionName(this.VersionName);
+                var future = this._client.GetAcceptVersionByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            request.VersionName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "acceptVersion")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithVersionName(this.VersionName);
+                GetAcceptVersionByUserIdResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetAcceptVersionByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "acceptVersion")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "AcceptVersion"
+                        );
+                        var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            resultModel.Item.VersionName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Model.AcceptVersion>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Version.Model.AcceptVersion> GetAsync(
+            GetAcceptVersionByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
+            var future = this._client.GetAcceptVersionByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "acceptVersion")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
+            GetAcceptVersionByUserIdResult result = null;
+            try {
+                result = await this._client.GetAcceptVersionByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                    request.VersionName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "acceptVersion")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "AcceptVersion"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        resultModel.Item.VersionName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> DeleteFuture(
+            DeleteAcceptVersionByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithVersionName(this.VersionName);
+                var future = this._client.DeleteAcceptVersionByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            request.VersionName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "acceptVersion")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithVersionName(this.VersionName);
+                DeleteAcceptVersionByUserIdResult result = null;
+                try {
+                    result = await this._client.DeleteAcceptVersionByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "acceptVersion")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "AcceptVersion"
+                        );
+                        var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            resultModel.Item.VersionName.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> DeleteAsync(
+            DeleteAcceptVersionByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
+            var future = this._client.DeleteAcceptVersionByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "acceptVersion")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithVersionName(this.VersionName);
+            DeleteAcceptVersionByUserIdResult result = null;
+            try {
+                result = await this._client.DeleteAcceptVersionByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                    request.VersionName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "acceptVersion")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "AcceptVersion"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        resultModel.Item.VersionName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> DeleteAsync(
+            DeleteAcceptVersionByUserIdRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionDomain> Delete(
+            DeleteAcceptVersionByUserIdRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class AcceptVersionDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
+                    _parentKey,
+                    Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        this.VersionName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetAcceptVersionByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -419,6 +694,7 @@ namespace Gs2.Gs2Version.Domain.Model
                             if (e.errors[0].component != "acceptVersion")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -427,44 +703,89 @@ namespace Gs2.Gs2Version.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                             this.VersionName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Model.AcceptVersion>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Model.AcceptVersion> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
+                    _parentKey,
+                    Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                        this.VersionName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetAcceptVersionByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                                    this.VersionName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Version.Model.AcceptVersion>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "acceptVersion")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
-                    _parentKey,
-                    Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
-                        this.VersionName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Version.Model.AcceptVersion>(
+                        _parentKey,
+                        Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
+                            this.VersionName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Model.AcceptVersion>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Version.Model.AcceptVersion> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Version.Model.AcceptVersion> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Version.Model.AcceptVersion> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

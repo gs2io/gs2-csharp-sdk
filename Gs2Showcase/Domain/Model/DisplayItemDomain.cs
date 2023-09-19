@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -103,28 +104,134 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
         }
 
+        public static string CreateCacheParentKey(
+            string namespaceName,
+            string userId,
+            string showcaseName,
+            string displayItemId,
+            string childType
+        )
+        {
+            return string.Join(
+                ":",
+                "showcase",
+                namespaceName ?? "null",
+                userId ?? "null",
+                showcaseName ?? "null",
+                displayItemId ?? "null",
+                childType
+            );
+        }
+
+        public static string CreateCacheKey(
+            string displayItemId
+        )
+        {
+            return string.Join(
+                ":",
+                displayItemId ?? "null"
+            );
+        }
+
+    }
+
+    public partial class DisplayItemDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> BuyAsync(
-            #else
-        public IFuture<Gs2.Core.Domain.TransactionDomain> Buy(
-            #endif
-        #else
-        public async Task<Gs2.Core.Domain.TransactionDomain> BuyAsync(
-        #endif
+        public IFuture<Gs2.Core.Domain.TransactionDomain> BuyFuture(
             BuyByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithShowcaseName(this.ShowcaseName)
+                    .WithDisplayItemId(this.DisplayItemId);
+                var future = this._client.BuyByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithShowcaseName(this.ShowcaseName)
+                    .WithDisplayItemId(this.DisplayItemId);
+                BuyByUserIdResult result = null;
+                    result = await this._client.BuyByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.ShowcaseName,
+                            this.DisplayItemId,
+                            "SalesItem"
+                        );
+                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+
+                );
+                if (result?.StampSheet != null)
+                {
+                    var future2 = stampSheet.Wait();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+
+            self.OnComplete(stampSheet);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Domain.TransactionDomain> BuyAsync(
+            BuyByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithShowcaseName(this.ShowcaseName)
                 .WithDisplayItemId(this.DisplayItemId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.BuyByUserIdFuture(
                 request
             );
@@ -136,10 +243,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.BuyByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithShowcaseName(this.ShowcaseName)
+                .WithDisplayItemId(this.DisplayItemId);
+            BuyByUserIdResult result = null;
+                result = await this._client.BuyByUserIdAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -177,100 +291,98 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
             if (result?.StampSheet != null)
             {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future2 = stampSheet.Wait();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-        #else
                 await stampSheet.WaitAsync();
-        #endif
             }
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(stampSheet);
-        #else
             return stampSheet;
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
-        #endif
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string showcaseName,
-            string displayItemId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "showcase",
-                namespaceName ?? "null",
-                userId ?? "null",
-                showcaseName ?? "null",
-                displayItemId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string displayItemId
-        )
-        {
-            return string.Join(
-                ":",
-                displayItemId ?? "null"
-            );
-        }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> Model() {
-            #else
-        public IFuture<Gs2.Gs2Showcase.Model.DisplayItem> Model() {
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> BuyAsync(
+            BuyByUserIdRequest request
+        ) {
+            var future = BuyFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Showcase.Model.DisplayItem> Model() {
+        [Obsolete("The name has been changed to BuyFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionDomain> Buy(
+            BuyByUserIdRequest request
+        ) {
+            return BuyFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+    }
+
+    public partial class DisplayItemDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Showcase.Model.DisplayItem> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.DisplayItem> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Showcase.Model.DisplayItem>(
-                       _parentKey,
-                       Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                    this.DisplayItemId?.ToString()
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
+                    _parentKey,
+                    Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
+                        this.DisplayItemId?.ToString()
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.DisplayItem>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
+                    _parentKey,
+                    Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
+                        this.DisplayItemId?.ToString()
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Showcase.Model.DisplayItem> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Showcase.Model.DisplayItem> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

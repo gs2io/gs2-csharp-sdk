@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -100,41 +101,166 @@ namespace Gs2.Gs2Idle.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Idle.Model.Status> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Idle.Model.Status> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Idle.Model.Status> GetAsync(
-        #endif
+        private IFuture<Gs2.Gs2Idle.Model.Status> GetFuture(
             GetStatusRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCategoryName(this.CategoryName);
+                var future = this._client.GetStatusFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                            request.CategoryName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "status")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCategoryName(this.CategoryName);
+                GetStatusResult result = null;
+                try {
+                    result = await this._client.GetStatusAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                        request.CategoryName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "status")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Item.CategoryName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Idle.Model.Status> GetAsync(
+            GetStatusRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithCategoryName(this.CategoryName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetStatusFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                        request.CategoryName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "status")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetStatusAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithCategoryName(this.CategoryName);
+            GetStatusResult result = null;
+            try {
+                result = await this._client.GetStatusAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                    request.CategoryName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "status")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -157,38 +283,78 @@ namespace Gs2.Gs2Idle.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
-            #else
-        public IFuture<Gs2.Core.Model.AcquireAction[]> Prediction(
-            #endif
-        #else
-        public async Task<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
-        #endif
+        public IFuture<Gs2.Core.Model.AcquireAction[]> PredictionFuture(
             PredictionRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Model.AcquireAction[]> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCategoryName(this.CategoryName);
+                var future = this._client.PredictionFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCategoryName(this.CategoryName);
+                PredictionResult result = null;
+                    result = await this._client.PredictionAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Status != null) {
+                        var parentKey = Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Status.CategoryName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Status,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Items);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Model.AcquireAction[]>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
+            PredictionRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithCategoryName(this.CategoryName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.PredictionFuture(
                 request
             );
@@ -200,10 +366,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.PredictionAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithCategoryName(this.CategoryName);
+            PredictionResult result = null;
+                result = await this._client.PredictionAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -226,38 +398,106 @@ namespace Gs2.Gs2Idle.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Items);
-        #else
             return result?.Items;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Model.AcquireAction[]>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
-            #else
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Receive(
+        public async UniTask<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
+            PredictionRequest request
+        ) {
+            var future = PredictionFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
+        [Obsolete("The name has been changed to PredictionFuture.")]
+        public IFuture<Gs2.Core.Model.AcquireAction[]> Prediction(
+            PredictionRequest request
+        ) {
+            return PredictionFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveFuture(
             ReceiveRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCategoryName(this.CategoryName);
+                var future = this._client.ReceiveFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCategoryName(this.CategoryName);
+                ReceiveResult result = null;
+                    result = await this._client.ReceiveAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this.AccessToken,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+
+                );
+                if (result?.StampSheet != null)
+                {
+                    var future2 = stampSheet.Wait();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+
+            self.OnComplete(stampSheet);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
+            ReceiveRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithCategoryName(this.CategoryName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.ReceiveFuture(
                 request
             );
@@ -269,10 +509,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.ReceiveAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithCategoryName(this.CategoryName);
+            ReceiveResult result = null;
+                result = await this._client.ReceiveAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -293,29 +539,33 @@ namespace Gs2.Gs2Idle.Domain.Model
             );
             if (result?.StampSheet != null)
             {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future2 = stampSheet.Wait();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-        #else
                 await stampSheet.WaitAsync();
-        #endif
             }
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(stampSheet);
-        #else
             return stampSheet;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
+            ReceiveRequest request
+        ) {
+            var future = ReceiveFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to ReceiveFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Receive(
+            ReceiveRequest request
+        ) {
+            return ReceiveFuture(request);
+        }
+        #endif
 
         public static string CreateCacheParentKey(
             string namespaceName,
@@ -345,42 +595,20 @@ namespace Gs2.Gs2Idle.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Model.Status> Model() {
-            #else
-        public IFuture<Gs2.Gs2Idle.Model.Status> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Idle.Model.Status> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Idle.Model.Status> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Idle.Model.Status>(
-                       _parentKey,
-                       Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
-                            this.CategoryName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
-                _parentKey,
-                Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                    _parentKey,
+                    Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                        this.CategoryName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetStatusRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -399,6 +627,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                             if (e.errors[0].component != "status")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -407,44 +636,89 @@ namespace Gs2.Gs2Idle.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                        _parentKey,
+                        Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                             this.CategoryName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Idle.Model.Status> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                    _parentKey,
+                    Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                        this.CategoryName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetStatusRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                                    this.CategoryName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Idle.Model.Status>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "status")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                        _parentKey,
+                        Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
+                            this.CategoryName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Idle.Model.Status> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Idle.Model.Status> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Idle.Model.Status> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Idle.Model.Status> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

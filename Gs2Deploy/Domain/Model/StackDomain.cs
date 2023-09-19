@@ -41,6 +41,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -86,684 +87,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
             );
             this._stackName = stackName;
             this._parentKey = "deploy:Stack";
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatus(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusAsync(
-        #endif
-            GetStackStatusRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetStackStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetStackStatusAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-            this.Status = domain.Status = result?.Status;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Deploy.Model.Stack> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Deploy.Model.Stack> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Deploy.Model.Stack> GetAsync(
-        #endif
-            GetStackRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Stack> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetStackFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetStackAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateAsync(
-        #endif
-            UpdateStackRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateStackFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateStackAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSet(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
-        #endif
-            ChangeSetRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.ChangeSetFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.ChangeSetAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            var domain = result?.Items;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.ChangeSet[]>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHub(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubAsync(
-        #endif
-            UpdateStackFromGitHubRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateStackFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateStackFromGitHubAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteAsync(
-        #endif
-            DeleteStackRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteStackFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        request.StackName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteStackResult result = null;
-            try {
-                result = await this._client.DeleteStackAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "stack")
-                {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        request.StackName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDelete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteAsync(
-        #endif
-            ForceDeleteStackRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.ForceDeleteStackFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.ForceDeleteStackAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResources(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesAsync(
-        #endif
-            DeleteStackResourcesRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteStackResourcesFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        request.StackName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteStackResourcesResult result = null;
-            try {
-                result = await this._client.DeleteStackResourcesAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "stack")
-                {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        request.StackName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityAsync(
-            #else
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntity(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityAsync(
-        #endif
-            DeleteStackEntityRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteStackEntityFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        request.StackName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteStackEntityResult result = null;
-            try {
-                result = await this._client.DeleteStackEntityAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "stack")
-                {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        request.StackName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Deploy.Domain.Model.StackDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        #endif
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -933,48 +256,1437 @@ namespace Gs2.Gs2Deploy.Domain.Model
             );
         }
 
+    }
+
+    public partial class StackDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusFuture(
+            GetStackStatusRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.GetStackStatusFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            request.StackName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "stack")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                GetStackStatusResult result = null;
+                try {
+                    result = await this._client.GetStackStatusAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "stack")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.Status = domain.Status = result?.Status;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusAsync(
+            GetStackStatusRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.GetStackStatusFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "stack")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            GetStackStatusResult result = null;
+            try {
+                result = await this._client.GetStackStatusAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    request.StackName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "stack")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.Status = domain.Status = result?.Status;
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Model.Stack> Model() {
-            #else
-        public IFuture<Gs2.Gs2Deploy.Model.Stack> Model() {
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusAsync(
+            GetStackStatusRequest request
+        ) {
+            var future = GetStatusFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Model.Stack> Model() {
+        [Obsolete("The name has been changed to GetStatusFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatus(
+            GetStackStatusRequest request
+        ) {
+            return GetStatusFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Deploy.Model.Stack> GetFuture(
+            GetStackRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Stack> self)
             {
-        #endif
-            var parentKey = string.Join(
-                ":",
-                "deploy",
-                "Stack"
-            );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Deploy.Model.Stack>(
-                       _parentKey,
-                       Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                            this.StackName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
-                parentKey,
-                Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                    this.StackName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.GetStackFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            request.StackName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "stack")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                GetStackResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetStackAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "stack")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Deploy.Model.Stack> GetAsync(
+            GetStackRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.GetStackFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "stack")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            GetStackResult result = null;
+            try {
+                result = await this._client.GetStackAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    request.StackName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "stack")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFuture(
+            UpdateStackRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.UpdateStackFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                UpdateStackResult result = null;
+                    result = await this._client.UpdateStackAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateAsync(
+            UpdateStackRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.UpdateStackFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            UpdateStackResult result = null;
+                result = await this._client.UpdateStackAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateAsync(
+            UpdateStackRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> Update(
+            UpdateStackRequest request
+        ) {
+            return UpdateFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetFuture(
+            ChangeSetRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> self)
+            {
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.ChangeSetFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = result?.Items;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.ChangeSet[]>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
+            ChangeSetRequest request
+        ) {
+            request
+                .WithStackName(this.StackName);
+            ChangeSetResult result = null;
+                result = await this._client.ChangeSetAsync(
+                    request
+                );
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+            var domain = result?.Items;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
+            ChangeSetRequest request
+        ) {
+            var future = ChangeSetFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to ChangeSetFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSet(
+            ChangeSetRequest request
+        ) {
+            return ChangeSetFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubFuture(
+            UpdateStackFromGitHubRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.UpdateStackFromGitHubFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                UpdateStackFromGitHubResult result = null;
+                    result = await this._client.UpdateStackFromGitHubAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubAsync(
+            UpdateStackFromGitHubRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.UpdateStackFromGitHubFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            UpdateStackFromGitHubResult result = null;
+                result = await this._client.UpdateStackFromGitHubAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubAsync(
+            UpdateStackFromGitHubRequest request
+        ) {
+            var future = UpdateFromGitHubFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHub(
+            UpdateStackFromGitHubRequest request
+        ) {
+            return UpdateFromGitHubFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteFuture(
+            DeleteStackRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.DeleteStackFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            request.StackName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "stack")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                DeleteStackResult result = null;
+                try {
+                    result = await this._client.DeleteStackAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "stack")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteAsync(
+            DeleteStackRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.DeleteStackFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "stack")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            DeleteStackResult result = null;
+            try {
+                result = await this._client.DeleteStackAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    request.StackName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "stack")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteAsync(
+            DeleteStackRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> Delete(
+            DeleteStackRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteFuture(
+            ForceDeleteStackRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.ForceDeleteStackFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                ForceDeleteStackResult result = null;
+                    result = await this._client.ForceDeleteStackAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteAsync(
+            ForceDeleteStackRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.ForceDeleteStackFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            ForceDeleteStackResult result = null;
+                result = await this._client.ForceDeleteStackAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteAsync(
+            ForceDeleteStackRequest request
+        ) {
+            var future = ForceDeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to ForceDeleteFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDelete(
+            ForceDeleteStackRequest request
+        ) {
+            return ForceDeleteFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesFuture(
+            DeleteStackResourcesRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.DeleteStackResourcesFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            request.StackName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "stack")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                DeleteStackResourcesResult result = null;
+                try {
+                    result = await this._client.DeleteStackResourcesAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "stack")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesAsync(
+            DeleteStackResourcesRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.DeleteStackResourcesFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "stack")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            DeleteStackResourcesResult result = null;
+            try {
+                result = await this._client.DeleteStackResourcesAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    request.StackName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "stack")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesAsync(
+            DeleteStackResourcesRequest request
+        ) {
+            var future = DeleteResourcesFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteResourcesFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResources(
+            DeleteStackResourcesRequest request
+        ) {
+            return DeleteResourcesFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityFuture(
+            DeleteStackEntityRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName);
+                var future = this._client.DeleteStackEntityFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            request.StackName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "stack")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName);
+                DeleteStackEntityResult result = null;
+                try {
+                    result = await this._client.DeleteStackEntityAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "stack")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "deploy",
+                            "Stack"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityAsync(
+            DeleteStackEntityRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName);
+            var future = this._client.DeleteStackEntityFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        request.StackName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "stack")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName);
+            DeleteStackEntityResult result = null;
+            try {
+                result = await this._client.DeleteStackEntityAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    request.StackName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "stack")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                {
+                    var parentKey = string.Join(
+                        ":",
+                        "deploy",
+                        "Stack"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityAsync(
+            DeleteStackEntityRequest request
+        ) {
+            var future = DeleteEntityFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteEntityFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntity(
+            DeleteStackEntityRequest request
+        ) {
+            return DeleteEntityFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class StackDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Model.Stack> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Stack> self)
+            {
+                var parentKey = string.Join(
+                    ":",
+                    "deploy",
+                    "Stack"
+                );
+                var (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
+                    parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        this.StackName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetStackRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -993,6 +1705,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             if (e.errors[0].component != "stack")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -1001,44 +1714,94 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
+                        parentKey,
+                        Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             this.StackName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
+        {
+            var parentKey = string.Join(
+                ":",
+                "deploy",
+                "Stack"
+            );
+            var (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
+                    parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                        this.StackName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetStackRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                                    this.StackName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Deploy.Model.Stack>(
                         parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "stack")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
-                    parentKey,
-                    Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        this.StackName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Deploy.Model.Stack>(
+                        parentKey,
+                        Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                            this.StackName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Deploy.Model.Stack> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Model.Stack> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Deploy.Model.Stack> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

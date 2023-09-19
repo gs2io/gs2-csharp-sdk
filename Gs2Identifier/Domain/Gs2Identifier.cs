@@ -85,22 +85,68 @@ namespace Gs2.Gs2Identifier.Domain
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
-            #else
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUser(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
-        #endif
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserFuture(
             CreateUserRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CreateUserFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CreateUserResult result = null;
+                    result = await this._client.CreateUserAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "identifier",
+                            "User"
+                        );
+                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
+            CreateUserRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.CreateUserFuture(
                 request
             );
@@ -112,10 +158,12 @@ namespace Gs2.Gs2Identifier.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateUserAsync(
-                request
-            );
+            CreateUserResult result = null;
+                result = await this._client.CreateUserAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -138,42 +186,101 @@ namespace Gs2.Gs2Identifier.Domain
                     );
                 }
             }
-            var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                result?.Item?.Name
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
-            #else
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicy(
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
+            CreateUserRequest request
+        ) {
+            var future = CreateUserFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
+        [Obsolete("The name has been changed to CreateUserFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUser(
+            CreateUserRequest request
+        ) {
+            return CreateUserFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyFuture(
             CreateSecurityPolicyRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CreateSecurityPolicyFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CreateSecurityPolicyResult result = null;
+                    result = await this._client.CreateSecurityPolicyAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "identifier",
+                            "SecurityPolicy"
+                        );
+                        var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
+            CreateSecurityPolicyRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.CreateSecurityPolicyFuture(
                 request
             );
@@ -185,10 +292,12 @@ namespace Gs2.Gs2Identifier.Domain
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateSecurityPolicyAsync(
-                request
-            );
+            CreateSecurityPolicyResult result = null;
+                result = await this._client.CreateSecurityPolicyAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -211,24 +320,37 @@ namespace Gs2.Gs2Identifier.Domain
                     );
                 }
             }
-            var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                result?.Item?.Name
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
+                var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    result?.Item?.Name
+                );
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
+            CreateSecurityPolicyRequest request
+        ) {
+            var future = CreateSecurityPolicyFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CreateSecurityPolicyFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicy(
+            CreateSecurityPolicyRequest request
+        ) {
+            return CreateSecurityPolicyFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Identifier.Model.User> Users(

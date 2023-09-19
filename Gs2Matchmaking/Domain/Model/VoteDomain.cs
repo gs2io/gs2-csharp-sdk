@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -95,61 +96,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> CommitAsync(
-            #else
-        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> Commit(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> CommitAsync(
-        #endif
-            CommitVoteRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithRatingName(this.RatingName)
-                .WithGatheringName(this.GatheringName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.CommitVoteFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.CommitVoteAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-            }
-            Gs2.Gs2Matchmaking.Domain.Model.VoteDomain domain = this;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string ratingName,
@@ -179,49 +125,182 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
+    }
+
+    public partial class VoteDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> CommitFuture(
+            CommitVoteRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithRatingName(this.RatingName)
+                    .WithGatheringName(this.GatheringName);
+                var future = this._client.CommitVoteFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithRatingName(this.RatingName)
+                    .WithGatheringName(this.GatheringName);
+                CommitVoteResult result = null;
+                    result = await this._client.CommitVoteAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> CommitAsync(
+            CommitVoteRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithRatingName(this.RatingName)
+                .WithGatheringName(this.GatheringName);
+            var future = this._client.CommitVoteFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithRatingName(this.RatingName)
+                .WithGatheringName(this.GatheringName);
+            CommitVoteResult result = null;
+                result = await this._client.CommitVoteAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Matchmaking.Model.Vote> Model() {
-            #else
-        public IFuture<Gs2.Gs2Matchmaking.Model.Vote> Model() {
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> CommitAsync(
+            CommitVoteRequest request
+        ) {
+            var future = CommitFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Matchmaking.Model.Vote> Model() {
+        [Obsolete("The name has been changed to CommitFuture.")]
+        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> Commit(
+            CommitVoteRequest request
+        ) {
+            return CommitFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+    }
+
+    public partial class VoteDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Matchmaking.Model.Vote> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Vote> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Vote>(
-                       _parentKey,
-                       Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                            this.RatingName?.ToString(),
-                            this.GatheringName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                    this.RatingName?.ToString(),
-                    this.GatheringName?.ToString()
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
+                        this.RatingName?.ToString(),
+                        this.GatheringName?.ToString()
+                    )
+                );
+                self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Vote>(Impl);
-        #endif
         }
+        #else
+        public async Task<Gs2.Gs2Matchmaking.Model.Vote> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
+                    _parentKey,
+                    Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
+                        this.RatingName?.ToString(),
+                        this.GatheringName?.ToString()
+                    )
+                );
+            return value;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Matchmaking.Model.Vote> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Matchmaking.Model.Vote> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Matchmaking.Model.Vote> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Matchmaking.Model.Vote> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

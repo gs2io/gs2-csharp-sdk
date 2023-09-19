@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -91,241 +92,6 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Version.Model.VersionModelMaster> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Version.Model.VersionModelMaster> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Version.Model.VersionModelMaster> GetAsync(
-        #endif
-            GetVersionModelMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.VersionModelMaster> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithVersionName(this.VersionName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetVersionModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetVersionModelMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "VersionModelMaster"
-                    );
-                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Model.VersionModelMaster>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> UpdateAsync(
-            #else
-        public IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> Update(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> UpdateAsync(
-        #endif
-            UpdateVersionModelMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithVersionName(this.VersionName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.UpdateVersionModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.UpdateVersionModelMasterAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "VersionModelMaster"
-                    );
-                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-            Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> DeleteAsync(
-        #endif
-            DeleteVersionModelMasterRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithVersionName(this.VersionName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteVersionModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                        request.VersionName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteVersionModelMasterResult result = null;
-            try {
-                result = await this._client.DeleteVersionModelMasterAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "versionModelMaster")
-                {
-                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                        request.VersionName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "VersionModelMaster"
-                    );
-                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Version.Model.VersionModelMaster>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string versionName,
@@ -351,43 +117,540 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
+    }
+
+    public partial class VersionModelMasterDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Model.VersionModelMaster> Model() {
-            #else
-        public IFuture<Gs2.Gs2Version.Model.VersionModelMaster> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Version.Model.VersionModelMaster> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2Version.Model.VersionModelMaster> GetFuture(
+            GetVersionModelMasterRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.VersionModelMaster> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Version.Model.VersionModelMaster>(
-                       _parentKey,
-                       Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                            this.VersionName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Version.Model.VersionModelMaster>(
-                _parentKey,
-                Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                    this.VersionName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithVersionName(this.VersionName);
+                var future = this._client.GetVersionModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                            request.VersionName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "versionModelMaster")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithVersionName(this.VersionName);
+                GetVersionModelMasterResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetVersionModelMasterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "versionModelMaster")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "VersionModelMaster"
+                        );
+                        var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Model.VersionModelMaster>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Version.Model.VersionModelMaster> GetAsync(
+            GetVersionModelMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithVersionName(this.VersionName);
+            var future = this._client.GetVersionModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "versionModelMaster")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithVersionName(this.VersionName);
+            GetVersionModelMasterResult result = null;
+            try {
+                result = await this._client.GetVersionModelMasterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                    request.VersionName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "versionModelMaster")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "VersionModelMaster"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> UpdateFuture(
+            UpdateVersionModelMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithVersionName(this.VersionName);
+                var future = this._client.UpdateVersionModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithVersionName(this.VersionName);
+                UpdateVersionModelMasterResult result = null;
+                    result = await this._client.UpdateVersionModelMasterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "VersionModelMaster"
+                        );
+                        var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> UpdateAsync(
+            UpdateVersionModelMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithVersionName(this.VersionName);
+            var future = this._client.UpdateVersionModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithVersionName(this.VersionName);
+            UpdateVersionModelMasterResult result = null;
+                result = await this._client.UpdateVersionModelMasterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "VersionModelMaster"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> UpdateAsync(
+            UpdateVersionModelMasterRequest request
+        ) {
+            var future = UpdateFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UpdateFuture.")]
+        public IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> Update(
+            UpdateVersionModelMasterRequest request
+        ) {
+            return UpdateFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> DeleteFuture(
+            DeleteVersionModelMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithVersionName(this.VersionName);
+                var future = this._client.DeleteVersionModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                            request.VersionName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "versionModelMaster")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithVersionName(this.VersionName);
+                DeleteVersionModelMasterResult result = null;
+                try {
+                    result = await this._client.DeleteVersionModelMasterAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "versionModelMaster")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "VersionModelMaster"
+                        );
+                        var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Version.Model.VersionModelMaster>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> DeleteAsync(
+            DeleteVersionModelMasterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithVersionName(this.VersionName);
+            var future = this._client.DeleteVersionModelMasterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        request.VersionName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "versionModelMaster")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithVersionName(this.VersionName);
+            DeleteVersionModelMasterResult result = null;
+            try {
+                result = await this._client.DeleteVersionModelMasterAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                    request.VersionName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "versionModelMaster")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "VersionModelMaster"
+                    );
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Version.Model.VersionModelMaster>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> DeleteAsync(
+            DeleteVersionModelMasterRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain> Delete(
+            DeleteVersionModelMasterRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class VersionModelMasterDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Version.Model.VersionModelMaster> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.VersionModelMaster> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Version.Model.VersionModelMaster>(
+                    _parentKey,
+                    Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        this.VersionName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetVersionModelMasterRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -406,6 +669,7 @@ namespace Gs2.Gs2Version.Domain.Model
                             if (e.errors[0].component != "versionModelMaster")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -414,44 +678,89 @@ namespace Gs2.Gs2Version.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Version.Model.VersionModelMaster>(
+                        _parentKey,
+                        Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
                             this.VersionName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Version.Model.VersionModelMaster>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Version.Model.VersionModelMaster> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Version.Model.VersionModelMaster>(
+                    _parentKey,
+                    Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                        this.VersionName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetVersionModelMasterRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                                    this.VersionName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Version.Model.VersionModelMaster>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "versionModelMaster")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Version.Model.VersionModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
-                        this.VersionName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Version.Model.VersionModelMaster>(
+                        _parentKey,
+                        Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain.CreateCacheKey(
+                            this.VersionName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Model.VersionModelMaster>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Version.Model.VersionModelMaster> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Version.Model.VersionModelMaster> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Version.Model.VersionModelMaster> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Version.Model.VersionModelMaster> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -91,73 +92,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Deploy.Model.Resource> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Deploy.Model.Resource> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Deploy.Model.Resource> GetAsync(
-        #endif
-            GetResourceRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Resource> self)
-            {
-        #endif
-            request
-                .WithStackName(this.StackName)
-                .WithResourceName(this.ResourceName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetResourceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetResourceAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
-                        this.StackName,
-                        "Resource"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Resource>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string stackName,
             string resourceName,
@@ -183,43 +117,210 @@ namespace Gs2.Gs2Deploy.Domain.Model
             );
         }
 
+    }
+
+    public partial class ResourceDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Model.Resource> Model() {
-            #else
-        public IFuture<Gs2.Gs2Deploy.Model.Resource> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Deploy.Model.Resource> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2Deploy.Model.Resource> GetFuture(
+            GetResourceRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Resource> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Deploy.Model.Resource>(
-                       _parentKey,
-                       Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                            this.ResourceName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
-                _parentKey,
-                Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                    this.ResourceName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithStackName(this.StackName)
+                    .WithResourceName(this.ResourceName);
+                var future = this._client.GetResourceFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                            request.ResourceName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Deploy.Model.Resource>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "resource")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithStackName(this.StackName)
+                    .WithResourceName(this.ResourceName);
+                GetResourceResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetResourceAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        request.ResourceName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Resource>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "resource")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
+                            this.StackName,
+                            "Resource"
+                        );
+                        var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Resource>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Deploy.Model.Resource> GetAsync(
+            GetResourceRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithStackName(this.StackName)
+                .WithResourceName(this.ResourceName);
+            var future = this._client.GetResourceFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        request.ResourceName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Deploy.Model.Resource>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "resource")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithStackName(this.StackName)
+                .WithResourceName(this.ResourceName);
+            GetResourceResult result = null;
+            try {
+                result = await this._client.GetResourceAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                    request.ResourceName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Deploy.Model.Resource>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "resource")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
+                        this.StackName,
+                        "Resource"
+                    );
+                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+    }
+
+    public partial class ResourceDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Deploy.Model.Resource> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Resource> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
+                    _parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        this.ResourceName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetResourceRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -238,6 +339,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             if (e.errors[0].component != "resource")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -246,44 +348,89 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
+                        _parentKey,
+                        Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                             this.ResourceName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Resource>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Deploy.Model.Resource> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
+                    _parentKey,
+                    Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                        this.ResourceName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetResourceRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                                    this.ResourceName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Deploy.Model.Resource>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "resource")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
-                    _parentKey,
-                    Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
-                        this.ResourceName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Deploy.Model.Resource>(
+                        _parentKey,
+                        Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                            this.ResourceName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Resource>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Deploy.Model.Resource> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Deploy.Model.Resource> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Deploy.Model.Resource> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Deploy.Model.Resource> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

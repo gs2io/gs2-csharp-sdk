@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -83,23 +84,71 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this._parentKey = "identifier:ProjectToken";
         }
 
+        public static string CreateCacheParentKey(
+            string childType
+        )
+        {
+            return string.Join(
+                ":",
+                "identifier",
+                childType
+            );
+        }
+
+        public static string CreateCacheKey(
+        )
+        {
+            return "Singleton";
+        }
+
+    }
+
+    public partial class ProjectTokenDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginAsync(
-            #else
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> Login(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginAsync(
-        #endif
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginFuture(
             LoginRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.LoginFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                LoginResult result = null;
+                    result = await this._client.LoginAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.AccessToken = domain.AccessToken = result?.AccessToken;
+                this.TokenType = domain.TokenType = result?.TokenType;
+                this.ExpiresIn = domain.ExpiresIn = result?.ExpiresIn;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginAsync(
+            LoginRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.LoginFuture(
                 request
             );
@@ -111,49 +160,104 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.LoginAsync(
-                request
-            );
+            LoginResult result = null;
+                result = await this._client.LoginAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
             if (resultModel != null) {
                 
             }
-            Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
+                var domain = this;
             this.AccessToken = domain.AccessToken = result?.AccessToken;
             this.TokenType = domain.TokenType = result?.TokenType;
             this.ExpiresIn = domain.ExpiresIn = result?.ExpiresIn;
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUserAsync(
-            #else
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUser(
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginAsync(
+            LoginRequest request
+        ) {
+            var future = LoginFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUserAsync(
+        [Obsolete("The name has been changed to LoginFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> Login(
+            LoginRequest request
+        ) {
+            return LoginFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUserFuture(
             LoginByUserRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> self)
             {
-        #endif
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.LoginByUserFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                LoginByUserResult result = null;
+                    result = await this._client.LoginByUserAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    {
+                        var parentKey = string.Join(
+                            ":",
+                            "identifier",
+                            "ProjectToken"
+                        );
+                        var key = Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUserAsync(
+            LoginByUserRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             var future = this._client.LoginByUserFuture(
                 request
             );
@@ -165,10 +269,12 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.LoginByUserAsync(
-                request
-            );
+            LoginByUserResult result = null;
+                result = await this._client.LoginByUserAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -190,81 +296,105 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     );
                 }
             }
-            Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain domain = this;
+                var domain = this;
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain>(Impl);
-        #endif
-        }
-
-        public static string CreateCacheParentKey(
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "identifier",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Model.ProjectToken> Model() {
-            #else
-        public IFuture<Gs2.Gs2Identifier.Model.ProjectToken> Model() {
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUserAsync(
+            LoginByUserRequest request
+        ) {
+            var future = LoginByUserFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Identifier.Model.ProjectToken> Model() {
+        [Obsolete("The name has been changed to LoginByUserFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUser(
+            LoginByUserRequest request
+        ) {
+            return LoginByUserFuture(request);
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+    }
+
+    public partial class ProjectTokenDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Identifier.Model.ProjectToken> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.ProjectToken> self)
             {
-        #endif
+                var parentKey = string.Join(
+                    ":",
+                    "identifier",
+                    "ProjectToken"
+                );
+                var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.ProjectToken>(
+                    parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                    )
+                );
+                self.OnComplete(value);
+                return null;
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.ProjectToken>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Identifier.Model.ProjectToken> ModelAsync()
+        {
             var parentKey = string.Join(
                 ":",
                 "identifier",
                 "ProjectToken"
             );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Identifier.Model.ProjectToken>(
-                       _parentKey,
-                       Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                        )).LockAsync())
-            {
-        # endif
             var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.ProjectToken>(
-                parentKey,
-                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
+                    parentKey,
+                    Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                    )
+                );
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.ProjectToken>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Identifier.Model.ProjectToken> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Identifier.Model.ProjectToken> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Identifier.Model.ProjectToken> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Identifier.Model.ProjectToken> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

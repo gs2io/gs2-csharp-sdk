@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -94,26 +95,118 @@ namespace Gs2.Gs2Exchange.Domain.Model
             );
         }
 
+        public static string CreateCacheParentKey(
+            string namespaceName,
+            string userId,
+            string childType
+        )
+        {
+            return string.Join(
+                ":",
+                "exchange",
+                namespaceName ?? "null",
+                userId ?? "null",
+                childType
+            );
+        }
+
+        public static string CreateCacheKey(
+        )
+        {
+            return "Singleton";
+        }
+
+    }
+
+    public partial class ExchangeDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> ExchangeAsync(
-            #else
-        public IFuture<Gs2.Core.Domain.TransactionDomain> Exchange(
-            #endif
-        #else
-        public async Task<Gs2.Core.Domain.TransactionDomain> ExchangeAsync(
-        #endif
+        public IFuture<Gs2.Core.Domain.TransactionDomain> ExchangeFuture(
             ExchangeByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.ExchangeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                ExchangeByUserIdResult result = null;
+                    result = await this._client.ExchangeByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "RateModel"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+
+                );
+                if (result?.StampSheet != null)
+                {
+                    var future2 = stampSheet.Wait();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+
+            self.OnComplete(stampSheet);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Domain.TransactionDomain> ExchangeAsync(
+            ExchangeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.ExchangeByUserIdFuture(
                 request
             );
@@ -125,10 +218,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.ExchangeByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            ExchangeByUserIdResult result = null;
+                result = await this._client.ExchangeByUserIdAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -164,50 +262,121 @@ namespace Gs2.Gs2Exchange.Domain.Model
             );
             if (result?.StampSheet != null)
             {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future2 = stampSheet.Wait();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-        #else
                 await stampSheet.WaitAsync();
-        #endif
             }
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(stampSheet);
-        #else
             return stampSheet;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> IncrementalAsync(
-            #else
-        public IFuture<Gs2.Core.Domain.TransactionDomain> Incremental(
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> ExchangeAsync(
+            ExchangeByUserIdRequest request
+        ) {
+            var future = ExchangeFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Core.Domain.TransactionDomain> IncrementalAsync(
+        [Obsolete("The name has been changed to ExchangeFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionDomain> Exchange(
+            ExchangeByUserIdRequest request
+        ) {
+            return ExchangeFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.TransactionDomain> IncrementalFuture(
             IncrementalExchangeByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.IncrementalExchangeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                IncrementalExchangeByUserIdResult result = null;
+                    result = await this._client.IncrementalExchangeByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "IncrementalRateModel"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+
+                );
+                if (result?.StampSheet != null)
+                {
+                    var future2 = stampSheet.Wait();
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+
+            self.OnComplete(stampSheet);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Core.Domain.TransactionDomain> IncrementalAsync(
+            IncrementalExchangeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.IncrementalExchangeByUserIdFuture(
                 request
             );
@@ -219,10 +388,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.IncrementalExchangeByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            IncrementalExchangeByUserIdResult result = null;
+                result = await this._client.IncrementalExchangeByUserIdAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -258,50 +432,107 @@ namespace Gs2.Gs2Exchange.Domain.Model
             );
             if (result?.StampSheet != null)
             {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future2 = stampSheet.Wait();
-                yield return future2;
-                if (future2.Error != null)
-                {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-        #else
                 await stampSheet.WaitAsync();
-        #endif
             }
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(stampSheet);
-        #else
             return stampSheet;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
-        #endif
         }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalAsync(
-            #else
-        public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncremental(
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> IncrementalAsync(
+            IncrementalExchangeByUserIdRequest request
+        ) {
+            var future = IncrementalFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
             #endif
-        #else
-        public async Task<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalAsync(
+        [Obsolete("The name has been changed to IncrementalFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionDomain> Incremental(
+            IncrementalExchangeByUserIdRequest request
+        ) {
+            return IncrementalFuture(request);
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalFuture(
             UnlockIncrementalExchangeByUserIdRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.UnlockIncrementalExchangeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                UnlockIncrementalExchangeByUserIdResult result = null;
+                    result = await this._client.UnlockIncrementalExchangeByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "IncrementalRateModel"
+                        );
+                        var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalAsync(
+            UnlockIncrementalExchangeByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.UnlockIncrementalExchangeByUserIdFuture(
                 request
             );
@@ -313,10 +544,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.UnlockIncrementalExchangeByUserIdAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            UnlockIncrementalExchangeByUserIdResult result = null;
+                result = await this._client.UnlockIncrementalExchangeByUserIdAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -338,47 +574,43 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     );
                 }
             }
-            var domain = new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                request.NamespaceName,
-                result?.Item?.Name
-            );
+                var domain = new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    result?.Item?.Name
+                );
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
+        }
         #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncrementalAsync(
+            UnlockIncrementalExchangeByUserIdRequest request
+        ) {
+            var future = UnlockIncrementalFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
             }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain>(Impl);
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to UnlockIncrementalFuture.")]
+        public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain> UnlockIncremental(
+            UnlockIncrementalExchangeByUserIdRequest request
+        ) {
+            return UnlockIncrementalFuture(request);
+        }
         #endif
-        }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "exchange",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
+    }
 
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
+    public partial class ExchangeDomain {
 
     }
 }

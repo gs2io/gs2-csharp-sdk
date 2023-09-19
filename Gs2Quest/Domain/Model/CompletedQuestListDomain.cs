@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -96,175 +97,6 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Quest.Model.CompletedQuestList> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Quest.Model.CompletedQuestList> GetAsync(
-        #endif
-            GetCompletedQuestListByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithQuestGroupName(this.QuestGroupName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.GetCompletedQuestListByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
-            var result = await this._client.GetCompletedQuestListByUserIdAsync(
-                request
-            );
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "CompletedQuestList"
-                    );
-                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                        resultModel.Item.QuestGroupName.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
-            return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.CompletedQuestList>(Impl);
-        #endif
-        }
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> DeleteAsync(
-            #else
-        public IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> Delete(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> DeleteAsync(
-        #endif
-            DeleteCompletedQuestListByUserIdRequest request
-        ) {
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> self)
-            {
-        #endif
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithQuestGroupName(this.QuestGroupName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            var future = this._client.DeleteCompletedQuestListByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                        request.QuestGroupName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
-            DeleteCompletedQuestListByUserIdResult result = null;
-            try {
-                result = await this._client.DeleteCompletedQuestListByUserIdAsync(
-                    request
-                );
-            } catch(Gs2.Core.Exception.NotFoundException e) {
-                if (e.errors[0].component == "completedQuestList")
-                {
-                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                        request.QuestGroupName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-            #endif
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "CompletedQuestList"
-                    );
-                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                        resultModel.Item.QuestGroupName.ToString()
-                    );
-                    cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(parentKey, key);
-                }
-            }
-            Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain domain = this;
-
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
-            return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain>(Impl);
-        #endif
-        }
-
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,
@@ -292,43 +124,418 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
+    }
+
+    public partial class CompletedQuestListDomain {
+
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Quest.Model.CompletedQuestList> Model() {
-            #else
-        public IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Quest.Model.CompletedQuestList> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        private IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> GetFuture(
+            GetCompletedQuestListByUserIdRequest request
+        ) {
+
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                       _parentKey,
-                       Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                            this.QuestGroupName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                _parentKey,
-                Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                    this.QuestGroupName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithQuestGroupName(this.QuestGroupName);
+                var future = this._client.GetCompletedQuestListByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                            request.QuestGroupName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "completedQuestList")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithQuestGroupName(this.QuestGroupName);
+                GetCompletedQuestListByUserIdResult result = null;
                 try {
-                    await this.GetAsync(
+                    result = await this._client.GetCompletedQuestListByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        request.QuestGroupName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "completedQuestList")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "CompletedQuestList"
+                        );
+                        var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                            resultModel.Item.QuestGroupName.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.CompletedQuestList>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Quest.Model.CompletedQuestList> GetAsync(
+            GetCompletedQuestListByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithQuestGroupName(this.QuestGroupName);
+            var future = this._client.GetCompletedQuestListByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        request.QuestGroupName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "completedQuestList")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithQuestGroupName(this.QuestGroupName);
+            GetCompletedQuestListByUserIdResult result = null;
+            try {
+                result = await this._client.GetCompletedQuestListByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                    request.QuestGroupName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "completedQuestList")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "CompletedQuestList"
+                    );
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        resultModel.Item.QuestGroupName.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> DeleteFuture(
+            DeleteCompletedQuestListByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithQuestGroupName(this.QuestGroupName);
+                var future = this._client.DeleteCompletedQuestListByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                            request.QuestGroupName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "completedQuestList")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithQuestGroupName(this.QuestGroupName);
+                DeleteCompletedQuestListByUserIdResult result = null;
+                try {
+                    result = await this._client.DeleteCompletedQuestListByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        request.QuestGroupName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "completedQuestList")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "CompletedQuestList"
+                        );
+                        var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                            resultModel.Item.QuestGroupName.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(parentKey, key);
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> DeleteAsync(
+            DeleteCompletedQuestListByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithQuestGroupName(this.QuestGroupName);
+            var future = this._client.DeleteCompletedQuestListByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        request.QuestGroupName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "completedQuestList")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithQuestGroupName(this.QuestGroupName);
+            DeleteCompletedQuestListByUserIdResult result = null;
+            try {
+                result = await this._client.DeleteCompletedQuestListByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                    request.QuestGroupName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "completedQuestList")
+                {
+                    throw;
+                }
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "CompletedQuestList"
+                    );
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        resultModel.Item.QuestGroupName.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(parentKey, key);
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> DeleteAsync(
+            DeleteCompletedQuestListByUserIdRequest request
+        ) {
+            var future = DeleteFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteFuture.")]
+        public IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain> Delete(
+            DeleteCompletedQuestListByUserIdRequest request
+        ) {
+            return DeleteFuture(request);
+        }
+        #endif
+
+    }
+
+    public partial class CompletedQuestListDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> ModelFuture()
+        {
+            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> self)
+            {
+                var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    _parentKey,
+                    Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        this.QuestGroupName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetCompletedQuestListByUserIdRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -347,6 +554,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                             if (e.errors[0].component != "completedQuestList")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -355,44 +563,89 @@ namespace Gs2.Gs2Quest.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _parentKey,
+                        Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
                             this.QuestGroupName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.CompletedQuestList>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Quest.Model.CompletedQuestList> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    _parentKey,
+                    Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                        this.QuestGroupName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetCompletedQuestListByUserIdRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                                    this.QuestGroupName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Quest.Model.CompletedQuestList>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "completedQuestList")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                    _parentKey,
-                    Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
-                        this.QuestGroupName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                        _parentKey,
+                        Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain.CreateCacheKey(
+                            this.QuestGroupName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.CompletedQuestList>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Quest.Model.CompletedQuestList> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Quest.Model.CompletedQuestList> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Quest.Model.CompletedQuestList> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }

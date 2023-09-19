@@ -9,7 +9,9 @@ namespace Gs2.Core.Domain
     public class CacheDatabase
     {
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>>();
+        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, List<object>>>> _cacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<string, List<object>>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCached = new Dictionary<Type, HashSet<string>>();
+        private readonly Dictionary<Type, Dictionary<string, List<object>>> _listCacheUpdateCallback = new Dictionary<Type, Dictionary<string, List<object>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCacheUpdateRequired = new Dictionary<Type, HashSet<string>>();
         private readonly Dictionary<Type, Dictionary<string, object>> _listCacheContexts = new Dictionary<Type, Dictionary<string, object>>();
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, AsyncLock>>> _lockObjects = new Dictionary<Type, Dictionary<string, Dictionary<string, AsyncLock>>>();
@@ -43,6 +45,12 @@ namespace Gs2.Core.Domain
         public void RequireListCacheUpdate<TKind>(string parentKey)
         {
             _listCacheUpdateRequired.Ensure(typeof(TKind)).Add(parentKey);
+            {
+                var callbacks = this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey);
+                foreach (var callback in callbacks) {
+                    (callback as Action)?.Invoke();
+                }
+            }
         }
 
         private bool IsListCacheUpdateRequired<TKind>(string parentKey)
@@ -57,6 +65,42 @@ namespace Gs2.Core.Domain
                 ttl = UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.DefaultCacheMinutes;
             }
             _cache.Ensure(typeof(TKind)).Ensure(parentKey)[key] = new Tuple<object, long>(obj, ttl);
+            {
+                var callbacks = this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey);
+                foreach (var callback in callbacks) {
+                    (callback as Action)?.Invoke();
+                }
+            }
+            {
+                var callbacks = this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key);
+                foreach (var callback in callbacks) {
+                    (callback as Action<TKind>)?.Invoke(obj);
+                }
+            }
+        }
+
+        public void Subscribe<TKind>(string parentKey, string key, Action<TKind> subscribe)
+        {
+            var callbacks = this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key);
+            callbacks.Add(subscribe);
+        }
+
+        public void Unsubscribe<TKind>(string parentKey, string key, Action<TKind> subscribe)
+        {
+            var callbacks = this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key);
+            callbacks.Remove(subscribe);
+        }
+
+        public void ListSubscribe<TKind>(string parentKey, Action subscribe)
+        {
+            var callbacks = this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey);
+            callbacks.Add(subscribe);
+        }
+
+        public void ListUnsubscribe<TKind>(string parentKey, Action subscribe)
+        {
+            var callbacks = this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey);
+            callbacks.Remove(subscribe);
         }
 
         public void Delete<TKind>(string parentKey, string key)

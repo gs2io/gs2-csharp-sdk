@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -94,25 +95,81 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomAsync(
-            #else
-        public IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoom(
-            #endif
-        #else
-        public async Task<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomAsync(
-        #endif
+        public IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomFuture(
             CreateRoomRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                var future = this._client.CreateRoomFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                CreateRoomResult result = null;
+                    result = await this._client.CreateRoomAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "Singleton",
+                            "Room"
+                        );
+                        var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    this._accessToken,
+                    result?.Item?.Name,
+                    result?.Item?.Password
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomAsync(
+            CreateRoomRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.CreateRoomFuture(
                 request
             );
@@ -124,10 +181,15 @@ namespace Gs2.Gs2Chat.Domain.Model
             }
             var result = future.Result;
             #else
-            var result = await this._client.CreateRoomAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            CreateRoomResult result = null;
+                result = await this._client.CreateRoomAsync(
+                    request
+                );
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -150,28 +212,41 @@ namespace Gs2.Gs2Chat.Domain.Model
                     );
                 }
             }
-            var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                request.NamespaceName,
-                this._accessToken,
-                result?.Item?.Name,
-                result?.Item?.Password
-            );
+                var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    this._accessToken,
+                    result?.Item?.Name,
+                    result?.Item?.Password
+                );
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(domain);
-            yield return null;
-        #else
             return domain;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomAsync(
+            CreateRoomRequest request
+        ) {
+            var future = CreateRoomFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CreateRoomFuture.")]
+        public IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoom(
+            CreateRoomRequest request
+        ) {
+            return CreateRoomFuture(request);
+        }
+        #endif
 
         public Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain Room(
             string roomName,

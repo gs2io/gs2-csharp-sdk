@@ -39,6 +39,7 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
@@ -98,41 +99,166 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        private async UniTask<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
-            #else
-        private IFuture<Gs2.Gs2Showcase.Model.Showcase> Get(
-            #endif
-        #else
-        private async Task<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
-        #endif
+        private IFuture<Gs2.Gs2Showcase.Model.Showcase> GetFuture(
             GetShowcaseRequest request
         ) {
 
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Showcase> self)
             {
-        #endif
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithShowcaseName(this.ShowcaseName);
+                var future = this._client.GetShowcaseFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                            request.ShowcaseName.ToString()
+                        );
+                        _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "showcase")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithShowcaseName(this.ShowcaseName);
+                GetShowcaseResult result = null;
+                try {
+                    result = await this._client.GetShowcaseAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                        request.ShowcaseName.ToString()
+                        );
+                    _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.Errors[0].Component != "showcase")
+                    {
+                        throw;
+                    }
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Showcase"
+                        );
+                        var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
+        }
+        #else
+        private async Task<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            GetShowcaseRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithShowcaseName(this.ShowcaseName);
-            #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             var future = this._client.GetShowcaseFuture(
                 request
             );
             yield return future;
             if (future.Error != null)
             {
-                self.OnError(future.Error);
-                yield break;
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                        request.ShowcaseName.ToString()
+                    );
+                    _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (future.Error.Errors[0].Component != "showcase")
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
             }
             var result = future.Result;
             #else
-            var result = await this._client.GetShowcaseAsync(
-                request
-            );
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithShowcaseName(this.ShowcaseName);
+            GetShowcaseResult result = null;
+            try {
+                result = await this._client.GetShowcaseAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                    request.ShowcaseName.ToString()
+                    );
+                _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "showcase")
+                {
+                    throw;
+                }
+            }
             #endif
+
             var requestModel = request;
             var resultModel = result;
             var cache = _cache;
@@ -155,16 +281,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     );
                 }
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(result?.Item);
-        #else
             return result?.Item;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
-        #endif
         }
+        #endif
 
         public Gs2.Gs2Showcase.Domain.Model.DisplayItemAccessTokenDomain DisplayItem(
             string displayItemId
@@ -209,42 +328,20 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Showcase.Model.Showcase> Model() {
-            #else
-        public IFuture<Gs2.Gs2Showcase.Model.Showcase> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Showcase.Model.Showcase> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2Showcase.Model.Showcase> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Showcase> self)
             {
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Showcase.Model.Showcase>(
-                       _parentKey,
-                       Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                            this.ShowcaseName?.ToString()
-                        )).LockAsync())
-            {
-        # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                    this.ShowcaseName?.ToString()
-                )
-            );
-            if (!find) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    var future = this.Get(
-        #else
-                try {
-                    await this.GetAsync(
-        #endif
+                var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                    _parentKey,
+                    Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                        this.ShowcaseName?.ToString()
+                    )
+                );
+                if (!find) {
+                    var future = this.GetFuture(
                         new GetShowcaseRequest()
                     );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                     yield return future;
                     if (future.Error != null)
                     {
@@ -263,6 +360,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             if (e.errors[0].component != "showcase")
                             {
                                 self.OnError(future.Error);
+                                yield break;
                             }
                         }
                         else
@@ -271,44 +369,89 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             yield break;
                         }
                     }
-        #else
-                } catch(Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                    (value, _) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                        _parentKey,
+                        Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                             this.ShowcaseName?.ToString()
-                        );
+                        )
+                    );
+                }
+                self.OnComplete(value);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
+        {
+            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                    _parentKey,
+                    Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                        this.ShowcaseName?.ToString()
+                    )
+                );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetShowcaseRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                                    this.ShowcaseName?.ToString()
+                                );
                     _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         key,
                         null,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
+
                     if (e.errors[0].component != "showcase")
                     {
-                        throw e;
+                        throw;
                     }
                 }
-        #endif
-                (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        this.ShowcaseName?.ToString()
-                    )
-                );
+                (value, _) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                        _parentKey,
+                        Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                            this.ShowcaseName?.ToString()
+                        )
+                    );
             }
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
-        #endif
         }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Showcase.Model.Showcase> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Showcase.Model.Showcase> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Showcase.Model.Showcase> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
 
     }
 }
