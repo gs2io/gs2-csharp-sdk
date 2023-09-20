@@ -544,6 +544,21 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata.ToString());
                 }
+                if (request.Scope != null)
+                {
+                    jsonWriter.WritePropertyName("scope");
+                    jsonWriter.Write(request.Scope.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.CurrentVersion != null)
+                {
+                    jsonWriter.WritePropertyName("currentVersion");
+                    request.CurrentVersion.WriteJson(jsonWriter);
+                }
                 if (request.WarningVersion != null)
                 {
                     jsonWriter.WritePropertyName("warningVersion");
@@ -554,15 +569,15 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("errorVersion");
                     request.ErrorVersion.WriteJson(jsonWriter);
                 }
-                if (request.Scope != null)
+                if (request.ScheduleVersions != null)
                 {
-                    jsonWriter.WritePropertyName("scope");
-                    jsonWriter.Write(request.Scope.ToString());
-                }
-                if (request.CurrentVersion != null)
-                {
-                    jsonWriter.WritePropertyName("currentVersion");
-                    request.CurrentVersion.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("scheduleVersions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ScheduleVersions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.NeedSignature != null)
                 {
@@ -800,6 +815,21 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata.ToString());
                 }
+                if (request.Scope != null)
+                {
+                    jsonWriter.WritePropertyName("scope");
+                    jsonWriter.Write(request.Scope.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.CurrentVersion != null)
+                {
+                    jsonWriter.WritePropertyName("currentVersion");
+                    request.CurrentVersion.WriteJson(jsonWriter);
+                }
                 if (request.WarningVersion != null)
                 {
                     jsonWriter.WritePropertyName("warningVersion");
@@ -810,15 +840,15 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("errorVersion");
                     request.ErrorVersion.WriteJson(jsonWriter);
                 }
-                if (request.Scope != null)
+                if (request.ScheduleVersions != null)
                 {
-                    jsonWriter.WritePropertyName("scope");
-                    jsonWriter.Write(request.Scope.ToString());
-                }
-                if (request.CurrentVersion != null)
-                {
-                    jsonWriter.WritePropertyName("currentVersion");
-                    request.CurrentVersion.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("scheduleVersions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ScheduleVersions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.NeedSignature != null)
                 {

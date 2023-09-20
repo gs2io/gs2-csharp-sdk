@@ -914,6 +914,21 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.Scope != null)
+                {
+                    jsonWriter.WritePropertyName("scope");
+                    jsonWriter.Write(request.Scope);
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type);
+                }
+                if (request.CurrentVersion != null)
+                {
+                    jsonWriter.WritePropertyName("currentVersion");
+                    request.CurrentVersion.WriteJson(jsonWriter);
+                }
                 if (request.WarningVersion != null)
                 {
                     jsonWriter.WritePropertyName("warningVersion");
@@ -924,15 +939,15 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("errorVersion");
                     request.ErrorVersion.WriteJson(jsonWriter);
                 }
-                if (request.Scope != null)
+                if (request.ScheduleVersions != null)
                 {
-                    jsonWriter.WritePropertyName("scope");
-                    jsonWriter.Write(request.Scope);
-                }
-                if (request.CurrentVersion != null)
-                {
-                    jsonWriter.WritePropertyName("currentVersion");
-                    request.CurrentVersion.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("scheduleVersions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ScheduleVersions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.NeedSignature != null)
                 {
@@ -1177,6 +1192,21 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.Scope != null)
+                {
+                    jsonWriter.WritePropertyName("scope");
+                    jsonWriter.Write(request.Scope);
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type);
+                }
+                if (request.CurrentVersion != null)
+                {
+                    jsonWriter.WritePropertyName("currentVersion");
+                    request.CurrentVersion.WriteJson(jsonWriter);
+                }
                 if (request.WarningVersion != null)
                 {
                     jsonWriter.WritePropertyName("warningVersion");
@@ -1187,15 +1217,15 @@ namespace Gs2.Gs2Version
                     jsonWriter.WritePropertyName("errorVersion");
                     request.ErrorVersion.WriteJson(jsonWriter);
                 }
-                if (request.Scope != null)
+                if (request.ScheduleVersions != null)
                 {
-                    jsonWriter.WritePropertyName("scope");
-                    jsonWriter.Write(request.Scope);
-                }
-                if (request.CurrentVersion != null)
-                {
-                    jsonWriter.WritePropertyName("currentVersion");
-                    request.CurrentVersion.WriteJson(jsonWriter);
+                    jsonWriter.WritePropertyName("scheduleVersions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ScheduleVersions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.NeedSignature != null)
                 {

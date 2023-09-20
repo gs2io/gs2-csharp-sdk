@@ -34,10 +34,12 @@ namespace Gs2.Gs2Version.Model
         public string VersionModelId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
+        public string Scope { set; get; }
+        public string Type { set; get; }
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
         public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
         public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
-        public string Scope { set; get; }
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
+        public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
         public bool? NeedSignature { set; get; }
         public string SignatureKeyId { set; get; }
         public VersionModel WithVersionModelId(string versionModelId) {
@@ -52,6 +54,18 @@ namespace Gs2.Gs2Version.Model
             this.Metadata = metadata;
             return this;
         }
+        public VersionModel WithScope(string scope) {
+            this.Scope = scope;
+            return this;
+        }
+        public VersionModel WithType(string type) {
+            this.Type = type;
+            return this;
+        }
+        public VersionModel WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
+            this.CurrentVersion = currentVersion;
+            return this;
+        }
         public VersionModel WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
             this.WarningVersion = warningVersion;
             return this;
@@ -60,12 +74,8 @@ namespace Gs2.Gs2Version.Model
             this.ErrorVersion = errorVersion;
             return this;
         }
-        public VersionModel WithScope(string scope) {
-            this.Scope = scope;
-            return this;
-        }
-        public VersionModel WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
-            this.CurrentVersion = currentVersion;
+        public VersionModel WithScheduleVersions(Gs2.Gs2Version.Model.ScheduleVersion[] scheduleVersions) {
+            this.ScheduleVersions = scheduleVersions;
             return this;
         }
         public VersionModel WithNeedSignature(bool? needSignature) {
@@ -157,24 +167,39 @@ namespace Gs2.Gs2Version.Model
                 .WithVersionModelId(!data.Keys.Contains("versionModelId") || data["versionModelId"] == null ? null : data["versionModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithCurrentVersion(!data.Keys.Contains("currentVersion") || data["currentVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["currentVersion"]))
                 .WithWarningVersion(!data.Keys.Contains("warningVersion") || data["warningVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["warningVersion"]))
                 .WithErrorVersion(!data.Keys.Contains("errorVersion") || data["errorVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["errorVersion"]))
-                .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
-                .WithCurrentVersion(!data.Keys.Contains("currentVersion") || data["currentVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["currentVersion"]))
+                .WithScheduleVersions(!data.Keys.Contains("scheduleVersions") || data["scheduleVersions"] == null ? new Gs2.Gs2Version.Model.ScheduleVersion[]{} : data["scheduleVersions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Version.Model.ScheduleVersion.FromJson(v);
+                }).ToArray())
                 .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))
                 .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString());
         }
 
         public JsonData ToJson()
         {
+            JsonData scheduleVersionsJsonData = null;
+            if (ScheduleVersions != null)
+            {
+                scheduleVersionsJsonData = new JsonData();
+                foreach (var scheduleVersion in ScheduleVersions)
+                {
+                    scheduleVersionsJsonData.Add(scheduleVersion.ToJson());
+                }
+            }
             return new JsonData {
                 ["versionModelId"] = VersionModelId,
                 ["name"] = Name,
                 ["metadata"] = Metadata,
+                ["scope"] = Scope,
+                ["type"] = Type,
+                ["currentVersion"] = CurrentVersion?.ToJson(),
                 ["warningVersion"] = WarningVersion?.ToJson(),
                 ["errorVersion"] = ErrorVersion?.ToJson(),
-                ["scope"] = Scope,
-                ["currentVersion"] = CurrentVersion?.ToJson(),
+                ["scheduleVersions"] = scheduleVersionsJsonData,
                 ["needSignature"] = NeedSignature,
                 ["signatureKeyId"] = SignatureKeyId,
             };
@@ -195,6 +220,18 @@ namespace Gs2.Gs2Version.Model
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
+            if (Scope != null) {
+                writer.WritePropertyName("scope");
+                writer.Write(Scope.ToString());
+            }
+            if (Type != null) {
+                writer.WritePropertyName("type");
+                writer.Write(Type.ToString());
+            }
+            if (CurrentVersion != null) {
+                writer.WritePropertyName("currentVersion");
+                CurrentVersion.WriteJson(writer);
+            }
             if (WarningVersion != null) {
                 writer.WritePropertyName("warningVersion");
                 WarningVersion.WriteJson(writer);
@@ -203,13 +240,16 @@ namespace Gs2.Gs2Version.Model
                 writer.WritePropertyName("errorVersion");
                 ErrorVersion.WriteJson(writer);
             }
-            if (Scope != null) {
-                writer.WritePropertyName("scope");
-                writer.Write(Scope.ToString());
-            }
-            if (CurrentVersion != null) {
-                writer.WritePropertyName("currentVersion");
-                CurrentVersion.WriteJson(writer);
+            if (ScheduleVersions != null) {
+                writer.WritePropertyName("scheduleVersions");
+                writer.WriteArrayStart();
+                foreach (var scheduleVersion in ScheduleVersions)
+                {
+                    if (scheduleVersion != null) {
+                        scheduleVersion.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (NeedSignature != null) {
                 writer.WritePropertyName("needSignature");
@@ -250,6 +290,30 @@ namespace Gs2.Gs2Version.Model
             {
                 diff += Metadata.CompareTo(other.Metadata);
             }
+            if (Scope == null && Scope == other.Scope)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Scope.CompareTo(other.Scope);
+            }
+            if (Type == null && Type == other.Type)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Type.CompareTo(other.Type);
+            }
+            if (CurrentVersion == null && CurrentVersion == other.CurrentVersion)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += CurrentVersion.CompareTo(other.CurrentVersion);
+            }
             if (WarningVersion == null && WarningVersion == other.WarningVersion)
             {
                 // null and null
@@ -266,21 +330,17 @@ namespace Gs2.Gs2Version.Model
             {
                 diff += ErrorVersion.CompareTo(other.ErrorVersion);
             }
-            if (Scope == null && Scope == other.Scope)
+            if (ScheduleVersions == null && ScheduleVersions == other.ScheduleVersions)
             {
                 // null and null
             }
             else
             {
-                diff += Scope.CompareTo(other.Scope);
-            }
-            if (CurrentVersion == null && CurrentVersion == other.CurrentVersion)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CurrentVersion.CompareTo(other.CurrentVersion);
+                diff += ScheduleVersions.Length - other.ScheduleVersions.Length;
+                for (var i = 0; i < ScheduleVersions.Length; i++)
+                {
+                    diff += ScheduleVersions[i].CompareTo(other.ScheduleVersions[i]);
+                }
             }
             if (NeedSignature == null && NeedSignature == other.NeedSignature)
             {

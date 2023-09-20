@@ -32,15 +32,11 @@ namespace Gs2.Gs2Version.Model
 	public class TargetVersion : IComparable
 	{
         public string VersionName { set; get; }
-        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
         public string Body { set; get; }
         public string Signature { set; get; }
+        public Gs2.Gs2Version.Model.Version_ Version { set; get; }
         public TargetVersion WithVersionName(string versionName) {
             this.VersionName = versionName;
-            return this;
-        }
-        public TargetVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
-            this.Version = version;
             return this;
         }
         public TargetVersion WithBody(string body) {
@@ -49,6 +45,10 @@ namespace Gs2.Gs2Version.Model
         }
         public TargetVersion WithSignature(string signature) {
             this.Signature = signature;
+            return this;
+        }
+        public TargetVersion WithVersion(Gs2.Gs2Version.Model.Version_ version) {
+            this.Version = version;
             return this;
         }
 
@@ -62,18 +62,18 @@ namespace Gs2.Gs2Version.Model
             }
             return new TargetVersion()
                 .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
-                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]))
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
-                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
+                .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["version"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["versionName"] = VersionName,
-                ["version"] = Version?.ToJson(),
                 ["body"] = Body,
                 ["signature"] = Signature,
+                ["version"] = Version?.ToJson(),
             };
         }
 
@@ -84,10 +84,6 @@ namespace Gs2.Gs2Version.Model
                 writer.WritePropertyName("versionName");
                 writer.Write(VersionName.ToString());
             }
-            if (Version != null) {
-                writer.WritePropertyName("version");
-                Version.WriteJson(writer);
-            }
             if (Body != null) {
                 writer.WritePropertyName("body");
                 writer.Write(Body.ToString());
@@ -95,6 +91,10 @@ namespace Gs2.Gs2Version.Model
             if (Signature != null) {
                 writer.WritePropertyName("signature");
                 writer.Write(Signature.ToString());
+            }
+            if (Version != null) {
+                writer.WritePropertyName("version");
+                Version.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }
@@ -111,14 +111,6 @@ namespace Gs2.Gs2Version.Model
             {
                 diff += VersionName.CompareTo(other.VersionName);
             }
-            if (Version == null && Version == other.Version)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Version.CompareTo(other.Version);
-            }
             if (Body == null && Body == other.Body)
             {
                 // null and null
@@ -134,6 +126,14 @@ namespace Gs2.Gs2Version.Model
             else
             {
                 diff += Signature.CompareTo(other.Signature);
+            }
+            if (Version == null && Version == other.Version)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Version.CompareTo(other.Version);
             }
             return diff;
         }
