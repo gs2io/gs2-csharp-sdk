@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
@@ -133,7 +134,7 @@ namespace Gs2.Gs2Inventory.Request
                 InventoryName = InventoryName,
                 UserId = UserId,
                 ItemName = ItemName,
-                AcquireCount = (decimal.Parse(AcquireCount) * x).ToString("0"),
+                AcquireCount = (BigInteger.Parse(AcquireCount) * x).ToString("0"),
             };
         }
 

@@ -1315,7 +1315,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var resultModel = result;
             var cache = _cache;
             if (resultModel != null) {
-                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        this.InventoryName,
+                        this.ItemName,
+                        this.ItemSetName,
+                        "ReferenceOf"
+                    );
+                    foreach (var item in resultModel.Item) {
+                        this._cache.Put(
+                            parentKey,
+                            item,
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
                 if (resultModel.ItemSet != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                         this.NamespaceName,
