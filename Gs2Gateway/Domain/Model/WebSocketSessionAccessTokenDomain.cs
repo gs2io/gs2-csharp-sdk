@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -167,14 +169,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
             SetUserIdRequest request
         ) {
             #if UNITY_2017_1_OR_NEWER
-            var future2 = ModelFuture();
-            yield return future2;
-            if (future2.Error != null)
-            {
-                self.OnError(future2.Error);
-                yield break;
-            }
-            var model = future2.Result;
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
