@@ -875,6 +875,242 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class AddBanTask : Gs2WebSocketSessionTask<Request.AddBanRequest, Result.AddBanResult>
+        {
+	        public AddBanTask(IGs2Session session, Request.AddBanRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AddBanRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.BanStatus != null)
+                {
+                    jsonWriter.WritePropertyName("banStatus");
+                    request.BanStatus.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "addBan",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddBan(
+                Request.AddBanRequest request,
+                UnityAction<AsyncResult<Result.AddBanResult>> callback
+        )
+		{
+			var task = new AddBanTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddBanResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddBanResult> AddBanFuture(
+                Request.AddBanRequest request
+        )
+		{
+			return new AddBanTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddBanResult> AddBanAsync(
+            Request.AddBanRequest request
+        )
+		{
+		    var task = new AddBanTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AddBanTask AddBanAsync(
+                Request.AddBanRequest request
+        )
+		{
+			return new AddBanTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddBanResult> AddBanAsync(
+            Request.AddBanRequest request
+        )
+		{
+		    var task = new AddBanTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RemoveBanTask : Gs2WebSocketSessionTask<Request.RemoveBanRequest, Result.RemoveBanResult>
+        {
+	        public RemoveBanTask(IGs2Session session, Request.RemoveBanRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RemoveBanRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.BanStatusName != null)
+                {
+                    jsonWriter.WritePropertyName("banStatusName");
+                    jsonWriter.Write(request.BanStatusName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "removeBan",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RemoveBan(
+                Request.RemoveBanRequest request,
+                UnityAction<AsyncResult<Result.RemoveBanResult>> callback
+        )
+		{
+			var task = new RemoveBanTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RemoveBanResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RemoveBanResult> RemoveBanFuture(
+                Request.RemoveBanRequest request
+        )
+		{
+			return new RemoveBanTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RemoveBanResult> RemoveBanAsync(
+            Request.RemoveBanRequest request
+        )
+		{
+		    var task = new RemoveBanTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public RemoveBanTask RemoveBanAsync(
+                Request.RemoveBanRequest request
+        )
+		{
+			return new RemoveBanTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RemoveBanResult> RemoveBanAsync(
+            Request.RemoveBanRequest request
+        )
+		{
+		    var task = new RemoveBanTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetAccountTask : Gs2WebSocketSessionTask<Request.GetAccountRequest, Result.GetAccountResult>
         {
 	        public GetAccountTask(IGs2Session session, Request.GetAccountRequest request) : base(session, request)

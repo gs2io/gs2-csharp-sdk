@@ -34,11 +34,17 @@ namespace Gs2.Gs2Account.Result
 	public class AuthenticationResult : IResult
 	{
         public Gs2.Gs2Account.Model.Account Item { set; get; }
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; }
         public string Body { set; get; }
         public string Signature { set; get; }
 
         public AuthenticationResult WithItem(Gs2.Gs2Account.Model.Account item) {
             this.Item = item;
+            return this;
+        }
+
+        public AuthenticationResult WithBanStatuses(Gs2.Gs2Account.Model.BanStatus[] banStatuses) {
+            this.BanStatuses = banStatuses;
             return this;
         }
 
@@ -62,14 +68,27 @@ namespace Gs2.Gs2Account.Result
             }
             return new AuthenticationResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Account.Model.Account.FromJson(data["item"]))
+                .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null ? new Gs2.Gs2Account.Model.BanStatus[]{} : data["banStatuses"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Account.Model.BanStatus.FromJson(v);
+                }).ToArray())
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
                 .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());
         }
 
         public JsonData ToJson()
         {
+            JsonData banStatusesJsonData = null;
+            if (BanStatuses != null)
+            {
+                banStatusesJsonData = new JsonData();
+                foreach (var banStatus in BanStatuses)
+                {
+                    banStatusesJsonData.Add(banStatus.ToJson());
+                }
+            }
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["banStatuses"] = banStatusesJsonData,
                 ["body"] = Body,
                 ["signature"] = Signature,
             };
@@ -81,6 +100,14 @@ namespace Gs2.Gs2Account.Result
             if (Item != null) {
                 Item.WriteJson(writer);
             }
+            writer.WriteArrayStart();
+            foreach (var banStatus in BanStatuses)
+            {
+                if (banStatus != null) {
+                    banStatus.WriteJson(writer);
+                }
+            }
+            writer.WriteArrayEnd();
             if (Body != null) {
                 writer.WritePropertyName("body");
                 writer.Write(Body.ToString());

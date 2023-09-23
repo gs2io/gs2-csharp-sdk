@@ -67,6 +67,7 @@ namespace Gs2.Gs2Account.Domain.Model
         public AccessToken AccessToken => _accessToken;
 
         private readonly String _parentKey;
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; }
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NextPageToken { get; set; }

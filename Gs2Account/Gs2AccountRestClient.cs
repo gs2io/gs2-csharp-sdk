@@ -1275,6 +1275,243 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class AddBanTask : Gs2RestSessionTask<AddBanRequest, AddBanResult>
+        {
+            public AddBanTask(IGs2Session session, RestSessionRequestFactory factory, AddBanRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(AddBanRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/ban";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.BanStatus != null)
+                {
+                    jsonWriter.WritePropertyName("banStatus");
+                    request.BanStatus.WriteJson(jsonWriter);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AddBan(
+                Request.AddBanRequest request,
+                UnityAction<AsyncResult<Result.AddBanResult>> callback
+        )
+		{
+			var task = new AddBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AddBanResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AddBanResult> AddBanFuture(
+                Request.AddBanRequest request
+        )
+		{
+			return new AddBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AddBanResult> AddBanAsync(
+                Request.AddBanRequest request
+        )
+		{
+            AsyncResult<Result.AddBanResult> result = null;
+			await AddBan(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public AddBanTask AddBanAsync(
+                Request.AddBanRequest request
+        )
+		{
+			return new AddBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AddBanResult> AddBanAsync(
+                Request.AddBanRequest request
+        )
+		{
+			var task = new AddBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class RemoveBanTask : Gs2RestSessionTask<RemoveBanRequest, RemoveBanResult>
+        {
+            public RemoveBanTask(IGs2Session session, RestSessionRequestFactory factory, RemoveBanRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RemoveBanRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/ban/{banName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{banStatusName}", !string.IsNullOrEmpty(request.BanStatusName) ? request.BanStatusName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RemoveBan(
+                Request.RemoveBanRequest request,
+                UnityAction<AsyncResult<Result.RemoveBanResult>> callback
+        )
+		{
+			var task = new RemoveBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.RemoveBanResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.RemoveBanResult> RemoveBanFuture(
+                Request.RemoveBanRequest request
+        )
+		{
+			return new RemoveBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.RemoveBanResult> RemoveBanAsync(
+                Request.RemoveBanRequest request
+        )
+		{
+            AsyncResult<Result.RemoveBanResult> result = null;
+			await RemoveBan(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public RemoveBanTask RemoveBanAsync(
+                Request.RemoveBanRequest request
+        )
+		{
+			return new RemoveBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.RemoveBanResult> RemoveBanAsync(
+                Request.RemoveBanRequest request
+        )
+		{
+			var task = new RemoveBanTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetAccountTask : Gs2RestSessionTask<GetAccountRequest, GetAccountResult>
         {
             public GetAccountTask(IGs2Session session, RestSessionRequestFactory factory, GetAccountRequest request) : base(session, factory, request)

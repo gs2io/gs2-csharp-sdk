@@ -35,6 +35,7 @@ namespace Gs2.Gs2Account.Model
         public string UserId { set; get; }
         public string Password { set; get; }
         public int? TimeOffset { set; get; }
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; }
         public bool? Banned { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Account.Model
         }
         public Account WithTimeOffset(int? timeOffset) {
             this.TimeOffset = timeOffset;
+            return this;
+        }
+        public Account WithBanStatuses(Gs2.Gs2Account.Model.BanStatus[] banStatuses) {
+            this.BanStatuses = banStatuses;
             return this;
         }
         public Account WithBanned(bool? banned) {
@@ -148,6 +153,9 @@ namespace Gs2.Gs2Account.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()))
+                .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null ? new Gs2.Gs2Account.Model.BanStatus[]{} : data["banStatuses"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Account.Model.BanStatus.FromJson(v);
+                }).ToArray())
                 .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
@@ -155,11 +163,21 @@ namespace Gs2.Gs2Account.Model
 
         public JsonData ToJson()
         {
+            JsonData banStatusesJsonData = null;
+            if (BanStatuses != null)
+            {
+                banStatusesJsonData = new JsonData();
+                foreach (var banStatus in BanStatuses)
+                {
+                    banStatusesJsonData.Add(banStatus.ToJson());
+                }
+            }
             return new JsonData {
                 ["accountId"] = AccountId,
                 ["userId"] = UserId,
                 ["password"] = Password,
                 ["timeOffset"] = TimeOffset,
+                ["banStatuses"] = banStatusesJsonData,
                 ["banned"] = Banned,
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
@@ -184,6 +202,17 @@ namespace Gs2.Gs2Account.Model
             if (TimeOffset != null) {
                 writer.WritePropertyName("timeOffset");
                 writer.Write(int.Parse(TimeOffset.ToString()));
+            }
+            if (BanStatuses != null) {
+                writer.WritePropertyName("banStatuses");
+                writer.WriteArrayStart();
+                foreach (var banStatus in BanStatuses)
+                {
+                    if (banStatus != null) {
+                        banStatus.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (Banned != null) {
                 writer.WritePropertyName("banned");
@@ -235,6 +264,18 @@ namespace Gs2.Gs2Account.Model
             else
             {
                 diff += (int)(TimeOffset - other.TimeOffset);
+            }
+            if (BanStatuses == null && BanStatuses == other.BanStatuses)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += BanStatuses.Length - other.BanStatuses.Length;
+                for (var i = 0; i < BanStatuses.Length; i++)
+                {
+                    diff += BanStatuses[i].CompareTo(other.BanStatuses[i]);
+                }
             }
             if (Banned == null && Banned == other.Banned)
             {
