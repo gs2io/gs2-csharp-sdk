@@ -745,5 +745,26 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.Received> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inbox.Model.Received>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

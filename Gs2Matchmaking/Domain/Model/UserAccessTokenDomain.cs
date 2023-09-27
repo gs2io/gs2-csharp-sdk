@@ -288,6 +288,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
+        public ulong SubscribeDoMatchmaking(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                "matchmaking",
+                callback
+            );
+        }
+
+        public void UnsubscribeDoMatchmaking(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                "matchmaking",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain Gathering(
             string gatheringName
         ) {
@@ -357,6 +373,30 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRatings(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Rating"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRatings(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Rating"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Matchmaking.Domain.Model.RatingAccessTokenDomain Rating(

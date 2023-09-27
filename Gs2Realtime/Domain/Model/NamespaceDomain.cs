@@ -123,6 +123,28 @@ namespace Gs2.Gs2Realtime.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRooms(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Realtime.Model.Room>(
+                Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Room"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRooms(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Realtime.Model.Room>(
+                Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Room"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Realtime.Domain.Model.RoomDomain Room(
             string roomName
         ) {
@@ -1123,6 +1145,29 @@ namespace Gs2.Gs2Realtime.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Realtime.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Realtime.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

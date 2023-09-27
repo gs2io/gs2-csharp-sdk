@@ -132,6 +132,30 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
         }
 
+        public ulong SubscribeWallets(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Money.Model.Wallet>(
+                Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Wallet"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeWallets(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Money.Model.Wallet>(
+                Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Wallet"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain Wallet(
             int? slot
         ) {

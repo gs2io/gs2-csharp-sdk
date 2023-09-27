@@ -441,5 +441,28 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Schedule.Model.Event> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
+                    this.EventName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Schedule.Model.Event>(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
+                    this.EventName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

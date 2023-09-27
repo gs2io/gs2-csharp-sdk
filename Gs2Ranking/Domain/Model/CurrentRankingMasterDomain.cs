@@ -790,5 +790,26 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.CurrentRankingMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -432,5 +432,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Mission.Model.CounterModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.CounterModelDomain.CreateCacheKey(
+                    this.CounterName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Mission.Model.CounterModel>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.CounterModelDomain.CreateCacheKey(
+                    this.CounterName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

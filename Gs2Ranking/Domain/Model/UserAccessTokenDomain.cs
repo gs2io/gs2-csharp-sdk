@@ -308,6 +308,30 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSubscribeUsers(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "SubscribeUser"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSubscribeUsers(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "SubscribeUser"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain SubscribeUser(
             string categoryName,
             string targetUserId
@@ -369,6 +393,30 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRankings(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.Ranking>(
+                Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Ranking"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRankings(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Ranking>(
+                Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Ranking"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Ranking.Domain.Model.RankingAccessTokenDomain Ranking(
             string categoryName
         ) {
@@ -426,6 +474,30 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeScores(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.Score>(
+                Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Score"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeScores(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Score>(
+                Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Score"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain Score(

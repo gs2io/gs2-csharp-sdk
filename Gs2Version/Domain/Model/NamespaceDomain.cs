@@ -133,6 +133,28 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
         }
 
+        public ulong SubscribeVersionModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Version.Model.VersionModel>(
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "VersionModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeVersionModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Version.Model.VersionModel>(
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "VersionModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Version.Domain.Model.VersionModelDomain VersionModel(
             string versionName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Version.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeVersionModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Version.Model.VersionModelMaster>(
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "VersionModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeVersionModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Version.Model.VersionModelMaster>(
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "VersionModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Version.Domain.Model.VersionModelMasterDomain VersionModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2Version.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Version.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Version.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

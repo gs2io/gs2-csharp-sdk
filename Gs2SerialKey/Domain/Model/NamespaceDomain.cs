@@ -133,6 +133,28 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
         }
 
+        public ulong SubscribeCampaignModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CampaignModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCampaignModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CampaignModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain CampaignModel(
             string campaignModelName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCampaignModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CampaignModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCampaignModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CampaignModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain CampaignModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SerialKey.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

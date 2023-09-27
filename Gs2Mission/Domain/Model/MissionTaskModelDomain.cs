@@ -445,5 +445,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Mission.Model.MissionTaskModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
+                    this.MissionTaskName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Mission.Model.MissionTaskModel>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
+                    this.MissionTaskName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

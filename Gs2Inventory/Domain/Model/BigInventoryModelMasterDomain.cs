@@ -130,6 +130,30 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBigItemModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName,
+                    "BigItemModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBigItemModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName,
+                    "BigItemModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain BigItemModelMaster(
             string itemName
         ) {
@@ -965,6 +989,29 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -132,6 +132,30 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
         }
 
+        public ulong SubscribeProgresses(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.Progress>(
+                Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Progress"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeProgresses(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Progress>(
+                Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Progress"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Quest.Domain.Model.ProgressDomain Progress(
         ) {
             return new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
@@ -179,6 +203,30 @@ namespace Gs2.Gs2Quest.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCompletedQuestLists(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "CompletedQuestList"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCompletedQuestLists(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "CompletedQuestList"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain CompletedQuestList(

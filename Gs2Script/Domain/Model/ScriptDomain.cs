@@ -901,5 +901,28 @@ namespace Gs2.Gs2Script.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Script.Model.Script> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                    this.ScriptName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Script.Model.Script>(
+                _parentKey,
+                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                    this.ScriptName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

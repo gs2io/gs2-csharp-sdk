@@ -445,5 +445,28 @@ namespace Gs2.Gs2Distributor.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.StampSheetResult> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Distributor.Model.StampSheetResult>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

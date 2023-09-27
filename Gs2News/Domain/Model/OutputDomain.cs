@@ -445,5 +445,28 @@ namespace Gs2.Gs2News.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2News.Model.Output> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2News.Domain.Model.OutputDomain.CreateCacheKey(
+                    this.OutputName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2News.Model.Output>(
+                _parentKey,
+                Gs2.Gs2News.Domain.Model.OutputDomain.CreateCacheKey(
+                    this.OutputName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

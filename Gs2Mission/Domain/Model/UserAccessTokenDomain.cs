@@ -131,6 +131,30 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
+        public ulong SubscribeCounters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.Counter>(
+                Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Counter"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCounters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Counter>(
+                Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Counter"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain Counter(
             string counterName
         ) {
@@ -180,6 +204,30 @@ namespace Gs2.Gs2Mission.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCompletes(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.Complete>(
+                Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Complete"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCompletes(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Complete>(
+                Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Complete"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Mission.Domain.Model.CompleteAccessTokenDomain Complete(

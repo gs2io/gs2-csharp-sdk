@@ -438,5 +438,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Rating> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                    this.RatingName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.RatingDomain.CreateCacheKey(
+                    this.RatingName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

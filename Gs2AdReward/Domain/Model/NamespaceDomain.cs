@@ -956,5 +956,28 @@ namespace Gs2.Gs2AdReward.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2AdReward.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2AdReward.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2AdReward.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2AdReward.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

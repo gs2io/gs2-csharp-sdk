@@ -783,5 +783,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Gathering> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
+                    this.GatheringName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
+                    this.GatheringName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

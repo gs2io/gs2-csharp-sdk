@@ -68,6 +68,7 @@ namespace Gs2.Gs2Account.Domain.Model
         private readonly string _userId;
 
         private readonly String _parentKey;
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; }
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NextPageToken { get; set; }
@@ -132,6 +133,30 @@ namespace Gs2.Gs2Account.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeTakeOvers(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "TakeOver"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeTakeOvers(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "TakeOver"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Account.Domain.Model.TakeOverDomain TakeOver(
@@ -420,7 +445,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         "Account"
                     );
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        this.UserId
+                        resultModel.Item.UserId.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -454,6 +479,274 @@ namespace Gs2.Gs2Account.Domain.Model
             UpdateBannedRequest request
         ) {
             return UpdateBannedFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> AddBanFuture(
+            AddBanRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.AddBanFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                AddBanResult result = null;
+                    result = await this._client.AddBanAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "Account"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                            resultModel.Item.UserId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.AccountDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> AddBanAsync(
+            AddBanRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.AddBanFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            AddBanResult result = null;
+                result = await this._client.AddBanAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Account"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                        resultModel.Item.UserId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> AddBanAsync(
+            AddBanRequest request
+        ) {
+            var future = AddBanFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to AddBanFuture.")]
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> AddBan(
+            AddBanRequest request
+        ) {
+            return AddBanFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> RemoveBanFuture(
+            RemoveBanRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.RemoveBanFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                RemoveBanResult result = null;
+                    result = await this._client.RemoveBanAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "Account"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                            resultModel.Item.UserId.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.AccountDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> RemoveBanAsync(
+            RemoveBanRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.RemoveBanFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            RemoveBanResult result = null;
+                result = await this._client.RemoveBanAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Account"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                        resultModel.Item.UserId.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> RemoveBanAsync(
+            RemoveBanRequest request
+        ) {
+            var future = RemoveBanFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to RemoveBanFuture.")]
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> RemoveBan(
+            RemoveBanRequest request
+        ) {
+            return RemoveBanFuture(request);
         }
         #endif
 
@@ -1307,6 +1600,29 @@ namespace Gs2.Gs2Account.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Account.Model.Account> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                    this.UserId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                    this.UserId.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

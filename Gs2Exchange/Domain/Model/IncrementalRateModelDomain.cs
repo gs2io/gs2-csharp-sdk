@@ -432,5 +432,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.IncrementalRateModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                    this.RateName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
+                    this.RateName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

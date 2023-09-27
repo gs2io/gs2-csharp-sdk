@@ -458,5 +458,28 @@ namespace Gs2.Gs2Datastore.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Datastore.Model.DataObjectHistory> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
+                    this.Generation.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                _parentKey,
+                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
+                    this.Generation.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

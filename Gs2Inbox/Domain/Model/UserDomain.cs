@@ -134,6 +134,30 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMessages(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inbox.Model.Message>(
+                Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Message"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMessages(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.Message>(
+                Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Message"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inbox.Domain.Model.MessageDomain Message(
             string messageName
         ) {

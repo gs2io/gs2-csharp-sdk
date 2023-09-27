@@ -132,6 +132,30 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #endif
         }
 
+        public ulong SubscribeJobs(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2JobQueue.Model.Job>(
+                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Job"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeJobs(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.Job>(
+                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Job"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2JobQueue.Domain.Model.JobDomain Job(
             string jobName
         ) {
@@ -181,6 +205,30 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeDeadLetterJobs(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
+                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "DeadLetterJob"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeDeadLetterJobs(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
+                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "DeadLetterJob"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain DeadLetterJob(

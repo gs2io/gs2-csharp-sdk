@@ -130,6 +130,30 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
+        public ulong SubscribePrizeLimits(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.PrizeTableName,
+                    "PrizeLimit"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePrizeLimits(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.PrizeTableName,
+                    "PrizeLimit"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain PrizeLimit(
             string prizeId
         ) {
@@ -483,6 +507,29 @@ namespace Gs2.Gs2Lottery.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.PrizeTable> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                    this.PrizeTableName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Lottery.Model.PrizeTable>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                    this.PrizeTableName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

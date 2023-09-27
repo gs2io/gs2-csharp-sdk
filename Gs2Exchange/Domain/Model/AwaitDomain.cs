@@ -1178,5 +1178,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.Await> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                    this.AwaitName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Exchange.Model.Await>(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
+                    this.AwaitName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

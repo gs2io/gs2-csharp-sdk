@@ -130,6 +130,30 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
         }
 
+        public ulong SubscribeQuestModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.QuestModelMaster>(
+                Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.QuestGroupName,
+                    "QuestModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeQuestModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.QuestModelMaster>(
+                Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.QuestGroupName,
+                    "QuestModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain QuestModelMaster(
             string questName
         ) {
@@ -965,6 +989,29 @@ namespace Gs2.Gs2Quest.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
+                    this.QuestGroupName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
+                    this.QuestGroupName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

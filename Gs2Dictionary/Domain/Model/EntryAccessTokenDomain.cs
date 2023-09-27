@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -181,12 +183,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
+                self.OnError(future.Error);
+                yield break;
             }
             var result = future.Result;
             #else
@@ -195,12 +193,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 .WithAccessToken(this._accessToken?.Token)
                 .WithEntryModelName(this.EntryName);
             GetEntryResult result = null;
-            try {
-                result = await this._client.GetEntryAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-            }
+            result = await this._client.GetEntryAsync(
+                request
+            );
             #endif
 
             var requestModel = request;
@@ -247,12 +242,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 yield return future;
                 if (future.Error != null)
                 {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
                 #else
@@ -261,12 +252,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     .WithAccessToken(this._accessToken?.Token)
                     .WithEntryModelName(this.EntryName);
                 GetEntryWithSignatureResult result = null;
-                try {
-                    result = await this._client.GetEntryWithSignatureAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                }
+                result = await this._client.GetEntryWithSignatureAsync(
+                    request
+                );
                 #endif
 
                 var requestModel = request;
@@ -314,12 +302,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             yield return future;
             if (future.Error != null)
             {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
+                self.OnError(future.Error);
+                yield break;
             }
             var result = future.Result;
             #else
@@ -328,12 +312,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 .WithAccessToken(this._accessToken?.Token)
                 .WithEntryModelName(this.EntryName);
             GetEntryWithSignatureResult result = null;
-            try {
-                result = await this._client.GetEntryWithSignatureAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-            }
+            result = await this._client.GetEntryWithSignatureAsync(
+                request
+            );
             #endif
 
             var requestModel = request;
@@ -539,6 +520,29 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Dictionary.Model.Entry> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                    this.EntryName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Dictionary.Model.Entry>(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                    this.EntryName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

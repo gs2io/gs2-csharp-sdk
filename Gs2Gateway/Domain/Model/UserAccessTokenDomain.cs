@@ -139,6 +139,30 @@ namespace Gs2.Gs2Gateway.Domain.Model
         #endif
         }
 
+        public ulong SubscribeWebSocketSessions(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
+                Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "WebSocketSession"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeWebSocketSessions(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
+                Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "WebSocketSession"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain WebSocketSession(
         ) {
             return new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain(

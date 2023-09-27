@@ -812,5 +812,28 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FollowUser> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
+                    this.TargetUserId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Friend.Model.FollowUser>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.FollowUserDomain.CreateCacheKey(
+                    this.TargetUserId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

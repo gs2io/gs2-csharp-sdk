@@ -251,6 +251,22 @@ namespace Gs2.Gs2Money.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Money.Model.Namespace>(
+                "money:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Money.Model.Namespace>(
+                "money:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Money.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

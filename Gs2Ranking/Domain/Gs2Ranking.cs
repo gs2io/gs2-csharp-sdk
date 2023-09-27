@@ -251,6 +251,22 @@ namespace Gs2.Gs2Ranking.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.Namespace>(
+                "ranking:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Namespace>(
+                "ranking:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Ranking.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

@@ -2040,5 +2040,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                    this.StaminaName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Stamina.Model.Stamina>(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                    this.StaminaName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

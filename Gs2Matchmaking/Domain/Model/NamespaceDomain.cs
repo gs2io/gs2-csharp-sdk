@@ -159,6 +159,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRatingModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.RatingModel>(
+                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RatingModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRatingModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.RatingModel>(
+                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RatingModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Matchmaking.Domain.Model.RatingModelDomain RatingModel(
             string ratingName
         ) {
@@ -220,6 +242,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRatingModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RatingModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRatingModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
+                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RatingModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Matchmaking.Domain.Model.RatingModelMasterDomain RatingModelMaster(
@@ -1542,6 +1586,29 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

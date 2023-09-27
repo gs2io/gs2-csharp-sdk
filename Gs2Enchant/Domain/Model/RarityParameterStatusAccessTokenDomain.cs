@@ -608,5 +608,30 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.RarityParameterStatus> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
+                    this.ParameterName.ToString(),
+                    this.PropertyId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
+                    this.ParameterName.ToString(),
+                    this.PropertyId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

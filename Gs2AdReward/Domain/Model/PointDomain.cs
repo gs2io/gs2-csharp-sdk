@@ -879,5 +879,26 @@ namespace Gs2.Gs2AdReward.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2AdReward.Model.Point> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2AdReward.Model.Point>(
+                _parentKey,
+                Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

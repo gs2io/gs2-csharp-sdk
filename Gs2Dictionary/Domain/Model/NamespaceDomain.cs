@@ -133,6 +133,28 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
         }
 
+        public ulong SubscribeEntryModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Dictionary.Model.EntryModel>(
+                Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "EntryModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeEntryModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.EntryModel>(
+                Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "EntryModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Dictionary.Domain.Model.EntryModelDomain EntryModel(
             string entryName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeEntryModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "EntryModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeEntryModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "EntryModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain EntryModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Dictionary.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Dictionary.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -134,6 +134,30 @@ namespace Gs2.Gs2Limit.Domain.Model
         #endif
         }
 
+        public ulong SubscribeCounters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Limit.Model.Counter>(
+                Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Counter"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCounters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Limit.Model.Counter>(
+                Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Counter"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Limit.Domain.Model.CounterDomain Counter(
             string limitName,
             string counterName

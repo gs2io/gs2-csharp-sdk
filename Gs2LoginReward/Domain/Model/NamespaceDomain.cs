@@ -122,6 +122,28 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBonusModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BonusModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBonusModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BonusModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain BonusModelMaster(
             string bonusModelName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeBonusModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2LoginReward.Model.BonusModel>(
+                Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BonusModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBonusModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2LoginReward.Model.BonusModel>(
+                Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BonusModel"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain BonusModel(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2LoginReward.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2LoginReward.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

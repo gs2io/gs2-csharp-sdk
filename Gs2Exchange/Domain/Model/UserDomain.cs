@@ -149,6 +149,30 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
         }
 
+        public ulong SubscribeAwaits(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.Await>(
+                Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Await"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeAwaits(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.Await>(
+                Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Await"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Exchange.Domain.Model.AwaitDomain Await(
             string awaitName
         ) {

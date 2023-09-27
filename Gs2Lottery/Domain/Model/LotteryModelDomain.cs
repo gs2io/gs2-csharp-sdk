@@ -432,5 +432,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.LotteryModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
+                    this.LotteryName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Lottery.Model.LotteryModel>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain.CreateCacheKey(
+                    this.LotteryName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

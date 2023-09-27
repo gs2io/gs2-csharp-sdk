@@ -130,6 +130,30 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
         }
 
+        public ulong SubscribeEntries(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Entry>(
+                Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Entry"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeEntries(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Entry>(
+                Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Entry"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Dictionary.Domain.Model.EntryDomain Entry(
             string entryName
         ) {

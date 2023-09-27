@@ -122,6 +122,28 @@ namespace Gs2.Gs2Account.Domain.Model
         #endif
         }
 
+        public ulong SubscribeAccounts(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Account.Model.Account>(
+                Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Account"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeAccounts(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Account.Model.Account>(
+                Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Account"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Account.Domain.Model.AccountDomain Account(
             string userId
         ) {
@@ -1431,6 +1453,29 @@ namespace Gs2.Gs2Account.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Account.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Account.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

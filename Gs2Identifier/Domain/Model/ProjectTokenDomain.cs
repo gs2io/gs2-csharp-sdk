@@ -396,5 +396,26 @@ namespace Gs2.Gs2Identifier.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.ProjectToken> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Identifier.Model.ProjectToken>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

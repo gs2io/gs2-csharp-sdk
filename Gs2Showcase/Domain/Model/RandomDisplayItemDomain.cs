@@ -642,5 +642,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.RandomDisplayItem> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                    this.DisplayItemName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                    this.DisplayItemName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

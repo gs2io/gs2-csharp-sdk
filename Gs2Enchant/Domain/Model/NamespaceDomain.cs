@@ -133,6 +133,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBalanceParameterModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BalanceParameterModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBalanceParameterModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BalanceParameterModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelDomain BalanceParameterModel(
             string parameterName
         ) {
@@ -179,6 +201,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeBalanceParameterModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BalanceParameterModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBalanceParameterModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BalanceParameterModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain BalanceParameterModelMaster(
@@ -229,6 +273,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRarityParameterModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RarityParameterModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRarityParameterModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RarityParameterModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Enchant.Domain.Model.RarityParameterModelDomain RarityParameterModel(
             string parameterName
         ) {
@@ -275,6 +341,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRarityParameterModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RarityParameterModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRarityParameterModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RarityParameterModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain RarityParameterModelMaster(
@@ -1447,6 +1535,29 @@ namespace Gs2.Gs2Enchant.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Enchant.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

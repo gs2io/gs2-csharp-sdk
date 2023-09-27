@@ -131,6 +131,30 @@ namespace Gs2.Gs2Lock.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMutexes(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lock.Model.Mutex>(
+                Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Mutex"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMutexes(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lock.Model.Mutex>(
+                Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Mutex"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Lock.Domain.Model.MutexAccessTokenDomain Mutex(
             string propertyId
         ) {

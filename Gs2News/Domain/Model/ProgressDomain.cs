@@ -130,6 +130,30 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
         }
 
+        public ulong SubscribeOutputs(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2News.Model.Output>(
+                Gs2.Gs2News.Domain.Model.ProgressDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UploadToken,
+                    "Output"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeOutputs(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2News.Model.Output>(
+                Gs2.Gs2News.Domain.Model.ProgressDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UploadToken,
+                    "Output"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2News.Domain.Model.OutputDomain Output(
             string outputName
         ) {
@@ -483,6 +507,29 @@ namespace Gs2.Gs2News.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2News.Model.Progress> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2News.Domain.Model.ProgressDomain.CreateCacheKey(
+                    this.UploadToken.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2News.Model.Progress>(
+                _parentKey,
+                Gs2.Gs2News.Domain.Model.ProgressDomain.CreateCacheKey(
+                    this.UploadToken.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

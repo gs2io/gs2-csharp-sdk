@@ -137,6 +137,28 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
         }
 
+        public ulong SubscribeDistributorModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Distributor.Model.DistributorModel>(
+                Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "DistributorModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeDistributorModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Distributor.Model.DistributorModel>(
+                Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "DistributorModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain DistributorModel(
             string distributorName
         ) {
@@ -194,6 +216,28 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeDistributorModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
+                Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "DistributorModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeDistributorModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
+                Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "DistributorModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain DistributorModelMaster(
@@ -1222,6 +1266,29 @@ namespace Gs2.Gs2Distributor.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Distributor.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -762,5 +762,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
+                    this.RecoverIntervalTableName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain.CreateCacheKey(
+                    this.RecoverIntervalTableName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

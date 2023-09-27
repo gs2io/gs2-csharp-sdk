@@ -251,6 +251,22 @@ namespace Gs2.Gs2Enhance.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enhance.Model.Namespace>(
+                "enhance:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.Namespace>(
+                "enhance:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Enhance.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

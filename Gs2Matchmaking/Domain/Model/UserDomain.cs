@@ -128,6 +128,30 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         #endif
         }
+
+        public ulong SubscribeGatherings(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Singleton",
+                    "Gathering"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeGatherings(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Singleton",
+                    "Gathering"
+                ),
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmakingByPlayer(
@@ -166,6 +190,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeDoMatchmakingByPlayer(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                "matchmaking",
+                callback
+            );
+        }
+
+        public void UnsubscribeDoMatchmakingByPlayer(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                "matchmaking",
+                callbackId
+            );
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -207,6 +247,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeDoMatchmaking(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                "matchmaking",
+                callback
+            );
+        }
+
+        public void UnsubscribeDoMatchmaking(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+                "matchmaking",
+                callbackId
+            );
         }
 
         public Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain Gathering(
@@ -278,6 +334,30 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRatings(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Rating"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRatings(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Rating"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Matchmaking.Domain.Model.RatingDomain Rating(

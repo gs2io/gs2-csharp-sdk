@@ -551,5 +551,30 @@ namespace Gs2.Gs2MegaField.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.Spatial> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
+                    this.AreaModelName.ToString(),
+                    this.LayerModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2MegaField.Model.Spatial>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
+                    this.AreaModelName.ToString(),
+                    this.LayerModelName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

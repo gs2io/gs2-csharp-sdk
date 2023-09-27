@@ -133,6 +133,28 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
         }
 
+        public ulong SubscribeQuestGroupModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "QuestGroupModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeQuestGroupModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.QuestGroupModel>(
+                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "QuestGroupModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain QuestGroupModel(
             string questGroupName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Quest.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeQuestGroupModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "QuestGroupModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeQuestGroupModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "QuestGroupModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain QuestGroupModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2Quest.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Quest.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Quest.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

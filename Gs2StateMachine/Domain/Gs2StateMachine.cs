@@ -251,6 +251,22 @@ namespace Gs2.Gs2StateMachine.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2StateMachine.Model.Namespace>(
+                "stateMachine:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2StateMachine.Model.Namespace>(
+                "stateMachine:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

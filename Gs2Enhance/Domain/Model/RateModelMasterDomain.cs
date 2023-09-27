@@ -762,5 +762,28 @@ namespace Gs2.Gs2Enhance.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Enhance.Model.RateModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                    this.RateName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                    this.RateName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

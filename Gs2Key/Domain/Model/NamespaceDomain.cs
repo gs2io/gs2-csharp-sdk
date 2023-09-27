@@ -122,6 +122,28 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
         }
 
+        public ulong SubscribeKeys(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Key.Model.Key>(
+                Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Key"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeKeys(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Key.Model.Key>(
+                Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Key"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Key.Domain.Model.KeyDomain Key(
             string keyName
         ) {
@@ -168,6 +190,28 @@ namespace Gs2.Gs2Key.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeGitHubApiKeys(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
+                Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "GitHubApiKey"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeGitHubApiKeys(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
+                Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "GitHubApiKey"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain GitHubApiKey(
@@ -1314,6 +1358,29 @@ namespace Gs2.Gs2Key.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Key.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Key.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

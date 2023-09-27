@@ -432,5 +432,28 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Dictionary.Model.EntryModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.EntryModelDomain.CreateCacheKey(
+                    this.EntryName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Dictionary.Model.EntryModel>(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.EntryModelDomain.CreateCacheKey(
+                    this.EntryName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

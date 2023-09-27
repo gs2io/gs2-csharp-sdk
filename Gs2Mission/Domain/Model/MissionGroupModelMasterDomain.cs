@@ -130,6 +130,30 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMissionTaskModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionTaskModelMaster>(
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    "MissionTaskModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMissionTaskModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionTaskModelMaster>(
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    "MissionTaskModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain MissionTaskModelMaster(
             string missionTaskName
         ) {
@@ -965,6 +989,29 @@ namespace Gs2.Gs2Mission.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
+                    this.MissionGroupName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain.CreateCacheKey(
+                    this.MissionGroupName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

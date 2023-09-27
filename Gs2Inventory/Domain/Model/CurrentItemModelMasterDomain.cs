@@ -790,5 +790,26 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.CurrentItemModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.CurrentItemModelMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.CurrentItemModelMaster>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.CurrentItemModelMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

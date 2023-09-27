@@ -301,6 +301,30 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSubscribes(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Subscribe"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSubscribes(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Subscribe"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain Subscribe(
             string roomName
         ) {

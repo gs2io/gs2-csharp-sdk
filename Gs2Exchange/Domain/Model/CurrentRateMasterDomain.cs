@@ -790,5 +790,26 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.CurrentRateMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Exchange.Model.CurrentRateMaster>(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

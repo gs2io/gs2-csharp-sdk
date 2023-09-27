@@ -1199,5 +1199,26 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2SkillTree.Model.Status> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SkillTree.Model.Status>(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

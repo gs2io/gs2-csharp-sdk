@@ -130,6 +130,30 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
         }
 
+        public ulong SubscribeIssueJobs(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2SerialKey.Model.IssueJob>(
+                Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.CampaignModelName,
+                    "IssueJob"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeIssueJobs(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.IssueJob>(
+                Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.CampaignModelName,
+                    "IssueJob"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2SerialKey.Domain.Model.IssueJobDomain IssueJob(
             string issueJobName
         ) {
@@ -635,6 +659,29 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.CampaignModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
+                    this.CampaignModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SerialKey.Model.CampaignModel>(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
+                    this.CampaignModelName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

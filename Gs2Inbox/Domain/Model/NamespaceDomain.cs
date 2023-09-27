@@ -159,6 +159,28 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
         }
 
+        public ulong SubscribeGlobalMessages(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "GlobalMessage"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeGlobalMessages(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "GlobalMessage"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain GlobalMessage(
             string globalMessageName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeGlobalMessageMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "GlobalMessageMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeGlobalMessageMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
+                Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "GlobalMessageMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Inbox.Domain.Model.GlobalMessageMasterDomain GlobalMessageMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2Inbox.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inbox.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

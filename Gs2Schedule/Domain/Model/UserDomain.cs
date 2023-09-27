@@ -130,6 +130,30 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
         }
 
+        public ulong SubscribeTriggers(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Schedule.Model.Trigger>(
+                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Trigger"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeTriggers(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
+                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Trigger"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Schedule.Domain.Model.TriggerDomain Trigger(
             string triggerName
         ) {
@@ -179,6 +203,30 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeEvents(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Schedule.Model.Event>(
+                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Event"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeEvents(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Event>(
+                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Event"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Schedule.Domain.Model.EventDomain Event(

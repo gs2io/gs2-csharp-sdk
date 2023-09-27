@@ -130,6 +130,30 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         }
 
+        public ulong SubscribeLayerModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2MegaField.Model.LayerModelMaster>(
+                Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    "LayerModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeLayerModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2MegaField.Model.LayerModelMaster>(
+                Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    "LayerModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2MegaField.Domain.Model.LayerModelMasterDomain LayerModelMaster(
             string layerModelName
         ) {
@@ -965,6 +989,29 @@ namespace Gs2.Gs2MegaField.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.AreaModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheKey(
+                    this.AreaModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheKey(
+                    this.AreaModelName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

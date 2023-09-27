@@ -136,6 +136,32 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRandomDisplayItems(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName,
+                    "RandomDisplayItem"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRandomDisplayItems(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName,
+                    "RandomDisplayItem"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain RandomDisplayItem(
             string displayItemName
         ) {
@@ -246,6 +272,29 @@ namespace Gs2.Gs2Showcase.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.RandomShowcase> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheKey(
+                    this.ShowcaseName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomShowcase>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheKey(
+                    this.ShowcaseName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

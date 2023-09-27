@@ -790,5 +790,26 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.CurrentRatingModelMaster>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.CurrentRatingModelMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -655,6 +655,32 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMessages(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Message>(
+                Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Singleton",
+                    this.RoomName,
+                    "Message"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMessages(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Message>(
+                Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Singleton",
+                    this.RoomName,
+                    "Message"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Chat.Domain.Model.MessageAccessTokenDomain Message(
             string messageName
         ) {
@@ -758,6 +784,29 @@ namespace Gs2.Gs2Chat.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Chat.Model.Room> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                    this.RoomName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Chat.Model.Room>(
+                _parentKey,
+                Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                    this.RoomName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

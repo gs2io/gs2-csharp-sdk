@@ -193,5 +193,28 @@ namespace Gs2.Gs2AdReward.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2AdReward.Model.History> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2AdReward.Domain.Model.HistoryDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2AdReward.Model.History>(
+                _parentKey,
+                Gs2.Gs2AdReward.Domain.Model.HistoryDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

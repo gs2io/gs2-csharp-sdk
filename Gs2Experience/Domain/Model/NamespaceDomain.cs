@@ -133,6 +133,28 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
         }
 
+        public ulong SubscribeExperienceModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Experience.Model.ExperienceModel>(
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExperienceModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeExperienceModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ExperienceModel>(
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExperienceModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain ExperienceModel(
             string experienceName
         ) {
@@ -207,6 +229,28 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
         }
 
+        public ulong SubscribeThresholdMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ThresholdMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeThresholdMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ThresholdMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain ThresholdMaster(
             string thresholdName
         ) {
@@ -253,6 +297,28 @@ namespace Gs2.Gs2Experience.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeExperienceModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExperienceModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeExperienceModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExperienceModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain ExperienceModelMaster(
@@ -1399,6 +1465,29 @@ namespace Gs2.Gs2Experience.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Experience.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Experience.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -137,6 +137,30 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSerialKeys(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
+                Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "SerialKey"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSerialKeys(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
+                Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "SerialKey"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain SerialKey(
             string serialKeyCode
         ) {

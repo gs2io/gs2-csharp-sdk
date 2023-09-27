@@ -251,6 +251,22 @@ namespace Gs2.Gs2Limit.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Limit.Model.Namespace>(
+                "limit:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Limit.Model.Namespace>(
+                "limit:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Limit.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

@@ -127,6 +127,28 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
         }
 
+        public ulong SubscribeScripts(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Script.Model.Script>(
+                Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Script"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeScripts(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Script.Model.Script>(
+                Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Script"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Script.Domain.Model.ScriptDomain Script(
             string scriptName
         ) {
@@ -1471,6 +1493,29 @@ namespace Gs2.Gs2Script.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Script.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Script.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

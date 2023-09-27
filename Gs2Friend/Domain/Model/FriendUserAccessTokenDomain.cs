@@ -723,5 +723,28 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FriendUser> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                    this.TargetUserId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Friend.Model.FriendUser>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                    this.TargetUserId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

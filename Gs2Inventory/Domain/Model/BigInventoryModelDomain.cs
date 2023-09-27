@@ -129,6 +129,30 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBigItemModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigItemModel>(
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName,
+                    "BigItemModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBigItemModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigItemModel>(
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName,
+                    "BigItemModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.BigItemModelDomain BigItemModel(
             string itemName
         ) {
@@ -482,6 +506,29 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.BigInventoryModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModel>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

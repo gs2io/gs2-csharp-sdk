@@ -1160,5 +1160,30 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Formation.Model.PropertyForm> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
+                    this.PropertyFormModelName.ToString(),
+                    this.PropertyId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
+                    this.PropertyFormModelName.ToString(),
+                    this.PropertyId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

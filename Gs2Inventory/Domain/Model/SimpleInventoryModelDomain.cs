@@ -129,6 +129,30 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSimpleItemModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleItemModel>(
+                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName,
+                    "SimpleItemModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSimpleItemModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleItemModel>(
+                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName,
+                    "SimpleItemModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.SimpleItemModelDomain SimpleItemModel(
             string itemName
         ) {
@@ -482,6 +506,29 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.SimpleInventoryModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModel>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -790,5 +790,26 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Mission.Model.CurrentMissionMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

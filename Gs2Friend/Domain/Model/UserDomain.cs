@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -154,6 +156,22 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBlackLists(Action callback)
+        {
+            return this._cache.ListSubscribe<string>(
+                "friend:UserId",
+                callback
+            );
+        }
+
+        public void UnsubscribeBlackLists(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<string>(
+                "friend:UserId",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Friend.Domain.Model.BlackListDomain BlackList(
         ) {
             return new Gs2.Gs2Friend.Domain.Model.BlackListDomain(
@@ -205,6 +223,36 @@ namespace Gs2.Gs2Friend.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeFollows(
+            Action callback,
+            bool? withProfile
+        )
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FollowUser>(
+                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "FollowUser:" + (withProfile == true)
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeFollows(
+            ulong callbackId,
+            bool? withProfile
+        )
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FollowUser>(
+                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "FollowUser:" + (withProfile == true)
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Friend.Domain.Model.FollowUserDomain FollowUser(
@@ -264,6 +312,38 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
+        public ulong SubscribeFriends(
+            Action callback,
+            bool? withProfile
+        )
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendUser>(
+                Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    withProfile?.ToString() ?? "False",
+                    "FriendUser"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeFriends(
+            ulong callbackId,
+            bool? withProfile
+        )
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendUser>(
+                Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    withProfile?.ToString() ?? "False",
+                    "FriendUser"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Friend.Domain.Model.FriendDomain Friend(
             bool? withProfile
         ) {
@@ -315,6 +395,30 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSendRequests(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "FriendRequest"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSendRequests(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "FriendRequest"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain SendFriendRequest(
             string targetUserId
         ) {
@@ -364,6 +468,30 @@ namespace Gs2.Gs2Friend.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeReceiveRequests(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "FriendRequest"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeReceiveRequests(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "FriendRequest"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain ReceiveFriendRequest(

@@ -790,5 +790,26 @@ namespace Gs2.Gs2Distributor.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.CurrentDistributorMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Distributor.Model.CurrentDistributorMaster>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

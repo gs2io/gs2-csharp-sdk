@@ -674,5 +674,28 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Chat.Model.Message> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                    this.MessageName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Chat.Model.Message>(
+                _parentKey,
+                Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                    this.MessageName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

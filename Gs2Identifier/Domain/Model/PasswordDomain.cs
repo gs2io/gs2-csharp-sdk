@@ -720,5 +720,26 @@ namespace Gs2.Gs2Identifier.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.Password> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Identifier.Model.Password>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

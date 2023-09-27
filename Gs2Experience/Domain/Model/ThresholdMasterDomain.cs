@@ -762,5 +762,28 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Experience.Model.ThresholdMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
+                    this.ThresholdName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ThresholdMasterDomain.CreateCacheKey(
+                    this.ThresholdName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -130,6 +130,30 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeInventories(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.Inventory>(
+                Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Inventory"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeInventories(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.Inventory>(
+                Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Inventory"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.InventoryDomain Inventory(
             string inventoryName
         ) {

@@ -432,5 +432,28 @@ namespace Gs2.Gs2Limit.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Limit.Model.LimitModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.LimitModelDomain.CreateCacheKey(
+                    this.LimitName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Limit.Model.LimitModel>(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.LimitModelDomain.CreateCacheKey(
+                    this.LimitName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

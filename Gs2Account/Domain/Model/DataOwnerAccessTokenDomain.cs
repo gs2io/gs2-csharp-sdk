@@ -175,5 +175,26 @@ namespace Gs2.Gs2Account.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Account.Model.DataOwner> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Account.Model.DataOwner>(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

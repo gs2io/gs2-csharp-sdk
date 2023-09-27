@@ -159,6 +159,28 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
         }
 
+        public ulong SubscribeEventMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Schedule.Model.EventMaster>(
+                Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "EventMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeEventMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.EventMaster>(
+                Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "EventMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Schedule.Domain.Model.EventMasterDomain EventMaster(
             string eventName
         ) {
@@ -1159,6 +1181,29 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Schedule.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Schedule.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

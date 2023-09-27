@@ -757,5 +757,28 @@ namespace Gs2.Gs2Identifier.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.SecurityPolicy> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    this.SecurityPolicyName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
+                    this.SecurityPolicyName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -762,5 +762,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.SalesItemMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
+                    this.SalesItemName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
+                    this.SalesItemName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

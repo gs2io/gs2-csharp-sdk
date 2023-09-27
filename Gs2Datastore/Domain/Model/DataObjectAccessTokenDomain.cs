@@ -1007,6 +1007,32 @@ namespace Gs2.Gs2Datastore.Domain.Model
         #endif
         }
 
+        public ulong SubscribeDataObjectHistories(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName,
+                    "DataObjectHistory"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeDataObjectHistories(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName,
+                    "DataObjectHistory"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryAccessTokenDomain DataObjectHistory(
             string generation
         ) {
@@ -1109,6 +1135,29 @@ namespace Gs2.Gs2Datastore.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Datastore.Model.DataObject> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
+                    this.DataObjectName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Datastore.Model.DataObject>(
+                _parentKey,
+                Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
+                    this.DataObjectName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

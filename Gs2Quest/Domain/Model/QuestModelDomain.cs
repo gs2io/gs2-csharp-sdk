@@ -445,5 +445,28 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Quest.Model.QuestModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                    this.QuestName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Quest.Model.QuestModel>(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
+                    this.QuestName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

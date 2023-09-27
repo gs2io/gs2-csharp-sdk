@@ -432,5 +432,28 @@ namespace Gs2.Gs2Distributor.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.DistributorModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
+                    this.DistributorName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Distributor.Model.DistributorModel>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
+                    this.DistributorName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -134,6 +134,30 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBalanceParameterStatuses(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "BalanceParameterStatus"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBalanceParameterStatuses(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "BalanceParameterStatus"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain BalanceParameterStatus(
             string parameterName,
             string propertyId
@@ -189,6 +213,30 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRarityParameterStatuses(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+                Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "RarityParameterStatus"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRarityParameterStatuses(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+                Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "RarityParameterStatus"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain RarityParameterStatus(

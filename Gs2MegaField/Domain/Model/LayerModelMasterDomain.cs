@@ -787,5 +787,28 @@ namespace Gs2.Gs2MegaField.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.LayerModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.LayerModelMasterDomain.CreateCacheKey(
+                    this.LayerModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2MegaField.Model.LayerModelMaster>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.LayerModelMasterDomain.CreateCacheKey(
+                    this.LayerModelName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -462,5 +462,30 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.BalanceParameterStatus> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
+                    this.ParameterName.ToString(),
+                    this.PropertyId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
+                    this.ParameterName.ToString(),
+                    this.PropertyId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

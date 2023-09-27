@@ -790,5 +790,26 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Formation.Model.CurrentFormMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

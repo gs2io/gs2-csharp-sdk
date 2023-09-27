@@ -133,6 +133,28 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRateModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enhance.Model.RateModel>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRateModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.RateModel>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Enhance.Domain.Model.RateModelDomain RateModel(
             string rateName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRateModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRateModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain RateModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2Enhance.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Enhance.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Enhance.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

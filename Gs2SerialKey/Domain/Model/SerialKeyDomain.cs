@@ -327,8 +327,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithCode(this.SerialKeyCode);
+                .WithUserId(this.UserId);
             var future = this._client.UseByUserIdFuture(
                 request
             );
@@ -543,6 +542,29 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.SerialKey> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
+                    this.SerialKeyCode.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
+                    this.SerialKeyCode.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

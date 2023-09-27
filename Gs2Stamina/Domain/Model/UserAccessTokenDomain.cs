@@ -132,6 +132,30 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
+        public ulong SubscribeStaminas(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.Stamina>(
+                Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Stamina"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeStaminas(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.Stamina>(
+                Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Stamina"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain Stamina(
             string staminaName
         ) {

@@ -133,6 +133,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeInventoryModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.InventoryModel>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "InventoryModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeInventoryModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.InventoryModel>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "InventoryModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain InventoryModel(
             string inventoryName
         ) {
@@ -207,6 +229,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSimpleInventoryModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SimpleInventoryModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSimpleInventoryModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SimpleInventoryModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain SimpleInventoryModelMaster(
             string inventoryName
         ) {
@@ -253,6 +297,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeSimpleInventoryModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModel>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SimpleInventoryModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSimpleInventoryModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModel>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SimpleInventoryModel"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelDomain SimpleInventoryModel(
@@ -303,6 +369,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBigInventoryModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BigInventoryModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBigInventoryModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BigInventoryModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain BigInventoryModelMaster(
             string inventoryName
         ) {
@@ -351,6 +439,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBigInventoryModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigInventoryModel>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BigInventoryModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBigInventoryModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModel>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "BigInventoryModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Inventory.Domain.Model.BigInventoryModelDomain BigInventoryModel(
             string inventoryName
         ) {
@@ -397,6 +507,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeInventoryModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "InventoryModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeInventoryModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "InventoryModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain InventoryModelMaster(
@@ -1687,6 +1819,29 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

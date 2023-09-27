@@ -122,6 +122,28 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         #endif
         }
 
+        public ulong SubscribeStateMachineMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
+                Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "StateMachineMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeStateMachineMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
+                Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "StateMachineMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2StateMachine.Domain.Model.StateMachineMasterDomain StateMachineMaster(
             long? version_
         ) {
@@ -1148,6 +1170,29 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2StateMachine.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2StateMachine.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2StateMachine.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

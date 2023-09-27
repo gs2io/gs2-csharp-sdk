@@ -133,6 +133,28 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         }
 
+        public ulong SubscribeAreaModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2MegaField.Model.AreaModel>(
+                Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AreaModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeAreaModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2MegaField.Model.AreaModel>(
+                Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AreaModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2MegaField.Domain.Model.AreaModelDomain AreaModel(
             string areaModelName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeAreaModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AreaModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeAreaModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AreaModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain AreaModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2MegaField.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2MegaField.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -132,6 +132,30 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
         }
 
+        public ulong SubscribeNewses(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2News.Model.News>(
+                Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "News"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeNewses(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2News.Model.News>(
+                Gs2.Gs2News.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "News"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2News.Domain.Model.NewsAccessTokenDomain News(
         ) {
             return new Gs2.Gs2News.Domain.Model.NewsAccessTokenDomain(

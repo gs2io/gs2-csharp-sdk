@@ -956,6 +956,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return await ModelAsync();
         }
         #endif
-
+        
     }
 }

@@ -133,6 +133,28 @@ namespace Gs2.Gs2Limit.Domain.Model
         #endif
         }
 
+        public ulong SubscribeLimitModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Limit.Model.LimitModel>(
+                Gs2.Gs2Limit.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LimitModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeLimitModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Limit.Model.LimitModel>(
+                Gs2.Gs2Limit.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LimitModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Limit.Domain.Model.LimitModelDomain LimitModel(
             string limitName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Limit.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeLimitModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                Gs2.Gs2Limit.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LimitModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeLimitModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                Gs2.Gs2Limit.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LimitModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain LimitModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2Limit.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Limit.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Limit.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

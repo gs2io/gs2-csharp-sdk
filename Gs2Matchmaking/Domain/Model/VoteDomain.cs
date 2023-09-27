@@ -302,5 +302,30 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Vote> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
+                    this.RatingName.ToString(),
+                    this.GatheringName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Vote>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
+                    this.RatingName.ToString(),
+                    this.GatheringName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

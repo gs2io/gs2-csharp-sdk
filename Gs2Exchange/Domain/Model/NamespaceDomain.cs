@@ -122,6 +122,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRateModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRateModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain RateModelMaster(
             string rateName
         ) {
@@ -179,6 +201,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeRateModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModel>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRateModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModel>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RateModel"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Exchange.Domain.Model.RateModelDomain RateModel(
@@ -255,6 +299,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
         }
 
+        public ulong SubscribeIncrementalRateModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IncrementalRateModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeIncrementalRateModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IncrementalRateModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain IncrementalRateModel(
             string rateName
         ) {
@@ -301,6 +367,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeIncrementalRateModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IncrementalRateModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeIncrementalRateModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IncrementalRateModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain IncrementalRateModelMaster(
@@ -1447,6 +1535,29 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Exchange.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

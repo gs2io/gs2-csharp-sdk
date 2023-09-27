@@ -971,5 +971,28 @@ namespace Gs2.Gs2Key.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Key.Model.Key> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    this.KeyName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Key.Model.Key>(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    this.KeyName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

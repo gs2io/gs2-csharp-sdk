@@ -253,6 +253,22 @@ namespace Gs2.Gs2Realtime.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Realtime.Model.Namespace>(
+                "realtime:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Realtime.Model.Namespace>(
+                "realtime:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Realtime.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

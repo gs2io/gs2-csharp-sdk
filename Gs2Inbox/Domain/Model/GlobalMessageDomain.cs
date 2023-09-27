@@ -432,5 +432,28 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.GlobalMessage> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
+                    this.GlobalMessageName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
+                    this.GlobalMessageName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

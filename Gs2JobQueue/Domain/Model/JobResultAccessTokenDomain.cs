@@ -389,5 +389,28 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2JobQueue.Model.JobResult> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                    this.TryNumber.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2JobQueue.Model.JobResult>(
+                _parentKey,
+                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                    this.TryNumber.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

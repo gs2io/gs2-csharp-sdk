@@ -762,5 +762,28 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Experience.Model.ExperienceModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain.CreateCacheKey(
+                    this.ExperienceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ExperienceModelMasterDomain.CreateCacheKey(
+                    this.ExperienceName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -728,5 +728,28 @@ namespace Gs2.Gs2Money.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Money.Model.Wallet> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                    this.Slot.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Money.Model.Wallet>(
+                _parentKey,
+                Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
+                    this.Slot.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

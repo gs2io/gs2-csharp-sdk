@@ -131,6 +131,30 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
         }
 
+        public ulong SubscribeStatuses(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Idle.Model.Status>(
+                Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Status"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeStatuses(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Idle.Model.Status>(
+                Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Status"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain Status(
             string categoryName
         ) {

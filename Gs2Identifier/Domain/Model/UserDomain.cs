@@ -122,6 +122,28 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
         }
 
+        public ulong SubscribeIdentifiers(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.Identifier>(
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.UserName,
+                    "Identifier"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeIdentifiers(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.UserName,
+                    "Identifier"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Identifier.Domain.Model.IdentifierDomain Identifier(
             string clientId
         ) {
@@ -168,6 +190,28 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribePasswords(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.Password>(
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.UserName,
+                    "Password"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePasswords(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Password>(
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.UserName,
+                    "Password"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Identifier.Domain.Model.PasswordDomain Password(
@@ -1009,6 +1053,29 @@ namespace Gs2.Gs2Identifier.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.User> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                    this.UserName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Identifier.Model.User>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                    this.UserName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

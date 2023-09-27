@@ -385,6 +385,22 @@ namespace Gs2.Gs2Identifier.Domain
         #endif
         }
 
+        public ulong SubscribeUsers(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.User>(
+                "identifier:User",
+                callback
+            );
+        }
+
+        public void UnsubscribeUsers(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.User>(
+                "identifier:User",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Identifier.Domain.Model.UserDomain User(
             string userName
         ) {
@@ -429,6 +445,22 @@ namespace Gs2.Gs2Identifier.Domain
             );
         #endif
         }
+
+        public ulong SubscribeSecurityPolicies(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                "identifier:SecurityPolicy",
+                callback
+            );
+        }
+
+        public void UnsubscribeSecurityPolicies(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                "identifier:SecurityPolicy",
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Identifier.Model.SecurityPolicy> CommonSecurityPolicies(
@@ -461,6 +493,22 @@ namespace Gs2.Gs2Identifier.Domain
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCommonSecurityPolicies(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                "identifier:SecurityPolicy",
+                callback
+            );
+        }
+
+        public void UnsubscribeCommonSecurityPolicies(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+                "identifier:SecurityPolicy",
+                callbackId
+            );
         }
 
         public Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain SecurityPolicy(

@@ -578,5 +578,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.BoxItems> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                    this.PrizeTableName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                    this.PrizeTableName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

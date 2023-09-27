@@ -129,6 +129,30 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMissionTaskModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionTaskModel>(
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    "MissionTaskModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMissionTaskModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionTaskModel>(
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    "MissionTaskModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain MissionTaskModel(
             string missionTaskName
         ) {
@@ -482,6 +506,29 @@ namespace Gs2.Gs2Mission.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Mission.Model.MissionGroupModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheKey(
+                    this.MissionGroupName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Mission.Model.MissionGroupModel>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheKey(
+                    this.MissionGroupName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

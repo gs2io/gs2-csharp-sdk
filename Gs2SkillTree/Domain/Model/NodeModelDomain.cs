@@ -432,5 +432,28 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2SkillTree.Model.NodeModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                    this.NodeModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SkillTree.Model.NodeModel>(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain.CreateCacheKey(
+                    this.NodeModelName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

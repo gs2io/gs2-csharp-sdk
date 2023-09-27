@@ -252,6 +252,22 @@ namespace Gs2.Gs2Chat.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Namespace>(
+                "chat:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Namespace>(
+                "chat:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Chat.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

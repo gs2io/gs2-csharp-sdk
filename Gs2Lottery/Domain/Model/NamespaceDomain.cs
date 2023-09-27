@@ -159,6 +159,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
+        public ulong SubscribePrizeTables(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeTable>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PrizeTable"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePrizeTables(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeTable>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PrizeTable"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain PrizeTable(
             string prizeTableName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeLotteryModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.LotteryModel>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LotteryModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeLotteryModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.LotteryModel>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LotteryModel"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Lottery.Domain.Model.LotteryModelDomain LotteryModel(
@@ -255,6 +299,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
+        public ulong SubscribePrizeTableMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PrizeTableMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePrizeTableMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PrizeTableMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Lottery.Domain.Model.PrizeTableMasterDomain PrizeTableMaster(
             string prizeTableName
         ) {
@@ -301,6 +367,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeLotteryModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LotteryModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeLotteryModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "LotteryModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain LotteryModelMaster(
@@ -1447,6 +1535,29 @@ namespace Gs2.Gs2Lottery.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Lottery.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

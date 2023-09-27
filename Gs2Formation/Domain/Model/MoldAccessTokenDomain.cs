@@ -559,6 +559,32 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
+        public ulong SubscribeForms(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.Form>(
+                Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MoldModelName,
+                    "Form"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeForms(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.Form>(
+                Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MoldModelName,
+                    "Form"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain Form(
             int? index
         ) {
@@ -726,6 +752,29 @@ namespace Gs2.Gs2Formation.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Formation.Model.Mold> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                    this.MoldModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.Mold>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
+                    this.MoldModelName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

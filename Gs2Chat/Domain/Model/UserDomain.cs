@@ -128,6 +128,30 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRooms(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Room>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Singleton",
+                    "Room"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRooms(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Room>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Singleton",
+                    "Room"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Chat.Domain.Model.RoomDomain Room(
             string roomName,
             string password
@@ -180,6 +204,30 @@ namespace Gs2.Gs2Chat.Domain.Model
             );
         #endif
         }
+
+        public ulong SubscribeSubscribes(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Subscribe"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSubscribes(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Subscribe"
+                ),
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomName(
@@ -218,6 +266,30 @@ namespace Gs2.Gs2Chat.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeSubscribesByRoomName(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Subscribe"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSubscribesByRoomName(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Subscribe"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Chat.Domain.Model.SubscribeDomain Subscribe(

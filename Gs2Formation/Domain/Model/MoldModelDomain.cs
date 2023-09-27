@@ -446,5 +446,28 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Formation.Model.MoldModel> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                    this.MoldModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.MoldModel>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
+                    this.MoldModelName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

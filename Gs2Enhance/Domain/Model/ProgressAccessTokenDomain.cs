@@ -918,5 +918,26 @@ namespace Gs2.Gs2Enhance.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Enhance.Model.Progress> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Enhance.Model.Progress>(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

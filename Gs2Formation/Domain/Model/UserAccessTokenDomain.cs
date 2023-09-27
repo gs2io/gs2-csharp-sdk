@@ -133,6 +133,30 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMolds(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.Mold>(
+                Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Mold"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMolds(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.Mold>(
+                Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Mold"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Formation.Domain.Model.MoldAccessTokenDomain Mold(
             string moldModelName
         ) {
@@ -186,6 +210,30 @@ namespace Gs2.Gs2Formation.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribePropertyForms(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
+                Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "PropertyForm"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePropertyForms(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
+                Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "PropertyForm"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Formation.Domain.Model.PropertyFormAccessTokenDomain PropertyForm(

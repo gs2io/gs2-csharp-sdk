@@ -143,6 +143,30 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
         }
 
+        public ulong SubscribeReceiveStatuses(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "ReceiveStatus"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeReceiveStatuses(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "ReceiveStatus"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusAccessTokenDomain ReceiveStatus(
             string bonusModelName
         ) {

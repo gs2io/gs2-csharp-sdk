@@ -762,5 +762,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.ShowcaseMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain.CreateCacheKey(
+                    this.ShowcaseName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain.CreateCacheKey(
+                    this.ShowcaseName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

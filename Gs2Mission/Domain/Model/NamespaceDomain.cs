@@ -133,6 +133,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMissionGroupModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionGroupModel>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MissionGroupModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMissionGroupModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionGroupModel>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MissionGroupModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain MissionGroupModel(
             string missionGroupName
         ) {
@@ -179,6 +201,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCounterModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.CounterModel>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CounterModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCounterModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.CounterModel>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CounterModel"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Mission.Domain.Model.CounterModelDomain CounterModel(
@@ -255,6 +299,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMissionGroupModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MissionGroupModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMissionGroupModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MissionGroupModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain MissionGroupModelMaster(
             string missionGroupName
         ) {
@@ -301,6 +367,28 @@ namespace Gs2.Gs2Mission.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCounterModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CounterModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCounterModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "CounterModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain CounterModelMaster(
@@ -1447,6 +1535,29 @@ namespace Gs2.Gs2Mission.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Mission.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Mission.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

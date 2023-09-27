@@ -628,5 +628,28 @@ namespace Gs2.Gs2Realtime.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Realtime.Model.Room> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Realtime.Domain.Model.RoomDomain.CreateCacheKey(
+                    this.RoomName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Realtime.Model.Room>(
+                _parentKey,
+                Gs2.Gs2Realtime.Domain.Model.RoomDomain.CreateCacheKey(
+                    this.RoomName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

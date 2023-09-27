@@ -158,6 +158,30 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
+        public ulong SubscribeShowcases(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Showcase.Model.Showcase>(
+                Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Showcase"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeShowcases(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.Showcase>(
+                Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Showcase"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Showcase.Domain.Model.ShowcaseAccessTokenDomain Showcase(
             string showcaseName
         ) {

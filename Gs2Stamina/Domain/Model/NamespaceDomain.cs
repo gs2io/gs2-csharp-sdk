@@ -133,6 +133,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
+        public ulong SubscribeStaminaModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.StaminaModel>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "StaminaModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeStaminaModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.StaminaModel>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "StaminaModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain StaminaModel(
             string staminaName
         ) {
@@ -207,6 +229,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRecoverIntervalTableMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RecoverIntervalTableMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRecoverIntervalTableMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RecoverIntervalTableMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Stamina.Domain.Model.RecoverIntervalTableMasterDomain RecoverIntervalTableMaster(
             string recoverIntervalTableName
         ) {
@@ -253,6 +297,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeMaxStaminaTableMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MaxStaminaTableMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMaxStaminaTableMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MaxStaminaTableMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain MaxStaminaTableMaster(
@@ -303,6 +369,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRecoverValueTableMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RecoverValueTableMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRecoverValueTableMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RecoverValueTableMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Stamina.Domain.Model.RecoverValueTableMasterDomain RecoverValueTableMaster(
             string recoverValueTableName
         ) {
@@ -349,6 +437,28 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeStaminaModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "StaminaModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeStaminaModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "StaminaModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Stamina.Domain.Model.StaminaModelMasterDomain StaminaModelMaster(
@@ -1783,6 +1893,29 @@ namespace Gs2.Gs2Stamina.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Stamina.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Stamina.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

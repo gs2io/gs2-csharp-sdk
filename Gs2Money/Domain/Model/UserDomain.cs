@@ -131,6 +131,30 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
         }
 
+        public ulong SubscribeWallets(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Money.Model.Wallet>(
+                Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Wallet"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeWallets(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Money.Model.Wallet>(
+                Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Wallet"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Money.Domain.Model.WalletDomain Wallet(
             int? slot
         ) {
@@ -192,6 +216,30 @@ namespace Gs2.Gs2Money.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeReceipts(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Money.Model.Receipt>(
+                Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Receipt"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeReceipts(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Money.Model.Receipt>(
+                Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Receipt"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Money.Domain.Model.ReceiptDomain Receipt(

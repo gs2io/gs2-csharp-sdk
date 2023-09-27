@@ -134,6 +134,30 @@ namespace Gs2.Gs2Account.Domain.Model
         #endif
         }
 
+        public ulong SubscribeTakeOvers(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "TakeOver"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeTakeOvers(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "TakeOver"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain TakeOver(
             int? type
         ) {
@@ -245,6 +269,29 @@ namespace Gs2.Gs2Account.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Account.Model.Account> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                    this.UserId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                    this.UserId.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

@@ -133,6 +133,28 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
         }
 
+        public ulong SubscribeNodeModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2SkillTree.Model.NodeModel>(
+                Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "NodeModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeNodeModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.NodeModel>(
+                Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "NodeModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2SkillTree.Domain.Model.NodeModelDomain NodeModel(
             string nodeModelName
         ) {
@@ -205,6 +227,28 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeNodeModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
+                Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "NodeModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeNodeModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
+                Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "NodeModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2SkillTree.Domain.Model.NodeModelMasterDomain NodeModelMaster(
@@ -1207,6 +1251,29 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2SkillTree.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SkillTree.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

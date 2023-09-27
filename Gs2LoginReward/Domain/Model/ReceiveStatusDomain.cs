@@ -1037,5 +1037,28 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2LoginReward.Model.ReceiveStatus> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
+                    this.BonusModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                _parentKey,
+                Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
+                    this.BonusModelName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

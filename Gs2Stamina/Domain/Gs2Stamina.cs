@@ -251,6 +251,22 @@ namespace Gs2.Gs2Stamina.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Stamina.Model.Namespace>(
+                "stamina:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.Namespace>(
+                "stamina:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Stamina.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

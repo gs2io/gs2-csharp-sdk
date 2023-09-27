@@ -133,6 +133,28 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
+        public ulong SubscribeMoldModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModel>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MoldModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMoldModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModel>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MoldModel"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Formation.Domain.Model.MoldModelDomain MoldModel(
             string moldModelName
         ) {
@@ -179,6 +201,28 @@ namespace Gs2.Gs2Formation.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribePropertyFormModels(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModel>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PropertyFormModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePropertyFormModels(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModel>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PropertyFormModel"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain PropertyFormModel(
@@ -255,6 +299,28 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
+        public ulong SubscribePropertyFormModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PropertyFormModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribePropertyFormModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "PropertyFormModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain PropertyFormModelMaster(
             string propertyFormModelName
         ) {
@@ -303,6 +369,28 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
+        public ulong SubscribeFormModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "FormModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeFormModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "FormModelMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain FormModelMaster(
             string formModelName
         ) {
@@ -349,6 +437,28 @@ namespace Gs2.Gs2Formation.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeMoldModelMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MoldModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeMoldModelMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "MoldModelMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain MoldModelMaster(
@@ -1639,6 +1749,29 @@ namespace Gs2.Gs2Formation.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Formation.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

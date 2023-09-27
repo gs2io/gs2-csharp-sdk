@@ -122,6 +122,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
+        public ulong SubscribeRandomShowcaseMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RandomShowcaseMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeRandomShowcaseMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "RandomShowcaseMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain RandomShowcaseMaster(
             string showcaseName
         ) {
@@ -170,6 +192,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
+        public ulong SubscribeSalesItemMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SalesItemMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSalesItemMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SalesItemMaster"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain SalesItemMaster(
             string salesItemName
         ) {
@@ -216,6 +260,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeSalesItemGroupMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SalesItemGroupMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeSalesItemGroupMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "SalesItemGroupMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Showcase.Domain.Model.SalesItemGroupMasterDomain SalesItemGroupMaster(
@@ -301,6 +367,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeShowcaseMasters(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ShowcaseMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeShowcaseMasters(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ShowcaseMaster"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain ShowcaseMaster(
@@ -1735,6 +1823,29 @@ namespace Gs2.Gs2Showcase.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

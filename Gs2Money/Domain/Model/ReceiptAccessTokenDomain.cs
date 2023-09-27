@@ -186,5 +186,28 @@ namespace Gs2.Gs2Money.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Money.Model.Receipt> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Money.Model.Receipt>(
+                _parentKey,
+                Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

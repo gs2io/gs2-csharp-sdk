@@ -133,6 +133,30 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
         }
 
+        public ulong SubscribeAcceptVersions(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
+                Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "AcceptVersion"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeAcceptVersions(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
+                Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "AcceptVersion"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain AcceptVersion(
             string versionName
         ) {

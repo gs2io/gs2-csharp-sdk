@@ -181,5 +181,26 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.SendBox> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.SendBoxDomain.CreateCacheKey(
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Friend.Model.SendBox>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.SendBoxDomain.CreateCacheKey(
+                ),
+                callbackId
+            );
+        }
+
     }
 }

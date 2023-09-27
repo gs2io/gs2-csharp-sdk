@@ -787,5 +787,28 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
+                    this.ItemName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
+                    this.ItemName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

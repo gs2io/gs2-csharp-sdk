@@ -762,5 +762,28 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                    this.CampaignModelName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.CampaignModelMasterDomain.CreateCacheKey(
+                    this.CampaignModelName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

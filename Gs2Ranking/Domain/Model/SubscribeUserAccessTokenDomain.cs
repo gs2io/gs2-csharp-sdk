@@ -674,5 +674,30 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.SubscribeUser> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
+                    this.CategoryName.ToString(),
+                    this.TargetUserId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
+                    this.CategoryName.ToString(),
+                    this.TargetUserId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }

@@ -508,5 +508,32 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.Score> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                    this.CategoryName.ToString(),
+                    this.ScorerUserId.ToString(),
+                    this.UniqueId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Ranking.Model.Score>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                    this.CategoryName.ToString(),
+                    this.ScorerUserId.ToString(),
+                    this.UniqueId.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }
