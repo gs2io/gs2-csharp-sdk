@@ -93,7 +93,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         public Gs2.Gs2Formation.Domain.Model.FormModelDomain FormModel(
-            string formModelName
         ) {
             return new Gs2.Gs2Formation.Domain.Model.FormModelDomain(
                 this._cache,
@@ -101,8 +100,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this.NamespaceName,
-                this.MoldModelName,
-                formModelName
+                this.MoldModelName
             );
         }
 

@@ -13,6 +13,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -116,12 +118,12 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this.InventoryName,
                 "ItemSet"
             );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemSet>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemSet[]>
             (
                     parentKey,
                     out var list
             )) {
-                this._result = list
+                this._result = list.SelectMany(v => v)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -159,13 +161,13 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                                     item.ItemName?.ToString(),
                                     item.Name?.ToString()
                             ),
-                            item,
+                            new []{ item },
                             item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<Gs2.Gs2Inventory.Model.ItemSet>(
+                    this._cache.SetListCached<Gs2.Gs2Inventory.Model.ItemSet[]>(
                             parentKey
                     );
                 }

@@ -147,6 +147,36 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
+        public ulong SubscribeBoxes(
+            Action callback,
+            string prizeTableName
+        )
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
+                Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "BoxItems:" + prizeTableName
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeBoxes(
+            ulong callbackId,
+            string prizeTableName
+        )
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
+                Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "BoxItems:" + prizeTableName
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Lottery.Domain.Model.BoxItemsAccessTokenDomain BoxItems(
             string prizeTableName
         ) {
@@ -200,6 +230,36 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeProbabilities(
+            Action callback,
+            string lotteryName
+        )
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.Probability>(
+                Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Probability:" + lotteryName
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeProbabilities(
+            ulong callbackId,
+            string lotteryName
+        )
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.Probability>(
+                Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    "Probability:" + lotteryName
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Lottery.Domain.Model.ProbabilityAccessTokenDomain Probability(

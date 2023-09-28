@@ -64,12 +64,10 @@ namespace Gs2.Gs2Formation.Domain.Model
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
         private readonly string _moldModelName;
-        private readonly string _formModelName;
 
         private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
         public string MoldModelName => _moldModelName;
-        public string FormModelName => _formModelName;
 
         public FormModelDomain(
             CacheDatabase cache,
@@ -77,8 +75,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             StampSheetConfiguration stampSheetConfiguration,
             Gs2RestSession session,
             string namespaceName,
-            string moldModelName,
-            string formModelName
+            string moldModelName
         ) {
             this._cache = cache;
             this._jobQueueDomain = jobQueueDomain;
@@ -89,7 +86,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._moldModelName = moldModelName;
-            this._formModelName = formModelName;
             this._parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.MoldModelName,
@@ -100,7 +96,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         public static string CreateCacheParentKey(
             string namespaceName,
             string moldModelName,
-            string formModelName,
             string childType
         )
         {
@@ -109,19 +104,14 @@ namespace Gs2.Gs2Formation.Domain.Model
                 "formation",
                 namespaceName ?? "null",
                 moldModelName ?? "null",
-                formModelName ?? "null",
                 childType
             );
         }
 
         public static string CreateCacheKey(
-            string formModelName
         )
         {
-            return string.Join(
-                ":",
-                formModelName ?? "null"
-            );
+            return "Singleton";
         }
 
     }
@@ -138,8 +128,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithFormModelName(this.FormModelName);
+                    .WithMoldModelName(this.MoldModelName);
                 var future = this._client.GetFormModelFuture(
                     request
                 );
@@ -148,7 +137,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 {
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
                         var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                            request.FormModelName.ToString()
                         );
                         _cache.Put<Gs2.Gs2Formation.Model.FormModel>(
                             _parentKey,
@@ -172,8 +160,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 #else
                 request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithFormModelName(this.FormModelName);
+                    .WithMoldModelName(this.MoldModelName);
                 GetFormModelResult result = null;
                 try {
                     result = await this._client.GetFormModelAsync(
@@ -181,7 +168,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                 } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                        request.FormModelName.ToString()
                         );
                     _cache.Put<Gs2.Gs2Formation.Model.FormModel>(
                         _parentKey,
@@ -209,7 +195,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                             "FormModel"
                         );
                         var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
                         );
                         cache.Put(
                             parentKey,
@@ -230,8 +215,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             #if UNITY_2017_1_OR_NEWER
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithMoldModelName(this.MoldModelName)
-                .WithFormModelName(this.FormModelName);
+                .WithMoldModelName(this.MoldModelName);
             var future = this._client.GetFormModelFuture(
                 request
             );
@@ -240,7 +224,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             {
                 if (future.Error is Gs2.Core.Exception.NotFoundException) {
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                        request.FormModelName.ToString()
                     );
                     _cache.Put<Gs2.Gs2Formation.Model.FormModel>(
                         _parentKey,
@@ -264,8 +247,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithMoldModelName(this.MoldModelName)
-                .WithFormModelName(this.FormModelName);
+                .WithMoldModelName(this.MoldModelName);
             GetFormModelResult result = null;
             try {
                 result = await this._client.GetFormModelAsync(
@@ -273,7 +255,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
             } catch (Gs2.Core.Exception.NotFoundException e) {
                 var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                    request.FormModelName.ToString()
                     );
                 _cache.Put<Gs2.Gs2Formation.Model.FormModel>(
                     _parentKey,
@@ -301,7 +282,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                         "FormModel"
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
                     );
                     cache.Put(
                         parentKey,
@@ -327,7 +307,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.FormModel>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                        this.FormModelName?.ToString()
                     )
                 );
                 if (!find) {
@@ -340,7 +319,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                         if (future.Error is Gs2.Core.Exception.NotFoundException e)
                         {
                             var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                                    this.FormModelName?.ToString()
                                 );
                             _cache.Put<Gs2.Gs2Formation.Model.FormModel>(
                                 _parentKey,
@@ -364,7 +342,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                     (value, _) = _cache.Get<Gs2.Gs2Formation.Model.FormModel>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                            this.FormModelName?.ToString()
                         )
                     );
                 }
@@ -378,7 +355,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.FormModel>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                        this.FormModelName?.ToString()
                     )
                 );
             if (!find) {
@@ -388,7 +364,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                 } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                                    this.FormModelName?.ToString()
                                 );
                     _cache.Put<Gs2.Gs2Formation.Model.FormModel>(
                         _parentKey,
@@ -405,7 +380,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 (value, _) = _cache.Get<Gs2.Gs2Formation.Model.FormModel>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                            this.FormModelName?.ToString()
                         )
                     );
             }
@@ -451,7 +425,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             return this._cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                    this.FormModelName.ToString()
                 ),
                 callback
             );
@@ -462,7 +435,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             this._cache.Unsubscribe<Gs2.Gs2Formation.Model.FormModel>(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
-                    this.FormModelName.ToString()
                 ),
                 callbackId
             );
