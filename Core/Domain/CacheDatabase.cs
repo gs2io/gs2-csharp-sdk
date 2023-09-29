@@ -63,12 +63,18 @@ namespace Gs2.Core.Domain
             {
                 ttl = UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.DefaultCacheMinutes;
             }
-            this._cache.Ensure(typeof(TKind)).Ensure(parentKey)[key] = new Tuple<object, long>(obj, ttl);
+            var parent = this._cache.Ensure(typeof(TKind)).Ensure(parentKey);
+            var exists = parent.ContainsKey(key);
+            parent[key] = new Tuple<object, long>(obj, ttl);
             foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key)) {
                 (callback.Value as Action<TKind>)?.Invoke(obj);
             }
-            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                (callback.Value as Action)?.Invoke();
+            if (this._listCached.Get(typeof(TKind))?.Contains(parentKey) == true) {
+                if (!exists) {
+                    foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+                        (callback.Value as Action)?.Invoke();
+                    }
+                }
             }
         }
 

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -187,6 +189,29 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
+                        foreach (var displayItem in resultModel.Item.DisplayItems) {
+                            cache.Put(
+                                Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
+                                    this.NamespaceName.ToString(),
+                                    this.UserId.ToString(),
+                                    resultModel.Item.Name.ToString(),
+                                    "DisplayItem"
+                                ),
+                                Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                                    displayItem.DisplayItemId.ToString()
+                                ),
+                                displayItem,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
+                            Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
+                                this.NamespaceName.ToString(),
+                                this.UserId.ToString(),
+                                resultModel.Item.Name.ToString(),
+                                "DisplayItem"
+                            )
+                        );
                     }
                 }
                 self.OnComplete(result?.Item);
@@ -278,6 +303,29 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         key,
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                    foreach (var displayItem in resultModel.Item.DisplayItems) {
+                        cache.Put(
+                            Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
+                                this.NamespaceName.ToString(),
+                                this.UserId.ToString(),
+                                resultModel.Item.Name.ToString(),
+                                "DisplayItem"
+                            ),
+                            Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                                displayItem.DisplayItemId.ToString()
+                            ),
+                            displayItem,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
+                        Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
+                            this.NamespaceName.ToString(),
+                            this.UserId.ToString(),
+                            resultModel.Item.Name.ToString(),
+                            "DisplayItem"
+                        )
                     );
                 }
             }

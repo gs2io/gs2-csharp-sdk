@@ -93,6 +93,28 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
+        public ulong SubscribeDrawnPrizes(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "DrawnPrize"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeDrawnPrizes(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
+                Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "DrawnPrize"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Lottery.Domain.Model.DrawnPrizeAccessTokenDomain DrawnPrize(
             int index
         ) {

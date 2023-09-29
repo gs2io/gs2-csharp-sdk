@@ -31,9 +31,14 @@ namespace Gs2.Gs2Lottery.Model
 #endif
 	public class BoxItem : IComparable
 	{
+        public string PrizeId { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public int? Remaining { set; get; }
         public int? Initial { set; get; }
+        public BoxItem WithPrizeId(string prizeId) {
+            this.PrizeId = prizeId;
+            return this;
+        }
         public BoxItem WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
@@ -56,6 +61,7 @@ namespace Gs2.Gs2Lottery.Model
                 return null;
             }
             return new BoxItem()
+                .WithPrizeId(!data.Keys.Contains("prizeId") || data["prizeId"] == null ? null : data["prizeId"].ToString())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Lottery.Model
                 }
             }
             return new JsonData {
+                ["prizeId"] = PrizeId,
                 ["acquireActions"] = acquireActionsJsonData,
                 ["remaining"] = Remaining,
                 ["initial"] = Initial,
@@ -84,6 +91,10 @@ namespace Gs2.Gs2Lottery.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (PrizeId != null) {
+                writer.WritePropertyName("prizeId");
+                writer.Write(PrizeId.ToString());
+            }
             if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
                 writer.WriteArrayStart();
@@ -110,6 +121,14 @@ namespace Gs2.Gs2Lottery.Model
         {
             var other = obj as BoxItem;
             var diff = 0;
+            if (PrizeId == null && PrizeId == other.PrizeId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += PrizeId.CompareTo(other.PrizeId);
+            }
             if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
                 // null and null
