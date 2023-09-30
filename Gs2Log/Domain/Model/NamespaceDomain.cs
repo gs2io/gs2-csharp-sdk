@@ -147,6 +147,28 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
+
+        public ulong SubscribeAccessLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AccessLog"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeAccessLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AccessLog"
+                ),
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLog(
@@ -205,6 +227,28 @@ namespace Gs2.Gs2Log.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCountAccessLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AccessLogCount"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCountAccessLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "AccessLogCount"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Log.Domain.Model.AccessLogDomain AccessLog(
@@ -280,6 +324,28 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
+
+        public ulong SubscribeExecuteStampSheetLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampSheetLog"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeExecuteStampSheetLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampSheetLog"
+                ),
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLog(
@@ -342,6 +408,28 @@ namespace Gs2.Gs2Log.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCountExecuteStampSheetLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampSheetLogCount"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCountExecuteStampSheetLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampSheetLogCount"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Log.Domain.Model.ExecuteStampSheetLogDomain ExecuteStampSheetLog(
@@ -417,6 +505,28 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
+
+        public ulong SubscribeExecuteStampTaskLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampTaskLog"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeExecuteStampTaskLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampTaskLog"
+                ),
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLog(
@@ -479,6 +589,28 @@ namespace Gs2.Gs2Log.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeCountExecuteStampTaskLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampTaskLogCount"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCountExecuteStampTaskLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "ExecuteStampTaskLogCount"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Log.Domain.Model.ExecuteStampTaskLogDomain ExecuteStampTaskLog(
@@ -554,6 +686,28 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         #endif
         }
+
+        public ulong SubscribeIssueStampSheetLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IssueStampSheetLog"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeIssueStampSheetLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IssueStampSheetLog"
+                ),
+                callbackId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLog(
@@ -618,6 +772,28 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
+        public ulong SubscribeCountIssueStampSheetLog(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IssueStampSheetLogCount"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeCountIssueStampSheetLog(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "IssueStampSheetLogCount"
+                ),
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain IssueStampSheetLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain(
@@ -673,6 +849,28 @@ namespace Gs2.Gs2Log.Domain.Model
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeInsights(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.Insight>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Insight"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeInsights(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.Insight>(
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "Insight"
+                ),
+                callbackId
+            );
         }
 
         public Gs2.Gs2Log.Domain.Model.InsightDomain Insight(
@@ -1765,6 +1963,29 @@ namespace Gs2.Gs2Log.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Log.Model.Namespace> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Log.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

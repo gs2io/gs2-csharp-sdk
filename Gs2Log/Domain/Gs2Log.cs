@@ -251,6 +251,22 @@ namespace Gs2.Gs2Log.Domain
         #endif
         }
 
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.Namespace>(
+                "log:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.Namespace>(
+                "log:Namespace",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Log.Domain.Model.NamespaceDomain Namespace(
             string namespaceName
         ) {

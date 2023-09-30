@@ -475,6 +475,22 @@ namespace Gs2.Gs2Deploy.Domain
         #endif
         }
 
+        public ulong SubscribeStacks(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Deploy.Model.Stack>(
+                "deploy:Stack",
+                callback
+            );
+        }
+
+        public void UnsubscribeStacks(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Deploy.Model.Stack>(
+                "deploy:Stack",
+                callbackId
+            );
+        }
+
         public Gs2.Gs2Deploy.Domain.Model.StackDomain Stack(
             string stackName
         ) {

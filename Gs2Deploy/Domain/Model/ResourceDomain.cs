@@ -432,5 +432,28 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
         #endif
 
+
+        public ulong Subscribe(Action<Gs2.Gs2Deploy.Model.Resource> callback)
+        {
+            return this._cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                    this.ResourceName.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._cache.Unsubscribe<Gs2.Gs2Deploy.Model.Resource>(
+                _parentKey,
+                Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                    this.ResourceName.ToString()
+                ),
+                callbackId
+            );
+        }
+
     }
 }
