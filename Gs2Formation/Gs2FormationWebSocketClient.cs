@@ -534,11 +534,6 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("moldModelName");
                     jsonWriter.Write(request.MoldModelName.ToString());
                 }
-                if (request.FormModelName != null)
-                {
-                    jsonWriter.WritePropertyName("formModelName");
-                    jsonWriter.Write(request.FormModelName.ToString());
-                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

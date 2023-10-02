@@ -780,11 +780,10 @@ namespace Gs2.Gs2Formation
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "formation")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/model/{moldModelName}/form/{formModelName}";
+                    + "/{namespaceName}/model/{moldModelName}/form";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{moldModelName}", !string.IsNullOrEmpty(request.MoldModelName) ? request.MoldModelName.ToString() : "null");
-                url = url.Replace("{formModelName}", !string.IsNullOrEmpty(request.FormModelName) ? request.FormModelName.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
