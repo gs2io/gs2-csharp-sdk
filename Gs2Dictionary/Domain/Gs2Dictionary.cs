@@ -331,6 +331,12 @@ namespace Gs2.Gs2Dictionary.Domain
         public static Action<string, DeleteEntriesByUserIdRequest, DeleteEntriesByUserIdResult> DeleteEntriesByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyEntryByUserIdRequest, VerifyEntryByUserIdResult> VerifyEntryByUserIdComplete = new UnityEvent<string, VerifyEntryByUserIdRequest, VerifyEntryByUserIdResult>();
+    #else
+        public static Action<string, VerifyEntryByUserIdRequest, VerifyEntryByUserIdResult> VerifyEntryByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -360,6 +366,18 @@ namespace Gs2.Gs2Dictionary.Domain
                         }
 
                         DeleteEntriesByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyEntryByUserId": {
+                        var requestModel = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyEntryByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyEntryByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

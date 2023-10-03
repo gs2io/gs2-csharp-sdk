@@ -1652,6 +1652,226 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankFuture(
+            VerifyRankByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                var future = this._client.VerifyRankByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                VerifyRankByUserIdResult result = null;
+                    result = await this._client.VerifyRankByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankAsync(
+            VerifyRankByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            var future = this._client.VerifyRankByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            VerifyRankByUserIdResult result = null;
+                result = await this._client.VerifyRankByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankAsync(
+            VerifyRankByUserIdRequest request
+        ) {
+            var future = VerifyRankFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyRankFuture.")]
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRank(
+            VerifyRankByUserIdRequest request
+        ) {
+            return VerifyRankFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankCapFuture(
+            VerifyRankCapByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                var future = this._client.VerifyRankCapByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                VerifyRankCapByUserIdResult result = null;
+                    result = await this._client.VerifyRankCapByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankCapAsync(
+            VerifyRankCapByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            var future = this._client.VerifyRankCapByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            VerifyRankCapByUserIdResult result = null;
+                result = await this._client.VerifyRankCapByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankCapAsync(
+            VerifyRankCapByUserIdRequest request
+        ) {
+            var future = VerifyRankCapFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyRankCapFuture.")]
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusDomain> VerifyRankCap(
+            VerifyRankCapByUserIdRequest request
+        ) {
+            return VerifyRankCapFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionDomain> MultiplyAcquireActionsFuture(
             MultiplyAcquireActionsByUserIdRequest request
         ) {

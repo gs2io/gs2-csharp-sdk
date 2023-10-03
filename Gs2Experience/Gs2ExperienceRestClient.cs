@@ -4256,6 +4256,548 @@ namespace Gs2.Gs2Experience
 #endif
 
 
+        public class VerifyRankTask : Gs2RestSessionTask<VerifyRankRequest, VerifyRankResult>
+        {
+            public VerifyRankTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRankRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRankRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/{experienceName}/verify/rank/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId);
+                }
+                if (request.RankValue != null)
+                {
+                    jsonWriter.WritePropertyName("rankValue");
+                    jsonWriter.Write(request.RankValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRank(
+                Request.VerifyRankRequest request,
+                UnityAction<AsyncResult<Result.VerifyRankResult>> callback
+        )
+		{
+			var task = new VerifyRankTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyRankResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyRankResult> VerifyRankFuture(
+                Request.VerifyRankRequest request
+        )
+		{
+			return new VerifyRankTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyRankResult> VerifyRankAsync(
+                Request.VerifyRankRequest request
+        )
+		{
+            AsyncResult<Result.VerifyRankResult> result = null;
+			await VerifyRank(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyRankTask VerifyRankAsync(
+                Request.VerifyRankRequest request
+        )
+		{
+			return new VerifyRankTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyRankResult> VerifyRankAsync(
+                Request.VerifyRankRequest request
+        )
+		{
+			var task = new VerifyRankTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyRankByUserIdTask : Gs2RestSessionTask<VerifyRankByUserIdRequest, VerifyRankByUserIdResult>
+        {
+            public VerifyRankByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRankByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRankByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/{experienceName}/verify/rank/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId);
+                }
+                if (request.RankValue != null)
+                {
+                    jsonWriter.WritePropertyName("rankValue");
+                    jsonWriter.Write(request.RankValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRankByUserId(
+                Request.VerifyRankByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyRankByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyRankByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyRankByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyRankByUserIdResult> VerifyRankByUserIdFuture(
+                Request.VerifyRankByUserIdRequest request
+        )
+		{
+			return new VerifyRankByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyRankByUserIdResult> VerifyRankByUserIdAsync(
+                Request.VerifyRankByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyRankByUserIdResult> result = null;
+			await VerifyRankByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyRankByUserIdTask VerifyRankByUserIdAsync(
+                Request.VerifyRankByUserIdRequest request
+        )
+		{
+			return new VerifyRankByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyRankByUserIdResult> VerifyRankByUserIdAsync(
+                Request.VerifyRankByUserIdRequest request
+        )
+		{
+			var task = new VerifyRankByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyRankCapTask : Gs2RestSessionTask<VerifyRankCapRequest, VerifyRankCapResult>
+        {
+            public VerifyRankCapTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRankCapRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRankCapRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/{experienceName}/verify/rankCap/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId);
+                }
+                if (request.RankCapValue != null)
+                {
+                    jsonWriter.WritePropertyName("rankCapValue");
+                    jsonWriter.Write(request.RankCapValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRankCap(
+                Request.VerifyRankCapRequest request,
+                UnityAction<AsyncResult<Result.VerifyRankCapResult>> callback
+        )
+		{
+			var task = new VerifyRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyRankCapResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyRankCapResult> VerifyRankCapFuture(
+                Request.VerifyRankCapRequest request
+        )
+		{
+			return new VerifyRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyRankCapResult> VerifyRankCapAsync(
+                Request.VerifyRankCapRequest request
+        )
+		{
+            AsyncResult<Result.VerifyRankCapResult> result = null;
+			await VerifyRankCap(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyRankCapTask VerifyRankCapAsync(
+                Request.VerifyRankCapRequest request
+        )
+		{
+			return new VerifyRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyRankCapResult> VerifyRankCapAsync(
+                Request.VerifyRankCapRequest request
+        )
+		{
+			var task = new VerifyRankCapTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyRankCapByUserIdTask : Gs2RestSessionTask<VerifyRankCapByUserIdRequest, VerifyRankCapByUserIdResult>
+        {
+            public VerifyRankCapByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRankCapByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRankCapByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/{experienceName}/verify/rankCap/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{experienceName}", !string.IsNullOrEmpty(request.ExperienceName) ? request.ExperienceName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId);
+                }
+                if (request.RankCapValue != null)
+                {
+                    jsonWriter.WritePropertyName("rankCapValue");
+                    jsonWriter.Write(request.RankCapValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRankCapByUserId(
+                Request.VerifyRankCapByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyRankCapByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyRankCapByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyRankCapByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyRankCapByUserIdResult> VerifyRankCapByUserIdFuture(
+                Request.VerifyRankCapByUserIdRequest request
+        )
+		{
+			return new VerifyRankCapByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyRankCapByUserIdResult> VerifyRankCapByUserIdAsync(
+                Request.VerifyRankCapByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyRankCapByUserIdResult> result = null;
+			await VerifyRankCapByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyRankCapByUserIdTask VerifyRankCapByUserIdAsync(
+                Request.VerifyRankCapByUserIdRequest request
+        )
+		{
+			return new VerifyRankCapByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyRankCapByUserIdResult> VerifyRankCapByUserIdAsync(
+                Request.VerifyRankCapByUserIdRequest request
+        )
+		{
+			var task = new VerifyRankCapByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AddExperienceByStampSheetTask : Gs2RestSessionTask<AddExperienceByStampSheetRequest, AddExperienceByStampSheetResult>
         {
             public AddExperienceByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AddExperienceByStampSheetRequest request) : base(session, factory, request)
@@ -5132,6 +5674,256 @@ namespace Gs2.Gs2Experience
         )
 		{
 			var task = new MultiplyAcquireActionsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyRankByStampTaskTask : Gs2RestSessionTask<VerifyRankByStampTaskRequest, VerifyRankByStampTaskResult>
+        {
+            public VerifyRankByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRankByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRankByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/rank/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRankByStampTask(
+                Request.VerifyRankByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyRankByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyRankByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyRankByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyRankByStampTaskResult> VerifyRankByStampTaskFuture(
+                Request.VerifyRankByStampTaskRequest request
+        )
+		{
+			return new VerifyRankByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyRankByStampTaskResult> VerifyRankByStampTaskAsync(
+                Request.VerifyRankByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyRankByStampTaskResult> result = null;
+			await VerifyRankByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyRankByStampTaskTask VerifyRankByStampTaskAsync(
+                Request.VerifyRankByStampTaskRequest request
+        )
+		{
+			return new VerifyRankByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyRankByStampTaskResult> VerifyRankByStampTaskAsync(
+                Request.VerifyRankByStampTaskRequest request
+        )
+		{
+			var task = new VerifyRankByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyRankCapByStampTaskTask : Gs2RestSessionTask<VerifyRankCapByStampTaskRequest, VerifyRankCapByStampTaskResult>
+        {
+            public VerifyRankCapByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRankCapByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRankCapByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/rankCap/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRankCapByStampTask(
+                Request.VerifyRankCapByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyRankCapByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyRankCapByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyRankCapByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyRankCapByStampTaskResult> VerifyRankCapByStampTaskFuture(
+                Request.VerifyRankCapByStampTaskRequest request
+        )
+		{
+			return new VerifyRankCapByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyRankCapByStampTaskResult> VerifyRankCapByStampTaskAsync(
+                Request.VerifyRankCapByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyRankCapByStampTaskResult> result = null;
+			await VerifyRankCapByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyRankCapByStampTaskTask VerifyRankCapByStampTaskAsync(
+                Request.VerifyRankCapByStampTaskRequest request
+        )
+		{
+			return new VerifyRankCapByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyRankCapByStampTaskResult> VerifyRankCapByStampTaskAsync(
+                Request.VerifyRankCapByStampTaskRequest request
+        )
+		{
+			var task = new VerifyRankCapByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

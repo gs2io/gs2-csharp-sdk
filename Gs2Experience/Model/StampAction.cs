@@ -30,6 +30,10 @@ namespace Gs2.Gs2Experience.Model
                     return SubExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Experience:SubRankCapByUserId":
                     return SubRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Experience:VerifyRankByUserId":
+                    return VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Experience:VerifyRankCapByUserId":
+                    return VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

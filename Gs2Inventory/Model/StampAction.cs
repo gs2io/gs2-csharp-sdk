@@ -28,12 +28,18 @@ namespace Gs2.Gs2Inventory.Model
             switch (action.Action) {
                 case "Gs2Inventory:ConsumeItemSetByUserId":
                     return ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifyItemSetByUserId":
+                    return VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:VerifyReferenceOfByUserId":
                     return VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:ConsumeSimpleItemsByUserId":
                     return ConsumeSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifySimpleItemByUserId":
+                    return VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:ConsumeBigItemByUserId":
                     return ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:VerifyBigItemByUserId":
+                    return VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

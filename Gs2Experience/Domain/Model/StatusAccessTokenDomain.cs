@@ -529,6 +529,226 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankFuture(
+            VerifyRankRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                var future = this._client.VerifyRankFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                VerifyRankResult result = null;
+                    result = await this._client.VerifyRankAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankAsync(
+            VerifyRankRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            var future = this._client.VerifyRankFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            VerifyRankResult result = null;
+                result = await this._client.VerifyRankAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankAsync(
+            VerifyRankRequest request
+        ) {
+            var future = VerifyRankFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyRankFuture.")]
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRank(
+            VerifyRankRequest request
+        ) {
+            return VerifyRankFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankCapFuture(
+            VerifyRankCapRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                var future = this._client.VerifyRankCapFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithExperienceName(this.ExperienceName)
+                    .WithPropertyId(this.PropertyId);
+                VerifyRankCapResult result = null;
+                    result = await this._client.VerifyRankCapAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankCapAsync(
+            VerifyRankCapRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            var future = this._client.VerifyRankCapFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithExperienceName(this.ExperienceName)
+                .WithPropertyId(this.PropertyId);
+            VerifyRankCapResult result = null;
+                result = await this._client.VerifyRankCapAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankCapAsync(
+            VerifyRankCapRequest request
+        ) {
+            var future = VerifyRankCapFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyRankCapFuture.")]
+        public IFuture<Gs2.Gs2Experience.Domain.Model.StatusAccessTokenDomain> VerifyRankCap(
+            VerifyRankCapRequest request
+        ) {
+            return VerifyRankCapFuture(request);
+        }
+        #endif
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

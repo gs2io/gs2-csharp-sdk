@@ -425,6 +425,18 @@ namespace Gs2.Gs2Experience.Domain
         public static Action<string, SubRankCapByUserIdRequest, SubRankCapByUserIdResult> SubRankCapByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyRankByUserIdRequest, VerifyRankByUserIdResult> VerifyRankByUserIdComplete = new UnityEvent<string, VerifyRankByUserIdRequest, VerifyRankByUserIdResult>();
+    #else
+        public static Action<string, VerifyRankByUserIdRequest, VerifyRankByUserIdResult> VerifyRankByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyRankCapByUserIdRequest, VerifyRankCapByUserIdResult> VerifyRankCapByUserIdComplete = new UnityEvent<string, VerifyRankCapByUserIdRequest, VerifyRankCapByUserIdResult>();
+    #else
+        public static Action<string, VerifyRankCapByUserIdRequest, VerifyRankCapByUserIdResult> VerifyRankCapByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -485,6 +497,30 @@ namespace Gs2.Gs2Experience.Domain
                         }
 
                         SubRankCapByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyRankByUserId": {
+                        var requestModel = VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyRankByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyRankByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyRankCapByUserId": {
+                        var requestModel = VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyRankCapByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

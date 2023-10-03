@@ -445,6 +445,116 @@ namespace Gs2.Gs2Limit.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> VerifyFuture(
+            VerifyCounterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithLimitName(this.LimitName)
+                    .WithCounterName(this.CounterName);
+                var future = this._client.VerifyCounterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithLimitName(this.LimitName)
+                    .WithCounterName(this.CounterName);
+                VerifyCounterResult result = null;
+                    result = await this._client.VerifyCounterAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> VerifyAsync(
+            VerifyCounterRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithLimitName(this.LimitName)
+                .WithCounterName(this.CounterName);
+            var future = this._client.VerifyCounterFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithLimitName(this.LimitName)
+                .WithCounterName(this.CounterName);
+            VerifyCounterResult result = null;
+                result = await this._client.VerifyCounterAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> VerifyAsync(
+            VerifyCounterRequest request
+        ) {
+            var future = VerifyFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyFuture.")]
+        public IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> Verify(
+            VerifyCounterRequest request
+        ) {
+            return VerifyFuture(request);
+        }
+        #endif
+
         public static string CreateCacheParentKey(
             string namespaceName,
             string userId,

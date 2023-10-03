@@ -93,6 +93,108 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 "User"
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserAccessTokenDomain> VerifyEntryFuture(
+            VerifyEntryRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.UserAccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                var future = this._client.VerifyEntryFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token);
+                VerifyEntryResult result = null;
+                    result = await this._client.VerifyEntryAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.UserAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.UserAccessTokenDomain> VerifyEntryAsync(
+            VerifyEntryRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            var future = this._client.VerifyEntryFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token);
+            VerifyEntryResult result = null;
+                result = await this._client.VerifyEntryAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.UserAccessTokenDomain> VerifyEntryAsync(
+            VerifyEntryRequest request
+        ) {
+            var future = VerifyEntryFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyEntryFuture.")]
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserAccessTokenDomain> VerifyEntry(
+            VerifyEntryRequest request
+        ) {
+            return VerifyEntryFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Dictionary.Model.Entry> Entries(

@@ -616,6 +616,116 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> VerifyFuture(
+            VerifySimpleItemByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                var future = this._client.VerifySimpleItemByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                VerifySimpleItemByUserIdResult result = null;
+                    result = await this._client.VerifySimpleItemByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> VerifyAsync(
+            VerifySimpleItemByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            var future = this._client.VerifySimpleItemByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            VerifySimpleItemByUserIdResult result = null;
+                result = await this._client.VerifySimpleItemByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> VerifyAsync(
+            VerifySimpleItemByUserIdRequest request
+        ) {
+            var future = VerifyFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain> Verify(
+            VerifySimpleItemByUserIdRequest request
+        ) {
+            return VerifyFuture(request);
+        }
+        #endif
+
     }
 
     public partial class SimpleItemDomain {

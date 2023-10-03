@@ -1264,6 +1264,277 @@ namespace Gs2.Gs2Limit
 #endif
 
 
+        public class VerifyCounterTask : Gs2WebSocketSessionTask<Request.VerifyCounterRequest, Result.VerifyCounterResult>
+        {
+	        public VerifyCounterTask(IGs2Session session, Request.VerifyCounterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCounterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.LimitName != null)
+                {
+                    jsonWriter.WritePropertyName("limitName");
+                    jsonWriter.Write(request.LimitName.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "limit",
+                    "counter",
+                    "verifyCounter",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounter(
+                Request.VerifyCounterRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterResult>> callback
+        )
+		{
+			var task = new VerifyCounterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterResult> VerifyCounterFuture(
+                Request.VerifyCounterRequest request
+        )
+		{
+			return new VerifyCounterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterResult> VerifyCounterAsync(
+            Request.VerifyCounterRequest request
+        )
+		{
+		    var task = new VerifyCounterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCounterTask VerifyCounterAsync(
+                Request.VerifyCounterRequest request
+        )
+		{
+			return new VerifyCounterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterResult> VerifyCounterAsync(
+            Request.VerifyCounterRequest request
+        )
+		{
+		    var task = new VerifyCounterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyCounterByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyCounterByUserIdRequest, Result.VerifyCounterByUserIdResult>
+        {
+	        public VerifyCounterByUserIdTask(IGs2Session session, Request.VerifyCounterByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyCounterByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.LimitName != null)
+                {
+                    jsonWriter.WritePropertyName("limitName");
+                    jsonWriter.Write(request.LimitName.ToString());
+                }
+                if (request.CounterName != null)
+                {
+                    jsonWriter.WritePropertyName("counterName");
+                    jsonWriter.Write(request.CounterName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "limit",
+                    "counter",
+                    "verifyCounterByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCounterByUserId(
+                Request.VerifyCounterByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyCounterByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyCounterByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyCounterByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyCounterByUserIdResult> VerifyCounterByUserIdFuture(
+                Request.VerifyCounterByUserIdRequest request
+        )
+		{
+			return new VerifyCounterByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyCounterByUserIdResult> VerifyCounterByUserIdAsync(
+            Request.VerifyCounterByUserIdRequest request
+        )
+		{
+		    var task = new VerifyCounterByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyCounterByUserIdTask VerifyCounterByUserIdAsync(
+                Request.VerifyCounterByUserIdRequest request
+        )
+		{
+			return new VerifyCounterByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyCounterByUserIdResult> VerifyCounterByUserIdAsync(
+            Request.VerifyCounterByUserIdRequest request
+        )
+		{
+		    var task = new VerifyCounterByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class CountDownByStampSheetTask : Gs2WebSocketSessionTask<Request.CountDownByStampSheetRequest, Result.CountDownByStampSheetResult>
         {
 	        public CountDownByStampSheetTask(IGs2Session session, Request.CountDownByStampSheetRequest request) : base(session, request)

@@ -8336,6 +8336,279 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class VerifyItemSetTask : Gs2RestSessionTask<VerifyItemSetRequest, VerifyItemSetResult>
+        {
+            public VerifyItemSetTask(IGs2Session session, RestSessionRequestFactory factory, VerifyItemSetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyItemSetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/inventory/{inventoryName}/item/{itemName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ItemSetName != null)
+                {
+                    jsonWriter.WritePropertyName("itemSetName");
+                    jsonWriter.Write(request.ItemSetName);
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyItemSet(
+                Request.VerifyItemSetRequest request,
+                UnityAction<AsyncResult<Result.VerifyItemSetResult>> callback
+        )
+		{
+			var task = new VerifyItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyItemSetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyItemSetResult> VerifyItemSetFuture(
+                Request.VerifyItemSetRequest request
+        )
+		{
+			return new VerifyItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyItemSetResult> VerifyItemSetAsync(
+                Request.VerifyItemSetRequest request
+        )
+		{
+            AsyncResult<Result.VerifyItemSetResult> result = null;
+			await VerifyItemSet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyItemSetTask VerifyItemSetAsync(
+                Request.VerifyItemSetRequest request
+        )
+		{
+			return new VerifyItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyItemSetResult> VerifyItemSetAsync(
+                Request.VerifyItemSetRequest request
+        )
+		{
+			var task = new VerifyItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyItemSetByUserIdTask : Gs2RestSessionTask<VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult>
+        {
+            public VerifyItemSetByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyItemSetByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyItemSetByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/inventory/{inventoryName}/item/{itemName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ItemSetName != null)
+                {
+                    jsonWriter.WritePropertyName("itemSetName");
+                    jsonWriter.Write(request.ItemSetName);
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyItemSetByUserId(
+                Request.VerifyItemSetByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyItemSetByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyItemSetByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdFuture(
+                Request.VerifyItemSetByUserIdRequest request
+        )
+		{
+			return new VerifyItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdAsync(
+                Request.VerifyItemSetByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyItemSetByUserIdResult> result = null;
+			await VerifyItemSetByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyItemSetByUserIdTask VerifyItemSetByUserIdAsync(
+                Request.VerifyItemSetByUserIdRequest request
+        )
+		{
+			return new VerifyItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdAsync(
+                Request.VerifyItemSetByUserIdRequest request
+        )
+		{
+			var task = new VerifyItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AcquireItemSetByStampSheetTask : Gs2RestSessionTask<AcquireItemSetByStampSheetRequest, AcquireItemSetByStampSheetResult>
         {
             public AcquireItemSetByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AcquireItemSetByStampSheetRequest request) : base(session, factory, request)
@@ -8577,6 +8850,131 @@ namespace Gs2.Gs2Inventory
         )
 		{
 			var task = new ConsumeItemSetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyItemSetByStampTaskTask : Gs2RestSessionTask<VerifyItemSetByStampTaskRequest, VerifyItemSetByStampTaskResult>
+        {
+            public VerifyItemSetByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyItemSetByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyItemSetByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/item/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyItemSetByStampTask(
+                Request.VerifyItemSetByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyItemSetByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyItemSetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyItemSetByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskFuture(
+                Request.VerifyItemSetByStampTaskRequest request
+        )
+		{
+			return new VerifyItemSetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskAsync(
+                Request.VerifyItemSetByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyItemSetByStampTaskResult> result = null;
+			await VerifyItemSetByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyItemSetByStampTaskTask VerifyItemSetByStampTaskAsync(
+                Request.VerifyItemSetByStampTaskRequest request
+        )
+		{
+			return new VerifyItemSetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskAsync(
+                Request.VerifyItemSetByStampTaskRequest request
+        )
+		{
+			var task = new VerifyItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -11365,6 +11763,269 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class VerifySimpleItemTask : Gs2RestSessionTask<VerifySimpleItemRequest, VerifySimpleItemResult>
+        {
+            public VerifySimpleItemTask(IGs2Session session, RestSessionRequestFactory factory, VerifySimpleItemRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifySimpleItemRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/simple/inventory/{inventoryName}/item/{itemName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifySimpleItem(
+                Request.VerifySimpleItemRequest request,
+                UnityAction<AsyncResult<Result.VerifySimpleItemResult>> callback
+        )
+		{
+			var task = new VerifySimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifySimpleItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifySimpleItemResult> VerifySimpleItemFuture(
+                Request.VerifySimpleItemRequest request
+        )
+		{
+			return new VerifySimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifySimpleItemResult> VerifySimpleItemAsync(
+                Request.VerifySimpleItemRequest request
+        )
+		{
+            AsyncResult<Result.VerifySimpleItemResult> result = null;
+			await VerifySimpleItem(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifySimpleItemTask VerifySimpleItemAsync(
+                Request.VerifySimpleItemRequest request
+        )
+		{
+			return new VerifySimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifySimpleItemResult> VerifySimpleItemAsync(
+                Request.VerifySimpleItemRequest request
+        )
+		{
+			var task = new VerifySimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifySimpleItemByUserIdTask : Gs2RestSessionTask<VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult>
+        {
+            public VerifySimpleItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifySimpleItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifySimpleItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/simple/inventory/{inventoryName}/item/{itemName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifySimpleItemByUserId(
+                Request.VerifySimpleItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifySimpleItemByUserIdResult>> callback
+        )
+		{
+			var task = new VerifySimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifySimpleItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdFuture(
+                Request.VerifySimpleItemByUserIdRequest request
+        )
+		{
+			return new VerifySimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdAsync(
+                Request.VerifySimpleItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifySimpleItemByUserIdResult> result = null;
+			await VerifySimpleItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifySimpleItemByUserIdTask VerifySimpleItemByUserIdAsync(
+                Request.VerifySimpleItemByUserIdRequest request
+        )
+		{
+			return new VerifySimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdAsync(
+                Request.VerifySimpleItemByUserIdRequest request
+        )
+		{
+			var task = new VerifySimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AcquireSimpleItemsByStampSheetTask : Gs2RestSessionTask<AcquireSimpleItemsByStampSheetRequest, AcquireSimpleItemsByStampSheetResult>
         {
             public AcquireSimpleItemsByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AcquireSimpleItemsByStampSheetRequest request) : base(session, factory, request)
@@ -11606,6 +12267,131 @@ namespace Gs2.Gs2Inventory
         )
 		{
 			var task = new ConsumeSimpleItemsByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifySimpleItemByStampTaskTask : Gs2RestSessionTask<VerifySimpleItemByStampTaskRequest, VerifySimpleItemByStampTaskResult>
+        {
+            public VerifySimpleItemByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifySimpleItemByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifySimpleItemByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/simple/item/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifySimpleItemByStampTask(
+                Request.VerifySimpleItemByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifySimpleItemByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifySimpleItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifySimpleItemByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskFuture(
+                Request.VerifySimpleItemByStampTaskRequest request
+        )
+		{
+			return new VerifySimpleItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskAsync(
+                Request.VerifySimpleItemByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifySimpleItemByStampTaskResult> result = null;
+			await VerifySimpleItemByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifySimpleItemByStampTaskTask VerifySimpleItemByStampTaskAsync(
+                Request.VerifySimpleItemByStampTaskRequest request
+        )
+		{
+			return new VerifySimpleItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskAsync(
+                Request.VerifySimpleItemByStampTaskRequest request
+        )
+		{
+			var task = new VerifySimpleItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
@@ -12596,6 +13382,269 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class VerifyBigItemTask : Gs2RestSessionTask<VerifyBigItemRequest, VerifyBigItemResult>
+        {
+            public VerifyBigItemTask(IGs2Session session, RestSessionRequestFactory factory, VerifyBigItemRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyBigItemRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/big/inventory/{inventoryName}/item/{itemName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyBigItem(
+                Request.VerifyBigItemRequest request,
+                UnityAction<AsyncResult<Result.VerifyBigItemResult>> callback
+        )
+		{
+			var task = new VerifyBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyBigItemResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyBigItemResult> VerifyBigItemFuture(
+                Request.VerifyBigItemRequest request
+        )
+		{
+			return new VerifyBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyBigItemResult> VerifyBigItemAsync(
+                Request.VerifyBigItemRequest request
+        )
+		{
+            AsyncResult<Result.VerifyBigItemResult> result = null;
+			await VerifyBigItem(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyBigItemTask VerifyBigItemAsync(
+                Request.VerifyBigItemRequest request
+        )
+		{
+			return new VerifyBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyBigItemResult> VerifyBigItemAsync(
+                Request.VerifyBigItemRequest request
+        )
+		{
+			var task = new VerifyBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyBigItemByUserIdTask : Gs2RestSessionTask<VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult>
+        {
+            public VerifyBigItemByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyBigItemByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyBigItemByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/big/inventory/{inventoryName}/item/{itemName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{itemName}", !string.IsNullOrEmpty(request.ItemName) ? request.ItemName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyBigItemByUserId(
+                Request.VerifyBigItemByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyBigItemByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyBigItemByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdFuture(
+                Request.VerifyBigItemByUserIdRequest request
+        )
+		{
+			return new VerifyBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdAsync(
+                Request.VerifyBigItemByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyBigItemByUserIdResult> result = null;
+			await VerifyBigItemByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyBigItemByUserIdTask VerifyBigItemByUserIdAsync(
+                Request.VerifyBigItemByUserIdRequest request
+        )
+		{
+			return new VerifyBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdAsync(
+                Request.VerifyBigItemByUserIdRequest request
+        )
+		{
+			var task = new VerifyBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AcquireBigItemByStampSheetTask : Gs2RestSessionTask<AcquireBigItemByStampSheetRequest, AcquireBigItemByStampSheetResult>
         {
             public AcquireBigItemByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AcquireBigItemByStampSheetRequest request) : base(session, factory, request)
@@ -12837,6 +13886,131 @@ namespace Gs2.Gs2Inventory
         )
 		{
 			var task = new ConsumeBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyBigItemByStampTaskTask : Gs2RestSessionTask<VerifyBigItemByStampTaskRequest, VerifyBigItemByStampTaskResult>
+        {
+            public VerifyBigItemByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyBigItemByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyBigItemByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/big/item/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyBigItemByStampTask(
+                Request.VerifyBigItemByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyBigItemByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyBigItemByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskFuture(
+                Request.VerifyBigItemByStampTaskRequest request
+        )
+		{
+			return new VerifyBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskAsync(
+                Request.VerifyBigItemByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyBigItemByStampTaskResult> result = null;
+			await VerifyBigItemByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyBigItemByStampTaskTask VerifyBigItemByStampTaskAsync(
+                Request.VerifyBigItemByStampTaskRequest request
+        )
+		{
+			return new VerifyBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskAsync(
+                Request.VerifyBigItemByStampTaskRequest request
+        )
+		{
+			var task = new VerifyBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

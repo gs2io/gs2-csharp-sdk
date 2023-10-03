@@ -860,6 +860,116 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> VerifyFuture(
+            VerifyBigItemByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                var future = this._client.VerifyBigItemByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                VerifyBigItemByUserIdResult result = null;
+                    result = await this._client.VerifyBigItemByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> VerifyAsync(
+            VerifyBigItemByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            var future = this._client.VerifyBigItemByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            VerifyBigItemByUserIdResult result = null;
+                result = await this._client.VerifyBigItemByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> VerifyAsync(
+            VerifyBigItemByUserIdRequest request
+        ) {
+            var future = VerifyFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> Verify(
+            VerifyBigItemByUserIdRequest request
+        ) {
+            return VerifyFuture(request);
+        }
+        #endif
+
     }
 
     public partial class BigItemDomain {

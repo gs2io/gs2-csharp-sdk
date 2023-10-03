@@ -361,6 +361,12 @@ namespace Gs2.Gs2Limit.Domain
         public static Action<string, CountUpByUserIdRequest, CountUpByUserIdResult> CountUpByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyCounterByUserIdRequest, VerifyCounterByUserIdResult> VerifyCounterByUserIdComplete = new UnityEvent<string, VerifyCounterByUserIdRequest, VerifyCounterByUserIdResult>();
+    #else
+        public static Action<string, VerifyCounterByUserIdRequest, VerifyCounterByUserIdResult> VerifyCounterByUserIdComplete;
+    #endif
+
         public static void UpdateCacheFromStampTask(
                 CacheDatabase cache,
                 string taskId,
@@ -392,6 +398,18 @@ namespace Gs2.Gs2Limit.Domain
                         }
 
                         CountUpByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyCounterByUserId": {
+                        var requestModel = VerifyCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyCounterByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

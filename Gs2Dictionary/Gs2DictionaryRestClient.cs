@@ -2450,6 +2450,257 @@ namespace Gs2.Gs2Dictionary
 #endif
 
 
+        public class VerifyEntryTask : Gs2RestSessionTask<VerifyEntryRequest, VerifyEntryResult>
+        {
+            public VerifyEntryTask(IGs2Session session, RestSessionRequestFactory factory, VerifyEntryRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyEntryRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/entry/{entryModelName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{entryModelName}", !string.IsNullOrEmpty(request.EntryModelName) ? request.EntryModelName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyEntry(
+                Request.VerifyEntryRequest request,
+                UnityAction<AsyncResult<Result.VerifyEntryResult>> callback
+        )
+		{
+			var task = new VerifyEntryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyEntryResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyEntryResult> VerifyEntryFuture(
+                Request.VerifyEntryRequest request
+        )
+		{
+			return new VerifyEntryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyEntryResult> VerifyEntryAsync(
+                Request.VerifyEntryRequest request
+        )
+		{
+            AsyncResult<Result.VerifyEntryResult> result = null;
+			await VerifyEntry(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyEntryTask VerifyEntryAsync(
+                Request.VerifyEntryRequest request
+        )
+		{
+			return new VerifyEntryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyEntryResult> VerifyEntryAsync(
+                Request.VerifyEntryRequest request
+        )
+		{
+			var task = new VerifyEntryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyEntryByUserIdTask : Gs2RestSessionTask<VerifyEntryByUserIdRequest, VerifyEntryByUserIdResult>
+        {
+            public VerifyEntryByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyEntryByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyEntryByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/entry/{entryModelName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{entryModelName}", !string.IsNullOrEmpty(request.EntryModelName) ? request.EntryModelName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyEntryByUserId(
+                Request.VerifyEntryByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyEntryByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyEntryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyEntryByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyEntryByUserIdResult> VerifyEntryByUserIdFuture(
+                Request.VerifyEntryByUserIdRequest request
+        )
+		{
+			return new VerifyEntryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyEntryByUserIdResult> VerifyEntryByUserIdAsync(
+                Request.VerifyEntryByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyEntryByUserIdResult> result = null;
+			await VerifyEntryByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyEntryByUserIdTask VerifyEntryByUserIdAsync(
+                Request.VerifyEntryByUserIdRequest request
+        )
+		{
+			return new VerifyEntryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyEntryByUserIdResult> VerifyEntryByUserIdAsync(
+                Request.VerifyEntryByUserIdRequest request
+        )
+		{
+			var task = new VerifyEntryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteEntriesByUserIdTask : Gs2RestSessionTask<DeleteEntriesByUserIdRequest, DeleteEntriesByUserIdResult>
         {
             public DeleteEntriesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteEntriesByUserIdRequest request) : base(session, factory, request)
@@ -2823,6 +3074,131 @@ namespace Gs2.Gs2Dictionary
         )
 		{
 			var task = new DeleteEntriesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyEntryByStampTaskTask : Gs2RestSessionTask<VerifyEntryByStampTaskRequest, VerifyEntryByStampTaskResult>
+        {
+            public VerifyEntryByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyEntryByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyEntryByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/entry/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyEntryByStampTask(
+                Request.VerifyEntryByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyEntryByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyEntryByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyEntryByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyEntryByStampTaskResult> VerifyEntryByStampTaskFuture(
+                Request.VerifyEntryByStampTaskRequest request
+        )
+		{
+			return new VerifyEntryByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyEntryByStampTaskResult> VerifyEntryByStampTaskAsync(
+                Request.VerifyEntryByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyEntryByStampTaskResult> result = null;
+			await VerifyEntryByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyEntryByStampTaskTask VerifyEntryByStampTaskAsync(
+                Request.VerifyEntryByStampTaskRequest request
+        )
+		{
+			return new VerifyEntryByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyEntryByStampTaskResult> VerifyEntryByStampTaskAsync(
+                Request.VerifyEntryByStampTaskRequest request
+        )
+		{
+			var task = new VerifyEntryByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
