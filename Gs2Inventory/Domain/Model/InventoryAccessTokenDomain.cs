@@ -344,7 +344,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public ulong SubscribeItemSets(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet>(
                 Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -357,7 +357,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public void UnsubscribeItemSets(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.ItemSet>(
                 Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,

@@ -140,6 +140,38 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
+        public ulong SubscribeItemSets(
+            Action callback,
+            string itemSetName
+        )
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet>(
+                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.InventoryName,
+                    "ItemSet"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeItemSets(
+            ulong callbackId,
+            string itemSetName
+        )
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.ItemSet>(
+                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.InventoryName,
+                    "ItemSet"
+                ),
+                callbackId
+            );
+        }
+
         public ulong SubscribeItemSets(Action callback)
         {
             return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
@@ -147,7 +179,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
-                    "ItemSet"
+                    "ItemSet:Null"
                 ),
                 callback
             );
@@ -160,7 +192,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
-                    "ItemSet"
+                    "ItemSet:Null"
                 ),
                 callbackId
             );

@@ -145,7 +145,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         }
 
         public Gs2.Gs2StateMachine.Domain.Model.StateMachineMasterDomain StateMachineMaster(
-            long? version_
+            long? version
         ) {
             return new Gs2.Gs2StateMachine.Domain.Model.StateMachineMasterDomain(
                 this._cache,
@@ -153,7 +153,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 this._stampSheetConfiguration,
                 this._session,
                 this.NamespaceName,
-                version_
+                version
             );
         }
 

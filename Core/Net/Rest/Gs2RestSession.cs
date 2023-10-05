@@ -28,6 +28,8 @@ namespace Gs2.Core.Net
 
         public IGs2Credential Credential { get; }
         public Region Region { get; }
+        public string OwnerId { get; private set; }
+
         public bool _checkCertificateRevocation { get; } = true;
         
         public Gs2RestSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation)
@@ -95,6 +97,7 @@ namespace Gs2.Core.Net
                 }
 
                 Credential.ProjectToken = task.Result.AccessToken;
+                OwnerId = task.Result.OwnerId;
                 this.State = State.Available;
 
                 result.OnComplete(new OpenResult());
@@ -138,6 +141,7 @@ namespace Gs2.Core.Net
             var result = await task.Invoke();
 
             Credential.ProjectToken = result.AccessToken;
+            OwnerId = result.OwnerId;
             this.State = State.Available;
 
             return new OpenResult();

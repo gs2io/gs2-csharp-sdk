@@ -52,6 +52,11 @@ namespace Gs2.Core.Domain
             this._listCacheUpdateRequired.Ensure(typeof(TKind)).Add(parentKey);
         }
 
+        public bool IsListCached<TKind>(string parentKey)
+        {
+            return this._listCached.Get(typeof(TKind))?.Contains(parentKey) == true;
+        }
+
         private bool IsListCacheUpdateRequired<TKind>(string parentKey)
         {
             return this._listCacheUpdateRequired.Get(typeof(TKind))?.Contains(parentKey) == true;
@@ -157,21 +162,7 @@ namespace Gs2.Core.Domain
                 list = null;
                 return false;
             }
-
-            var now = UnixTime.ToUnixTime(DateTime.Now);
-            var values = this._cache.Ensure(typeof(TKind)).Ensure(parentKey).Values;
-            if (values.Any(value => value.Item2 < now))
-            {
-                ClearListCache<TKind>(parentKey);
-                list = null;
-                return false;
-            }
-
-            list = values
-                .Where(pair => pair.Item2 >= now)
-                .Select(pair => (TKind)pair.Item1).Where(v => v != null)
-                .ToArray();
-            return true;
+            return TryGetListForce(parentKey, out list);
         }
 
         // listCacheContext は RequireListCacheUpdate() が呼ばれたあとのみ値が代入されます
@@ -190,6 +181,30 @@ namespace Gs2.Core.Domain
                 return false;
             }
         }
+        
+        public TKind[] ListForce<TKind>(string parentKey)
+        {
+            return TryGetListForce<TKind>(parentKey, out var list) ? list : Array.Empty<TKind>();
+        }
+
+        public bool TryGetListForce<TKind>(string parentKey, out TKind[] list)
+        {
+            var now = UnixTime.ToUnixTime(DateTime.Now);
+            var values = this._cache.Ensure(typeof(TKind)).Ensure(parentKey).Values;
+            if (values.Any(value => value.Item2 < now))
+            {
+                ClearListCache<TKind>(parentKey);
+                list = null;
+                return false;
+            }
+
+            list = values
+                .Where(pair => pair.Item2 >= now)
+                .Select(pair => (TKind)pair.Item1).Where(v => v != null)
+                .ToArray();
+            return true;
+        }
+
     }
     
     static class ExtensionMethods

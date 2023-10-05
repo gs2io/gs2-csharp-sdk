@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -98,7 +100,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._experienceName = experienceName;
-            this._propertyId = propertyId;
+            this._propertyId = propertyId?.Replace("{region}", session.Region.DisplayName()).Replace("{ownerId}", session.OwnerId ?? "").Replace("{userId}", UserId);
             this._parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
                 this.UserId,

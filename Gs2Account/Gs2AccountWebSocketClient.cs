@@ -2351,6 +2351,124 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class DeleteTakeOverByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteTakeOverByUserIdRequest, Result.DeleteTakeOverByUserIdResult>
+        {
+	        public DeleteTakeOverByUserIdTask(IGs2Session session, Request.DeleteTakeOverByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteTakeOverByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "deleteTakeOverByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteTakeOverByUserId(
+                Request.DeleteTakeOverByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteTakeOverByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteTakeOverByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteTakeOverByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteTakeOverByUserIdResult> DeleteTakeOverByUserIdFuture(
+                Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverByUserIdResult> DeleteTakeOverByUserIdAsync(
+            Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+		    var task = new DeleteTakeOverByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteTakeOverByUserIdTask DeleteTakeOverByUserIdAsync(
+                Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteTakeOverByUserIdResult> DeleteTakeOverByUserIdAsync(
+            Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+		    var task = new DeleteTakeOverByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DoTakeOverTask : Gs2WebSocketSessionTask<Request.DoTakeOverRequest, Result.DoTakeOverResult>
         {
 	        public DoTakeOverTask(IGs2Session session, Request.DoTakeOverRequest request) : base(session, request)

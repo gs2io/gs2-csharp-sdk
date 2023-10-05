@@ -1182,6 +1182,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var domain = this;
                 domain.Body = result?.Body;
                 domain.Signature = result?.Signature;
+                domain.BanStatuses = result?.BanStatuses;
 
                 self.OnComplete(domain);
             }
@@ -1239,6 +1240,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 var domain = this;
             domain.Body = result?.Body;
             domain.Signature = result?.Signature;
+            domain.BanStatuses = result?.BanStatuses;
 
             return domain;
         }
@@ -1262,6 +1264,162 @@ namespace Gs2.Gs2Account.Domain.Model
             AuthenticationRequest request
         ) {
             return AuthenticationFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> DeleteTakeOverFuture(
+            DeleteTakeOverByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.DeleteTakeOverByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                DeleteTakeOverByUserIdResult result = null;
+                try {
+                    result = await this._client.DeleteTakeOverByUserIdAsync(
+                        request
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                }
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "TakeOver"
+                        );
+                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                            resultModel.Item.Type.ToString()
+                        );
+                        cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+                    }
+                }
+                var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.Type
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverDomain> DeleteTakeOverAsync(
+            DeleteTakeOverByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var future = this._client.DeleteTakeOverByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                }
+                else {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            DeleteTakeOverByUserIdResult result = null;
+            try {
+                result = await this._client.DeleteTakeOverByUserIdAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+            }
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "TakeOver"
+                    );
+                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                        resultModel.Item.Type.ToString()
+                    );
+                    cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+                }
+            }
+                var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
+                    this._cache,
+                    this._jobQueueDomain,
+                    this._stampSheetConfiguration,
+                    this._session,
+                    request.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.Type
+                );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverDomain> DeleteTakeOverAsync(
+            DeleteTakeOverByUserIdRequest request
+        ) {
+            var future = DeleteTakeOverFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DeleteTakeOverFuture.")]
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> DeleteTakeOver(
+            DeleteTakeOverByUserIdRequest request
+        ) {
+            return DeleteTakeOverFuture(request);
         }
         #endif
 

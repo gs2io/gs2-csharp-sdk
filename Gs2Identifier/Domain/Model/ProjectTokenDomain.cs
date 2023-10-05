@@ -67,6 +67,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public string AccessToken { get; set; }
         public string TokenType { get; set; }
         public int? ExpiresIn { get; set; }
+        public string OwnerId { get; set; }
 
         public ProjectTokenDomain(
             CacheDatabase cache,
@@ -140,6 +141,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this.AccessToken = domain.AccessToken = result?.AccessToken;
                 this.TokenType = domain.TokenType = result?.TokenType;
                 this.ExpiresIn = domain.ExpiresIn = result?.ExpiresIn;
+                this.OwnerId = domain.OwnerId = result?.OwnerId;
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain>(Impl);
@@ -176,6 +178,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this.AccessToken = domain.AccessToken = result?.AccessToken;
             this.TokenType = domain.TokenType = result?.TokenType;
             this.ExpiresIn = domain.ExpiresIn = result?.ExpiresIn;
+            this.OwnerId = domain.OwnerId = result?.OwnerId;
             return domain;
         }
         #endif

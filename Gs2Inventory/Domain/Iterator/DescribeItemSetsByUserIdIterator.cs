@@ -118,12 +118,12 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this.InventoryName,
                 "ItemSet"
             );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemSet[]>
+            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemSet>
             (
                     parentKey,
                     out var list
             )) {
-                this._result = list.SelectMany(v => v)
+                this._result = list
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -161,7 +161,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                                     item.ItemName?.ToString(),
                                     item.Name?.ToString()
                             ),
-                            new []{ item },
+                            item,
                             item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }

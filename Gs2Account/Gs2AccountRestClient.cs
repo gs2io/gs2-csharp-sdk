@@ -1413,7 +1413,7 @@ namespace Gs2.Gs2Account
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "account")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/account/{userId}/ban/{banName}";
+                    + "/{namespaceName}/account/{userId}/ban/{banStatusName}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
@@ -3094,6 +3094,116 @@ namespace Gs2.Gs2Account
         )
 		{
 			var task = new DeleteTakeOverByUserIdentifierTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteTakeOverByUserIdTask : Gs2RestSessionTask<DeleteTakeOverByUserIdRequest, DeleteTakeOverByUserIdResult>
+        {
+            public DeleteTakeOverByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteTakeOverByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteTakeOverByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/takeover/type/{type}/takeover";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteTakeOverByUserId(
+                Request.DeleteTakeOverByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DeleteTakeOverByUserIdResult>> callback
+        )
+		{
+			var task = new DeleteTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteTakeOverByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteTakeOverByUserIdResult> DeleteTakeOverByUserIdFuture(
+                Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteTakeOverByUserIdResult> DeleteTakeOverByUserIdAsync(
+                Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DeleteTakeOverByUserIdResult> result = null;
+			await DeleteTakeOverByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteTakeOverByUserIdTask DeleteTakeOverByUserIdAsync(
+                Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+			return new DeleteTakeOverByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteTakeOverByUserIdResult> DeleteTakeOverByUserIdAsync(
+                Request.DeleteTakeOverByUserIdRequest request
+        )
+		{
+			var task = new DeleteTakeOverByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

@@ -33,6 +33,7 @@ namespace Gs2.Core.Model.Internal
 		public string AccessToken { set; get; }
 		public string TokenType { set; get; }
 		public int? ExpiresIn { set; get; }
+		public string OwnerId { set; get; }
 
 		public LoginResult WithAccessToken(string accessToken) {
 			this.AccessToken = accessToken;
@@ -49,6 +50,11 @@ namespace Gs2.Core.Model.Internal
 			return this;
 		}
 
+		public LoginResult WithOwnerId(string ownerId) {
+			this.OwnerId = ownerId;
+			return this;
+		}
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -60,7 +66,8 @@ namespace Gs2.Core.Model.Internal
 			return new LoginResult()
 				.WithAccessToken(!data.Keys.Contains("access_token") || data["access_token"] == null ? null : data["access_token"].ToString())
 				.WithTokenType(!data.Keys.Contains("token_type") || data["token_type"] == null ? null : data["token_type"].ToString())
-				.WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : (int?)int.Parse(data["expires_in"].ToString()));
+				.WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : (int?)int.Parse(data["expires_in"].ToString()))
+				.WithOwnerId(!data.Keys.Contains("owner_id") || data["owner_id"] == null ? null : data["owner_id"].ToString());
 		}
 
 	}

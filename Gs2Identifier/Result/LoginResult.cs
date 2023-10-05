@@ -38,19 +38,25 @@ namespace Gs2.Gs2Identifier.Result
         public string AccessToken { set; get; }
         public string TokenType { set; get; }
         public int? ExpiresIn { set; get; }
+        public string OwnerId { set; get; }
 
-        public LoginResult WithAccessToken(string access_token) {
-            this.AccessToken = access_token;
+        public LoginResult WithAccessToken(string accessToken) {
+            this.AccessToken = accessToken;
             return this;
         }
 
-        public LoginResult WithTokenType(string token_type) {
-            this.TokenType = token_type;
+        public LoginResult WithTokenType(string tokenType) {
+            this.TokenType = tokenType;
             return this;
         }
 
-        public LoginResult WithExpiresIn(int? expires_in) {
-            this.ExpiresIn = expires_in;
+        public LoginResult WithExpiresIn(int? expiresIn) {
+            this.ExpiresIn = expiresIn;
+            return this;
+        }
+
+        public LoginResult WithOwnerId(string ownerId) {
+            this.OwnerId = ownerId;
             return this;
         }
 
@@ -65,7 +71,8 @@ namespace Gs2.Gs2Identifier.Result
             return new LoginResult()
                 .WithAccessToken(!data.Keys.Contains("access_token") || data["access_token"] == null ? null : data["access_token"].ToString())
                 .WithTokenType(!data.Keys.Contains("token_type") || data["token_type"] == null ? null : data["token_type"].ToString())
-                .WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : (int?)int.Parse(data["expires_in"].ToString()));
+                .WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : (int?)int.Parse(data["expires_in"].ToString()))
+                .WithOwnerId(!data.Keys.Contains("owner_id") || data["owner_id"] == null ? null : data["owner_id"].ToString());
         }
 
         public JsonData ToJson()
@@ -74,6 +81,7 @@ namespace Gs2.Gs2Identifier.Result
                 ["access_token"] = AccessToken,
                 ["token_type"] = TokenType,
                 ["expires_in"] = ExpiresIn,
+                ["owner_id"] = OwnerId,
             };
         }
 
@@ -91,6 +99,10 @@ namespace Gs2.Gs2Identifier.Result
             if (ExpiresIn != null) {
                 writer.WritePropertyName("expires_in");
                 writer.Write(int.Parse(ExpiresIn.ToString()));
+            }
+            if (OwnerId != null) {
+                writer.WritePropertyName("owner_id");
+                writer.Write(OwnerId.ToString());
             }
             writer.WriteObjectEnd();
         }
