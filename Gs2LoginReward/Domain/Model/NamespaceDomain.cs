@@ -66,6 +66,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         private readonly String _parentKey;
         public string Status { get; set; }
+        public string Url { get; set; }
         public string NextPageToken { get; set; }
         public string NamespaceName => _namespaceName;
 

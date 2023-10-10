@@ -67,6 +67,7 @@ namespace Gs2.Gs2Limit.Domain
         private readonly Gs2LimitRestClient _client;
 
         private readonly String _parentKey;
+        public string Url { get; set; }
 
         public Gs2Limit(
             CacheDatabase cache,
@@ -215,6 +216,368 @@ namespace Gs2.Gs2Limit.Domain
             CreateNamespaceRequest request
         ) {
             return CreateNamespaceFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Limit> DumpUserDataFuture(
+            DumpUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Limit> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.DumpUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                DumpUserDataByUserIdResult result = null;
+                    result = await this._client.DumpUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Limit>(Impl);
+        }
+        #else
+        public async Task<Gs2Limit> DumpUserDataAsync(
+            DumpUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.DumpUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            DumpUserDataByUserIdResult result = null;
+                result = await this._client.DumpUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Limit> DumpUserDataAsync(
+            DumpUserDataByUserIdRequest request
+        ) {
+            var future = DumpUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DumpUserDataFuture.")]
+        public IFuture<Gs2Limit> DumpUserData(
+            DumpUserDataByUserIdRequest request
+        ) {
+            return DumpUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Limit> CheckDumpUserDataFuture(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Limit> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CheckDumpUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CheckDumpUserDataByUserIdResult result = null;
+                    result = await this._client.CheckDumpUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.Url = domain.Url = result?.Url;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Limit>(Impl);
+        }
+        #else
+        public async Task<Gs2Limit> CheckDumpUserDataAsync(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CheckDumpUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CheckDumpUserDataByUserIdResult result = null;
+                result = await this._client.CheckDumpUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.Url = domain.Url = result?.Url;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Limit> CheckDumpUserDataAsync(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+            var future = CheckDumpUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckDumpUserDataFuture.")]
+        public IFuture<Gs2Limit> CheckDumpUserData(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+            return CheckDumpUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Limit> CleanUserDataFuture(
+            CleanUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Limit> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CleanUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CleanUserDataByUserIdResult result = null;
+                    result = await this._client.CleanUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Limit>(Impl);
+        }
+        #else
+        public async Task<Gs2Limit> CleanUserDataAsync(
+            CleanUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CleanUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CleanUserDataByUserIdResult result = null;
+                result = await this._client.CleanUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Limit> CleanUserDataAsync(
+            CleanUserDataByUserIdRequest request
+        ) {
+            var future = CleanUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CleanUserDataFuture.")]
+        public IFuture<Gs2Limit> CleanUserData(
+            CleanUserDataByUserIdRequest request
+        ) {
+            return CleanUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Limit> CheckCleanUserDataFuture(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Limit> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CheckCleanUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CheckCleanUserDataByUserIdResult result = null;
+                    result = await this._client.CheckCleanUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Limit>(Impl);
+        }
+        #else
+        public async Task<Gs2Limit> CheckCleanUserDataAsync(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CheckCleanUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CheckCleanUserDataByUserIdResult result = null;
+                result = await this._client.CheckCleanUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Limit> CheckCleanUserDataAsync(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+            var future = CheckCleanUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckCleanUserDataFuture.")]
+        public IFuture<Gs2Limit> CheckCleanUserData(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+            return CheckCleanUserDataFuture(request);
         }
         #endif
         #if UNITY_2017_1_OR_NEWER

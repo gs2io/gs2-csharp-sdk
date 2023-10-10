@@ -69,6 +69,7 @@ namespace Gs2.Gs2Inventory.Domain
         private readonly Gs2InventoryRestClient _client;
 
         private readonly String _parentKey;
+        public string Url { get; set; }
 
         public Gs2Inventory(
             CacheDatabase cache,
@@ -219,6 +220,368 @@ namespace Gs2.Gs2Inventory.Domain
             return CreateNamespaceFuture(request);
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> DumpUserDataFuture(
+            DumpUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.DumpUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                DumpUserDataByUserIdResult result = null;
+                    result = await this._client.DumpUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> DumpUserDataAsync(
+            DumpUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.DumpUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            DumpUserDataByUserIdResult result = null;
+                result = await this._client.DumpUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> DumpUserDataAsync(
+            DumpUserDataByUserIdRequest request
+        ) {
+            var future = DumpUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to DumpUserDataFuture.")]
+        public IFuture<Gs2Inventory> DumpUserData(
+            DumpUserDataByUserIdRequest request
+        ) {
+            return DumpUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> CheckDumpUserDataFuture(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CheckDumpUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CheckDumpUserDataByUserIdResult result = null;
+                    result = await this._client.CheckDumpUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.Url = domain.Url = result?.Url;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> CheckDumpUserDataAsync(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CheckDumpUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CheckDumpUserDataByUserIdResult result = null;
+                result = await this._client.CheckDumpUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.Url = domain.Url = result?.Url;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> CheckDumpUserDataAsync(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+            var future = CheckDumpUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckDumpUserDataFuture.")]
+        public IFuture<Gs2Inventory> CheckDumpUserData(
+            CheckDumpUserDataByUserIdRequest request
+        ) {
+            return CheckDumpUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> CleanUserDataFuture(
+            CleanUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CleanUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CleanUserDataByUserIdResult result = null;
+                    result = await this._client.CleanUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> CleanUserDataAsync(
+            CleanUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CleanUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CleanUserDataByUserIdResult result = null;
+                result = await this._client.CleanUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> CleanUserDataAsync(
+            CleanUserDataByUserIdRequest request
+        ) {
+            var future = CleanUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CleanUserDataFuture.")]
+        public IFuture<Gs2Inventory> CleanUserData(
+            CleanUserDataByUserIdRequest request
+        ) {
+            return CleanUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> CheckCleanUserDataFuture(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CheckCleanUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CheckCleanUserDataByUserIdResult result = null;
+                    result = await this._client.CheckCleanUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> CheckCleanUserDataAsync(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CheckCleanUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CheckCleanUserDataByUserIdResult result = null;
+                result = await this._client.CheckCleanUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> CheckCleanUserDataAsync(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+            var future = CheckCleanUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckCleanUserDataFuture.")]
+        public IFuture<Gs2Inventory> CheckCleanUserData(
+            CheckCleanUserDataByUserIdRequest request
+        ) {
+            return CheckCleanUserDataFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
@@ -251,6 +614,22 @@ namespace Gs2.Gs2Inventory.Domain
         #else
             );
         #endif
+        }
+
+        public ulong SubscribeNamespaces(Action callback)
+        {
+            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.Namespace>(
+                "inventory:Namespace",
+                callback
+            );
+        }
+
+        public void UnsubscribeNamespaces(ulong callbackId)
+        {
+            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.Namespace>(
+                "inventory:Namespace",
+                callbackId
+            );
         }
 
         public Gs2.Gs2Inventory.Domain.Model.NamespaceDomain Namespace(
@@ -633,6 +1012,12 @@ namespace Gs2.Gs2Inventory.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult> VerifyItemSetByUserIdComplete = new UnityEvent<string, VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult>();
+    #else
+        public static Action<string, VerifyItemSetByUserIdRequest, VerifyItemSetByUserIdResult> VerifyItemSetByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, VerifyReferenceOfByUserIdRequest, VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdComplete = new UnityEvent<string, VerifyReferenceOfByUserIdRequest, VerifyReferenceOfByUserIdResult>();
     #else
         public static Action<string, VerifyReferenceOfByUserIdRequest, VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdComplete;
@@ -645,9 +1030,21 @@ namespace Gs2.Gs2Inventory.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdComplete = new UnityEvent<string, VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult>();
+    #else
+        public static Action<string, VerifySimpleItemByUserIdRequest, VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdComplete = new UnityEvent<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult>();
     #else
         public static Action<string, ConsumeBigItemByUserIdRequest, ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult> VerifyBigItemByUserIdComplete = new UnityEvent<string, VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult>();
+    #else
+        public static Action<string, VerifyBigItemByUserIdRequest, VerifyBigItemByUserIdResult> VerifyBigItemByUserIdComplete;
     #endif
 
         public static void UpdateCacheFromStampTask(
@@ -739,6 +1136,18 @@ namespace Gs2.Gs2Inventory.Domain
                         );
                         break;
                     }
+                    case "VerifyItemSetByUserId": {
+                        var requestModel = VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyItemSetByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "VerifyReferenceOfByUserId": {
                         var requestModel = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = VerifyReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -815,6 +1224,18 @@ namespace Gs2.Gs2Inventory.Domain
                         );
                         break;
                     }
+                    case "VerifySimpleItemByUserId": {
+                        var requestModel = VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifySimpleItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifySimpleItemByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "ConsumeBigItemByUserId": {
                         var requestModel = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ConsumeBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -838,6 +1259,18 @@ namespace Gs2.Gs2Inventory.Domain
                         }
 
                         ConsumeBigItemByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyBigItemByUserId": {
+                        var requestModel = VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyBigItemByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel
@@ -957,6 +1390,21 @@ namespace Gs2.Gs2Inventory.Domain
                                 );
                             }
                         }
+                        var _ = resultModel.Items.GroupBy(v => v.ItemName).Select(group =>
+                        {
+                            var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                group.Key,
+                                null
+                            );
+                            var items = group.ToArray();
+                            cache.Put(
+                                parentKey,
+                                key,
+                                items,
+                                items == null || items.Length == 0 ? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes : items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
+                            );
+                            return items;
+                        }).ToArray();
                     }
                     if (resultModel.ItemModel != null) {
                         var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
