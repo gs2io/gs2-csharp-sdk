@@ -4709,6 +4709,267 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class VerifyInventoryCurrentMaxCapacityTask : Gs2WebSocketSessionTask<Request.VerifyInventoryCurrentMaxCapacityRequest, Result.VerifyInventoryCurrentMaxCapacityResult>
+        {
+	        public VerifyInventoryCurrentMaxCapacityTask(IGs2Session session, Request.VerifyInventoryCurrentMaxCapacityRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyInventoryCurrentMaxCapacityRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.CurrentInventoryMaxCapacity != null)
+                {
+                    jsonWriter.WritePropertyName("currentInventoryMaxCapacity");
+                    jsonWriter.Write(request.CurrentInventoryMaxCapacity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "inventory",
+                    "verifyInventoryCurrentMaxCapacity",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyInventoryCurrentMaxCapacity(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request,
+                UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult>> callback
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityFuture(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
+            Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+		    var task = new VerifyInventoryCurrentMaxCapacityTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyInventoryCurrentMaxCapacityTask VerifyInventoryCurrentMaxCapacityAsync(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
+            Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+		    var task = new VerifyInventoryCurrentMaxCapacityTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyInventoryCurrentMaxCapacityByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest, Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>
+        {
+	        public VerifyInventoryCurrentMaxCapacityByUserIdTask(IGs2Session session, Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.CurrentInventoryMaxCapacity != null)
+                {
+                    jsonWriter.WritePropertyName("currentInventoryMaxCapacity");
+                    jsonWriter.Write(request.CurrentInventoryMaxCapacity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "inventory",
+                    "verifyInventoryCurrentMaxCapacityByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyInventoryCurrentMaxCapacityByUserId(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdFuture(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+            Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+		    var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public VerifyInventoryCurrentMaxCapacityByUserIdTask VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+            Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+		    var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AddCapacityByStampSheetTask : Gs2WebSocketSessionTask<Request.AddCapacityByStampSheetRequest, Result.AddCapacityByStampSheetResult>
         {
 	        public AddCapacityByStampSheetTask(IGs2Session session, Request.AddCapacityByStampSheetRequest request) : base(session, request)

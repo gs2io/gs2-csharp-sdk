@@ -7300,6 +7300,392 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class VerifyInventoryCurrentMaxCapacityTask : Gs2RestSessionTask<VerifyInventoryCurrentMaxCapacityRequest, VerifyInventoryCurrentMaxCapacityResult>
+        {
+            public VerifyInventoryCurrentMaxCapacityTask(IGs2Session session, RestSessionRequestFactory factory, VerifyInventoryCurrentMaxCapacityRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyInventoryCurrentMaxCapacityRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/inventory/{inventoryName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.CurrentInventoryMaxCapacity != null)
+                {
+                    jsonWriter.WritePropertyName("currentInventoryMaxCapacity");
+                    jsonWriter.Write(request.CurrentInventoryMaxCapacity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyInventoryCurrentMaxCapacity(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request,
+                UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult>> callback
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityFuture(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+            AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult> result = null;
+			await VerifyInventoryCurrentMaxCapacity(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyInventoryCurrentMaxCapacityTask VerifyInventoryCurrentMaxCapacityAsync(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
+                Request.VerifyInventoryCurrentMaxCapacityRequest request
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyInventoryCurrentMaxCapacityByUserIdTask : Gs2RestSessionTask<VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult>
+        {
+            public VerifyInventoryCurrentMaxCapacityByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyInventoryCurrentMaxCapacityByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyInventoryCurrentMaxCapacityByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/inventory/{inventoryName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{inventoryName}", !string.IsNullOrEmpty(request.InventoryName) ? request.InventoryName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.CurrentInventoryMaxCapacity != null)
+                {
+                    jsonWriter.WritePropertyName("currentInventoryMaxCapacity");
+                    jsonWriter.Write(request.CurrentInventoryMaxCapacity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyInventoryCurrentMaxCapacityByUserId(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>> callback
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdFuture(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> result = null;
+			await VerifyInventoryCurrentMaxCapacityByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyInventoryCurrentMaxCapacityByUserIdTask VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class VerifyInventoryCurrentMaxCapacityByStampTaskTask : Gs2RestSessionTask<VerifyInventoryCurrentMaxCapacityByStampTaskRequest, VerifyInventoryCurrentMaxCapacityByStampTaskResult>
+        {
+            public VerifyInventoryCurrentMaxCapacityByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyInventoryCurrentMaxCapacityByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyInventoryCurrentMaxCapacityByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "inventory")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/inventory/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyInventoryCurrentMaxCapacityByStampTask(
+                Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult>> callback
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskFuture(
+                Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
+        )
+		{
+            AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> result = null;
+			await VerifyInventoryCurrentMaxCapacityByStampTask(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public VerifyInventoryCurrentMaxCapacityByStampTaskTask VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
+        )
+		{
+			return new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
+                Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
+        )
+		{
+			var task = new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AddCapacityByStampSheetTask : Gs2RestSessionTask<AddCapacityByStampSheetRequest, AddCapacityByStampSheetResult>
         {
             public AddCapacityByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, AddCapacityByStampSheetRequest request) : base(session, factory, request)

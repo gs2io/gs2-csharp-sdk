@@ -26,6 +26,8 @@ namespace Gs2.Gs2Inventory.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Inventory:VerifyInventoryCurrentMaxCapacityByUserId":
+                    return VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:ConsumeItemSetByUserId":
                     return ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:VerifyItemSetByUserId":
