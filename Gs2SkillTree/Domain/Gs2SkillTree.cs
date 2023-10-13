@@ -68,6 +68,8 @@ namespace Gs2.Gs2SkillTree.Domain
 
         private readonly String _parentKey;
         public string Url { get; set; }
+        public string UploadToken { get; set; }
+        public string UploadUrl { get; set; }
 
         public Gs2SkillTree(
             CacheDatabase cache,
@@ -578,6 +580,282 @@ namespace Gs2.Gs2SkillTree.Domain
             CheckCleanUserDataByUserIdRequest request
         ) {
             return CheckCleanUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2SkillTree> PrepareImportUserDataFuture(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2SkillTree> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.PrepareImportUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                PrepareImportUserDataByUserIdResult result = null;
+                    result = await this._client.PrepareImportUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2SkillTree>(Impl);
+        }
+        #else
+        public async Task<Gs2SkillTree> PrepareImportUserDataAsync(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.PrepareImportUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            PrepareImportUserDataByUserIdResult result = null;
+                result = await this._client.PrepareImportUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2SkillTree> PrepareImportUserDataAsync(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+            var future = PrepareImportUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to PrepareImportUserDataFuture.")]
+        public IFuture<Gs2SkillTree> PrepareImportUserData(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+            return PrepareImportUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2SkillTree> ImportUserDataFuture(
+            ImportUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2SkillTree> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.ImportUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                ImportUserDataByUserIdResult result = null;
+                    result = await this._client.ImportUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2SkillTree>(Impl);
+        }
+        #else
+        public async Task<Gs2SkillTree> ImportUserDataAsync(
+            ImportUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.ImportUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            ImportUserDataByUserIdResult result = null;
+                result = await this._client.ImportUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2SkillTree> ImportUserDataAsync(
+            ImportUserDataByUserIdRequest request
+        ) {
+            var future = ImportUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to ImportUserDataFuture.")]
+        public IFuture<Gs2SkillTree> ImportUserData(
+            ImportUserDataByUserIdRequest request
+        ) {
+            return ImportUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2SkillTree> CheckImportUserDataFuture(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2SkillTree> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CheckImportUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CheckImportUserDataByUserIdResult result = null;
+                    result = await this._client.CheckImportUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.Url = domain.Url = result?.Url;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2SkillTree>(Impl);
+        }
+        #else
+        public async Task<Gs2SkillTree> CheckImportUserDataAsync(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CheckImportUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CheckImportUserDataByUserIdResult result = null;
+                result = await this._client.CheckImportUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.Url = domain.Url = result?.Url;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2SkillTree> CheckImportUserDataAsync(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+            var future = CheckImportUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckImportUserDataFuture.")]
+        public IFuture<Gs2SkillTree> CheckImportUserData(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+            return CheckImportUserDataFuture(request);
         }
         #endif
         #if UNITY_2017_1_OR_NEWER

@@ -67,6 +67,8 @@ namespace Gs2.Gs2AdReward.Domain.Model
         private readonly String _parentKey;
         public string Status { get; set; }
         public string Url { get; set; }
+        public string UploadToken { get; set; }
+        public string UploadUrl { get; set; }
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
