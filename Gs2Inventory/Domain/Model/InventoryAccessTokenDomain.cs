@@ -302,6 +302,112 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return result?.Item;
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain> VerifyCurrentMaxCapacityFuture(
+            VerifyInventoryCurrentMaxCapacityRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithInventoryName(this.InventoryName);
+                var future = this._client.VerifyInventoryCurrentMaxCapacityFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithInventoryName(this.InventoryName);
+                VerifyInventoryCurrentMaxCapacityResult result = null;
+                    result = await this._client.VerifyInventoryCurrentMaxCapacityAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain> VerifyCurrentMaxCapacityAsync(
+            VerifyInventoryCurrentMaxCapacityRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithInventoryName(this.InventoryName);
+            var future = this._client.VerifyInventoryCurrentMaxCapacityFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithInventoryName(this.InventoryName);
+            VerifyInventoryCurrentMaxCapacityResult result = null;
+                result = await this._client.VerifyInventoryCurrentMaxCapacityAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain> VerifyCurrentMaxCapacityAsync(
+            VerifyInventoryCurrentMaxCapacityRequest request
+        ) {
+            var future = VerifyCurrentMaxCapacityFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyCurrentMaxCapacityFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryAccessTokenDomain> VerifyCurrentMaxCapacity(
+            VerifyInventoryCurrentMaxCapacityRequest request
+        ) {
+            return VerifyCurrentMaxCapacityFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Inventory.Model.ItemSet> ItemSets(

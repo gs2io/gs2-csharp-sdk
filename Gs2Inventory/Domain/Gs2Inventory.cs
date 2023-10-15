@@ -70,6 +70,8 @@ namespace Gs2.Gs2Inventory.Domain
 
         private readonly String _parentKey;
         public string Url { get; set; }
+        public string UploadToken { get; set; }
+        public string UploadUrl { get; set; }
 
         public Gs2Inventory(
             CacheDatabase cache,
@@ -582,6 +584,282 @@ namespace Gs2.Gs2Inventory.Domain
             return CheckCleanUserDataFuture(request);
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> PrepareImportUserDataFuture(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.PrepareImportUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                PrepareImportUserDataByUserIdResult result = null;
+                    result = await this._client.PrepareImportUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.UploadToken = domain.UploadToken = result?.UploadToken;
+                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> PrepareImportUserDataAsync(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.PrepareImportUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            PrepareImportUserDataByUserIdResult result = null;
+                result = await this._client.PrepareImportUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.UploadToken = domain.UploadToken = result?.UploadToken;
+            this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> PrepareImportUserDataAsync(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+            var future = PrepareImportUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to PrepareImportUserDataFuture.")]
+        public IFuture<Gs2Inventory> PrepareImportUserData(
+            PrepareImportUserDataByUserIdRequest request
+        ) {
+            return PrepareImportUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> ImportUserDataFuture(
+            ImportUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.ImportUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                ImportUserDataByUserIdResult result = null;
+                    result = await this._client.ImportUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> ImportUserDataAsync(
+            ImportUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.ImportUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            ImportUserDataByUserIdResult result = null;
+                result = await this._client.ImportUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> ImportUserDataAsync(
+            ImportUserDataByUserIdRequest request
+        ) {
+            var future = ImportUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to ImportUserDataFuture.")]
+        public IFuture<Gs2Inventory> ImportUserData(
+            ImportUserDataByUserIdRequest request
+        ) {
+            return ImportUserDataFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2Inventory> CheckImportUserDataFuture(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2Inventory> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                var future = this._client.CheckImportUserDataByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                CheckImportUserDataByUserIdResult result = null;
+                    result = await this._client.CheckImportUserDataByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                this.Url = domain.Url = result?.Url;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2Inventory>(Impl);
+        }
+        #else
+        public async Task<Gs2Inventory> CheckImportUserDataAsync(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            var future = this._client.CheckImportUserDataByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            CheckImportUserDataByUserIdResult result = null;
+                result = await this._client.CheckImportUserDataByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            this.Url = domain.Url = result?.Url;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2Inventory> CheckImportUserDataAsync(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+            var future = CheckImportUserDataFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to CheckImportUserDataFuture.")]
+        public IFuture<Gs2Inventory> CheckImportUserData(
+            CheckImportUserDataByUserIdRequest request
+        ) {
+            return CheckImportUserDataFuture(request);
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
@@ -1006,6 +1284,12 @@ namespace Gs2.Gs2Inventory.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdComplete = new UnityEvent<string, VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult>();
+    #else
+        public static Action<string, VerifyInventoryCurrentMaxCapacityByUserIdRequest, VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, ConsumeItemSetByUserIdRequest, ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdComplete = new UnityEvent<string, ConsumeItemSetByUserIdRequest, ConsumeItemSetByUserIdResult>();
     #else
         public static Action<string, ConsumeItemSetByUserIdRequest, ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdComplete;
@@ -1055,6 +1339,18 @@ namespace Gs2.Gs2Inventory.Domain
                 string result
         ) {
                 switch (method) {
+                    case "VerifyInventoryCurrentMaxCapacityByUserId": {
+                        var requestModel = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyInventoryCurrentMaxCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+
+                        VerifyInventoryCurrentMaxCapacityByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                     case "ConsumeItemSetByUserId": {
                         var requestModel = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ConsumeItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
@@ -1088,6 +1384,21 @@ namespace Gs2.Gs2Inventory.Domain
                                     );
                                 }
                             }
+                            var _ = resultModel.Items.GroupBy(v => v.ItemName).Select(group =>
+                            {
+                                var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                                    group.Key,
+                                    null
+                                );
+                                var items = group.ToArray();
+                                cache.Put(
+                                    parentKey,
+                                    key,
+                                    items,
+                                    items == null || items.Length == 0 ? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes : items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
+                                );
+                                return items;
+                            }).ToArray();
                         }
                         if (resultModel.ItemModel != null) {
                             var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(

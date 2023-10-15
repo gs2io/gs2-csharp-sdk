@@ -172,32 +172,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public ulong SubscribeItemSets(Action callback)
-        {
-            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
-                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    this.InventoryName,
-                    "ItemSet:Null"
-                ),
-                callback
-            );
-        }
-
-        public void UnsubscribeItemSets(ulong callbackId)
-        {
-            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
-                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    this.InventoryName,
-                    "ItemSet:Null"
-                ),
-                callbackId
-            );
-        }
-
         public Gs2.Gs2Inventory.Domain.Model.ItemSetDomain ItemSet(
             string itemName,
             string itemSetName
@@ -954,6 +928,112 @@ namespace Gs2.Gs2Inventory.Domain.Model
             DeleteInventoryByUserIdRequest request
         ) {
             return DeleteFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryDomain> VerifyCurrentMaxCapacityFuture(
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryDomain> self)
+            {
+                #if UNITY_2017_1_OR_NEWER
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName);
+                var future = this._client.VerifyInventoryCurrentMaxCapacityByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                #else
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName);
+                VerifyInventoryCurrentMaxCapacityByUserIdResult result = null;
+                    result = await this._client.VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+                        request
+                    );
+                #endif
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = _cache;
+                if (resultModel != null) {
+                    
+                }
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.InventoryDomain>(Impl);
+        }
+        #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.InventoryDomain> VerifyCurrentMaxCapacityAsync(
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        ) {
+            #if UNITY_2017_1_OR_NEWER
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName);
+            var future = this._client.VerifyInventoryCurrentMaxCapacityByUserIdFuture(
+                request
+            );
+            yield return future;
+            if (future.Error != null)
+            {
+                self.OnError(future.Error);
+                yield break;
+            }
+            var result = future.Result;
+            #else
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName);
+            VerifyInventoryCurrentMaxCapacityByUserIdResult result = null;
+                result = await this._client.VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+                    request
+                );
+            #endif
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = _cache;
+            if (resultModel != null) {
+                
+            }
+                var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.InventoryDomain> VerifyCurrentMaxCapacityAsync(
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        ) {
+            var future = VerifyCurrentMaxCapacityFuture(request);
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+            #endif
+        [Obsolete("The name has been changed to VerifyCurrentMaxCapacityFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.InventoryDomain> VerifyCurrentMaxCapacity(
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        ) {
+            return VerifyCurrentMaxCapacityFuture(request);
         }
         #endif
 

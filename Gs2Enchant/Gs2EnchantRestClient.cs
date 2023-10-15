@@ -1465,9 +1465,10 @@ namespace Gs2.Gs2Enchant
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "enchant")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/import";
+                    + "/system/user/{userId}/import/{uploadToken}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{uploadToken}", !string.IsNullOrEmpty(request.UploadToken) ? request.UploadToken.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
