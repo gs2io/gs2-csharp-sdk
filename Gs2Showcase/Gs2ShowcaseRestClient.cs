@@ -790,7 +790,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/dump";
+                    + "/system/dump/user/{userId}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
@@ -911,7 +911,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/dump";
+                    + "/system/dump/user/{userId}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
@@ -1019,7 +1019,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/clean";
+                    + "/system/clean/user/{userId}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
@@ -1140,7 +1140,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/clean";
+                    + "/system/clean/user/{userId}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
@@ -1248,7 +1248,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/import/prepare";
+                    + "/system/import/user/{userId}/prepare";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
@@ -1369,7 +1369,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/import";
+                    + "/system/import/user/{userId}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
 
@@ -1495,7 +1495,7 @@ namespace Gs2.Gs2Showcase
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "showcase")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/system/user/{userId}/import/{uploadToken}";
+                    + "/system/import/user/{userId}/{uploadToken}";
 
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
                 url = url.Replace("{uploadToken}", !string.IsNullOrEmpty(request.UploadToken) ? request.UploadToken.ToString() : "null");
