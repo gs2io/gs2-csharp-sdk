@@ -77,10 +77,10 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
                 }
-                if (request.ExperienceCapScriptId != null)
+                if (request.RankCapScriptId != null)
                 {
-                    jsonWriter.WritePropertyName("experienceCapScriptId");
-                    jsonWriter.Write(request.ExperienceCapScriptId.ToString());
+                    jsonWriter.WritePropertyName("rankCapScriptId");
+                    jsonWriter.Write(request.RankCapScriptId.ToString());
                 }
                 if (request.ChangeExperienceScript != null)
                 {
@@ -323,10 +323,10 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
                 }
-                if (request.ExperienceCapScriptId != null)
+                if (request.RankCapScriptId != null)
                 {
-                    jsonWriter.WritePropertyName("experienceCapScriptId");
-                    jsonWriter.Write(request.ExperienceCapScriptId.ToString());
+                    jsonWriter.WritePropertyName("rankCapScriptId");
+                    jsonWriter.Write(request.RankCapScriptId.ToString());
                 }
                 if (request.ChangeExperienceScript != null)
                 {

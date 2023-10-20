@@ -36,7 +36,7 @@ namespace Gs2.Gs2Experience.Request
         public string NamespaceName { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Experience.Model.TransactionSetting TransactionSetting { set; get; }
-        public string ExperienceCapScriptId { set; get; }
+        public string RankCapScriptId { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
@@ -54,8 +54,8 @@ namespace Gs2.Gs2Experience.Request
             this.TransactionSetting = transactionSetting;
             return this;
         }
-        public UpdateNamespaceRequest WithExperienceCapScriptId(string experienceCapScriptId) {
-            this.ExperienceCapScriptId = experienceCapScriptId;
+        public UpdateNamespaceRequest WithRankCapScriptId(string rankCapScriptId) {
+            this.RankCapScriptId = rankCapScriptId;
             return this;
         }
         public UpdateNamespaceRequest WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
@@ -91,7 +91,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Experience.Model.TransactionSetting.FromJson(data["transactionSetting"]))
-                .WithExperienceCapScriptId(!data.Keys.Contains("experienceCapScriptId") || data["experienceCapScriptId"] == null ? null : data["experienceCapScriptId"].ToString())
+                .WithRankCapScriptId(!data.Keys.Contains("rankCapScriptId") || data["rankCapScriptId"] == null ? null : data["rankCapScriptId"].ToString())
                 .WithChangeExperienceScript(!data.Keys.Contains("changeExperienceScript") || data["changeExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeExperienceScript"]))
                 .WithChangeRankScript(!data.Keys.Contains("changeRankScript") || data["changeRankScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankScript"]))
                 .WithChangeRankCapScript(!data.Keys.Contains("changeRankCapScript") || data["changeRankCapScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankCapScript"]))
@@ -105,7 +105,7 @@ namespace Gs2.Gs2Experience.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
-                ["experienceCapScriptId"] = ExperienceCapScriptId,
+                ["rankCapScriptId"] = RankCapScriptId,
                 ["changeExperienceScript"] = ChangeExperienceScript?.ToJson(),
                 ["changeRankScript"] = ChangeRankScript?.ToJson(),
                 ["changeRankCapScript"] = ChangeRankCapScript?.ToJson(),
@@ -128,9 +128,9 @@ namespace Gs2.Gs2Experience.Request
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
             }
-            if (ExperienceCapScriptId != null) {
-                writer.WritePropertyName("experienceCapScriptId");
-                writer.Write(ExperienceCapScriptId.ToString());
+            if (RankCapScriptId != null) {
+                writer.WritePropertyName("rankCapScriptId");
+                writer.Write(RankCapScriptId.ToString());
             }
             if (ChangeExperienceScript != null) {
                 ChangeExperienceScript.WriteJson(writer);
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Experience.Request
             key += NamespaceName + ":";
             key += Description + ":";
             key += TransactionSetting + ":";
-            key += ExperienceCapScriptId + ":";
+            key += RankCapScriptId + ":";
             key += ChangeExperienceScript + ":";
             key += ChangeRankScript + ":";
             key += ChangeRankCapScript + ":";
