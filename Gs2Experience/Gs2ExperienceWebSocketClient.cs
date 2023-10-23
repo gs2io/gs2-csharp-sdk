@@ -100,7 +100,7 @@ namespace Gs2.Gs2Experience
                 if (request.OverflowExperienceScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowExperienceScript");
-                    request.OverflowExperienceScript.WriteJson(jsonWriter);
+                    jsonWriter.Write(request.OverflowExperienceScript.ToString());
                 }
                 if (request.LogSetting != null)
                 {
@@ -346,7 +346,7 @@ namespace Gs2.Gs2Experience
                 if (request.OverflowExperienceScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowExperienceScript");
-                    request.OverflowExperienceScript.WriteJson(jsonWriter);
+                    jsonWriter.Write(request.OverflowExperienceScript.ToString());
                 }
                 if (request.LogSetting != null)
                 {

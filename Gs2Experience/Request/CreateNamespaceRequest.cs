@@ -40,7 +40,7 @@ namespace Gs2.Gs2Experience.Request
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
-        public Gs2.Gs2Experience.Model.ScriptSetting OverflowExperienceScript { set; get; }
+        public string OverflowExperienceScript { set; get; }
         public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Experience.Request
             this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
-        public CreateNamespaceRequest WithOverflowExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting overflowExperienceScript) {
+        public CreateNamespaceRequest WithOverflowExperienceScript(string overflowExperienceScript) {
             this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithChangeExperienceScript(!data.Keys.Contains("changeExperienceScript") || data["changeExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeExperienceScript"]))
                 .WithChangeRankScript(!data.Keys.Contains("changeRankScript") || data["changeRankScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankScript"]))
                 .WithChangeRankCapScript(!data.Keys.Contains("changeRankCapScript") || data["changeRankCapScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["changeRankCapScript"]))
-                .WithOverflowExperienceScript(!data.Keys.Contains("overflowExperienceScript") || data["overflowExperienceScript"] == null ? null : Gs2.Gs2Experience.Model.ScriptSetting.FromJson(data["overflowExperienceScript"]))
+                .WithOverflowExperienceScript(!data.Keys.Contains("overflowExperienceScript") || data["overflowExperienceScript"] == null ? null : data["overflowExperienceScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Experience.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Experience.Request
                 ["changeExperienceScript"] = ChangeExperienceScript?.ToJson(),
                 ["changeRankScript"] = ChangeRankScript?.ToJson(),
                 ["changeRankCapScript"] = ChangeRankCapScript?.ToJson(),
-                ["overflowExperienceScript"] = OverflowExperienceScript?.ToJson(),
+                ["overflowExperienceScript"] = OverflowExperienceScript,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -142,7 +142,8 @@ namespace Gs2.Gs2Experience.Request
                 ChangeRankCapScript.WriteJson(writer);
             }
             if (OverflowExperienceScript != null) {
-                OverflowExperienceScript.WriteJson(writer);
+                writer.WritePropertyName("overflowExperienceScript");
+                writer.Write(OverflowExperienceScript.ToString());
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
