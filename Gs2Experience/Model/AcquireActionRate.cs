@@ -32,13 +32,23 @@ namespace Gs2.Gs2Experience.Model
 	public class AcquireActionRate : IComparable
 	{
         public string Name { set; get; }
+        public string Mode { set; get; }
         public double[] Rates { set; get; }
+        public string[] BigRates { set; get; }
         public AcquireActionRate WithName(string name) {
             this.Name = name;
             return this;
         }
+        public AcquireActionRate WithMode(string mode) {
+            this.Mode = mode;
+            return this;
+        }
         public AcquireActionRate WithRates(double[] rates) {
             this.Rates = rates;
+            return this;
+        }
+        public AcquireActionRate WithBigRates(string[] bigRates) {
+            this.BigRates = bigRates;
             return this;
         }
 
@@ -52,8 +62,12 @@ namespace Gs2.Gs2Experience.Model
             }
             return new AcquireActionRate()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
+                .WithMode(!data.Keys.Contains("mode") || data["mode"] == null ? null : data["mode"].ToString())
                 .WithRates(!data.Keys.Contains("rates") || data["rates"] == null ? new double[]{} : data["rates"].Cast<JsonData>().Select(v => {
                     return double.Parse(v.ToString());
+                }).ToArray())
+                .WithBigRates(!data.Keys.Contains("bigRates") || data["bigRates"] == null ? new string[]{} : data["bigRates"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
                 }).ToArray());
         }
 
@@ -68,9 +82,20 @@ namespace Gs2.Gs2Experience.Model
                     ratesJsonData.Add(rate);
                 }
             }
+            JsonData bigRatesJsonData = null;
+            if (BigRates != null)
+            {
+                bigRatesJsonData = new JsonData();
+                foreach (var bigRate in BigRates)
+                {
+                    bigRatesJsonData.Add(bigRate);
+                }
+            }
             return new JsonData {
                 ["name"] = Name,
+                ["mode"] = Mode,
                 ["rates"] = ratesJsonData,
+                ["bigRates"] = bigRatesJsonData,
             };
         }
 
@@ -81,6 +106,10 @@ namespace Gs2.Gs2Experience.Model
                 writer.WritePropertyName("name");
                 writer.Write(Name.ToString());
             }
+            if (Mode != null) {
+                writer.WritePropertyName("mode");
+                writer.Write(Mode.ToString());
+            }
             if (Rates != null) {
                 writer.WritePropertyName("rates");
                 writer.WriteArrayStart();
@@ -88,6 +117,17 @@ namespace Gs2.Gs2Experience.Model
                 {
                     if (rate != null) {
                         writer.Write(double.Parse(rate.ToString()));
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (BigRates != null) {
+                writer.WritePropertyName("bigRates");
+                writer.WriteArrayStart();
+                foreach (var bigRate in BigRates)
+                {
+                    if (bigRate != null) {
+                        writer.Write(bigRate.ToString());
                     }
                 }
                 writer.WriteArrayEnd();
@@ -107,6 +147,14 @@ namespace Gs2.Gs2Experience.Model
             {
                 diff += Name.CompareTo(other.Name);
             }
+            if (Mode == null && Mode == other.Mode)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Mode.CompareTo(other.Mode);
+            }
             if (Rates == null && Rates == other.Rates)
             {
                 // null and null
@@ -117,6 +165,18 @@ namespace Gs2.Gs2Experience.Model
                 for (var i = 0; i < Rates.Length; i++)
                 {
                     diff += (int)(Rates[i] - other.Rates[i]);
+                }
+            }
+            if (BigRates == null && BigRates == other.BigRates)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += BigRates.Length - other.BigRates.Length;
+                for (var i = 0; i < BigRates.Length; i++)
+                {
+                    diff += BigRates[i].CompareTo(other.BigRates[i]);
                 }
             }
             return diff;
