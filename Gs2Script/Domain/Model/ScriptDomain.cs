@@ -68,6 +68,7 @@ namespace Gs2.Gs2Script.Domain.Model
         private readonly String _parentKey;
         public int? Code { get; set; }
         public string Result { get; set; }
+        public string Transaction { get; set; }
         public int? ExecuteTime { get; set; }
         public int? Charged { get; set; }
         public string[] Output { get; set; }

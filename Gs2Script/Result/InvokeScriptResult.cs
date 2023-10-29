@@ -35,6 +35,7 @@ namespace Gs2.Gs2Script.Result
 	{
         public int? Code { set; get; }
         public string Result { set; get; }
+        public string Transaction { set; get; }
         public int? ExecuteTime { set; get; }
         public int? Charged { set; get; }
         public string[] Output { set; get; }
@@ -46,6 +47,11 @@ namespace Gs2.Gs2Script.Result
 
         public InvokeScriptResult WithResult(string result) {
             this.Result = result;
+            return this;
+        }
+
+        public InvokeScriptResult WithTransaction(string transaction) {
+            this.Transaction = transaction;
             return this;
         }
 
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Script.Result
             return new InvokeScriptResult()
                 .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)int.Parse(data["code"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
+                .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
                 .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)int.Parse(data["executeTime"].ToString()))
                 .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)int.Parse(data["charged"].ToString()))
                 .WithOutput(!data.Keys.Contains("output") || data["output"] == null ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
@@ -96,6 +103,7 @@ namespace Gs2.Gs2Script.Result
             return new JsonData {
                 ["code"] = Code,
                 ["result"] = Result,
+                ["transaction"] = Transaction,
                 ["executeTime"] = ExecuteTime,
                 ["charged"] = Charged,
                 ["output"] = outputJsonData,
@@ -112,6 +120,10 @@ namespace Gs2.Gs2Script.Result
             if (Result != null) {
                 writer.WritePropertyName("result");
                 writer.Write(Result.ToString());
+            }
+            if (Transaction != null) {
+                writer.WritePropertyName("transaction");
+                writer.Write(Transaction.ToString());
             }
             if (ExecuteTime != null) {
                 writer.WritePropertyName("executeTime");
