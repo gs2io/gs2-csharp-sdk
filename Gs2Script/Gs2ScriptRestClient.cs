@@ -1612,6 +1612,11 @@ namespace Gs2.Gs2Script
                     jsonWriter.WritePropertyName("args");
                     jsonWriter.Write(request.Args);
                 }
+                if (request.RandomStatus != null)
+                {
+                    jsonWriter.WritePropertyName("randomStatus");
+                    request.RandomStatus.WriteJson(jsonWriter);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1736,6 +1741,11 @@ namespace Gs2.Gs2Script
                 {
                     jsonWriter.WritePropertyName("args");
                     jsonWriter.Write(request.Args);
+                }
+                if (request.RandomStatus != null)
+                {
+                    jsonWriter.WritePropertyName("randomStatus");
+                    request.RandomStatus.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {

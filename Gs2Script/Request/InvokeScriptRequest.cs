@@ -36,6 +36,7 @@ namespace Gs2.Gs2Script.Request
         public string ScriptId { set; get; }
         public string UserId { set; get; }
         public string Args { set; get; }
+        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
         public InvokeScriptRequest WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Script.Request
         }
         public InvokeScriptRequest WithArgs(string args) {
             this.Args = args;
+            return this;
+        }
+        public InvokeScriptRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
+            this.RandomStatus = randomStatus;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Script.Request
             return new InvokeScriptRequest()
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]));
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Script.Request
                 ["scriptId"] = ScriptId,
                 ["userId"] = UserId,
                 ["args"] = Args,
+                ["randomStatus"] = RandomStatus?.ToJson(),
             };
         }
 
@@ -87,6 +94,9 @@ namespace Gs2.Gs2Script.Request
                 writer.WritePropertyName("args");
                 writer.Write(Args.ToString());
             }
+            if (RandomStatus != null) {
+                RandomStatus.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +105,7 @@ namespace Gs2.Gs2Script.Request
             key += ScriptId + ":";
             key += UserId + ":";
             key += Args + ":";
+            key += RandomStatus + ":";
             return key;
         }
 

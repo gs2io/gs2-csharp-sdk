@@ -35,12 +35,17 @@ namespace Gs2.Gs2Script.Request
 	{
         public string Script { set; get; }
         public string Args { set; get; }
+        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
         public DebugInvokeRequest WithScript(string script) {
             this.Script = script;
             return this;
         }
         public DebugInvokeRequest WithArgs(string args) {
             this.Args = args;
+            return this;
+        }
+        public DebugInvokeRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
+            this.RandomStatus = randomStatus;
             return this;
         }
 
@@ -54,7 +59,8 @@ namespace Gs2.Gs2Script.Request
             }
             return new DebugInvokeRequest()
                 .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
-                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]));
         }
 
         public override JsonData ToJson()
@@ -62,6 +68,7 @@ namespace Gs2.Gs2Script.Request
             return new JsonData {
                 ["script"] = Script,
                 ["args"] = Args,
+                ["randomStatus"] = RandomStatus?.ToJson(),
             };
         }
 
@@ -76,6 +83,9 @@ namespace Gs2.Gs2Script.Request
                 writer.WritePropertyName("args");
                 writer.Write(Args.ToString());
             }
+            if (RandomStatus != null) {
+                RandomStatus.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
 
@@ -83,6 +93,7 @@ namespace Gs2.Gs2Script.Request
             var key = "";
             key += Script + ":";
             key += Args + ":";
+            key += RandomStatus + ":";
             return key;
         }
 

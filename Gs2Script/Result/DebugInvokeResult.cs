@@ -36,6 +36,7 @@ namespace Gs2.Gs2Script.Result
         public int? Code { set; get; }
         public string Result { set; get; }
         public string Transaction { set; get; }
+        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
         public int? ExecuteTime { set; get; }
         public int? Charged { set; get; }
         public string[] Output { set; get; }
@@ -52,6 +53,11 @@ namespace Gs2.Gs2Script.Result
 
         public DebugInvokeResult WithTransaction(string transaction) {
             this.Transaction = transaction;
+            return this;
+        }
+
+        public DebugInvokeResult WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
+            this.RandomStatus = randomStatus;
             return this;
         }
 
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Script.Result
                 .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)int.Parse(data["code"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
+                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
                 .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)int.Parse(data["executeTime"].ToString()))
                 .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)int.Parse(data["charged"].ToString()))
                 .WithOutput(!data.Keys.Contains("output") || data["output"] == null ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
@@ -104,6 +111,7 @@ namespace Gs2.Gs2Script.Result
                 ["code"] = Code,
                 ["result"] = Result,
                 ["transaction"] = Transaction,
+                ["randomStatus"] = RandomStatus?.ToJson(),
                 ["executeTime"] = ExecuteTime,
                 ["charged"] = Charged,
                 ["output"] = outputJsonData,
@@ -124,6 +132,9 @@ namespace Gs2.Gs2Script.Result
             if (Transaction != null) {
                 writer.WritePropertyName("transaction");
                 writer.Write(Transaction.ToString());
+            }
+            if (RandomStatus != null) {
+                RandomStatus.WriteJson(writer);
             }
             if (ExecuteTime != null) {
                 writer.WritePropertyName("executeTime");
