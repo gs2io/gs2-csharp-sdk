@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Script.Domain.Model
 {
 
     public partial class ScriptDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScriptRestClient _client;
         private readonly string _namespaceName;
         private readonly string _scriptName;
@@ -76,19 +74,13 @@ namespace Gs2.Gs2Script.Domain.Model
         public string ScriptName => _scriptName;
 
         public ScriptDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string scriptName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ScriptRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._scriptName = scriptName;
@@ -134,7 +126,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Script> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
@@ -148,7 +139,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                             request.ScriptName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Script.Model.Script>(
+                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
                             _parentKey,
                             key,
                             null,
@@ -167,36 +158,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithScriptName(this.ScriptName);
-                GetScriptResult result = null;
-                try {
-                    result = await this._client.GetScriptAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        request.ScriptName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "script")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -219,44 +184,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Model.Script>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Script.Model.Script> GetAsync(
+            #else
         private async Task<Gs2.Gs2Script.Model.Script> GetAsync(
+            #endif
             GetScriptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithScriptName(this.ScriptName);
-            var future = this._client.GetScriptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        request.ScriptName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "script")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
@@ -269,7 +206,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     request.ScriptName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Script.Model.Script>(
+                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
                     _parentKey,
                     key,
                     null,
@@ -281,11 +218,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -315,7 +251,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
@@ -329,19 +264,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithScriptName(this.ScriptName);
-                UpdateScriptResult result = null;
-                    result = await this._client.UpdateScriptAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -366,25 +292,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateAsync(
+            #endif
             UpdateScriptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithScriptName(this.ScriptName);
-            var future = this._client.UpdateScriptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
@@ -392,11 +309,10 @@ namespace Gs2.Gs2Script.Domain.Model
                 result = await this._client.UpdateScriptAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -422,18 +338,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateAsync(
-            UpdateScriptRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> Update(
             UpdateScriptRequest request
@@ -449,7 +353,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
@@ -463,19 +366,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithScriptName(this.ScriptName);
-                UpdateScriptFromGitHubResult result = null;
-                    result = await this._client.UpdateScriptFromGitHubAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -500,25 +394,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFromGitHubAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFromGitHubAsync(
+            #endif
             UpdateScriptFromGitHubRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithScriptName(this.ScriptName);
-            var future = this._client.UpdateScriptFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
@@ -526,11 +411,10 @@ namespace Gs2.Gs2Script.Domain.Model
                 result = await this._client.UpdateScriptFromGitHubAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -556,18 +440,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFromGitHubAsync(
-            UpdateScriptFromGitHubRequest request
-        ) {
-            var future = UpdateFromGitHubFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFromGitHub(
             UpdateScriptFromGitHubRequest request
@@ -583,7 +455,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
@@ -597,7 +468,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                             request.ScriptName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Script.Model.Script>(
+                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
                             _parentKey,
                             key,
                             null,
@@ -616,36 +487,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithScriptName(this.ScriptName);
-                DeleteScriptResult result = null;
-                try {
-                    result = await this._client.DeleteScriptAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        request.ScriptName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "script")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -665,44 +510,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> DeleteAsync(
+            #endif
             DeleteScriptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithScriptName(this.ScriptName);
-            var future = this._client.DeleteScriptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        request.ScriptName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "script")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
@@ -715,7 +532,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     request.ScriptName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Script.Model.Script>(
+                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
                     _parentKey,
                     key,
                     null,
@@ -727,11 +544,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -752,18 +568,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> DeleteAsync(
-            DeleteScriptRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> Delete(
             DeleteScriptRequest request
@@ -781,7 +585,7 @@ namespace Gs2.Gs2Script.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Script> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Script.Model.Script>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
                     _parentKey,
                     Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                         this.ScriptName?.ToString()
@@ -799,7 +603,7 @@ namespace Gs2.Gs2Script.Domain.Model
                             var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                                     this.ScriptName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Script.Model.Script>(
+                            this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
                                 _parentKey,
                                 key,
                                 null,
@@ -818,7 +622,7 @@ namespace Gs2.Gs2Script.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Script.Model.Script>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
                         _parentKey,
                         Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                             this.ScriptName?.ToString()
@@ -829,10 +633,15 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Model.Script>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Model.Script> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Script.Model.Script> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Script.Model.Script>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
                     _parentKey,
                     Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                         this.ScriptName?.ToString()
@@ -847,7 +656,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                                     this.ScriptName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Script.Model.Script>(
+                    this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
                         _parentKey,
                         key,
                         null,
@@ -859,7 +668,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Script.Model.Script>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
                         _parentKey,
                         Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                             this.ScriptName?.ToString()
@@ -872,16 +681,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Model.Script> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Script.Model.Script> Model()
         {
@@ -905,7 +704,7 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Script.Model.Script> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     this.ScriptName.ToString()
@@ -916,7 +715,7 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Script.Model.Script>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Script.Model.Script>(
                 _parentKey,
                 Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                     this.ScriptName.ToString()

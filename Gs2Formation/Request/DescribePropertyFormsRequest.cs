@@ -38,22 +38,27 @@ namespace Gs2.Gs2Formation.Request
         public string PropertyFormModelName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribePropertyFormsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribePropertyFormsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DescribePropertyFormsRequest WithPropertyFormModelName(string propertyFormModelName) {
             this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
+
         public DescribePropertyFormsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribePropertyFormsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -35,10 +35,12 @@ namespace Gs2.Gs2Exchange.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public DeleteAwaitByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public DeleteAwaitByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

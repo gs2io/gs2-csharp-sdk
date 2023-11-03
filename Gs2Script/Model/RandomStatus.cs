@@ -33,10 +33,12 @@ namespace Gs2.Gs2Script.Model
 	{
         public long? Seed { set; get; }
         public Gs2.Gs2Script.Model.RandomUsed[] Used { set; get; }
+
         public RandomStatus WithSeed(long? seed) {
             this.Seed = seed;
             return this;
         }
+
         public RandomStatus WithUsed(Gs2.Gs2Script.Model.RandomUsed[] used) {
             this.Used = used;
             return this;

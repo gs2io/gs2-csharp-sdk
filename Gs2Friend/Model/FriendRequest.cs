@@ -33,10 +33,12 @@ namespace Gs2.Gs2Friend.Model
 	{
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
+
         public FriendRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public FriendRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

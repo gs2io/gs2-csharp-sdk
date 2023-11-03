@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,6 @@ using Gs2.Gs2Mission.Domain.Iterator;
 using Gs2.Gs2Mission.Domain.Model;
 using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Result;
-using Gs2.Gs2Mission.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -61,10 +61,7 @@ namespace Gs2.Gs2Mission.Domain
 {
 
     public class Gs2Mission {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
 
         private readonly String _parentKey;
@@ -73,17 +70,11 @@ namespace Gs2.Gs2Mission.Domain
         public string UploadUrl { get; set; }
 
         public Gs2Mission(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session
+            Gs2.Core.Domain.Gs2 gs2
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MissionRestClient(
-                session
+                gs2.RestSession
             );
             this._parentKey = "mission";
         }
@@ -95,7 +86,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CreateNamespaceFuture(
                     request
                 );
@@ -106,16 +96,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CreateNamespaceResult result = null;
-                    result = await this._client.CreateNamespaceAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -136,41 +120,31 @@ namespace Gs2.Gs2Mission.Domain
                     }
                 }
                 var domain = new Gs2.Gs2Mission.Domain.Model.NamespaceDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            #else
         public async Task<Gs2.Gs2Mission.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            #endif
             CreateNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CreateNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CreateNamespaceResult result = null;
                 result = await this._client.CreateNamespaceAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -191,10 +165,7 @@ namespace Gs2.Gs2Mission.Domain
                 }
             }
                 var domain = new Gs2.Gs2Mission.Domain.Model.NamespaceDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
             return domain;
@@ -202,18 +173,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Mission.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            CreateNamespaceRequest request
-        ) {
-            var future = CreateNamespaceFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateNamespaceFuture.")]
         public IFuture<Gs2.Gs2Mission.Domain.Model.NamespaceDomain> CreateNamespace(
             CreateNamespaceRequest request
@@ -229,7 +188,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.DumpUserDataByUserIdFuture(
                     request
                 );
@@ -240,16 +198,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                DumpUserDataByUserIdResult result = null;
-                    result = await this._client.DumpUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -258,31 +210,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> DumpUserDataAsync(
+            #else
         public async Task<Gs2Mission> DumpUserDataAsync(
+            #endif
             DumpUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.DumpUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             DumpUserDataByUserIdResult result = null;
                 result = await this._client.DumpUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -292,18 +237,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> DumpUserDataAsync(
-            DumpUserDataByUserIdRequest request
-        ) {
-            var future = DumpUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DumpUserDataFuture.")]
         public IFuture<Gs2Mission> DumpUserData(
             DumpUserDataByUserIdRequest request
@@ -319,7 +252,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CheckDumpUserDataByUserIdFuture(
                     request
                 );
@@ -330,16 +262,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CheckDumpUserDataByUserIdResult result = null;
-                    result = await this._client.CheckDumpUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -349,31 +275,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> CheckDumpUserDataAsync(
+            #else
         public async Task<Gs2Mission> CheckDumpUserDataAsync(
+            #endif
             CheckDumpUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CheckDumpUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CheckDumpUserDataByUserIdResult result = null;
                 result = await this._client.CheckDumpUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -384,18 +303,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> CheckDumpUserDataAsync(
-            CheckDumpUserDataByUserIdRequest request
-        ) {
-            var future = CheckDumpUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CheckDumpUserDataFuture.")]
         public IFuture<Gs2Mission> CheckDumpUserData(
             CheckDumpUserDataByUserIdRequest request
@@ -411,7 +318,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CleanUserDataByUserIdFuture(
                     request
                 );
@@ -422,16 +328,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CleanUserDataByUserIdResult result = null;
-                    result = await this._client.CleanUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -440,31 +340,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> CleanUserDataAsync(
+            #else
         public async Task<Gs2Mission> CleanUserDataAsync(
+            #endif
             CleanUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CleanUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CleanUserDataByUserIdResult result = null;
                 result = await this._client.CleanUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -474,18 +367,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> CleanUserDataAsync(
-            CleanUserDataByUserIdRequest request
-        ) {
-            var future = CleanUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CleanUserDataFuture.")]
         public IFuture<Gs2Mission> CleanUserData(
             CleanUserDataByUserIdRequest request
@@ -501,7 +382,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CheckCleanUserDataByUserIdFuture(
                     request
                 );
@@ -512,16 +392,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CheckCleanUserDataByUserIdResult result = null;
-                    result = await this._client.CheckCleanUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -530,31 +404,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> CheckCleanUserDataAsync(
+            #else
         public async Task<Gs2Mission> CheckCleanUserDataAsync(
+            #endif
             CheckCleanUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CheckCleanUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CheckCleanUserDataByUserIdResult result = null;
                 result = await this._client.CheckCleanUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -564,18 +431,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> CheckCleanUserDataAsync(
-            CheckCleanUserDataByUserIdRequest request
-        ) {
-            var future = CheckCleanUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CheckCleanUserDataFuture.")]
         public IFuture<Gs2Mission> CheckCleanUserData(
             CheckCleanUserDataByUserIdRequest request
@@ -591,7 +446,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.PrepareImportUserDataByUserIdFuture(
                     request
                 );
@@ -602,16 +456,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                PrepareImportUserDataByUserIdResult result = null;
-                    result = await this._client.PrepareImportUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -622,31 +470,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> PrepareImportUserDataAsync(
+            #else
         public async Task<Gs2Mission> PrepareImportUserDataAsync(
+            #endif
             PrepareImportUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.PrepareImportUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             PrepareImportUserDataByUserIdResult result = null;
                 result = await this._client.PrepareImportUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -658,18 +499,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> PrepareImportUserDataAsync(
-            PrepareImportUserDataByUserIdRequest request
-        ) {
-            var future = PrepareImportUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PrepareImportUserDataFuture.")]
         public IFuture<Gs2Mission> PrepareImportUserData(
             PrepareImportUserDataByUserIdRequest request
@@ -685,7 +514,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.ImportUserDataByUserIdFuture(
                     request
                 );
@@ -696,16 +524,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                ImportUserDataByUserIdResult result = null;
-                    result = await this._client.ImportUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -714,31 +536,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> ImportUserDataAsync(
+            #else
         public async Task<Gs2Mission> ImportUserDataAsync(
+            #endif
             ImportUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.ImportUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             ImportUserDataByUserIdResult result = null;
                 result = await this._client.ImportUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -748,18 +563,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> ImportUserDataAsync(
-            ImportUserDataByUserIdRequest request
-        ) {
-            var future = ImportUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to ImportUserDataFuture.")]
         public IFuture<Gs2Mission> ImportUserData(
             ImportUserDataByUserIdRequest request
@@ -775,7 +578,6 @@ namespace Gs2.Gs2Mission.Domain
 
             IEnumerator Impl(IFuture<Gs2Mission> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CheckImportUserDataByUserIdFuture(
                     request
                 );
@@ -786,16 +588,10 @@ namespace Gs2.Gs2Mission.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CheckImportUserDataByUserIdResult result = null;
-                    result = await this._client.CheckImportUserDataByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -805,31 +601,24 @@ namespace Gs2.Gs2Mission.Domain
             }
             return new Gs2InlineFuture<Gs2Mission>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2Mission> CheckImportUserDataAsync(
+            #else
         public async Task<Gs2Mission> CheckImportUserDataAsync(
+            #endif
             CheckImportUserDataByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CheckImportUserDataByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CheckImportUserDataByUserIdResult result = null;
                 result = await this._client.CheckImportUserDataByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -840,18 +629,6 @@ namespace Gs2.Gs2Mission.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2Mission> CheckImportUserDataAsync(
-            CheckImportUserDataByUserIdRequest request
-        ) {
-            var future = CheckImportUserDataFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CheckImportUserDataFuture.")]
         public IFuture<Gs2Mission> CheckImportUserData(
             CheckImportUserDataByUserIdRequest request
@@ -865,7 +642,7 @@ namespace Gs2.Gs2Mission.Domain
         )
         {
             return new DescribeNamespacesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
             );
         }
@@ -875,12 +652,12 @@ namespace Gs2.Gs2Mission.Domain
         public Gs2Iterator<Gs2.Gs2Mission.Model.Namespace> Namespaces(
             #endif
         #else
-        public DescribeNamespacesIterator Namespaces(
+        public DescribeNamespacesIterator NamespacesAsync(
         #endif
         )
         {
             return new DescribeNamespacesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -895,7 +672,7 @@ namespace Gs2.Gs2Mission.Domain
 
         public ulong SubscribeNamespaces(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.Namespace>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Namespace>(
                 "mission:Namespace",
                 callback
             );
@@ -903,7 +680,7 @@ namespace Gs2.Gs2Mission.Domain
 
         public void UnsubscribeNamespaces(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Namespace>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Namespace>(
                 "mission:Namespace",
                 callbackId
             );
@@ -913,10 +690,7 @@ namespace Gs2.Gs2Mission.Domain
             string namespaceName
         ) {
             return new Gs2.Gs2Mission.Domain.Model.NamespaceDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 namespaceName
             );
         }

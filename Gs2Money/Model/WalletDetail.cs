@@ -33,10 +33,12 @@ namespace Gs2.Gs2Money.Model
 	{
         public float? Price { set; get; }
         public int? Count { set; get; }
+
         public WalletDetail WithPrice(float? price) {
             this.Price = price;
             return this;
         }
+
         public WalletDetail WithCount(int? count) {
             this.Count = count;
             return this;

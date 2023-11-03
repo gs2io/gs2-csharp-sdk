@@ -35,6 +35,7 @@ namespace Gs2.Gs2Limit.Request
 	{
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DumpUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

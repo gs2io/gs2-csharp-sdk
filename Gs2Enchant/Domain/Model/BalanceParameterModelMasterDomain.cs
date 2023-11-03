@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 {
 
     public partial class BalanceParameterModelMasterDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
         private readonly string _namespaceName;
         private readonly string _parameterName;
@@ -70,19 +68,13 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public string ParameterName => _parameterName;
 
         public BalanceParameterModelMasterDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string parameterName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2EnchantRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parameterName = parameterName;
@@ -128,7 +120,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithParameterName(this.ParameterName);
@@ -142,7 +133,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                             request.ParameterName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                             _parentKey,
                             key,
                             null,
@@ -161,36 +152,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithParameterName(this.ParameterName);
-                GetBalanceParameterModelMasterResult result = null;
-                try {
-                    result = await this._client.GetBalanceParameterModelMasterAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
-                        request.ParameterName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "balanceParameterModelMaster")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -213,44 +178,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> GetAsync(
+            #else
         private async Task<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> GetAsync(
+            #endif
             GetBalanceParameterModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithParameterName(this.ParameterName);
-            var future = this._client.GetBalanceParameterModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
-                        request.ParameterName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "balanceParameterModelMaster")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithParameterName(this.ParameterName);
@@ -263,7 +200,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                     request.ParameterName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                     _parentKey,
                     key,
                     null,
@@ -275,11 +212,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -309,7 +245,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithParameterName(this.ParameterName);
@@ -323,19 +258,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithParameterName(this.ParameterName);
-                UpdateBalanceParameterModelMasterResult result = null;
-                    result = await this._client.UpdateBalanceParameterModelMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -360,25 +286,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> UpdateAsync(
+            #endif
             UpdateBalanceParameterModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithParameterName(this.ParameterName);
-            var future = this._client.UpdateBalanceParameterModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithParameterName(this.ParameterName);
@@ -386,11 +303,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 result = await this._client.UpdateBalanceParameterModelMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -416,18 +332,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> UpdateAsync(
-            UpdateBalanceParameterModelMasterRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> Update(
             UpdateBalanceParameterModelMasterRequest request
@@ -443,7 +347,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithParameterName(this.ParameterName);
@@ -457,7 +360,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                             request.ParameterName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                             _parentKey,
                             key,
                             null,
@@ -476,36 +379,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithParameterName(this.ParameterName);
-                DeleteBalanceParameterModelMasterResult result = null;
-                try {
-                    result = await this._client.DeleteBalanceParameterModelMasterAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
-                        request.ParameterName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "balanceParameterModelMaster")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -525,44 +402,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> DeleteAsync(
+            #endif
             DeleteBalanceParameterModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithParameterName(this.ParameterName);
-            var future = this._client.DeleteBalanceParameterModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
-                        request.ParameterName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "balanceParameterModelMaster")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithParameterName(this.ParameterName);
@@ -575,7 +424,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                     request.ParameterName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                     _parentKey,
                     key,
                     null,
@@ -587,11 +436,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -612,18 +460,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> DeleteAsync(
-            DeleteBalanceParameterModelMasterRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> Delete(
             DeleteBalanceParameterModelMasterRequest request
@@ -641,7 +477,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                     _parentKey,
                     Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                         this.ParameterName?.ToString()
@@ -659,7 +495,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                                     this.ParameterName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                            this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                                 _parentKey,
                                 key,
                                 null,
@@ -678,7 +514,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                         _parentKey,
                         Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                             this.ParameterName?.ToString()
@@ -689,10 +525,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                     _parentKey,
                     Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                         this.ParameterName?.ToString()
@@ -707,7 +548,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                                     this.ParameterName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                    this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                         _parentKey,
                         key,
                         null,
@@ -719,7 +560,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                         _parentKey,
                         Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                             this.ParameterName?.ToString()
@@ -732,16 +573,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> Model()
         {
@@ -765,7 +596,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                     this.ParameterName.ToString()
@@ -776,7 +607,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                 _parentKey,
                 Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain.CreateCacheKey(
                     this.ParameterName.ToString()

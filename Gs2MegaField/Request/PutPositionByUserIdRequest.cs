@@ -41,30 +41,37 @@ namespace Gs2.Gs2MegaField.Request
         public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
         public float? R { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public PutPositionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public PutPositionByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public PutPositionByUserIdRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
+
         public PutPositionByUserIdRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
+
         public PutPositionByUserIdRequest WithPosition(Gs2.Gs2MegaField.Model.Position position) {
             this.Position = position;
             return this;
         }
+
         public PutPositionByUserIdRequest WithVector(Gs2.Gs2MegaField.Model.Vector vector) {
             this.Vector = vector;
             return this;
         }
+
         public PutPositionByUserIdRequest WithR(float? r) {
             this.R = r;
             return this;

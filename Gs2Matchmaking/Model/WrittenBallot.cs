@@ -33,10 +33,12 @@ namespace Gs2.Gs2Matchmaking.Model
 	{
         public Gs2.Gs2Matchmaking.Model.Ballot Ballot { set; get; }
         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
+
         public WrittenBallot WithBallot(Gs2.Gs2Matchmaking.Model.Ballot ballot) {
             this.Ballot = ballot;
             return this;
         }
+
         public WrittenBallot WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
             this.GameResults = gameResults;
             return this;

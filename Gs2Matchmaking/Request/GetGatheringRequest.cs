@@ -35,10 +35,12 @@ namespace Gs2.Gs2Matchmaking.Request
 	{
         public string NamespaceName { set; get; }
         public string GatheringName { set; get; }
+
         public GetGatheringRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetGatheringRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;

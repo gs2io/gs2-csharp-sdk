@@ -38,22 +38,27 @@ namespace Gs2.Gs2Idle.Request
         public Gs2.Gs2Idle.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Idle.Model.ScriptSetting ReceiveScript { set; get; }
         public Gs2.Gs2Idle.Model.LogSetting LogSetting { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Idle.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public UpdateNamespaceRequest WithReceiveScript(Gs2.Gs2Idle.Model.ScriptSetting receiveScript) {
             this.ReceiveScript = receiveScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Idle.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 
 using System;
 using System.Collections.Generic;
@@ -60,26 +61,17 @@ namespace Gs2.Gs2Identifier.Domain
 {
 
     public class Gs2Identifier {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
 
         private readonly String _parentKey;
 
         public Gs2Identifier(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session
+            Gs2.Core.Domain.Gs2 gs2
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2IdentifierRestClient(
-                session
+                gs2.RestSession
             );
             this._parentKey = "identifier";
         }
@@ -111,7 +103,7 @@ namespace Gs2.Gs2Identifier.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -132,10 +124,7 @@ namespace Gs2.Gs2Identifier.Domain
                     }
                 }
                 var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
                 self.OnComplete(domain);
@@ -166,7 +155,7 @@ namespace Gs2.Gs2Identifier.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -187,10 +176,7 @@ namespace Gs2.Gs2Identifier.Domain
                 }
             }
                 var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
             return domain;
@@ -245,7 +231,7 @@ namespace Gs2.Gs2Identifier.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -266,10 +252,7 @@ namespace Gs2.Gs2Identifier.Domain
                     }
                 }
                 var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
                 self.OnComplete(domain);
@@ -300,7 +283,7 @@ namespace Gs2.Gs2Identifier.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -321,10 +304,7 @@ namespace Gs2.Gs2Identifier.Domain
                 }
             }
                 var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
             return domain;
@@ -357,7 +337,7 @@ namespace Gs2.Gs2Identifier.Domain
         )
         {
             return new DescribeUsersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
             );
         }
@@ -367,12 +347,12 @@ namespace Gs2.Gs2Identifier.Domain
         public Gs2Iterator<Gs2.Gs2Identifier.Model.User> Users(
             #endif
         #else
-        public DescribeUsersIterator Users(
+        public DescribeUsersIterator UsersAsync(
         #endif
         )
         {
             return new DescribeUsersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -387,7 +367,7 @@ namespace Gs2.Gs2Identifier.Domain
 
         public ulong SubscribeUsers(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.User>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.User>(
                 "identifier:User",
                 callback
             );
@@ -395,7 +375,7 @@ namespace Gs2.Gs2Identifier.Domain
 
         public void UnsubscribeUsers(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.User>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.User>(
                 "identifier:User",
                 callbackId
             );
@@ -405,10 +385,7 @@ namespace Gs2.Gs2Identifier.Domain
             string userName
         ) {
             return new Gs2.Gs2Identifier.Domain.Model.UserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 userName
             );
         }
@@ -418,7 +395,7 @@ namespace Gs2.Gs2Identifier.Domain
         )
         {
             return new DescribeSecurityPoliciesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
             );
         }
@@ -428,12 +405,12 @@ namespace Gs2.Gs2Identifier.Domain
         public Gs2Iterator<Gs2.Gs2Identifier.Model.SecurityPolicy> SecurityPolicies(
             #endif
         #else
-        public DescribeSecurityPoliciesIterator SecurityPolicies(
+        public DescribeSecurityPoliciesIterator SecurityPoliciesAsync(
         #endif
         )
         {
             return new DescribeSecurityPoliciesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -448,7 +425,7 @@ namespace Gs2.Gs2Identifier.Domain
 
         public ulong SubscribeSecurityPolicies(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
                 callback
             );
@@ -456,7 +433,7 @@ namespace Gs2.Gs2Identifier.Domain
 
         public void UnsubscribeSecurityPolicies(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
                 callbackId
             );
@@ -467,7 +444,7 @@ namespace Gs2.Gs2Identifier.Domain
         )
         {
             return new DescribeCommonSecurityPoliciesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
             );
         }
@@ -477,12 +454,12 @@ namespace Gs2.Gs2Identifier.Domain
         public Gs2Iterator<Gs2.Gs2Identifier.Model.SecurityPolicy> CommonSecurityPolicies(
             #endif
         #else
-        public DescribeCommonSecurityPoliciesIterator CommonSecurityPolicies(
+        public DescribeCommonSecurityPoliciesIterator CommonSecurityPoliciesAsync(
         #endif
         )
         {
             return new DescribeCommonSecurityPoliciesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -497,7 +474,7 @@ namespace Gs2.Gs2Identifier.Domain
 
         public ulong SubscribeCommonSecurityPolicies(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
                 callback
             );
@@ -505,7 +482,7 @@ namespace Gs2.Gs2Identifier.Domain
 
         public void UnsubscribeCommonSecurityPolicies(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
                 callbackId
             );
@@ -515,10 +492,7 @@ namespace Gs2.Gs2Identifier.Domain
             string securityPolicyName
         ) {
             return new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 securityPolicyName
             );
         }

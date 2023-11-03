@@ -44,54 +44,67 @@ namespace Gs2.Gs2Mission.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public MissionTaskModelMaster WithMissionTaskId(string missionTaskId) {
             this.MissionTaskId = missionTaskId;
             return this;
         }
+
         public MissionTaskModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public MissionTaskModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public MissionTaskModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public MissionTaskModelMaster WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
+
         public MissionTaskModelMaster WithTargetResetType(string targetResetType) {
             this.TargetResetType = targetResetType;
             return this;
         }
+
         public MissionTaskModelMaster WithTargetValue(long? targetValue) {
             this.TargetValue = targetValue;
             return this;
         }
+
         public MissionTaskModelMaster WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
+
         public MissionTaskModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
+
         public MissionTaskModelMaster WithPremiseMissionTaskName(string premiseMissionTaskName) {
             this.PremiseMissionTaskName = premiseMissionTaskName;
             return this;
         }
+
         public MissionTaskModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public MissionTaskModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public MissionTaskModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

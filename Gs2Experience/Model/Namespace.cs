@@ -44,54 +44,67 @@ namespace Gs2.Gs2Experience.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Namespace WithTransactionSetting(Gs2.Gs2Experience.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public Namespace WithRankCapScriptId(string rankCapScriptId) {
             this.RankCapScriptId = rankCapScriptId;
             return this;
         }
+
         public Namespace WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
             this.ChangeExperienceScript = changeExperienceScript;
             return this;
         }
+
         public Namespace WithChangeRankScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
             this.ChangeRankScript = changeRankScript;
             return this;
         }
+
         public Namespace WithChangeRankCapScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
             this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
+
         public Namespace WithOverflowExperienceScript(string overflowExperienceScript) {
             this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
+
         public Namespace WithLogSetting(Gs2.Gs2Experience.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
+
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

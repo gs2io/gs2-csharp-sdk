@@ -35,10 +35,12 @@ namespace Gs2.Gs2Dictionary.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public DeleteEntriesByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public DeleteEntriesByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -38,18 +38,22 @@ namespace Gs2.Gs2LoginReward.Request
         public string UserId { set; get; }
         public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public ReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public ReceiveByUserIdRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
+
         public ReceiveByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public ReceiveByUserIdRequest WithConfig(Gs2.Gs2LoginReward.Model.Config[] config) {
             this.Config = config;
             return this;

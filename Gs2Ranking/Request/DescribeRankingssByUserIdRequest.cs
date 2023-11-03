@@ -40,30 +40,37 @@ namespace Gs2.Gs2Ranking.Request
         public long? StartIndex { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeRankingssByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeRankingssByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public DescribeRankingssByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeRankingssByUserIdRequest WithAdditionalScopeName(string additionalScopeName) {
             this.AdditionalScopeName = additionalScopeName;
             return this;
         }
+
         public DescribeRankingssByUserIdRequest WithStartIndex(long? startIndex) {
             this.StartIndex = startIndex;
             return this;
         }
+
         public DescribeRankingssByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeRankingssByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

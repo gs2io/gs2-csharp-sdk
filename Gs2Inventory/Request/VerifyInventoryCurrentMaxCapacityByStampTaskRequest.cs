@@ -35,10 +35,12 @@ namespace Gs2.Gs2Inventory.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public VerifyInventoryCurrentMaxCapacityByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public VerifyInventoryCurrentMaxCapacityByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

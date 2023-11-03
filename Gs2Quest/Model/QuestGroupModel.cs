@@ -36,22 +36,27 @@ namespace Gs2.Gs2Quest.Model
         public string Metadata { set; get; }
         public Gs2.Gs2Quest.Model.QuestModel[] Quests { set; get; }
         public string ChallengePeriodEventId { set; get; }
+
         public QuestGroupModel WithQuestGroupModelId(string questGroupModelId) {
             this.QuestGroupModelId = questGroupModelId;
             return this;
         }
+
         public QuestGroupModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public QuestGroupModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public QuestGroupModel WithQuests(Gs2.Gs2Quest.Model.QuestModel[] quests) {
             this.Quests = quests;
             return this;
         }
+
         public QuestGroupModel WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;

@@ -59,10 +59,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -75,19 +72,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2RankingRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -130,7 +121,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -152,10 +143,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.CategoryName,
@@ -196,7 +184,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -218,10 +206,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.CategoryName,
@@ -257,10 +242,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string categoryName
         ) {
             return new Gs2.Gs2Ranking.Domain.Model.SubscribeAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 categoryName
@@ -273,7 +255,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeSubscribesByCategoryNameIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -286,13 +268,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public Gs2Iterator<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribeUsers(
             #endif
         #else
-        public DescribeSubscribesByCategoryNameIterator SubscribeUsers(
+        public DescribeSubscribesByCategoryNameIterator SubscribeUsersAsync(
         #endif
             string categoryName
         )
         {
             return new DescribeSubscribesByCategoryNameIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -310,7 +292,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public ulong SubscribeSubscribeUsers(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -322,7 +304,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public void UnsubscribeSubscribeUsers(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -337,10 +319,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string targetUserId
         ) {
             return new Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 categoryName,
@@ -355,7 +334,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeRankingsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -369,14 +348,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> Rankings(
             #endif
         #else
-        public DescribeRankingsIterator Rankings(
+        public DescribeRankingsIterator RankingsAsync(
         #endif
             string categoryName,
             string additionalScopeName = null
         )
         {
             return new DescribeRankingsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -395,7 +374,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public ulong SubscribeRankings(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.Ranking>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.Ranking>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -407,7 +386,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public void UnsubscribeRankings(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Ranking>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Ranking>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -421,10 +400,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string categoryName
         ) {
             return new Gs2.Gs2Ranking.Domain.Model.RankingAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 categoryName
@@ -438,7 +414,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         )
         {
             return new DescribeScoresIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -452,14 +428,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Score> Scores(
             #endif
         #else
-        public DescribeScoresIterator Scores(
+        public DescribeScoresIterator ScoresAsync(
         #endif
             string categoryName,
             string scorerUserId
         )
         {
             return new DescribeScoresIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 categoryName,
@@ -478,7 +454,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public ulong SubscribeScores(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Ranking.Model.Score>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.Score>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -490,7 +466,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public void UnsubscribeScores(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Score>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Score>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -506,10 +482,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string uniqueId
         ) {
             return new Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 categoryName,

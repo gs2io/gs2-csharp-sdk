@@ -34,6 +34,7 @@ namespace Gs2.Gs2Schedule.Request
 	public class GetCurrentEventMasterRequest : Gs2Request<GetCurrentEventMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -36,10 +36,12 @@ namespace Gs2.Gs2Gateway.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteFirebaseTokenByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteFirebaseTokenByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

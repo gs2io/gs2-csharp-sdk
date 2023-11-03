@@ -35,10 +35,12 @@ namespace Gs2.Gs2Project.Request
 	{
         public string Email { set; get; }
         public string Password { set; get; }
+
         public SignInRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
+
         public SignInRequest WithPassword(string password) {
             this.Password = password;
             return this;

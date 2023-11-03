@@ -39,22 +39,27 @@ namespace Gs2.Gs2Exchange.Request
         public int? Count { set; get; }
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public IncrementalExchangeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public IncrementalExchangeRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
+
         public IncrementalExchangeRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public IncrementalExchangeRequest WithCount(int? count) {
             this.Count = count;
             return this;
         }
+
         public IncrementalExchangeRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
             return this;

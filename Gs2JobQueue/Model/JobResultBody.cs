@@ -35,18 +35,22 @@ namespace Gs2.Gs2JobQueue.Model
         public int? StatusCode { set; get; }
         public string Result { set; get; }
         public long? TryAt { set; get; }
+
         public JobResultBody WithTryNumber(int? tryNumber) {
             this.TryNumber = tryNumber;
             return this;
         }
+
         public JobResultBody WithStatusCode(int? statusCode) {
             this.StatusCode = statusCode;
             return this;
         }
+
         public JobResultBody WithResult(string result) {
             this.Result = result;
             return this;
         }
+
         public JobResultBody WithTryAt(long? tryAt) {
             this.TryAt = tryAt;
             return this;

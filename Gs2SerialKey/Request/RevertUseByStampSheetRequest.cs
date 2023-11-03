@@ -35,10 +35,12 @@ namespace Gs2.Gs2SerialKey.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public RevertUseByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public RevertUseByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

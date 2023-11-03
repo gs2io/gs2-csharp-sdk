@@ -36,14 +36,17 @@ namespace Gs2.Gs2Formation.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeMoldModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeMoldModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeMoldModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -39,26 +39,32 @@ namespace Gs2.Gs2Showcase.Request
         public string Metadata { set; get; }
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+
         public CreateSalesItemMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateSalesItemMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateSalesItemMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateSalesItemMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateSalesItemMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
+
         public CreateSalesItemMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

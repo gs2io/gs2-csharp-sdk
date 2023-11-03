@@ -37,14 +37,17 @@ namespace Gs2.Gs2Enhance.Request
         public string UserId { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public EndByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public EndByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public EndByUserIdRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

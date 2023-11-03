@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Key.Domain.Model
 {
 
     public partial class NamespaceDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2KeyRestClient _client;
         private readonly string _namespaceName;
 
@@ -70,18 +68,12 @@ namespace Gs2.Gs2Key.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2KeyRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = "key:Namespace";
@@ -92,7 +84,7 @@ namespace Gs2.Gs2Key.Domain.Model
         )
         {
             return new DescribeKeysIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -103,12 +95,12 @@ namespace Gs2.Gs2Key.Domain.Model
         public Gs2Iterator<Gs2.Gs2Key.Model.Key> Keys(
             #endif
         #else
-        public DescribeKeysIterator Keys(
+        public DescribeKeysIterator KeysAsync(
         #endif
         )
         {
             return new DescribeKeysIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -124,7 +116,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public ulong SubscribeKeys(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Key.Model.Key>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Key.Model.Key>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Key"
@@ -135,7 +127,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public void UnsubscribeKeys(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Key.Model.Key>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Key.Model.Key>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Key"
@@ -148,10 +140,7 @@ namespace Gs2.Gs2Key.Domain.Model
             string keyName
         ) {
             return new Gs2.Gs2Key.Domain.Model.KeyDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 keyName
             );
@@ -162,7 +151,7 @@ namespace Gs2.Gs2Key.Domain.Model
         )
         {
             return new DescribeGitHubApiKeysIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -173,12 +162,12 @@ namespace Gs2.Gs2Key.Domain.Model
         public Gs2Iterator<Gs2.Gs2Key.Model.GitHubApiKey> GitHubApiKeys(
             #endif
         #else
-        public DescribeGitHubApiKeysIterator GitHubApiKeys(
+        public DescribeGitHubApiKeysIterator GitHubApiKeysAsync(
         #endif
         )
         {
             return new DescribeGitHubApiKeysIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -194,7 +183,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public ulong SubscribeGitHubApiKeys(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "GitHubApiKey"
@@ -205,7 +194,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public void UnsubscribeGitHubApiKeys(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "GitHubApiKey"
@@ -218,10 +207,7 @@ namespace Gs2.Gs2Key.Domain.Model
             string apiKeyName
         ) {
             return new Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 apiKeyName
             );
@@ -274,7 +260,7 @@ namespace Gs2.Gs2Key.Domain.Model
                         var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -305,7 +291,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -321,7 +307,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -348,7 +334,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -379,7 +365,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -395,7 +381,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -446,7 +432,7 @@ namespace Gs2.Gs2Key.Domain.Model
                         var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -477,7 +463,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -493,7 +479,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -534,7 +520,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -565,7 +551,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -581,7 +567,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -636,7 +622,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -690,7 +676,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -757,7 +743,7 @@ namespace Gs2.Gs2Key.Domain.Model
                         var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -788,7 +774,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -804,7 +790,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -842,7 +828,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -873,7 +859,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -889,7 +875,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -962,7 +948,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -982,10 +968,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Key.Domain.Model.KeyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1022,7 +1005,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1042,10 +1025,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Key.Domain.Model.KeyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1106,7 +1086,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1126,10 +1106,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1166,7 +1143,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1186,10 +1163,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1233,7 +1207,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     "key",
                     "Namespace"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Key.Model.Namespace>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1251,7 +1225,7 @@ namespace Gs2.Gs2Key.Domain.Model
                             var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                            this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                                 parentKey,
                                 key,
                                 null,
@@ -1270,7 +1244,7 @@ namespace Gs2.Gs2Key.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Key.Model.Namespace>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1289,7 +1263,7 @@ namespace Gs2.Gs2Key.Domain.Model
                 "key",
                 "Namespace"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Key.Model.Namespace>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1304,7 +1278,7 @@ namespace Gs2.Gs2Key.Domain.Model
                     var key = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Key.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Namespace>(
                         parentKey,
                         key,
                         null,
@@ -1316,7 +1290,7 @@ namespace Gs2.Gs2Key.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Key.Model.Namespace>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1362,7 +1336,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Key.Model.Namespace> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()
@@ -1373,7 +1347,7 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Key.Model.Namespace>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Key.Model.Namespace>(
                 _parentKey,
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()

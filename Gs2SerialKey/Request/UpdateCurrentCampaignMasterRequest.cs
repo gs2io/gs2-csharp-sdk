@@ -35,10 +35,12 @@ namespace Gs2.Gs2SerialKey.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
+
         public UpdateCurrentCampaignMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentCampaignMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

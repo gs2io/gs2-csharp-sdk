@@ -11,23 +11,23 @@ namespace Gs2.Core.Domain
     public class JobQueueDomain
     {
         
-        private object lockObject = new object();
+        private readonly object _lockObject = new object();
 
-        private Gs2 gs2;
-        private List<string> tasks = new List<string>();
+        private readonly Gs2 _gs2;
+        private readonly List<string> _tasks = new List<string>();
 
         public JobQueueDomain(
             Gs2 gs2
         ) {
-            this.gs2 = gs2;
+            this._gs2 = gs2;
         }
 
         public void Push(
             string namespaceName
         ) {
-            lock (lockObject)
+            lock (this._lockObject)
             {
-                tasks.Add(namespaceName);
+                this._tasks.Add(namespaceName);
             }
         }
 
@@ -43,18 +43,18 @@ namespace Gs2.Core.Domain
             {
 #endif
             string namespaceName = null;
-            lock (lockObject) {
-                if (tasks.Count > 0) {
-                    namespaceName = tasks[0];
+            lock (this._lockObject) {
+                if (this._tasks.Count > 0) {
+                    namespaceName = this._tasks[0];
                 }
             }
             if (namespaceName != null) {
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = gs2.JobQueue.Namespace(
+                var future = this._gs2.JobQueue.Namespace(
                     namespaceName
                 ).AccessToken(
                     accessToken
-                ).Run(
+                ).RunFuture(
                     new RunRequest()
                 );
                 yield return future;
@@ -62,9 +62,9 @@ namespace Gs2.Core.Domain
                 {
                     
                 }
-                JobAccessTokenDomain job = future.Result;
+                var job = future.Result;
 #else
-                JobAccessTokenDomain job = await gs2.JobQueue.Namespace(
+                var job = await this._gs2.JobQueue.Namespace(
                     namespaceName
                 ).AccessToken(
                     accessToken
@@ -73,15 +73,21 @@ namespace Gs2.Core.Domain
                 );
 #endif 
                 if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                    lock (lockObject) {
-                        tasks.Remove(namespaceName);
+                    lock (this._lockObject) {
+                        this._tasks.Remove(namespaceName);
                     }
                 }
             }
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(tasks.Count == 0);
+                if (this._lockObject != null) {
+                    lock (this._lockObject) {
+                        self.OnComplete(this._tasks.Count == 0);
+                    }
+                }
 #else
-            return tasks.Count == 0;
+            lock (this._lockObject) {
+                return this._tasks.Count == 0;
+            }
 #endif 
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
@@ -102,18 +108,18 @@ namespace Gs2.Core.Domain
             {
 #endif
             string namespaceName = null;
-            lock (lockObject) {
-                if (tasks.Count > 0) {
-                    namespaceName = tasks[0];
+            lock (this._lockObject) {
+                if (this._tasks.Count > 0) {
+                    namespaceName = this._tasks[0];
                 }
             }
             if (namespaceName != null) {
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = gs2.JobQueue.Namespace(
+                var future = this._gs2.JobQueue.Namespace(
                     namespaceName
                 ).User(
                     userId
-                ).Run(
+                ).RunFuture(
                     new RunByUserIdRequest()
                 );
                 yield return future;
@@ -122,9 +128,9 @@ namespace Gs2.Core.Domain
                     self.OnError(future.Error);
                     yield break;
                 }
-                JobDomain job = future.Result;
+                var job = future.Result;
 #else
-                JobDomain job = await gs2.JobQueue.Namespace(
+                var job = await this._gs2.JobQueue.Namespace(
                     namespaceName
                 ).User(
                     userId
@@ -133,15 +139,19 @@ namespace Gs2.Core.Domain
                 );
 #endif 
                 if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                    lock (lockObject) {
-                        tasks.Remove(namespaceName);
+                    lock (this._lockObject) {
+                        this._tasks.Remove(namespaceName);
                     }
                 }
             }
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(tasks.Count == 0);
+            lock (this._lockObject) {
+                self.OnComplete(this._tasks.Count == 0);
+            }
 #else
-            return tasks.Count == 0;
+            lock (this._lockObject) {
+                return this._tasks.Count == 0;
+            }
 #endif 
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }

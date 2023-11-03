@@ -36,14 +36,17 @@ namespace Gs2.Gs2Deploy.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public string Template { set; get; }
+
         public CreateStackRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateStackRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateStackRequest WithTemplate(string template) {
             this.Template = template;
             return this;

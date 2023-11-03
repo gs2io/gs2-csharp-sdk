@@ -39,26 +39,32 @@ namespace Gs2.Gs2Matchmaking.Request
         public string AccessToken { set; get; }
         public int? NumberOfPlayer { set; get; }
         public string KeyId { set; get; }
+
         public GetBallotRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetBallotRequest WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;
         }
+
         public GetBallotRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;
         }
+
         public GetBallotRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetBallotRequest WithNumberOfPlayer(int? numberOfPlayer) {
             this.NumberOfPlayer = numberOfPlayer;
             return this;
         }
+
         public GetBallotRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -37,14 +37,17 @@ namespace Gs2.Gs2SerialKey.Request
         public string UserId { set; get; }
         public string Code { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public UseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UseByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public UseByUserIdRequest WithCode(string code) {
             this.Code = code;
             return this;

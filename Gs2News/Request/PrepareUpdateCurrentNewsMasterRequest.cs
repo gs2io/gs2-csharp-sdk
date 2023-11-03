@@ -34,6 +34,7 @@ namespace Gs2.Gs2News.Request
 	public class PrepareUpdateCurrentNewsMasterRequest : Gs2Request<PrepareUpdateCurrentNewsMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public PrepareUpdateCurrentNewsMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

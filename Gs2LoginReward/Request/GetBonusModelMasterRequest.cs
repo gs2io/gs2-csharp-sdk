@@ -35,10 +35,12 @@ namespace Gs2.Gs2LoginReward.Request
 	{
         public string NamespaceName { set; get; }
         public string BonusModelName { set; get; }
+
         public GetBonusModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetBonusModelMasterRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;

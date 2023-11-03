@@ -59,10 +59,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -76,19 +73,13 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LotteryRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -101,10 +92,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public Gs2.Gs2Lottery.Domain.Model.LotteryAccessTokenDomain Lottery(
         ) {
             return new Gs2.Gs2Lottery.Domain.Model.LotteryAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken
             );
@@ -115,7 +103,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeBoxesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -127,12 +115,12 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public Gs2Iterator<Gs2.Gs2Lottery.Model.BoxItems> Boxes(
             #endif
         #else
-        public DescribeBoxesIterator Boxes(
+        public DescribeBoxesIterator BoxesAsync(
         #endif
         )
         {
             return new DescribeBoxesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -152,7 +140,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             string prizeTableName
         )
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -167,7 +155,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             string prizeTableName
         )
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -181,10 +169,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             string prizeTableName
         ) {
             return new Gs2.Gs2Lottery.Domain.Model.BoxItemsAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 prizeTableName
@@ -197,7 +182,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeProbabilitiesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 lotteryName,
@@ -210,13 +195,13 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> Probabilities(
             #endif
         #else
-        public DescribeProbabilitiesIterator Probabilities(
+        public DescribeProbabilitiesIterator ProbabilitiesAsync(
         #endif
             string lotteryName
         )
         {
             return new DescribeProbabilitiesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 lotteryName,
@@ -237,7 +222,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             string lotteryName
         )
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.Probability>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.Probability>(
                 Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -252,7 +237,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             string lotteryName
         )
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.Probability>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.Probability>(
                 Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -267,10 +252,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             string prizeId
         ) {
             return new Gs2.Gs2Lottery.Domain.Model.ProbabilityAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 lotteryName,

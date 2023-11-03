@@ -35,10 +35,12 @@ namespace Gs2.Gs2Limit.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Limit.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentLimitMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentLimitMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Limit.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

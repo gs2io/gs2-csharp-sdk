@@ -36,14 +36,17 @@ namespace Gs2.Gs2JobQueue.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string JobName { set; get; }
+
         public GetJobResultByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetJobResultByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public GetJobResultByUserIdRequest WithJobName(string jobName) {
             this.JobName = jobName;
             return this;

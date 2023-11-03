@@ -38,18 +38,22 @@ namespace Gs2.Gs2Idle.Request
         public string CategoryName { set; get; }
         public int? IncreaseMinutes { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public IncreaseMaximumIdleMinutesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public IncreaseMaximumIdleMinutesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public IncreaseMaximumIdleMinutesByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public IncreaseMaximumIdleMinutesByUserIdRequest WithIncreaseMinutes(int? increaseMinutes) {
             this.IncreaseMinutes = increaseMinutes;
             return this;

@@ -41,30 +41,37 @@ namespace Gs2.Gs2Enhance.Request
         public bool? Force { set; get; }
         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public StartRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public StartRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
+
         public StartRequest WithTargetItemSetId(string targetItemSetId) {
             this.TargetItemSetId = targetItemSetId;
             return this;
         }
+
         public StartRequest WithMaterials(Gs2.Gs2Enhance.Model.Material[] materials) {
             this.Materials = materials;
             return this;
         }
+
         public StartRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public StartRequest WithForce(bool? force) {
             this.Force = force;
             return this;
         }
+
         public StartRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

@@ -33,10 +33,12 @@ namespace Gs2.Gs2Experience.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentExperienceMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentExperienceMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

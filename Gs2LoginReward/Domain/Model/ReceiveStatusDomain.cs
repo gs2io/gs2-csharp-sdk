@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 {
 
     public partial class ReceiveStatusDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -72,20 +70,14 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         public string BonusModelName => _bonusModelName;
 
         public ReceiveStatusDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string bonusModelName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LoginRewardRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -135,7 +127,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Model.ReceiveStatus> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -150,7 +141,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             request.BonusModelName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                        this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                             _parentKey,
                             key,
                             null,
@@ -169,37 +160,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithBonusModelName(this.BonusModelName);
-                GetReceiveStatusByUserIdResult result = null;
-                try {
-                    result = await this._client.GetReceiveStatusByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "receiveStatus")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -238,45 +202,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Model.ReceiveStatus>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2LoginReward.Model.ReceiveStatus> GetAsync(
+            #else
         private async Task<Gs2.Gs2LoginReward.Model.ReceiveStatus> GetAsync(
+            #endif
             GetReceiveStatusByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.GetReceiveStatusByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "receiveStatus")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -290,7 +225,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                     request.BonusModelName.ToString()
                     );
-                _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                     _parentKey,
                     key,
                     null,
@@ -302,11 +237,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -352,7 +286,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -367,7 +300,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             request.BonusModelName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                        this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                             _parentKey,
                             key,
                             null,
@@ -386,37 +319,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithBonusModelName(this.BonusModelName);
-                DeleteReceiveStatusByUserIdResult result = null;
-                try {
-                    result = await this._client.DeleteReceiveStatusByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "receiveStatus")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -447,45 +353,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> DeleteAsync(
+            #endif
             DeleteReceiveStatusByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.DeleteReceiveStatusByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "receiveStatus")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -499,7 +376,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                     request.BonusModelName.ToString()
                     );
-                _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                     _parentKey,
                     key,
                     null,
@@ -511,11 +388,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -547,18 +423,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> DeleteAsync(
-            DeleteReceiveStatusByUserIdRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> Delete(
             DeleteReceiveStatusByUserIdRequest request
@@ -574,7 +438,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -589,20 +452,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithBonusModelName(this.BonusModelName);
-                MarkReceivedByUserIdResult result = null;
-                    result = await this._client.MarkReceivedByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -643,26 +496,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> MarkReceivedAsync(
+            #else
         public async Task<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> MarkReceivedAsync(
+            #endif
             MarkReceivedByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.MarkReceivedByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -671,11 +514,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 result = await this._client.MarkReceivedByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -717,18 +559,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> MarkReceivedAsync(
-            MarkReceivedByUserIdRequest request
-        ) {
-            var future = MarkReceivedFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to MarkReceivedFuture.")]
         public IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> MarkReceived(
             MarkReceivedByUserIdRequest request
@@ -744,7 +574,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -759,20 +588,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithBonusModelName(this.BonusModelName);
-                UnmarkReceivedByUserIdResult result = null;
-                    result = await this._client.UnmarkReceivedByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -813,26 +632,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> UnmarkReceivedAsync(
+            #else
         public async Task<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> UnmarkReceivedAsync(
+            #endif
             UnmarkReceivedByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.UnmarkReceivedByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -841,11 +650,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 result = await this._client.UnmarkReceivedByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -887,18 +695,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> UnmarkReceivedAsync(
-            UnmarkReceivedByUserIdRequest request
-        ) {
-            var future = UnmarkReceivedFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UnmarkReceivedFuture.")]
         public IFuture<Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain> UnmarkReceived(
             UnmarkReceivedByUserIdRequest request
@@ -916,7 +712,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Model.ReceiveStatus> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                     _parentKey,
                     Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                         this.BonusModelName?.ToString()
@@ -934,7 +730,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                             var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                                     this.BonusModelName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                            this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                                 _parentKey,
                                 key,
                                 null,
@@ -953,7 +749,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                         _parentKey,
                         Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             this.BonusModelName?.ToString()
@@ -964,10 +760,15 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Model.ReceiveStatus>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Model.ReceiveStatus> ModelAsync()
+            #else
         public async Task<Gs2.Gs2LoginReward.Model.ReceiveStatus> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                     _parentKey,
                     Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                         this.BonusModelName?.ToString()
@@ -982,7 +783,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                                     this.BonusModelName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                    this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                         _parentKey,
                         key,
                         null,
@@ -994,7 +795,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                         _parentKey,
                         Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             this.BonusModelName?.ToString()
@@ -1007,16 +808,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Model.ReceiveStatus> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2LoginReward.Model.ReceiveStatus> Model()
         {
@@ -1040,7 +831,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2LoginReward.Model.ReceiveStatus> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                     this.BonusModelName.ToString()
@@ -1051,7 +842,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
                 _parentKey,
                 Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                     this.BonusModelName.ToString()

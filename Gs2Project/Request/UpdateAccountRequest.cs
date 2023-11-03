@@ -38,22 +38,27 @@ namespace Gs2.Gs2Project.Request
         public string CompanyName { set; get; }
         public string Password { set; get; }
         public string AccountToken { set; get; }
+
         public UpdateAccountRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
+
         public UpdateAccountRequest WithFullName(string fullName) {
             this.FullName = fullName;
             return this;
         }
+
         public UpdateAccountRequest WithCompanyName(string companyName) {
             this.CompanyName = companyName;
             return this;
         }
+
         public UpdateAccountRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
+
         public UpdateAccountRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

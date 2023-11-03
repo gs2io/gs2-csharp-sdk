@@ -35,10 +35,12 @@ namespace Gs2.Gs2Showcase.Request
 	{
         public string NamespaceName { set; get; }
         public string ShowcaseName { set; get; }
+
         public GetShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetShowcaseMasterRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;

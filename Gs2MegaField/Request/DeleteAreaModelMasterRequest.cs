@@ -35,10 +35,12 @@ namespace Gs2.Gs2MegaField.Request
 	{
         public string NamespaceName { set; get; }
         public string AreaModelName { set; get; }
+
         public DeleteAreaModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteAreaModelMasterRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;

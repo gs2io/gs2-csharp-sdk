@@ -37,14 +37,17 @@ namespace Gs2.Gs2Dictionary.Request
         public string UserId { set; get; }
         public string[] EntryModelNames { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public AddEntriesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public AddEntriesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public AddEntriesByUserIdRequest WithEntryModelNames(string[] entryModelNames) {
             this.EntryModelNames = entryModelNames;
             return this;

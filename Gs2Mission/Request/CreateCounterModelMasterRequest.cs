@@ -39,26 +39,32 @@ namespace Gs2.Gs2Mission.Request
         public string Description { set; get; }
         public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
         public string ChallengePeriodEventId { set; get; }
+
         public CreateCounterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateCounterModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateCounterModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateCounterModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateCounterModelMasterRequest WithScopes(Gs2.Gs2Mission.Model.CounterScopeModel[] scopes) {
             this.Scopes = scopes;
             return this;
         }
+
         public CreateCounterModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;

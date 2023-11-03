@@ -35,10 +35,12 @@ namespace Gs2.Gs2MegaField.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
+
         public UpdateCurrentFieldMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentFieldMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

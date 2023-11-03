@@ -42,38 +42,47 @@ namespace Gs2.Gs2Showcase.Request
         public long? BaseTimestamp { set; get; }
         public int? ResetIntervalHours { set; get; }
         public string SalesPeriodEventId { set; get; }
+
         public UpdateRandomShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithMaximumNumberOfChoice(int? maximumNumberOfChoice) {
             this.MaximumNumberOfChoice = maximumNumberOfChoice;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithDisplayItems(Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] displayItems) {
             this.DisplayItems = displayItems;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithBaseTimestamp(long? baseTimestamp) {
             this.BaseTimestamp = baseTimestamp;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithResetIntervalHours(int? resetIntervalHours) {
             this.ResetIntervalHours = resetIntervalHours;
             return this;
         }
+
         public UpdateRandomShowcaseMasterRequest WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;

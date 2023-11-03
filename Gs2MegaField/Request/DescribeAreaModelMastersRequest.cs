@@ -36,14 +36,17 @@ namespace Gs2.Gs2MegaField.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeAreaModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeAreaModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeAreaModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

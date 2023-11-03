@@ -40,26 +40,32 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemSetName { set; get; }
         public string ReferenceOf { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteReferenceOfRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteReferenceOfRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public DeleteReferenceOfRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DeleteReferenceOfRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public DeleteReferenceOfRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
+
         public DeleteReferenceOfRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
             return this;

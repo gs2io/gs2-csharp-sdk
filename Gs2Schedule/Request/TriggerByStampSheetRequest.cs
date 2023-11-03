@@ -35,10 +35,12 @@ namespace Gs2.Gs2Schedule.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public TriggerByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public TriggerByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

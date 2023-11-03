@@ -40,26 +40,32 @@ namespace Gs2.Gs2Chat.Request
         public string[] WhiteListUserIds { set; get; }
         public string AccessToken { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public UpdateRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateRoomRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public UpdateRoomRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateRoomRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
+
         public UpdateRoomRequest WithWhiteListUserIds(string[] whiteListUserIds) {
             this.WhiteListUserIds = whiteListUserIds;
             return this;
         }
+
         public UpdateRoomRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

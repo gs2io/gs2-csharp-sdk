@@ -35,18 +35,22 @@ namespace Gs2.Gs2Version.Model
         public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
         public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
         public string ScheduleEventId { set; get; }
+
         public ScheduleVersion WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;
         }
+
         public ScheduleVersion WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
             this.WarningVersion = warningVersion;
             return this;
         }
+
         public ScheduleVersion WithErrorVersion(Gs2.Gs2Version.Model.Version_ errorVersion) {
             this.ErrorVersion = errorVersion;
             return this;
         }
+
         public ScheduleVersion WithScheduleEventId(string scheduleEventId) {
             this.ScheduleEventId = scheduleEventId;
             return this;

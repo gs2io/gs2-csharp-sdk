@@ -21,6 +21,7 @@ using Gs2.Gs2Datastore.Model;
 using Gs2.Gs2Datastore.Request;
 using Gs2.Gs2Datastore.Result;
 
+// ReSharper disable once CheckNamespace
 namespace Gs2.Gs2Datastore.Domain.Model
 {
     public partial class UserAccessTokenDomain
@@ -61,12 +62,12 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
 	    public class UploadFuture : Gs2Future<DataObject>
 	    {
-		    private UserAccessTokenDomain _domain;
-		    private string _scope;
-		    private List<string> _allowUserIds;
-		    private byte[] _data;
-		    private string _name;
-		    private bool? _updateIfExists;
+		    private readonly UserAccessTokenDomain _domain;
+		    private readonly string _scope;
+		    private readonly List<string> _allowUserIds;
+		    private readonly byte[] _data;
+		    private readonly string _name;
+		    private readonly bool? _updateIfExists;
 
 		    public UploadFuture(
 			    UserAccessTokenDomain domain,
@@ -77,26 +78,26 @@ namespace Gs2.Gs2Datastore.Domain.Model
 			    bool? updateIfExists=null
 		    )
 		    {
-			    _domain = domain;
-			    _scope = scope;
-			    _allowUserIds = allowUserIds;
-			    _data = data;
-			    _name = name;
-			    _updateIfExists = updateIfExists;
+			    this._domain = domain;
+			    this._scope = scope;
+			    this._allowUserIds = allowUserIds;
+			    this._data = data;
+			    this._name = name;
+			    this._updateIfExists = updateIfExists;
 		    }
 
 		    public override IEnumerator Action()
 		    {
 			    {
-				    string dataObjectName = null;
-				    string uploadUrl = null;
+				    string dataObjectName;
+				    string uploadUrl;
 				    {
-					    var task = _domain.PrepareUpload(
+					    var task = this._domain.PrepareUploadFuture(
 						    new PrepareUploadRequest()
-							    .WithScope(_scope)
-							    .WithAllowUserIds(_allowUserIds.ToArray())
-							    .WithName(_name)
-							    .WithUpdateIfExists(_updateIfExists)
+							    .WithScope(this._scope)
+							    .WithAllowUserIds(this._allowUserIds.ToArray())
+							    .WithName(this._name)
+							    .WithUpdateIfExists(this._updateIfExists)
 					    );
 					    yield return task;
 					    if (task.Error != null)
@@ -104,7 +105,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 						    OnError(task.Error);
 						    yield break;
 					    }
-						var task2 = task.Result.Model();
+						var task2 = task.Result.ModelFuture();
 						yield return task2;
 
 					    dataObjectName = task2.Result.Name;
@@ -112,9 +113,9 @@ namespace Gs2.Gs2Datastore.Domain.Model
 				    }
 				    {
 					    var task = new UploadImplFuture(
-						    _domain,
+						    this._domain,
 						    uploadUrl,
-						    _data
+						    this._data
 					    );
 					    yield return task;
 					    if (task.Error != null)
@@ -124,9 +125,9 @@ namespace Gs2.Gs2Datastore.Domain.Model
 					    }
 				    }
 				    {
-					    var task = _domain.DataObject(
+					    var task = this._domain.DataObject(
 						    dataObjectName
-					    ).DoneUpload(
+					    ).DoneUploadFuture(
 						    new DoneUploadRequest()
 					    );
 					    yield return task;
@@ -135,7 +136,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 						    OnError(task.Error);
 						    yield break;
 					    }
-						var task2 = task.Result.Model();
+						var task2 = task.Result.ModelFuture();
 						yield return task2;
 					    OnComplete(task2.Result);
 				    }
@@ -181,7 +182,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 			        dataObjectName
 			    ).DoneUploadAsync(
 			        new DoneUploadRequest()
-		        )).Model();
+		        )).ModelAsync();
 		        return result;
 	        }
 	#else

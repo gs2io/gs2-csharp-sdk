@@ -38,22 +38,27 @@ namespace Gs2.Gs2Experience.Request
         public string Description { set; get; }
         public string Metadata { set; get; }
         public long[] Values { set; get; }
+
         public UpdateThresholdMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateThresholdMasterRequest WithThresholdName(string thresholdName) {
             this.ThresholdName = thresholdName;
             return this;
         }
+
         public UpdateThresholdMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateThresholdMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateThresholdMasterRequest WithValues(long[] values) {
             this.Values = values;
             return this;

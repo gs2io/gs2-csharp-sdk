@@ -36,22 +36,27 @@ namespace Gs2.Gs2Formation.Model
         public string Body { set; get; }
         public string Signature { set; get; }
         public string Metadata { set; get; }
+
         public SlotWithSignature WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public SlotWithSignature WithPropertyType(string propertyType) {
             this.PropertyType = propertyType;
             return this;
         }
+
         public SlotWithSignature WithBody(string body) {
             this.Body = body;
             return this;
         }
+
         public SlotWithSignature WithSignature(string signature) {
             this.Signature = signature;
             return this;
         }
+
         public SlotWithSignature WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

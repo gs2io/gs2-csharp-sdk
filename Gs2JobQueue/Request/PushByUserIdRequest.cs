@@ -37,14 +37,17 @@ namespace Gs2.Gs2JobQueue.Request
         public string UserId { set; get; }
         public Gs2.Gs2JobQueue.Model.JobEntry[] Jobs { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public PushByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public PushByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public PushByUserIdRequest WithJobs(Gs2.Gs2JobQueue.Model.JobEntry[] jobs) {
             this.Jobs = jobs;
             return this;

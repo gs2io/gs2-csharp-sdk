@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Account.Domain.Model
 {
 
     public partial class AccountAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -75,19 +73,13 @@ namespace Gs2.Gs2Account.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public AccountAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2AccountRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -102,7 +94,7 @@ namespace Gs2.Gs2Account.Domain.Model
         )
         {
             return new DescribeTakeOversIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -114,12 +106,12 @@ namespace Gs2.Gs2Account.Domain.Model
         public Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> TakeOvers(
             #endif
         #else
-        public DescribeTakeOversIterator TakeOvers(
+        public DescribeTakeOversIterator TakeOversAsync(
         #endif
         )
         {
             return new DescribeTakeOversIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -136,7 +128,7 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public ulong SubscribeTakeOvers(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -148,7 +140,7 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void UnsubscribeTakeOvers(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -162,10 +154,7 @@ namespace Gs2.Gs2Account.Domain.Model
             int? type
         ) {
             return new Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 type
@@ -175,10 +164,7 @@ namespace Gs2.Gs2Account.Domain.Model
         public Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain DataOwner(
         ) {
             return new Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken
             );
@@ -214,7 +200,7 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.Account> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Account.Model.Account>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         this.UserId?.ToString()
@@ -225,10 +211,15 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.Account>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Model.Account> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Account.Model.Account> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.Account>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         this.UserId?.ToString()
@@ -240,16 +231,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Model.Account> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Account.Model.Account> Model()
         {
@@ -273,7 +254,7 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Account.Model.Account> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                     this.UserId.ToString()
@@ -284,7 +265,7 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                     this.UserId.ToString()

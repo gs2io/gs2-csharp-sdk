@@ -40,30 +40,37 @@ namespace Gs2.Gs2SkillTree.Request
         public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; }
         public float? RestrainReturnRate { set; get; }
         public string[] PremiseNodeNames { set; get; }
+
         public UpdateNodeModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNodeModelMasterRequest WithNodeModelName(string nodeModelName) {
             this.NodeModelName = nodeModelName;
             return this;
         }
+
         public UpdateNodeModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNodeModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateNodeModelMasterRequest WithReleaseConsumeActions(Gs2.Core.Model.ConsumeAction[] releaseConsumeActions) {
             this.ReleaseConsumeActions = releaseConsumeActions;
             return this;
         }
+
         public UpdateNodeModelMasterRequest WithRestrainReturnRate(float? restrainReturnRate) {
             this.RestrainReturnRate = restrainReturnRate;
             return this;
         }
+
         public UpdateNodeModelMasterRequest WithPremiseNodeNames(string[] premiseNodeNames) {
             this.PremiseNodeNames = premiseNodeNames;
             return this;

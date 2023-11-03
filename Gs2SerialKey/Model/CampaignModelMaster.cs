@@ -39,34 +39,42 @@ namespace Gs2.Gs2SerialKey.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public CampaignModelMaster WithCampaignId(string campaignId) {
             this.CampaignId = campaignId;
             return this;
         }
+
         public CampaignModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CampaignModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CampaignModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CampaignModelMaster WithEnableCampaignCode(bool? enableCampaignCode) {
             this.EnableCampaignCode = enableCampaignCode;
             return this;
         }
+
         public CampaignModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public CampaignModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public CampaignModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

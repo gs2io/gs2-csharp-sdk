@@ -35,10 +35,12 @@ namespace Gs2.Gs2Experience.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public SubExperienceByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public SubExperienceByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 {
 
     public partial class NamespaceDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExchangeRestClient _client;
         private readonly string _namespaceName;
 
@@ -73,18 +71,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ExchangeRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = "exchange:Namespace";
@@ -95,7 +87,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         )
         {
             return new DescribeRateModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -106,12 +98,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public Gs2Iterator<Gs2.Gs2Exchange.Model.RateModelMaster> RateModelMasters(
             #endif
         #else
-        public DescribeRateModelMastersIterator RateModelMasters(
+        public DescribeRateModelMastersIterator RateModelMastersAsync(
         #endif
         )
         {
             return new DescribeRateModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -127,7 +119,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public ulong SubscribeRateModelMasters(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RateModelMaster"
@@ -138,7 +130,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void UnsubscribeRateModelMasters(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModelMaster>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RateModelMaster"
@@ -151,10 +143,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             string rateName
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 rateName
             );
@@ -163,10 +152,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain CurrentRateMaster(
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -176,7 +162,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         )
         {
             return new DescribeRateModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -187,12 +173,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public Gs2Iterator<Gs2.Gs2Exchange.Model.RateModel> RateModels(
             #endif
         #else
-        public DescribeRateModelsIterator RateModels(
+        public DescribeRateModelsIterator RateModelsAsync(
         #endif
         )
         {
             return new DescribeRateModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -208,7 +194,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public ulong SubscribeRateModels(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModel>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.RateModel>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RateModel"
@@ -219,7 +205,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void UnsubscribeRateModels(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModel>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.RateModel>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RateModel"
@@ -232,10 +218,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             string rateName
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.RateModelDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 rateName
             );
@@ -245,10 +228,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             string userId
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.UserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 userId
             );
@@ -258,10 +238,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             AccessToken accessToken
         ) {
             return new UserAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 accessToken
             );
@@ -272,7 +249,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         )
         {
             return new DescribeIncrementalRateModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -283,12 +260,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public Gs2Iterator<Gs2.Gs2Exchange.Model.IncrementalRateModel> IncrementalRateModels(
             #endif
         #else
-        public DescribeIncrementalRateModelsIterator IncrementalRateModels(
+        public DescribeIncrementalRateModelsIterator IncrementalRateModelsAsync(
         #endif
         )
         {
             return new DescribeIncrementalRateModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -304,7 +281,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public ulong SubscribeIncrementalRateModels(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IncrementalRateModel"
@@ -315,7 +292,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void UnsubscribeIncrementalRateModels(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModel>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IncrementalRateModel"
@@ -328,10 +305,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             string rateName
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 rateName
             );
@@ -342,7 +316,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         )
         {
             return new DescribeIncrementalRateModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -353,12 +327,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public Gs2Iterator<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> IncrementalRateModelMasters(
             #endif
         #else
-        public DescribeIncrementalRateModelMastersIterator IncrementalRateModelMasters(
+        public DescribeIncrementalRateModelMastersIterator IncrementalRateModelMastersAsync(
         #endif
         )
         {
             return new DescribeIncrementalRateModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -374,7 +348,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public ulong SubscribeIncrementalRateModelMasters(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IncrementalRateModelMaster"
@@ -385,7 +359,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void UnsubscribeIncrementalRateModelMasters(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IncrementalRateModelMaster"
@@ -398,10 +372,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
             string rateName
         ) {
             return new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 rateName
             );
@@ -441,7 +412,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceStatusFuture(
@@ -454,7 +424,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -473,35 +443,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceStatusResult result = null;
-                try {
-                    result = await this._client.GetNamespaceStatusAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -511,43 +456,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #endif
             GetNamespaceStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceStatusResult result = null;
@@ -559,7 +477,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -571,11 +489,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -586,18 +503,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> GetStatusAsync(
-            GetNamespaceStatusRequest request
-        ) {
-            var future = GetStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetStatusFuture.")]
         public IFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> GetStatus(
             GetNamespaceStatusRequest request
@@ -613,7 +518,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Namespace> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceFuture(
@@ -626,7 +530,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -645,35 +549,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceResult result = null;
-                try {
-                    result = await this._client.GetNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -697,43 +576,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Exchange.Model.Namespace> GetAsync(
+            #else
         private async Task<Gs2.Gs2Exchange.Model.Namespace> GetAsync(
+            #endif
             GetNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceResult result = null;
@@ -745,7 +597,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -757,11 +609,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -792,7 +643,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateNamespaceFuture(
@@ -805,18 +655,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateNamespaceResult result = null;
-                    result = await this._client.UpdateNamespaceAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -842,35 +684,26 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> UpdateAsync(
+            #endif
             UpdateNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateNamespaceResult result = null;
                 result = await this._client.UpdateNamespaceAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -897,18 +730,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> UpdateAsync(
-            UpdateNamespaceRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> Update(
             UpdateNamespaceRequest request
@@ -924,7 +745,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.DeleteNamespaceFuture(
@@ -937,7 +757,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -956,35 +776,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                DeleteNamespaceResult result = null;
-                try {
-                    result = await this._client.DeleteNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1005,43 +800,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> DeleteAsync(
+            #endif
             DeleteNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.DeleteNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             DeleteNamespaceResult result = null;
@@ -1053,7 +821,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -1065,11 +833,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1091,18 +858,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> DeleteAsync(
-            DeleteNamespaceRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Exchange.Domain.Model.NamespaceDomain> Delete(
             DeleteNamespaceRequest request
@@ -1118,7 +873,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CreateRateModelMasterFuture(
@@ -1131,18 +885,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CreateRateModelMasterResult result = null;
-                    result = await this._client.CreateRateModelMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1162,10 +908,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1174,35 +917,26 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain> CreateRateModelMasterAsync(
+            #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain> CreateRateModelMasterAsync(
+            #endif
             CreateRateModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CreateRateModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CreateRateModelMasterResult result = null;
                 result = await this._client.CreateRateModelMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1222,10 +956,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1235,18 +966,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain> CreateRateModelMasterAsync(
-            CreateRateModelMasterRequest request
-        ) {
-            var future = CreateRateModelMasterFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateRateModelMasterFuture.")]
         public IFuture<Gs2.Gs2Exchange.Domain.Model.RateModelMasterDomain> CreateRateModelMaster(
             CreateRateModelMasterRequest request
@@ -1262,7 +981,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CreateIncrementalRateModelMasterFuture(
@@ -1275,18 +993,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CreateIncrementalRateModelMasterResult result = null;
-                    result = await this._client.CreateIncrementalRateModelMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1306,10 +1016,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1318,35 +1025,26 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> CreateIncrementalRateModelMasterAsync(
+            #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> CreateIncrementalRateModelMasterAsync(
+            #endif
             CreateIncrementalRateModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CreateIncrementalRateModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CreateIncrementalRateModelMasterResult result = null;
                 result = await this._client.CreateIncrementalRateModelMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1366,10 +1064,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1379,18 +1074,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> CreateIncrementalRateModelMasterAsync(
-            CreateIncrementalRateModelMasterRequest request
-        ) {
-            var future = CreateIncrementalRateModelMasterFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateIncrementalRateModelMasterFuture.")]
         public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> CreateIncrementalRateModelMaster(
             CreateIncrementalRateModelMasterRequest request
@@ -1413,7 +1096,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     "exchange",
                     "Namespace"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1431,7 +1114,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                             var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                            this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                                 parentKey,
                                 key,
                                 null,
@@ -1450,7 +1133,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1461,15 +1144,20 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Model.Namespace> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Exchange.Model.Namespace> ModelAsync()
+            #endif
         {
             var parentKey = string.Join(
                 ":",
                 "exchange",
                 "Namespace"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1484,7 +1172,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     var key = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Namespace>(
                         parentKey,
                         key,
                         null,
@@ -1496,7 +1184,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1509,16 +1197,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Model.Namespace> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Exchange.Model.Namespace> Model()
         {
@@ -1542,7 +1220,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.Namespace> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()
@@ -1553,7 +1231,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Exchange.Model.Namespace>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Exchange.Model.Namespace>(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()

@@ -35,6 +35,7 @@ namespace Gs2.Gs2Datastore.Request
 	{
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CleanUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

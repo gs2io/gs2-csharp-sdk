@@ -34,6 +34,7 @@ namespace Gs2.Gs2Identifier.Request
 	public class GetHasSecurityPolicyRequest : Gs2Request<GetHasSecurityPolicyRequest>
 	{
         public string UserName { set; get; }
+
         public GetHasSecurityPolicyRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

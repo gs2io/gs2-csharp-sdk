@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -71,19 +69,13 @@ namespace Gs2.Gs2Chat.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ChatRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -98,7 +90,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         )
         {
             return new DescribeRoomsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -109,12 +101,12 @@ namespace Gs2.Gs2Chat.Domain.Model
         public Gs2Iterator<Gs2.Gs2Chat.Model.Room> Rooms(
             #endif
         #else
-        public DescribeRoomsIterator Rooms(
+        public DescribeRoomsIterator RoomsAsync(
         #endif
         )
         {
             return new DescribeRoomsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -130,7 +122,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         public ulong SubscribeRooms(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Room>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Room>(
                 Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Singleton",
@@ -142,7 +134,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         public void UnsubscribeRooms(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Room>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Room>(
                 Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Singleton",
@@ -157,10 +149,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             string password
         ) {
             return new Gs2.Gs2Chat.Domain.Model.RoomDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 roomName,
@@ -173,7 +162,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         )
         {
             return new DescribeSubscribesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -185,12 +174,12 @@ namespace Gs2.Gs2Chat.Domain.Model
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
             #endif
         #else
-        public DescribeSubscribesByUserIdIterator Subscribes(
+        public DescribeSubscribesByUserIdIterator SubscribesAsync(
         #endif
         )
         {
             return new DescribeSubscribesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -207,7 +196,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         public ulong SubscribeSubscribes(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -219,7 +208,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         public void UnsubscribeSubscribes(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -235,7 +224,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         )
         {
             return new DescribeSubscribesByRoomNameIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 roomName
@@ -247,13 +236,13 @@ namespace Gs2.Gs2Chat.Domain.Model
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomName(
             #endif
         #else
-        public DescribeSubscribesByRoomNameIterator SubscribesByRoomName(
+        public DescribeSubscribesByRoomNameIterator SubscribesByRoomNameAsync(
         #endif
             string roomName
         )
         {
             return new DescribeSubscribesByRoomNameIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 roomName
@@ -270,7 +259,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         public ulong SubscribeSubscribesByRoomName(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -282,7 +271,7 @@ namespace Gs2.Gs2Chat.Domain.Model
 
         public void UnsubscribeSubscribesByRoomName(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
                 Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -296,10 +285,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             string roomName
         ) {
             return new Gs2.Gs2Chat.Domain.Model.SubscribeDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 roomName

@@ -44,46 +44,57 @@ namespace Gs2.Gs2LoginReward.Request
         public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; }
         public string MissedReceiveRelief { set; get; }
         public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; }
+
         public CreateBonusModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithPeriodEventId(string periodEventId) {
             this.PeriodEventId = periodEventId;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithRepeat(string repeat) {
             this.Repeat = repeat;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithRewards(Gs2.Gs2LoginReward.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithMissedReceiveRelief(string missedReceiveRelief) {
             this.MissedReceiveRelief = missedReceiveRelief;
             return this;
         }
+
         public CreateBonusModelMasterRequest WithMissedReceiveReliefConsumeActions(Gs2.Core.Model.ConsumeAction[] missedReceiveReliefConsumeActions) {
             this.MissedReceiveReliefConsumeActions = missedReceiveReliefConsumeActions;
             return this;

@@ -38,18 +38,22 @@ namespace Gs2.Gs2Inbox.Request
         public string MessageName { set; get; }
         public Gs2.Gs2Inbox.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public ReadMessageRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public ReadMessageRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public ReadMessageRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;
         }
+
         public ReadMessageRequest WithConfig(Gs2.Gs2Inbox.Model.Config[] config) {
             this.Config = config;
             return this;

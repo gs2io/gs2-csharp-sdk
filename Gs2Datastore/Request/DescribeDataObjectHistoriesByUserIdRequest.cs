@@ -38,22 +38,27 @@ namespace Gs2.Gs2Datastore.Request
         public string DataObjectName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeDataObjectHistoriesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeDataObjectHistoriesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeDataObjectHistoriesByUserIdRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
+
         public DescribeDataObjectHistoriesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeDataObjectHistoriesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

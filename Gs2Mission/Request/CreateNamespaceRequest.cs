@@ -41,50 +41,44 @@ namespace Gs2.Gs2Mission.Request
         public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; }
         public Gs2.Gs2Mission.Model.NotificationSetting CompleteNotification { set; get; }
         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Mission.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public CreateNamespaceRequest WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
             this.MissionCompleteScript = missionCompleteScript;
             return this;
         }
+
         public CreateNamespaceRequest WithCounterIncrementScript(Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript) {
             this.CounterIncrementScript = counterIncrementScript;
             return this;
         }
+
         public CreateNamespaceRequest WithReceiveRewardsScript(Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
             this.ReceiveRewardsScript = receiveRewardsScript;
             return this;
         }
+
         public CreateNamespaceRequest WithCompleteNotification(Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Mission.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -104,9 +98,7 @@ namespace Gs2.Gs2Mission.Request
                 .WithCounterIncrementScript(!data.Keys.Contains("counterIncrementScript") || data["counterIncrementScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["counterIncrementScript"]))
                 .WithReceiveRewardsScript(!data.Keys.Contains("receiveRewardsScript") || data["receiveRewardsScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["receiveRewardsScript"]))
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Mission.Model.NotificationSetting.FromJson(data["completeNotification"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
         public override JsonData ToJson()
@@ -120,8 +112,6 @@ namespace Gs2.Gs2Mission.Request
                 ["receiveRewardsScript"] = ReceiveRewardsScript?.ToJson(),
                 ["completeNotification"] = CompleteNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
             };
         }
 
@@ -154,14 +144,6 @@ namespace Gs2.Gs2Mission.Request
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
@@ -175,8 +157,6 @@ namespace Gs2.Gs2Mission.Request
             key += ReceiveRewardsScript + ":";
             key += CompleteNotification + ":";
             key += LogSetting + ":";
-            key += QueueNamespaceId + ":";
-            key += KeyId + ":";
             return key;
         }
 

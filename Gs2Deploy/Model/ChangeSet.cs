@@ -34,14 +34,17 @@ namespace Gs2.Gs2Deploy.Model
         public string ResourceName { set; get; }
         public string ResourceType { set; get; }
         public string Operation { set; get; }
+
         public ChangeSet WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;
         }
+
         public ChangeSet WithResourceType(string resourceType) {
             this.ResourceType = resourceType;
             return this;
         }
+
         public ChangeSet WithOperation(string operation) {
             this.Operation = operation;
             return this;

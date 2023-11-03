@@ -63,7 +63,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         )
         {
             return new DescribeDrawnPrizesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -74,12 +74,12 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public Gs2Iterator<Gs2.Gs2Lottery.Model.DrawnPrize> DrawnPrizes(
             #endif
         #else
-        public DescribeDrawnPrizesIterator DrawnPrizes(
+        public DescribeDrawnPrizesIterator DrawnPrizesAsync(
         #endif
         )
         {
             return new DescribeDrawnPrizesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -95,7 +95,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public ulong SubscribeDrawnPrizes(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "DrawnPrize"
@@ -106,7 +106,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public void UnsubscribeDrawnPrizes(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "DrawnPrize"
@@ -119,10 +119,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             int index
         ) {
             return new Gs2.Gs2Lottery.Domain.Model.DrawnPrizeAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 index

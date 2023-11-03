@@ -38,22 +38,27 @@ namespace Gs2.Gs2Project.Request
         public string MethodType { set; get; }
         public string CardCustomerId { set; get; }
         public string PartnerId { set; get; }
+
         public CreateBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public CreateBillingMethodRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateBillingMethodRequest WithMethodType(string methodType) {
             this.MethodType = methodType;
             return this;
         }
+
         public CreateBillingMethodRequest WithCardCustomerId(string cardCustomerId) {
             this.CardCustomerId = cardCustomerId;
             return this;
         }
+
         public CreateBillingMethodRequest WithPartnerId(string partnerId) {
             this.PartnerId = partnerId;
             return this;

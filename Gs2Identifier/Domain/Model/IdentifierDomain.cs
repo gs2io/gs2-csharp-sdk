@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 {
 
     public partial class IdentifierDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
         private readonly string _userName;
         private readonly string _clientId;
@@ -72,19 +70,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public string ClientId => _clientId;
 
         public IdentifierDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string userName,
             string clientId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2IdentifierRestClient(
-                session
+                gs2.RestSession
             );
             this._userName = userName;
             this._clientId = clientId;
@@ -144,7 +136,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                             request.ClientId.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                        this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                             _parentKey,
                             key,
                             null,
@@ -176,7 +168,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                         request.ClientId.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         key,
                         null,
@@ -192,7 +184,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -233,7 +225,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                         request.ClientId.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         key,
                         null,
@@ -265,7 +257,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                     request.ClientId.ToString()
                     );
-                _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                     _parentKey,
                     key,
                     null,
@@ -281,7 +273,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -325,7 +317,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                             request.ClientId.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                        this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                             _parentKey,
                             key,
                             null,
@@ -357,7 +349,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                         request.ClientId.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         key,
                         null,
@@ -373,7 +365,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -411,7 +403,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                         request.ClientId.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         key,
                         null,
@@ -443,7 +435,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                     request.ClientId.ToString()
                     );
-                _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                     _parentKey,
                     key,
                     null,
@@ -459,7 +451,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -509,7 +501,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Identifier> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
                     _parentKey,
                     Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                         this.ClientId?.ToString()
@@ -527,7 +519,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                             var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                                     this.ClientId?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                            this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                                 _parentKey,
                                 key,
                                 null,
@@ -546,7 +538,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                             this.ClientId?.ToString()
@@ -560,7 +552,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #else
         public async Task<Gs2.Gs2Identifier.Model.Identifier> ModelAsync()
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
                     _parentKey,
                     Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                         this.ClientId?.ToString()
@@ -575,7 +567,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                                     this.ClientId?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         key,
                         null,
@@ -587,7 +579,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.Identifier>(
                         _parentKey,
                         Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                             this.ClientId?.ToString()
@@ -633,7 +625,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.Identifier> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                     this.ClientId.ToString()
@@ -644,7 +636,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
                     this.ClientId.ToString()

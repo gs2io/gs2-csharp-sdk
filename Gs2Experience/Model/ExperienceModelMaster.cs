@@ -43,50 +43,62 @@ namespace Gs2.Gs2Experience.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public ExperienceModelMaster WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public ExperienceModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public ExperienceModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public ExperienceModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public ExperienceModelMaster WithDefaultExperience(long? defaultExperience) {
             this.DefaultExperience = defaultExperience;
             return this;
         }
+
         public ExperienceModelMaster WithDefaultRankCap(long? defaultRankCap) {
             this.DefaultRankCap = defaultRankCap;
             return this;
         }
+
         public ExperienceModelMaster WithMaxRankCap(long? maxRankCap) {
             this.MaxRankCap = maxRankCap;
             return this;
         }
+
         public ExperienceModelMaster WithRankThresholdName(string rankThresholdName) {
             this.RankThresholdName = rankThresholdName;
             return this;
         }
+
         public ExperienceModelMaster WithAcquireActionRates(Gs2.Gs2Experience.Model.AcquireActionRate[] acquireActionRates) {
             this.AcquireActionRates = acquireActionRates;
             return this;
         }
+
         public ExperienceModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public ExperienceModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public ExperienceModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

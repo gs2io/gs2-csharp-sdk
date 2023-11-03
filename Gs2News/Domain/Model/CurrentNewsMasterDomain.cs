@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2News.Domain.Model
 {
 
     public partial class CurrentNewsMasterDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
         private readonly string _namespaceName;
 
@@ -70,18 +68,12 @@ namespace Gs2.Gs2News.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public CurrentNewsMasterDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2NewsRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2News.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -120,7 +112,6 @@ namespace Gs2.Gs2News.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.PrepareUpdateCurrentNewsMasterFuture(
@@ -133,18 +124,10 @@ namespace Gs2.Gs2News.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                PrepareUpdateCurrentNewsMasterResult result = null;
-                    result = await this._client.PrepareUpdateCurrentNewsMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -155,35 +138,26 @@ namespace Gs2.Gs2News.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateAsync(
+            #else
         public async Task<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateAsync(
+            #endif
             PrepareUpdateCurrentNewsMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.PrepareUpdateCurrentNewsMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             PrepareUpdateCurrentNewsMasterResult result = null;
                 result = await this._client.PrepareUpdateCurrentNewsMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -195,18 +169,6 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateAsync(
-            PrepareUpdateCurrentNewsMasterRequest request
-        ) {
-            var future = PrepareUpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PrepareUpdateFuture.")]
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdate(
             PrepareUpdateCurrentNewsMasterRequest request
@@ -222,7 +184,6 @@ namespace Gs2.Gs2News.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateCurrentNewsMasterFuture(
@@ -235,18 +196,10 @@ namespace Gs2.Gs2News.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateCurrentNewsMasterResult result = null;
-                    result = await this._client.UpdateCurrentNewsMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -255,35 +208,26 @@ namespace Gs2.Gs2News.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateAsync(
+            #endif
             UpdateCurrentNewsMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateCurrentNewsMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateCurrentNewsMasterResult result = null;
                 result = await this._client.UpdateCurrentNewsMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -293,18 +237,6 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateAsync(
-            UpdateCurrentNewsMasterRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> Update(
             UpdateCurrentNewsMasterRequest request
@@ -320,7 +252,6 @@ namespace Gs2.Gs2News.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(
@@ -333,18 +264,10 @@ namespace Gs2.Gs2News.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                PrepareUpdateCurrentNewsMasterFromGitHubResult result = null;
-                    result = await this._client.PrepareUpdateCurrentNewsMasterFromGitHubAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -354,35 +277,26 @@ namespace Gs2.Gs2News.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubAsync(
+            #else
         public async Task<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubAsync(
+            #endif
             PrepareUpdateCurrentNewsMasterFromGitHubRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             PrepareUpdateCurrentNewsMasterFromGitHubResult result = null;
                 result = await this._client.PrepareUpdateCurrentNewsMasterFromGitHubAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -393,18 +307,6 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubAsync(
-            PrepareUpdateCurrentNewsMasterFromGitHubRequest request
-        ) {
-            var future = PrepareUpdateFromGitHubFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PrepareUpdateFromGitHubFuture.")]
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHub(
             PrepareUpdateCurrentNewsMasterFromGitHubRequest request

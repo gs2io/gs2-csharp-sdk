@@ -39,26 +39,32 @@ namespace Gs2.Gs2Inbox.Request
         public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
         public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
         public long? ExpiresAt { set; get; }
+
         public CreateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateGlobalMessageMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateGlobalMessageMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateGlobalMessageMasterRequest WithReadAcquireActions(Gs2.Core.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
+
         public CreateGlobalMessageMasterRequest WithExpiresTimeSpan(Gs2.Gs2Inbox.Model.TimeSpan_ expiresTimeSpan) {
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
+
         public CreateGlobalMessageMasterRequest WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;

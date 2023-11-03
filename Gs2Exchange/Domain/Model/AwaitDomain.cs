@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 {
 
     public partial class AwaitDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExchangeRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -75,20 +73,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string AwaitName => _awaitName;
 
         public AwaitDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string awaitName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ExchangeRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -138,7 +130,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Await> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -153,7 +144,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                             request.AwaitName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                        this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Await>(
                             _parentKey,
                             key,
                             null,
@@ -172,37 +163,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithAwaitName(this.AwaitName);
-                GetAwaitByUserIdResult result = null;
-                try {
-                    result = await this._client.GetAwaitByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        request.AwaitName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Await>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "await")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -226,45 +190,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Model.Await>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Exchange.Model.Await> GetAsync(
+            #else
         private async Task<Gs2.Gs2Exchange.Model.Await> GetAsync(
+            #endif
             GetAwaitByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithAwaitName(this.AwaitName);
-            var future = this._client.GetAwaitByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        request.AwaitName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Await>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "await")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -278,7 +213,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     request.AwaitName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Await>(
                     _parentKey,
                     key,
                     null,
@@ -290,11 +225,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -325,7 +259,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -340,20 +273,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithAwaitName(this.AwaitName);
-                AcquireByUserIdResult result = null;
-                    result = await this._client.AcquireByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -374,10 +297,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -387,7 +307,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -400,26 +320,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> AcquireAsync(
+            #endif
             AcquireByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithAwaitName(this.AwaitName);
-            var future = this._client.AcquireByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -428,11 +338,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 result = await this._client.AcquireByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -453,10 +362,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -474,18 +380,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireAsync(
-            AcquireByUserIdRequest request
-        ) {
-            var future = AcquireFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to AcquireFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> Acquire(
             AcquireByUserIdRequest request
@@ -501,7 +395,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -516,20 +409,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithAwaitName(this.AwaitName);
-                AcquireForceByUserIdResult result = null;
-                    result = await this._client.AcquireForceByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -550,10 +433,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -563,7 +443,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -576,26 +456,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireForceAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> AcquireForceAsync(
+            #endif
             AcquireForceByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithAwaitName(this.AwaitName);
-            var future = this._client.AcquireForceByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -604,11 +474,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 result = await this._client.AcquireForceByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -629,10 +498,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -650,18 +516,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireForceAsync(
-            AcquireForceByUserIdRequest request
-        ) {
-            var future = AcquireForceFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to AcquireForceFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> AcquireForce(
             AcquireForceByUserIdRequest request
@@ -677,7 +531,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -692,20 +545,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithAwaitName(this.AwaitName);
-                SkipByUserIdResult result = null;
-                    result = await this._client.SkipByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -726,10 +569,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -739,7 +579,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -752,26 +592,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> SkipAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> SkipAsync(
+            #endif
             SkipByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithAwaitName(this.AwaitName);
-            var future = this._client.SkipByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -780,11 +610,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 result = await this._client.SkipByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -805,10 +634,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -826,18 +652,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> SkipAsync(
-            SkipByUserIdRequest request
-        ) {
-            var future = SkipFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SkipFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> Skip(
             SkipByUserIdRequest request
@@ -853,7 +667,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -868,7 +681,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                             request.AwaitName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                        this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Await>(
                             _parentKey,
                             key,
                             null,
@@ -887,37 +700,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithAwaitName(this.AwaitName);
-                DeleteAwaitByUserIdResult result = null;
-                try {
-                    result = await this._client.DeleteAwaitByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        request.AwaitName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Await>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "await")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -938,45 +724,16 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> DeleteAsync(
+            #endif
             DeleteAwaitByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithAwaitName(this.AwaitName);
-            var future = this._client.DeleteAwaitByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
-                        request.AwaitName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Await>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "await")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -990,7 +747,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     request.AwaitName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Await>(
                     _parentKey,
                     key,
                     null,
@@ -1002,11 +759,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1028,18 +784,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> DeleteAsync(
-            DeleteAwaitByUserIdRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> Delete(
             DeleteAwaitByUserIdRequest request
@@ -1057,7 +801,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.Await> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Await>(
                     _parentKey,
                     Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                         this.AwaitName?.ToString()
@@ -1075,7 +819,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                             var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                                     this.AwaitName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                            this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Await>(
                                 _parentKey,
                                 key,
                                 null,
@@ -1094,7 +838,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Await>(
                         _parentKey,
                         Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                             this.AwaitName?.ToString()
@@ -1105,10 +849,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Exchange.Model.Await>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Exchange.Model.Await> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Exchange.Model.Await> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Await>(
                     _parentKey,
                     Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                         this.AwaitName?.ToString()
@@ -1123,7 +872,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     var key = Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                                     this.AwaitName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Exchange.Model.Await>(
+                    this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.Await>(
                         _parentKey,
                         key,
                         null,
@@ -1135,7 +884,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Exchange.Model.Await>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.Await>(
                         _parentKey,
                         Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                             this.AwaitName?.ToString()
@@ -1148,16 +897,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Exchange.Model.Await> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Exchange.Model.Await> Model()
         {
@@ -1181,7 +920,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.Await> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     this.AwaitName.ToString()
@@ -1192,7 +931,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Exchange.Model.Await>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Exchange.Model.Await>(
                 _parentKey,
                 Gs2.Gs2Exchange.Domain.Model.AwaitDomain.CreateCacheKey(
                     this.AwaitName.ToString()

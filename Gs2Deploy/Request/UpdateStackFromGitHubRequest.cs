@@ -36,14 +36,17 @@ namespace Gs2.Gs2Deploy.Request
         public string StackName { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Deploy.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateStackFromGitHubRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
+
         public UpdateStackFromGitHubRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateStackFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Deploy.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

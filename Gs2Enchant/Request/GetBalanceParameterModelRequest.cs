@@ -35,10 +35,12 @@ namespace Gs2.Gs2Enchant.Request
 	{
         public string NamespaceName { set; get; }
         public string ParameterName { set; get; }
+
         public GetBalanceParameterModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetBalanceParameterModelRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;

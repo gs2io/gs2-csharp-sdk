@@ -34,6 +34,7 @@ namespace Gs2.Gs2SerialKey.Request
 	public class DescribeCampaignModelsRequest : Gs2Request<DescribeCampaignModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeCampaignModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

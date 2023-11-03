@@ -56,10 +56,7 @@ namespace Gs2.Gs2Log.Domain.Model
 {
 
     public partial class LogDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         private readonly string _namespaceName;
 
@@ -67,18 +64,12 @@ namespace Gs2.Gs2Log.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public LogDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LogRestClient(
-                session
+                this._gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(

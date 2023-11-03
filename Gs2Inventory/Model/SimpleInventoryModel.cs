@@ -35,18 +35,22 @@ namespace Gs2.Gs2Inventory.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2Inventory.Model.SimpleItemModel[] SimpleItemModels { set; get; }
+
         public SimpleInventoryModel WithInventoryModelId(string inventoryModelId) {
             this.InventoryModelId = inventoryModelId;
             return this;
         }
+
         public SimpleInventoryModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public SimpleInventoryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public SimpleInventoryModel WithSimpleItemModels(Gs2.Gs2Inventory.Model.SimpleItemModel[] simpleItemModels) {
             this.SimpleItemModels = simpleItemModels;
             return this;

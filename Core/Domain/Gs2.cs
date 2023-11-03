@@ -28,6 +28,12 @@ namespace Gs2.Core.Domain
         private readonly Gs2RestSession _restSession;
         private readonly Gs2WebSocketSession _webSocketSession;
 
+        internal CacheDatabase Cache => this._cache;
+        internal JobQueueDomain JobQueueDomain => this._jobQueueDomain;
+        internal StampSheetConfiguration StampSheetConfiguration => this._sheetConfiguration;
+        internal Gs2RestSession RestSession => this._restSession;
+        internal Gs2WebSocketSession WebSocketSession => this._webSocketSession;
+
         public readonly Gs2Account.Domain.Gs2Account Account;
         public readonly Gs2AdReward.Domain.Gs2AdReward AdReward;
         public readonly Gs2Auth.Domain.Gs2Auth Auth;
@@ -77,63 +83,56 @@ namespace Gs2.Core.Domain
             string distributorNamespaceName = null
         )
         {
-            _sheetConfiguration = StampSheetConfiguration.Builder()
+            this._sheetConfiguration = StampSheetConfiguration.Builder()
                 .WithNamespaceName(distributorNamespaceName)
                 .Build();
-            _restSession = session;
-            _webSocketSession = wssession;
-            _cache = new CacheDatabase();
-            _jobQueueDomain = new JobQueueDomain(this);
+            this._restSession = session;
+            this._webSocketSession = wssession;
+            this._cache = new CacheDatabase();
+            this._jobQueueDomain = new JobQueueDomain(this);
 
-            Account = new Gs2Account.Domain.Gs2Account(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            AdReward = new Gs2AdReward.Domain.Gs2AdReward(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Auth = new Gs2Auth.Domain.Gs2Auth(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Chat = new Gs2Chat.Domain.Gs2Chat(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Datastore = new Gs2Datastore.Domain.Gs2Datastore(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Deploy = new Gs2Deploy.Domain.Gs2Deploy(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Dictionary =
-                new Gs2Dictionary.Domain.Gs2Dictionary(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Distributor =
-                new Gs2Distributor.Domain.Gs2Distributor(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Enchant = new Gs2Enchant.Domain.Gs2Enchant(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Enhance = new Gs2Enhance.Domain.Gs2Enhance(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Exchange = new Gs2Exchange.Domain.Gs2Exchange(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Experience =
-                new Gs2Experience.Domain.Gs2Experience(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Formation = new Gs2Formation.Domain.Gs2Formation(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Friend = new Gs2Friend.Domain.Gs2Friend(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Gateway = new Gs2Gateway.Domain.Gs2Gateway(_cache, _jobQueueDomain, _sheetConfiguration, session,
-                wssession);
-            Identifier =
-                new Gs2Identifier.Domain.Gs2Identifier(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Idle = new Gs2Idle.Domain.Gs2Idle(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Inbox = new Gs2Inbox.Domain.Gs2Inbox(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Inventory = new Gs2Inventory.Domain.Gs2Inventory(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            JobQueue = new Gs2JobQueue.Domain.Gs2JobQueue(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Key = new Gs2Key.Domain.Gs2Key(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Limit = new Gs2Limit.Domain.Gs2Limit(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            LoginReward = new Gs2LoginReward.Domain.Gs2LoginReward(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Lock = new Gs2Lock.Domain.Gs2Lock(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Log = new Gs2Log.Domain.Gs2Log(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Lottery = new Gs2Lottery.Domain.Gs2Lottery(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Matchmaking =
-                new Gs2Matchmaking.Domain.Gs2Matchmaking(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            MegaField =
-                new Gs2MegaField.Domain.Gs2MegaField(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Mission = new Gs2Mission.Domain.Gs2Mission(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Money = new Gs2Money.Domain.Gs2Money(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            News = new Gs2News.Domain.Gs2News(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Quest = new Gs2Quest.Domain.Gs2Quest(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Ranking = new Gs2Ranking.Domain.Gs2Ranking(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Realtime = new Gs2Realtime.Domain.Gs2Realtime(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Schedule = new Gs2Schedule.Domain.Gs2Schedule(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Script = new Gs2Script.Domain.Gs2Script(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            SerialKey = new Gs2SerialKey.Domain.Gs2SerialKey(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Showcase = new Gs2Showcase.Domain.Gs2Showcase(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            SkillTree = new Gs2SkillTree.Domain.Gs2SkillTree(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Stamina = new Gs2Stamina.Domain.Gs2Stamina(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            StateMachine = new Gs2StateMachine.Domain.Gs2StateMachine(_cache, _jobQueueDomain, _sheetConfiguration, session);
-            Version = new Gs2Version.Domain.Gs2Version(_cache, _jobQueueDomain, _sheetConfiguration, session);
+            this.Account = new Gs2Account.Domain.Gs2Account(this);
+            this.AdReward = new Gs2AdReward.Domain.Gs2AdReward(this);
+            this.Auth = new Gs2Auth.Domain.Gs2Auth(this);
+            this.Chat = new Gs2Chat.Domain.Gs2Chat(this);
+            this.Datastore = new Gs2Datastore.Domain.Gs2Datastore(this);
+            this.Deploy = new Gs2Deploy.Domain.Gs2Deploy(this);
+            this.Dictionary = new Gs2Dictionary.Domain.Gs2Dictionary(this);
+            this.Distributor = new Gs2Distributor.Domain.Gs2Distributor(this);
+            this.Enchant = new Gs2Enchant.Domain.Gs2Enchant(this);
+            this.Enhance = new Gs2Enhance.Domain.Gs2Enhance(this);
+            this.Exchange = new Gs2Exchange.Domain.Gs2Exchange(this);
+            this.Experience = new Gs2Experience.Domain.Gs2Experience(this);
+            this.Formation = new Gs2Formation.Domain.Gs2Formation(this);
+            this.Friend = new Gs2Friend.Domain.Gs2Friend(this);
+            this.Gateway = new Gs2Gateway.Domain.Gs2Gateway(this);
+            this.Identifier = new Gs2Identifier.Domain.Gs2Identifier(this);
+            this.Idle = new Gs2Idle.Domain.Gs2Idle(this);
+            this.Inbox = new Gs2Inbox.Domain.Gs2Inbox(this);
+            this.Inventory = new Gs2Inventory.Domain.Gs2Inventory(this);
+            this.JobQueue = new Gs2JobQueue.Domain.Gs2JobQueue(this);
+            this.Key = new Gs2Key.Domain.Gs2Key(this);
+            this.Limit = new Gs2Limit.Domain.Gs2Limit(this);
+            this.LoginReward = new Gs2LoginReward.Domain.Gs2LoginReward(this);
+            this.Lock = new Gs2Lock.Domain.Gs2Lock(this);
+            this.Log = new Gs2Log.Domain.Gs2Log(this);
+            this.Lottery = new Gs2Lottery.Domain.Gs2Lottery(this);
+            this.Matchmaking = new Gs2Matchmaking.Domain.Gs2Matchmaking(this);
+            this.MegaField = new Gs2MegaField.Domain.Gs2MegaField(this);
+            this.Mission = new Gs2Mission.Domain.Gs2Mission(this);
+            this.Money = new Gs2Money.Domain.Gs2Money(this);
+            this.News = new Gs2News.Domain.Gs2News(this);
+            this.Quest = new Gs2Quest.Domain.Gs2Quest(this);
+            this.Ranking = new Gs2Ranking.Domain.Gs2Ranking(this);
+            this.Realtime = new Gs2Realtime.Domain.Gs2Realtime(this);
+            this.Schedule = new Gs2Schedule.Domain.Gs2Schedule(this);
+            this.Script = new Gs2Script.Domain.Gs2Script(this);
+            this.SerialKey = new Gs2SerialKey.Domain.Gs2SerialKey(this);
+            this.Showcase = new Gs2Showcase.Domain.Gs2Showcase(this);
+            this.SkillTree = new Gs2SkillTree.Domain.Gs2SkillTree(this);
+            this.Stamina = new Gs2Stamina.Domain.Gs2Stamina(this);
+            this.StateMachine = new Gs2StateMachine.Domain.Gs2StateMachine(this);
+            this.Version = new Gs2Version.Domain.Gs2Version(this);
 
             if (wssession != null)
             {
@@ -146,130 +145,130 @@ namespace Gs2.Core.Domain
                         switch (service)
                         {
                             case "Gs2Account":
-                                Account.HandleNotification(_cache, method, message.payload);
+                                this.Account.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2AdReward":
-                                AdReward.HandleNotification(_cache, method, message.payload);
+                                this.AdReward.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Auth":
-                                Auth.HandleNotification(_cache, method, message.payload);
+                                this.Auth.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Chat":
-                                Chat.HandleNotification(_cache, method, message.payload);
+                                this.Chat.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Datastore":
-                                Datastore.HandleNotification(_cache, method, message.payload);
+                                this.Datastore.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Deploy":
-                                Deploy.HandleNotification(_cache, method, message.payload);
+                                this.Deploy.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Dictionary":
-                                Dictionary.HandleNotification(_cache, method, message.payload);
+                                this.Dictionary.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Distributor":
-                                Distributor.HandleNotification(_cache, method, message.payload);
+                                this.Distributor.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Enchant":
-                                Enchant.HandleNotification(_cache, method, message.payload);
+                                this.Enchant.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Enhance":
-                                Enhance.HandleNotification(_cache, method, message.payload);
+                                this.Enhance.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Exchange":
-                                Exchange.HandleNotification(_cache, method, message.payload);
+                                this.Exchange.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Experience":
-                                Experience.HandleNotification(_cache, method, message.payload);
+                                this.Experience.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Formation":
-                                Formation.HandleNotification(_cache, method, message.payload);
+                                this.Formation.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Friend":
-                                Friend.HandleNotification(_cache, method, message.payload);
+                                this.Friend.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Gateway":
-                                Gateway.HandleNotification(_cache, method, message.payload);
+                                this.Gateway.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Identifier":
-                                Identifier.HandleNotification(_cache, method, message.payload);
+                                this.Identifier.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Idle":
-                                Idle.HandleNotification(_cache, method, message.payload);
+                                this.Idle.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Inbox":
-                                Inbox.HandleNotification(_cache, method, message.payload);
+                                this.Inbox.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Inventory":
-                                Inventory.HandleNotification(_cache, method, message.payload);
+                                this.Inventory.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2JobQueue":
-                                JobQueue.HandleNotification(_cache, method, message.payload);
+                                this.JobQueue.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Key":
-                                Key.HandleNotification(_cache, method, message.payload);
+                                this.Key.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Limit":
-                                Limit.HandleNotification(_cache, method, message.payload);
+                                this.Limit.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2LoginReward":
-                                LoginReward.HandleNotification(_cache, method, message.payload);
+                                this.LoginReward.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Lock":
-                                Lock.HandleNotification(_cache, method, message.payload);
+                                this.Lock.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Log":
-                                Log.HandleNotification(_cache, method, message.payload);
+                                this.Log.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Lottery":
-                                Lottery.HandleNotification(_cache, method, message.payload);
+                                this.Lottery.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Matchmaking":
-                                Matchmaking.HandleNotification(_cache, method, message.payload);
+                                this.Matchmaking.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2MegaField":
-                                MegaField.HandleNotification(_cache, method, message.payload);
+                                this.MegaField.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Mission":
-                                Mission.HandleNotification(_cache, method, message.payload);
+                                this.Mission.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Money":
-                                Money.HandleNotification(_cache, method, message.payload);
+                                this.Money.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2News":
-                                News.HandleNotification(_cache, method, message.payload);
+                                this.News.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Quest":
-                                Quest.HandleNotification(_cache, method, message.payload);
+                                this.Quest.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Ranking":
-                                Ranking.HandleNotification(_cache, method, message.payload);
+                                this.Ranking.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Realtime":
-                                Realtime.HandleNotification(_cache, method, message.payload);
+                                this.Realtime.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Schedule":
-                                Schedule.HandleNotification(_cache, method, message.payload);
+                                this.Schedule.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Script":
-                                Script.HandleNotification(_cache, method, message.payload);
+                                this.Script.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2SerialKey":
-                                SerialKey.HandleNotification(_cache, method, message.payload);
+                                this.SerialKey.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Showcase":
-                                Showcase.HandleNotification(_cache, method, message.payload);
+                                this.Showcase.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2SkillTree":
-                                SkillTree.HandleNotification(_cache, method, message.payload);
+                                this.SkillTree.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Stamina":
-                                Stamina.HandleNotification(_cache, method, message.payload);
+                                this.Stamina.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2StateMachine":
-                                StateMachine.HandleNotification(_cache, method, message.payload);
+                                this.StateMachine.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Version":
-                                Version.HandleNotification(_cache, method, message.payload);
+                                this.Version.HandleNotification(this._cache, method, message.payload);
                                 break;
                         }
                     }
@@ -306,10 +305,7 @@ namespace Gs2.Core.Domain
                     
                     {
                         var future = Gs2Distributor.Domain.Gs2Distributor.Dispatch(
-                            _cache,
-                            _jobQueueDomain,
-                            _sheetConfiguration,
-                            _restSession,
+                            this,
                             accessToken
                         );
                         yield return future;
@@ -321,8 +317,7 @@ namespace Gs2.Core.Domain
                     }
                     {
                         var future = Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
-                            _cache,
-                            _restSession,
+                            this,
                             accessToken
                         );
                         yield return future;
@@ -394,16 +389,12 @@ namespace Gs2.Core.Domain
                 }
 
                 await Gs2Distributor.Domain.Gs2Distributor.Dispatch(
-                    _cache,
-                    _jobQueueDomain,
-                    _sheetConfiguration,
-                    _restSession,
+                    this,
                     accessToken
                 );
 
                 await Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
-                    _cache,
-                    _restSession,
+                    this,
                     accessToken
                 );
 

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Ranking.Request
         public string NamespaceName { set; get; }
         public string CategoryName { set; get; }
         public string AccessToken { set; get; }
+
         public DescribeSubscribesByCategoryNameRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeSubscribesByCategoryNameRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public DescribeSubscribesByCategoryNameRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

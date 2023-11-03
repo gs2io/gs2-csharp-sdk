@@ -37,14 +37,17 @@ namespace Gs2.Gs2Mission.Request
         public string UserId { set; get; }
         public string MissionGroupName { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteCompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteCompleteByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DeleteCompleteByUserIdRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;

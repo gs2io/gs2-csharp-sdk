@@ -42,38 +42,47 @@ namespace Gs2.Gs2Experience.Request
         public long? MaxRankCap { set; get; }
         public string RankThresholdName { set; get; }
         public Gs2.Gs2Experience.Model.AcquireActionRate[] AcquireActionRates { set; get; }
+
         public UpdateExperienceModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithDefaultExperience(long? defaultExperience) {
             this.DefaultExperience = defaultExperience;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithDefaultRankCap(long? defaultRankCap) {
             this.DefaultRankCap = defaultRankCap;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithMaxRankCap(long? maxRankCap) {
             this.MaxRankCap = maxRankCap;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithRankThresholdName(string rankThresholdName) {
             this.RankThresholdName = rankThresholdName;
             return this;
         }
+
         public UpdateExperienceModelMasterRequest WithAcquireActionRates(Gs2.Gs2Experience.Model.AcquireActionRate[] acquireActionRates) {
             this.AcquireActionRates = acquireActionRates;
             return this;

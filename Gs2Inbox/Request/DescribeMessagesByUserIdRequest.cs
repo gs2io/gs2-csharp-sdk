@@ -38,22 +38,27 @@ namespace Gs2.Gs2Inbox.Request
         public bool? IsRead { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeMessagesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeMessagesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeMessagesByUserIdRequest WithIsRead(bool? isRead) {
             this.IsRead = isRead;
             return this;
         }
+
         public DescribeMessagesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeMessagesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

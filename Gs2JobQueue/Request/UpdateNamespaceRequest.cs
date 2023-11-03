@@ -39,26 +39,32 @@ namespace Gs2.Gs2JobQueue.Request
         public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; }
         public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; }
         public Gs2.Gs2JobQueue.Model.LogSetting LogSetting { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithEnableAutoRun(bool? enableAutoRun) {
             this.EnableAutoRun = enableAutoRun;
             return this;
         }
+
         public UpdateNamespaceRequest WithPushNotification(Gs2.Gs2JobQueue.Model.NotificationSetting pushNotification) {
             this.PushNotification = pushNotification;
             return this;
         }
+
         public UpdateNamespaceRequest WithRunNotification(Gs2.Gs2JobQueue.Model.NotificationSetting runNotification) {
             this.RunNotification = runNotification;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2JobQueue.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

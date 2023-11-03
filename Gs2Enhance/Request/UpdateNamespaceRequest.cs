@@ -39,42 +39,34 @@ namespace Gs2.Gs2Enhance.Request
         public Gs2.Gs2Enhance.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Enhance.Model.ScriptSetting EnhanceScript { set; get; }
         public Gs2.Gs2Enhance.Model.LogSetting LogSetting { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithEnableDirectEnhance(bool? enableDirectEnhance) {
             this.EnableDirectEnhance = enableDirectEnhance;
             return this;
         }
+
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Enhance.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public UpdateNamespaceRequest WithEnhanceScript(Gs2.Gs2Enhance.Model.ScriptSetting enhanceScript) {
             this.EnhanceScript = enhanceScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Enhance.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public UpdateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -92,9 +84,7 @@ namespace Gs2.Gs2Enhance.Request
                 .WithEnableDirectEnhance(!data.Keys.Contains("enableDirectEnhance") || data["enableDirectEnhance"] == null ? null : (bool?)bool.Parse(data["enableDirectEnhance"].ToString()))
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Enhance.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithEnhanceScript(!data.Keys.Contains("enhanceScript") || data["enhanceScript"] == null ? null : Gs2.Gs2Enhance.Model.ScriptSetting.FromJson(data["enhanceScript"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Enhance.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
         public override JsonData ToJson()
@@ -106,8 +96,6 @@ namespace Gs2.Gs2Enhance.Request
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["enhanceScript"] = EnhanceScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
             };
         }
 
@@ -135,14 +123,6 @@ namespace Gs2.Gs2Enhance.Request
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
@@ -154,8 +134,6 @@ namespace Gs2.Gs2Enhance.Request
             key += TransactionSetting + ":";
             key += EnhanceScript + ":";
             key += LogSetting + ":";
-            key += QueueNamespaceId + ":";
-            key += KeyId + ":";
             return key;
         }
 

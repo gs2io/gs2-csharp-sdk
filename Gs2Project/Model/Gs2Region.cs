@@ -33,10 +33,12 @@ namespace Gs2.Gs2Project.Model
 	{
         public string RegionName { set; get; }
         public string Status { set; get; }
+
         public Gs2Region WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;
         }
+
         public Gs2Region WithStatus(string status) {
             this.Status = status;
             return this;

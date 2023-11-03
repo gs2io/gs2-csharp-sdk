@@ -34,6 +34,7 @@ namespace Gs2.Gs2Inbox.Request
 	public class DescribeGlobalMessagesRequest : Gs2Request<DescribeGlobalMessagesRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeGlobalMessagesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -33,10 +33,12 @@ namespace Gs2.Gs2Friend.Model
 	{
         public string UserId { set; get; }
         public string Value { set; get; }
+
         public PublicProfile WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public PublicProfile WithValue(string value) {
             this.Value = value;
             return this;

@@ -59,10 +59,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 {
 
     public partial class RankingAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -75,20 +72,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public string CategoryName => _categoryName;
 
         public RankingAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             string categoryName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2RankingRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -122,7 +113,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                             request.CategoryName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                        this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                             _parentKey,
                             key,
                             null,
@@ -155,7 +146,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         request.CategoryName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                         _parentKey,
                         key,
                         null,
@@ -171,7 +162,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -216,7 +207,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         request.CategoryName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                         _parentKey,
                         key,
                         null,
@@ -249,7 +240,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                     request.CategoryName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                     _parentKey,
                     key,
                     null,
@@ -265,7 +256,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -326,7 +317,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -352,10 +343,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.CategoryName,
@@ -399,7 +387,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -425,10 +413,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.CategoryName,
@@ -500,7 +485,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.CategoryName,
                     "Ranking"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         scorerUserId?.ToString()
@@ -519,7 +504,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                                     scorerUserId?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                            this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                                 parentKey,
                                 key,
                                 null,
@@ -538,7 +523,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             yield break;
                         }
                     }
-                    (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+                    (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         scorerUserId?.ToString()
@@ -560,7 +545,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.CategoryName,
                 "Ranking"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         scorerUserId?.ToString()
@@ -576,7 +561,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                                     scorerUserId?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
+                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
                         parentKey,
                         key,
                         null,
@@ -588,7 +573,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         throw;
                     }
                 }
-                (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+                (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         scorerUserId?.ToString()
@@ -644,7 +629,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string userId
         )
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                     userId
@@ -658,7 +643,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             string userId
         )
         {
-            this._cache.Unsubscribe<Gs2.Gs2Ranking.Model.Ranking>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking.Model.Ranking>(
                 _parentKey,
                 Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                     userId

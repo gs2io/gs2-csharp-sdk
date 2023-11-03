@@ -38,18 +38,22 @@ namespace Gs2.Gs2LoginReward.Request
         public string UserId { set; get; }
         public int? StepNumber { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public MarkReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public MarkReceivedByUserIdRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
+
         public MarkReceivedByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public MarkReceivedByUserIdRequest WithStepNumber(int? stepNumber) {
             this.StepNumber = stepNumber;
             return this;

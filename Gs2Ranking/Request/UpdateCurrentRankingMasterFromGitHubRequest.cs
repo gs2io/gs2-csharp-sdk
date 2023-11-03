@@ -35,10 +35,12 @@ namespace Gs2.Gs2Ranking.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Ranking.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentRankingMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentRankingMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Ranking.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

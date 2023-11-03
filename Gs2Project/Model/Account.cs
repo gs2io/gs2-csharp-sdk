@@ -39,34 +39,42 @@ namespace Gs2.Gs2Project.Model
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public Account WithAccountId(string accountId) {
             this.AccountId = accountId;
             return this;
         }
+
         public Account WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Account WithEmail(string email) {
             this.Email = email;
             return this;
         }
+
         public Account WithFullName(string fullName) {
             this.FullName = fullName;
             return this;
         }
+
         public Account WithCompanyName(string companyName) {
             this.CompanyName = companyName;
             return this;
         }
+
         public Account WithStatus(string status) {
             this.Status = status;
             return this;
         }
+
         public Account WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Account WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

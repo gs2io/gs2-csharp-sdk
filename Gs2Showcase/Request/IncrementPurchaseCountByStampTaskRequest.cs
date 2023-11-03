@@ -35,10 +35,12 @@ namespace Gs2.Gs2Showcase.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public IncrementPurchaseCountByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public IncrementPurchaseCountByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

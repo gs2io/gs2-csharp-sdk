@@ -37,18 +37,22 @@ namespace Gs2.Gs2Chat.Request
         public string RoomName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeSubscribesByRoomNameRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeSubscribesByRoomNameRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public DescribeSubscribesByRoomNameRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeSubscribesByRoomNameRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

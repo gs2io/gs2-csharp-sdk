@@ -31,7 +31,6 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
@@ -44,10 +43,7 @@ namespace Gs2.Core.Domain
     public partial class TransactionDomain
     {
 
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2 _gs2;
         private readonly string _userId;
         public bool AutoRunStampSheet;
         public string TransactionId;
@@ -55,20 +51,14 @@ namespace Gs2.Core.Domain
         public string StampSheetEncryptionKey;
 
         public TransactionDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2 gs2,
             string userId,
             bool autoRunStampSheet,
             string transactionId,
             string stampSheet,
             string stampSheetEncryptionKey
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._userId = userId;
             this.AutoRunStampSheet = autoRunStampSheet;
             this.TransactionId = transactionId;
@@ -77,30 +67,21 @@ namespace Gs2.Core.Domain
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public IFuture<TransactionDomain> Wait(
+        public IFuture<TransactionDomain> WaitFuture(
             bool all = false
         ) {
             IEnumerator Impl(IFuture<TransactionDomain> self) {
-#if GS2_ENABLE_UNITASK
-                yield return WaitAsync().ToCoroutine(
-                    v => { self.OnComplete(this); },
-                    e => { self.OnError(e as Gs2Exception); }
-                );
-#else
                 if (this.AutoRunStampSheet) {
                     while (true) {
                         var future = new Gs2Distributor.Domain.Gs2Distributor(
-                            this._cache,
-                            this._jobQueueDomain,
-                            this._stampSheetConfiguration,
-                            this._session
+                            this._gs2
                         ).Namespace(
-                            this._stampSheetConfiguration.NamespaceName
+                            this._gs2.StampSheetConfiguration.NamespaceName
                         ).User(
                             this._userId
                         ).StampSheetResult(
                             this.TransactionId
-                        ).Model();
+                        ).ModelFuture();
                         
                         yield return future;
                         if (future.Error != null) {
@@ -121,14 +102,11 @@ namespace Gs2.Core.Domain
                             {
                                 foreach (var job in result2.Items) {
                                     var future3 = new JobQueueJobDomain(
-                                        this._cache,
-                                        this._jobQueueDomain,
-                                        this._stampSheetConfiguration,
-                                        this._session,
+                                        this._gs2,
                                         this._userId,
                                         true,
                                         job.JobId
-                                    ).Wait();
+                                    ).WaitFuture();
                                     yield return future3;
                                     if (future3.Error != null) {
                                         self.OnError(future3.Error);
@@ -141,10 +119,7 @@ namespace Gs2.Core.Domain
                         var resultJson = JsonMapper.ToObject(result.SheetResult);
                         if (resultJson["transactionId"] != null) {
                             var next = new TransactionDomain(
-                                this._cache,
-                                this._jobQueueDomain,
-                                this._stampSheetConfiguration,
-                                this._session,
+                                this._gs2,
                                 this._userId,
                                 resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
                                 !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
@@ -153,7 +128,7 @@ namespace Gs2.Core.Domain
                             );
                             if (all) {
                                 while (next != null) {
-                                    var future2 = next.Wait(all);
+                                    var future2 = next.WaitFuture(all);
                                     yield return future2;
                                     if (future2.Error != null) {
                                         self.OnError(future2.Error);
@@ -170,16 +145,11 @@ namespace Gs2.Core.Domain
                 } 
                 else {
                     var stampSheet = new StampSheetDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._session,
+                        this._gs2,
                         this.StampSheet.ToString(),
-                        this.StampSheetEncryptionKey.ToString(),
-                        this._stampSheetConfiguration.NamespaceName,
-                        this._stampSheetConfiguration.StampTaskEventHandler,
-                        this._stampSheetConfiguration.StampSheetEventHandler
+                        this.StampSheetEncryptionKey.ToString()
                     );
-                    var future4 = stampSheet.Run();
+                    var future4 = stampSheet.RunFuture();
                     yield return future4;
                     if (future4.Error != null) {
                         self.OnError(new TransactionException(stampSheet, future4.Error));
@@ -188,7 +158,6 @@ namespace Gs2.Core.Domain
 
                     self.OnComplete(this);
                 }
-#endif
             }
             return new Gs2InlineFuture<TransactionDomain>(Impl);
         }
@@ -206,17 +175,14 @@ namespace Gs2.Core.Domain
             if (this.AutoRunStampSheet) {
                 while (true) {
                     var result = await new Gs2Distributor.Domain.Gs2Distributor(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session
+                        this._gs2
                     ).Namespace(
-                        this._stampSheetConfiguration.NamespaceName
+                        this._gs2.StampSheetConfiguration.NamespaceName
                     ).User(
                         this._userId
                     ).StampSheetResult(
                         this.TransactionId
-                    ).Model();
+                    ).ModelAsync();
                     if (result == null) {
 #if UNITY_2017_1_OR_NEWER
                         await UniTask.Delay(TimeSpan.FromMilliseconds(100));
@@ -233,10 +199,7 @@ namespace Gs2.Core.Domain
                         {
                             foreach (var job in result2.Items) {
                                 await new JobQueueJobDomain(
-                                    this._cache,
-                                    this._jobQueueDomain,
-                                    this._stampSheetConfiguration,
-                                    this._session,
+                                    this._gs2,
                                     this._userId,
                                     true,
                                     job.JobId
@@ -248,10 +211,7 @@ namespace Gs2.Core.Domain
                     var resultJson = JsonMapper.ToObject(result.SheetResult);
                     if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
                         var next = new TransactionDomain(
-                            this._cache,
-                            this._jobQueueDomain,
-                            this._stampSheetConfiguration,
-                            this._session,
+                            this._gs2,
                             this._userId,
                             resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
                             !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
@@ -271,14 +231,9 @@ namespace Gs2.Core.Domain
             }
             else {
                 var stampSheet = new StampSheetDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._session,
+                    this._gs2,
                     this.StampSheet.ToString(),
-                    this.StampSheetEncryptionKey.ToString(),
-                    this._stampSheetConfiguration.NamespaceName,
-                    this._stampSheetConfiguration.StampTaskEventHandler,
-                    this._stampSheetConfiguration.StampSheetEventHandler
+                    this.StampSheetEncryptionKey.ToString()
                 );
                 try {
                     await stampSheet.RunAsync();

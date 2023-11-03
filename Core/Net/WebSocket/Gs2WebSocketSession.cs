@@ -18,6 +18,7 @@ using Cysharp.Threading.Tasks;
 #endif
 using UnityEngine;
 using UnityEngine.Events;
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 #endif
 
 namespace Gs2.Core.Net
@@ -536,9 +537,7 @@ namespace Gs2.Core.Net
                     this._inflightRequest.Remove(sessionRequest.TaskId);
                 }
             }
-            if (false) {
-                yield return null;
-            }
+            yield return null;
         }
         
 #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK

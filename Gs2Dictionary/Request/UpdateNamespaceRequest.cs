@@ -38,22 +38,27 @@ namespace Gs2.Gs2Dictionary.Request
         public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; }
         public Gs2.Gs2Dictionary.Model.ScriptSetting DuplicateEntryScript { set; get; }
         public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting entryScript) {
             this.EntryScript = entryScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithDuplicateEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting duplicateEntryScript) {
             this.DuplicateEntryScript = duplicateEntryScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Dictionary.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

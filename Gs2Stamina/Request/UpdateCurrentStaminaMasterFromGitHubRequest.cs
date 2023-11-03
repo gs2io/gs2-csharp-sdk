@@ -35,10 +35,12 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Stamina.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentStaminaMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentStaminaMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Stamina.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

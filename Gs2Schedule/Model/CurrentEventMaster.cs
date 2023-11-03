@@ -33,10 +33,12 @@ namespace Gs2.Gs2Schedule.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentEventMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentEventMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

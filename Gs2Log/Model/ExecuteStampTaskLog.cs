@@ -38,30 +38,37 @@ namespace Gs2.Gs2Log.Model
         public string UserId { set; get; }
         public string Action { set; get; }
         public string Args { set; get; }
+
         public ExecuteStampTaskLog WithTimestamp(long? timestamp) {
             this.Timestamp = timestamp;
             return this;
         }
+
         public ExecuteStampTaskLog WithTaskId(string taskId) {
             this.TaskId = taskId;
             return this;
         }
+
         public ExecuteStampTaskLog WithService(string service) {
             this.Service = service;
             return this;
         }
+
         public ExecuteStampTaskLog WithMethod(string method) {
             this.Method = method;
             return this;
         }
+
         public ExecuteStampTaskLog WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public ExecuteStampTaskLog WithAction(string action) {
             this.Action = action;
             return this;
         }
+
         public ExecuteStampTaskLog WithArgs(string args) {
             this.Args = args;
             return this;

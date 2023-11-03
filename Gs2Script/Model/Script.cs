@@ -38,30 +38,37 @@ namespace Gs2.Gs2Script.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Script WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
         }
+
         public Script WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Script WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Script WithValue(string value) {
             this.Value = value;
             return this;
         }
+
         public Script WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Script WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Script WithRevision(long? revision) {
             this.Revision = revision;
             return this;

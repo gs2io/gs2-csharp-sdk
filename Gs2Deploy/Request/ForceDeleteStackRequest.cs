@@ -34,6 +34,7 @@ namespace Gs2.Gs2Deploy.Request
 	public class ForceDeleteStackRequest : Gs2Request<ForceDeleteStackRequest>
 	{
         public string StackName { set; get; }
+
         public ForceDeleteStackRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

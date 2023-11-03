@@ -35,10 +35,12 @@ namespace Gs2.Gs2JobQueue.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public DeleteByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public DeleteByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

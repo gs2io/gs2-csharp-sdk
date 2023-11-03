@@ -36,14 +36,17 @@ namespace Gs2.Gs2StateMachine.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string StatusName { set; get; }
+
         public GetStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public GetStatusByUserIdRequest WithStatusName(string statusName) {
             this.StatusName = statusName;
             return this;

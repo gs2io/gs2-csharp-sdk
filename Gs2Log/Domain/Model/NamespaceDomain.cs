@@ -57,10 +57,7 @@ namespace Gs2.Gs2Log.Domain.Model
 {
 
     public partial class NamespaceDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         private readonly string _namespaceName;
 
@@ -72,18 +69,12 @@ namespace Gs2.Gs2Log.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LogRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = "log:Namespace";
@@ -100,7 +91,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryAccessLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -117,7 +108,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLog> AccessLog(
             #endif
         #else
-        public QueryAccessLogIterator AccessLog(
+        public QueryAccessLogIterator AccessLogAsync(
         #endif
             string service,
             string method,
@@ -128,7 +119,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryAccessLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -150,7 +141,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeAccessLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLog>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "AccessLog"
@@ -161,7 +152,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeAccessLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLog>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "AccessLog"
@@ -181,7 +172,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountAccessLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -198,7 +189,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLog(
             #endif
         #else
-        public CountAccessLogIterator CountAccessLog(
+        public CountAccessLogIterator CountAccessLogAsync(
         #endif
             bool? service,
             bool? method,
@@ -209,7 +200,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountAccessLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -231,7 +222,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeCountAccessLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "AccessLogCount"
@@ -242,7 +233,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeCountAccessLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "AccessLogCount"
@@ -254,10 +245,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2.Gs2Log.Domain.Model.AccessLogDomain AccessLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.AccessLogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -274,7 +262,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryExecuteStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -292,7 +280,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLog(
             #endif
         #else
-        public QueryExecuteStampSheetLogIterator ExecuteStampSheetLog(
+        public QueryExecuteStampSheetLogIterator ExecuteStampSheetLogAsync(
         #endif
             string service,
             string method,
@@ -304,7 +292,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryExecuteStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -327,7 +315,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeExecuteStampSheetLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampSheetLog"
@@ -338,7 +326,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeExecuteStampSheetLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampSheetLog"
@@ -359,7 +347,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountExecuteStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -377,7 +365,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLog(
             #endif
         #else
-        public CountExecuteStampSheetLogIterator CountExecuteStampSheetLog(
+        public CountExecuteStampSheetLogIterator CountExecuteStampSheetLogAsync(
         #endif
             bool? service,
             bool? method,
@@ -389,7 +377,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountExecuteStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -412,7 +400,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeCountExecuteStampSheetLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampSheetLogCount"
@@ -423,7 +411,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeCountExecuteStampSheetLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampSheetLogCount"
@@ -435,10 +423,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2.Gs2Log.Domain.Model.ExecuteStampSheetLogDomain ExecuteStampSheetLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.ExecuteStampSheetLogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -455,7 +440,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryExecuteStampTaskLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -473,7 +458,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLog(
             #endif
         #else
-        public QueryExecuteStampTaskLogIterator ExecuteStampTaskLog(
+        public QueryExecuteStampTaskLogIterator ExecuteStampTaskLogAsync(
         #endif
             string service,
             string method,
@@ -485,7 +470,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryExecuteStampTaskLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -508,7 +493,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeExecuteStampTaskLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampTaskLog"
@@ -519,7 +504,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeExecuteStampTaskLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampTaskLog"
@@ -540,7 +525,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountExecuteStampTaskLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -558,7 +543,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLog(
             #endif
         #else
-        public CountExecuteStampTaskLogIterator CountExecuteStampTaskLog(
+        public CountExecuteStampTaskLogIterator CountExecuteStampTaskLogAsync(
         #endif
             bool? service,
             bool? method,
@@ -570,7 +555,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountExecuteStampTaskLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -593,7 +578,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeCountExecuteStampTaskLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampTaskLogCount"
@@ -604,7 +589,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeCountExecuteStampTaskLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "ExecuteStampTaskLogCount"
@@ -616,10 +601,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2.Gs2Log.Domain.Model.ExecuteStampTaskLogDomain ExecuteStampTaskLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.ExecuteStampTaskLogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -636,7 +618,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryIssueStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -654,7 +636,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLog(
             #endif
         #else
-        public QueryIssueStampSheetLogIterator IssueStampSheetLog(
+        public QueryIssueStampSheetLogIterator IssueStampSheetLogAsync(
         #endif
             string service,
             string method,
@@ -666,7 +648,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new QueryIssueStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -689,7 +671,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeIssueStampSheetLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IssueStampSheetLog"
@@ -700,7 +682,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeIssueStampSheetLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IssueStampSheetLog"
@@ -721,7 +703,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountIssueStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -739,7 +721,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLog(
             #endif
         #else
-        public CountIssueStampSheetLogIterator CountIssueStampSheetLog(
+        public CountIssueStampSheetLogIterator CountIssueStampSheetLogAsync(
         #endif
             bool? service,
             bool? method,
@@ -751,7 +733,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new CountIssueStampSheetLogIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 service,
@@ -774,7 +756,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeCountIssueStampSheetLog(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IssueStampSheetLogCount"
@@ -785,7 +767,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeCountIssueStampSheetLog(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "IssueStampSheetLogCount"
@@ -797,10 +779,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain IssueStampSheetLog(
         ) {
             return new Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -808,10 +787,7 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2.Gs2Log.Domain.Model.LogDomain Log(
         ) {
             return new Gs2.Gs2Log.Domain.Model.LogDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -821,7 +797,7 @@ namespace Gs2.Gs2Log.Domain.Model
         )
         {
             return new DescribeInsightsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -832,12 +808,12 @@ namespace Gs2.Gs2Log.Domain.Model
         public Gs2Iterator<Gs2.Gs2Log.Model.Insight> Insights(
             #endif
         #else
-        public DescribeInsightsIterator Insights(
+        public DescribeInsightsIterator InsightsAsync(
         #endif
         )
         {
             return new DescribeInsightsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -853,7 +829,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong SubscribeInsights(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Log.Model.Insight>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.Insight>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Insight"
@@ -864,7 +840,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void UnsubscribeInsights(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Log.Model.Insight>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.Insight>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Insight"
@@ -877,10 +853,7 @@ namespace Gs2.Gs2Log.Domain.Model
             string insightName
         ) {
             return new Gs2.Gs2Log.Domain.Model.InsightDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 insightName
             );
@@ -933,7 +906,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -964,7 +937,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -980,7 +953,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -1007,7 +980,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -1038,7 +1011,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -1054,7 +1027,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -1105,7 +1078,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -1136,7 +1109,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -1152,7 +1125,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1193,7 +1166,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -1224,7 +1197,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -1240,7 +1213,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1295,7 +1268,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1349,7 +1322,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1416,7 +1389,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -1447,7 +1420,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -1463,7 +1436,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1501,7 +1474,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         request.NamespaceName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         _parentKey,
                         key,
                         null,
@@ -1532,7 +1505,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -1548,7 +1521,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1617,7 +1590,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -1650,7 +1623,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -1711,7 +1684,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1731,10 +1704,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1771,7 +1741,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1791,10 +1761,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1838,7 +1805,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     "log",
                     "Namespace"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Log.Model.Namespace>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1856,7 +1823,7 @@ namespace Gs2.Gs2Log.Domain.Model
                             var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                            this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                                 parentKey,
                                 key,
                                 null,
@@ -1875,7 +1842,7 @@ namespace Gs2.Gs2Log.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Log.Model.Namespace>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1894,7 +1861,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 "log",
                 "Namespace"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Log.Model.Namespace>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1909,7 +1876,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Log.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Namespace>(
                         parentKey,
                         key,
                         null,
@@ -1921,7 +1888,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Log.Model.Namespace>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1967,7 +1934,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Log.Model.Namespace> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()
@@ -1978,7 +1945,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Log.Model.Namespace>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.Namespace>(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()

@@ -37,26 +37,32 @@ namespace Gs2.Gs2Matchmaking.Model
         public Gs2.Gs2Matchmaking.Model.WrittenBallot[] WrittenBallots { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public Vote WithVoteId(string voteId) {
             this.VoteId = voteId;
             return this;
         }
+
         public Vote WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;
         }
+
         public Vote WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;
         }
+
         public Vote WithWrittenBallots(Gs2.Gs2Matchmaking.Model.WrittenBallot[] writtenBallots) {
             this.WrittenBallots = writtenBallots;
             return this;
         }
+
         public Vote WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Vote WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

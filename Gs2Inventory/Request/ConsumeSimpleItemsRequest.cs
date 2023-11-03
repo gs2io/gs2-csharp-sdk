@@ -38,18 +38,22 @@ namespace Gs2.Gs2Inventory.Request
         public string AccessToken { set; get; }
         public Gs2.Gs2Inventory.Model.ConsumeCount[] ConsumeCounts { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public ConsumeSimpleItemsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public ConsumeSimpleItemsRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public ConsumeSimpleItemsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public ConsumeSimpleItemsRequest WithConsumeCounts(Gs2.Gs2Inventory.Model.ConsumeCount[] consumeCounts) {
             this.ConsumeCounts = consumeCounts;
             return this;

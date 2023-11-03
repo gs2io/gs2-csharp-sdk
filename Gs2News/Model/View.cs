@@ -33,10 +33,12 @@ namespace Gs2.Gs2News.Model
 	{
         public Gs2.Gs2News.Model.Content[] Contents { set; get; }
         public Gs2.Gs2News.Model.Content[] RemoveContents { set; get; }
+
         public View WithContents(Gs2.Gs2News.Model.Content[] contents) {
             this.Contents = contents;
             return this;
         }
+
         public View WithRemoveContents(Gs2.Gs2News.Model.Content[] removeContents) {
             this.RemoveContents = removeContents;
             return this;

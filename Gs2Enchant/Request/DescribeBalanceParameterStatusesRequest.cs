@@ -38,22 +38,27 @@ namespace Gs2.Gs2Enchant.Request
         public string ParameterName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeBalanceParameterStatusesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeBalanceParameterStatusesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DescribeBalanceParameterStatusesRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
+
         public DescribeBalanceParameterStatusesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeBalanceParameterStatusesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

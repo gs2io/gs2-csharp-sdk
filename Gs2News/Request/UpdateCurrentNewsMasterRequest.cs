@@ -35,10 +35,12 @@ namespace Gs2.Gs2News.Request
 	{
         public string NamespaceName { set; get; }
         public string UploadToken { set; get; }
+
         public UpdateCurrentNewsMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentNewsMasterRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;

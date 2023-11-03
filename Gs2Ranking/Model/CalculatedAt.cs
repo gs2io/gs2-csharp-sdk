@@ -33,10 +33,12 @@ namespace Gs2.Gs2Ranking.Model
 	{
         public string CategoryName { set; get; }
         public long? Value { set; get; }
+
         public CalculatedAt WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public CalculatedAt WithValue(long? value) {
             this.Value = value;
             return this;

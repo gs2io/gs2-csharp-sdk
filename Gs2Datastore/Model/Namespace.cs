@@ -39,34 +39,42 @@ namespace Gs2.Gs2Datastore.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Namespace WithDoneUploadScript(Gs2.Gs2Datastore.Model.ScriptSetting doneUploadScript) {
             this.DoneUploadScript = doneUploadScript;
             return this;
         }
+
         public Namespace WithLogSetting(Gs2.Gs2Datastore.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
+
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -59,10 +59,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 {
 
     public partial class RandomShowcaseStatusDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -74,20 +71,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public string ShowcaseName => _showcaseName;
 
         public RandomShowcaseStatusDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string showcaseName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ShowcaseRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -165,7 +156,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -187,10 +178,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     request.UserId,
                     result?.Item?.ShowcaseName,
@@ -233,7 +221,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -255,10 +243,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     request.UserId,
                     result?.Item?.ShowcaseName,
@@ -325,7 +310,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -347,10 +332,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     request.UserId,
                     result?.Item?.ShowcaseName,
@@ -393,7 +375,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -415,10 +397,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     request.UserId,
                     result?.Item?.ShowcaseName,
@@ -485,7 +464,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
@@ -511,10 +490,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         request.UserId,
                         result.Items[i]?.ShowcaseName,
@@ -529,7 +505,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -572,7 +548,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
@@ -598,10 +574,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         request.UserId,
                         result.Items[i]?.ShowcaseName,
@@ -616,7 +589,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],

@@ -40,26 +40,32 @@ namespace Gs2.Gs2Experience.Request
         public string PropertyId { set; get; }
         public long? RankCapValue { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public VerifyRankCapRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public VerifyRankCapRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public VerifyRankCapRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
+
         public VerifyRankCapRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
+
         public VerifyRankCapRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public VerifyRankCapRequest WithRankCapValue(long? rankCapValue) {
             this.RankCapValue = rankCapValue;
             return this;

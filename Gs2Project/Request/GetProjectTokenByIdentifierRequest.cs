@@ -37,18 +37,22 @@ namespace Gs2.Gs2Project.Request
         public string ProjectName { set; get; }
         public string UserName { set; get; }
         public string Password { set; get; }
+
         public GetProjectTokenByIdentifierRequest WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
+
         public GetProjectTokenByIdentifierRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
+
         public GetProjectTokenByIdentifierRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
+
         public GetProjectTokenByIdentifierRequest WithPassword(string password) {
             this.Password = password;
             return this;

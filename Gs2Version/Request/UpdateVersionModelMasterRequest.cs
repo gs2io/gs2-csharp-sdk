@@ -45,50 +45,62 @@ namespace Gs2.Gs2Version.Request
         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
         public bool? NeedSignature { set; get; }
         public string SignatureKeyId { set; get; }
+
         public UpdateVersionModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithType(string type) {
             this.Type = type;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
             this.WarningVersion = warningVersion;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithErrorVersion(Gs2.Gs2Version.Model.Version_ errorVersion) {
             this.ErrorVersion = errorVersion;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithScheduleVersions(Gs2.Gs2Version.Model.ScheduleVersion[] scheduleVersions) {
             this.ScheduleVersions = scheduleVersions;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithNeedSignature(bool? needSignature) {
             this.NeedSignature = needSignature;
             return this;
         }
+
         public UpdateVersionModelMasterRequest WithSignatureKeyId(string signatureKeyId) {
             this.SignatureKeyId = signatureKeyId;
             return this;

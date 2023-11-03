@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -71,19 +69,13 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2EnchantRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -99,7 +91,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterStatusesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -112,13 +104,13 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterStatus> BalanceParameterStatuses(
             #endif
         #else
-        public DescribeBalanceParameterStatusesByUserIdIterator BalanceParameterStatuses(
+        public DescribeBalanceParameterStatusesByUserIdIterator BalanceParameterStatusesAsync(
         #endif
             string parameterName
         )
         {
             return new DescribeBalanceParameterStatusesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -136,7 +128,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong SubscribeBalanceParameterStatuses(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -148,7 +140,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void UnsubscribeBalanceParameterStatuses(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -163,10 +155,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string propertyId
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 parameterName,
@@ -180,7 +169,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterStatusesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -193,13 +182,13 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2Iterator<Gs2.Gs2Enchant.Model.RarityParameterStatus> RarityParameterStatuses(
             #endif
         #else
-        public DescribeRarityParameterStatusesByUserIdIterator RarityParameterStatuses(
+        public DescribeRarityParameterStatusesByUserIdIterator RarityParameterStatusesAsync(
         #endif
             string parameterName
         )
         {
             return new DescribeRarityParameterStatusesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -217,7 +206,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong SubscribeRarityParameterStatuses(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -229,7 +218,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void UnsubscribeRarityParameterStatuses(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -244,10 +233,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string propertyId
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 parameterName,

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Showcase.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeSalesItemGroupMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeSalesItemGroupMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeSalesItemGroupMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

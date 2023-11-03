@@ -32,6 +32,7 @@ namespace Gs2.Gs2LoginReward.Model
 	public class Reward : IComparable
 	{
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+
         public Reward WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

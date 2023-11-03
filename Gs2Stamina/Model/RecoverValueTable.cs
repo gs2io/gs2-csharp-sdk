@@ -35,18 +35,22 @@ namespace Gs2.Gs2Stamina.Model
         public string Metadata { set; get; }
         public string ExperienceModelId { set; get; }
         public int[] Values { set; get; }
+
         public RecoverValueTable WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public RecoverValueTable WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public RecoverValueTable WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public RecoverValueTable WithValues(int[] values) {
             this.Values = values;
             return this;
@@ -108,9 +112,7 @@ namespace Gs2.Gs2Stamina.Model
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    if (value != null) {
-                        writer.Write(int.Parse(value.ToString()));
-                    }
+                    writer.Write(int.Parse(value.ToString()));
                 }
                 writer.WriteArrayEnd();
             }

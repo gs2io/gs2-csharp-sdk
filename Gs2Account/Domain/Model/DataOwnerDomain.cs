@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Account.Domain.Model
 {
 
     public partial class DataOwnerDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -71,19 +69,13 @@ namespace Gs2.Gs2Account.Domain.Model
         public string UserId => _userId;
 
         public DataOwnerDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2AccountRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -126,7 +118,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.DataOwner> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
@@ -139,7 +130,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
                         var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                         );
-                        _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
+                        this._gs2.Cache.Put<Gs2.Gs2Account.Model.DataOwner>(
                             _parentKey,
                             key,
                             null,
@@ -158,35 +149,10 @@ namespace Gs2.Gs2Account.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                GetDataOwnerByUserIdResult result = null;
-                try {
-                    result = await this._client.GetDataOwnerByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
-                        );
-                    _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "dataOwner")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -209,43 +175,16 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.DataOwner>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Account.Model.DataOwner> GetAsync(
+            #else
         private async Task<Gs2.Gs2Account.Model.DataOwner> GetAsync(
+            #endif
             GetDataOwnerByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var future = this._client.GetDataOwnerByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
-                    );
-                    _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "dataOwner")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
@@ -257,7 +196,7 @@ namespace Gs2.Gs2Account.Domain.Model
             } catch (Gs2.Core.Exception.NotFoundException e) {
                 var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                     );
-                _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
+                this._gs2.Cache.Put<Gs2.Gs2Account.Model.DataOwner>(
                     _parentKey,
                     key,
                     null,
@@ -269,11 +208,10 @@ namespace Gs2.Gs2Account.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -305,7 +243,7 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.DataOwner> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.DataOwner>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                     )
@@ -321,7 +259,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         {
                             var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                                 );
-                            _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
+                            this._gs2.Cache.Put<Gs2.Gs2Account.Model.DataOwner>(
                                 _parentKey,
                                 key,
                                 null,
@@ -340,7 +278,7 @@ namespace Gs2.Gs2Account.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.DataOwner>(
                         _parentKey,
                         Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                         )
@@ -350,10 +288,15 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.DataOwner>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Model.DataOwner> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Account.Model.DataOwner> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.DataOwner>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                     )
@@ -366,7 +309,7 @@ namespace Gs2.Gs2Account.Domain.Model
                 } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                                 );
-                    _cache.Put<Gs2.Gs2Account.Model.DataOwner>(
+                    this._gs2.Cache.Put<Gs2.Gs2Account.Model.DataOwner>(
                         _parentKey,
                         key,
                         null,
@@ -378,7 +321,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Account.Model.DataOwner>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.DataOwner>(
                         _parentKey,
                         Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                         )
@@ -390,16 +333,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Model.DataOwner> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Account.Model.DataOwner> Model()
         {
@@ -423,7 +356,7 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Account.Model.DataOwner> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                 ),
@@ -433,7 +366,7 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Account.Model.DataOwner>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.DataOwner>(
                 _parentKey,
                 Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                 ),

@@ -59,10 +59,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 {
 
     public partial class SpatialAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -77,21 +74,15 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public string LayerModelName => _layerModelName;
 
         public SpatialAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             string areaModelName,
             string layerModelName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MegaFieldRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -141,7 +132,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -202,7 +193,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -287,7 +278,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -313,10 +304,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result.Items[i]?.UserId,
                         result.Items[i]?.AreaModelName,
@@ -331,7 +319,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         result.Items[i].AreaModelName.ToString(),
                         result.Items[i].LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -376,7 +364,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -402,10 +390,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result.Items[i]?.UserId,
                         result.Items[i]?.AreaModelName,
@@ -420,7 +405,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         result.Items[i].AreaModelName.ToString(),
                         result.Items[i].LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -489,7 +474,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -497,10 +482,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result?.Items[i],
                         request.AreaModelName,
@@ -545,7 +527,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -553,10 +535,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result?.Items[i],
                         request.AreaModelName,
@@ -625,7 +604,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -651,10 +630,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result.Items[i]?.UserId,
                         result.Items[i]?.AreaModelName,
@@ -669,7 +645,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         result.Items[i].AreaModelName.ToString(),
                         result.Items[i].LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -714,7 +690,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -740,10 +716,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result.Items[i]?.UserId,
                         result.Items[i]?.AreaModelName,
@@ -758,7 +731,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         result.Items[i].AreaModelName.ToString(),
                         result.Items[i].LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -826,7 +799,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.Spatial> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.Spatial>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.Spatial>(
                     _parentKey,
                     Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
                         this.AreaModelName?.ToString(),
@@ -841,7 +814,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #else
         public async Task<Gs2.Gs2MegaField.Model.Spatial> ModelAsync()
         {
-            var (value, find) = _cache.Get<Gs2.Gs2MegaField.Model.Spatial>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.Spatial>(
                     _parentKey,
                     Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
                         this.AreaModelName?.ToString(),
@@ -887,7 +860,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.Spatial> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
                     this.AreaModelName.ToString(),
@@ -899,7 +872,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2MegaField.Model.Spatial>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2MegaField.Model.Spatial>(
                 _parentKey,
                 Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
                     this.AreaModelName.ToString(),

@@ -45,50 +45,62 @@ namespace Gs2.Gs2Exchange.Request
         public string ExchangeCountId { set; get; }
         public int? MaximumExchangeCount { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+
         public CreateIncrementalRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithConsumeAction(Gs2.Core.Model.ConsumeAction consumeAction) {
             this.ConsumeAction = consumeAction;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithCalculateType(string calculateType) {
             this.CalculateType = calculateType;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithBaseValue(long? baseValue) {
             this.BaseValue = baseValue;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithCoefficientValue(long? coefficientValue) {
             this.CoefficientValue = coefficientValue;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithCalculateScriptId(string calculateScriptId) {
             this.CalculateScriptId = calculateScriptId;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithExchangeCountId(string exchangeCountId) {
             this.ExchangeCountId = exchangeCountId;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithMaximumExchangeCount(int? maximumExchangeCount) {
             this.MaximumExchangeCount = maximumExchangeCount;
             return this;
         }
+
         public CreateIncrementalRateModelMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

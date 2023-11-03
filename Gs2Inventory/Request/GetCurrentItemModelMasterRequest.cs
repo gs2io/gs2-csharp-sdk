@@ -34,6 +34,7 @@ namespace Gs2.Gs2Inventory.Request
 	public class GetCurrentItemModelMasterRequest : Gs2Request<GetCurrentItemModelMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentItemModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -38,30 +38,37 @@ namespace Gs2.Gs2Matchmaking.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Rating WithRatingId(string ratingId) {
             this.RatingId = ratingId;
             return this;
         }
+
         public Rating WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Rating WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Rating WithRateValue(float? rateValue) {
             this.RateValue = rateValue;
             return this;
         }
+
         public Rating WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Rating WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Rating WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -37,18 +37,22 @@ namespace Gs2.Gs2JobQueue.Request
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeDeadLetterJobsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeDeadLetterJobsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeDeadLetterJobsByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeDeadLetterJobsByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

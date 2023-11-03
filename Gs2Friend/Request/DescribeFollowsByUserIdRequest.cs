@@ -38,22 +38,27 @@ namespace Gs2.Gs2Friend.Request
         public bool? WithProfile { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeFollowsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeFollowsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeFollowsByUserIdRequest WithWithProfile(bool? withProfile) {
             this.WithProfile = withProfile;
             return this;
         }
+
         public DescribeFollowsByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeFollowsByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

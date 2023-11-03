@@ -42,65 +42,63 @@ namespace Gs2.Gs2Mission.Model
         public Gs2.Gs2Mission.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
         public long? Revision { set; get; }
+
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Namespace WithTransactionSetting(Gs2.Gs2Mission.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public Namespace WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
             this.MissionCompleteScript = missionCompleteScript;
             return this;
         }
+
         public Namespace WithCounterIncrementScript(Gs2.Gs2Mission.Model.ScriptSetting counterIncrementScript) {
             this.CounterIncrementScript = counterIncrementScript;
             return this;
         }
+
         public Namespace WithReceiveRewardsScript(Gs2.Gs2Mission.Model.ScriptSetting receiveRewardsScript) {
             this.ReceiveRewardsScript = receiveRewardsScript;
             return this;
         }
+
         public Namespace WithCompleteNotification(Gs2.Gs2Mission.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
         }
+
         public Namespace WithLogSetting(Gs2.Gs2Mission.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
+
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-        [Obsolete("This method is deprecated")]
-        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public Namespace WithKeyId(string keyId) {
-            this.KeyId = keyId;
-            return this;
-        }
+
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;
@@ -177,8 +175,6 @@ namespace Gs2.Gs2Mission.Model
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Mission.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
         }
 
@@ -196,8 +192,6 @@ namespace Gs2.Gs2Mission.Model
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["revision"] = Revision,
             };
         }
@@ -248,14 +242,6 @@ namespace Gs2.Gs2Mission.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write(long.Parse(UpdatedAt.ToString()));
-            }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
@@ -355,22 +341,6 @@ namespace Gs2.Gs2Mission.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
             }
             if (Revision == null && Revision == other.Revision)
             {

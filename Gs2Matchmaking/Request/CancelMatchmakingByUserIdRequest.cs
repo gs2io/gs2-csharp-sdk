@@ -37,14 +37,17 @@ namespace Gs2.Gs2Matchmaking.Request
         public string GatheringName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CancelMatchmakingByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CancelMatchmakingByUserIdRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;
         }
+
         public CancelMatchmakingByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -39,34 +39,42 @@ namespace Gs2.Gs2JobQueue.Model
         public Gs2.Gs2JobQueue.Model.JobResultBody[] Result { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public DeadLetterJob WithDeadLetterJobId(string deadLetterJobId) {
             this.DeadLetterJobId = deadLetterJobId;
             return this;
         }
+
         public DeadLetterJob WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public DeadLetterJob WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DeadLetterJob WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
         }
+
         public DeadLetterJob WithArgs(string args) {
             this.Args = args;
             return this;
         }
+
         public DeadLetterJob WithResult(Gs2.Gs2JobQueue.Model.JobResultBody[] result) {
             this.Result = result;
             return this;
         }
+
         public DeadLetterJob WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public DeadLetterJob WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

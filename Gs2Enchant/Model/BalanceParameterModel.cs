@@ -37,26 +37,32 @@ namespace Gs2.Gs2Enchant.Model
         public long? TotalValue { set; get; }
         public string InitialValueStrategy { set; get; }
         public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
+
         public BalanceParameterModel WithBalanceParameterModelId(string balanceParameterModelId) {
             this.BalanceParameterModelId = balanceParameterModelId;
             return this;
         }
+
         public BalanceParameterModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public BalanceParameterModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public BalanceParameterModel WithTotalValue(long? totalValue) {
             this.TotalValue = totalValue;
             return this;
         }
+
         public BalanceParameterModel WithInitialValueStrategy(string initialValueStrategy) {
             this.InitialValueStrategy = initialValueStrategy;
             return this;
         }
+
         public BalanceParameterModel WithParameters(Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] parameters) {
             this.Parameters = parameters;
             return this;

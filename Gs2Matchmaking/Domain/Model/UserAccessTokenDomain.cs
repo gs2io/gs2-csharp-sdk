@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -73,19 +71,13 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MatchmakingRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -102,7 +94,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -116,19 +107,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                CreateGatheringResult result = null;
-                    result = await this._client.CreateGatheringAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -149,10 +131,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -162,25 +141,16 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> CreateGatheringAsync(
+            #else
         public async Task<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> CreateGatheringAsync(
+            #endif
             CreateGatheringRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.CreateGatheringFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -188,11 +158,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 result = await this._client.CreateGatheringAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -213,10 +182,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -227,18 +193,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> CreateGatheringAsync(
-            CreateGatheringRequest request
-        ) {
-            var future = CreateGatheringFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateGatheringFuture.")]
         public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain> CreateGathering(
             CreateGatheringRequest request
@@ -253,7 +207,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         )
         {
             return new DoMatchmakingIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -266,13 +220,13 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Gathering> DoMatchmaking(
             #endif
         #else
-        public DoMatchmakingIterator DoMatchmaking(
+        public DoMatchmakingIterator DoMatchmakingAsync(
         #endif
             Gs2.Gs2Matchmaking.Model.Player player
         )
         {
             return new DoMatchmakingIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -290,7 +244,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public ulong SubscribeDoMatchmaking(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 "matchmaking",
                 callback
             );
@@ -298,7 +252,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public void UnsubscribeDoMatchmaking(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 "matchmaking",
                 callbackId
             );
@@ -308,10 +262,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             string gatheringName
         ) {
             return new Gs2.Gs2Matchmaking.Domain.Model.GatheringAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 gatheringName
@@ -325,10 +276,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             string keyId
         ) {
             return new Gs2.Gs2Matchmaking.Domain.Model.BallotAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 ratingName,
@@ -343,7 +291,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         )
         {
             return new DescribeRatingsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -355,12 +303,12 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> Ratings(
             #endif
         #else
-        public DescribeRatingsIterator Ratings(
+        public DescribeRatingsIterator RatingsAsync(
         #endif
         )
         {
             return new DescribeRatingsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -377,7 +325,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public ulong SubscribeRatings(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -389,7 +337,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public void UnsubscribeRatings(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -403,10 +351,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             string ratingName
         ) {
             return new Gs2.Gs2Matchmaking.Domain.Model.RatingAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 ratingName

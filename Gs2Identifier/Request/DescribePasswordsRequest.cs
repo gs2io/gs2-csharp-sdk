@@ -36,14 +36,17 @@ namespace Gs2.Gs2Identifier.Request
         public string UserName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribePasswordsRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
+
         public DescribePasswordsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribePasswordsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -42,34 +42,42 @@ namespace Gs2.Gs2Matchmaking.Request
         public long? ExpiresAt { set; get; }
         public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CreateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
             this.Player = player;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
             this.AttributeRanges = attributeRanges;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithCapacityOfRoles(Gs2.Gs2Matchmaking.Model.CapacityOfRole[] capacityOfRoles) {
             this.CapacityOfRoles = capacityOfRoles;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
+
         public CreateGatheringByUserIdRequest WithExpiresAtTimeSpan(Gs2.Gs2Matchmaking.Model.TimeSpan_ expiresAtTimeSpan) {
             this.ExpiresAtTimeSpan = expiresAtTimeSpan;
             return this;

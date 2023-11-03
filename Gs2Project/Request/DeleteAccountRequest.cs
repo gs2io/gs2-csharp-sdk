@@ -34,6 +34,7 @@ namespace Gs2.Gs2Project.Request
 	public class DeleteAccountRequest : Gs2Request<DeleteAccountRequest>
 	{
         public string AccountToken { set; get; }
+
         public DeleteAccountRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;

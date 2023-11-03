@@ -36,14 +36,17 @@ namespace Gs2.Gs2JobQueue.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string JobName { set; get; }
+
         public GetJobResultRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetJobResultRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetJobResultRequest WithJobName(string jobName) {
             this.JobName = jobName;
             return this;

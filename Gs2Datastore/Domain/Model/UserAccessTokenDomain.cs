@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -75,19 +73,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2DatastoreRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -104,7 +96,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -118,19 +109,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                PrepareUploadResult result = null;
-                    result = await this._client.PrepareUploadAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -151,10 +133,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -165,25 +144,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareUploadAsync(
+            #else
         public async Task<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareUploadAsync(
+            #endif
             PrepareUploadRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.PrepareUploadFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -191,11 +161,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 result = await this._client.PrepareUploadAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -216,10 +185,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -231,18 +197,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareUploadAsync(
-            PrepareUploadRequest request
-        ) {
-            var future = PrepareUploadFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PrepareUploadFuture.")]
         public IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareUpload(
             PrepareUploadRequest request
@@ -258,7 +212,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -272,19 +225,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                PrepareDownloadResult result = null;
-                    result = await this._client.PrepareDownloadAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -305,10 +249,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -320,25 +261,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadAsync(
+            #else
         public async Task<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadAsync(
+            #endif
             PrepareDownloadRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.PrepareDownloadFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -346,11 +278,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 result = await this._client.PrepareDownloadAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -371,10 +302,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -387,18 +315,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadAsync(
-            PrepareDownloadRequest request
-        ) {
-            var future = PrepareDownloadFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PrepareDownloadFuture.")]
         public IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownload(
             PrepareDownloadRequest request
@@ -414,7 +330,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -428,19 +343,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                PrepareDownloadByGenerationResult result = null;
-                    result = await this._client.PrepareDownloadByGenerationAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -461,10 +367,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -476,25 +379,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadByGenerationAsync(
+            #else
         public async Task<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadByGenerationAsync(
+            #endif
             PrepareDownloadByGenerationRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.PrepareDownloadByGenerationFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -502,11 +396,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 result = await this._client.PrepareDownloadByGenerationAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -527,10 +420,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     this._accessToken,
                     result?.Item?.Name
@@ -543,18 +433,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadByGenerationAsync(
-            PrepareDownloadByGenerationRequest request
-        ) {
-            var future = PrepareDownloadByGenerationFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PrepareDownloadByGenerationFuture.")]
         public IFuture<Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain> PrepareDownloadByGeneration(
             PrepareDownloadByGenerationRequest request
@@ -569,7 +447,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
         )
         {
             return new DescribeDataObjectsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -582,13 +460,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public Gs2Iterator<Gs2.Gs2Datastore.Model.DataObject> DataObjects(
             #endif
         #else
-        public DescribeDataObjectsIterator DataObjects(
+        public DescribeDataObjectsIterator DataObjectsAsync(
         #endif
             string status
         )
         {
             return new DescribeDataObjectsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken,
@@ -606,7 +484,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
         public ulong SubscribeDataObjects(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Datastore.Model.DataObject>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Datastore.Model.DataObject>(
                 Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -618,7 +496,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
         public void UnsubscribeDataObjects(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Datastore.Model.DataObject>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Datastore.Model.DataObject>(
                 Gs2.Gs2Datastore.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -632,10 +510,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             string dataObjectName
         ) {
             return new Gs2.Gs2Datastore.Domain.Model.DataObjectAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 dataObjectName

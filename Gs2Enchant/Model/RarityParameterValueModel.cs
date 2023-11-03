@@ -36,22 +36,27 @@ namespace Gs2.Gs2Enchant.Model
         public string ResourceName { set; get; }
         public long? ResourceValue { set; get; }
         public int? Weight { set; get; }
+
         public RarityParameterValueModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public RarityParameterValueModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public RarityParameterValueModel WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;
         }
+
         public RarityParameterValueModel WithResourceValue(long? resourceValue) {
             this.ResourceValue = resourceValue;
             return this;
         }
+
         public RarityParameterValueModel WithWeight(int? weight) {
             this.Weight = weight;
             return this;

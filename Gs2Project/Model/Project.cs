@@ -44,54 +44,67 @@ namespace Gs2.Gs2Project.Model
         public string EventBridgeAwsRegion { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public Project WithProjectId(string projectId) {
             this.ProjectId = projectId;
             return this;
         }
+
         public Project WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
+
         public Project WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Project WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Project WithPlan(string plan) {
             this.Plan = plan;
             return this;
         }
+
         public Project WithRegions(Gs2.Gs2Project.Model.Gs2Region[] regions) {
             this.Regions = regions;
             return this;
         }
+
         public Project WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
         }
+
         public Project WithEnableEventBridge(string enableEventBridge) {
             this.EnableEventBridge = enableEventBridge;
             return this;
         }
+
         public Project WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
+
         public Project WithEventBridgeAwsAccountId(string eventBridgeAwsAccountId) {
             this.EventBridgeAwsAccountId = eventBridgeAwsAccountId;
             return this;
         }
+
         public Project WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
             this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;
         }
+
         public Project WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Project WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

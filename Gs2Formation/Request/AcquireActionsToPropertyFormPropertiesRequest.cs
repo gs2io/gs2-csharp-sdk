@@ -40,26 +40,32 @@ namespace Gs2.Gs2Formation.Request
         public Gs2.Core.Model.AcquireAction AcquireAction { set; get; }
         public Gs2.Gs2Formation.Model.AcquireActionConfig[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public AcquireActionsToPropertyFormPropertiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public AcquireActionsToPropertyFormPropertiesRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public AcquireActionsToPropertyFormPropertiesRequest WithPropertyFormModelName(string propertyFormModelName) {
             this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
+
         public AcquireActionsToPropertyFormPropertiesRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public AcquireActionsToPropertyFormPropertiesRequest WithAcquireAction(Gs2.Core.Model.AcquireAction acquireAction) {
             this.AcquireAction = acquireAction;
             return this;
         }
+
         public AcquireActionsToPropertyFormPropertiesRequest WithConfig(Gs2.Gs2Formation.Model.AcquireActionConfig[] config) {
             this.Config = config;
             return this;

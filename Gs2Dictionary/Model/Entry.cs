@@ -36,22 +36,27 @@ namespace Gs2.Gs2Dictionary.Model
         public string Name { set; get; }
         public long? AcquiredAt { set; get; }
         public long? Revision { set; get; }
+
         public Entry WithEntryId(string entryId) {
             this.EntryId = entryId;
             return this;
         }
+
         public Entry WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Entry WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Entry WithAcquiredAt(long? acquiredAt) {
             this.AcquiredAt = acquiredAt;
             return this;
         }
+
         public Entry WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Matchmaking.Request
         public string NamespaceName { set; get; }
         public string RatingName { set; get; }
         public string GatheringName { set; get; }
+
         public CommitVoteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CommitVoteRequest WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;
         }
+
         public CommitVoteRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;

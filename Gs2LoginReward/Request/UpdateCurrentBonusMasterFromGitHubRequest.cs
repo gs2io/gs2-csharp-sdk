@@ -35,10 +35,12 @@ namespace Gs2.Gs2LoginReward.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2LoginReward.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentBonusMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentBonusMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2LoginReward.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Money.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MoneyRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -72,19 +70,13 @@ namespace Gs2.Gs2Money.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MoneyRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -99,7 +91,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeWalletsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -111,12 +103,12 @@ namespace Gs2.Gs2Money.Domain.Model
         public Gs2Iterator<Gs2.Gs2Money.Model.Wallet> Wallets(
             #endif
         #else
-        public DescribeWalletsByUserIdIterator Wallets(
+        public DescribeWalletsByUserIdIterator WalletsAsync(
         #endif
         )
         {
             return new DescribeWalletsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -133,7 +125,7 @@ namespace Gs2.Gs2Money.Domain.Model
 
         public ulong SubscribeWallets(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Money.Model.Wallet>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money.Model.Wallet>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -145,7 +137,7 @@ namespace Gs2.Gs2Money.Domain.Model
 
         public void UnsubscribeWallets(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Money.Model.Wallet>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money.Model.Wallet>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -159,10 +151,7 @@ namespace Gs2.Gs2Money.Domain.Model
             int? slot
         ) {
             return new Gs2.Gs2Money.Domain.Model.WalletDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 slot
@@ -177,7 +166,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeReceiptsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -192,7 +181,7 @@ namespace Gs2.Gs2Money.Domain.Model
         public Gs2Iterator<Gs2.Gs2Money.Model.Receipt> Receipts(
             #endif
         #else
-        public DescribeReceiptsIterator Receipts(
+        public DescribeReceiptsIterator ReceiptsAsync(
         #endif
             int? slot,
             long? begin,
@@ -200,7 +189,7 @@ namespace Gs2.Gs2Money.Domain.Model
         )
         {
             return new DescribeReceiptsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -220,7 +209,7 @@ namespace Gs2.Gs2Money.Domain.Model
 
         public ulong SubscribeReceipts(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Money.Model.Receipt>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money.Model.Receipt>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -232,7 +221,7 @@ namespace Gs2.Gs2Money.Domain.Model
 
         public void UnsubscribeReceipts(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Money.Model.Receipt>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money.Model.Receipt>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -246,10 +235,7 @@ namespace Gs2.Gs2Money.Domain.Model
             string transactionId
         ) {
             return new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 transactionId
@@ -292,7 +278,6 @@ namespace Gs2.Gs2Money.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
@@ -306,19 +291,10 @@ namespace Gs2.Gs2Money.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                RecordReceiptResult result = null;
-                    result = await this._client.RecordReceiptAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -339,10 +315,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.TransactionId
@@ -352,25 +325,16 @@ namespace Gs2.Gs2Money.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RecordReceiptAsync(
+            #else
         public async Task<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RecordReceiptAsync(
+            #endif
             RecordReceiptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var future = this._client.RecordReceiptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
@@ -378,11 +342,10 @@ namespace Gs2.Gs2Money.Domain.Model
                 result = await this._client.RecordReceiptAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -403,10 +366,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.TransactionId
@@ -417,18 +377,6 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RecordReceiptAsync(
-            RecordReceiptRequest request
-        ) {
-            var future = RecordReceiptFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to RecordReceiptFuture.")]
         public IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RecordReceipt(
             RecordReceiptRequest request
@@ -444,7 +392,6 @@ namespace Gs2.Gs2Money.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
@@ -458,19 +405,10 @@ namespace Gs2.Gs2Money.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                RevertRecordReceiptResult result = null;
-                    result = await this._client.RevertRecordReceiptAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -491,10 +429,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.TransactionId
@@ -504,25 +439,16 @@ namespace Gs2.Gs2Money.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RevertRecordReceiptAsync(
+            #else
         public async Task<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RevertRecordReceiptAsync(
+            #endif
             RevertRecordReceiptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var future = this._client.RevertRecordReceiptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
@@ -530,11 +456,10 @@ namespace Gs2.Gs2Money.Domain.Model
                 result = await this._client.RevertRecordReceiptAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -555,10 +480,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Money.Domain.Model.ReceiptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.TransactionId
@@ -569,18 +491,6 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RevertRecordReceiptAsync(
-            RevertRecordReceiptRequest request
-        ) {
-            var future = RevertRecordReceiptFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to RevertRecordReceiptFuture.")]
         public IFuture<Gs2.Gs2Money.Domain.Model.ReceiptDomain> RevertRecordReceipt(
             RevertRecordReceiptRequest request

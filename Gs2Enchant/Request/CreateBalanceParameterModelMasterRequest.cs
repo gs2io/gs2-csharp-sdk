@@ -40,30 +40,37 @@ namespace Gs2.Gs2Enchant.Request
         public long? TotalValue { set; get; }
         public string InitialValueStrategy { set; get; }
         public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
+
         public CreateBalanceParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateBalanceParameterModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateBalanceParameterModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateBalanceParameterModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateBalanceParameterModelMasterRequest WithTotalValue(long? totalValue) {
             this.TotalValue = totalValue;
             return this;
         }
+
         public CreateBalanceParameterModelMasterRequest WithInitialValueStrategy(string initialValueStrategy) {
             this.InitialValueStrategy = initialValueStrategy;
             return this;
         }
+
         public CreateBalanceParameterModelMasterRequest WithParameters(Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] parameters) {
             this.Parameters = parameters;
             return this;

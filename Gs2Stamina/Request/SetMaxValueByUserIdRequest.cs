@@ -38,18 +38,22 @@ namespace Gs2.Gs2Stamina.Request
         public string UserId { set; get; }
         public int? MaxValue { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public SetMaxValueByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public SetMaxValueByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
+
         public SetMaxValueByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public SetMaxValueByUserIdRequest WithMaxValue(int? maxValue) {
             this.MaxValue = maxValue;
             return this;

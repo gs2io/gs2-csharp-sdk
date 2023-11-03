@@ -35,10 +35,12 @@ namespace Gs2.Gs2SkillTree.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public MarkReleaseByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public MarkReleaseByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -40,26 +40,32 @@ namespace Gs2.Gs2Chat.Request
         public string Metadata { set; get; }
         public string Password { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public PostRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public PostRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public PostRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public PostRequest WithCategory(int? category) {
             this.Category = category;
             return this;
         }
+
         public PostRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public PostRequest WithPassword(string password) {
             this.Password = password;
             return this;

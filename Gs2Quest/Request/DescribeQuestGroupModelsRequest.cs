@@ -34,6 +34,7 @@ namespace Gs2.Gs2Quest.Request
 	public class DescribeQuestGroupModelsRequest : Gs2Request<DescribeQuestGroupModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeQuestGroupModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -34,6 +34,7 @@ namespace Gs2.Gs2Log.Request
 	public class CreateInsightRequest : Gs2Request<CreateInsightRequest>
 	{
         public string NamespaceName { set; get; }
+
         public CreateInsightRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

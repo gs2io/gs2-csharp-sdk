@@ -40,38 +40,47 @@ namespace Gs2.Gs2Stamina.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public MaxStaminaTableMaster WithMaxStaminaTableId(string maxStaminaTableId) {
             this.MaxStaminaTableId = maxStaminaTableId;
             return this;
         }
+
         public MaxStaminaTableMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public MaxStaminaTableMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public MaxStaminaTableMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public MaxStaminaTableMaster WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public MaxStaminaTableMaster WithValues(int[] values) {
             this.Values = values;
             return this;
         }
+
         public MaxStaminaTableMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public MaxStaminaTableMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public MaxStaminaTableMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;
@@ -219,9 +228,7 @@ namespace Gs2.Gs2Stamina.Model
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    if (value != null) {
-                        writer.Write(int.Parse(value.ToString()));
-                    }
+                    writer.Write(int.Parse(value.ToString()));
                 }
                 writer.WriteArrayEnd();
             }

@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 {
 
     public partial class BigInventoryAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -74,20 +72,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public string InventoryName => _inventoryName;
 
         public BigInventoryAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             string inventoryName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2InventoryRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -104,7 +96,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             return new DescribeBigItemsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,
@@ -117,12 +109,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public Gs2Iterator<Gs2.Gs2Inventory.Model.BigItem> BigItems(
             #endif
         #else
-        public DescribeBigItemsIterator BigItems(
+        public DescribeBigItemsIterator BigItemsAsync(
         #endif
         )
         {
             return new DescribeBigItemsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.InventoryName,
@@ -140,7 +132,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public ulong SubscribeBigItems(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigItem>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigItem>(
                 Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -153,7 +145,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public void UnsubscribeBigItems(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigItem>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigItem>(
                 Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -168,10 +160,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
             string itemName
         ) {
             return new Gs2.Gs2Inventory.Domain.Model.BigItemAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 this.InventoryName,
@@ -211,7 +200,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.BigInventory> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.BigInventory>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.BigInventory>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheKey(
                         this.InventoryName?.ToString()
@@ -222,10 +211,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.BigInventory>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Inventory.Model.BigInventory> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Inventory.Model.BigInventory> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Inventory.Model.BigInventory>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.BigInventory>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheKey(
                         this.InventoryName?.ToString()
@@ -237,16 +231,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Inventory.Model.BigInventory> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Inventory.Model.BigInventory> Model()
         {
@@ -270,7 +254,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.BigInventory> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheKey(
                     this.InventoryName.ToString()
@@ -281,7 +265,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Inventory.Model.BigInventory>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Inventory.Model.BigInventory>(
                 _parentKey,
                 Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheKey(
                     this.InventoryName.ToString()

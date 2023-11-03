@@ -34,14 +34,17 @@ namespace Gs2.Gs2Matchmaking.Model
         public string Name { set; get; }
         public int? Min { set; get; }
         public int? Max { set; get; }
+
         public AttributeRange WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public AttributeRange WithMin(int? min) {
             this.Min = min;
             return this;
         }
+
         public AttributeRange WithMax(int? max) {
             this.Max = max;
             return this;

@@ -37,18 +37,22 @@ namespace Gs2.Gs2Experience.Request
         public string AccessToken { set; get; }
         public string ExperienceName { set; get; }
         public string PropertyId { set; get; }
+
         public GetStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetStatusRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetStatusRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
+
         public GetStatusRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;

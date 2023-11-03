@@ -23,7 +23,9 @@
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ArrangeThisQualifier
 // ReSharper disable NotAccessedField.Local
+// ReSharper disable InconsistentNaming
 
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 #pragma warning disable 1998
 
 using System;
@@ -48,8 +50,6 @@ using Cysharp.Threading.Tasks.Linq;
     #else
 using System.Collections;
 using UnityEngine.Events;
-using Gs2.Core;
-using Gs2.Core.Exception;
     #endif
 #else
 using System.Collections.Generic;

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Enhance.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeRateModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeRateModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeRateModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

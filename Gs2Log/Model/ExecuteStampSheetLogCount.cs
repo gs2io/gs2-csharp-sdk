@@ -36,22 +36,27 @@ namespace Gs2.Gs2Log.Model
         public string UserId { set; get; }
         public string Action { set; get; }
         public long? Count { set; get; }
+
         public ExecuteStampSheetLogCount WithService(string service) {
             this.Service = service;
             return this;
         }
+
         public ExecuteStampSheetLogCount WithMethod(string method) {
             this.Method = method;
             return this;
         }
+
         public ExecuteStampSheetLogCount WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public ExecuteStampSheetLogCount WithAction(string action) {
             this.Action = action;
             return this;
         }
+
         public ExecuteStampSheetLogCount WithCount(long? count) {
             this.Count = count;
             return this;

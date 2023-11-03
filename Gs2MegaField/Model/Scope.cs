@@ -34,14 +34,17 @@ namespace Gs2.Gs2MegaField.Model
         public string LayerName { set; get; }
         public float? R { set; get; }
         public int? Limit { set; get; }
+
         public Scope WithLayerName(string layerName) {
             this.LayerName = layerName;
             return this;
         }
+
         public Scope WithR(float? r) {
             this.R = r;
             return this;
         }
+
         public Scope WithLimit(int? limit) {
             this.Limit = limit;
             return this;

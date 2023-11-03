@@ -35,10 +35,12 @@ namespace Gs2.Gs2Project.Request
 	{
         public string AccountToken { set; get; }
         public string BillingMethodName { set; get; }
+
         public DeleteBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public DeleteBillingMethodRequest WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;

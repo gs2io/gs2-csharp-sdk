@@ -35,10 +35,12 @@ namespace Gs2.Gs2SkillTree.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2SkillTree.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentTreeMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentTreeMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2SkillTree.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

@@ -37,14 +37,17 @@ namespace Gs2.Gs2Chat.Request
         public string RoomName { set; get; }
         public string AccessToken { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteRoomRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public DeleteRoomRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

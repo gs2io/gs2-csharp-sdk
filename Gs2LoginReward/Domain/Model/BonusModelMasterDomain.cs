@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 {
 
     public partial class BonusModelMasterDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
         private readonly string _namespaceName;
         private readonly string _bonusModelName;
@@ -70,19 +68,13 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         public string BonusModelName => _bonusModelName;
 
         public BonusModelMasterDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string bonusModelName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LoginRewardRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._bonusModelName = bonusModelName;
@@ -128,7 +120,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Model.BonusModelMaster> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithBonusModelName(this.BonusModelName);
@@ -142,7 +133,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                             request.BonusModelName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                        this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                             _parentKey,
                             key,
                             null,
@@ -161,36 +152,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithBonusModelName(this.BonusModelName);
-                GetBonusModelMasterResult result = null;
-                try {
-                    result = await this._client.GetBonusModelMasterAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "bonusModelMaster")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -213,44 +178,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Model.BonusModelMaster>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2LoginReward.Model.BonusModelMaster> GetAsync(
+            #else
         private async Task<Gs2.Gs2LoginReward.Model.BonusModelMaster> GetAsync(
+            #endif
             GetBonusModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.GetBonusModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "bonusModelMaster")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithBonusModelName(this.BonusModelName);
@@ -263,7 +200,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                     request.BonusModelName.ToString()
                     );
-                _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                     _parentKey,
                     key,
                     null,
@@ -275,11 +212,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -309,7 +245,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithBonusModelName(this.BonusModelName);
@@ -323,19 +258,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithBonusModelName(this.BonusModelName);
-                UpdateBonusModelMasterResult result = null;
-                    result = await this._client.UpdateBonusModelMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -360,25 +286,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> UpdateAsync(
+            #endif
             UpdateBonusModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.UpdateBonusModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithBonusModelName(this.BonusModelName);
@@ -386,11 +303,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 result = await this._client.UpdateBonusModelMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -416,18 +332,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> UpdateAsync(
-            UpdateBonusModelMasterRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> Update(
             UpdateBonusModelMasterRequest request
@@ -443,7 +347,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithBonusModelName(this.BonusModelName);
@@ -457,7 +360,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                             request.BonusModelName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                        this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                             _parentKey,
                             key,
                             null,
@@ -476,36 +379,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithBonusModelName(this.BonusModelName);
-                DeleteBonusModelMasterResult result = null;
-                try {
-                    result = await this._client.DeleteBonusModelMasterAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "bonusModelMaster")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -525,44 +402,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> DeleteAsync(
+            #endif
             DeleteBonusModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithBonusModelName(this.BonusModelName);
-            var future = this._client.DeleteBonusModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
-                        request.BonusModelName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "bonusModelMaster")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithBonusModelName(this.BonusModelName);
@@ -575,7 +424,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                     request.BonusModelName.ToString()
                     );
-                _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                     _parentKey,
                     key,
                     null,
@@ -587,11 +436,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -612,18 +460,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> DeleteAsync(
-            DeleteBonusModelMasterRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain> Delete(
             DeleteBonusModelMasterRequest request
@@ -641,7 +477,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2LoginReward.Model.BonusModelMaster> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                     _parentKey,
                     Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                         this.BonusModelName?.ToString()
@@ -659,7 +495,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                             var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                                     this.BonusModelName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                            this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                                 _parentKey,
                                 key,
                                 null,
@@ -678,7 +514,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                         _parentKey,
                         Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                             this.BonusModelName?.ToString()
@@ -689,10 +525,15 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2LoginReward.Model.BonusModelMaster>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2LoginReward.Model.BonusModelMaster> ModelAsync()
+            #else
         public async Task<Gs2.Gs2LoginReward.Model.BonusModelMaster> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                     _parentKey,
                     Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                         this.BonusModelName?.ToString()
@@ -707,7 +548,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                                     this.BonusModelName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                    this._gs2.Cache.Put<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                         _parentKey,
                         key,
                         null,
@@ -719,7 +560,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                         _parentKey,
                         Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                             this.BonusModelName?.ToString()
@@ -732,16 +573,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2LoginReward.Model.BonusModelMaster> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2LoginReward.Model.BonusModelMaster> Model()
         {
@@ -765,7 +596,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2LoginReward.Model.BonusModelMaster> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                     this.BonusModelName.ToString()
@@ -776,7 +607,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
                 _parentKey,
                 Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
                     this.BonusModelName.ToString()

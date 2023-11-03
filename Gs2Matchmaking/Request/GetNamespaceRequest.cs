@@ -34,6 +34,7 @@ namespace Gs2.Gs2Matchmaking.Request
 	public class GetNamespaceRequest : Gs2Request<GetNamespaceRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

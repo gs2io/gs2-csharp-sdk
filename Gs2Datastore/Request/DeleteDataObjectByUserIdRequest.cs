@@ -37,14 +37,17 @@ namespace Gs2.Gs2Datastore.Request
         public string UserId { set; get; }
         public string DataObjectName { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteDataObjectByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteDataObjectByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DeleteDataObjectByUserIdRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;

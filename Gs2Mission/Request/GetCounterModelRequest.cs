@@ -35,10 +35,12 @@ namespace Gs2.Gs2Mission.Request
 	{
         public string NamespaceName { set; get; }
         public string CounterName { set; get; }
+
         public GetCounterModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetCounterModelRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

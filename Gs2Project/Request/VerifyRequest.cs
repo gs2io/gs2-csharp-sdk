@@ -34,6 +34,7 @@ namespace Gs2.Gs2Project.Request
 	public class VerifyRequest : Gs2Request<VerifyRequest>
 	{
         public string VerifyToken { set; get; }
+
         public VerifyRequest WithVerifyToken(string verifyToken) {
             this.VerifyToken = verifyToken;
             return this;

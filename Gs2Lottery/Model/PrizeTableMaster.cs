@@ -39,34 +39,42 @@ namespace Gs2.Gs2Lottery.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public PrizeTableMaster WithPrizeTableId(string prizeTableId) {
             this.PrizeTableId = prizeTableId;
             return this;
         }
+
         public PrizeTableMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public PrizeTableMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public PrizeTableMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public PrizeTableMaster WithPrizes(Gs2.Gs2Lottery.Model.Prize[] prizes) {
             this.Prizes = prizes;
             return this;
         }
+
         public PrizeTableMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public PrizeTableMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public PrizeTableMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

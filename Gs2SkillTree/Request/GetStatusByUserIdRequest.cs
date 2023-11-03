@@ -35,10 +35,12 @@ namespace Gs2.Gs2SkillTree.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+
         public GetStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -34,6 +34,7 @@ namespace Gs2.Gs2Identifier.Request
 	public class DeletePasswordRequest : Gs2Request<DeletePasswordRequest>
 	{
         public string UserName { set; get; }
+
         public DeletePasswordRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

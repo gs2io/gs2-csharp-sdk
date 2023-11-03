@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 {
 
     public partial class FormDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -78,21 +76,15 @@ namespace Gs2.Gs2Formation.Domain.Model
         public int? Index => _index;
 
         public FormDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string moldModelName,
             int? index
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2FormationRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -146,7 +138,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Form> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -162,7 +153,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             request.Index.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                             _parentKey,
                             key,
                             null,
@@ -181,38 +172,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                GetFormByUserIdResult result = null;
-                try {
-                    result = await this._client.GetFormByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                        request.Index.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "form")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -283,46 +246,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Form>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Formation.Model.Form> GetAsync(
+            #else
         private async Task<Gs2.Gs2Formation.Model.Form> GetAsync(
+            #endif
             GetFormByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithMoldModelName(this.MoldModelName)
-                .WithIndex(this.Index);
-            var future = this._client.GetFormByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                        request.Index.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "form")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -337,7 +270,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                     request.Index.ToString()
                     );
-                _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                     _parentKey,
                     key,
                     null,
@@ -349,11 +282,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -431,7 +363,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -447,7 +378,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             request.Index.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                             _parentKey,
                             key,
                             null,
@@ -466,38 +397,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                GetFormWithSignatureByUserIdResult result = null;
-                try {
-                    result = await this._client.GetFormWithSignatureByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                        request.Index.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "form")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -572,46 +475,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> GetWithSignatureAsync(
+            #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormDomain> GetWithSignatureAsync(
+            #endif
             GetFormWithSignatureByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithMoldModelName(this.MoldModelName)
-                .WithIndex(this.Index);
-            var future = this._client.GetFormWithSignatureByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                        request.Index.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "form")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -626,7 +499,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                     request.Index.ToString()
                     );
-                _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                     _parentKey,
                     key,
                     null,
@@ -638,11 +511,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -718,18 +590,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> GetWithSignatureAsync(
-            GetFormWithSignatureByUserIdRequest request
-        ) {
-            var future = GetWithSignatureFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetWithSignatureFuture.")]
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> GetWithSignature(
             GetFormWithSignatureByUserIdRequest request
@@ -745,7 +605,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -761,21 +620,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                SetFormByUserIdResult result = null;
-                    result = await this._client.SetFormByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -848,27 +696,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> SetAsync(
+            #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormDomain> SetAsync(
+            #endif
             SetFormByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithMoldModelName(this.MoldModelName)
-                .WithIndex(this.Index);
-            var future = this._client.SetFormByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -878,11 +715,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                 result = await this._client.SetFormByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -956,18 +792,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> SetAsync(
-            SetFormByUserIdRequest request
-        ) {
-            var future = SetFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SetFuture.")]
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> Set(
             SetFormByUserIdRequest request
@@ -983,7 +807,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -999,21 +822,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                AcquireActionsToFormPropertiesResult result = null;
-                    result = await this._client.AcquireActionsToFormPropertiesAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1051,10 +863,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -1064,7 +873,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -1077,27 +886,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireActionsToPropertiesAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> AcquireActionsToPropertiesAsync(
+            #endif
             AcquireActionsToFormPropertiesRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithMoldModelName(this.MoldModelName)
-                .WithIndex(this.Index);
-            var future = this._client.AcquireActionsToFormPropertiesFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -1107,11 +905,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                 result = await this._client.AcquireActionsToFormPropertiesAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1149,10 +946,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -1170,18 +964,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> AcquireActionsToPropertiesAsync(
-            AcquireActionsToFormPropertiesRequest request
-        ) {
-            var future = AcquireActionsToPropertiesFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to AcquireActionsToPropertiesFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> AcquireActionsToProperties(
             AcquireActionsToFormPropertiesRequest request
@@ -1197,7 +979,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -1213,7 +994,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             request.Index.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                             _parentKey,
                             key,
                             null,
@@ -1232,38 +1013,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                DeleteFormByUserIdResult result = null;
-                try {
-                    result = await this._client.DeleteFormByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                        request.Index.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "form")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1316,46 +1069,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormDomain> DeleteAsync(
+            #endif
             DeleteFormByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithMoldModelName(this.MoldModelName)
-                .WithIndex(this.Index);
-            var future = this._client.DeleteFormByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
-                        request.Index.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "form")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -1370,7 +1093,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                     request.Index.ToString()
                     );
-                _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                     _parentKey,
                     key,
                     null,
@@ -1382,11 +1105,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1440,18 +1162,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> DeleteAsync(
-            DeleteFormByUserIdRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> Delete(
             DeleteFormByUserIdRequest request
@@ -1469,7 +1179,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Form> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Form>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Form>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                         this.Index?.ToString()
@@ -1487,7 +1197,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                                     this.Index?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                            this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                                 _parentKey,
                                 key,
                                 null,
@@ -1506,7 +1216,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Formation.Model.Form>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Form>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             this.Index?.ToString()
@@ -1517,10 +1227,15 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Form>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Model.Form> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Formation.Model.Form> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.Form>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Form>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                         this.Index?.ToString()
@@ -1535,7 +1250,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                                     this.Index?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Formation.Model.Form>(
+                    this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Form>(
                         _parentKey,
                         key,
                         null,
@@ -1547,7 +1262,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Formation.Model.Form>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Form>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             this.Index?.ToString()
@@ -1560,16 +1275,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Model.Form> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Formation.Model.Form> Model()
         {
@@ -1593,7 +1298,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.Form> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                     this.Index.ToString()
@@ -1604,7 +1309,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.Form>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.Form>(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                     this.Index.ToString()

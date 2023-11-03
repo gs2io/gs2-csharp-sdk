@@ -35,18 +35,22 @@ namespace Gs2.Gs2Lottery.Model
         public string PrizeTableName { set; get; }
         public string UserId { set; get; }
         public Gs2.Gs2Lottery.Model.BoxItem[] Items { set; get; }
+
         public BoxItems WithBoxId(string boxId) {
             this.BoxId = boxId;
             return this;
         }
+
         public BoxItems WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
+
         public BoxItems WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public BoxItems WithItems(Gs2.Gs2Lottery.Model.BoxItem[] items) {
             this.Items = items;
             return this;

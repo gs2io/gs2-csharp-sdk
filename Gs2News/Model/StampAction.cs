@@ -14,6 +14,10 @@
  * permissions and limitations under the License.
  */
 
+// ReSharper disable ConvertSwitchStatementToSwitchExpression
+
+#pragma warning disable CS1522 // Empty switch block
+
 using System;
 using Gs2.Core.Control;
 using Gs2.Core.Model;

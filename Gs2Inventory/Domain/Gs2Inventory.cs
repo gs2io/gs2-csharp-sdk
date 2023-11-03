@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 
 using System;
 using System.Collections.Generic;
@@ -62,10 +63,7 @@ namespace Gs2.Gs2Inventory.Domain
 {
 
     public class Gs2Inventory {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
 
         private readonly String _parentKey;
@@ -74,17 +72,11 @@ namespace Gs2.Gs2Inventory.Domain
         public string UploadUrl { get; set; }
 
         public Gs2Inventory(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session
+            Gs2.Core.Domain.Gs2 gs2
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2InventoryRestClient(
-                session
+                gs2.RestSession
             );
             this._parentKey = "inventory";
         }
@@ -116,7 +108,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -137,10 +129,7 @@ namespace Gs2.Gs2Inventory.Domain
                     }
                 }
                 var domain = new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
                 self.OnComplete(domain);
@@ -171,7 +160,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -192,10 +181,7 @@ namespace Gs2.Gs2Inventory.Domain
                 }
             }
                 var domain = new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     result?.Item?.Name
                 );
             return domain;
@@ -250,7 +236,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -283,7 +269,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -340,7 +326,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -374,7 +360,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -432,7 +418,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -465,7 +451,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -522,7 +508,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -555,7 +541,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -612,7 +598,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -647,7 +633,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -706,7 +692,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -739,7 +725,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -796,7 +782,7 @@ namespace Gs2.Gs2Inventory.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -830,7 +816,7 @@ namespace Gs2.Gs2Inventory.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -866,7 +852,7 @@ namespace Gs2.Gs2Inventory.Domain
         )
         {
             return new DescribeNamespacesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
             );
         }
@@ -876,12 +862,12 @@ namespace Gs2.Gs2Inventory.Domain
         public Gs2Iterator<Gs2.Gs2Inventory.Model.Namespace> Namespaces(
             #endif
         #else
-        public DescribeNamespacesIterator Namespaces(
+        public DescribeNamespacesIterator NamespacesAsync(
         #endif
         )
         {
             return new DescribeNamespacesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -896,7 +882,7 @@ namespace Gs2.Gs2Inventory.Domain
 
         public ulong SubscribeNamespaces(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Inventory.Model.Namespace>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.Namespace>(
                 "inventory:Namespace",
                 callback
             );
@@ -904,7 +890,7 @@ namespace Gs2.Gs2Inventory.Domain
 
         public void UnsubscribeNamespaces(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.Namespace>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.Namespace>(
                 "inventory:Namespace",
                 callbackId
             );
@@ -914,10 +900,7 @@ namespace Gs2.Gs2Inventory.Domain
             string namespaceName
         ) {
             return new Gs2.Gs2Inventory.Domain.Model.NamespaceDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 namespaceName
             );
         }
@@ -1111,7 +1094,7 @@ namespace Gs2.Gs2Inventory.Domain
                                     parentKey,
                                     key,
                                     resultModel.Inventory,
-                                    resultModel.Items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
+                                    resultModel.Items == null || resultModel.Items.Length == 0 ? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes : resultModel.Items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
                                 );
                             }
                         }
@@ -1435,7 +1418,7 @@ namespace Gs2.Gs2Inventory.Domain
                                     parentKey,
                                     key,
                                     resultModel.Inventory,
-                                    resultModel.Items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
+                                    resultModel.Items == null || resultModel.Items.Length == 0 ? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes : resultModel.Items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
                                 );
                             }
                         }

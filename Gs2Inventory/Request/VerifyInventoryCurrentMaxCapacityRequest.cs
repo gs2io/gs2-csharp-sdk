@@ -39,22 +39,27 @@ namespace Gs2.Gs2Inventory.Request
         public string VerifyType { set; get; }
         public int? CurrentInventoryMaxCapacity { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public VerifyInventoryCurrentMaxCapacityRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public VerifyInventoryCurrentMaxCapacityRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public VerifyInventoryCurrentMaxCapacityRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public VerifyInventoryCurrentMaxCapacityRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
+
         public VerifyInventoryCurrentMaxCapacityRequest WithCurrentInventoryMaxCapacity(int? currentInventoryMaxCapacity) {
             this.CurrentInventoryMaxCapacity = currentInventoryMaxCapacity;
             return this;

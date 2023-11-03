@@ -40,26 +40,32 @@ namespace Gs2.Gs2Enhance.Request
         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
         public bool? Force { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CreateProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public CreateProgressByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
+
         public CreateProgressByUserIdRequest WithTargetItemSetId(string targetItemSetId) {
             this.TargetItemSetId = targetItemSetId;
             return this;
         }
+
         public CreateProgressByUserIdRequest WithMaterials(Gs2.Gs2Enhance.Model.Material[] materials) {
             this.Materials = materials;
             return this;
         }
+
         public CreateProgressByUserIdRequest WithForce(bool? force) {
             this.Force = force;
             return this;

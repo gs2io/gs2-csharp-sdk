@@ -38,30 +38,37 @@ namespace Gs2.Gs2Exchange.Model
         public string CommitHash { set; get; }
         public string BranchName { set; get; }
         public string TagName { set; get; }
+
         public GitHubCheckoutSetting WithApiKeyId(string apiKeyId) {
             this.ApiKeyId = apiKeyId;
             return this;
         }
+
         public GitHubCheckoutSetting WithRepositoryName(string repositoryName) {
             this.RepositoryName = repositoryName;
             return this;
         }
+
         public GitHubCheckoutSetting WithSourcePath(string sourcePath) {
             this.SourcePath = sourcePath;
             return this;
         }
+
         public GitHubCheckoutSetting WithReferenceType(string referenceType) {
             this.ReferenceType = referenceType;
             return this;
         }
+
         public GitHubCheckoutSetting WithCommitHash(string commitHash) {
             this.CommitHash = commitHash;
             return this;
         }
+
         public GitHubCheckoutSetting WithBranchName(string branchName) {
             this.BranchName = branchName;
             return this;
         }
+
         public GitHubCheckoutSetting WithTagName(string tagName) {
             this.TagName = tagName;
             return this;

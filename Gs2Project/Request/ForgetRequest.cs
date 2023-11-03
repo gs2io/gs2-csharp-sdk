@@ -35,10 +35,12 @@ namespace Gs2.Gs2Project.Request
 	{
         public string Email { set; get; }
         public string Lang { set; get; }
+
         public ForgetRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
+
         public ForgetRequest WithLang(string lang) {
             this.Lang = lang;
             return this;

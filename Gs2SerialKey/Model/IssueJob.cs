@@ -39,34 +39,42 @@ namespace Gs2.Gs2SerialKey.Model
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
+
         public IssueJob WithIssueJobId(string issueJobId) {
             this.IssueJobId = issueJobId;
             return this;
         }
+
         public IssueJob WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public IssueJob WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public IssueJob WithIssuedCount(int? issuedCount) {
             this.IssuedCount = issuedCount;
             return this;
         }
+
         public IssueJob WithIssueRequestCount(int? issueRequestCount) {
             this.IssueRequestCount = issueRequestCount;
             return this;
         }
+
         public IssueJob WithStatus(string status) {
             this.Status = status;
             return this;
         }
+
         public IssueJob WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public IssueJob WithRevision(long? revision) {
             this.Revision = revision;
             return this;

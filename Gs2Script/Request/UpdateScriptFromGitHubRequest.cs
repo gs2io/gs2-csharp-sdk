@@ -37,18 +37,22 @@ namespace Gs2.Gs2Script.Request
         public string ScriptName { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Script.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateScriptFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateScriptFromGitHubRequest WithScriptName(string scriptName) {
             this.ScriptName = scriptName;
             return this;
         }
+
         public UpdateScriptFromGitHubRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateScriptFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Script.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

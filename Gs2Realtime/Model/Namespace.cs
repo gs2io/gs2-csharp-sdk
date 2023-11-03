@@ -41,42 +41,52 @@ namespace Gs2.Gs2Realtime.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Namespace WithServerType(string serverType) {
             this.ServerType = serverType;
             return this;
         }
+
         public Namespace WithServerSpec(string serverSpec) {
             this.ServerSpec = serverSpec;
             return this;
         }
+
         public Namespace WithCreateNotification(Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
             this.CreateNotification = createNotification;
             return this;
         }
+
         public Namespace WithLogSetting(Gs2.Gs2Realtime.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
+
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

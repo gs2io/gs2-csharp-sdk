@@ -37,18 +37,22 @@ namespace Gs2.Gs2Friend.Request
         public string AccessToken { set; get; }
         public string TargetUserId { set; get; }
         public bool? WithProfile { set; get; }
+
         public GetFriendRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetFriendRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetFriendRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;
         }
+
         public GetFriendRequest WithWithProfile(bool? withProfile) {
             this.WithProfile = withProfile;
             return this;

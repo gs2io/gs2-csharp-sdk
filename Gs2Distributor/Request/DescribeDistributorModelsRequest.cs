@@ -34,6 +34,7 @@ namespace Gs2.Gs2Distributor.Request
 	public class DescribeDistributorModelsRequest : Gs2Request<DescribeDistributorModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeDistributorModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -34,6 +34,7 @@ namespace Gs2.Gs2Identifier.Request
 	public class GetUserRequest : Gs2Request<GetUserRequest>
 	{
         public string UserName { set; get; }
+
         public GetUserRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

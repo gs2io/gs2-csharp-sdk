@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2QuestRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -74,19 +72,13 @@ namespace Gs2.Gs2Quest.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2QuestRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -103,7 +95,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -117,27 +108,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                StartResult result = null;
-                    result = await this._client.StartAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.AccessToken,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -147,7 +126,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -160,25 +139,16 @@ namespace Gs2.Gs2Quest.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
+            #endif
             StartRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.StartFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -186,19 +156,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                 result = await this._client.StartAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
             var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.AccessToken,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -216,18 +182,6 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> StartAsync(
-            StartRequest request
-        ) {
-            var future = StartFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to StartFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Start(
             StartRequest request
@@ -239,10 +193,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         public Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain Progress(
         ) {
             return new Gs2.Gs2Quest.Domain.Model.ProgressAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken
             );
@@ -253,7 +204,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         )
         {
             return new DescribeCompletedQuestListsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -265,12 +216,12 @@ namespace Gs2.Gs2Quest.Domain.Model
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
             #endif
         #else
-        public DescribeCompletedQuestListsIterator CompletedQuestLists(
+        public DescribeCompletedQuestListsIterator CompletedQuestListsAsync(
         #endif
         )
         {
             return new DescribeCompletedQuestListsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -287,7 +238,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         public ulong SubscribeCompletedQuestLists(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -299,7 +250,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         public void UnsubscribeCompletedQuestLists(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -313,10 +264,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             string questGroupName
         ) {
             return new Gs2.Gs2Quest.Domain.Model.CompletedQuestListAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 questGroupName

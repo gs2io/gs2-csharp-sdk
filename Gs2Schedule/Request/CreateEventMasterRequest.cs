@@ -48,62 +48,77 @@ namespace Gs2.Gs2Schedule.Request
         public int? RepeatBeginHour { set; get; }
         public int? RepeatEndHour { set; get; }
         public string RelativeTriggerName { set; get; }
+
         public CreateEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateEventMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateEventMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateEventMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateEventMasterRequest WithScheduleType(string scheduleType) {
             this.ScheduleType = scheduleType;
             return this;
         }
+
         public CreateEventMasterRequest WithAbsoluteBegin(long? absoluteBegin) {
             this.AbsoluteBegin = absoluteBegin;
             return this;
         }
+
         public CreateEventMasterRequest WithAbsoluteEnd(long? absoluteEnd) {
             this.AbsoluteEnd = absoluteEnd;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
             this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
             this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
             this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
             this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatBeginHour(int? repeatBeginHour) {
             this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
+
         public CreateEventMasterRequest WithRepeatEndHour(int? repeatEndHour) {
             this.RepeatEndHour = repeatEndHour;
             return this;
         }
+
         public CreateEventMasterRequest WithRelativeTriggerName(string relativeTriggerName) {
             this.RelativeTriggerName = relativeTriggerName;
             return this;

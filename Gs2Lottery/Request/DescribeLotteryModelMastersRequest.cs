@@ -36,14 +36,17 @@ namespace Gs2.Gs2Lottery.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeLotteryModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeLotteryModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeLotteryModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

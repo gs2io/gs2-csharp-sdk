@@ -35,10 +35,12 @@ namespace Gs2.Gs2Experience.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
+
         public UpdateCurrentExperienceMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentExperienceMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

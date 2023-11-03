@@ -34,6 +34,7 @@ namespace Gs2.Gs2Deploy.Request
 	public class ValidateRequest : Gs2Request<ValidateRequest>
 	{
         public string Template { set; get; }
+
         public ValidateRequest WithTemplate(string template) {
             this.Template = template;
             return this;

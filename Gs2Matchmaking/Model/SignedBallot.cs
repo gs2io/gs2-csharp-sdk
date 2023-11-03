@@ -33,10 +33,12 @@ namespace Gs2.Gs2Matchmaking.Model
 	{
         public string Body { set; get; }
         public string Signature { set; get; }
+
         public SignedBallot WithBody(string body) {
             this.Body = body;
             return this;
         }
+
         public SignedBallot WithSignature(string signature) {
             this.Signature = signature;
             return this;

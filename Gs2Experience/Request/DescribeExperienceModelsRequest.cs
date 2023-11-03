@@ -34,6 +34,7 @@ namespace Gs2.Gs2Experience.Request
 	public class DescribeExperienceModelsRequest : Gs2Request<DescribeExperienceModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeExperienceModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

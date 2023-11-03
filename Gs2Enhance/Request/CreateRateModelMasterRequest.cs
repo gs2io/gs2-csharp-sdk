@@ -43,42 +43,52 @@ namespace Gs2.Gs2Enhance.Request
         public string[] AcquireExperienceHierarchy { set; get; }
         public string ExperienceModelId { set; get; }
         public Gs2.Gs2Enhance.Model.BonusRate[] BonusRates { set; get; }
+
         public CreateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateRateModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateRateModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateRateModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateRateModelMasterRequest WithTargetInventoryModelId(string targetInventoryModelId) {
             this.TargetInventoryModelId = targetInventoryModelId;
             return this;
         }
+
         public CreateRateModelMasterRequest WithAcquireExperienceSuffix(string acquireExperienceSuffix) {
             this.AcquireExperienceSuffix = acquireExperienceSuffix;
             return this;
         }
+
         public CreateRateModelMasterRequest WithMaterialInventoryModelId(string materialInventoryModelId) {
             this.MaterialInventoryModelId = materialInventoryModelId;
             return this;
         }
+
         public CreateRateModelMasterRequest WithAcquireExperienceHierarchy(string[] acquireExperienceHierarchy) {
             this.AcquireExperienceHierarchy = acquireExperienceHierarchy;
             return this;
         }
+
         public CreateRateModelMasterRequest WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public CreateRateModelMasterRequest WithBonusRates(Gs2.Gs2Enhance.Model.BonusRate[] bonusRates) {
             this.BonusRates = bonusRates;
             return this;

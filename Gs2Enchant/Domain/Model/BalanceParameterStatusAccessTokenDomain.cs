@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 {
 
     public partial class BalanceParameterStatusAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -75,25 +73,20 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public string PropertyId => _propertyId;
 
         public BalanceParameterStatusAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             string parameterName,
             string propertyId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2EnchantRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._parameterName = parameterName;
+            propertyId = propertyId?.Replace("{region}", gs2.RestSession.Region.DisplayName()).Replace("{ownerId}", gs2.RestSession.OwnerId ?? "").Replace("{userId}", UserId);
             this._propertyId = propertyId;
             this._parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
                 this.NamespaceName,
@@ -109,7 +102,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.BalanceParameterStatus> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -126,7 +118,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             request.ParameterName.ToString(),
                             request.PropertyId.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                             _parentKey,
                             key,
                             null,
@@ -145,39 +137,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithParameterName(this.ParameterName)
-                    .WithPropertyId(this.PropertyId);
-                GetBalanceParameterStatusResult result = null;
-                try {
-                    result = await this._client.GetBalanceParameterStatusAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                        request.ParameterName.ToString(),
-                        request.PropertyId.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "balanceParameterStatus")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -202,47 +165,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterStatus> GetAsync(
+            #else
         private async Task<Gs2.Gs2Enchant.Model.BalanceParameterStatus> GetAsync(
+            #endif
             GetBalanceParameterStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithParameterName(this.ParameterName)
-                .WithPropertyId(this.PropertyId);
-            var future = this._client.GetBalanceParameterStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                        request.ParameterName.ToString(),
-                        request.PropertyId.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "balanceParameterStatus")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -258,7 +190,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     request.ParameterName.ToString(),
                     request.PropertyId.ToString()
                     );
-                _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                     _parentKey,
                     key,
                     null,
@@ -270,11 +202,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -335,7 +266,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.BalanceParameterStatus> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                     _parentKey,
                     Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
                         this.ParameterName?.ToString(),
@@ -355,7 +286,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                                     this.ParameterName?.ToString(),
                                     this.PropertyId?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                            this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                                 _parentKey,
                                 key,
                                 null,
@@ -374,7 +305,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                         _parentKey,
                         Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
                             this.ParameterName?.ToString(),
@@ -386,10 +317,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterStatus> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Enchant.Model.BalanceParameterStatus> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                     _parentKey,
                     Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
                         this.ParameterName?.ToString(),
@@ -406,7 +342,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                                     this.ParameterName?.ToString(),
                                     this.PropertyId?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                    this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                         _parentKey,
                         key,
                         null,
@@ -418,7 +354,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                         _parentKey,
                         Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
                             this.ParameterName?.ToString(),
@@ -432,16 +368,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterStatus> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Enchant.Model.BalanceParameterStatus> Model()
         {
@@ -465,7 +391,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.BalanceParameterStatus> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
                     this.ParameterName.ToString(),
@@ -477,7 +403,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                 _parentKey,
                 Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
                     this.ParameterName.ToString(),

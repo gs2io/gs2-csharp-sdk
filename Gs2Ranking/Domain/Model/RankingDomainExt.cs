@@ -88,7 +88,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.CategoryName,
                 "Ranking"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
+            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Ranking.Model.Ranking>(
                 parentKey,
                 string.Join(
                     ":",

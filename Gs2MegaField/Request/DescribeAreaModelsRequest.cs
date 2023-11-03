@@ -34,6 +34,7 @@ namespace Gs2.Gs2MegaField.Request
 	public class DescribeAreaModelsRequest : Gs2Request<DescribeAreaModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeAreaModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

@@ -37,26 +37,32 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public int? Stock { set; get; }
         public int? Weight { set; get; }
+
         public RandomDisplayItemModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public RandomDisplayItemModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public RandomDisplayItemModel WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
+
         public RandomDisplayItemModel WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
+
         public RandomDisplayItemModel WithStock(int? stock) {
             this.Stock = stock;
             return this;
         }
+
         public RandomDisplayItemModel WithWeight(int? weight) {
             this.Weight = weight;
             return this;

@@ -41,34 +41,42 @@ namespace Gs2.Gs2Account.Request
         public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; }
         public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
             this.ChangePasswordIfTakeOver = changePasswordIfTakeOver;
             return this;
         }
+
         public UpdateNamespaceRequest WithCreateAccountScript(Gs2.Gs2Account.Model.ScriptSetting createAccountScript) {
             this.CreateAccountScript = createAccountScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithAuthenticationScript(Gs2.Gs2Account.Model.ScriptSetting authenticationScript) {
             this.AuthenticationScript = authenticationScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithCreateTakeOverScript(Gs2.Gs2Account.Model.ScriptSetting createTakeOverScript) {
             this.CreateTakeOverScript = createTakeOverScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithDoTakeOverScript(Gs2.Gs2Account.Model.ScriptSetting doTakeOverScript) {
             this.DoTakeOverScript = doTakeOverScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Account.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Project.Request
         public string AccountToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeBillingMethodsRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public DescribeBillingMethodsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeBillingMethodsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

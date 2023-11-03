@@ -37,18 +37,22 @@ namespace Gs2.Gs2Stamina.Request
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeStaminasByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeStaminasByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeStaminasByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeStaminasByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

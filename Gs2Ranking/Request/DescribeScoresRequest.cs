@@ -39,26 +39,32 @@ namespace Gs2.Gs2Ranking.Request
         public string ScorerUserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeScoresRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeScoresRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public DescribeScoresRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DescribeScoresRequest WithScorerUserId(string scorerUserId) {
             this.ScorerUserId = scorerUserId;
             return this;
         }
+
         public DescribeScoresRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeScoresRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -40,26 +40,32 @@ namespace Gs2.Gs2Limit.Request
         public int? CountUpValue { set; get; }
         public int? MaxValue { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CountUpRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CountUpRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
+
         public CountUpRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
+
         public CountUpRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public CountUpRequest WithCountUpValue(int? countUpValue) {
             this.CountUpValue = countUpValue;
             return this;
         }
+
         public CountUpRequest WithMaxValue(int? maxValue) {
             this.MaxValue = maxValue;
             return this;

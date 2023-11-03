@@ -42,46 +42,57 @@ namespace Gs2.Gs2Exchange.Model
         public string ExchangeCountId { set; get; }
         public int? MaximumExchangeCount { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+
         public IncrementalRateModel WithIncrementalRateModelId(string incrementalRateModelId) {
             this.IncrementalRateModelId = incrementalRateModelId;
             return this;
         }
+
         public IncrementalRateModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public IncrementalRateModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public IncrementalRateModel WithConsumeAction(Gs2.Core.Model.ConsumeAction consumeAction) {
             this.ConsumeAction = consumeAction;
             return this;
         }
+
         public IncrementalRateModel WithCalculateType(string calculateType) {
             this.CalculateType = calculateType;
             return this;
         }
+
         public IncrementalRateModel WithBaseValue(long? baseValue) {
             this.BaseValue = baseValue;
             return this;
         }
+
         public IncrementalRateModel WithCoefficientValue(long? coefficientValue) {
             this.CoefficientValue = coefficientValue;
             return this;
         }
+
         public IncrementalRateModel WithCalculateScriptId(string calculateScriptId) {
             this.CalculateScriptId = calculateScriptId;
             return this;
         }
+
         public IncrementalRateModel WithExchangeCountId(string exchangeCountId) {
             this.ExchangeCountId = exchangeCountId;
             return this;
         }
+
         public IncrementalRateModel WithMaximumExchangeCount(int? maximumExchangeCount) {
             this.MaximumExchangeCount = maximumExchangeCount;
             return this;
         }
+
         public IncrementalRateModel WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

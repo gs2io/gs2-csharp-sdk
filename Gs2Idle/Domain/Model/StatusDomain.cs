@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Idle.Domain.Model
 {
 
     public partial class StatusDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdleRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -74,20 +72,14 @@ namespace Gs2.Gs2Idle.Domain.Model
         public string CategoryName => _categoryName;
 
         public StatusDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string categoryName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2IdleRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -137,7 +129,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -152,7 +143,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                         var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                             request.CategoryName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                        this._gs2.Cache.Put<Gs2.Gs2Idle.Model.Status>(
                             _parentKey,
                             key,
                             null,
@@ -171,37 +162,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithCategoryName(this.CategoryName);
-                GetStatusByUserIdResult result = null;
-                try {
-                    result = await this._client.GetStatusByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
-                        request.CategoryName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Idle.Model.Status>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "status")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -225,45 +189,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Idle.Model.Status> GetAsync(
+            #else
         private async Task<Gs2.Gs2Idle.Model.Status> GetAsync(
+            #endif
             GetStatusByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.GetStatusByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
-                        request.CategoryName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Idle.Model.Status>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "status")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -277,7 +212,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                     request.CategoryName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                this._gs2.Cache.Put<Gs2.Gs2Idle.Model.Status>(
                     _parentKey,
                     key,
                     null,
@@ -289,11 +224,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -324,7 +258,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Model.AcquireAction[]> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -339,20 +272,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithCategoryName(this.CategoryName);
-                PredictionByUserIdResult result = null;
-                    result = await this._client.PredictionByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Status != null) {
@@ -376,26 +299,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Model.AcquireAction[]>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
+            #else
         public async Task<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
+            #endif
             PredictionByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.PredictionByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -404,11 +317,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                 result = await this._client.PredictionByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Status != null) {
@@ -433,18 +345,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
-            PredictionByUserIdRequest request
-        ) {
-            var future = PredictionFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PredictionFuture.")]
         public IFuture<Gs2.Core.Model.AcquireAction[]> Prediction(
             PredictionByUserIdRequest request
@@ -460,7 +360,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -475,28 +374,15 @@ namespace Gs2.Gs2Idle.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithCategoryName(this.CategoryName);
-                ReceiveByUserIdResult result = null;
-                    result = await this._client.ReceiveByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -506,7 +392,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -519,26 +405,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> ReceiveAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> ReceiveAsync(
+            #endif
             ReceiveByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.ReceiveByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -547,19 +423,15 @@ namespace Gs2.Gs2Idle.Domain.Model
                 result = await this._client.ReceiveByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -577,18 +449,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> ReceiveAsync(
-            ReceiveByUserIdRequest request
-        ) {
-            var future = ReceiveFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to ReceiveFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> Receive(
             ReceiveByUserIdRequest request
@@ -604,7 +464,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -619,20 +478,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithCategoryName(this.CategoryName);
-                IncreaseMaximumIdleMinutesByUserIdResult result = null;
-                    result = await this._client.IncreaseMaximumIdleMinutesByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -658,26 +507,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.StatusDomain> IncreaseMaximumIdleMinutesAsync(
+            #else
         public async Task<Gs2.Gs2Idle.Domain.Model.StatusDomain> IncreaseMaximumIdleMinutesAsync(
+            #endif
             IncreaseMaximumIdleMinutesByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.IncreaseMaximumIdleMinutesByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -686,11 +525,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                 result = await this._client.IncreaseMaximumIdleMinutesByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -717,18 +555,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.StatusDomain> IncreaseMaximumIdleMinutesAsync(
-            IncreaseMaximumIdleMinutesByUserIdRequest request
-        ) {
-            var future = IncreaseMaximumIdleMinutesFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to IncreaseMaximumIdleMinutesFuture.")]
         public IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> IncreaseMaximumIdleMinutes(
             IncreaseMaximumIdleMinutesByUserIdRequest request
@@ -744,7 +570,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -759,20 +584,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithCategoryName(this.CategoryName);
-                DecreaseMaximumIdleMinutesByUserIdResult result = null;
-                    result = await this._client.DecreaseMaximumIdleMinutesByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -798,26 +613,16 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.StatusDomain> DecreaseMaximumIdleMinutesAsync(
+            #else
         public async Task<Gs2.Gs2Idle.Domain.Model.StatusDomain> DecreaseMaximumIdleMinutesAsync(
+            #endif
             DecreaseMaximumIdleMinutesByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.DecreaseMaximumIdleMinutesByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -826,11 +631,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                 result = await this._client.DecreaseMaximumIdleMinutesByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -857,18 +661,6 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Domain.Model.StatusDomain> DecreaseMaximumIdleMinutesAsync(
-            DecreaseMaximumIdleMinutesByUserIdRequest request
-        ) {
-            var future = DecreaseMaximumIdleMinutesFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DecreaseMaximumIdleMinutesFuture.")]
         public IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> DecreaseMaximumIdleMinutes(
             DecreaseMaximumIdleMinutesByUserIdRequest request
@@ -886,7 +678,7 @@ namespace Gs2.Gs2Idle.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Idle.Model.Status>(
                     _parentKey,
                     Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                         this.CategoryName?.ToString()
@@ -904,7 +696,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                             var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                                     this.CategoryName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                            this._gs2.Cache.Put<Gs2.Gs2Idle.Model.Status>(
                                 _parentKey,
                                 key,
                                 null,
@@ -923,7 +715,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Idle.Model.Status>(
                         _parentKey,
                         Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                             this.CategoryName?.ToString()
@@ -934,10 +726,15 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Idle.Model.Status> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Idle.Model.Status> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Idle.Model.Status>(
                     _parentKey,
                     Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                         this.CategoryName?.ToString()
@@ -952,7 +749,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                                     this.CategoryName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Idle.Model.Status>(
+                    this._gs2.Cache.Put<Gs2.Gs2Idle.Model.Status>(
                         _parentKey,
                         key,
                         null,
@@ -964,7 +761,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Idle.Model.Status>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Idle.Model.Status>(
                         _parentKey,
                         Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                             this.CategoryName?.ToString()
@@ -977,16 +774,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Idle.Model.Status> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Idle.Model.Status> Model()
         {
@@ -1010,7 +797,7 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Idle.Model.Status> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                     this.CategoryName.ToString()
@@ -1021,7 +808,7 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Idle.Model.Status>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Idle.Model.Status>(
                 _parentKey,
                 Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                     this.CategoryName.ToString()

@@ -35,10 +35,12 @@ namespace Gs2.Gs2StateMachine.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public StartStateMachineByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public StartStateMachineByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

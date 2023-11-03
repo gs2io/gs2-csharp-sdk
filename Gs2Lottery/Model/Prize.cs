@@ -38,30 +38,37 @@ namespace Gs2.Gs2Lottery.Model
         public string LimitFailOverPrizeId { set; get; }
         public string PrizeTableName { set; get; }
         public int? Weight { set; get; }
+
         public Prize WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;
         }
+
         public Prize WithType(string type) {
             this.Type = type;
             return this;
         }
+
         public Prize WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
+
         public Prize WithDrawnLimit(int? drawnLimit) {
             this.DrawnLimit = drawnLimit;
             return this;
         }
+
         public Prize WithLimitFailOverPrizeId(string limitFailOverPrizeId) {
             this.LimitFailOverPrizeId = limitFailOverPrizeId;
             return this;
         }
+
         public Prize WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
+
         public Prize WithWeight(int? weight) {
             this.Weight = weight;
             return this;

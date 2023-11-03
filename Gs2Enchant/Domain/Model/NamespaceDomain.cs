@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 {
 
     public partial class NamespaceDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
         private readonly string _namespaceName;
 
@@ -73,18 +71,12 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2EnchantRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = "enchant:Namespace";
@@ -93,10 +85,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain CurrentParameterMaster(
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName
             );
         }
@@ -106,7 +95,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -117,12 +106,12 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterModel> BalanceParameterModels(
             #endif
         #else
-        public DescribeBalanceParameterModelsIterator BalanceParameterModels(
+        public DescribeBalanceParameterModelsIterator BalanceParameterModelsAsync(
         #endif
         )
         {
             return new DescribeBalanceParameterModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -138,7 +127,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong SubscribeBalanceParameterModels(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "BalanceParameterModel"
@@ -149,7 +138,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void UnsubscribeBalanceParameterModels(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "BalanceParameterModel"
@@ -162,10 +151,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string parameterName
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 parameterName
             );
@@ -176,7 +162,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeBalanceParameterModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -187,12 +173,12 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster> BalanceParameterModelMasters(
             #endif
         #else
-        public DescribeBalanceParameterModelMastersIterator BalanceParameterModelMasters(
+        public DescribeBalanceParameterModelMastersIterator BalanceParameterModelMastersAsync(
         #endif
         )
         {
             return new DescribeBalanceParameterModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -208,7 +194,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong SubscribeBalanceParameterModelMasters(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "BalanceParameterModelMaster"
@@ -219,7 +205,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void UnsubscribeBalanceParameterModelMasters(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "BalanceParameterModelMaster"
@@ -232,10 +218,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string parameterName
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 parameterName
             );
@@ -246,7 +229,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -257,12 +240,12 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2Iterator<Gs2.Gs2Enchant.Model.RarityParameterModel> RarityParameterModels(
             #endif
         #else
-        public DescribeRarityParameterModelsIterator RarityParameterModels(
+        public DescribeRarityParameterModelsIterator RarityParameterModelsAsync(
         #endif
         )
         {
             return new DescribeRarityParameterModelsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -278,7 +261,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong SubscribeRarityParameterModels(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RarityParameterModel"
@@ -289,7 +272,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void UnsubscribeRarityParameterModels(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RarityParameterModel"
@@ -302,10 +285,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string parameterName
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.RarityParameterModelDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 parameterName
             );
@@ -316,7 +296,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
         )
         {
             return new DescribeRarityParameterModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -327,12 +307,12 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public Gs2Iterator<Gs2.Gs2Enchant.Model.RarityParameterModelMaster> RarityParameterModelMasters(
             #endif
         #else
-        public DescribeRarityParameterModelMastersIterator RarityParameterModelMasters(
+        public DescribeRarityParameterModelMastersIterator RarityParameterModelMastersAsync(
         #endif
         )
         {
             return new DescribeRarityParameterModelMastersIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -348,7 +328,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong SubscribeRarityParameterModelMasters(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RarityParameterModelMaster"
@@ -359,7 +339,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void UnsubscribeRarityParameterModelMasters(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "RarityParameterModelMaster"
@@ -372,10 +352,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string parameterName
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 parameterName
             );
@@ -385,10 +362,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             string userId
         ) {
             return new Gs2.Gs2Enchant.Domain.Model.UserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 userId
             );
@@ -398,10 +372,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
             AccessToken accessToken
         ) {
             return new UserAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 accessToken
             );
@@ -441,7 +412,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceStatusFuture(
@@ -454,7 +424,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -473,35 +443,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceStatusResult result = null;
-                try {
-                    result = await this._client.GetNamespaceStatusAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -511,43 +456,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #endif
             GetNamespaceStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceStatusResult result = null;
@@ -559,7 +477,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -571,11 +489,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -586,18 +503,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> GetStatusAsync(
-            GetNamespaceStatusRequest request
-        ) {
-            var future = GetStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetStatusFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> GetStatus(
             GetNamespaceStatusRequest request
@@ -613,7 +518,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.Namespace> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceFuture(
@@ -626,7 +530,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -645,35 +549,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceResult result = null;
-                try {
-                    result = await this._client.GetNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -697,43 +576,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Enchant.Model.Namespace> GetAsync(
+            #else
         private async Task<Gs2.Gs2Enchant.Model.Namespace> GetAsync(
+            #endif
             GetNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceResult result = null;
@@ -745,7 +597,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -757,11 +609,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -792,7 +643,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateNamespaceFuture(
@@ -805,18 +655,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateNamespaceResult result = null;
-                    result = await this._client.UpdateNamespaceAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -842,35 +684,26 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> UpdateAsync(
+            #endif
             UpdateNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateNamespaceResult result = null;
                 result = await this._client.UpdateNamespaceAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -897,18 +730,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> UpdateAsync(
-            UpdateNamespaceRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> Update(
             UpdateNamespaceRequest request
@@ -924,7 +745,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.DeleteNamespaceFuture(
@@ -937,7 +757,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -956,35 +776,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                DeleteNamespaceResult result = null;
-                try {
-                    result = await this._client.DeleteNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1005,43 +800,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> DeleteAsync(
+            #endif
             DeleteNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.DeleteNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             DeleteNamespaceResult result = null;
@@ -1053,7 +821,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -1065,11 +833,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1091,18 +858,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> DeleteAsync(
-            DeleteNamespaceRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> Delete(
             DeleteNamespaceRequest request
@@ -1118,7 +873,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CreateBalanceParameterModelMasterFuture(
@@ -1131,18 +885,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CreateBalanceParameterModelMasterResult result = null;
-                    result = await this._client.CreateBalanceParameterModelMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1162,10 +908,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1174,35 +917,26 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> CreateBalanceParameterModelMasterAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> CreateBalanceParameterModelMasterAsync(
+            #endif
             CreateBalanceParameterModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CreateBalanceParameterModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CreateBalanceParameterModelMasterResult result = null;
                 result = await this._client.CreateBalanceParameterModelMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1222,10 +956,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1235,18 +966,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> CreateBalanceParameterModelMasterAsync(
-            CreateBalanceParameterModelMasterRequest request
-        ) {
-            var future = CreateBalanceParameterModelMasterFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateBalanceParameterModelMasterFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelMasterDomain> CreateBalanceParameterModelMaster(
             CreateBalanceParameterModelMasterRequest request
@@ -1262,7 +981,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CreateRarityParameterModelMasterFuture(
@@ -1275,18 +993,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CreateRarityParameterModelMasterResult result = null;
-                    result = await this._client.CreateRarityParameterModelMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1306,10 +1016,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1318,35 +1025,26 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain> CreateRarityParameterModelMasterAsync(
+            #else
         public async Task<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain> CreateRarityParameterModelMasterAsync(
+            #endif
             CreateRarityParameterModelMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CreateRarityParameterModelMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CreateRarityParameterModelMasterResult result = null;
                 result = await this._client.CreateRarityParameterModelMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1366,10 +1064,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1379,18 +1074,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain> CreateRarityParameterModelMasterAsync(
-            CreateRarityParameterModelMasterRequest request
-        ) {
-            var future = CreateRarityParameterModelMasterFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateRarityParameterModelMasterFuture.")]
         public IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterModelMasterDomain> CreateRarityParameterModelMaster(
             CreateRarityParameterModelMasterRequest request
@@ -1413,7 +1096,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     "enchant",
                     "Namespace"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1431,7 +1114,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                            this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                                 parentKey,
                                 key,
                                 null,
@@ -1450,7 +1133,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1461,15 +1144,20 @@ namespace Gs2.Gs2Enchant.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enchant.Model.Namespace> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Enchant.Model.Namespace> ModelAsync()
+            #endif
         {
             var parentKey = string.Join(
                 ":",
                 "enchant",
                 "Namespace"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1484,7 +1172,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.Namespace>(
                         parentKey,
                         key,
                         null,
@@ -1496,7 +1184,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1509,16 +1197,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Enchant.Model.Namespace> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Enchant.Model.Namespace> Model()
         {
@@ -1542,7 +1220,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.Namespace> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()
@@ -1553,7 +1231,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Enchant.Model.Namespace>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.Namespace>(
                 _parentKey,
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()

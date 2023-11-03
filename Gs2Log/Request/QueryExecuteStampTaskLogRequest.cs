@@ -44,42 +44,52 @@ namespace Gs2.Gs2Log.Request
         public string PageToken { set; get; }
         public int? Limit { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public QueryExecuteStampTaskLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithService(string service) {
             this.Service = service;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithMethod(string method) {
             this.Method = method;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithAction(string action) {
             this.Action = action;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithLongTerm(bool? longTerm) {
             this.LongTerm = longTerm;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public QueryExecuteStampTaskLogRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

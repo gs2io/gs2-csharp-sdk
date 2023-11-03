@@ -35,10 +35,12 @@ namespace Gs2.Gs2Identifier.Request
 	{
         public string Name { set; get; }
         public string Description { set; get; }
+
         public CreateUserRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateUserRequest WithDescription(string description) {
             this.Description = description;
             return this;

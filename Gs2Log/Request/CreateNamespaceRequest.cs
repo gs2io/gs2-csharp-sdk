@@ -43,42 +43,52 @@ namespace Gs2.Gs2Log.Request
         public string AwsAccessKeyId { set; get; }
         public string AwsSecretAccessKey { set; get; }
         public string FirehoseStreamName { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithType(string type) {
             this.Type = type;
             return this;
         }
+
         public CreateNamespaceRequest WithGcpCredentialJson(string gcpCredentialJson) {
             this.GcpCredentialJson = gcpCredentialJson;
             return this;
         }
+
         public CreateNamespaceRequest WithBigQueryDatasetName(string bigQueryDatasetName) {
             this.BigQueryDatasetName = bigQueryDatasetName;
             return this;
         }
+
         public CreateNamespaceRequest WithLogExpireDays(int? logExpireDays) {
             this.LogExpireDays = logExpireDays;
             return this;
         }
+
         public CreateNamespaceRequest WithAwsRegion(string awsRegion) {
             this.AwsRegion = awsRegion;
             return this;
         }
+
         public CreateNamespaceRequest WithAwsAccessKeyId(string awsAccessKeyId) {
             this.AwsAccessKeyId = awsAccessKeyId;
             return this;
         }
+
         public CreateNamespaceRequest WithAwsSecretAccessKey(string awsSecretAccessKey) {
             this.AwsSecretAccessKey = awsSecretAccessKey;
             return this;
         }
+
         public CreateNamespaceRequest WithFirehoseStreamName(string firehoseStreamName) {
             this.FirehoseStreamName = firehoseStreamName;
             return this;

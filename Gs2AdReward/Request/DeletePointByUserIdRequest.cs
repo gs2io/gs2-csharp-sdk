@@ -36,10 +36,12 @@ namespace Gs2.Gs2AdReward.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeletePointByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeletePointByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -35,10 +35,12 @@ namespace Gs2.Gs2Enchant.Request
 	{
         public string NamespaceName { set; get; }
         public string ParameterName { set; get; }
+
         public DeleteRarityParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteRarityParameterModelMasterRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;

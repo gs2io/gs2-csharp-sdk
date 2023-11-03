@@ -35,10 +35,12 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string NamespaceName { set; get; }
         public string StaminaName { set; get; }
+
         public GetStaminaModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetStaminaModelRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;

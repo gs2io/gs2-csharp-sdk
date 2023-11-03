@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 {
 
     public partial class PrizeLimitDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
         private readonly string _prizeTableName;
@@ -72,20 +70,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public string PrizeId => _prizeId;
 
         public PrizeLimitDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string prizeTableName,
             string prizeId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LotteryRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._prizeTableName = prizeTableName;
@@ -135,7 +127,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.PrizeLimit> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName)
@@ -150,7 +141,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                             request.PrizeId.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                        this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                             _parentKey,
                             key,
                             null,
@@ -169,37 +160,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithPrizeTableName(this.PrizeTableName)
-                    .WithPrizeId(this.PrizeId);
-                GetPrizeLimitResult result = null;
-                try {
-                    result = await this._client.GetPrizeLimitAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
-                        request.PrizeId.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "prizeLimit")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -223,45 +187,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.PrizeLimit>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Lottery.Model.PrizeLimit> GetAsync(
+            #else
         private async Task<Gs2.Gs2Lottery.Model.PrizeLimit> GetAsync(
+            #endif
             GetPrizeLimitRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithPrizeTableName(this.PrizeTableName)
-                .WithPrizeId(this.PrizeId);
-            var future = this._client.GetPrizeLimitFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
-                        request.PrizeId.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "prizeLimit")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName)
@@ -275,7 +210,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                     request.PrizeId.ToString()
                     );
-                _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                     _parentKey,
                     key,
                     null,
@@ -287,11 +222,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -322,7 +256,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithPrizeTableName(this.PrizeTableName)
@@ -337,7 +270,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                             request.PrizeId.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                        this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                             _parentKey,
                             key,
                             null,
@@ -356,37 +289,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithPrizeTableName(this.PrizeTableName)
-                    .WithPrizeId(this.PrizeId);
-                ResetPrizeLimitResult result = null;
-                try {
-                    result = await this._client.ResetPrizeLimitAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
-                        request.PrizeId.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "prizeLimit")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -395,45 +301,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> ResetAsync(
+            #else
         public async Task<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> ResetAsync(
+            #endif
             ResetPrizeLimitRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithPrizeTableName(this.PrizeTableName)
-                .WithPrizeId(this.PrizeId);
-            var future = this._client.ResetPrizeLimitFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
-                        request.PrizeId.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "prizeLimit")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithPrizeTableName(this.PrizeTableName)
@@ -447,7 +324,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                     request.PrizeId.ToString()
                     );
-                _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                     _parentKey,
                     key,
                     null,
@@ -459,11 +336,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -473,18 +349,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> ResetAsync(
-            ResetPrizeLimitRequest request
-        ) {
-            var future = ResetFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to ResetFuture.")]
         public IFuture<Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain> Reset(
             ResetPrizeLimitRequest request
@@ -502,7 +366,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.PrizeLimit> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
                     _parentKey,
                     Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                         this.PrizeId?.ToString()
@@ -520,7 +384,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                             var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                                     this.PrizeId?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                            this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                                 _parentKey,
                                 key,
                                 null,
@@ -539,7 +403,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
                         _parentKey,
                         Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                             this.PrizeId?.ToString()
@@ -550,10 +414,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.PrizeLimit>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Lottery.Model.PrizeLimit> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Lottery.Model.PrizeLimit> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
                     _parentKey,
                     Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                         this.PrizeId?.ToString()
@@ -568,7 +437,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     var key = Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                                     this.PrizeId?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                    this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeLimit>(
                         _parentKey,
                         key,
                         null,
@@ -580,7 +449,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeLimit>(
                         _parentKey,
                         Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                             this.PrizeId?.ToString()
@@ -593,16 +462,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.PrizeLimit> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Lottery.Model.PrizeLimit> Model()
         {
@@ -626,7 +485,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.PrizeLimit> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                     this.PrizeId.ToString()
@@ -637,7 +496,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.PrizeLimitDomain.CreateCacheKey(
                     this.PrizeId.ToString()

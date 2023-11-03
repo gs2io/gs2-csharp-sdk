@@ -35,10 +35,12 @@ namespace Gs2.Gs2Deploy.Request
 	{
         public string StackName { set; get; }
         public string OutputName { set; get; }
+
         public GetOutputRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
+
         public GetOutputRequest WithOutputName(string outputName) {
             this.OutputName = outputName;
             return this;

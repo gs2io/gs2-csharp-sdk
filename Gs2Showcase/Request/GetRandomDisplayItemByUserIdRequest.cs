@@ -37,18 +37,22 @@ namespace Gs2.Gs2Showcase.Request
         public string ShowcaseName { set; get; }
         public string DisplayItemName { set; get; }
         public string UserId { set; get; }
+
         public GetRandomDisplayItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetRandomDisplayItemByUserIdRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
+
         public GetRandomDisplayItemByUserIdRequest WithDisplayItemName(string displayItemName) {
             this.DisplayItemName = displayItemName;
             return this;
         }
+
         public GetRandomDisplayItemByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

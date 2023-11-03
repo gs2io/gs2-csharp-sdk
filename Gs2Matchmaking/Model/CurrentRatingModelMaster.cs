@@ -33,10 +33,12 @@ namespace Gs2.Gs2Matchmaking.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentRatingModelMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentRatingModelMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

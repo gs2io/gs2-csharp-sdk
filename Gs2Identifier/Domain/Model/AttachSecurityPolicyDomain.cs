@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 {
 
     public partial class AttachSecurityPolicyDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
         private readonly string _userName;
 
@@ -68,18 +66,12 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public string UserName => _userName;
 
         public AttachSecurityPolicyDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string userName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2IdentifierRestClient(
-                session
+                gs2.RestSession
             );
             this._userName = userName;
             this._parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -130,7 +122,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
                         var key = Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                         );
-                        _cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+                        this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                             _parentKey,
                             key,
                             null,
@@ -160,7 +152,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                         );
-                    _cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                         _parentKey,
                         key,
                         null,
@@ -176,7 +168,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -184,17 +176,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         result.Items[i]?.Name
                     );
                     var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -221,7 +210,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 if (future.Error is Gs2.Core.Exception.NotFoundException) {
                     var key = Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                     );
-                    _cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                         _parentKey,
                         key,
                         null,
@@ -251,7 +240,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
             } catch (Gs2.Core.Exception.NotFoundException e) {
                 var key = Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                     );
-                _cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+                this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                     _parentKey,
                     key,
                     null,
@@ -267,7 +256,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -275,17 +264,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         result.Items[i]?.Name
                     );
                     var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -348,7 +334,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -356,17 +342,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         result.Items[i]?.Name
                     );
                     var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -405,7 +388,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -413,17 +396,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         result.Items[i]?.Name
                     );
                     var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -486,7 +466,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -494,17 +474,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         result.Items[i]?.Name
                     );
                     var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -543,7 +520,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -551,17 +528,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         result.Items[i]?.Name
                     );
                     var parentKey = "identifier:SecurityPolicy";
                     var key = Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain.CreateCacheKey(
                         result.Items[i].Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -602,7 +576,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                     _parentKey,
                     Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                     )
@@ -615,7 +589,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #else
         public async Task<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> ModelAsync()
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                     _parentKey,
                     Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                     )
@@ -659,7 +633,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                 ),
@@ -669,7 +643,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                 _parentKey,
                 Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
                 ),

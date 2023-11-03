@@ -36,14 +36,17 @@ namespace Gs2.Gs2Chat.Request
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
         public string AccessToken { set; get; }
+
         public GetSubscribeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetSubscribeRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public GetSubscribeRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

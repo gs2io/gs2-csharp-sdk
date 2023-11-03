@@ -34,6 +34,7 @@ namespace Gs2.Gs2Stamina.Request
 	public class GetCurrentStaminaMasterRequest : Gs2Request<GetCurrentStaminaMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentStaminaMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

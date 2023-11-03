@@ -36,14 +36,17 @@ namespace Gs2.Gs2Money.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public int? Slot { set; get; }
+
         public GetWalletRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetWalletRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetWalletRequest WithSlot(int? slot) {
             this.Slot = slot;
             return this;

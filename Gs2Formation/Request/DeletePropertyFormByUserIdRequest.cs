@@ -38,18 +38,22 @@ namespace Gs2.Gs2Formation.Request
         public string PropertyFormModelName { set; get; }
         public string PropertyId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeletePropertyFormByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeletePropertyFormByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DeletePropertyFormByUserIdRequest WithPropertyFormModelName(string propertyFormModelName) {
             this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
+
         public DeletePropertyFormByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;

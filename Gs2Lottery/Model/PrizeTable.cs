@@ -35,18 +35,22 @@ namespace Gs2.Gs2Lottery.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2Lottery.Model.Prize[] Prizes { set; get; }
+
         public PrizeTable WithPrizeTableId(string prizeTableId) {
             this.PrizeTableId = prizeTableId;
             return this;
         }
+
         public PrizeTable WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public PrizeTable WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public PrizeTable WithPrizes(Gs2.Gs2Lottery.Model.Prize[] prizes) {
             this.Prizes = prizes;
             return this;

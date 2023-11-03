@@ -33,10 +33,12 @@ namespace Gs2.Gs2Enchant.Model
 	{
         public string Name { set; get; }
         public long? Value { set; get; }
+
         public BalanceParameterValue WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public BalanceParameterValue WithValue(long? value) {
             this.Value = value;
             return this;

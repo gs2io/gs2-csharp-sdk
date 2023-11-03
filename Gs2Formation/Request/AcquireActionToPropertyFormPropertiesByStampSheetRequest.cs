@@ -35,10 +35,12 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public AcquireActionToPropertyFormPropertiesByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public AcquireActionToPropertyFormPropertiesByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

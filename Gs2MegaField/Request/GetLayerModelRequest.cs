@@ -36,14 +36,17 @@ namespace Gs2.Gs2MegaField.Request
         public string NamespaceName { set; get; }
         public string AreaModelName { set; get; }
         public string LayerModelName { set; get; }
+
         public GetLayerModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetLayerModelRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
+
         public GetLayerModelRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;

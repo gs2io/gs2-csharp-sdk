@@ -44,54 +44,67 @@ namespace Gs2.Gs2Project.Model
         public string Currency { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public Billing WithBillingId(string billingId) {
             this.BillingId = billingId;
             return this;
         }
+
         public Billing WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
+
         public Billing WithYear(int? year) {
             this.Year = year;
             return this;
         }
+
         public Billing WithMonth(int? month) {
             this.Month = month;
             return this;
         }
+
         public Billing WithRegion(string region) {
             this.Region = region;
             return this;
         }
+
         public Billing WithService(string service) {
             this.Service = service;
             return this;
         }
+
         public Billing WithActivityType(string activityType) {
             this.ActivityType = activityType;
             return this;
         }
+
         public Billing WithUnit(double? unit) {
             this.Unit = unit;
             return this;
         }
+
         public Billing WithUnitName(string unitName) {
             this.UnitName = unitName;
             return this;
         }
+
         public Billing WithPrice(double? price) {
             this.Price = price;
             return this;
         }
+
         public Billing WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
+
         public Billing WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Billing WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

@@ -50,78 +50,97 @@ namespace Gs2.Gs2Matchmaking.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public Namespace WithEnableRating(bool? enableRating) {
             this.EnableRating = enableRating;
             return this;
         }
+
         public Namespace WithCreateGatheringTriggerType(string createGatheringTriggerType) {
             this.CreateGatheringTriggerType = createGatheringTriggerType;
             return this;
         }
+
         public Namespace WithCreateGatheringTriggerRealtimeNamespaceId(string createGatheringTriggerRealtimeNamespaceId) {
             this.CreateGatheringTriggerRealtimeNamespaceId = createGatheringTriggerRealtimeNamespaceId;
             return this;
         }
+
         public Namespace WithCreateGatheringTriggerScriptId(string createGatheringTriggerScriptId) {
             this.CreateGatheringTriggerScriptId = createGatheringTriggerScriptId;
             return this;
         }
+
         public Namespace WithCompleteMatchmakingTriggerType(string completeMatchmakingTriggerType) {
             this.CompleteMatchmakingTriggerType = completeMatchmakingTriggerType;
             return this;
         }
+
         public Namespace WithCompleteMatchmakingTriggerRealtimeNamespaceId(string completeMatchmakingTriggerRealtimeNamespaceId) {
             this.CompleteMatchmakingTriggerRealtimeNamespaceId = completeMatchmakingTriggerRealtimeNamespaceId;
             return this;
         }
+
         public Namespace WithCompleteMatchmakingTriggerScriptId(string completeMatchmakingTriggerScriptId) {
             this.CompleteMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
             return this;
         }
+
         public Namespace WithChangeRatingScript(Gs2.Gs2Matchmaking.Model.ScriptSetting changeRatingScript) {
             this.ChangeRatingScript = changeRatingScript;
             return this;
         }
+
         public Namespace WithJoinNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting joinNotification) {
             this.JoinNotification = joinNotification;
             return this;
         }
+
         public Namespace WithLeaveNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting leaveNotification) {
             this.LeaveNotification = leaveNotification;
             return this;
         }
+
         public Namespace WithCompleteNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
         }
+
         public Namespace WithChangeRatingNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting changeRatingNotification) {
             this.ChangeRatingNotification = changeRatingNotification;
             return this;
         }
+
         public Namespace WithLogSetting(Gs2.Gs2Matchmaking.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
+
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

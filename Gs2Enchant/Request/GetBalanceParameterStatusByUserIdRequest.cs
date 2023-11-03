@@ -37,18 +37,22 @@ namespace Gs2.Gs2Enchant.Request
         public string UserId { set; get; }
         public string ParameterName { set; get; }
         public string PropertyId { set; get; }
+
         public GetBalanceParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetBalanceParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public GetBalanceParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
+
         public GetBalanceParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;

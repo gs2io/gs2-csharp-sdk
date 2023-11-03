@@ -38,18 +38,22 @@ namespace Gs2.Gs2Datastore.Request
         public string DataObjectId { set; get; }
         public string Generation { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public PrepareDownloadByGenerationAndUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public PrepareDownloadByGenerationAndUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public PrepareDownloadByGenerationAndUserIdRequest WithDataObjectId(string dataObjectId) {
             this.DataObjectId = dataObjectId;
             return this;
         }
+
         public PrepareDownloadByGenerationAndUserIdRequest WithGeneration(string generation) {
             this.Generation = generation;
             return this;

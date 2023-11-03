@@ -43,50 +43,62 @@ namespace Gs2.Gs2Showcase.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public RandomShowcaseMaster WithShowcaseId(string showcaseId) {
             this.ShowcaseId = showcaseId;
             return this;
         }
+
         public RandomShowcaseMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public RandomShowcaseMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public RandomShowcaseMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public RandomShowcaseMaster WithMaximumNumberOfChoice(int? maximumNumberOfChoice) {
             this.MaximumNumberOfChoice = maximumNumberOfChoice;
             return this;
         }
+
         public RandomShowcaseMaster WithDisplayItems(Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] displayItems) {
             this.DisplayItems = displayItems;
             return this;
         }
+
         public RandomShowcaseMaster WithBaseTimestamp(long? baseTimestamp) {
             this.BaseTimestamp = baseTimestamp;
             return this;
         }
+
         public RandomShowcaseMaster WithResetIntervalHours(int? resetIntervalHours) {
             this.ResetIntervalHours = resetIntervalHours;
             return this;
         }
+
         public RandomShowcaseMaster WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;
         }
+
         public RandomShowcaseMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public RandomShowcaseMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public RandomShowcaseMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

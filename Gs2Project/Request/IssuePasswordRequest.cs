@@ -34,6 +34,7 @@ namespace Gs2.Gs2Project.Request
 	public class IssuePasswordRequest : Gs2Request<IssuePasswordRequest>
 	{
         public string IssuePasswordToken { set; get; }
+
         public IssuePasswordRequest WithIssuePasswordToken(string issuePasswordToken) {
             this.IssuePasswordToken = issuePasswordToken;
             return this;

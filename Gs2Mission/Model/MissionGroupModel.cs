@@ -40,38 +40,47 @@ namespace Gs2.Gs2Mission.Model
         public string ResetDayOfWeek { set; get; }
         public int? ResetHour { set; get; }
         public string CompleteNotificationNamespaceId { set; get; }
+
         public MissionGroupModel WithMissionGroupId(string missionGroupId) {
             this.MissionGroupId = missionGroupId;
             return this;
         }
+
         public MissionGroupModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public MissionGroupModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public MissionGroupModel WithTasks(Gs2.Gs2Mission.Model.MissionTaskModel[] tasks) {
             this.Tasks = tasks;
             return this;
         }
+
         public MissionGroupModel WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
+
         public MissionGroupModel WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
+
         public MissionGroupModel WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
+
         public MissionGroupModel WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
+
         public MissionGroupModel WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
             this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;

@@ -40,46 +40,39 @@ namespace Gs2.Gs2Quest.Request
         public Gs2.Gs2Quest.Model.ScriptSetting CompleteQuestScript { set; get; }
         public Gs2.Gs2Quest.Model.ScriptSetting FailedQuestScript { set; get; }
         public Gs2.Gs2Quest.Model.LogSetting LogSetting { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Quest.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public CreateNamespaceRequest WithStartQuestScript(Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
             this.StartQuestScript = startQuestScript;
             return this;
         }
+
         public CreateNamespaceRequest WithCompleteQuestScript(Gs2.Gs2Quest.Model.ScriptSetting completeQuestScript) {
             this.CompleteQuestScript = completeQuestScript;
             return this;
         }
+
         public CreateNamespaceRequest WithFailedQuestScript(Gs2.Gs2Quest.Model.ScriptSetting failedQuestScript) {
             this.FailedQuestScript = failedQuestScript;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Quest.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -98,9 +91,7 @@ namespace Gs2.Gs2Quest.Request
                 .WithStartQuestScript(!data.Keys.Contains("startQuestScript") || data["startQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["startQuestScript"]))
                 .WithCompleteQuestScript(!data.Keys.Contains("completeQuestScript") || data["completeQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["completeQuestScript"]))
                 .WithFailedQuestScript(!data.Keys.Contains("failedQuestScript") || data["failedQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["failedQuestScript"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Quest.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Quest.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
         public override JsonData ToJson()
@@ -113,8 +104,6 @@ namespace Gs2.Gs2Quest.Request
                 ["completeQuestScript"] = CompleteQuestScript?.ToJson(),
                 ["failedQuestScript"] = FailedQuestScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
             };
         }
 
@@ -144,14 +133,6 @@ namespace Gs2.Gs2Quest.Request
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
@@ -164,8 +145,6 @@ namespace Gs2.Gs2Quest.Request
             key += CompleteQuestScript + ":";
             key += FailedQuestScript + ":";
             key += LogSetting + ":";
-            key += QueueNamespaceId + ":";
-            key += KeyId + ":";
             return key;
         }
 

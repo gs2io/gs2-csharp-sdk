@@ -34,6 +34,7 @@ namespace Gs2.Gs2MegaField.Request
 	public class GetCurrentFieldMasterRequest : Gs2Request<GetCurrentFieldMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentFieldMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

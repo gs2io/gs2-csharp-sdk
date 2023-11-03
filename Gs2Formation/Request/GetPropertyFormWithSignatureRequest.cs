@@ -38,22 +38,27 @@ namespace Gs2.Gs2Formation.Request
         public string PropertyFormModelName { set; get; }
         public string PropertyId { set; get; }
         public string KeyId { set; get; }
+
         public GetPropertyFormWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetPropertyFormWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetPropertyFormWithSignatureRequest WithPropertyFormModelName(string propertyFormModelName) {
             this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
+
         public GetPropertyFormWithSignatureRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public GetPropertyFormWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

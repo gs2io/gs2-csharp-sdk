@@ -56,10 +56,7 @@ namespace Gs2.Gs2News.Domain.Model
 {
 
     public partial class SetCookieRequestEntryAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
         private readonly string _namespaceName;
         private readonly AccessToken _accessToken;
@@ -73,21 +70,15 @@ namespace Gs2.Gs2News.Domain.Model
         public string Value => _value;
 
         public SetCookieRequestEntryAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             string key,
             string value
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2NewsRestClient(
-                session
+                this._gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -132,36 +123,62 @@ namespace Gs2.Gs2News.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2News.Model.SetCookieRequestEntry> Model() {
-            #else
-        public IFuture<Gs2.Gs2News.Model.SetCookieRequestEntry> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2News.Model.SetCookieRequestEntry> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public IFuture<Gs2.Gs2News.Model.SetCookieRequestEntry> ModelFuture()
+        {
             IEnumerator Impl(IFuture<Gs2.Gs2News.Model.SetCookieRequestEntry> self)
             {
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2News.Model.SetCookieRequestEntry>(
+                    _parentKey,
+                    Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
+                        this.Key?.ToString(),
+                        this.Value?.ToString()
+                    )
+                );
+                self.OnComplete(value);
+                yield return null;
+            }
+            return new Gs2InlineFuture<Gs2.Gs2News.Model.SetCookieRequestEntry>(Impl);
+        }
         #endif
-            var (value, find) = _cache.Get<Gs2.Gs2News.Model.SetCookieRequestEntry>(
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2News.Model.SetCookieRequestEntry> ModelAsync()
+            #else
+        public async Task<Gs2.Gs2News.Model.SetCookieRequestEntry> ModelAsync()
+            #endif
+        {
+            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2News.Model.SetCookieRequestEntry>(
                 _parentKey,
                 Gs2.Gs2News.Domain.Model.SetCookieRequestEntryDomain.CreateCacheKey(
                     this.Key?.ToString(),
                     this.Value?.ToString()
                 )
             );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2News.Model.SetCookieRequestEntry>(Impl);
-        #endif
         }
+        #endif
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2News.Model.SetCookieRequestEntry> Model()
+        {
+            return await ModelAsync();
+        }
+            #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2News.Model.SetCookieRequestEntry> Model()
+        {
+            return ModelFuture();
+        }
+            #endif
+        #else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2News.Model.SetCookieRequestEntry> Model()
+        {
+            return await ModelAsync();
+        }
+        #endif
+        
     }
 }

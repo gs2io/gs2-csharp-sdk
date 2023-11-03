@@ -37,14 +37,17 @@ namespace Gs2.Gs2Account.Request
         public string UserId { set; get; }
         public int? Type { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteTakeOverByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteTakeOverByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DeleteTakeOverByUserIdRequest WithType(int? type) {
             this.Type = type;
             return this;

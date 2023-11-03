@@ -38,18 +38,22 @@ namespace Gs2.Gs2Exchange.Request
         public string AwaitName { set; get; }
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public AcquireByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public AcquireByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public AcquireByUserIdRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;
         }
+
         public AcquireByUserIdRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
             return this;

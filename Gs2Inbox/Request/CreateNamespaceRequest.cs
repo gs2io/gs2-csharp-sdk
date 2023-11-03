@@ -42,54 +42,49 @@ namespace Gs2.Gs2Inbox.Request
         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
         public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; }
         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithIsAutomaticDeletingEnabled(bool? isAutomaticDeletingEnabled) {
             this.IsAutomaticDeletingEnabled = isAutomaticDeletingEnabled;
             return this;
         }
+
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public CreateNamespaceRequest WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
             this.ReceiveMessageScript = receiveMessageScript;
             return this;
         }
+
         public CreateNamespaceRequest WithReadMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting readMessageScript) {
             this.ReadMessageScript = readMessageScript;
             return this;
         }
+
         public CreateNamespaceRequest WithDeleteMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting deleteMessageScript) {
             this.DeleteMessageScript = deleteMessageScript;
             return this;
         }
+
         public CreateNamespaceRequest WithReceiveNotification(Gs2.Gs2Inbox.Model.NotificationSetting receiveNotification) {
             this.ReceiveNotification = receiveNotification;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Inbox.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -110,9 +105,7 @@ namespace Gs2.Gs2Inbox.Request
                 .WithReadMessageScript(!data.Keys.Contains("readMessageScript") || data["readMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["readMessageScript"]))
                 .WithDeleteMessageScript(!data.Keys.Contains("deleteMessageScript") || data["deleteMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["deleteMessageScript"]))
                 .WithReceiveNotification(!data.Keys.Contains("receiveNotification") || data["receiveNotification"] == null ? null : Gs2.Gs2Inbox.Model.NotificationSetting.FromJson(data["receiveNotification"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inbox.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inbox.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
         public override JsonData ToJson()
@@ -127,8 +120,6 @@ namespace Gs2.Gs2Inbox.Request
                 ["deleteMessageScript"] = DeleteMessageScript?.ToJson(),
                 ["receiveNotification"] = ReceiveNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
             };
         }
 
@@ -165,14 +156,6 @@ namespace Gs2.Gs2Inbox.Request
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
@@ -187,8 +170,6 @@ namespace Gs2.Gs2Inbox.Request
             key += DeleteMessageScript + ":";
             key += ReceiveNotification + ":";
             key += LogSetting + ":";
-            key += QueueNamespaceId + ":";
-            key += KeyId + ":";
             return key;
         }
 

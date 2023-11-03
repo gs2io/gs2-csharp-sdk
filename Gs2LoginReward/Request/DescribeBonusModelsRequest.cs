@@ -34,6 +34,7 @@ namespace Gs2.Gs2LoginReward.Request
 	public class DescribeBonusModelsRequest : Gs2Request<DescribeBonusModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeBonusModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

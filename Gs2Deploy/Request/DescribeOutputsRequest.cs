@@ -36,14 +36,17 @@ namespace Gs2.Gs2Deploy.Request
         public string StackName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeOutputsRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
+
         public DescribeOutputsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeOutputsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

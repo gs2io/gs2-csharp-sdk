@@ -35,10 +35,12 @@ namespace Gs2.Gs2Schedule.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+
         public DescribeEventsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeEventsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

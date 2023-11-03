@@ -36,14 +36,17 @@ namespace Gs2.Gs2News.Request
         public string NamespaceName { set; get; }
         public string UploadToken { set; get; }
         public string OutputName { set; get; }
+
         public GetOutputRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetOutputRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;
         }
+
         public GetOutputRequest WithOutputName(string outputName) {
             this.OutputName = outputName;
             return this;

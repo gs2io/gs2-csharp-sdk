@@ -34,6 +34,7 @@ namespace Gs2.Gs2Deploy.Request
 	public class DeleteStackEntityRequest : Gs2Request<DeleteStackEntityRequest>
 	{
         public string StackName { set; get; }
+
         public DeleteStackEntityRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

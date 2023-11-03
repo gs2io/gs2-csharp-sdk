@@ -44,54 +44,67 @@ namespace Gs2.Gs2Enhance.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public RateModelMaster WithRateModelId(string rateModelId) {
             this.RateModelId = rateModelId;
             return this;
         }
+
         public RateModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public RateModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public RateModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public RateModelMaster WithTargetInventoryModelId(string targetInventoryModelId) {
             this.TargetInventoryModelId = targetInventoryModelId;
             return this;
         }
+
         public RateModelMaster WithAcquireExperienceSuffix(string acquireExperienceSuffix) {
             this.AcquireExperienceSuffix = acquireExperienceSuffix;
             return this;
         }
+
         public RateModelMaster WithMaterialInventoryModelId(string materialInventoryModelId) {
             this.MaterialInventoryModelId = materialInventoryModelId;
             return this;
         }
+
         public RateModelMaster WithAcquireExperienceHierarchy(string[] acquireExperienceHierarchy) {
             this.AcquireExperienceHierarchy = acquireExperienceHierarchy;
             return this;
         }
+
         public RateModelMaster WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public RateModelMaster WithBonusRates(Gs2.Gs2Enhance.Model.BonusRate[] bonusRates) {
             this.BonusRates = bonusRates;
             return this;
         }
+
         public RateModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public RateModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public RateModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

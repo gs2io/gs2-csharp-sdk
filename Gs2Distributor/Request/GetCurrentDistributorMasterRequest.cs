@@ -34,6 +34,7 @@ namespace Gs2.Gs2Distributor.Request
 	public class GetCurrentDistributorMasterRequest : Gs2Request<GetCurrentDistributorMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentDistributorMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

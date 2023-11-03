@@ -35,10 +35,12 @@ namespace Gs2.Gs2LoginReward.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public DeleteReceiveStatusByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public DeleteReceiveStatusByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

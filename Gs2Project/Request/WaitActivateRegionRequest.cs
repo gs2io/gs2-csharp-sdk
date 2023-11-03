@@ -35,10 +35,12 @@ namespace Gs2.Gs2Project.Request
 	{
         public string ProjectName { set; get; }
         public string RegionName { set; get; }
+
         public WaitActivateRegionRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
+
         public WaitActivateRegionRequest WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;

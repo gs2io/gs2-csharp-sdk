@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2QuestRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -73,19 +71,13 @@ namespace Gs2.Gs2Quest.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2QuestRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -100,7 +92,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         )
         {
             return new DescribeProgressesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -112,12 +104,12 @@ namespace Gs2.Gs2Quest.Domain.Model
         public Gs2Iterator<Gs2.Gs2Quest.Model.Progress> Progresses(
             #endif
         #else
-        public DescribeProgressesByUserIdIterator Progresses(
+        public DescribeProgressesByUserIdIterator ProgressesAsync(
         #endif
         )
         {
             return new DescribeProgressesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -134,7 +126,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         public ulong SubscribeProgresses(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.Progress>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.Progress>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -146,7 +138,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         public void UnsubscribeProgresses(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Progress>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Progress>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -159,10 +151,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         public Gs2.Gs2Quest.Domain.Model.ProgressDomain Progress(
         ) {
             return new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId
             );
@@ -173,7 +162,7 @@ namespace Gs2.Gs2Quest.Domain.Model
         )
         {
             return new DescribeCompletedQuestListsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -185,12 +174,12 @@ namespace Gs2.Gs2Quest.Domain.Model
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
             #endif
         #else
-        public DescribeCompletedQuestListsByUserIdIterator CompletedQuestLists(
+        public DescribeCompletedQuestListsByUserIdIterator CompletedQuestListsAsync(
         #endif
         )
         {
             return new DescribeCompletedQuestListsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -207,7 +196,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         public ulong SubscribeCompletedQuestLists(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -219,7 +208,7 @@ namespace Gs2.Gs2Quest.Domain.Model
 
         public void UnsubscribeCompletedQuestLists(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -233,10 +222,7 @@ namespace Gs2.Gs2Quest.Domain.Model
             string questGroupName
         ) {
             return new Gs2.Gs2Quest.Domain.Model.CompletedQuestListDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 questGroupName
@@ -279,7 +265,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
@@ -293,19 +278,10 @@ namespace Gs2.Gs2Quest.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                CreateProgressByUserIdResult result = null;
-                    result = await this._client.CreateProgressByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -325,10 +301,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId
                 );
@@ -337,25 +310,16 @@ namespace Gs2.Gs2Quest.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Quest.Domain.Model.ProgressDomain> CreateProgressAsync(
+            #else
         public async Task<Gs2.Gs2Quest.Domain.Model.ProgressDomain> CreateProgressAsync(
+            #endif
             CreateProgressByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var future = this._client.CreateProgressByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
@@ -363,11 +327,10 @@ namespace Gs2.Gs2Quest.Domain.Model
                 result = await this._client.CreateProgressByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -387,10 +350,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId
                 );
@@ -400,18 +360,6 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Quest.Domain.Model.ProgressDomain> CreateProgressAsync(
-            CreateProgressByUserIdRequest request
-        ) {
-            var future = CreateProgressFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateProgressFuture.")]
         public IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> CreateProgress(
             CreateProgressByUserIdRequest request
@@ -427,7 +375,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
@@ -441,27 +388,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                StartByUserIdResult result = null;
-                    result = await this._client.StartByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -471,7 +406,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -484,25 +419,16 @@ namespace Gs2.Gs2Quest.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> StartAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> StartAsync(
+            #endif
             StartByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var future = this._client.StartByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
@@ -510,19 +436,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                 result = await this._client.StartByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -540,18 +462,6 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> StartAsync(
-            StartByUserIdRequest request
-        ) {
-            var future = StartFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to StartFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> Start(
             StartByUserIdRequest request

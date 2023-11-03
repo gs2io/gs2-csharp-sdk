@@ -59,10 +59,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 {
 
     public partial class ShowcaseDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -74,20 +71,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public string ShowcaseName => _showcaseName;
 
         public ShowcaseDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string showcaseName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ShowcaseRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -103,10 +94,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             string displayItemId
         ) {
             return new Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 this.ShowcaseName,
@@ -167,7 +155,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                             request.ShowcaseName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                             _parentKey,
                             key,
                             null,
@@ -200,7 +188,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                         request.ShowcaseName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         key,
                         null,
@@ -216,7 +204,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -282,7 +270,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                         request.ShowcaseName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         key,
                         null,
@@ -315,7 +303,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                     request.ShowcaseName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                     _parentKey,
                     key,
                     null,
@@ -331,7 +319,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -387,7 +375,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Showcase> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                     _parentKey,
                     Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                         this.ShowcaseName?.ToString()
@@ -405,7 +393,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                                     this.ShowcaseName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                            this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                                 _parentKey,
                                 key,
                                 null,
@@ -424,7 +412,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                             this.ShowcaseName?.ToString()
@@ -438,7 +426,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #else
         public async Task<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                     _parentKey,
                     Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                         this.ShowcaseName?.ToString()
@@ -453,7 +441,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                                     this.ShowcaseName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         key,
                         null,
@@ -465,7 +453,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                             this.ShowcaseName?.ToString()
@@ -511,7 +499,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.Showcase> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                     this.ShowcaseName.ToString()
@@ -522,7 +510,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.Showcase>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.Showcase>(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                     this.ShowcaseName.ToString()

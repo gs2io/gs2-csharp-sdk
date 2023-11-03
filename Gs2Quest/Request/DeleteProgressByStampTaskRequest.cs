@@ -35,10 +35,12 @@ namespace Gs2.Gs2Quest.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public DeleteProgressByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public DeleteProgressByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

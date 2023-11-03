@@ -34,14 +34,17 @@ namespace Gs2.Gs2MegaField.Model
         public float? X { set; get; }
         public float? Y { set; get; }
         public float? Z { set; get; }
+
         public Position WithX(float? x) {
             this.X = x;
             return this;
         }
+
         public Position WithY(float? y) {
             this.Y = y;
             return this;
         }
+
         public Position WithZ(float? z) {
             this.Z = z;
             return this;

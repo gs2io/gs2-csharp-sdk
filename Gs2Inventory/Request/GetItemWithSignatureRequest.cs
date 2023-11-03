@@ -39,26 +39,32 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemName { set; get; }
         public string ItemSetName { set; get; }
         public string KeyId { set; get; }
+
         public GetItemWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetItemWithSignatureRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public GetItemWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetItemWithSignatureRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public GetItemWithSignatureRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
+
         public GetItemWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

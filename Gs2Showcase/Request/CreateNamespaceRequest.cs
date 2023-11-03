@@ -37,37 +37,28 @@ namespace Gs2.Gs2Showcase.Request
         public string Description { set; get; }
         public Gs2.Gs2Showcase.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Showcase.Model.ScriptSetting BuyScript { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
         public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Showcase.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public CreateNamespaceRequest WithBuyScript(Gs2.Gs2Showcase.Model.ScriptSetting buyScript) {
             this.BuyScript = buyScript;
             return this;
         }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public CreateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
-            return this;
-        }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -86,8 +77,6 @@ namespace Gs2.Gs2Showcase.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Showcase.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithBuyScript(!data.Keys.Contains("buyScript") || data["buyScript"] == null ? null : Gs2.Gs2Showcase.Model.ScriptSetting.FromJson(data["buyScript"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Showcase.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -98,8 +87,6 @@ namespace Gs2.Gs2Showcase.Request
                 ["description"] = Description,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["buyScript"] = BuyScript?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -121,14 +108,6 @@ namespace Gs2.Gs2Showcase.Request
             if (BuyScript != null) {
                 BuyScript.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -141,8 +120,6 @@ namespace Gs2.Gs2Showcase.Request
             key += Description + ":";
             key += TransactionSetting + ":";
             key += BuyScript + ":";
-            key += QueueNamespaceId + ":";
-            key += KeyId + ":";
             key += LogSetting + ":";
             return key;
         }

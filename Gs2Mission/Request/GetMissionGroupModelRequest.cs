@@ -35,10 +35,12 @@ namespace Gs2.Gs2Mission.Request
 	{
         public string NamespaceName { set; get; }
         public string MissionGroupName { set; get; }
+
         public GetMissionGroupModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetMissionGroupModelRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;

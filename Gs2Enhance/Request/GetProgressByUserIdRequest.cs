@@ -35,10 +35,12 @@ namespace Gs2.Gs2Enhance.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+
         public GetProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -39,26 +39,32 @@ namespace Gs2.Gs2Realtime.Request
         public string ServerSpec { set; get; }
         public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; }
         public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithServerType(string serverType) {
             this.ServerType = serverType;
             return this;
         }
+
         public CreateNamespaceRequest WithServerSpec(string serverSpec) {
             this.ServerSpec = serverSpec;
             return this;
         }
+
         public CreateNamespaceRequest WithCreateNotification(Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
             this.CreateNotification = createNotification;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Realtime.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

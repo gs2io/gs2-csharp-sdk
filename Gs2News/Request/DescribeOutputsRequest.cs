@@ -37,18 +37,22 @@ namespace Gs2.Gs2News.Request
         public string UploadToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeOutputsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeOutputsRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;
         }
+
         public DescribeOutputsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeOutputsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

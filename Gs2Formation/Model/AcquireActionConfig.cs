@@ -33,10 +33,12 @@ namespace Gs2.Gs2Formation.Model
 	{
         public string Name { set; get; }
         public Gs2.Gs2Formation.Model.Config[] Config { set; get; }
+
         public AcquireActionConfig WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public AcquireActionConfig WithConfig(Gs2.Gs2Formation.Model.Config[] config) {
             this.Config = config;
             return this;

@@ -33,10 +33,12 @@ namespace Gs2.Gs2Ranking.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentRankingMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentRankingMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

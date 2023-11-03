@@ -34,6 +34,7 @@ namespace Gs2.Gs2Inbox.Request
 	public class ExportMasterRequest : Gs2Request<ExportMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public ExportMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

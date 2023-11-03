@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Money.Domain.Model
 {
 
     public partial class WalletAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MoneyRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -74,20 +72,14 @@ namespace Gs2.Gs2Money.Domain.Model
         public int? Slot => _slot;
 
         public WalletAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             int? slot
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MoneyRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -106,7 +98,6 @@ namespace Gs2.Gs2Money.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Wallet> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -121,7 +112,7 @@ namespace Gs2.Gs2Money.Domain.Model
                         var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                             request.Slot.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Money.Model.Wallet>(
+                        this._gs2.Cache.Put<Gs2.Gs2Money.Model.Wallet>(
                             _parentKey,
                             key,
                             null,
@@ -140,37 +131,10 @@ namespace Gs2.Gs2Money.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithSlot(this.Slot);
-                GetWalletResult result = null;
-                try {
-                    result = await this._client.GetWalletAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                        request.Slot.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Money.Model.Wallet>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "wallet")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -194,45 +158,16 @@ namespace Gs2.Gs2Money.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Money.Model.Wallet>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Money.Model.Wallet> GetAsync(
+            #else
         private async Task<Gs2.Gs2Money.Model.Wallet> GetAsync(
+            #endif
             GetWalletRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithSlot(this.Slot);
-            var future = this._client.GetWalletFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
-                        request.Slot.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Money.Model.Wallet>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "wallet")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -246,7 +181,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                     request.Slot.ToString()
                     );
-                _cache.Put<Gs2.Gs2Money.Model.Wallet>(
+                this._gs2.Cache.Put<Gs2.Gs2Money.Model.Wallet>(
                     _parentKey,
                     key,
                     null,
@@ -258,11 +193,10 @@ namespace Gs2.Gs2Money.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -293,7 +227,6 @@ namespace Gs2.Gs2Money.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -308,20 +241,10 @@ namespace Gs2.Gs2Money.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithSlot(this.Slot);
-                WithdrawResult result = null;
-                    result = await this._client.WithdrawAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -348,26 +271,16 @@ namespace Gs2.Gs2Money.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain> WithdrawAsync(
+            #else
         public async Task<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain> WithdrawAsync(
+            #endif
             WithdrawRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithSlot(this.Slot);
-            var future = this._client.WithdrawFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -376,11 +289,10 @@ namespace Gs2.Gs2Money.Domain.Model
                 result = await this._client.WithdrawAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -408,18 +320,6 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain> WithdrawAsync(
-            WithdrawRequest request
-        ) {
-            var future = WithdrawFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to WithdrawFuture.")]
         public IFuture<Gs2.Gs2Money.Domain.Model.WalletAccessTokenDomain> Withdraw(
             WithdrawRequest request
@@ -460,7 +360,7 @@ namespace Gs2.Gs2Money.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Wallet> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Money.Model.Wallet>(
                     _parentKey,
                     Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                         this.Slot?.ToString() ?? "0"
@@ -478,7 +378,7 @@ namespace Gs2.Gs2Money.Domain.Model
                             var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                                     this.Slot?.ToString() ?? "0"
                                 );
-                            _cache.Put<Gs2.Gs2Money.Model.Wallet>(
+                            this._gs2.Cache.Put<Gs2.Gs2Money.Model.Wallet>(
                                 _parentKey,
                                 key,
                                 null,
@@ -497,7 +397,7 @@ namespace Gs2.Gs2Money.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Money.Model.Wallet>(
                         _parentKey,
                         Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                             this.Slot?.ToString() ?? "0"
@@ -508,10 +408,15 @@ namespace Gs2.Gs2Money.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Money.Model.Wallet>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Money.Model.Wallet> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Money.Model.Wallet> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Money.Model.Wallet>(
                     _parentKey,
                     Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                         this.Slot?.ToString() ?? "0"
@@ -526,7 +431,7 @@ namespace Gs2.Gs2Money.Domain.Model
                     var key = Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                                     this.Slot?.ToString() ?? "0"
                                 );
-                    _cache.Put<Gs2.Gs2Money.Model.Wallet>(
+                    this._gs2.Cache.Put<Gs2.Gs2Money.Model.Wallet>(
                         _parentKey,
                         key,
                         null,
@@ -538,7 +443,7 @@ namespace Gs2.Gs2Money.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Money.Model.Wallet>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Money.Model.Wallet>(
                         _parentKey,
                         Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                             this.Slot?.ToString() ?? "0"
@@ -551,16 +456,6 @@ namespace Gs2.Gs2Money.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Money.Model.Wallet> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Money.Model.Wallet> Model()
         {
@@ -584,7 +479,7 @@ namespace Gs2.Gs2Money.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Money.Model.Wallet> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                     this.Slot.ToString()
@@ -595,7 +490,7 @@ namespace Gs2.Gs2Money.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Money.Model.Wallet>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Money.Model.Wallet>(
                 _parentKey,
                 Gs2.Gs2Money.Domain.Model.WalletDomain.CreateCacheKey(
                     this.Slot.ToString()

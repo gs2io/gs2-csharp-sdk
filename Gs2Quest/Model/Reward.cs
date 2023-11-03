@@ -35,18 +35,22 @@ namespace Gs2.Gs2Quest.Model
         public string Request { set; get; }
         public string ItemId { set; get; }
         public int? Value { set; get; }
+
         public Reward WithAction(string action) {
             this.Action = action;
             return this;
         }
+
         public Reward WithRequest(string request) {
             this.Request = request;
             return this;
         }
+
         public Reward WithItemId(string itemId) {
             this.ItemId = itemId;
             return this;
         }
+
         public Reward WithValue(int? value) {
             this.Value = value;
             return this;

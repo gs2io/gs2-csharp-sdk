@@ -34,14 +34,17 @@ namespace Gs2.Gs2Dictionary.Model
         public string EntryModelId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
+
         public EntryModel WithEntryModelId(string entryModelId) {
             this.EntryModelId = entryModelId;
             return this;
         }
+
         public EntryModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public EntryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

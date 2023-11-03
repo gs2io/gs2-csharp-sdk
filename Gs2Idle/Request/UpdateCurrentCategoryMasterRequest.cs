@@ -35,10 +35,12 @@ namespace Gs2.Gs2Idle.Request
 	{
         public string NamespaceName { set; get; }
         public string Settings { set; get; }
+
         public UpdateCurrentCategoryMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentCategoryMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

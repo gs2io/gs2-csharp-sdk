@@ -37,18 +37,22 @@ namespace Gs2.Gs2Ranking.Request
         public string CategoryName { set; get; }
         public string AdditionalScopeName { set; get; }
         public long? Score { set; get; }
+
         public DescribeNearRankingsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeNearRankingsRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public DescribeNearRankingsRequest WithAdditionalScopeName(string additionalScopeName) {
             this.AdditionalScopeName = additionalScopeName;
             return this;
         }
+
         public DescribeNearRankingsRequest WithScore(long? score) {
             this.Score = score;
             return this;

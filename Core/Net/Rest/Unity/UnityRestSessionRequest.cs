@@ -9,6 +9,7 @@ using Cysharp.Threading.Tasks;
 using Gs2.Core.Exception;
 #endif
 using UnityEngine.Networking;
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
 namespace Gs2.Core.Net
 {

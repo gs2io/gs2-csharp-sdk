@@ -36,14 +36,17 @@ namespace Gs2.Gs2Realtime.Request
         public string NamespaceName { set; get; }
         public string Name { set; get; }
         public string[] NotificationUserIds { set; get; }
+
         public WantRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public WantRoomRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public WantRoomRequest WithNotificationUserIds(string[] notificationUserIds) {
             this.NotificationUserIds = notificationUserIds;
             return this;

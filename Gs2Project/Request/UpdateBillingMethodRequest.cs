@@ -36,14 +36,17 @@ namespace Gs2.Gs2Project.Request
         public string AccountToken { set; get; }
         public string BillingMethodName { set; get; }
         public string Description { set; get; }
+
         public UpdateBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public UpdateBillingMethodRequest WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
         }
+
         public UpdateBillingMethodRequest WithDescription(string description) {
             this.Description = description;
             return this;

@@ -34,6 +34,7 @@ namespace Gs2.Gs2Lock.Request
 	public class DeleteNamespaceRequest : Gs2Request<DeleteNamespaceRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DeleteNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

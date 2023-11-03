@@ -36,14 +36,17 @@ namespace Gs2.Gs2SkillTree.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeNodeModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeNodeModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeNodeModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

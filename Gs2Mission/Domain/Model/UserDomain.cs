@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Mission.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -71,19 +69,13 @@ namespace Gs2.Gs2Mission.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MissionRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -98,7 +90,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         )
         {
             return new DescribeCountersByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -110,12 +102,12 @@ namespace Gs2.Gs2Mission.Domain.Model
         public Gs2Iterator<Gs2.Gs2Mission.Model.Counter> Counters(
             #endif
         #else
-        public DescribeCountersByUserIdIterator Counters(
+        public DescribeCountersByUserIdIterator CountersAsync(
         #endif
         )
         {
             return new DescribeCountersByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -132,7 +124,7 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         public ulong SubscribeCounters(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.Counter>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Counter>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -144,7 +136,7 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         public void UnsubscribeCounters(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Counter>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Counter>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -158,10 +150,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             string counterName
         ) {
             return new Gs2.Gs2Mission.Domain.Model.CounterDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 counterName
@@ -173,7 +162,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         )
         {
             return new DescribeCompletesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -185,12 +174,12 @@ namespace Gs2.Gs2Mission.Domain.Model
         public Gs2Iterator<Gs2.Gs2Mission.Model.Complete> Completes(
             #endif
         #else
-        public DescribeCompletesByUserIdIterator Completes(
+        public DescribeCompletesByUserIdIterator CompletesAsync(
         #endif
         )
         {
             return new DescribeCompletesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -207,7 +196,7 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         public ulong SubscribeCompletes(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Mission.Model.Complete>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Complete>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -219,7 +208,7 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         public void UnsubscribeCompletes(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Complete>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Complete>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -233,10 +222,7 @@ namespace Gs2.Gs2Mission.Domain.Model
             string missionGroupName
         ) {
             return new Gs2.Gs2Mission.Domain.Model.CompleteDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 missionGroupName

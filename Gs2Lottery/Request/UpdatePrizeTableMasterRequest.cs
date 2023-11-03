@@ -38,22 +38,27 @@ namespace Gs2.Gs2Lottery.Request
         public string Description { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2Lottery.Model.Prize[] Prizes { set; get; }
+
         public UpdatePrizeTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdatePrizeTableMasterRequest WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
+
         public UpdatePrizeTableMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdatePrizeTableMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdatePrizeTableMasterRequest WithPrizes(Gs2.Gs2Lottery.Model.Prize[] prizes) {
             this.Prizes = prizes;
             return this;

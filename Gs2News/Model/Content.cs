@@ -34,14 +34,17 @@ namespace Gs2.Gs2News.Model
         public string Section { set; get; }
         public string Value { set; get; }
         public string FrontMatter { set; get; }
+
         public Content WithSection(string section) {
             this.Section = section;
             return this;
         }
+
         public Content WithValue(string value) {
             this.Value = value;
             return this;
         }
+
         public Content WithFrontMatter(string frontMatter) {
             this.FrontMatter = frontMatter;
             return this;

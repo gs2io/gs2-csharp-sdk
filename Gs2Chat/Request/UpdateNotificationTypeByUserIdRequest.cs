@@ -38,18 +38,22 @@ namespace Gs2.Gs2Chat.Request
         public string UserId { set; get; }
         public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public UpdateNotificationTypeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNotificationTypeByUserIdRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public UpdateNotificationTypeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public UpdateNotificationTypeByUserIdRequest WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
             this.NotificationTypes = notificationTypes;
             return this;

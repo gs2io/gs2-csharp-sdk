@@ -56,10 +56,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 {
 
     public partial class DrawnPrizeAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -72,20 +69,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public int Index => _index;
 
         public DrawnPrizeAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             int index
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LotteryRestClient(
-                session
+                this._gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -137,14 +128,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
             {
         #endif
         #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._cache.GetLockObject<Gs2.Gs2Lottery.Model.DrawnPrize>(
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.DrawnPrize>(
                        _parentKey,
                        Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                             this.Index
                         )).LockAsync())
             {
         # endif
-            var (value, find) = _cache.Get<Gs2.Gs2Lottery.Model.DrawnPrize>(
+            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                     this.Index
@@ -168,7 +159,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.DrawnPrize> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                     this.Index
@@ -179,7 +170,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                     this.Index

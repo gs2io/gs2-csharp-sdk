@@ -33,10 +33,12 @@ namespace Gs2.Gs2Deploy.Model
 	{
         public string Name { set; get; }
         public string FieldName { set; get; }
+
         public OutputField WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public OutputField WithFieldName(string fieldName) {
             this.FieldName = fieldName;
             return this;

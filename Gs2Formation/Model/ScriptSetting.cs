@@ -35,18 +35,22 @@ namespace Gs2.Gs2Formation.Model
         public string DoneTriggerTargetType { set; get; }
         public string DoneTriggerScriptId { set; get; }
         public string DoneTriggerQueueNamespaceId { set; get; }
+
         public ScriptSetting WithTriggerScriptId(string triggerScriptId) {
             this.TriggerScriptId = triggerScriptId;
             return this;
         }
+
         public ScriptSetting WithDoneTriggerTargetType(string doneTriggerTargetType) {
             this.DoneTriggerTargetType = doneTriggerTargetType;
             return this;
         }
+
         public ScriptSetting WithDoneTriggerScriptId(string doneTriggerScriptId) {
             this.DoneTriggerScriptId = doneTriggerScriptId;
             return this;
         }
+
         public ScriptSetting WithDoneTriggerQueueNamespaceId(string doneTriggerQueueNamespaceId) {
             this.DoneTriggerQueueNamespaceId = doneTriggerQueueNamespaceId;
             return this;

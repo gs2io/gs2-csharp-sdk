@@ -35,10 +35,12 @@ namespace Gs2.Gs2Realtime.Request
 	{
         public string NamespaceName { set; get; }
         public string RoomName { set; get; }
+
         public DeleteRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteRoomRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;

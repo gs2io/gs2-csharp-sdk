@@ -38,30 +38,37 @@ namespace Gs2.Gs2StateMachine.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public StateMachineMaster WithStateMachineId(string stateMachineId) {
             this.StateMachineId = stateMachineId;
             return this;
         }
+
         public StateMachineMaster WithMainStateMachineName(string mainStateMachineName) {
             this.MainStateMachineName = mainStateMachineName;
             return this;
         }
+
         public StateMachineMaster WithPayload(string payload) {
             this.Payload = payload;
             return this;
         }
+
         public StateMachineMaster WithVersion(long? version) {
             this.Version = version;
             return this;
         }
+
         public StateMachineMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public StateMachineMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public StateMachineMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

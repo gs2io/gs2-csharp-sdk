@@ -33,10 +33,12 @@ namespace Gs2.Gs2Inventory.Model
 	{
         public string ItemName { set; get; }
         public long? Count { set; get; }
+
         public AcquireCount WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public AcquireCount WithCount(long? count) {
             this.Count = count;
             return this;

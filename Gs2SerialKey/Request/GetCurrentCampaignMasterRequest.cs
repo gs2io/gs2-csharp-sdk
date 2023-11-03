@@ -34,6 +34,7 @@ namespace Gs2.Gs2SerialKey.Request
 	public class GetCurrentCampaignMasterRequest : Gs2Request<GetCurrentCampaignMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentCampaignMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

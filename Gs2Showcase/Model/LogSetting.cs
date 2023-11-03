@@ -32,6 +32,7 @@ namespace Gs2.Gs2Showcase.Model
 	public class LogSetting : IComparable
 	{
         public string LoggingNamespaceId { set; get; }
+
         public LogSetting WithLoggingNamespaceId(string loggingNamespaceId) {
             this.LoggingNamespaceId = loggingNamespaceId;
             return this;

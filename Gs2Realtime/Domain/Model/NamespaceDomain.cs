@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
 {
 
     public partial class NamespaceDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RealtimeRestClient _client;
         private readonly string _namespaceName;
 
@@ -71,18 +69,12 @@ namespace Gs2.Gs2Realtime.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2RealtimeRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = "realtime:Namespace";
@@ -93,7 +85,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
         )
         {
             return new DescribeRoomsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -104,12 +96,12 @@ namespace Gs2.Gs2Realtime.Domain.Model
         public Gs2Iterator<Gs2.Gs2Realtime.Model.Room> Rooms(
             #endif
         #else
-        public DescribeRoomsIterator Rooms(
+        public DescribeRoomsIterator RoomsAsync(
         #endif
         )
         {
             return new DescribeRoomsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -125,7 +117,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
         public ulong SubscribeRooms(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Realtime.Model.Room>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Realtime.Model.Room>(
                 Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Room"
@@ -136,7 +128,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
         public void UnsubscribeRooms(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Realtime.Model.Room>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Realtime.Model.Room>(
                 Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Room"
@@ -149,10 +141,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
             string roomName
         ) {
             return new Gs2.Gs2Realtime.Domain.Model.RoomDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 roomName
             );
@@ -192,7 +181,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceStatusFuture(
@@ -205,7 +193,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                         var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -224,35 +212,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceStatusResult result = null;
-                try {
-                    result = await this._client.GetNamespaceStatusAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -262,43 +225,16 @@ namespace Gs2.Gs2Realtime.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #else
         public async Task<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #endif
             GetNamespaceStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceStatusResult result = null;
@@ -310,7 +246,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                 var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -322,11 +258,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -337,18 +272,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> GetStatusAsync(
-            GetNamespaceStatusRequest request
-        ) {
-            var future = GetStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetStatusFuture.")]
         public IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> GetStatus(
             GetNamespaceStatusRequest request
@@ -364,7 +287,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Realtime.Model.Namespace> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceFuture(
@@ -377,7 +299,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                         var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -396,35 +318,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceResult result = null;
-                try {
-                    result = await this._client.GetNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -448,43 +345,16 @@ namespace Gs2.Gs2Realtime.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Realtime.Model.Namespace> GetAsync(
+            #else
         private async Task<Gs2.Gs2Realtime.Model.Namespace> GetAsync(
+            #endif
             GetNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceResult result = null;
@@ -496,7 +366,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                 var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -508,11 +378,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -543,7 +412,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateNamespaceFuture(
@@ -556,18 +424,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateNamespaceResult result = null;
-                    result = await this._client.UpdateNamespaceAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -593,35 +453,26 @@ namespace Gs2.Gs2Realtime.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> UpdateAsync(
+            #endif
             UpdateNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateNamespaceResult result = null;
                 result = await this._client.UpdateNamespaceAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -648,18 +499,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> UpdateAsync(
-            UpdateNamespaceRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> Update(
             UpdateNamespaceRequest request
@@ -675,7 +514,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.DeleteNamespaceFuture(
@@ -688,7 +526,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                         var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -707,35 +545,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                DeleteNamespaceResult result = null;
-                try {
-                    result = await this._client.DeleteNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -756,43 +569,16 @@ namespace Gs2.Gs2Realtime.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> DeleteAsync(
+            #endif
             DeleteNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.DeleteNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             DeleteNamespaceResult result = null;
@@ -804,7 +590,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                 var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -816,11 +602,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -842,18 +627,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> DeleteAsync(
-            DeleteNamespaceRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> Delete(
             DeleteNamespaceRequest request
@@ -869,7 +642,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Realtime.Domain.Model.RoomDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.WantRoomFuture(
@@ -882,18 +654,10 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                WantRoomResult result = null;
-                    result = await this._client.WantRoomAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -913,10 +677,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Realtime.Domain.Model.RoomDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -925,35 +686,26 @@ namespace Gs2.Gs2Realtime.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Domain.Model.RoomDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Realtime.Domain.Model.RoomDomain> WantRoomAsync(
+            #else
         public async Task<Gs2.Gs2Realtime.Domain.Model.RoomDomain> WantRoomAsync(
+            #endif
             WantRoomRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.WantRoomFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             WantRoomResult result = null;
                 result = await this._client.WantRoomAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -973,10 +725,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Realtime.Domain.Model.RoomDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -986,18 +735,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Realtime.Domain.Model.RoomDomain> WantRoomAsync(
-            WantRoomRequest request
-        ) {
-            var future = WantRoomFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to WantRoomFuture.")]
         public IFuture<Gs2.Gs2Realtime.Domain.Model.RoomDomain> WantRoom(
             WantRoomRequest request
@@ -1020,7 +757,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     "realtime",
                     "Namespace"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1038,7 +775,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                             var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                            this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                                 parentKey,
                                 key,
                                 null,
@@ -1057,7 +794,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1068,15 +805,20 @@ namespace Gs2.Gs2Realtime.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Realtime.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Realtime.Model.Namespace> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Realtime.Model.Namespace> ModelAsync()
+            #endif
         {
             var parentKey = string.Join(
                 ":",
                 "realtime",
                 "Namespace"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1091,7 +833,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                     var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Realtime.Model.Namespace>(
                         parentKey,
                         key,
                         null,
@@ -1103,7 +845,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Realtime.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1116,16 +858,6 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Realtime.Model.Namespace> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Realtime.Model.Namespace> Model()
         {
@@ -1149,7 +881,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Realtime.Model.Namespace> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()
@@ -1160,7 +892,7 @@ namespace Gs2.Gs2Realtime.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Realtime.Model.Namespace>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Realtime.Model.Namespace>(
                 _parentKey,
                 Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()

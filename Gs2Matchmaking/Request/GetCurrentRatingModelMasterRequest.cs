@@ -34,6 +34,7 @@ namespace Gs2.Gs2Matchmaking.Request
 	public class GetCurrentRatingModelMasterRequest : Gs2Request<GetCurrentRatingModelMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentRatingModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

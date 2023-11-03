@@ -35,10 +35,12 @@ namespace Gs2.Gs2Identifier.Request
 	{
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeSecurityPoliciesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeSecurityPoliciesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

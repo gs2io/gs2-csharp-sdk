@@ -2008,5 +2008,1203 @@ namespace Gs2.Gs2Project
 			return await task.Invoke();
         }
 #endif
+
+
+        public class GetDumpProgressTask : Gs2WebSocketSessionTask<Request.GetDumpProgressRequest, Result.GetDumpProgressResult>
+        {
+	        public GetDumpProgressTask(IGs2Session session, Request.GetDumpProgressRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetDumpProgressRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "dumpProgress",
+                    "getDumpProgress",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetDumpProgress(
+                Request.GetDumpProgressRequest request,
+                UnityAction<AsyncResult<Result.GetDumpProgressResult>> callback
+        )
+		{
+			var task = new GetDumpProgressTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDumpProgressResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetDumpProgressResult> GetDumpProgressFuture(
+                Request.GetDumpProgressRequest request
+        )
+		{
+			return new GetDumpProgressTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDumpProgressResult> GetDumpProgressAsync(
+            Request.GetDumpProgressRequest request
+        )
+		{
+		    var task = new GetDumpProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetDumpProgressTask GetDumpProgressAsync(
+                Request.GetDumpProgressRequest request
+        )
+		{
+			return new GetDumpProgressTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetDumpProgressResult> GetDumpProgressAsync(
+            Request.GetDumpProgressRequest request
+        )
+		{
+		    var task = new GetDumpProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class WaitDumpUserDataTask : Gs2WebSocketSessionTask<Request.WaitDumpUserDataRequest, Result.WaitDumpUserDataResult>
+        {
+	        public WaitDumpUserDataTask(IGs2Session session, Request.WaitDumpUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.WaitDumpUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.MicroserviceName != null)
+                {
+                    jsonWriter.WritePropertyName("microserviceName");
+                    jsonWriter.Write(request.MicroserviceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "dumpProgress",
+                    "waitDumpUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator WaitDumpUserData(
+                Request.WaitDumpUserDataRequest request,
+                UnityAction<AsyncResult<Result.WaitDumpUserDataResult>> callback
+        )
+		{
+			var task = new WaitDumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.WaitDumpUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.WaitDumpUserDataResult> WaitDumpUserDataFuture(
+                Request.WaitDumpUserDataRequest request
+        )
+		{
+			return new WaitDumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WaitDumpUserDataResult> WaitDumpUserDataAsync(
+            Request.WaitDumpUserDataRequest request
+        )
+		{
+		    var task = new WaitDumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public WaitDumpUserDataTask WaitDumpUserDataAsync(
+                Request.WaitDumpUserDataRequest request
+        )
+		{
+			return new WaitDumpUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.WaitDumpUserDataResult> WaitDumpUserDataAsync(
+            Request.WaitDumpUserDataRequest request
+        )
+		{
+		    var task = new WaitDumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ArchiveDumpUserDataTask : Gs2WebSocketSessionTask<Request.ArchiveDumpUserDataRequest, Result.ArchiveDumpUserDataResult>
+        {
+	        public ArchiveDumpUserDataTask(IGs2Session session, Request.ArchiveDumpUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ArchiveDumpUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "dumpProgress",
+                    "archiveDumpUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ArchiveDumpUserData(
+                Request.ArchiveDumpUserDataRequest request,
+                UnityAction<AsyncResult<Result.ArchiveDumpUserDataResult>> callback
+        )
+		{
+			var task = new ArchiveDumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ArchiveDumpUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ArchiveDumpUserDataResult> ArchiveDumpUserDataFuture(
+                Request.ArchiveDumpUserDataRequest request
+        )
+		{
+			return new ArchiveDumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ArchiveDumpUserDataResult> ArchiveDumpUserDataAsync(
+            Request.ArchiveDumpUserDataRequest request
+        )
+		{
+		    var task = new ArchiveDumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ArchiveDumpUserDataTask ArchiveDumpUserDataAsync(
+                Request.ArchiveDumpUserDataRequest request
+        )
+		{
+			return new ArchiveDumpUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ArchiveDumpUserDataResult> ArchiveDumpUserDataAsync(
+            Request.ArchiveDumpUserDataRequest request
+        )
+		{
+		    var task = new ArchiveDumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DumpUserDataTask : Gs2WebSocketSessionTask<Request.DumpUserDataRequest, Result.DumpUserDataResult>
+        {
+	        public DumpUserDataTask(IGs2Session session, Request.DumpUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DumpUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "dumpProgress",
+                    "dumpUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DumpUserData(
+                Request.DumpUserDataRequest request,
+                UnityAction<AsyncResult<Result.DumpUserDataResult>> callback
+        )
+		{
+			var task = new DumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DumpUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DumpUserDataResult> DumpUserDataFuture(
+                Request.DumpUserDataRequest request
+        )
+		{
+			return new DumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DumpUserDataResult> DumpUserDataAsync(
+            Request.DumpUserDataRequest request
+        )
+		{
+		    var task = new DumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DumpUserDataTask DumpUserDataAsync(
+                Request.DumpUserDataRequest request
+        )
+		{
+			return new DumpUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DumpUserDataResult> DumpUserDataAsync(
+            Request.DumpUserDataRequest request
+        )
+		{
+		    var task = new DumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetDumpUserDataTask : Gs2WebSocketSessionTask<Request.GetDumpUserDataRequest, Result.GetDumpUserDataResult>
+        {
+	        public GetDumpUserDataTask(IGs2Session session, Request.GetDumpUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetDumpUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "dumpProgress",
+                    "getDumpUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetDumpUserData(
+                Request.GetDumpUserDataRequest request,
+                UnityAction<AsyncResult<Result.GetDumpUserDataResult>> callback
+        )
+		{
+			var task = new GetDumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetDumpUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetDumpUserDataResult> GetDumpUserDataFuture(
+                Request.GetDumpUserDataRequest request
+        )
+		{
+			return new GetDumpUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetDumpUserDataResult> GetDumpUserDataAsync(
+            Request.GetDumpUserDataRequest request
+        )
+		{
+		    var task = new GetDumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetDumpUserDataTask GetDumpUserDataAsync(
+                Request.GetDumpUserDataRequest request
+        )
+		{
+			return new GetDumpUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetDumpUserDataResult> GetDumpUserDataAsync(
+            Request.GetDumpUserDataRequest request
+        )
+		{
+		    var task = new GetDumpUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetCleanProgressTask : Gs2WebSocketSessionTask<Request.GetCleanProgressRequest, Result.GetCleanProgressResult>
+        {
+	        public GetCleanProgressTask(IGs2Session session, Request.GetCleanProgressRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetCleanProgressRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "cleanProgress",
+                    "getCleanProgress",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetCleanProgress(
+                Request.GetCleanProgressRequest request,
+                UnityAction<AsyncResult<Result.GetCleanProgressResult>> callback
+        )
+		{
+			var task = new GetCleanProgressTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetCleanProgressResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetCleanProgressResult> GetCleanProgressFuture(
+                Request.GetCleanProgressRequest request
+        )
+		{
+			return new GetCleanProgressTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetCleanProgressResult> GetCleanProgressAsync(
+            Request.GetCleanProgressRequest request
+        )
+		{
+		    var task = new GetCleanProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetCleanProgressTask GetCleanProgressAsync(
+                Request.GetCleanProgressRequest request
+        )
+		{
+			return new GetCleanProgressTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetCleanProgressResult> GetCleanProgressAsync(
+            Request.GetCleanProgressRequest request
+        )
+		{
+		    var task = new GetCleanProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class WaitCleanUserDataTask : Gs2WebSocketSessionTask<Request.WaitCleanUserDataRequest, Result.WaitCleanUserDataResult>
+        {
+	        public WaitCleanUserDataTask(IGs2Session session, Request.WaitCleanUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.WaitCleanUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.MicroserviceName != null)
+                {
+                    jsonWriter.WritePropertyName("microserviceName");
+                    jsonWriter.Write(request.MicroserviceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "cleanProgress",
+                    "waitCleanUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator WaitCleanUserData(
+                Request.WaitCleanUserDataRequest request,
+                UnityAction<AsyncResult<Result.WaitCleanUserDataResult>> callback
+        )
+		{
+			var task = new WaitCleanUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.WaitCleanUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.WaitCleanUserDataResult> WaitCleanUserDataFuture(
+                Request.WaitCleanUserDataRequest request
+        )
+		{
+			return new WaitCleanUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WaitCleanUserDataResult> WaitCleanUserDataAsync(
+            Request.WaitCleanUserDataRequest request
+        )
+		{
+		    var task = new WaitCleanUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public WaitCleanUserDataTask WaitCleanUserDataAsync(
+                Request.WaitCleanUserDataRequest request
+        )
+		{
+			return new WaitCleanUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.WaitCleanUserDataResult> WaitCleanUserDataAsync(
+            Request.WaitCleanUserDataRequest request
+        )
+		{
+		    var task = new WaitCleanUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CleanUserDataTask : Gs2WebSocketSessionTask<Request.CleanUserDataRequest, Result.CleanUserDataResult>
+        {
+	        public CleanUserDataTask(IGs2Session session, Request.CleanUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CleanUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "cleanProgress",
+                    "cleanUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CleanUserData(
+                Request.CleanUserDataRequest request,
+                UnityAction<AsyncResult<Result.CleanUserDataResult>> callback
+        )
+		{
+			var task = new CleanUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CleanUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CleanUserDataResult> CleanUserDataFuture(
+                Request.CleanUserDataRequest request
+        )
+		{
+			return new CleanUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CleanUserDataResult> CleanUserDataAsync(
+            Request.CleanUserDataRequest request
+        )
+		{
+		    var task = new CleanUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CleanUserDataTask CleanUserDataAsync(
+                Request.CleanUserDataRequest request
+        )
+		{
+			return new CleanUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CleanUserDataResult> CleanUserDataAsync(
+            Request.CleanUserDataRequest request
+        )
+		{
+		    var task = new CleanUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetImportProgressTask : Gs2WebSocketSessionTask<Request.GetImportProgressRequest, Result.GetImportProgressResult>
+        {
+	        public GetImportProgressTask(IGs2Session session, Request.GetImportProgressRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetImportProgressRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "importProgress",
+                    "getImportProgress",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetImportProgress(
+                Request.GetImportProgressRequest request,
+                UnityAction<AsyncResult<Result.GetImportProgressResult>> callback
+        )
+		{
+			var task = new GetImportProgressTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetImportProgressResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetImportProgressResult> GetImportProgressFuture(
+                Request.GetImportProgressRequest request
+        )
+		{
+			return new GetImportProgressTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetImportProgressResult> GetImportProgressAsync(
+            Request.GetImportProgressRequest request
+        )
+		{
+		    var task = new GetImportProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetImportProgressTask GetImportProgressAsync(
+                Request.GetImportProgressRequest request
+        )
+		{
+			return new GetImportProgressTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetImportProgressResult> GetImportProgressAsync(
+            Request.GetImportProgressRequest request
+        )
+		{
+		    var task = new GetImportProgressTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class WaitImportUserDataTask : Gs2WebSocketSessionTask<Request.WaitImportUserDataRequest, Result.WaitImportUserDataResult>
+        {
+	        public WaitImportUserDataTask(IGs2Session session, Request.WaitImportUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.WaitImportUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.TransactionId != null)
+                {
+                    jsonWriter.WritePropertyName("transactionId");
+                    jsonWriter.Write(request.TransactionId.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.MicroserviceName != null)
+                {
+                    jsonWriter.WritePropertyName("microserviceName");
+                    jsonWriter.Write(request.MicroserviceName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "importProgress",
+                    "waitImportUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator WaitImportUserData(
+                Request.WaitImportUserDataRequest request,
+                UnityAction<AsyncResult<Result.WaitImportUserDataResult>> callback
+        )
+		{
+			var task = new WaitImportUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.WaitImportUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.WaitImportUserDataResult> WaitImportUserDataFuture(
+                Request.WaitImportUserDataRequest request
+        )
+		{
+			return new WaitImportUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.WaitImportUserDataResult> WaitImportUserDataAsync(
+            Request.WaitImportUserDataRequest request
+        )
+		{
+		    var task = new WaitImportUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public WaitImportUserDataTask WaitImportUserDataAsync(
+                Request.WaitImportUserDataRequest request
+        )
+		{
+			return new WaitImportUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.WaitImportUserDataResult> WaitImportUserDataAsync(
+            Request.WaitImportUserDataRequest request
+        )
+		{
+		    var task = new WaitImportUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ImportUserDataTask : Gs2WebSocketSessionTask<Request.ImportUserDataRequest, Result.ImportUserDataResult>
+        {
+	        public ImportUserDataTask(IGs2Session session, Request.ImportUserDataRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ImportUserDataRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.UploadToken != null)
+                {
+                    jsonWriter.WritePropertyName("uploadToken");
+                    jsonWriter.Write(request.UploadToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "importProgress",
+                    "importUserData",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ImportUserData(
+                Request.ImportUserDataRequest request,
+                UnityAction<AsyncResult<Result.ImportUserDataResult>> callback
+        )
+		{
+			var task = new ImportUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ImportUserDataResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ImportUserDataResult> ImportUserDataFuture(
+                Request.ImportUserDataRequest request
+        )
+		{
+			return new ImportUserDataTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ImportUserDataResult> ImportUserDataAsync(
+            Request.ImportUserDataRequest request
+        )
+		{
+		    var task = new ImportUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ImportUserDataTask ImportUserDataAsync(
+                Request.ImportUserDataRequest request
+        )
+		{
+			return new ImportUserDataTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ImportUserDataResult> ImportUserDataAsync(
+            Request.ImportUserDataRequest request
+        )
+		{
+		    var task = new ImportUserDataTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

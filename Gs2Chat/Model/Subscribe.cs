@@ -37,26 +37,32 @@ namespace Gs2.Gs2Chat.Model
         public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Subscribe WithSubscribeId(string subscribeId) {
             this.SubscribeId = subscribeId;
             return this;
         }
+
         public Subscribe WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Subscribe WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public Subscribe WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
             this.NotificationTypes = notificationTypes;
             return this;
         }
+
         public Subscribe WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Subscribe WithRevision(long? revision) {
             this.Revision = revision;
             return this;

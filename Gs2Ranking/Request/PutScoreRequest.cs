@@ -39,22 +39,27 @@ namespace Gs2.Gs2Ranking.Request
         public long? Score { set; get; }
         public string Metadata { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public PutScoreRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public PutScoreRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public PutScoreRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public PutScoreRequest WithScore(long? score) {
             this.Score = score;
             return this;
         }
+
         public PutScoreRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

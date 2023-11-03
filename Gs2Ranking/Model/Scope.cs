@@ -33,10 +33,12 @@ namespace Gs2.Gs2Ranking.Model
 	{
         public string Name { set; get; }
         public long? TargetDays { set; get; }
+
         public Scope WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Scope WithTargetDays(long? targetDays) {
             this.TargetDays = targetDays;
             return this;

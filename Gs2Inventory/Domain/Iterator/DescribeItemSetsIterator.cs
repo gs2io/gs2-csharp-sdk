@@ -25,7 +25,9 @@
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ArrangeThisQualifier
 // ReSharper disable NotAccessedField.Local
+// ReSharper disable InconsistentNaming
 
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 #pragma warning disable 1998
 
 using System;
@@ -50,8 +52,6 @@ using Cysharp.Threading.Tasks.Linq;
     #else
 using System.Collections;
 using UnityEngine.Events;
-using Gs2.Core;
-using Gs2.Core.Exception;
     #endif
 #else
 using System.Collections.Generic;
@@ -172,7 +172,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 }
             }
             var items = this._result.ToList();
-            items.Sort((v1, v2) => v1.SortValue.Value - v2.SortValue.Value);
+            items.Sort((v1, v2) => (v1.SortValue ?? 0) - (v2.SortValue ?? 0));
             this._result = items.ToArray();
         }
 

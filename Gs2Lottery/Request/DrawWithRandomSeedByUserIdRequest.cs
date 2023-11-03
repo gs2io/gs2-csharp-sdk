@@ -40,26 +40,32 @@ namespace Gs2.Gs2Lottery.Request
         public int? Count { set; get; }
         public Gs2.Gs2Lottery.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DrawWithRandomSeedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DrawWithRandomSeedByUserIdRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;
         }
+
         public DrawWithRandomSeedByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DrawWithRandomSeedByUserIdRequest WithRandomSeed(long? randomSeed) {
             this.RandomSeed = randomSeed;
             return this;
         }
+
         public DrawWithRandomSeedByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;
         }
+
         public DrawWithRandomSeedByUserIdRequest WithConfig(Gs2.Gs2Lottery.Model.Config[] config) {
             this.Config = config;
             return this;

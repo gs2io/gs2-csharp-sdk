@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 {
 
     public partial class CurrentFormMasterDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
         private readonly string _namespaceName;
 
@@ -68,18 +66,12 @@ namespace Gs2.Gs2Formation.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public CurrentFormMasterDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2FormationRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -118,7 +110,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.ExportMasterFuture(
@@ -131,18 +122,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                ExportMasterResult result = null;
-                    result = await this._client.ExportMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -166,35 +149,26 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> ExportMasterAsync(
+            #else
         public async Task<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> ExportMasterAsync(
+            #endif
             ExportMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.ExportMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             ExportMasterResult result = null;
                 result = await this._client.ExportMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -219,18 +193,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> ExportMasterAsync(
-            ExportMasterRequest request
-        ) {
-            var future = ExportMasterFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to ExportMasterFuture.")]
         public IFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> ExportMaster(
             ExportMasterRequest request
@@ -246,7 +208,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.CurrentFormMaster> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetCurrentFormMasterFuture(
@@ -258,7 +219,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
                         var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                         );
-                        _cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                             _parentKey,
                             key,
                             null,
@@ -277,34 +238,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetCurrentFormMasterResult result = null;
-                try {
-                    result = await this._client.GetCurrentFormMasterAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
-                        );
-                    _cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "currentFormMaster")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -326,42 +263,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.CurrentFormMaster>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Formation.Model.CurrentFormMaster> GetAsync(
+            #else
         private async Task<Gs2.Gs2Formation.Model.CurrentFormMaster> GetAsync(
+            #endif
             GetCurrentFormMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetCurrentFormMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
-                    );
-                    _cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "currentFormMaster")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetCurrentFormMasterResult result = null;
@@ -372,7 +283,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             } catch (Gs2.Core.Exception.NotFoundException e) {
                 var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                     );
-                _cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                     _parentKey,
                     key,
                     null,
@@ -384,11 +295,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -417,7 +327,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateCurrentFormMasterFuture(
@@ -430,18 +339,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateCurrentFormMasterResult result = null;
-                    result = await this._client.UpdateCurrentFormMasterAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -465,35 +366,26 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateAsync(
+            #endif
             UpdateCurrentFormMasterRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateCurrentFormMasterFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateCurrentFormMasterResult result = null;
                 result = await this._client.UpdateCurrentFormMasterAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -518,18 +410,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateAsync(
-            UpdateCurrentFormMasterRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> Update(
             UpdateCurrentFormMasterRequest request
@@ -545,7 +425,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateCurrentFormMasterFromGitHubFuture(
@@ -558,18 +437,10 @@ namespace Gs2.Gs2Formation.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateCurrentFormMasterFromGitHubResult result = null;
-                    result = await this._client.UpdateCurrentFormMasterFromGitHubAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -593,35 +464,26 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateFromGitHubAsync(
+            #else
         public async Task<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateFromGitHubAsync(
+            #endif
             UpdateCurrentFormMasterFromGitHubRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateCurrentFormMasterFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateCurrentFormMasterFromGitHubResult result = null;
                 result = await this._client.UpdateCurrentFormMasterFromGitHubAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -646,18 +508,6 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateFromGitHubAsync(
-            UpdateCurrentFormMasterFromGitHubRequest request
-        ) {
-            var future = UpdateFromGitHubFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
         public IFuture<Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain> UpdateFromGitHub(
             UpdateCurrentFormMasterFromGitHubRequest request
@@ -675,7 +525,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.CurrentFormMaster> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                     )
@@ -691,7 +541,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         {
                             var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                                 );
-                            _cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                            this._gs2.Cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                                 _parentKey,
                                 key,
                                 null,
@@ -710,7 +560,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                         )
@@ -720,10 +570,15 @@ namespace Gs2.Gs2Formation.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.CurrentFormMaster>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Formation.Model.CurrentFormMaster> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Formation.Model.CurrentFormMaster> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                     )
@@ -736,7 +591,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 } catch (Gs2.Core.Exception.NotFoundException e) {
                     var key = Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                                 );
-                    _cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                    this._gs2.Cache.Put<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                         _parentKey,
                         key,
                         null,
@@ -748,7 +603,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                         )
@@ -760,16 +615,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Formation.Model.CurrentFormMaster> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Formation.Model.CurrentFormMaster> Model()
         {
@@ -793,7 +638,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.CurrentFormMaster> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                 ),
@@ -803,7 +648,7 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.CurrentFormMaster>(
                 _parentKey,
                 Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
                 ),

@@ -33,10 +33,12 @@ namespace Gs2.Gs2SkillTree.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentTreeMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentTreeMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

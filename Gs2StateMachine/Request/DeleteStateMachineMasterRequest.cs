@@ -35,10 +35,12 @@ namespace Gs2.Gs2StateMachine.Request
 	{
         public string NamespaceName { set; get; }
         public long? Version { set; get; }
+
         public DeleteStateMachineMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteStateMachineMasterRequest WithVersion(long? version) {
             this.Version = version;
             return this;

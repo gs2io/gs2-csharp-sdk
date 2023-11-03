@@ -39,22 +39,27 @@ namespace Gs2.Gs2Money.Request
         public int? Count { set; get; }
         public bool? PaidOnly { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public WithdrawRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public WithdrawRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public WithdrawRequest WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
+
         public WithdrawRequest WithCount(int? count) {
             this.Count = count;
             return this;
         }
+
         public WithdrawRequest WithPaidOnly(bool? paidOnly) {
             this.PaidOnly = paidOnly;
             return this;

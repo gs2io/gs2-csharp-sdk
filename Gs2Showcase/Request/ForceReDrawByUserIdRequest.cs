@@ -37,14 +37,17 @@ namespace Gs2.Gs2Showcase.Request
         public string ShowcaseName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public ForceReDrawByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public ForceReDrawByUserIdRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
+
         public ForceReDrawByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -38,30 +38,37 @@ namespace Gs2.Gs2Inventory.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public SimpleInventory WithInventoryId(string inventoryId) {
             this.InventoryId = inventoryId;
             return this;
         }
+
         public SimpleInventory WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public SimpleInventory WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public SimpleInventory WithSimpleItems(Gs2.Gs2Inventory.Model.SimpleItem[] simpleItems) {
             this.SimpleItems = simpleItems;
             return this;
         }
+
         public SimpleInventory WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public SimpleInventory WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public SimpleInventory WithRevision(long? revision) {
             this.Revision = revision;
             return this;

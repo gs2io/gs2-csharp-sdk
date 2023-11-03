@@ -34,6 +34,7 @@ namespace Gs2.Gs2Dictionary.Request
 	public class DescribeEntryModelsRequest : Gs2Request<DescribeEntryModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeEntryModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

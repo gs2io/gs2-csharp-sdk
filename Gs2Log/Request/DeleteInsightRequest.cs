@@ -35,10 +35,12 @@ namespace Gs2.Gs2Log.Request
 	{
         public string NamespaceName { set; get; }
         public string InsightName { set; get; }
+
         public DeleteInsightRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteInsightRequest WithInsightName(string insightName) {
             this.InsightName = insightName;
             return this;

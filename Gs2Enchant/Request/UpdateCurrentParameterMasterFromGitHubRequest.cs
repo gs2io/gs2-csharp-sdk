@@ -35,10 +35,12 @@ namespace Gs2.Gs2Enchant.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Enchant.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentParameterMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentParameterMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Enchant.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

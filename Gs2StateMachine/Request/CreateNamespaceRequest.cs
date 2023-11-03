@@ -40,30 +40,37 @@ namespace Gs2.Gs2StateMachine.Request
         public Gs2.Gs2StateMachine.Model.ScriptSetting ErrorScript { set; get; }
         public long? LowestStateMachineVersion { set; get; }
         public Gs2.Gs2StateMachine.Model.LogSetting LogSetting { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithStartScript(Gs2.Gs2StateMachine.Model.ScriptSetting startScript) {
             this.StartScript = startScript;
             return this;
         }
+
         public CreateNamespaceRequest WithPassScript(Gs2.Gs2StateMachine.Model.ScriptSetting passScript) {
             this.PassScript = passScript;
             return this;
         }
+
         public CreateNamespaceRequest WithErrorScript(Gs2.Gs2StateMachine.Model.ScriptSetting errorScript) {
             this.ErrorScript = errorScript;
             return this;
         }
+
         public CreateNamespaceRequest WithLowestStateMachineVersion(long? lowestStateMachineVersion) {
             this.LowestStateMachineVersion = lowestStateMachineVersion;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2StateMachine.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

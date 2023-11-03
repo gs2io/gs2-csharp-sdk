@@ -35,18 +35,22 @@ namespace Gs2.Gs2Auth.Model
         public string UserId { set; get; }
         public long? Expire { set; get; }
         public int? TimeOffset { set; get; }
+
         public AccessToken WithToken(string token) {
             this.Token = token;
             return this;
         }
+
         public AccessToken WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public AccessToken WithExpire(long? expire) {
             this.Expire = expire;
             return this;
         }
+
         public AccessToken WithTimeOffset(int? timeOffset) {
             this.TimeOffset = timeOffset;
             return this;

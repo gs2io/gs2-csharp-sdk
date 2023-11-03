@@ -35,10 +35,12 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string NamespaceName { set; get; }
         public string MaxStaminaTableName { set; get; }
+
         public GetMaxStaminaTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetMaxStaminaTableMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
             this.MaxStaminaTableName = maxStaminaTableName;
             return this;

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Script.Request
         public string Script { set; get; }
         public string Args { set; get; }
         public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
+
         public DebugInvokeRequest WithScript(string script) {
             this.Script = script;
             return this;
         }
+
         public DebugInvokeRequest WithArgs(string args) {
             this.Args = args;
             return this;
         }
+
         public DebugInvokeRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
             this.RandomStatus = randomStatus;
             return this;

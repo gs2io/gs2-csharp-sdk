@@ -38,18 +38,22 @@ namespace Gs2.Gs2SkillTree.Request
         public string[] NodeModelNames { set; get; }
         public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public ReleaseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public ReleaseByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public ReleaseByUserIdRequest WithNodeModelNames(string[] nodeModelNames) {
             this.NodeModelNames = nodeModelNames;
             return this;
         }
+
         public ReleaseByUserIdRequest WithConfig(Gs2.Gs2SkillTree.Model.Config[] config) {
             this.Config = config;
             return this;

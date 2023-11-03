@@ -37,14 +37,17 @@ namespace Gs2.Gs2Formation.Request
         public string AccessToken { set; get; }
         public string MoldModelName { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteMoldRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteMoldRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DeleteMoldRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;

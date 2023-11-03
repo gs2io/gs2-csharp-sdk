@@ -35,10 +35,12 @@ namespace Gs2.Gs2Deploy.Request
 	{
         public string StackName { set; get; }
         public string ResourceName { set; get; }
+
         public GetResourceRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
+
         public GetResourceRequest WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;

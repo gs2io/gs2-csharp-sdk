@@ -35,10 +35,12 @@ namespace Gs2.Gs2Schedule.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public DeleteTriggerByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public DeleteTriggerByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

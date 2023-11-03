@@ -35,10 +35,12 @@ namespace Gs2.Gs2Schedule.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2Schedule.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentEventMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentEventMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Schedule.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

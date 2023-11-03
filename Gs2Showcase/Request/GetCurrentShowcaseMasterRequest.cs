@@ -34,6 +34,7 @@ namespace Gs2.Gs2Showcase.Request
 	public class GetCurrentShowcaseMasterRequest : Gs2Request<GetCurrentShowcaseMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

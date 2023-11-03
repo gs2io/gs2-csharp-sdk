@@ -51,74 +51,92 @@ namespace Gs2.Gs2Ranking.Request
         public string AccessPeriodEventId { set; get; }
         public string[] IgnoreUserIds { set; get; }
         public string Generation { set; get; }
+
         public UpdateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithMinimumValue(long? minimumValue) {
             this.MinimumValue = minimumValue;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithMaximumValue(long? maximumValue) {
             this.MaximumValue = maximumValue;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithOrderDirection(string orderDirection) {
             this.OrderDirection = orderDirection;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithUniqueByUserId(bool? uniqueByUserId) {
             this.UniqueByUserId = uniqueByUserId;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithSum(bool? sum) {
             this.Sum = sum;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
             this.CalculateFixedTimingHour = calculateFixedTimingHour;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
             this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
             this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
             this.AdditionalScopes = additionalScopes;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithEntryPeriodEventId(string entryPeriodEventId) {
             this.EntryPeriodEventId = entryPeriodEventId;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithIgnoreUserIds(string[] ignoreUserIds) {
             this.IgnoreUserIds = ignoreUserIds;
             return this;
         }
+
         public UpdateCategoryModelMasterRequest WithGeneration(string generation) {
             this.Generation = generation;
             return this;

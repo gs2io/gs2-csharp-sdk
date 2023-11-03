@@ -33,10 +33,12 @@ namespace Gs2.Gs2Matchmaking.Model
 	{
         public string Name { set; get; }
         public int? Value { set; get; }
+
         public Attribute_ WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Attribute_ WithValue(int? value) {
             this.Value = value;
             return this;

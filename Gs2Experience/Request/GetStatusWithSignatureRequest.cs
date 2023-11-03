@@ -38,22 +38,27 @@ namespace Gs2.Gs2Experience.Request
         public string ExperienceName { set; get; }
         public string PropertyId { set; get; }
         public string KeyId { set; get; }
+
         public GetStatusWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetStatusWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetStatusWithSignatureRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
+
         public GetStatusWithSignatureRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public GetStatusWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -35,10 +35,12 @@ namespace Gs2.Gs2News.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+
         public DescribeNewsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeNewsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

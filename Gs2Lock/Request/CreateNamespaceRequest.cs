@@ -36,14 +36,17 @@ namespace Gs2.Gs2Lock.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Lock.Model.LogSetting LogSetting { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Lock.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

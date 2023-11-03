@@ -35,10 +35,12 @@ namespace Gs2.Gs2Enhance.Request
 	{
         public string NamespaceName { set; get; }
         public string RateName { set; get; }
+
         public DeleteRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteRateModelMasterRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;

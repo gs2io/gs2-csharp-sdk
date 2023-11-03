@@ -35,10 +35,12 @@ namespace Gs2.Gs2Showcase.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public ForceReDrawByUserIdByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public ForceReDrawByUserIdByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

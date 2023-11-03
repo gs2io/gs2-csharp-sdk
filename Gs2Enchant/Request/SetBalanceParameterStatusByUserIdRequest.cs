@@ -39,22 +39,27 @@ namespace Gs2.Gs2Enchant.Request
         public string PropertyId { set; get; }
         public Gs2.Gs2Enchant.Model.BalanceParameterValue[] ParameterValues { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public SetBalanceParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public SetBalanceParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public SetBalanceParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
+
         public SetBalanceParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public SetBalanceParameterStatusByUserIdRequest WithParameterValues(Gs2.Gs2Enchant.Model.BalanceParameterValue[] parameterValues) {
             this.ParameterValues = parameterValues;
             return this;

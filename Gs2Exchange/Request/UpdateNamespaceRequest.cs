@@ -40,46 +40,39 @@ namespace Gs2.Gs2Exchange.Request
         public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; }
         public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string QueueNamespaceId { set; get; }
-        [Obsolete("This method is deprecated")]
-        public string KeyId { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithEnableAwaitExchange(bool? enableAwaitExchange) {
             this.EnableAwaitExchange = enableAwaitExchange;
             return this;
         }
+
         public UpdateNamespaceRequest WithEnableDirectExchange(bool? enableDirectExchange) {
             this.EnableDirectExchange = enableDirectExchange;
             return this;
         }
+
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Exchange.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
+
         public UpdateNamespaceRequest WithExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting exchangeScript) {
             this.ExchangeScript = exchangeScript;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public UpdateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
-            this.QueueNamespaceId = queueNamespaceId;
-            return this;
-        }
-        [Obsolete("This method is deprecated")]
-        public UpdateNamespaceRequest WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
 
@@ -98,9 +91,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithEnableDirectExchange(!data.Keys.Contains("enableDirectExchange") || data["enableDirectExchange"] == null ? null : (bool?)bool.Parse(data["enableDirectExchange"].ToString()))
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
-                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
         public override JsonData ToJson()
@@ -113,8 +104,6 @@ namespace Gs2.Gs2Exchange.Request
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
-                ["queueNamespaceId"] = QueueNamespaceId,
-                ["keyId"] = KeyId,
             };
         }
 
@@ -146,14 +135,6 @@ namespace Gs2.Gs2Exchange.Request
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
-            if (QueueNamespaceId != null) {
-                writer.WritePropertyName("queueNamespaceId");
-                writer.Write(QueueNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
-            }
             writer.WriteObjectEnd();
         }
 
@@ -166,8 +147,6 @@ namespace Gs2.Gs2Exchange.Request
             key += TransactionSetting + ":";
             key += ExchangeScript + ":";
             key += LogSetting + ":";
-            key += QueueNamespaceId + ":";
-            key += KeyId + ":";
             return key;
         }
 

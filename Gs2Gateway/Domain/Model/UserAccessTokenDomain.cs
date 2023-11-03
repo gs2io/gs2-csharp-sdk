@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,12 +58,8 @@ namespace Gs2.Gs2Gateway.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GatewayRestClient _client;
-        private readonly Gs2WebSocketSession _wssession;
         private readonly Gs2GatewayWebSocketClient _wsclient;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -75,24 +72,16 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
-            Gs2WebSocketSession wssession,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2GatewayRestClient(
-                session
+                gs2.RestSession
             );
-            this._wssession = wssession;
             this._wsclient = new Gs2GatewayWebSocketClient(
-                wssession
+                gs2.WebSocketSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -107,7 +96,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         )
         {
             return new DescribeWebSocketSessionsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -119,12 +108,12 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public Gs2Iterator<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(
             #endif
         #else
-        public DescribeWebSocketSessionsIterator WebSocketSessions(
+        public DescribeWebSocketSessionsIterator WebSocketSessionsAsync(
         #endif
         )
         {
             return new DescribeWebSocketSessionsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -141,7 +130,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
         public ulong SubscribeWebSocketSessions(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -153,7 +142,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
         public void UnsubscribeWebSocketSessions(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
                 Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -166,11 +155,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain WebSocketSession(
         ) {
             return new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._wssession,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken
             );
@@ -179,11 +164,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public Gs2.Gs2Gateway.Domain.Model.FirebaseTokenAccessTokenDomain FirebaseToken(
         ) {
             return new Gs2.Gs2Gateway.Domain.Model.FirebaseTokenAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
-                this._wssession,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken
             );

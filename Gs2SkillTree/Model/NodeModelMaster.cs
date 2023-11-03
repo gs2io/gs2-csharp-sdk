@@ -41,42 +41,52 @@ namespace Gs2.Gs2SkillTree.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public NodeModelMaster WithNodeModelId(string nodeModelId) {
             this.NodeModelId = nodeModelId;
             return this;
         }
+
         public NodeModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public NodeModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public NodeModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public NodeModelMaster WithReleaseConsumeActions(Gs2.Core.Model.ConsumeAction[] releaseConsumeActions) {
             this.ReleaseConsumeActions = releaseConsumeActions;
             return this;
         }
+
         public NodeModelMaster WithRestrainReturnRate(float? restrainReturnRate) {
             this.RestrainReturnRate = restrainReturnRate;
             return this;
         }
+
         public NodeModelMaster WithPremiseNodeNames(string[] premiseNodeNames) {
             this.PremiseNodeNames = premiseNodeNames;
             return this;
         }
+
         public NodeModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public NodeModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public NodeModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

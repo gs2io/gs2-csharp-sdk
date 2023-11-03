@@ -35,10 +35,12 @@ namespace Gs2.Gs2Money.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public DepositByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public DepositByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

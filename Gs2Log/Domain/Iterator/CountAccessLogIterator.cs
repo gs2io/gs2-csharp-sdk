@@ -25,7 +25,9 @@
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ArrangeThisQualifier
 // ReSharper disable NotAccessedField.Local
+// ReSharper disable InconsistentNaming
 
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 #pragma warning disable 1998
 
 using System;
@@ -50,8 +52,6 @@ using Cysharp.Threading.Tasks.Linq;
     #else
 using System.Collections;
 using UnityEngine.Events;
-using Gs2.Core;
-using Gs2.Core.Exception;
     #endif
 #else
 using System.Collections.Generic;
@@ -136,12 +136,13 @@ namespace Gs2.Gs2Log.Domain.Iterator
             #endif
                 new Gs2.Gs2Log.Request.CountAccessLogRequest()
                     .WithNamespaceName(this._namespaceName)
-                    .WithPageToken(this._pageToken)
                     .WithService(this._service)
                     .WithMethod(this._method)
                     .WithUserId(this._userId)
                     .WithBegin(this._begin)
                     .WithEnd(this._end)
+                    .WithLongTerm(this._longTerm)
+                    .WithPageToken(this._pageToken)
                     .WithLimit(this.fetchSize)
             );
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

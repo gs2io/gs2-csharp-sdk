@@ -36,14 +36,17 @@ namespace Gs2.Gs2Log.Request
         public string LoggingNamespaceId { set; get; }
         public string LogCategory { set; get; }
         public string Payload { set; get; }
+
         public PutLogRequest WithLoggingNamespaceId(string loggingNamespaceId) {
             this.LoggingNamespaceId = loggingNamespaceId;
             return this;
         }
+
         public PutLogRequest WithLogCategory(string logCategory) {
             this.LogCategory = logCategory;
             return this;
         }
+
         public PutLogRequest WithPayload(string payload) {
             this.Payload = payload;
             return this;

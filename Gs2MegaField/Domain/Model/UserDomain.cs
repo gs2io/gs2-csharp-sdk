@@ -59,10 +59,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -72,19 +69,13 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MegaFieldRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -99,10 +90,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
             string layerModelName
         ) {
             return new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 areaModelName,
@@ -170,7 +158,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -196,10 +184,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result.Items[i]?.UserId,
                         result.Items[i]?.AreaModelName,
@@ -214,7 +199,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         result.Items[i].AreaModelName.ToString(),
                         result.Items[i].LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -253,7 +238,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -279,10 +264,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result.Items[i]?.UserId,
                         result.Items[i]?.AreaModelName,
@@ -297,7 +279,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         result.Items[i].AreaModelName.ToString(),
                         result.Items[i].LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         result.Items[i],
@@ -360,7 +342,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -368,10 +350,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result?.Items[i],
                         request.AreaModelName,
@@ -410,7 +389,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -418,10 +397,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 for (int i=0; i<result?.Items.Length; i++)
                 {
                     domain[i] = new Gs2.Gs2MegaField.Domain.Model.SpatialDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         request.NamespaceName,
                         result?.Items[i],
                         request.AreaModelName,

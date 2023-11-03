@@ -38,22 +38,27 @@ namespace Gs2.Gs2Chat.Request
         public string MessageName { set; get; }
         public string Password { set; get; }
         public string AccessToken { set; get; }
+
         public GetMessageRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetMessageRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public GetMessageRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;
         }
+
         public GetMessageRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
+
         public GetMessageRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

@@ -40,38 +40,47 @@ namespace Gs2.Gs2Stamina.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public RecoverIntervalTableMaster WithRecoverIntervalTableId(string recoverIntervalTableId) {
             this.RecoverIntervalTableId = recoverIntervalTableId;
             return this;
         }
+
         public RecoverIntervalTableMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public RecoverIntervalTableMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public RecoverIntervalTableMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public RecoverIntervalTableMaster WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public RecoverIntervalTableMaster WithValues(int[] values) {
             this.Values = values;
             return this;
         }
+
         public RecoverIntervalTableMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public RecoverIntervalTableMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public RecoverIntervalTableMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;
@@ -219,9 +228,7 @@ namespace Gs2.Gs2Stamina.Model
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    if (value != null) {
-                        writer.Write(int.Parse(value.ToString()));
-                    }
+                    writer.Write(int.Parse(value.ToString()));
                 }
                 writer.WriteArrayEnd();
             }

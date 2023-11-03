@@ -36,14 +36,17 @@ namespace Gs2.Gs2Exchange.Request
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
         public string AwaitName { set; get; }
+
         public GetAwaitRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetAwaitRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetAwaitRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;

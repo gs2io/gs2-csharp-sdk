@@ -40,22 +40,27 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemName { set; get; }
         public string AcquireCount { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public AcquireBigItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public AcquireBigItemByUserIdRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public AcquireBigItemByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public AcquireBigItemByUserIdRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public AcquireBigItemByUserIdRequest WithAcquireCount(string acquireCount) {
             this.AcquireCount = acquireCount;
             return this;

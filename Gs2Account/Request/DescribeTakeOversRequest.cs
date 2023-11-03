@@ -37,18 +37,22 @@ namespace Gs2.Gs2Account.Request
         public string AccessToken { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeTakeOversRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeTakeOversRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DescribeTakeOversRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeTakeOversRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

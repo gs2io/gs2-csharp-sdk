@@ -38,18 +38,22 @@ namespace Gs2.Gs2Mission.Request
         public string UserId { set; get; }
         public long? Value { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DecreaseCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DecreaseCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
+
         public DecreaseCounterByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DecreaseCounterByUserIdRequest WithValue(long? value) {
             this.Value = value;
             return this;

@@ -38,18 +38,22 @@ namespace Gs2.Gs2Dictionary.Request
         public string EntryModelName { set; get; }
         public string VerifyType { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public VerifyEntryByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public VerifyEntryByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public VerifyEntryByUserIdRequest WithEntryModelName(string entryModelName) {
             this.EntryModelName = entryModelName;
             return this;
         }
+
         public VerifyEntryByUserIdRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;

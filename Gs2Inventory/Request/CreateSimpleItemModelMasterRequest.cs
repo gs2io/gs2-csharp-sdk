@@ -38,22 +38,27 @@ namespace Gs2.Gs2Inventory.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
+
         public CreateSimpleItemModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateSimpleItemModelMasterRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public CreateSimpleItemModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateSimpleItemModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateSimpleItemModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

@@ -35,10 +35,12 @@ namespace Gs2.Gs2Inventory.Request
 	{
         public string NamespaceName { set; get; }
         public string InventoryName { set; get; }
+
         public GetSimpleInventoryModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetSimpleInventoryModelRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;

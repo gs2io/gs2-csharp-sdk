@@ -37,18 +37,22 @@ namespace Gs2.Gs2Inventory.Request
         public string InventoryName { set; get; }
         public string AccessToken { set; get; }
         public string ItemName { set; get; }
+
         public GetSimpleItemRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetSimpleItemRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public GetSimpleItemRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetSimpleItemRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;

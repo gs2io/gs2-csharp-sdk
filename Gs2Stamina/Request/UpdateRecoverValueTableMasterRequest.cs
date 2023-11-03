@@ -39,26 +39,32 @@ namespace Gs2.Gs2Stamina.Request
         public string Metadata { set; get; }
         public string ExperienceModelId { set; get; }
         public int[] Values { set; get; }
+
         public UpdateRecoverValueTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateRecoverValueTableMasterRequest WithRecoverValueTableName(string recoverValueTableName) {
             this.RecoverValueTableName = recoverValueTableName;
             return this;
         }
+
         public UpdateRecoverValueTableMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateRecoverValueTableMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateRecoverValueTableMasterRequest WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+
         public UpdateRecoverValueTableMasterRequest WithValues(int[] values) {
             this.Values = values;
             return this;

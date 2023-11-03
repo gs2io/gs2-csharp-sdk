@@ -38,18 +38,22 @@ namespace Gs2.Gs2Ranking.Request
         public string AccessToken { set; get; }
         public string TargetUserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public SubscribeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public SubscribeRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public SubscribeRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public SubscribeRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

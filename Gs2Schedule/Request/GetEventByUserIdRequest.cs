@@ -37,18 +37,22 @@ namespace Gs2.Gs2Schedule.Request
         public string EventName { set; get; }
         public string UserId { set; get; }
         public bool? IsInSchedule { set; get; }
+
         public GetEventByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetEventByUserIdRequest WithEventName(string eventName) {
             this.EventName = eventName;
             return this;
         }
+
         public GetEventByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public GetEventByUserIdRequest WithIsInSchedule(bool? isInSchedule) {
             this.IsInSchedule = isInSchedule;
             return this;

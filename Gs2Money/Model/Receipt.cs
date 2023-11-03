@@ -44,54 +44,67 @@ namespace Gs2.Gs2Money.Model
         public string ContentsId { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Receipt WithReceiptId(string receiptId) {
             this.ReceiptId = receiptId;
             return this;
         }
+
         public Receipt WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
+
         public Receipt WithPurchaseToken(string purchaseToken) {
             this.PurchaseToken = purchaseToken;
             return this;
         }
+
         public Receipt WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Receipt WithType(string type) {
             this.Type = type;
             return this;
         }
+
         public Receipt WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
+
         public Receipt WithPrice(float? price) {
             this.Price = price;
             return this;
         }
+
         public Receipt WithPaid(int? paid) {
             this.Paid = paid;
             return this;
         }
+
         public Receipt WithFree(int? free) {
             this.Free = free;
             return this;
         }
+
         public Receipt WithTotal(int? total) {
             this.Total = total;
             return this;
         }
+
         public Receipt WithContentsId(string contentsId) {
             this.ContentsId = contentsId;
             return this;
         }
+
         public Receipt WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Receipt WithRevision(long? revision) {
             this.Revision = revision;
             return this;

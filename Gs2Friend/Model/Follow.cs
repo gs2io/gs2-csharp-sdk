@@ -37,26 +37,32 @@ namespace Gs2.Gs2Friend.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Follow WithFollowId(string followId) {
             this.FollowId = followId;
             return this;
         }
+
         public Follow WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Follow WithTargetUserIds(string[] targetUserIds) {
             this.TargetUserIds = targetUserIds;
             return this;
         }
+
         public Follow WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Follow WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Follow WithRevision(long? revision) {
             this.Revision = revision;
             return this;

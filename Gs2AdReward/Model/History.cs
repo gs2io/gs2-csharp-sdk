@@ -35,18 +35,22 @@ namespace Gs2.Gs2AdReward.Model
         public string TransactionId { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
+
         public History WithProvider(string provider) {
             this.Provider = provider;
             return this;
         }
+
         public History WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
+
         public History WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public History WithRevision(long? revision) {
             this.Revision = revision;
             return this;

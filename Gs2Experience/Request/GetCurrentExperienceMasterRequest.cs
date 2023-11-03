@@ -34,6 +34,7 @@ namespace Gs2.Gs2Experience.Request
 	public class GetCurrentExperienceMasterRequest : Gs2Request<GetCurrentExperienceMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentExperienceMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

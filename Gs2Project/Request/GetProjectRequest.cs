@@ -35,10 +35,12 @@ namespace Gs2.Gs2Project.Request
 	{
         public string AccountToken { set; get; }
         public string ProjectName { set; get; }
+
         public GetProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public GetProjectRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;

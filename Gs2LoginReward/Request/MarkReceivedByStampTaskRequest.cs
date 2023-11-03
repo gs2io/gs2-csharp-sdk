@@ -35,10 +35,12 @@ namespace Gs2.Gs2LoginReward.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public MarkReceivedByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public MarkReceivedByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

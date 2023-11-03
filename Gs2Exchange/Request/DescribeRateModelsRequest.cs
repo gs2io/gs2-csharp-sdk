@@ -34,6 +34,7 @@ namespace Gs2.Gs2Exchange.Request
 	public class DescribeRateModelsRequest : Gs2Request<DescribeRateModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeRateModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

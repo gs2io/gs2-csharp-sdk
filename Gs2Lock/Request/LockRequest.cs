@@ -39,22 +39,27 @@ namespace Gs2.Gs2Lock.Request
         public string TransactionId { set; get; }
         public long? Ttl { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public LockRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public LockRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public LockRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public LockRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
+
         public LockRequest WithTtl(long? ttl) {
             this.Ttl = ttl;
             return this;

@@ -36,14 +36,17 @@ namespace Gs2.Gs2Lottery.Request
         public string NamespaceName { set; get; }
         public string LotteryName { set; get; }
         public string UserId { set; get; }
+
         public DescribeProbabilitiesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeProbabilitiesByUserIdRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;
         }
+
         public DescribeProbabilitiesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

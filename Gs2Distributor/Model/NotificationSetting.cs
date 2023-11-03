@@ -34,14 +34,17 @@ namespace Gs2.Gs2Distributor.Model
         public string GatewayNamespaceId { set; get; }
         public bool? EnableTransferMobileNotification { set; get; }
         public string Sound { set; get; }
+
         public NotificationSetting WithGatewayNamespaceId(string gatewayNamespaceId) {
             this.GatewayNamespaceId = gatewayNamespaceId;
             return this;
         }
+
         public NotificationSetting WithEnableTransferMobileNotification(bool? enableTransferMobileNotification) {
             this.EnableTransferMobileNotification = enableTransferMobileNotification;
             return this;
         }
+
         public NotificationSetting WithSound(string sound) {
             this.Sound = sound;
             return this;

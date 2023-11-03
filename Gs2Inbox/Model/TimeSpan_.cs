@@ -34,14 +34,17 @@ namespace Gs2.Gs2Inbox.Model
         public int? Days { set; get; }
         public int? Hours { set; get; }
         public int? Minutes { set; get; }
+
         public TimeSpan_ WithDays(int? days) {
             this.Days = days;
             return this;
         }
+
         public TimeSpan_ WithHours(int? hours) {
             this.Hours = hours;
             return this;
         }
+
         public TimeSpan_ WithMinutes(int? minutes) {
             this.Minutes = minutes;
             return this;

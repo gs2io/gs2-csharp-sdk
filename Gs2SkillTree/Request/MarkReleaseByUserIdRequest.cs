@@ -37,14 +37,17 @@ namespace Gs2.Gs2SkillTree.Request
         public string UserId { set; get; }
         public string[] NodeModelNames { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public MarkReleaseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public MarkReleaseByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public MarkReleaseByUserIdRequest WithNodeModelNames(string[] nodeModelNames) {
             this.NodeModelNames = nodeModelNames;
             return this;

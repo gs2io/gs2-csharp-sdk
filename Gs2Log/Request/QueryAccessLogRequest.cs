@@ -43,38 +43,47 @@ namespace Gs2.Gs2Log.Request
         public string PageToken { set; get; }
         public int? Limit { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public QueryAccessLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public QueryAccessLogRequest WithService(string service) {
             this.Service = service;
             return this;
         }
+
         public QueryAccessLogRequest WithMethod(string method) {
             this.Method = method;
             return this;
         }
+
         public QueryAccessLogRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public QueryAccessLogRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
+
         public QueryAccessLogRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
+
         public QueryAccessLogRequest WithLongTerm(bool? longTerm) {
             this.LongTerm = longTerm;
             return this;
         }
+
         public QueryAccessLogRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public QueryAccessLogRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

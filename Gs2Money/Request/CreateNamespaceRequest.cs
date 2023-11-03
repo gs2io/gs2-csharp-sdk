@@ -45,50 +45,62 @@ namespace Gs2.Gs2Money.Request
         public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
         public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
         public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithPriority(string priority) {
             this.Priority = priority;
             return this;
         }
+
         public CreateNamespaceRequest WithShareFree(bool? shareFree) {
             this.ShareFree = shareFree;
             return this;
         }
+
         public CreateNamespaceRequest WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
+
         public CreateNamespaceRequest WithAppleKey(string appleKey) {
             this.AppleKey = appleKey;
             return this;
         }
+
         public CreateNamespaceRequest WithGoogleKey(string googleKey) {
             this.GoogleKey = googleKey;
             return this;
         }
+
         public CreateNamespaceRequest WithEnableFakeReceipt(bool? enableFakeReceipt) {
             this.EnableFakeReceipt = enableFakeReceipt;
             return this;
         }
+
         public CreateNamespaceRequest WithCreateWalletScript(Gs2.Gs2Money.Model.ScriptSetting createWalletScript) {
             this.CreateWalletScript = createWalletScript;
             return this;
         }
+
         public CreateNamespaceRequest WithDepositScript(Gs2.Gs2Money.Model.ScriptSetting depositScript) {
             this.DepositScript = depositScript;
             return this;
         }
+
         public CreateNamespaceRequest WithWithdrawScript(Gs2.Gs2Money.Model.ScriptSetting withdrawScript) {
             this.WithdrawScript = withdrawScript;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Money.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

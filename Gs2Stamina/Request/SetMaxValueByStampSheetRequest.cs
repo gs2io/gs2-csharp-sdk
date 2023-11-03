@@ -35,10 +35,12 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public SetMaxValueByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public SetMaxValueByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

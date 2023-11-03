@@ -35,10 +35,12 @@ namespace Gs2.Gs2Mission.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public DecreaseByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public DecreaseByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

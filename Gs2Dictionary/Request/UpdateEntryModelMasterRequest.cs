@@ -37,18 +37,22 @@ namespace Gs2.Gs2Dictionary.Request
         public string EntryName { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
+
         public UpdateEntryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateEntryModelMasterRequest WithEntryName(string entryName) {
             this.EntryName = entryName;
             return this;
         }
+
         public UpdateEntryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateEntryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

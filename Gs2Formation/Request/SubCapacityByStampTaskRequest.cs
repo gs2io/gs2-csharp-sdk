@@ -35,10 +35,12 @@ namespace Gs2.Gs2Formation.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public SubCapacityByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public SubCapacityByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

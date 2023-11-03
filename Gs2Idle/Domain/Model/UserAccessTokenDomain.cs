@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Idle.Domain.Model
 {
 
     public partial class UserAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdleRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -72,19 +70,13 @@ namespace Gs2.Gs2Idle.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2IdleRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -99,7 +91,7 @@ namespace Gs2.Gs2Idle.Domain.Model
         )
         {
             return new DescribeStatusesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -111,12 +103,12 @@ namespace Gs2.Gs2Idle.Domain.Model
         public Gs2Iterator<Gs2.Gs2Idle.Model.Status> Statuses(
             #endif
         #else
-        public DescribeStatusesIterator Statuses(
+        public DescribeStatusesIterator StatusesAsync(
         #endif
         )
         {
             return new DescribeStatusesIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
@@ -133,7 +125,7 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         public ulong SubscribeStatuses(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Idle.Model.Status>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Idle.Model.Status>(
                 Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -145,7 +137,7 @@ namespace Gs2.Gs2Idle.Domain.Model
 
         public void UnsubscribeStatuses(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Idle.Model.Status>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Idle.Model.Status>(
                 Gs2.Gs2Idle.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -159,10 +151,7 @@ namespace Gs2.Gs2Idle.Domain.Model
             string categoryName
         ) {
             return new Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this._accessToken,
                 categoryName

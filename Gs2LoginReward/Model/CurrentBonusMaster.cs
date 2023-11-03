@@ -33,10 +33,12 @@ namespace Gs2.Gs2LoginReward.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentBonusMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentBonusMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

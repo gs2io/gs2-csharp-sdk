@@ -34,6 +34,7 @@ namespace Gs2.Gs2Lottery.Request
 	public class DescribePrizeTablesRequest : Gs2Request<DescribePrizeTablesRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribePrizeTablesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

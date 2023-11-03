@@ -34,14 +34,17 @@ namespace Gs2.Gs2Formation.Model
         public string Name { set; get; }
         public string PropertyId { set; get; }
         public string Metadata { set; get; }
+
         public Slot WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Slot WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public Slot WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

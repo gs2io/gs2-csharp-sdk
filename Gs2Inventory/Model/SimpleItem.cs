@@ -36,22 +36,27 @@ namespace Gs2.Gs2Inventory.Model
         public string ItemName { set; get; }
         public long? Count { set; get; }
         public long? Revision { set; get; }
+
         public SimpleItem WithItemId(string itemId) {
             this.ItemId = itemId;
             return this;
         }
+
         public SimpleItem WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public SimpleItem WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public SimpleItem WithCount(long? count) {
             this.Count = count;
             return this;
         }
+
         public SimpleItem WithRevision(long? revision) {
             this.Revision = revision;
             return this;

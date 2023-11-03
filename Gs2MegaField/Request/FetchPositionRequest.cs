@@ -39,22 +39,27 @@ namespace Gs2.Gs2MegaField.Request
         public string LayerModelName { set; get; }
         public string[] UserIds { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public FetchPositionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public FetchPositionRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public FetchPositionRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
+
         public FetchPositionRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
+
         public FetchPositionRequest WithUserIds(string[] userIds) {
             this.UserIds = userIds;
             return this;

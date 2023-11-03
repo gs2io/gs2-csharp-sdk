@@ -37,14 +37,17 @@ namespace Gs2.Gs2StateMachine.Request
         public string UserId { set; get; }
         public string StatusName { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public ExitStateMachineByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public ExitStateMachineByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public ExitStateMachineByUserIdRequest WithStatusName(string statusName) {
             this.StatusName = statusName;
             return this;

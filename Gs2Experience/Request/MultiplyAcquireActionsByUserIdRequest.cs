@@ -40,26 +40,32 @@ namespace Gs2.Gs2Experience.Request
         public string RateName { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public MultiplyAcquireActionsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public MultiplyAcquireActionsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public MultiplyAcquireActionsByUserIdRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
+
         public MultiplyAcquireActionsByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public MultiplyAcquireActionsByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
+
         public MultiplyAcquireActionsByUserIdRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

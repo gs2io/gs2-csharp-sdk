@@ -39,22 +39,27 @@ namespace Gs2.Gs2StateMachine.Request
         public string EventName { set; get; }
         public string Args { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public EmitRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public EmitRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public EmitRequest WithStatusName(string statusName) {
             this.StatusName = statusName;
             return this;
         }
+
         public EmitRequest WithEventName(string eventName) {
             this.EventName = eventName;
             return this;
         }
+
         public EmitRequest WithArgs(string args) {
             this.Args = args;
             return this;

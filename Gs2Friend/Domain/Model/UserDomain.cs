@@ -59,10 +59,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -73,19 +70,13 @@ namespace Gs2.Gs2Friend.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2FriendRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -98,10 +89,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2.Gs2Friend.Domain.Model.ProfileDomain Profile(
         ) {
             return new Gs2.Gs2Friend.Domain.Model.ProfileDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId
             );
@@ -110,10 +98,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2.Gs2Friend.Domain.Model.PublicProfileDomain PublicProfile(
         ) {
             return new Gs2.Gs2Friend.Domain.Model.PublicProfileDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId
             );
@@ -124,7 +109,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeBlackListByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -136,12 +121,12 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2Iterator<string> BlackLists(
             #endif
         #else
-        public DescribeBlackListByUserIdIterator BlackLists(
+        public DescribeBlackListByUserIdIterator BlackListsAsync(
         #endif
         )
         {
             return new DescribeBlackListByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -158,7 +143,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public ulong SubscribeBlackLists(Action callback)
         {
-            return this._cache.ListSubscribe<string>(
+            return this._gs2.Cache.ListSubscribe<string>(
                 "friend:UserId",
                 callback
             );
@@ -166,7 +151,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void UnsubscribeBlackLists(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<string>(
+            this._gs2.Cache.ListUnsubscribe<string>(
                 "friend:UserId",
                 callbackId
             );
@@ -175,10 +160,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2.Gs2Friend.Domain.Model.BlackListDomain BlackList(
         ) {
             return new Gs2.Gs2Friend.Domain.Model.BlackListDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId
             );
@@ -190,7 +172,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeFollowsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -203,13 +185,13 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
             #endif
         #else
-        public DescribeFollowsByUserIdIterator Follows(
+        public DescribeFollowsByUserIdIterator FollowsAsync(
         #endif
             bool? withProfile
         )
         {
             return new DescribeFollowsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -230,7 +212,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             bool? withProfile
         )
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FollowUser>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FollowUser>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -245,7 +227,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             bool? withProfile
         )
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FollowUser>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FollowUser>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -260,10 +242,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             bool? withProfile
         ) {
             return new Gs2.Gs2Friend.Domain.Model.FollowUserDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 targetUserId,
@@ -277,7 +256,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeFriendsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -290,13 +269,13 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
             #endif
         #else
-        public DescribeFriendsByUserIdIterator Friends(
+        public DescribeFriendsByUserIdIterator FriendsAsync(
         #endif
             bool? withProfile
         )
         {
             return new DescribeFriendsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId,
@@ -317,7 +296,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             bool? withProfile
         )
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendUser>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendUser>(
                 Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -333,7 +312,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             bool? withProfile
         )
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendUser>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendUser>(
                 Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -348,10 +327,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             bool? withProfile
         ) {
             return new Gs2.Gs2Friend.Domain.Model.FriendDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 withProfile
@@ -363,7 +339,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -375,12 +351,12 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
             #endif
         #else
-        public DescribeSendRequestsByUserIdIterator SendRequests(
+        public DescribeSendRequestsByUserIdIterator SendRequestsAsync(
         #endif
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -397,7 +373,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public ulong SubscribeSendRequests(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -409,7 +385,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void UnsubscribeSendRequests(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -423,10 +399,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             string targetUserId
         ) {
             return new Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 targetUserId
@@ -438,7 +411,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -450,12 +423,12 @@ namespace Gs2.Gs2Friend.Domain.Model
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
             #endif
         #else
-        public DescribeReceiveRequestsByUserIdIterator ReceiveRequests(
+        public DescribeReceiveRequestsByUserIdIterator ReceiveRequestsAsync(
         #endif
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -472,7 +445,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public ulong SubscribeReceiveRequests(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -484,7 +457,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void UnsubscribeReceiveRequests(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -498,10 +471,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             string fromUserId
         ) {
             return new Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 fromUserId
@@ -570,7 +540,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -591,10 +561,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.TargetUserId,
@@ -635,7 +602,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -656,10 +623,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.TargetUserId,

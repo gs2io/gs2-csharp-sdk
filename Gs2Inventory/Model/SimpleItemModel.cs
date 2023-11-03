@@ -34,14 +34,17 @@ namespace Gs2.Gs2Inventory.Model
         public string ItemModelId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
+
         public SimpleItemModel WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;
         }
+
         public SimpleItemModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public SimpleItemModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

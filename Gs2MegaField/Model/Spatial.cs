@@ -40,38 +40,47 @@ namespace Gs2.Gs2MegaField.Model
         public float? R { set; get; }
         public long? LastSyncAt { set; get; }
         public long? CreatedAt { set; get; }
+
         public Spatial WithSpatialId(string spatialId) {
             this.SpatialId = spatialId;
             return this;
         }
+
         public Spatial WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Spatial WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
+
         public Spatial WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
+
         public Spatial WithPosition(Gs2.Gs2MegaField.Model.Position position) {
             this.Position = position;
             return this;
         }
+
         public Spatial WithVector(Gs2.Gs2MegaField.Model.Vector vector) {
             this.Vector = vector;
             return this;
         }
+
         public Spatial WithR(float? r) {
             this.R = r;
             return this;
         }
+
         public Spatial WithLastSyncAt(long? lastSyncAt) {
             this.LastSyncAt = lastSyncAt;
             return this;
         }
+
         public Spatial WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

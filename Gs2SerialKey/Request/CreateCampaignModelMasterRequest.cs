@@ -38,22 +38,27 @@ namespace Gs2.Gs2SerialKey.Request
         public string Description { set; get; }
         public string Metadata { set; get; }
         public bool? EnableCampaignCode { set; get; }
+
         public CreateCampaignModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CreateCampaignModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateCampaignModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateCampaignModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public CreateCampaignModelMasterRequest WithEnableCampaignCode(bool? enableCampaignCode) {
             this.EnableCampaignCode = enableCampaignCode;
             return this;

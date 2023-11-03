@@ -59,10 +59,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 {
 
     public partial class BallotAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -83,10 +80,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public string KeyId => _keyId;
 
         public BallotAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken,
             string ratingName,
@@ -94,12 +88,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             int? numberOfPlayer,
             string keyId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2MatchmakingRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -142,7 +133,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                             request.NumberOfPlayer.ToString(),
                             request.KeyId.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                        this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
                             _parentKey,
                             key,
                             null,
@@ -181,7 +172,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         request.NumberOfPlayer.ToString(),
                         request.KeyId.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                    this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
                         _parentKey,
                         key,
                         null,
@@ -197,7 +188,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -253,7 +244,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         request.NumberOfPlayer.ToString(),
                         request.KeyId.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                    this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
                         _parentKey,
                         key,
                         null,
@@ -292,7 +283,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     request.NumberOfPlayer.ToString(),
                     request.KeyId.ToString()
                     );
-                _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
                     _parentKey,
                     key,
                     null,
@@ -308,7 +299,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -400,7 +391,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                                     this.NumberOfPlayer?.ToString(),
                                     this.KeyId?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                            this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
                                 _parentKey,
                                 key,
                                 null,
@@ -419,7 +410,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
                         _parentKey,
                         Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                             this.RatingName?.ToString(),
@@ -450,7 +441,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                                     this.NumberOfPlayer?.ToString(),
                                     this.KeyId?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
+                    this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
                         _parentKey,
                         key,
                         null,
@@ -462,7 +453,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
                         _parentKey,
                         Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
                             this.RatingName?.ToString(),
@@ -507,6 +498,35 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             return await ModelAsync();
         }
         #endif
+
+
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Ballot> callback)
+        {
+            return this._gs2.Cache.Subscribe(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    this.RatingName.ToString(),
+                    this.GatheringName.ToString(),
+                    this.NumberOfPlayer.ToString(),
+                    this.KeyId.ToString()
+                ),
+                callback
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Ballot>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    this.RatingName.ToString(),
+                    this.GatheringName.ToString(),
+                    this.NumberOfPlayer.ToString(),
+                    this.KeyId.ToString()
+                ),
+                callbackId
+            );
+        }
 
     }
 }

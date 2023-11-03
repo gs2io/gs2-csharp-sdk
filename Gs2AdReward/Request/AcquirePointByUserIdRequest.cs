@@ -37,14 +37,17 @@ namespace Gs2.Gs2AdReward.Request
         public string UserId { set; get; }
         public long? Point { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public AcquirePointByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public AcquirePointByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public AcquirePointByUserIdRequest WithPoint(long? point) {
             this.Point = point;
             return this;

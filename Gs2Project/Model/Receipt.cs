@@ -39,34 +39,42 @@ namespace Gs2.Gs2Project.Model
         public string PdfUrl { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public Receipt WithReceiptId(string receiptId) {
             this.ReceiptId = receiptId;
             return this;
         }
+
         public Receipt WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
+
         public Receipt WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Receipt WithDate(long? date) {
             this.Date = date;
             return this;
         }
+
         public Receipt WithAmount(string amount) {
             this.Amount = amount;
             return this;
         }
+
         public Receipt WithPdfUrl(string pdfUrl) {
             this.PdfUrl = pdfUrl;
             return this;
         }
+
         public Receipt WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Receipt WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

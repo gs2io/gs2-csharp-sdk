@@ -39,26 +39,32 @@ namespace Gs2.Gs2Project.Request
         public int? Month { set; get; }
         public string Region { set; get; }
         public string Service { set; get; }
+
         public DescribeBillingsRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public DescribeBillingsRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
+
         public DescribeBillingsRequest WithYear(int? year) {
             this.Year = year;
             return this;
         }
+
         public DescribeBillingsRequest WithMonth(int? month) {
             this.Month = month;
             return this;
         }
+
         public DescribeBillingsRequest WithRegion(string region) {
             this.Region = region;
             return this;
         }
+
         public DescribeBillingsRequest WithService(string service) {
             this.Service = service;
             return this;

@@ -38,30 +38,37 @@ namespace Gs2.Gs2Ranking.Model
         public string[] SubscribedUserIds { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Subscribe WithSubscribeId(string subscribeId) {
             this.SubscribeId = subscribeId;
             return this;
         }
+
         public Subscribe WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
+
         public Subscribe WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Subscribe WithTargetUserIds(string[] targetUserIds) {
             this.TargetUserIds = targetUserIds;
             return this;
         }
+
         public Subscribe WithSubscribedUserIds(string[] subscribedUserIds) {
             this.SubscribedUserIds = subscribedUserIds;
             return this;
         }
+
         public Subscribe WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Subscribe WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -35,10 +35,12 @@ namespace Gs2.Gs2Lottery.Request
 	{
         public string NamespaceName { set; get; }
         public string LotteryName { set; get; }
+
         public GetLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetLotteryModelMasterRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;

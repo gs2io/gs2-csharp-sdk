@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Script.Domain.Model
 {
 
     public partial class NamespaceDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScriptRestClient _client;
         private readonly string _namespaceName;
 
@@ -76,18 +74,12 @@ namespace Gs2.Gs2Script.Domain.Model
         public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ScriptRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._parentKey = "script:Namespace";
@@ -98,7 +90,7 @@ namespace Gs2.Gs2Script.Domain.Model
         )
         {
             return new DescribeScriptsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
             );
@@ -109,12 +101,12 @@ namespace Gs2.Gs2Script.Domain.Model
         public Gs2Iterator<Gs2.Gs2Script.Model.Script> Scripts(
             #endif
         #else
-        public DescribeScriptsIterator Scripts(
+        public DescribeScriptsIterator ScriptsAsync(
         #endif
         )
         {
             return new DescribeScriptsIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName
         #if UNITY_2017_1_OR_NEWER
@@ -130,7 +122,7 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public ulong SubscribeScripts(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Script.Model.Script>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Script.Model.Script>(
                 Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Script"
@@ -141,7 +133,7 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public void UnsubscribeScripts(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Script.Model.Script>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Script.Model.Script>(
                 Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     "Script"
@@ -154,10 +146,7 @@ namespace Gs2.Gs2Script.Domain.Model
             string scriptName
         ) {
             return new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 scriptName
             );
@@ -197,7 +186,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceStatusFuture(
@@ -210,7 +198,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -229,35 +217,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceStatusResult result = null;
-                try {
-                    result = await this._client.GetNamespaceStatusAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -267,43 +230,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatusAsync(
+            #endif
             GetNamespaceStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceStatusResult result = null;
@@ -315,7 +251,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -327,11 +263,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -342,18 +277,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatusAsync(
-            GetNamespaceStatusRequest request
-        ) {
-            var future = GetStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetStatusFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatus(
             GetNamespaceStatusRequest request
@@ -369,7 +292,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Namespace> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetNamespaceFuture(
@@ -382,7 +304,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -401,35 +323,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetNamespaceResult result = null;
-                try {
-                    result = await this._client.GetNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -453,43 +350,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Script.Model.Namespace> GetAsync(
+            #else
         private async Task<Gs2.Gs2Script.Model.Namespace> GetAsync(
+            #endif
             GetNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetNamespaceResult result = null;
@@ -501,7 +371,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -513,11 +383,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -548,7 +417,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.UpdateNamespaceFuture(
@@ -561,18 +429,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                UpdateNamespaceResult result = null;
-                    result = await this._client.UpdateNamespaceAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -598,35 +458,26 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> UpdateAsync(
+            #endif
             UpdateNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.UpdateNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             UpdateNamespaceResult result = null;
                 result = await this._client.UpdateNamespaceAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -653,18 +504,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> UpdateAsync(
-            UpdateNamespaceRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> Update(
             UpdateNamespaceRequest request
@@ -680,7 +519,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.DeleteNamespaceFuture(
@@ -693,7 +531,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                             request.NamespaceName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                             _parentKey,
                             key,
                             null,
@@ -712,35 +550,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                DeleteNamespaceResult result = null;
-                try {
-                    result = await this._client.DeleteNamespaceAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "namespace")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -761,43 +574,16 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DeleteAsync(
+            #endif
             DeleteNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.DeleteNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        request.NamespaceName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "namespace")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             DeleteNamespaceResult result = null;
@@ -809,7 +595,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                     request.NamespaceName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                     _parentKey,
                     key,
                     null,
@@ -821,11 +607,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -847,18 +632,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DeleteAsync(
-            DeleteNamespaceRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> Delete(
             DeleteNamespaceRequest request
@@ -874,7 +647,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CreateScriptFuture(
@@ -887,18 +659,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CreateScriptResult result = null;
-                    result = await this._client.CreateScriptAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -918,10 +682,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -930,35 +691,26 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptAsync(
+            #endif
             CreateScriptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CreateScriptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CreateScriptResult result = null;
                 result = await this._client.CreateScriptAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -978,10 +730,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -991,18 +740,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptAsync(
-            CreateScriptRequest request
-        ) {
-            var future = CreateScriptFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateScriptFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScript(
             CreateScriptRequest request
@@ -1018,7 +755,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CreateScriptFromGitHubFuture(
@@ -1031,18 +767,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CreateScriptFromGitHubResult result = null;
-                    result = await this._client.CreateScriptFromGitHubAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1062,10 +790,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1074,35 +799,26 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHubAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHubAsync(
+            #endif
             CreateScriptFromGitHubRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CreateScriptFromGitHubFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CreateScriptFromGitHubResult result = null;
                 result = await this._client.CreateScriptFromGitHubAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1122,10 +838,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     result?.Item?.Name
                 );
@@ -1135,18 +848,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHubAsync(
-            CreateScriptFromGitHubRequest request
-        ) {
-            var future = CreateScriptFromGitHubFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateScriptFromGitHubFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHub(
             CreateScriptFromGitHubRequest request
@@ -1162,7 +863,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.InvokeScriptFuture(
                     request
                 );
@@ -1173,16 +873,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                InvokeScriptResult result = null;
-                    result = await this._client.InvokeScriptAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -1197,31 +891,24 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScriptAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScriptAsync(
+            #endif
             InvokeScriptRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.InvokeScriptFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             InvokeScriptResult result = null;
                 result = await this._client.InvokeScriptAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -1237,18 +924,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScriptAsync(
-            InvokeScriptRequest request
-        ) {
-            var future = InvokeScriptFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to InvokeScriptFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScript(
             InvokeScriptRequest request
@@ -1264,7 +939,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.DebugInvokeFuture(
                     request
                 );
@@ -1275,16 +949,10 @@ namespace Gs2.Gs2Script.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                DebugInvokeResult result = null;
-                    result = await this._client.DebugInvokeAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -1299,31 +967,24 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvokeAsync(
+            #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvokeAsync(
+            #endif
             DebugInvokeRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.DebugInvokeFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             DebugInvokeResult result = null;
                 result = await this._client.DebugInvokeAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -1339,18 +1000,6 @@ namespace Gs2.Gs2Script.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvokeAsync(
-            DebugInvokeRequest request
-        ) {
-            var future = DebugInvokeFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DebugInvokeFuture.")]
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvoke(
             DebugInvokeRequest request
@@ -1373,7 +1022,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     "script",
                     "Namespace"
                 );
-                var (value, find) = _cache.Get<Gs2.Gs2Script.Model.Namespace>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1391,7 +1040,7 @@ namespace Gs2.Gs2Script.Domain.Model
                             var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                            this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                                 parentKey,
                                 key,
                                 null,
@@ -1410,7 +1059,7 @@ namespace Gs2.Gs2Script.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Script.Model.Namespace>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1421,15 +1070,20 @@ namespace Gs2.Gs2Script.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Model.Namespace>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Script.Model.Namespace> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Script.Model.Namespace> ModelAsync()
+            #endif
         {
             var parentKey = string.Join(
                 ":",
                 "script",
                 "Namespace"
             );
-            var (value, find) = _cache.Get<Gs2.Gs2Script.Model.Namespace>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Namespace>(
                     parentKey,
                     Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                         this.NamespaceName?.ToString()
@@ -1444,7 +1098,7 @@ namespace Gs2.Gs2Script.Domain.Model
                     var key = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                                     this.NamespaceName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Script.Model.Namespace>(
+                    this._gs2.Cache.Put<Gs2.Gs2Script.Model.Namespace>(
                         parentKey,
                         key,
                         null,
@@ -1456,7 +1110,7 @@ namespace Gs2.Gs2Script.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Script.Model.Namespace>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Namespace>(
                         parentKey,
                         Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                             this.NamespaceName?.ToString()
@@ -1469,16 +1123,6 @@ namespace Gs2.Gs2Script.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Script.Model.Namespace> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Script.Model.Namespace> Model()
         {
@@ -1502,7 +1146,7 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Script.Model.Namespace> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()
@@ -1513,7 +1157,7 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Script.Model.Namespace>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Script.Model.Namespace>(
                 _parentKey,
                 Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheKey(
                     this.NamespaceName.ToString()

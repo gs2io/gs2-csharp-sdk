@@ -35,10 +35,12 @@ namespace Gs2.Gs2Enchant.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public AddRarityParameterStatusByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public AddRarityParameterStatusByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

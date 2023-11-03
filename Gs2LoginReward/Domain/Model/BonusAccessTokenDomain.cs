@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 {
 
     public partial class BonusAccessTokenDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
         private readonly string _namespaceName;
         private AccessToken _accessToken;
@@ -73,19 +71,13 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         public string UserId => _accessToken.UserId;
 
         public BonusAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             AccessToken accessToken
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LoginRewardRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
@@ -103,7 +95,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -117,19 +108,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                ReceiveResult result = null;
-                    result = await this._client.ReceiveAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -165,10 +147,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.AccessToken,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -178,7 +157,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -191,25 +170,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
+            #endif
             ReceiveRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.ReceiveFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -217,11 +187,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 result = await this._client.ReceiveAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -257,10 +226,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.AccessToken,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -278,18 +244,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
-            ReceiveRequest request
-        ) {
-            var future = ReceiveFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to ReceiveFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Receive(
             ReceiveRequest request
@@ -305,7 +259,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -319,19 +272,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                MissedReceiveResult result = null;
-                    result = await this._client.MissedReceiveAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -367,10 +311,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.AccessToken,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -380,7 +321,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -393,25 +334,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> MissedReceiveAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> MissedReceiveAsync(
+            #endif
             MissedReceiveRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.MissedReceiveFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -419,11 +351,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 result = await this._client.MissedReceiveAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -459,10 +390,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.AccessToken,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -480,18 +408,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> MissedReceiveAsync(
-            MissedReceiveRequest request
-        ) {
-            var future = MissedReceiveFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to MissedReceiveFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> MissedReceive(
             MissedReceiveRequest request

@@ -37,26 +37,32 @@ namespace Gs2.Gs2Friend.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public BlackList WithBlackListId(string blackListId) {
             this.BlackListId = blackListId;
             return this;
         }
+
         public BlackList WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public BlackList WithTargetUserIds(string[] targetUserIds) {
             this.TargetUserIds = targetUserIds;
             return this;
         }
+
         public BlackList WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public BlackList WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public BlackList WithRevision(long? revision) {
             this.Revision = revision;
             return this;

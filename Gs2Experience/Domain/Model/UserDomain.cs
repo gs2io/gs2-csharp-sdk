@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Experience.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExperienceRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -73,19 +71,13 @@ namespace Gs2.Gs2Experience.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ExperienceRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -101,7 +93,7 @@ namespace Gs2.Gs2Experience.Domain.Model
         )
         {
             return new DescribeStatusesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 experienceName,
@@ -114,13 +106,13 @@ namespace Gs2.Gs2Experience.Domain.Model
         public Gs2Iterator<Gs2.Gs2Experience.Model.Status> Statuses(
             #endif
         #else
-        public DescribeStatusesByUserIdIterator Statuses(
+        public DescribeStatusesByUserIdIterator StatusesAsync(
         #endif
             string experienceName
         )
         {
             return new DescribeStatusesByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 experienceName,
@@ -138,7 +130,7 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         public ulong SubscribeStatuses(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Experience.Model.Status>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Experience.Model.Status>(
                 Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -150,7 +142,7 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         public void UnsubscribeStatuses(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Experience.Model.Status>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Experience.Model.Status>(
                 Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -165,10 +157,7 @@ namespace Gs2.Gs2Experience.Domain.Model
             string propertyId
         ) {
             return new Gs2.Gs2Experience.Domain.Model.StatusDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 experienceName,

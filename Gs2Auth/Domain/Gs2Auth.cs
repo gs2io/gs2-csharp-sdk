@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,6 @@ using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
-using Gs2.Gs2Auth.Model;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
 using UnityEngine;
@@ -59,26 +59,17 @@ namespace Gs2.Gs2Auth.Domain
 {
 
     public class Gs2Auth {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AuthRestClient _client;
 
         private readonly String _parentKey;
 
         public Gs2Auth(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session
+            Gs2.Core.Domain.Gs2 gs2
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2AuthRestClient(
-                session
+                gs2.RestSession
             );
             this._parentKey = "auth";
         }
@@ -86,10 +77,7 @@ namespace Gs2.Gs2Auth.Domain
         public Gs2.Gs2Auth.Domain.Model.AccessTokenDomain AccessToken(
         ) {
             return new Gs2.Gs2Auth.Domain.Model.AccessTokenDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session
+                this._gs2
             );
         }
 

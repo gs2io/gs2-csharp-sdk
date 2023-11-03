@@ -37,18 +37,22 @@ namespace Gs2.Gs2MegaField.Request
         public string AreaModelName { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
+
         public UpdateAreaModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateAreaModelMasterRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
+
         public UpdateAreaModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateAreaModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,26 +58,17 @@ namespace Gs2.Gs2Experience.Domain.Model
 {
 
     public partial class ThresholdDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExperienceRestClient _client;
 
         private readonly String _parentKey;
 
         public ThresholdDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session
+            Gs2.Core.Domain.Gs2 gs2
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ExperienceRestClient(
-                session
+                gs2.RestSession
             );
             this._parentKey = "experience:Threshold";
         }
@@ -111,7 +103,7 @@ namespace Gs2.Gs2Experience.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Experience.Model.Threshold> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Experience.Model.Threshold>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Experience.Model.Threshold>(
                     _parentKey,
                     Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
                     )
@@ -121,10 +113,15 @@ namespace Gs2.Gs2Experience.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Experience.Model.Threshold>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Experience.Model.Threshold> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Experience.Model.Threshold> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Experience.Model.Threshold>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Experience.Model.Threshold>(
                     _parentKey,
                     Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
                     )
@@ -135,16 +132,6 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Experience.Model.Threshold> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Experience.Model.Threshold> Model()
         {
@@ -168,7 +155,7 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Experience.Model.Threshold> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
                 ),
@@ -178,7 +165,7 @@ namespace Gs2.Gs2Experience.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Experience.Model.Threshold>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Experience.Model.Threshold>(
                 _parentKey,
                 Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
                 ),

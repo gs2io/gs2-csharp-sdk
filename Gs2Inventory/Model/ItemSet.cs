@@ -42,46 +42,57 @@ namespace Gs2.Gs2Inventory.Model
         public long? ExpiresAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public ItemSet WithItemSetId(string itemSetId) {
             this.ItemSetId = itemSetId;
             return this;
         }
+
         public ItemSet WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public ItemSet WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public ItemSet WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public ItemSet WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public ItemSet WithCount(long? count) {
             this.Count = count;
             return this;
         }
+
         public ItemSet WithReferenceOf(string[] referenceOf) {
             this.ReferenceOf = referenceOf;
             return this;
         }
+
         public ItemSet WithSortValue(int? sortValue) {
             this.SortValue = sortValue;
             return this;
         }
+
         public ItemSet WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
+
         public ItemSet WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public ItemSet WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

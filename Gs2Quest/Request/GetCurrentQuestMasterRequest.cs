@@ -34,6 +34,7 @@ namespace Gs2.Gs2Quest.Request
 	public class GetCurrentQuestMasterRequest : Gs2Request<GetCurrentQuestMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentQuestMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

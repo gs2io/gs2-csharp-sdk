@@ -35,10 +35,12 @@ namespace Gs2.Gs2Inventory.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public AcquireSimpleItemsByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public AcquireSimpleItemsByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

@@ -34,6 +34,7 @@ namespace Gs2.Gs2Version.Request
 	public class DescribeVersionModelsRequest : Gs2Request<DescribeVersionModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeVersionModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

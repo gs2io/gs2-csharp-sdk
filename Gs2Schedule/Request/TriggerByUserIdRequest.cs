@@ -39,22 +39,27 @@ namespace Gs2.Gs2Schedule.Request
         public string TriggerStrategy { set; get; }
         public int? Ttl { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public TriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public TriggerByUserIdRequest WithTriggerName(string triggerName) {
             this.TriggerName = triggerName;
             return this;
         }
+
         public TriggerByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public TriggerByUserIdRequest WithTriggerStrategy(string triggerStrategy) {
             this.TriggerStrategy = triggerStrategy;
             return this;
         }
+
         public TriggerByUserIdRequest WithTtl(int? ttl) {
             this.Ttl = ttl;
             return this;

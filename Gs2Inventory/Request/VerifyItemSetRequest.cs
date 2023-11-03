@@ -41,30 +41,37 @@ namespace Gs2.Gs2Inventory.Request
         public string ItemSetName { set; get; }
         public long? Count { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public VerifyItemSetRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public VerifyItemSetRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public VerifyItemSetRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public VerifyItemSetRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public VerifyItemSetRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
+
         public VerifyItemSetRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
+
         public VerifyItemSetRequest WithCount(long? count) {
             this.Count = count;
             return this;

@@ -57,10 +57,7 @@ namespace Gs2.Gs2Log.Domain.Model
 {
 
     public partial class InsightDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         private readonly string _namespaceName;
         private readonly string _insightName;
@@ -70,19 +67,13 @@ namespace Gs2.Gs2Log.Domain.Model
         public string InsightName => _insightName;
 
         public InsightDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string insightName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2LogRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._insightName = insightName;
@@ -142,7 +133,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                             request.InsightName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                        this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                             _parentKey,
                             key,
                             null,
@@ -174,7 +165,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         request.InsightName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         key,
                         null,
@@ -190,7 +181,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -231,7 +222,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         request.InsightName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         key,
                         null,
@@ -263,7 +254,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     request.InsightName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                     _parentKey,
                     key,
                     null,
@@ -279,7 +270,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -323,7 +314,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                             request.InsightName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                        this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                             _parentKey,
                             key,
                             null,
@@ -355,7 +346,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         request.InsightName.ToString()
                         );
-                    _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         key,
                         null,
@@ -371,7 +362,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -409,7 +400,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         request.InsightName.ToString()
                     );
-                    _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         key,
                         null,
@@ -441,7 +432,7 @@ namespace Gs2.Gs2Log.Domain.Model
                 var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     request.InsightName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                     _parentKey,
                     key,
                     null,
@@ -457,7 +448,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -507,7 +498,7 @@ namespace Gs2.Gs2Log.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Insight> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Insight>(
                     _parentKey,
                     Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         this.InsightName?.ToString()
@@ -525,7 +516,7 @@ namespace Gs2.Gs2Log.Domain.Model
                             var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                                     this.InsightName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                            this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                                 _parentKey,
                                 key,
                                 null,
@@ -544,7 +535,7 @@ namespace Gs2.Gs2Log.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                             this.InsightName?.ToString()
@@ -558,7 +549,7 @@ namespace Gs2.Gs2Log.Domain.Model
         #else
         public async Task<Gs2.Gs2Log.Model.Insight> ModelAsync()
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Insight>(
                     _parentKey,
                     Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                         this.InsightName?.ToString()
@@ -573,7 +564,7 @@ namespace Gs2.Gs2Log.Domain.Model
                     var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                                     this.InsightName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Log.Model.Insight>(
+                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         key,
                         null,
@@ -585,7 +576,7 @@ namespace Gs2.Gs2Log.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Log.Model.Insight>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Insight>(
                         _parentKey,
                         Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                             this.InsightName?.ToString()
@@ -631,7 +622,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Log.Model.Insight> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     this.InsightName.ToString()
@@ -642,7 +633,7 @@ namespace Gs2.Gs2Log.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Log.Model.Insight>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.Insight>(
                 _parentKey,
                 Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
                     this.InsightName.ToString()

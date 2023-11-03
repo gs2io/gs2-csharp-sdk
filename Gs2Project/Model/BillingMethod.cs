@@ -42,46 +42,57 @@ namespace Gs2.Gs2Project.Model
         public string PartnerId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public BillingMethod WithBillingMethodId(string billingMethodId) {
             this.BillingMethodId = billingMethodId;
             return this;
         }
+
         public BillingMethod WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
+
         public BillingMethod WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public BillingMethod WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public BillingMethod WithMethodType(string methodType) {
             this.MethodType = methodType;
             return this;
         }
+
         public BillingMethod WithCardSignatureName(string cardSignatureName) {
             this.CardSignatureName = cardSignatureName;
             return this;
         }
+
         public BillingMethod WithCardBrand(string cardBrand) {
             this.CardBrand = cardBrand;
             return this;
         }
+
         public BillingMethod WithCardLast4(string cardLast4) {
             this.CardLast4 = cardLast4;
             return this;
         }
+
         public BillingMethod WithPartnerId(string partnerId) {
             this.PartnerId = partnerId;
             return this;
         }
+
         public BillingMethod WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public BillingMethod WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

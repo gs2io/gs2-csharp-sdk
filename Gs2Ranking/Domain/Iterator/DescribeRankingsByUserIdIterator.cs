@@ -50,8 +50,6 @@ using Cysharp.Threading.Tasks.Linq;
     #else
 using System.Collections;
 using UnityEngine.Events;
-using Gs2.Core;
-using Gs2.Core.Exception;
     #endif
 #else
 using System.Collections.Generic;

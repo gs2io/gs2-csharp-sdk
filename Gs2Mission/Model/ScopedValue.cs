@@ -35,18 +35,22 @@ namespace Gs2.Gs2Mission.Model
         public long? Value { set; get; }
         public long? NextResetAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public ScopedValue WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
+
         public ScopedValue WithValue(long? value) {
             this.Value = value;
             return this;
         }
+
         public ScopedValue WithNextResetAt(long? nextResetAt) {
             this.NextResetAt = nextResetAt;
             return this;
         }
+
         public ScopedValue WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

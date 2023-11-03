@@ -33,10 +33,12 @@ namespace Gs2.Gs2Inventory.Model
 	{
         public string ItemName { set; get; }
         public long? Count { set; get; }
+
         public ConsumeCount WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
+
         public ConsumeCount WithCount(long? count) {
             this.Count = count;
             return this;

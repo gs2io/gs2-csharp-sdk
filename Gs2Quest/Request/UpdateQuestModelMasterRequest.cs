@@ -44,46 +44,57 @@ namespace Gs2.Gs2Quest.Request
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
         public string[] PremiseQuestNames { set; get; }
+
         public UpdateQuestModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithQuestName(string questName) {
             this.QuestName = questName;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
             this.Contents = contents;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithFailedAcquireActions(Gs2.Core.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
+
         public UpdateQuestModelMasterRequest WithPremiseQuestNames(string[] premiseQuestNames) {
             this.PremiseQuestNames = premiseQuestNames;
             return this;

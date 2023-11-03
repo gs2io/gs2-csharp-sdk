@@ -40,38 +40,47 @@ namespace Gs2.Gs2Quest.Model
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
         public string[] PremiseQuestNames { set; get; }
+
         public QuestModel WithQuestModelId(string questModelId) {
             this.QuestModelId = questModelId;
             return this;
         }
+
         public QuestModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public QuestModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public QuestModel WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
             this.Contents = contents;
             return this;
         }
+
         public QuestModel WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
+
         public QuestModel WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
             return this;
         }
+
         public QuestModel WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
+
         public QuestModel WithFailedAcquireActions(Gs2.Core.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
+
         public QuestModel WithPremiseQuestNames(string[] premiseQuestNames) {
             this.PremiseQuestNames = premiseQuestNames;
             return this;

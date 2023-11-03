@@ -39,34 +39,42 @@ namespace Gs2.Gs2Experience.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public ThresholdMaster WithThresholdId(string thresholdId) {
             this.ThresholdId = thresholdId;
             return this;
         }
+
         public ThresholdMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public ThresholdMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public ThresholdMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public ThresholdMaster WithValues(long[] values) {
             this.Values = values;
             return this;
         }
+
         public ThresholdMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public ThresholdMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public ThresholdMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;
@@ -208,9 +216,7 @@ namespace Gs2.Gs2Experience.Model
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    if (value != null) {
-                        writer.Write(long.Parse(value.ToString()));
-                    }
+                    writer.Write(long.Parse(value.ToString()));
                 }
                 writer.WriteArrayEnd();
             }

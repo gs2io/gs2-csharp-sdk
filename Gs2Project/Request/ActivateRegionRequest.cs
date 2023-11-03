@@ -36,14 +36,17 @@ namespace Gs2.Gs2Project.Request
         public string AccountToken { set; get; }
         public string ProjectName { set; get; }
         public string RegionName { set; get; }
+
         public ActivateRegionRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public ActivateRegionRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
+
         public ActivateRegionRequest WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;

@@ -44,54 +44,67 @@ namespace Gs2.Gs2Stamina.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Stamina WithStaminaId(string staminaId) {
             this.StaminaId = staminaId;
             return this;
         }
+
         public Stamina WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
+
         public Stamina WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Stamina WithValue(int? value) {
             this.Value = value;
             return this;
         }
+
         public Stamina WithMaxValue(int? maxValue) {
             this.MaxValue = maxValue;
             return this;
         }
+
         public Stamina WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
+
         public Stamina WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;
         }
+
         public Stamina WithOverflowValue(int? overflowValue) {
             this.OverflowValue = overflowValue;
             return this;
         }
+
         public Stamina WithNextRecoverAt(long? nextRecoverAt) {
             this.NextRecoverAt = nextRecoverAt;
             return this;
         }
+
         public Stamina WithLastRecoveredAt(long? lastRecoveredAt) {
             this.LastRecoveredAt = lastRecoveredAt;
             return this;
         }
+
         public Stamina WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Stamina WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Stamina WithRevision(long? revision) {
             this.Revision = revision;
             return this;

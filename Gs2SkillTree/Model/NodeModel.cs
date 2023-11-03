@@ -38,30 +38,37 @@ namespace Gs2.Gs2SkillTree.Model
         public Gs2.Core.Model.AcquireAction[] ReturnAcquireActions { set; get; }
         public float? RestrainReturnRate { set; get; }
         public string[] PremiseNodeNames { set; get; }
+
         public NodeModel WithNodeModelId(string nodeModelId) {
             this.NodeModelId = nodeModelId;
             return this;
         }
+
         public NodeModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public NodeModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public NodeModel WithReleaseConsumeActions(Gs2.Core.Model.ConsumeAction[] releaseConsumeActions) {
             this.ReleaseConsumeActions = releaseConsumeActions;
             return this;
         }
+
         public NodeModel WithReturnAcquireActions(Gs2.Core.Model.AcquireAction[] returnAcquireActions) {
             this.ReturnAcquireActions = returnAcquireActions;
             return this;
         }
+
         public NodeModel WithRestrainReturnRate(float? restrainReturnRate) {
             this.RestrainReturnRate = restrainReturnRate;
             return this;
         }
+
         public NodeModel WithPremiseNodeNames(string[] premiseNodeNames) {
             this.PremiseNodeNames = premiseNodeNames;
             return this;

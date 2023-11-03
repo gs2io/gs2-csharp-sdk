@@ -35,10 +35,12 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string StampTask { set; get; }
         public string KeyId { set; get; }
+
         public ConsumeStaminaByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
+
         public ConsumeStaminaByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

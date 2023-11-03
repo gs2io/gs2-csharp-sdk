@@ -33,10 +33,12 @@ namespace Gs2.Gs2Lottery.Model
 	{
         public Gs2.Gs2Lottery.Model.DrawnPrize Prize { set; get; }
         public float? Rate { set; get; }
+
         public Probability WithPrize(Gs2.Gs2Lottery.Model.DrawnPrize prize) {
             this.Prize = prize;
             return this;
         }
+
         public Probability WithRate(float? rate) {
             this.Rate = rate;
             return this;

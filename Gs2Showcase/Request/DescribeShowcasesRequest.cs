@@ -35,10 +35,12 @@ namespace Gs2.Gs2Showcase.Request
 	{
         public string NamespaceName { set; get; }
         public string AccessToken { set; get; }
+
         public DescribeShowcasesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeShowcasesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

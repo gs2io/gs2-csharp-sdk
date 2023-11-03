@@ -38,18 +38,22 @@ namespace Gs2.Gs2Enchant.Request
         public string ParameterName { set; get; }
         public string PropertyId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteRarityParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DeleteRarityParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
+
         public DeleteRarityParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;

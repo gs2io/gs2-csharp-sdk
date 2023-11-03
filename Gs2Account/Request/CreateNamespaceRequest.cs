@@ -42,38 +42,47 @@ namespace Gs2.Gs2Account.Request
         public Gs2.Gs2Account.Model.ScriptSetting CreateTakeOverScript { set; get; }
         public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; }
         public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; }
+
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateNamespaceRequest WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
             this.ChangePasswordIfTakeOver = changePasswordIfTakeOver;
             return this;
         }
+
         public CreateNamespaceRequest WithDifferentUserIdForLoginAndDataRetention(bool? differentUserIdForLoginAndDataRetention) {
             this.DifferentUserIdForLoginAndDataRetention = differentUserIdForLoginAndDataRetention;
             return this;
         }
+
         public CreateNamespaceRequest WithCreateAccountScript(Gs2.Gs2Account.Model.ScriptSetting createAccountScript) {
             this.CreateAccountScript = createAccountScript;
             return this;
         }
+
         public CreateNamespaceRequest WithAuthenticationScript(Gs2.Gs2Account.Model.ScriptSetting authenticationScript) {
             this.AuthenticationScript = authenticationScript;
             return this;
         }
+
         public CreateNamespaceRequest WithCreateTakeOverScript(Gs2.Gs2Account.Model.ScriptSetting createTakeOverScript) {
             this.CreateTakeOverScript = createTakeOverScript;
             return this;
         }
+
         public CreateNamespaceRequest WithDoTakeOverScript(Gs2.Gs2Account.Model.ScriptSetting doTakeOverScript) {
             this.DoTakeOverScript = doTakeOverScript;
             return this;
         }
+
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Account.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

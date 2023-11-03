@@ -37,18 +37,22 @@ namespace Gs2.Gs2LoginReward.Request
         public string UserId { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeReceiveStatusesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeReceiveStatusesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeReceiveStatusesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeReceiveStatusesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

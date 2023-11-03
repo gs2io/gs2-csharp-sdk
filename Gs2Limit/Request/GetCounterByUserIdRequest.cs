@@ -37,18 +37,22 @@ namespace Gs2.Gs2Limit.Request
         public string LimitName { set; get; }
         public string UserId { set; get; }
         public string CounterName { set; get; }
+
         public GetCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetCounterByUserIdRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
+
         public GetCounterByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public GetCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

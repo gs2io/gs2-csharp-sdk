@@ -37,14 +37,17 @@ namespace Gs2.Gs2Quest.Request
         public string QuestGroupName { set; get; }
         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public DeleteCompletedQuestListByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DeleteCompletedQuestListByUserIdRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
+
         public DeleteCompletedQuestListByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

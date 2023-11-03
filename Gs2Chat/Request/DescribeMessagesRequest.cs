@@ -39,26 +39,32 @@ namespace Gs2.Gs2Chat.Request
         public string AccessToken { set; get; }
         public long? StartAt { set; get; }
         public int? Limit { set; get; }
+
         public DescribeMessagesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeMessagesRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
+
         public DescribeMessagesRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
+
         public DescribeMessagesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public DescribeMessagesRequest WithStartAt(long? startAt) {
             this.StartAt = startAt;
             return this;
         }
+
         public DescribeMessagesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

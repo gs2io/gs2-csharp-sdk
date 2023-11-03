@@ -36,14 +36,17 @@ namespace Gs2.Gs2MegaField.Request
         public string NamespaceName { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2MegaField.Model.LogSetting LogSetting { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2MegaField.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

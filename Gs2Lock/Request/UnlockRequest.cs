@@ -38,18 +38,22 @@ namespace Gs2.Gs2Lock.Request
         public string AccessToken { set; get; }
         public string TransactionId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public UnlockRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UnlockRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public UnlockRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public UnlockRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

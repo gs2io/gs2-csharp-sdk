@@ -42,46 +42,57 @@ namespace Gs2.Gs2Version.Model
         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
         public bool? NeedSignature { set; get; }
         public string SignatureKeyId { set; get; }
+
         public VersionModel WithVersionModelId(string versionModelId) {
             this.VersionModelId = versionModelId;
             return this;
         }
+
         public VersionModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public VersionModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public VersionModel WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
+
         public VersionModel WithType(string type) {
             this.Type = type;
             return this;
         }
+
         public VersionModel WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;
         }
+
         public VersionModel WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
             this.WarningVersion = warningVersion;
             return this;
         }
+
         public VersionModel WithErrorVersion(Gs2.Gs2Version.Model.Version_ errorVersion) {
             this.ErrorVersion = errorVersion;
             return this;
         }
+
         public VersionModel WithScheduleVersions(Gs2.Gs2Version.Model.ScheduleVersion[] scheduleVersions) {
             this.ScheduleVersions = scheduleVersions;
             return this;
         }
+
         public VersionModel WithNeedSignature(bool? needSignature) {
             this.NeedSignature = needSignature;
             return this;
         }
+
         public VersionModel WithSignatureKeyId(string signatureKeyId) {
             this.SignatureKeyId = signatureKeyId;
             return this;

@@ -37,26 +37,32 @@ namespace Gs2.Gs2Formation.Model
         public int? InitialMaxCapacity { set; get; }
         public int? MaxCapacity { set; get; }
         public Gs2.Gs2Formation.Model.FormModel FormModel { set; get; }
+
         public MoldModel WithMoldModelId(string moldModelId) {
             this.MoldModelId = moldModelId;
             return this;
         }
+
         public MoldModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public MoldModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public MoldModel WithInitialMaxCapacity(int? initialMaxCapacity) {
             this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
+
         public MoldModel WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
+
         public MoldModel WithFormModel(Gs2.Gs2Formation.Model.FormModel formModel) {
             this.FormModel = formModel;
             return this;

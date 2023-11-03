@@ -38,30 +38,37 @@ namespace Gs2.Gs2News.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Progress WithProgressId(string progressId) {
             this.ProgressId = progressId;
             return this;
         }
+
         public Progress WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;
         }
+
         public Progress WithGenerated(int? generated) {
             this.Generated = generated;
             return this;
         }
+
         public Progress WithPatternCount(int? patternCount) {
             this.PatternCount = patternCount;
             return this;
         }
+
         public Progress WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Progress WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Progress WithRevision(long? revision) {
             this.Revision = revision;
             return this;

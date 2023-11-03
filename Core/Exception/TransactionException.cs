@@ -52,7 +52,7 @@ namespace Gs2.Core.Exception
         public Gs2Future Retry() {
             IEnumerator Impl(Gs2Future self)
             {
-                var future = this._stampSheet.Run();
+                var future = this._stampSheet.RunFuture();
                 yield return future;
                 if (future.Error != null)
                 {

@@ -34,14 +34,17 @@ namespace Gs2.Gs2MegaField.Model
         public string LayerModelId { set; get; }
         public string Name { set; get; }
         public string Metadata { set; get; }
+
         public LayerModel WithLayerModelId(string layerModelId) {
             this.LayerModelId = layerModelId;
             return this;
         }
+
         public LayerModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public LayerModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

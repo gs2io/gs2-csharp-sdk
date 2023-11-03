@@ -37,18 +37,22 @@ namespace Gs2.Gs2Inventory.Request
         public string InventoryName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeItemModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeItemModelMastersRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
+
         public DescribeItemModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeItemModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

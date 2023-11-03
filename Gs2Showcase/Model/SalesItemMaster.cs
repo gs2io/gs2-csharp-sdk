@@ -40,38 +40,47 @@ namespace Gs2.Gs2Showcase.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public SalesItemMaster WithSalesItemId(string salesItemId) {
             this.SalesItemId = salesItemId;
             return this;
         }
+
         public SalesItemMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public SalesItemMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public SalesItemMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public SalesItemMaster WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
+
         public SalesItemMaster WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
+
         public SalesItemMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public SalesItemMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public SalesItemMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

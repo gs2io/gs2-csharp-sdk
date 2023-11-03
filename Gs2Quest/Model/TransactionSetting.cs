@@ -35,18 +35,22 @@ namespace Gs2.Gs2Quest.Model
         public string DistributorNamespaceId { set; get; }
         public string KeyId { set; get; }
         public string QueueNamespaceId { set; get; }
+
         public TransactionSetting WithEnableAutoRun(bool? enableAutoRun) {
             this.EnableAutoRun = enableAutoRun;
             return this;
         }
+
         public TransactionSetting WithDistributorNamespaceId(string distributorNamespaceId) {
             this.DistributorNamespaceId = distributorNamespaceId;
             return this;
         }
+
         public TransactionSetting WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
+
         public TransactionSetting WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;

@@ -45,58 +45,72 @@ namespace Gs2.Gs2LoginReward.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public BonusModelMaster WithBonusModelId(string bonusModelId) {
             this.BonusModelId = bonusModelId;
             return this;
         }
+
         public BonusModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public BonusModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public BonusModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public BonusModelMaster WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
+
         public BonusModelMaster WithPeriodEventId(string periodEventId) {
             this.PeriodEventId = periodEventId;
             return this;
         }
+
         public BonusModelMaster WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
+
         public BonusModelMaster WithRepeat(string repeat) {
             this.Repeat = repeat;
             return this;
         }
+
         public BonusModelMaster WithRewards(Gs2.Gs2LoginReward.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
+
         public BonusModelMaster WithMissedReceiveRelief(string missedReceiveRelief) {
             this.MissedReceiveRelief = missedReceiveRelief;
             return this;
         }
+
         public BonusModelMaster WithMissedReceiveReliefConsumeActions(Gs2.Core.Model.ConsumeAction[] missedReceiveReliefConsumeActions) {
             this.MissedReceiveReliefConsumeActions = missedReceiveReliefConsumeActions;
             return this;
         }
+
         public BonusModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public BonusModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public BonusModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -36,22 +36,27 @@ namespace Gs2.Gs2Showcase.Model
         public string Metadata { set; get; }
         public string SalesPeriodEventId { set; get; }
         public Gs2.Gs2Showcase.Model.DisplayItem[] DisplayItems { set; get; }
+
         public Showcase WithShowcaseId(string showcaseId) {
             this.ShowcaseId = showcaseId;
             return this;
         }
+
         public Showcase WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Showcase WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public Showcase WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;
         }
+
         public Showcase WithDisplayItems(Gs2.Gs2Showcase.Model.DisplayItem[] displayItems) {
             this.DisplayItems = displayItems;
             return this;

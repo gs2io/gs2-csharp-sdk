@@ -33,10 +33,12 @@ namespace Gs2.Gs2Quest.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentQuestMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentQuestMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

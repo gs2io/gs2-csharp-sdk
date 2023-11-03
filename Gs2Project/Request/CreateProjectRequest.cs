@@ -43,42 +43,52 @@ namespace Gs2.Gs2Project.Request
         public string EnableEventBridge { set; get; }
         public string EventBridgeAwsAccountId { set; get; }
         public string EventBridgeAwsRegion { set; get; }
+
         public CreateProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
+
         public CreateProjectRequest WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public CreateProjectRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public CreateProjectRequest WithPlan(string plan) {
             this.Plan = plan;
             return this;
         }
+
         public CreateProjectRequest WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
+
         public CreateProjectRequest WithActivateRegionName(string activateRegionName) {
             this.ActivateRegionName = activateRegionName;
             return this;
         }
+
         public CreateProjectRequest WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
         }
+
         public CreateProjectRequest WithEnableEventBridge(string enableEventBridge) {
             this.EnableEventBridge = enableEventBridge;
             return this;
         }
+
         public CreateProjectRequest WithEventBridgeAwsAccountId(string eventBridgeAwsAccountId) {
             this.EventBridgeAwsAccountId = eventBridgeAwsAccountId;
             return this;
         }
+
         public CreateProjectRequest WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
             this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;

@@ -41,42 +41,52 @@ namespace Gs2.Gs2SerialKey.Model
         public long? UsedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public SerialKey WithSerialKeyId(string serialKeyId) {
             this.SerialKeyId = serialKeyId;
             return this;
         }
+
         public SerialKey WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;
         }
+
         public SerialKey WithCode(string code) {
             this.Code = code;
             return this;
         }
+
         public SerialKey WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public SerialKey WithStatus(string status) {
             this.Status = status;
             return this;
         }
+
         public SerialKey WithUsedUserId(string usedUserId) {
             this.UsedUserId = usedUserId;
             return this;
         }
+
         public SerialKey WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public SerialKey WithUsedAt(long? usedAt) {
             this.UsedAt = usedAt;
             return this;
         }
+
         public SerialKey WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public SerialKey WithRevision(long? revision) {
             this.Revision = revision;
             return this;

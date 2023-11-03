@@ -34,6 +34,7 @@ namespace Gs2.Gs2LoginReward.Request
 	public class GetCurrentBonusMasterRequest : Gs2Request<GetCurrentBonusMasterRequest>
 	{
         public string NamespaceName { set; get; }
+
         public GetCurrentBonusMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

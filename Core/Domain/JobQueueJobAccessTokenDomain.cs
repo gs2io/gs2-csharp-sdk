@@ -34,7 +34,6 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
@@ -47,55 +46,38 @@ namespace Gs2.Core.Domain
     public partial class JobQueueJobAccessTokenDomain
     {
 
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2 _gs2;
         private readonly AccessToken _accessToken;
         public bool AutoRunJobQueue;
         public string JobId;
 
         public JobQueueJobAccessTokenDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2 gs2,
             AccessToken accessToken,
             bool autoRunJobQueue,
             string jobId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._accessToken = accessToken;
             this.AutoRunJobQueue = autoRunJobQueue;
             this.JobId = jobId;
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public IFuture<JobQueueJobAccessTokenDomain> Wait() {
+        public IFuture<JobQueueJobAccessTokenDomain> WaitFuture() {
             IEnumerator Impl(IFuture<JobQueueJobAccessTokenDomain> self) {
-    #if GS2_ENABLE_UNITASK
-                yield return WaitAsync().ToCoroutine(
-                    v => { self.OnComplete(this); },
-                    e => { self.OnError(e as Gs2Exception); }
-                );
-    #else
+                var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
                 if (this.AutoRunJobQueue) {
                     while (true) {
                         var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                            this._cache,
-                            this._jobQueueDomain,
-                            this._stampSheetConfiguration,
-                            this._session
+                            this._gs2
                         ).Namespace(
-                            this._stampSheetConfiguration.NamespaceName
+                            namespaceName
                         ).AccessToken(
                             this._accessToken
                         ).Job(
                             this.JobId
-                        ).JobResult().Model();
+                        ).JobResult().ModelFuture();
 
                         yield return future;
                         if (future.Error != null) {
@@ -107,8 +89,7 @@ namespace Gs2.Core.Domain
                         if (result == null) {
                             yield return new WaitForSeconds(0.1f);
                             yield return Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
-                                this._cache,
-                                this._session,
+                                this._gs2,
                                 this._accessToken
                             );
                             continue;
@@ -117,16 +98,13 @@ namespace Gs2.Core.Domain
                         var resultJson = JsonMapper.ToObject(result.Result);
                         if (!string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
                             var future2 = new TransactionAccessTokenDomain(
-                                this._cache,
-                                this._jobQueueDomain,
-                                this._stampSheetConfiguration,
-                                this._session,
+                                this._gs2,
                                 this._accessToken,
                                 resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
                                 !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                            ).Wait();
+                            ).WaitFuture();
                             yield return future2;
                             if (future2.Error != null) {
                                 self.OnError(future2.Error);
@@ -141,14 +119,11 @@ namespace Gs2.Core.Domain
                             {
                                 foreach (var job in result2.Items) {
                                     var future3 = new JobQueueJobAccessTokenDomain(
-                                        this._cache,
-                                        this._jobQueueDomain,
-                                        this._stampSheetConfiguration,
-                                        this._session,
+                                        this._gs2,
                                         this._accessToken,
                                         true,
                                         job.JobId
-                                    ).Wait();
+                                    ).WaitFuture();
                                     yield return future3;
                                     if (future3.Error != null) {
                                         self.OnError(future3.Error);
@@ -158,21 +133,16 @@ namespace Gs2.Core.Domain
                             }
                         }
                     }
-                    self.OnComplete(this);
                 } else {
-                    var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
                     if (!string.IsNullOrEmpty(namespaceName)) {
                         while (true) {
                             var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                                this._cache,
-                                this._jobQueueDomain,
-                                this._stampSheetConfiguration,
-                                this._session
+                                this._gs2
                             ).Namespace(
                                 namespaceName
                             ).AccessToken(
                                 this._accessToken
-                            ).Run(
+                            ).RunFuture(
                                 new RunRequest()
                             );
                             yield return future;
@@ -187,14 +157,11 @@ namespace Gs2.Core.Domain
                             }
                         }
                         var future2 = new JobQueueJobAccessTokenDomain(
-                            this._cache,
-                            this._jobQueueDomain,
-                            this._stampSheetConfiguration,
-                            this._session,
+                            this._gs2,
                             this._accessToken,
                             true,
                             this.JobId
-                        ).Wait();
+                        ).WaitFuture();
                         yield return future2;
                         if (future2.Error != null) {
                             self.OnError(future2.Error);
@@ -202,7 +169,6 @@ namespace Gs2.Core.Domain
                         }
                     }
                 }
-    #endif
             }
             return new Gs2InlineFuture<JobQueueJobAccessTokenDomain>(Impl);
         }
@@ -216,20 +182,18 @@ namespace Gs2.Core.Domain
         public async Task<JobQueueJobAccessTokenDomain> WaitAsync(
     #endif
         ) {
+            var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
             if (this.AutoRunJobQueue) {
                 while (true) {
                     var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session
+                        this._gs2
                     ).Namespace(
-                        this._stampSheetConfiguration.NamespaceName
+                        namespaceName
                     ).AccessToken(
                         this._accessToken
                     ).Job(
                         this.JobId
-                    ).JobResult().Model();
+                    ).JobResult().ModelAsync();
                     if (result == null) {
 #if UNITY_2017_1_OR_NEWER
                         await UniTask.Delay(TimeSpan.FromMilliseconds(100));
@@ -242,10 +206,7 @@ namespace Gs2.Core.Domain
                     var resultJson = JsonMapper.ToObject(result.Result);
                     if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
                         await new TransactionAccessTokenDomain(
-                            this._cache,
-                            this._jobQueueDomain,
-                            this._stampSheetConfiguration,
-                            this._session,
+                            this._gs2,
                             this._accessToken,
                             resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
                             !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
@@ -261,10 +222,7 @@ namespace Gs2.Core.Domain
                         {
                             foreach (var job in result2.Items) {
                                 await new JobQueueJobAccessTokenDomain(
-                                    this._cache,
-                                    this._jobQueueDomain,
-                                    this._stampSheetConfiguration,
-                                    this._session,
+                                    this._gs2,
                                     this._accessToken,
                                     true,
                                     job.JobId
@@ -277,14 +235,10 @@ namespace Gs2.Core.Domain
                 }
             }
             else {
-                var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
                 if (!string.IsNullOrEmpty(namespaceName)) {
                     while (true) {
                         var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                            this._cache,
-                            this._jobQueueDomain,
-                            this._stampSheetConfiguration,
-                            this._session
+                            this._gs2
                         ).Namespace(
                             namespaceName
                         ).AccessToken(
@@ -297,10 +251,7 @@ namespace Gs2.Core.Domain
                         }
                     }
                     await new JobQueueJobAccessTokenDomain(
-                        this._cache,
-                        this._jobQueueDomain,
-                        this._stampSheetConfiguration,
-                        this._session,
+                        this._gs2,
                         this._accessToken,
                         true,
                         this.JobId

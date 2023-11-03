@@ -38,22 +38,27 @@ namespace Gs2.Gs2StateMachine.Request
         public string Status { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeStatusesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeStatusesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DescribeStatusesByUserIdRequest WithStatus(string status) {
             this.Status = status;
             return this;
         }
+
         public DescribeStatusesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeStatusesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

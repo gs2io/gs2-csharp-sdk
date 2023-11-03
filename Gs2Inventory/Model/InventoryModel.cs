@@ -38,30 +38,37 @@ namespace Gs2.Gs2Inventory.Model
         public int? MaxCapacity { set; get; }
         public bool? ProtectReferencedItem { set; get; }
         public Gs2.Gs2Inventory.Model.ItemModel[] ItemModels { set; get; }
+
         public InventoryModel WithInventoryModelId(string inventoryModelId) {
             this.InventoryModelId = inventoryModelId;
             return this;
         }
+
         public InventoryModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public InventoryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public InventoryModel WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
+
         public InventoryModel WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
+
         public InventoryModel WithProtectReferencedItem(bool? protectReferencedItem) {
             this.ProtectReferencedItem = protectReferencedItem;
             return this;
         }
+
         public InventoryModel WithItemModels(Gs2.Gs2Inventory.Model.ItemModel[] itemModels) {
             this.ItemModels = itemModels;
             return this;

@@ -38,30 +38,37 @@ namespace Gs2.Gs2Key.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public GitHubApiKey WithApiKeyId(string apiKeyId) {
             this.ApiKeyId = apiKeyId;
             return this;
         }
+
         public GitHubApiKey WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public GitHubApiKey WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public GitHubApiKey WithEncryptionKeyName(string encryptionKeyName) {
             this.EncryptionKeyName = encryptionKeyName;
             return this;
         }
+
         public GitHubApiKey WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public GitHubApiKey WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public GitHubApiKey WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -35,10 +35,12 @@ namespace Gs2.Gs2Exchange.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public IncrementalExchangeByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public IncrementalExchangeByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

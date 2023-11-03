@@ -40,26 +40,32 @@ namespace Gs2.Gs2Limit.Request
         public string VerifyType { set; get; }
         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public VerifyCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public VerifyCounterByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public VerifyCounterByUserIdRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
+
         public VerifyCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
+
         public VerifyCounterByUserIdRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
+
         public VerifyCounterByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;

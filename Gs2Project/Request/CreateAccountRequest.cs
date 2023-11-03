@@ -38,22 +38,27 @@ namespace Gs2.Gs2Project.Request
         public string CompanyName { set; get; }
         public string Password { set; get; }
         public string Lang { set; get; }
+
         public CreateAccountRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
+
         public CreateAccountRequest WithFullName(string fullName) {
             this.FullName = fullName;
             return this;
         }
+
         public CreateAccountRequest WithCompanyName(string companyName) {
             this.CompanyName = companyName;
             return this;
         }
+
         public CreateAccountRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
+
         public CreateAccountRequest WithLang(string lang) {
             this.Lang = lang;
             return this;

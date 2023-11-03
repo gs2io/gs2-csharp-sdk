@@ -40,30 +40,37 @@ namespace Gs2.Gs2Enchant.Request
         public int? MaximumParameterCount { set; get; }
         public Gs2.Gs2Enchant.Model.RarityParameterCountModel[] ParameterCounts { set; get; }
         public Gs2.Gs2Enchant.Model.RarityParameterValueModel[] Parameters { set; get; }
+
         public UpdateRarityParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateRarityParameterModelMasterRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
+
         public UpdateRarityParameterModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateRarityParameterModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public UpdateRarityParameterModelMasterRequest WithMaximumParameterCount(int? maximumParameterCount) {
             this.MaximumParameterCount = maximumParameterCount;
             return this;
         }
+
         public UpdateRarityParameterModelMasterRequest WithParameterCounts(Gs2.Gs2Enchant.Model.RarityParameterCountModel[] parameterCounts) {
             this.ParameterCounts = parameterCounts;
             return this;
         }
+
         public UpdateRarityParameterModelMasterRequest WithParameters(Gs2.Gs2Enchant.Model.RarityParameterValueModel[] parameters) {
             this.Parameters = parameters;
             return this;

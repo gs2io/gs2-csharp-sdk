@@ -38,30 +38,37 @@ namespace Gs2.Gs2MegaField.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public AreaModelMaster WithAreaModelMasterId(string areaModelMasterId) {
             this.AreaModelMasterId = areaModelMasterId;
             return this;
         }
+
         public AreaModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public AreaModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public AreaModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public AreaModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public AreaModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public AreaModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

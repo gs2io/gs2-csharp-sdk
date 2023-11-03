@@ -36,14 +36,17 @@ namespace Gs2.Gs2Matchmaking.Request
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
         public string RatingName { set; get; }
+
         public GetRatingByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetRatingByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public GetRatingByUserIdRequest WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;

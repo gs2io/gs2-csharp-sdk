@@ -35,10 +35,12 @@ namespace Gs2.Gs2Limit.Request
 	{
         public string StampSheet { set; get; }
         public string KeyId { set; get; }
+
         public CountDownByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
+
         public CountDownByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

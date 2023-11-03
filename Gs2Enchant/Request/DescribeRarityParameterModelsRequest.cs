@@ -34,6 +34,7 @@ namespace Gs2.Gs2Enchant.Request
 	public class DescribeRarityParameterModelsRequest : Gs2Request<DescribeRarityParameterModelsRequest>
 	{
         public string NamespaceName { set; get; }
+
         public DescribeRarityParameterModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

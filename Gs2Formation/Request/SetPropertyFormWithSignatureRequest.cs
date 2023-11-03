@@ -40,26 +40,32 @@ namespace Gs2.Gs2Formation.Request
         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
         public string KeyId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public SetPropertyFormWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public SetPropertyFormWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public SetPropertyFormWithSignatureRequest WithPropertyFormModelName(string propertyFormModelName) {
             this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
+
         public SetPropertyFormWithSignatureRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public SetPropertyFormWithSignatureRequest WithSlots(Gs2.Gs2Formation.Model.SlotWithSignature[] slots) {
             this.Slots = slots;
             return this;
         }
+
         public SetPropertyFormWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

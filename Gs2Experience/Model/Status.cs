@@ -42,46 +42,57 @@ namespace Gs2.Gs2Experience.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;
         }
+
         public Status WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
+
         public Status WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Status WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
+
         public Status WithExperienceValue(long? experienceValue) {
             this.ExperienceValue = experienceValue;
             return this;
         }
+
         public Status WithRankValue(long? rankValue) {
             this.RankValue = rankValue;
             return this;
         }
+
         public Status WithRankCapValue(long? rankCapValue) {
             this.RankCapValue = rankCapValue;
             return this;
         }
+
         public Status WithNextRankUpExperienceValue(long? nextRankUpExperienceValue) {
             this.NextRankUpExperienceValue = nextRankUpExperienceValue;
             return this;
         }
+
         public Status WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Status WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Status WithRevision(long? revision) {
             this.Revision = revision;
             return this;

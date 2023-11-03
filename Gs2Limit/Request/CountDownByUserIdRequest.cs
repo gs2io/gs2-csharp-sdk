@@ -39,22 +39,27 @@ namespace Gs2.Gs2Limit.Request
         public string UserId { set; get; }
         public int? CountDownValue { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CountDownByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public CountDownByUserIdRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
+
         public CountDownByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
+
         public CountDownByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public CountDownByUserIdRequest WithCountDownValue(int? countDownValue) {
             this.CountDownValue = countDownValue;
             return this;

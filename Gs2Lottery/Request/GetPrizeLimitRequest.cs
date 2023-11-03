@@ -36,14 +36,17 @@ namespace Gs2.Gs2Lottery.Request
         public string NamespaceName { set; get; }
         public string PrizeTableName { set; get; }
         public string PrizeId { set; get; }
+
         public GetPrizeLimitRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetPrizeLimitRequest WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
+
         public GetPrizeLimitRequest WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;

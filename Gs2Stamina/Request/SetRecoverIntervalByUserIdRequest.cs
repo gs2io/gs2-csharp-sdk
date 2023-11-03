@@ -38,18 +38,22 @@ namespace Gs2.Gs2Stamina.Request
         public string UserId { set; get; }
         public int? RecoverIntervalMinutes { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public SetRecoverIntervalByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public SetRecoverIntervalByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
+
         public SetRecoverIntervalByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public SetRecoverIntervalByUserIdRequest WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;

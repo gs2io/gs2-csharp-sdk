@@ -36,10 +36,12 @@ namespace Gs2.Gs2Idle.Request
         public string UserId { set; get; }
         public string UploadToken { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public CheckImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public CheckImportUserDataByUserIdRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;

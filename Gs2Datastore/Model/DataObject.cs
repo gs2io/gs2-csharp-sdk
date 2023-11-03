@@ -42,46 +42,57 @@ namespace Gs2.Gs2Datastore.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public DataObject WithDataObjectId(string dataObjectId) {
             this.DataObjectId = dataObjectId;
             return this;
         }
+
         public DataObject WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public DataObject WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public DataObject WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
+
         public DataObject WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
+
         public DataObject WithStatus(string status) {
             this.Status = status;
             return this;
         }
+
         public DataObject WithGeneration(string generation) {
             this.Generation = generation;
             return this;
         }
+
         public DataObject WithPreviousGeneration(string previousGeneration) {
             this.PreviousGeneration = previousGeneration;
             return this;
         }
+
         public DataObject WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public DataObject WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public DataObject WithRevision(long? revision) {
             this.Revision = revision;
             return this;

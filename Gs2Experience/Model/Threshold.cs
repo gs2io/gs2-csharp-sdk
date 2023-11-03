@@ -33,10 +33,12 @@ namespace Gs2.Gs2Experience.Model
 	{
         public string Metadata { set; get; }
         public long[] Values { set; get; }
+
         public Threshold WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public Threshold WithValues(long[] values) {
             this.Values = values;
             return this;
@@ -86,9 +88,7 @@ namespace Gs2.Gs2Experience.Model
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    if (value != null) {
-                        writer.Write(long.Parse(value.ToString()));
-                    }
+                    writer.Write(long.Parse(value.ToString()));
                 }
                 writer.WriteArrayEnd();
             }

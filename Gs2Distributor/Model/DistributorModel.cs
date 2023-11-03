@@ -36,22 +36,27 @@ namespace Gs2.Gs2Distributor.Model
         public string Metadata { set; get; }
         public string InboxNamespaceId { set; get; }
         public string[] WhiteListTargetIds { set; get; }
+
         public DistributorModel WithDistributorModelId(string distributorModelId) {
             this.DistributorModelId = distributorModelId;
             return this;
         }
+
         public DistributorModel WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public DistributorModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
+
         public DistributorModel WithInboxNamespaceId(string inboxNamespaceId) {
             this.InboxNamespaceId = inboxNamespaceId;
             return this;
         }
+
         public DistributorModel WithWhiteListTargetIds(string[] whiteListTargetIds) {
             this.WhiteListTargetIds = whiteListTargetIds;
             return this;

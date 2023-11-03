@@ -39,26 +39,32 @@ namespace Gs2.Gs2AdReward.Request
         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
         public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
         public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
+
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public UpdateNamespaceRequest WithAdmob(Gs2.Gs2AdReward.Model.AdMob admob) {
             this.Admob = admob;
             return this;
         }
+
         public UpdateNamespaceRequest WithUnityAd(Gs2.Gs2AdReward.Model.UnityAd unityAd) {
             this.UnityAd = unityAd;
             return this;
         }
+
         public UpdateNamespaceRequest WithChangePointNotification(Gs2.Gs2AdReward.Model.NotificationSetting changePointNotification) {
             this.ChangePointNotification = changePointNotification;
             return this;
         }
+
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2AdReward.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

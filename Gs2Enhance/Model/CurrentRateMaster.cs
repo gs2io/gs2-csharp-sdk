@@ -33,10 +33,12 @@ namespace Gs2.Gs2Enhance.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
+
         public CurrentRateMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
+
         public CurrentRateMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

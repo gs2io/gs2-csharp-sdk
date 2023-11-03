@@ -37,26 +37,32 @@ namespace Gs2.Gs2Identifier.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public User WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public User WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public User WithDescription(string description) {
             this.Description = description;
             return this;
         }
+
         public User WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public User WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public User WithRevision(long? revision) {
             this.Revision = revision;
             return this;

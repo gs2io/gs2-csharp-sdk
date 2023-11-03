@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Version.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2VersionRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -73,19 +71,13 @@ namespace Gs2.Gs2Version.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2VersionRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -100,7 +92,7 @@ namespace Gs2.Gs2Version.Domain.Model
         )
         {
             return new DescribeAcceptVersionsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -112,12 +104,12 @@ namespace Gs2.Gs2Version.Domain.Model
         public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
             #endif
         #else
-        public DescribeAcceptVersionsByUserIdIterator AcceptVersions(
+        public DescribeAcceptVersionsByUserIdIterator AcceptVersionsAsync(
         #endif
         )
         {
             return new DescribeAcceptVersionsByUserIdIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 this.UserId
@@ -134,7 +126,7 @@ namespace Gs2.Gs2Version.Domain.Model
 
         public ulong SubscribeAcceptVersions(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -146,7 +138,7 @@ namespace Gs2.Gs2Version.Domain.Model
 
         public void UnsubscribeAcceptVersions(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -160,10 +152,7 @@ namespace Gs2.Gs2Version.Domain.Model
             string versionName
         ) {
             return new Gs2.Gs2Version.Domain.Model.AcceptVersionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 versionName
@@ -173,10 +162,7 @@ namespace Gs2.Gs2Version.Domain.Model
         public Gs2.Gs2Version.Domain.Model.CheckerDomain Checker(
         ) {
             return new Gs2.Gs2Version.Domain.Model.CheckerDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId
             );
@@ -218,7 +204,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.UserDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.CalculateSignatureFuture(
@@ -231,18 +216,10 @@ namespace Gs2.Gs2Version.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                CalculateSignatureResult result = null;
-                    result = await this._client.CalculateSignatureAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -253,35 +230,26 @@ namespace Gs2.Gs2Version.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.UserDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Version.Domain.Model.UserDomain> CalculateSignatureAsync(
+            #else
         public async Task<Gs2.Gs2Version.Domain.Model.UserDomain> CalculateSignatureAsync(
+            #endif
             CalculateSignatureRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.CalculateSignatureFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             CalculateSignatureResult result = null;
                 result = await this._client.CalculateSignatureAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -293,18 +261,6 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Version.Domain.Model.UserDomain> CalculateSignatureAsync(
-            CalculateSignatureRequest request
-        ) {
-            var future = CalculateSignatureFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CalculateSignatureFuture.")]
         public IFuture<Gs2.Gs2Version.Domain.Model.UserDomain> CalculateSignature(
             CalculateSignatureRequest request

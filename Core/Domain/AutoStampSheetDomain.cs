@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
-using System.Threading.Tasks;
-using Gs2.Core.Net;
-using Gs2.Gs2Distributor;
+using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor.Domain.Model;
-using Gs2.Gs2Distributor.Request;
-using Gs2.Gs2Distributor.Result;
+using Gs2.Gs2Distributor.Model;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if GS2_ENABLE_UNITASK
@@ -16,61 +12,43 @@ namespace Gs2.Core.Domain
 {
     public class AutoStampSheetDomain
     {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly Gs2RestSession _session;
-        private readonly UserAccessTokenDomain _userAccessTokenDomain;
+        private readonly Gs2 _gs2;
+        private readonly AccessToken _accessToken;
         private readonly string _transactionId;
-        private readonly Action<CacheDatabase, string, string, string, string> _stampTaskEvent;
-        private readonly Action<CacheDatabase, string, string, string, string> _stampSheetEvent;
 
         public AutoStampSheetDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            UserAccessTokenDomain userAccessTokenDomain,
-            Gs2RestSession session,
-            string transactionId,
-            Action<CacheDatabase, string, string, string, string> stampTaskEvent,
-            Action<CacheDatabase, string, string, string, string> stampSheetEvent
+            Gs2 gs2,
+            AccessToken accessToken,
+            string transactionId
         )
         {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._session = session;
-            this._userAccessTokenDomain = userAccessTokenDomain;
+            this._gs2 = gs2;
+            this._accessToken = accessToken;
             this._transactionId = transactionId;
-            this._stampTaskEvent = stampTaskEvent;
-            this._stampSheetEvent = stampSheetEvent;
         }
         
 #if UNITY_2017_1_OR_NEWER
-    #if GS2_ENABLE_UNITASK
-        public async UniTask RunAsync()
-    #else
-        public Gs2Future Run()
-    #endif
-#else
-        public async Task RunAsync()
-#endif
+        public Gs2Future RunFuture()
         {
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             IEnumerator Impl(Gs2Future self)
             {
-#endif
-                _cache.Delete<Gs2Distributor.Model.StampSheetResult>(
-                    Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
-                        _userAccessTokenDomain.NamespaceName,
-                        _userAccessTokenDomain.UserId,
+                this._gs2.Cache.Delete<StampSheetResult>(
+                    UserDomain.CreateCacheParentKey(
+                        this._gs2.StampSheetConfiguration.NamespaceName,
+                        this._accessToken.UserId,
                         "StampSheetResult"
                     ),
-                    Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
-                        _transactionId?.ToString()
+                    StampSheetResultDomain.CreateCacheKey(
+                        this._transactionId?.ToString()
                     )
                 );
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = _userAccessTokenDomain.StampSheetResult(
-                    _transactionId
-                ).Model();
+                var future = this._gs2.Distributor.Namespace(
+                    this._gs2.StampSheetConfiguration.NamespaceName
+                ).AccessToken(
+                    this._accessToken
+                ).StampSheetResult(
+                    this._transactionId
+                ).ModelFuture();
                 yield return future;
                 if (future.Error != null)
                 {
@@ -78,18 +56,13 @@ namespace Gs2.Core.Domain
                     yield break;
                 }
                 var result = future.Result;
-#else
-                var result = await _userAccessTokenDomain.StampSheetResult(
-                    _transactionId
-                ).Model();
-#endif
                 if (result.TaskRequests != null) {
                     for (var i = 0; i < result.TaskRequests.Length; i++) {
                         var stampTask = result.TaskRequests[i];
                         if (i < result.TaskResults.Length) {
-                            _stampTaskEvent.Invoke(
-                                _cache,
-                                _transactionId + "[" + i + "]",
+                            this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                                this._gs2.Cache,
+                                this._transactionId + "[" + i + "]",
                                 stampTask.Action,
                                 stampTask.Request,
                                 result.TaskResults[i]
@@ -98,16 +71,14 @@ namespace Gs2.Core.Domain
                     }
                 }
 
-            string action = null;
-                JsonData requestJson = null;
-                _stampSheetEvent.Invoke(
-                    _cache,
-                    _transactionId,
+                this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                    this._gs2.Cache,
+                    this._transactionId,
                     result.SheetRequest.Action,
                     result.SheetRequest.Request,
                     result.SheetResult
                 );
-                requestJson = JsonMapper.ToObject(result.SheetRequest.Request.ToString());
+                var requestJson = JsonMapper.ToObject(result.SheetRequest.Request.ToString());
 
                 if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId" && result.SheetResult != null) {
                     var jobResult = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
@@ -115,15 +86,76 @@ namespace Gs2.Core.Domain
                     if (autoRun != null && !autoRun.Value)
                     {
                         Gs2.PushJobQueue(
-                            _jobQueueDomain,
+                            this._gs2.JobQueueDomain,
                             requestJson["namespaceName"].ToString()
                         );
                     }
                 }
-#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
             }
             return new Gs2InlineFuture(Impl);
-#endif
         }
+#endif
+        
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+        public async UniTask RunAsync()
+    #else
+        public async Task RunAsync()
+    #endif
+        {
+            this._gs2.Cache.Delete<StampSheetResult>(
+                UserDomain.CreateCacheParentKey(
+                    this._gs2.StampSheetConfiguration.NamespaceName,
+                    this._accessToken.UserId,
+                    "StampSheetResult"
+                ),
+                StampSheetResultDomain.CreateCacheKey(
+                    this._transactionId?.ToString()
+                )
+            );
+            var result = await this._gs2.Distributor.Namespace(
+                this._gs2.StampSheetConfiguration.NamespaceName
+            ).AccessToken(
+                this._accessToken
+            ).StampSheetResult(
+                this._transactionId
+            ).ModelAsync();
+            if (result.TaskRequests != null) {
+                for (var i = 0; i < result.TaskRequests.Length; i++) {
+                    var stampTask = result.TaskRequests[i];
+                    if (i < result.TaskResults.Length) {
+                        this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                            this._gs2.Cache,
+                            this._transactionId + "[" + i + "]",
+                            stampTask.Action,
+                            stampTask.Request,
+                            result.TaskResults[i]
+                        );
+                    }
+                }
+            }
+
+            this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                this._gs2.Cache,
+                this._transactionId,
+                result.SheetRequest.Action,
+                result.SheetRequest.Request,
+                result.SheetResult
+            );
+            var requestJson = JsonMapper.ToObject(result.SheetRequest.Request.ToString());
+
+            if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId" && result.SheetResult != null) {
+                var jobResult = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
+                var autoRun = jobResult?.AutoRun;
+                if (autoRun != null && !autoRun.Value)
+                {
+                    Gs2.PushJobQueue(
+                        this._gs2.JobQueueDomain,
+                        requestJson["namespaceName"].ToString()
+                    );
+                }
+            }
+        }
+#endif
     }
 }

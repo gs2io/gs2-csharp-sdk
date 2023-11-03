@@ -42,46 +42,57 @@ namespace Gs2.Gs2StateMachine.Model
         public int? TransitionCount { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;
         }
+
         public Status WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Status WithName(string name) {
             this.Name = name;
             return this;
         }
+
         public Status WithStateMachineVersion(long? stateMachineVersion) {
             this.StateMachineVersion = stateMachineVersion;
             return this;
         }
+
         public Status WithStacks(Gs2.Gs2StateMachine.Model.StackEntry[] stacks) {
             this.Stacks = stacks;
             return this;
         }
+
         public Status WithVariables(Gs2.Gs2StateMachine.Model.Variable[] variables) {
             this.Variables = variables;
             return this;
         }
+
         public Status WithValue(string value) {
             this.Value = value;
             return this;
         }
+
         public Status WithLastError(string lastError) {
             this.LastError = lastError;
             return this;
         }
+
         public Status WithTransitionCount(int? transitionCount) {
             this.TransitionCount = transitionCount;
             return this;
         }
+
         public Status WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Status WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

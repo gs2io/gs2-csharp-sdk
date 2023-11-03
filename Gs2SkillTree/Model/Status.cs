@@ -37,26 +37,32 @@ namespace Gs2.Gs2SkillTree.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
+
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;
         }
+
         public Status WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public Status WithReleasedNodeNames(string[] releasedNodeNames) {
             this.ReleasedNodeNames = releasedNodeNames;
             return this;
         }
+
         public Status WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
+
         public Status WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
+
         public Status WithRevision(long? revision) {
             this.Revision = revision;
             return this;

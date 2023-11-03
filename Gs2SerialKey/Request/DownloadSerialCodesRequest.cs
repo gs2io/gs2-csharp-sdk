@@ -36,14 +36,17 @@ namespace Gs2.Gs2SerialKey.Request
         public string NamespaceName { set; get; }
         public string CampaignModelName { set; get; }
         public string IssueJobName { set; get; }
+
         public DownloadSerialCodesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DownloadSerialCodesRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;
         }
+
         public DownloadSerialCodesRequest WithIssueJobName(string issueJobName) {
             this.IssueJobName = issueJobName;
             return this;

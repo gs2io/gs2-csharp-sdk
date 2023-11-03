@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 {
 
     public partial class UserDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -72,19 +70,13 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public string UserId => _userId;
 
         public UserDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2SerialKeyRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -101,7 +93,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         )
         {
             return new DescribeSerialKeysIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 campaignModelName,
@@ -114,14 +106,14 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public Gs2Iterator<Gs2.Gs2SerialKey.Model.SerialKey> SerialKeys(
             #endif
         #else
-        public DescribeSerialKeysIterator SerialKeys(
+        public DescribeSerialKeysIterator SerialKeysAsync(
         #endif
             string campaignModelName,
             string issueJobName
         )
         {
             return new DescribeSerialKeysIterator(
-                this._cache,
+                this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
                 campaignModelName,
@@ -139,7 +131,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
         public ulong SubscribeSerialKeys(Action callback)
         {
-            return this._cache.ListSubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -151,7 +143,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
         public void UnsubscribeSerialKeys(ulong callbackId)
         {
-            this._cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -165,10 +157,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             string serialKeyCode
         ) {
             return new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 serialKeyCode
@@ -211,7 +200,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.UserDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.DownloadSerialCodesFuture(
@@ -224,18 +212,10 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                DownloadSerialCodesResult result = null;
-                    result = await this._client.DownloadSerialCodesAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -245,35 +225,26 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.UserDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.UserDomain> DownloadSerialCodesAsync(
+            #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.UserDomain> DownloadSerialCodesAsync(
+            #endif
             DownloadSerialCodesRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.DownloadSerialCodesFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             DownloadSerialCodesResult result = null;
                 result = await this._client.DownloadSerialCodesAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -284,18 +255,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.UserDomain> DownloadSerialCodesAsync(
-            DownloadSerialCodesRequest request
-        ) {
-            var future = DownloadSerialCodesFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DownloadSerialCodesFuture.")]
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.UserDomain> DownloadSerialCodes(
             DownloadSerialCodesRequest request
@@ -311,7 +270,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.SerialKey> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName);
                 var future = this._client.GetSerialKeyFuture(
@@ -328,21 +286,10 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName);
-                GetSerialKeyResult result = null;
-                try {
-                    result = await this._client.GetSerialKeyAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -381,28 +328,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.SerialKey>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKeyAsync(
+            #else
         public async Task<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKeyAsync(
+            #endif
             GetSerialKeyRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName);
-            var future = this._client.GetSerialKeyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName);
             GetSerialKeyResult result = null;
@@ -412,11 +347,10 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 );
             } catch (Gs2.Core.Exception.NotFoundException e) {
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -456,18 +390,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKeyAsync(
-            GetSerialKeyRequest request
-        ) {
-            var future = GetSerialKeyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetSerialKeyFuture.")]
         public IFuture<Gs2.Gs2SerialKey.Model.SerialKey> GetSerialKey(
             GetSerialKeyRequest request
@@ -483,7 +405,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
@@ -497,19 +418,10 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                RevertUseByUserIdResult result = null;
-                    result = await this._client.RevertUseByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -545,10 +457,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     }
                 }
                 var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     request.UserId,
                     result?.Item?.Code
@@ -558,25 +467,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> RevertUseAsync(
+            #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> RevertUseAsync(
+            #endif
             RevertUseByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            var future = this._client.RevertUseByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
@@ -584,11 +484,10 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 result = await this._client.RevertUseByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -624,10 +523,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 }
             }
                 var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     request.NamespaceName,
                     request.UserId,
                     result?.Item?.Code
@@ -638,18 +534,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> RevertUseAsync(
-            RevertUseByUserIdRequest request
-        ) {
-            var future = RevertUseFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to RevertUseFuture.")]
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain> RevertUse(
             RevertUseByUserIdRequest request

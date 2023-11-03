@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -57,10 +58,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 {
 
     public partial class RandomDisplayItemDomain {
-        private readonly CacheDatabase _cache;
-        private readonly JobQueueDomain _jobQueueDomain;
-        private readonly StampSheetConfiguration _stampSheetConfiguration;
-        private readonly Gs2RestSession _session;
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
@@ -76,21 +74,15 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public string DisplayItemName => _displayItemName;
 
         public RandomDisplayItemDomain(
-            CacheDatabase cache,
-            JobQueueDomain jobQueueDomain,
-            StampSheetConfiguration stampSheetConfiguration,
-            Gs2RestSession session,
+            Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
             string showcaseName,
             string displayItemName
         ) {
-            this._cache = cache;
-            this._jobQueueDomain = jobQueueDomain;
-            this._stampSheetConfiguration = stampSheetConfiguration;
-            this._session = session;
+            this._gs2 = gs2;
             this._client = new Gs2ShowcaseRestClient(
-                session
+                gs2.RestSession
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
@@ -144,7 +136,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -160,7 +151,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                             request.DisplayItemName.ToString()
                         );
-                        _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                             _parentKey,
                             key,
                             null,
@@ -179,38 +170,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName)
-                    .WithDisplayItemName(this.DisplayItemName);
-                GetRandomDisplayItemByUserIdResult result = null;
-                try {
-                    result = await this._client.GetRandomDisplayItemByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
-                        request.DisplayItemName.ToString()
-                        );
-                    _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "randomDisplayItem")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -235,46 +198,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Showcase.Model.RandomDisplayItem> GetAsync(
+            #else
         private async Task<Gs2.Gs2Showcase.Model.RandomDisplayItem> GetAsync(
+            #endif
             GetRandomDisplayItemByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithShowcaseName(this.ShowcaseName)
-                .WithDisplayItemName(this.DisplayItemName);
-            var future = this._client.GetRandomDisplayItemByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
-                        request.DisplayItemName.ToString()
-                    );
-                    _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "randomDisplayItem")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -289,7 +222,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                     request.DisplayItemName.ToString()
                     );
-                _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                     _parentKey,
                     key,
                     null,
@@ -301,11 +234,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -337,7 +269,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -353,21 +284,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName)
-                    .WithDisplayItemName(this.DisplayItemName);
-                RandomShowcaseBuyByUserIdResult result = null;
-                    result = await this._client.RandomShowcaseBuyByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = _cache;
+                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -389,10 +309,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
                 }
                 var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._cache,
-                    this._jobQueueDomain,
-                    this._stampSheetConfiguration,
-                    this._session,
+                    this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
@@ -402,7 +319,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 );
                 if (result?.StampSheet != null)
                 {
-                    var future2 = stampSheet.Wait();
+                    var future2 = stampSheet.WaitFuture();
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -415,27 +332,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> RandomShowcaseBuyAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> RandomShowcaseBuyAsync(
+            #endif
             RandomShowcaseBuyByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithShowcaseName(this.ShowcaseName)
-                .WithDisplayItemName(this.DisplayItemName);
-            var future = this._client.RandomShowcaseBuyByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -445,11 +351,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 result = await this._client.RandomShowcaseBuyByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = _cache;
+            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -471,10 +376,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 }
             }
             var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._cache,
-                this._jobQueueDomain,
-                this._stampSheetConfiguration,
-                this._session,
+                this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
@@ -492,18 +394,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> RandomShowcaseBuyAsync(
-            RandomShowcaseBuyByUserIdRequest request
-        ) {
-            var future = RandomShowcaseBuyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to RandomShowcaseBuyFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> RandomShowcaseBuy(
             RandomShowcaseBuyByUserIdRequest request
@@ -521,7 +411,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem> self)
             {
-                var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                     _parentKey,
                     Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                         this.DisplayItemName?.ToString()
@@ -539,7 +429,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                                     this.DisplayItemName?.ToString()
                                 );
-                            _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                            this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                                 _parentKey,
                                 key,
                                 null,
@@ -558,7 +448,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             yield break;
                         }
                     }
-                    (value, _) = _cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                         _parentKey,
                         Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                             this.DisplayItemName?.ToString()
@@ -569,10 +459,15 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.RandomDisplayItem>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Showcase.Model.RandomDisplayItem> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Showcase.Model.RandomDisplayItem> ModelAsync()
+            #endif
         {
-            var (value, find) = _cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                     _parentKey,
                     Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                         this.DisplayItemName?.ToString()
@@ -587,7 +482,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                                     this.DisplayItemName?.ToString()
                                 );
-                    _cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                         _parentKey,
                         key,
                         null,
@@ -599,7 +494,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         throw;
                     }
                 }
-                (value, _) = _cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                         _parentKey,
                         Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                             this.DisplayItemName?.ToString()
@@ -612,16 +507,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Showcase.Model.RandomDisplayItem> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Showcase.Model.RandomDisplayItem> Model()
         {
@@ -645,7 +530,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.RandomDisplayItem> callback)
         {
-            return this._cache.Subscribe(
+            return this._gs2.Cache.Subscribe(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                     this.DisplayItemName.ToString()
@@ -656,7 +541,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
                 _parentKey,
                 Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
                     this.DisplayItemName.ToString()

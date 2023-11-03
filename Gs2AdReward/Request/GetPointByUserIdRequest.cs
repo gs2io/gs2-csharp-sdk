@@ -35,10 +35,12 @@ namespace Gs2.Gs2AdReward.Request
 	{
         public string NamespaceName { set; get; }
         public string UserId { set; get; }
+
         public GetPointByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetPointByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

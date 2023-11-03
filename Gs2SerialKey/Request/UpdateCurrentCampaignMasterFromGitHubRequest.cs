@@ -35,10 +35,12 @@ namespace Gs2.Gs2SerialKey.Request
 	{
         public string NamespaceName { set; get; }
         public Gs2.Gs2SerialKey.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
+
         public UpdateCurrentCampaignMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UpdateCurrentCampaignMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2SerialKey.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

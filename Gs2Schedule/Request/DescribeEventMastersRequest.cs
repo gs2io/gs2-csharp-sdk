@@ -36,14 +36,17 @@ namespace Gs2.Gs2Schedule.Request
         public string NamespaceName { set; get; }
         public string PageToken { set; get; }
         public int? Limit { set; get; }
+
         public DescribeEventMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public DescribeEventMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
+
         public DescribeEventMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

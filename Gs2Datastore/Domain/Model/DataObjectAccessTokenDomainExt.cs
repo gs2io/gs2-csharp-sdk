@@ -18,6 +18,7 @@ using Gs2.Core.Net;
 using Gs2.Gs2Datastore.Model;
 using Gs2.Gs2Datastore.Request;
 
+// ReSharper disable once CheckNamespace
 namespace Gs2.Gs2Datastore.Domain.Model
 {
     public partial class DataObjectAccessTokenDomain
@@ -28,21 +29,20 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	#else
 	    private class DownloadImplFuture : Gs2Future<byte[]>
 	    {
-		    private DataObjectAccessTokenDomain _domain;
-		    private string _fileUrl;
+		    private readonly string _fileUrl;
 
 		    public DownloadImplFuture(
+			    // ReSharper disable once UnusedParameter.Local
 			    DataObjectAccessTokenDomain domain,
 			    string fileUrl
 		    )
 		    {
-			    _domain = domain;
-			    _fileUrl = fileUrl;
+			    this._fileUrl = fileUrl;
 		    }
 
 		    public override IEnumerator Action()
 		    {
-			    using var request = UnityWebRequest.Get(_fileUrl);
+			    using var request = UnityWebRequest.Get(this._fileUrl);
 			    request.downloadHandler = new DownloadHandlerBuffer();
 			    yield return request.SendWebRequest();
 			    if (request.responseCode != 200)
@@ -55,21 +55,21 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	    
 	    public class DownloadFuture : Gs2Future<byte[]>
 	    {
-		    private DataObjectAccessTokenDomain _domain;
+		    private readonly DataObjectAccessTokenDomain _domain;
 
 		    public DownloadFuture(
 			    DataObjectAccessTokenDomain domain
 		    )
 		    {
-			    _domain = domain;
+			    this._domain = domain;
 		    }
 
 		    public override IEnumerator Action()
 		    {
 			    {
-				    string fileUrl = null;
+				    string fileUrl;
 				    {
-					    var task = _domain.PrepareDownloadOwnData(
+					    var task = this._domain.PrepareDownloadOwnDataFuture(
 						    new PrepareDownloadOwnDataRequest()
 					    );
 					    yield return task;
@@ -83,7 +83,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 				    }
 				    {
 					    var task = new DownloadImplFuture(
-						    _domain,
+						    this._domain,
 						    fileUrl
 					    );
 					    yield return task;
@@ -142,24 +142,23 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	#else
 	    private class ReUploadImplFuture : Gs2Future<RestResult>
 	    {
-		    private DataObjectAccessTokenDomain _domain;
-		    private string _uploadUrl;
-		    private byte[] _data;
+		    private readonly string _uploadUrl;
+		    private readonly byte[] _data;
 
 		    public ReUploadImplFuture(
+			    // ReSharper disable once UnusedParameter.Local
 			    DataObjectAccessTokenDomain domain,
 			    string uploadUrl,
 			    byte[] data
 		    )
 		    {
-			    _domain = domain;
-			    _uploadUrl = uploadUrl;
-			    _data = data;
+			    this._uploadUrl = uploadUrl;
+			    this._data = data;
 		    }
 
 		    public override IEnumerator Action()
 		    {
-			    using var request = UnityWebRequest.Put(_uploadUrl, _data);
+			    using var request = UnityWebRequest.Put(this._uploadUrl, this._data);
 			    request.downloadHandler = new DownloadHandlerBuffer();
 			    yield return request.SendWebRequest();
 			    OnComplete(new RestResult(
@@ -171,25 +170,24 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
 	    public class ReUploadFuture : Gs2Future<DataObjectAccessTokenDomain>
 	    {
-		    private DataObjectAccessTokenDomain _domain;
-		    private byte[] _data;
+		    private readonly DataObjectAccessTokenDomain _domain;
+		    private readonly byte[] _data;
 
 		    public ReUploadFuture(
 			    DataObjectAccessTokenDomain domain,
 			    byte[] data
 		    )
 		    {
-			    _domain = domain;
-			    _data = data;
+			    this._domain = domain;
+			    this._data = data;
 		    }
 
 		    public override IEnumerator Action()
 		    {
 			    {
-				    string dataObjectName = null;
-				    string uploadUrl = null;
+				    string uploadUrl;
 				    {
-					    var task = _domain.PrepareReUpload(
+					    var task = _domain.PrepareReUploadFuture(
 						    new PrepareReUploadRequest()
 					    );
 					    yield return task;
@@ -198,17 +196,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
 						    OnError(task.Error);
 						    yield break;
 					    }
-						var task2 = task.Result.Model();
+						var task2 = task.Result.ModelFuture();
 						yield return task2;
 
-					    dataObjectName = task2.Result.Name;
-					    uploadUrl = task.Result.UploadUrl;
+						uploadUrl = task.Result.UploadUrl;
 				    }
 				    {
 					    var task = new ReUploadImplFuture(
-						    _domain,
+						    this._domain,
 						    uploadUrl,
-						    _data
+						    this._data
 					    );
 					    yield return task;
 					    if (task.Error != null)
@@ -218,7 +215,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 					    }
 				    }
 				    {
-					    var task = _domain.DoneUpload(
+					    var task = _domain.DoneUploadFuture(
 						    new DoneUploadRequest()
 					    );
 					    yield return task;

@@ -38,22 +38,27 @@ namespace Gs2.Gs2Formation.Request
         public string MoldModelName { set; get; }
         public int? Index { set; get; }
         public string KeyId { set; get; }
+
         public GetFormWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public GetFormWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
+
         public GetFormWithSignatureRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;
         }
+
         public GetFormWithSignatureRequest WithIndex(int? index) {
             this.Index = index;
             return this;
         }
+
         public GetFormWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

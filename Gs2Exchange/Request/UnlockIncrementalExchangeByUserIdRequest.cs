@@ -38,18 +38,22 @@ namespace Gs2.Gs2Exchange.Request
         public string UserId { set; get; }
         public string LockTransactionId { set; get; }
         public string DuplicationAvoider { set; get; }
+
         public UnlockIncrementalExchangeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
+
         public UnlockIncrementalExchangeByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
+
         public UnlockIncrementalExchangeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
+
         public UnlockIncrementalExchangeByUserIdRequest WithLockTransactionId(string lockTransactionId) {
             this.LockTransactionId = lockTransactionId;
             return this;
