@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -119,7 +120,6 @@ namespace Gs2.Gs2Log.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Insight> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithInsightName(this.InsightName);
@@ -152,32 +152,6 @@ namespace Gs2.Gs2Log.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInsightName(this.InsightName);
-                GetInsightResult result = null;
-                try {
-                    result = await this._client.GetInsightAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                        request.InsightName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "insight")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -204,44 +178,16 @@ namespace Gs2.Gs2Log.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Log.Model.Insight>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Log.Model.Insight> GetAsync(
+            #else
         private async Task<Gs2.Gs2Log.Model.Insight> GetAsync(
+            #endif
             GetInsightRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithInsightName(this.InsightName);
-            var future = this._client.GetInsightFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                        request.InsightName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "insight")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithInsightName(this.InsightName);
@@ -266,7 +212,6 @@ namespace Gs2.Gs2Log.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -300,7 +245,6 @@ namespace Gs2.Gs2Log.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithInsightName(this.InsightName);
@@ -333,32 +277,6 @@ namespace Gs2.Gs2Log.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInsightName(this.InsightName);
-                DeleteInsightResult result = null;
-                try {
-                    result = await this._client.DeleteInsightAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                        request.InsightName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "insight")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -382,44 +300,16 @@ namespace Gs2.Gs2Log.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.InsightDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Log.Domain.Model.InsightDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Log.Domain.Model.InsightDomain> DeleteAsync(
+            #endif
             DeleteInsightRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithInsightName(this.InsightName);
-            var future = this._client.DeleteInsightFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Log.Domain.Model.InsightDomain.CreateCacheKey(
-                        request.InsightName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Log.Model.Insight>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "insight")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithInsightName(this.InsightName);
@@ -444,7 +334,6 @@ namespace Gs2.Gs2Log.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -469,18 +358,6 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Log.Domain.Model.InsightDomain> DeleteAsync(
-            DeleteInsightRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> Delete(
             DeleteInsightRequest request
@@ -546,8 +423,13 @@ namespace Gs2.Gs2Log.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Log.Model.Insight>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Log.Model.Insight> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Log.Model.Insight> ModelAsync()
+            #endif
         {
             var (value, find) = _gs2.Cache.Get<Gs2.Gs2Log.Model.Insight>(
                     _parentKey,
@@ -589,16 +471,6 @@ namespace Gs2.Gs2Log.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Log.Model.Insight> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Log.Model.Insight> Model()
         {

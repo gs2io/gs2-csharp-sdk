@@ -110,7 +110,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.CreatePasswordFuture(
@@ -123,14 +122,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                CreatePasswordResult result = null;
-                    result = await this._client.CreatePasswordAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -158,31 +149,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> CreateAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> CreateAsync(
+            #endif
             CreatePasswordRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.CreatePasswordFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             CreatePasswordResult result = null;
                 result = await this._client.CreatePasswordAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -211,18 +193,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> CreateAsync(
-            CreatePasswordRequest request
-        ) {
-            var future = CreateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> Create(
             CreatePasswordRequest request
@@ -238,7 +208,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Password> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.GetPasswordFuture(
@@ -269,30 +238,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                GetPasswordResult result = null;
-                try {
-                    result = await this._client.GetPasswordAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Password>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "password")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -318,42 +263,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.Password>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Identifier.Model.Password> GetAsync(
+            #else
         private async Task<Gs2.Gs2Identifier.Model.Password> GetAsync(
+            #endif
             GetPasswordRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.GetPasswordFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Password>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "password")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             GetPasswordResult result = null;
@@ -376,7 +295,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -409,7 +327,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.DeletePasswordFuture(
@@ -440,30 +357,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                DeletePasswordResult result = null;
-                try {
-                    result = await this._client.DeletePasswordAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Password>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "password")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -486,42 +379,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DeleteAsync(
+            #endif
             DeletePasswordRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.DeletePasswordFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.PasswordDomain.CreateCacheKey(
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.Password>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "password")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             DeletePasswordResult result = null;
@@ -544,7 +411,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -568,18 +434,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DeleteAsync(
-            DeletePasswordRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> Delete(
             DeletePasswordRequest request
@@ -642,8 +496,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.Password>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Model.Password> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Identifier.Model.Password> ModelAsync()
+            #endif
         {
             var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.Password>(
                     _parentKey,
@@ -682,16 +541,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Model.Password> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Identifier.Model.Password> Model()
         {

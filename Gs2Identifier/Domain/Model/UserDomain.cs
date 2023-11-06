@@ -253,7 +253,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.UpdateUserFuture(
@@ -266,14 +265,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                UpdateUserResult result = null;
-                    result = await this._client.UpdateUserAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -303,31 +294,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> UpdateAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.UserDomain> UpdateAsync(
+            #endif
             UpdateUserRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.UpdateUserFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             UpdateUserResult result = null;
                 result = await this._client.UpdateUserAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -358,18 +340,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> UpdateAsync(
-            UpdateUserRequest request
-        ) {
-            var future = UpdateFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to UpdateFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> Update(
             UpdateUserRequest request
@@ -385,7 +355,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.User> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.GetUserFuture(
@@ -417,31 +386,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                GetUserResult result = null;
-                try {
-                    result = await this._client.GetUserAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        request.UserName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "user")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -469,43 +413,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.User>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Identifier.Model.User> GetAsync(
+            #else
         private async Task<Gs2.Gs2Identifier.Model.User> GetAsync(
+            #endif
             GetUserRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.GetUserFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        request.UserName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "user")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             GetUserResult result = null;
@@ -529,7 +446,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -564,7 +480,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.DeleteUserFuture(
@@ -596,31 +511,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                DeleteUserResult result = null;
-                try {
-                    result = await this._client.DeleteUserAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        request.UserName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "user")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -645,43 +535,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> DeleteAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.UserDomain> DeleteAsync(
+            #endif
             DeleteUserRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.DeleteUserFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        request.UserName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "user")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             DeleteUserResult result = null;
@@ -705,7 +568,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -731,18 +593,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> DeleteAsync(
-            DeleteUserRequest request
-        ) {
-            var future = DeleteFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DeleteFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> Delete(
             DeleteUserRequest request
@@ -758,7 +608,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.CreateIdentifierFuture(
@@ -771,14 +620,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                CreateIdentifierResult result = null;
-                    result = await this._client.CreateIdentifierAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -812,31 +653,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> CreateIdentifierAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> CreateIdentifierAsync(
+            #endif
             CreateIdentifierRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.CreateIdentifierFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             CreateIdentifierResult result = null;
                 result = await this._client.CreateIdentifierAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -871,18 +703,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> CreateIdentifierAsync(
-            CreateIdentifierRequest request
-        ) {
-            var future = CreateIdentifierFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateIdentifierFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> CreateIdentifier(
             CreateIdentifierRequest request
@@ -953,8 +773,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.User>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Model.User> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Identifier.Model.User> ModelAsync()
+            #endif
         {
             var parentKey = string.Join(
                 ":",
@@ -1001,16 +826,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Model.User> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Identifier.Model.User> Model()
         {

@@ -83,7 +83,6 @@ namespace Gs2.Gs2Identifier.Domain
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CreateUserFuture(
                     request
                 );
@@ -94,12 +93,6 @@ namespace Gs2.Gs2Identifier.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CreateUserResult result = null;
-                    result = await this._client.CreateUserAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -131,27 +124,20 @@ namespace Gs2.Gs2Identifier.Domain
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
+            #endif
             CreateUserRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CreateUserFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CreateUserResult result = null;
                 result = await this._client.CreateUserAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -184,18 +170,6 @@ namespace Gs2.Gs2Identifier.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
-            CreateUserRequest request
-        ) {
-            var future = CreateUserFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateUserFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUser(
             CreateUserRequest request
@@ -211,7 +185,6 @@ namespace Gs2.Gs2Identifier.Domain
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CreateSecurityPolicyFuture(
                     request
                 );
@@ -222,12 +195,6 @@ namespace Gs2.Gs2Identifier.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CreateSecurityPolicyResult result = null;
-                    result = await this._client.CreateSecurityPolicyAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -259,27 +226,20 @@ namespace Gs2.Gs2Identifier.Domain
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
+            #endif
             CreateSecurityPolicyRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CreateSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CreateSecurityPolicyResult result = null;
                 result = await this._client.CreateSecurityPolicyAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -312,18 +272,6 @@ namespace Gs2.Gs2Identifier.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
-            CreateSecurityPolicyRequest request
-        ) {
-            var future = CreateSecurityPolicyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateSecurityPolicyFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicy(
             CreateSecurityPolicyRequest request

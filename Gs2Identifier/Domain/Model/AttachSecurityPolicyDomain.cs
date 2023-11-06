@@ -110,7 +110,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.GetHasSecurityPolicyFuture(
@@ -141,30 +140,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                GetHasSecurityPolicyResult result = null;
-                try {
-                    result = await this._client.GetHasSecurityPolicyAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "attachSecurityPolicy")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -194,42 +169,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> GetHasSecurityPolicyAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> GetHasSecurityPolicyAsync(
+            #endif
             GetHasSecurityPolicyRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.GetHasSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Identifier.Domain.Model.AttachSecurityPolicyDomain.CreateCacheKey(
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "attachSecurityPolicy")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             GetHasSecurityPolicyResult result = null;
@@ -252,7 +201,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -283,18 +231,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> GetHasSecurityPolicyAsync(
-            GetHasSecurityPolicyRequest request
-        ) {
-            var future = GetHasSecurityPolicyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to GetHasSecurityPolicyFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> GetHasSecurityPolicy(
             GetHasSecurityPolicyRequest request
@@ -310,7 +246,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.AttachSecurityPolicyFuture(
@@ -323,14 +258,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                AttachSecurityPolicyResult result = null;
-                    result = await this._client.AttachSecurityPolicyAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -360,31 +287,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> AttachSecurityPolicyAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> AttachSecurityPolicyAsync(
+            #endif
             AttachSecurityPolicyRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.AttachSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             AttachSecurityPolicyResult result = null;
                 result = await this._client.AttachSecurityPolicyAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -415,18 +333,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> AttachSecurityPolicyAsync(
-            AttachSecurityPolicyRequest request
-        ) {
-            var future = AttachSecurityPolicyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to AttachSecurityPolicyFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> AttachSecurityPolicy(
             AttachSecurityPolicyRequest request
@@ -442,7 +348,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithUserName(this.UserName);
                 var future = this._client.DetachSecurityPolicyFuture(
@@ -455,14 +360,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithUserName(this.UserName);
-                DetachSecurityPolicyResult result = null;
-                    result = await this._client.DetachSecurityPolicyAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -492,31 +389,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> DetachSecurityPolicyAsync(
+            #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> DetachSecurityPolicyAsync(
+            #endif
             DetachSecurityPolicyRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithUserName(this.UserName);
-            var future = this._client.DetachSecurityPolicyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithUserName(this.UserName);
             DetachSecurityPolicyResult result = null;
                 result = await this._client.DetachSecurityPolicyAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -547,18 +435,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> DetachSecurityPolicyAsync(
-            DetachSecurityPolicyRequest request
-        ) {
-            var future = DetachSecurityPolicyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to DetachSecurityPolicyFuture.")]
         public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain[]> DetachSecurityPolicy(
             DetachSecurityPolicyRequest request
@@ -586,8 +462,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> ModelAsync()
+            #endif
         {
             var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.AttachSecurityPolicy>(
                     _parentKey,
@@ -600,16 +481,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Identifier.Model.AttachSecurityPolicy> Model()
         {

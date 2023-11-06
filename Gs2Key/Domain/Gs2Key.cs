@@ -83,7 +83,6 @@ namespace Gs2.Gs2Key.Domain
 
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.NamespaceDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 var future = this._client.CreateNamespaceFuture(
                     request
                 );
@@ -94,12 +93,6 @@ namespace Gs2.Gs2Key.Domain
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                CreateNamespaceResult result = null;
-                    result = await this._client.CreateNamespaceAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -131,27 +124,20 @@ namespace Gs2.Gs2Key.Domain
             }
             return new Gs2InlineFuture<Gs2.Gs2Key.Domain.Model.NamespaceDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Key.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            #else
         public async Task<Gs2.Gs2Key.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
+            #endif
             CreateNamespaceRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            var future = this._client.CreateNamespaceFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             CreateNamespaceResult result = null;
                 result = await this._client.CreateNamespaceAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -184,18 +170,6 @@ namespace Gs2.Gs2Key.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Key.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            CreateNamespaceRequest request
-        ) {
-            var future = CreateNamespaceFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to CreateNamespaceFuture.")]
         public IFuture<Gs2.Gs2Key.Domain.Model.NamespaceDomain> CreateNamespace(
             CreateNamespaceRequest request
