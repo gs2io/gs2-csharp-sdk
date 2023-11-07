@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -89,8 +90,8 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
 
                 var future = domain.Dictionary.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Entry(
                     request.EntryModelName
                 ).ModelFuture();
@@ -101,14 +102,21 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, item);
+                    item = Transform(domain, accessToken, request, item);
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-                
+
                 result.OnComplete(() =>
                 {
                     return null;
@@ -132,13 +140,16 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Dictionary.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Entry(
                 request.EntryModelName
             ).ModelAsync();
 
-            Transform(domain, accessToken, request, item);
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
 
             return () =>
             {
@@ -146,5 +157,19 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static VerifyEntryByUserIdRequest Rate(
+            VerifyEntryByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyEntryByUserIdRequest Rate(
+            VerifyEntryByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

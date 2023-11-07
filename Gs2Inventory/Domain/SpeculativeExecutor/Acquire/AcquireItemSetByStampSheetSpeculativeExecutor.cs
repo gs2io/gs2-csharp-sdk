@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -73,11 +74,10 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AcquireItemSetByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Inventory(
                     request.InventoryName
                 ).ItemSet(
@@ -91,6 +91,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 var items = future.Result;
 
+                if (items == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 items = Transform(domain, accessToken, request, items);
 
                 result.OnComplete(() =>
@@ -137,8 +144,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var items = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Inventory(
                 request.InventoryName
             ).ItemSet(
@@ -146,6 +153,9 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 request.ItemSetName
             ).ModelAsync();
 
+            if (items == null) {
+                return () => null;
+            }
             items = Transform(domain, accessToken, request, items);
 
             return () =>
@@ -175,5 +185,21 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static AcquireItemSetByUserIdRequest Rate(
+            AcquireItemSetByUserIdRequest request,
+            double rate
+        ) {
+            request.AcquireCount = (long?) (request.AcquireCount * rate);
+            return request;
+        }
+
+        public static AcquireItemSetByUserIdRequest Rate(
+            AcquireItemSetByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.AcquireCount = (long?) ((request.AcquireCount ?? 0) * rate);
+            return request;
+        }
     }
 }

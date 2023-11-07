@@ -75,8 +75,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).BigInventory(
                     request.InventoryName
                 ).BigItem(
@@ -89,28 +89,36 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item != null) {
+                    item = Transform(domain, accessToken, request, item);
 
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.InventoryName,
-                    "BigItem"
-                );
-                var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
-                    request.ItemName.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Inventory.Model.BigItem>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                        request.NamespaceName,
+                        accessToken.UserId,
+                        request.InventoryName,
+                        "BigItem"
                     );
-                    return null;
-                });
+                    var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                        request.ItemName.ToString()
+                    );
+
+                    result.OnComplete(() =>
+                    {
+                        domain.Cache.Put<Gs2.Gs2Inventory.Model.BigItem>(
+                            parentKey,
+                            key,
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                        );
+                        return null;
+                    });
+                }
+                else {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                }
                 yield return null;
             }
 
@@ -130,37 +138,61 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).BigInventory(
                 request.InventoryName
             ).BigItem(
                 request.ItemName
             ).ModelAsync();
 
-            item = Transform(domain, accessToken, request, item);
+            if (item != null) {
+                item = Transform(domain, accessToken, request, item);
 
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                request.InventoryName,
-                "BigItem"
-            );
-            var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
-                request.ItemName.ToString()
-            );
-
-            return () =>
-            {
-                domain.Cache.Put<Gs2.Gs2Inventory.Model.BigItem>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.InventoryName,
+                    "BigItem"
                 );
-                return null;
-            };
+                var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                    request.ItemName.ToString()
+                );
+
+                return () =>
+                {
+                    domain.Cache.Put<Gs2.Gs2Inventory.Model.BigItem>(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                    );
+                    return null;
+                };
+            }
+            else {
+                return () =>
+                {
+                    return null;
+                };
+            }
         }
 #endif
+
+        public static AcquireBigItemByUserIdRequest Rate(
+            AcquireBigItemByUserIdRequest request,
+            double rate
+        ) {
+            request.AcquireCount = (BigInteger.Parse(request.AcquireCount) * new BigInteger(rate)).ToString();
+            return request;
+        }
+
+        public static AcquireBigItemByUserIdRequest Rate(
+            AcquireBigItemByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.AcquireCount = (BigInteger.Parse(request.AcquireCount) * rate).ToString();
+            return request;
+        }
     }
 }

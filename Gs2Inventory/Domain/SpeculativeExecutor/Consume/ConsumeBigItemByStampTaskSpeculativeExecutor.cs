@@ -82,8 +82,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).BigInventory(
                     request.InventoryName
                 ).BigItem(
@@ -96,6 +96,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
                     item = Transform(domain, accessToken, request, item);
                 }
@@ -143,14 +150,17 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).BigInventory(
                 request.InventoryName
             ).BigItem(
                 request.ItemName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
@@ -175,5 +185,21 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static ConsumeBigItemByUserIdRequest Rate(
+            ConsumeBigItemByUserIdRequest request,
+            double rate
+        ) {
+            request.ConsumeCount = (BigInteger.Parse(request.ConsumeCount) * (BigInteger) rate).ToString();
+            return request;
+        }
+
+        public static ConsumeBigItemByUserIdRequest Rate(
+            ConsumeBigItemByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.ConsumeCount = (BigInteger.Parse(request.ConsumeCount) * rate).ToString();
+            return request;
+        }
     }
 }

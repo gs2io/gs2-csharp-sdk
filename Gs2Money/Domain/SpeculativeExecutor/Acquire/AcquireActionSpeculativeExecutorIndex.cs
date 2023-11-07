@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DepositByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = DepositByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DepositByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (RevertRecordReceiptSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = RevertRecordReceiptSpeculativeExecutor.Rate(request, rate);
                     var future = RevertRecordReceiptSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -96,23 +105,31 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DepositByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = DepositByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DepositByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (RevertRecordReceiptSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = RevertRecordReceiptSpeculativeExecutor.Rate(request, rate);
                 return await RevertRecordReceiptSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

@@ -28,12 +28,14 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inbox.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -73,8 +75,8 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
 
                 var future = domain.Inbox.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Message(
                     request.MessageName
                 ).ModelFuture();
@@ -85,22 +87,21 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
-
-                var future2 = new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
-                    Array.Empty<ConsumeAction>(),
-                    item.ReadAcquireActions
-                ).ExecuteFuture(
-                    domain,
-                    accessToken
-                );
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
                     yield break;
                 }
-                var commit = future2.Result;
-                
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
+
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
                     accessToken.UserId,
@@ -112,7 +113,6 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
 
                 result.OnComplete(() =>
                 {
-                    commit?.Invoke();
                     domain.Cache.Put<Gs2.Gs2Inbox.Model.Message>(
                         parentKey,
                         key,
@@ -140,21 +140,16 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Inbox.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Message(
                 request.MessageName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
-
-            var commit = await new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
-                Array.Empty<ConsumeAction>(),
-                item.ReadAcquireActions
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
 
             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                 request.NamespaceName,
@@ -167,7 +162,6 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
 
             return () =>
             {
-                commit?.Invoke();
                 domain.Cache.Put<Gs2.Gs2Inbox.Model.Message>(
                     parentKey,
                     key,
@@ -178,5 +172,19 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static OpenMessageByUserIdRequest Rate(
+            OpenMessageByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static OpenMessageByUserIdRequest Rate(
+            OpenMessageByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

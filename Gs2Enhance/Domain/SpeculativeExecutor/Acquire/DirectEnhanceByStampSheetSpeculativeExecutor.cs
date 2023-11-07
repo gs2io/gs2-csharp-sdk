@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,11 +26,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -52,20 +52,6 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             return "Gs2Enhance:DirectEnhanceByUserId";
         }
 
-        public static Gs2.Gs2Enhance.Model.RateModel Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            DirectEnhanceByUserIdRequest request,
-            Gs2.Gs2Enhance.Model.RateModel item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -73,11 +59,21 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             DirectEnhanceByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                Transform(domain, accessToken, request, null);
+                var future = Transaction.SpeculativeExecutor.DirectEnhanceByUserIdSpeculativeExecutor.ExecuteFuture(
+                    domain,
+                    accessToken,
+                    request
+                );
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var commit = future.Result;
 
                 result.OnComplete(() =>
                 {
+                    commit?.Invoke();
                     return null;
                 });
                 yield return null;
@@ -97,13 +93,32 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DirectEnhanceByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
+            var commit = await Transaction.SpeculativeExecutor.DirectEnhanceByUserIdSpeculativeExecutor.ExecuteAsync(
+                domain,
+                accessToken,
+                request
+            );
 
             return () =>
             {
+                commit?.Invoke();
                 return null;
             };
         }
 #endif
+
+        public static DirectEnhanceByUserIdRequest Rate(
+            DirectEnhanceByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static DirectEnhanceByUserIdRequest Rate(
+            DirectEnhanceByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

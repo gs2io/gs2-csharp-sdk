@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,14 +65,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var consumeCount = request.ConsumeCount;
             foreach (var item in items.Reverse()) {
-                if (item.Count <= consumeCount) {
-                    item.Count = 0;
-                    consumeCount -= item.Count;
-                }
-                else {
+                if (consumeCount <= item.Count) {
                     item.Count -= consumeCount;
+                    consumeCount = 0;
                     break;   
                 }
+                item.Count = 0;
+                consumeCount -= item.Count;
             }
             if (consumeCount > 0) {
                 throw new BadRequestException(new [] {
@@ -91,13 +91,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Inventory(
                     request.InventoryName
                 ).ItemSet(
                     request.ItemName,
-                    request.ItemSetName
+                    string.IsNullOrEmpty(request.ItemSetName) ? null : request.ItemSetName
                 ).ModelFuture();
                 yield return future;
                 if (future.Error != null) {
@@ -106,6 +106,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 var items = future.Result;
 
+                if (items == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
                     items = Transform(domain, accessToken, request, items);
                 }
@@ -165,15 +172,18 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var items = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Inventory(
                 request.InventoryName
             ).ItemSet(
                 request.ItemName,
-                request.ItemSetName
+                string.IsNullOrEmpty(request.ItemSetName) ? null : request.ItemSetName
             ).ModelAsync();
 
+            if (items == null) {
+                return () => null;
+            }
             items = Transform(domain, accessToken, request, items);
 
             return () =>
@@ -210,5 +220,21 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static ConsumeItemSetByUserIdRequest Rate(
+            ConsumeItemSetByUserIdRequest request,
+            double rate
+        ) {
+            request.ConsumeCount = (long?) (request.ConsumeCount * rate);
+            return request;
+        }
+
+        public static ConsumeItemSetByUserIdRequest Rate(
+            ConsumeItemSetByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.ConsumeCount = (long?) ((request.ConsumeCount ?? 0) * rate);
+            return request;
+        }
     }
 }

@@ -118,7 +118,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stampSheetResult")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stampSheetResult")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -187,7 +187,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stampSheetResult")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stampSheetResult")
                 {
                     throw;
                 }
@@ -276,7 +276,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "stampSheetResult")
+                            if (e.errors.Length == 0 || e.errors[0].component != "stampSheetResult")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -329,7 +329,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "stampSheetResult")
+                    if (e.errors.Length == 0 || e.errors[0].component != "stampSheetResult")
                     {
                         throw;
                     }

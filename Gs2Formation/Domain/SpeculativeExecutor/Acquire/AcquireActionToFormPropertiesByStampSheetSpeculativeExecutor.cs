@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,11 +26,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Formation.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -52,20 +52,6 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             return "Gs2Formation:AcquireActionsToFormProperties";
         }
 
-        public static Gs2.Gs2Formation.Model.Form Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            AcquireActionsToFormPropertiesRequest request,
-            Gs2.Gs2Formation.Model.Form item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -73,11 +59,21 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             AcquireActionsToFormPropertiesRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                Transform(domain, accessToken, request, null);
+                var future = Transaction.SpeculativeExecutor.AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteFuture(
+                    domain,
+                    accessToken,
+                    request
+                );
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var commit = future.Result;
 
                 result.OnComplete(() =>
                 {
+                    commit?.Invoke();
                     return null;
                 });
                 yield return null;
@@ -97,13 +93,32 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             AccessToken accessToken,
             AcquireActionsToFormPropertiesRequest request
         ) {
-            Transform(domain, accessToken, request, null);
+            var commit = await Transaction.SpeculativeExecutor.AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteAsync(
+                domain,
+                accessToken,
+                request
+            );
 
             return () =>
             {
+                commit?.Invoke();
                 return null;
             };
         }
 #endif
+
+        public static AcquireActionsToFormPropertiesRequest Rate(
+            AcquireActionsToFormPropertiesRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static AcquireActionsToFormPropertiesRequest Rate(
+            AcquireActionsToFormPropertiesRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

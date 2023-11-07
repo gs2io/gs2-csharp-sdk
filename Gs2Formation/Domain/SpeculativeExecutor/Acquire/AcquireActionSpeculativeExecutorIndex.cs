@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AddMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AddMoldCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AddMoldCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (SetMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = SetMoldCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = SetMoldCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -81,10 +90,12 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AcquireActionsToFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AcquireActionsToFormPropertiesSpeculativeExecutor.Rate(request, rate);
                     var future = AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -95,10 +106,12 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Rate(request, rate);
                     var future = AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -124,37 +137,49 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AddMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AddMoldCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AddMoldCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (SetMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = SetMoldCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await SetMoldCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AcquireActionsToFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AcquireActionsToFormPropertiesSpeculativeExecutor.Rate(request, rate);
                 return await AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Rate(request, rate);
                 return await AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DirectEnhanceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = DirectEnhanceByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DirectEnhanceByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = CreateProgressByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = CreateProgressByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -96,23 +105,31 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DirectEnhanceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = DirectEnhanceByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DirectEnhanceByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = CreateProgressByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await CreateProgressByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

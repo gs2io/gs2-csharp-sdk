@@ -140,7 +140,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "lotteryModel")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "lotteryModel")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -207,7 +207,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "lotteryModel")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "lotteryModel")
                 {
                     throw;
                 }
@@ -272,7 +272,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "lotteryModel")
+                            if (e.errors.Length == 0 || e.errors[0].component != "lotteryModel")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -325,7 +325,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "lotteryModel")
+                    if (e.errors.Length == 0 || e.errors[0].component != "lotteryModel")
                     {
                         throw;
                     }

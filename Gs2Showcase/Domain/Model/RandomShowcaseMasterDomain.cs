@@ -140,7 +140,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "randomShowcaseMaster")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "randomShowcaseMaster")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -207,7 +207,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "randomShowcaseMaster")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "randomShowcaseMaster")
                 {
                     throw;
                 }
@@ -367,7 +367,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "randomShowcaseMaster")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "randomShowcaseMaster")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -431,7 +431,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "randomShowcaseMaster")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "randomShowcaseMaster")
                 {
                     throw;
                 }
@@ -502,7 +502,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "randomShowcaseMaster")
+                            if (e.errors.Length == 0 || e.errors[0].component != "randomShowcaseMaster")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -555,7 +555,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "randomShowcaseMaster")
+                    if (e.errors.Length == 0 || e.errors[0].component != "randomShowcaseMaster")
                     {
                         throw;
                     }

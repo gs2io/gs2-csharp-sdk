@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2StateMachine.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (StartStateMachineByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = StartStateMachineByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = StartStateMachineByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -82,16 +89,22 @@ namespace Gs2.Gs2StateMachine.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (StartStateMachineByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = StartStateMachineByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await StartStateMachineByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

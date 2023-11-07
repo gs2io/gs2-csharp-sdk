@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -51,7 +53,6 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Exchange:CreateAwaitByUserId";
         }
-
         public static Gs2.Gs2Exchange.Model.Await Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -74,12 +75,15 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
 
-                Transform(domain, accessToken, request, null);
+                try {
+                    Transform(domain, accessToken, request, null);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
+                result.OnComplete(() => null);
                 yield return null;
             }
 
@@ -99,11 +103,24 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
         ) {
             Transform(domain, accessToken, request, null);
 
-            return () =>
-            {
-                return null;
-            };
+            return () => null;
         }
 #endif
+
+        public static CreateAwaitByUserIdRequest Rate(
+            CreateAwaitByUserIdRequest request,
+            double rate
+        ) {
+            request.Count = (int?) (request.Count * rate);
+            return request;
+        }
+
+        public static CreateAwaitByUserIdRequest Rate(
+            CreateAwaitByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.Count = (int?) ((request.Count ?? 0) * rate);
+            return request;
+        }
     }
 }

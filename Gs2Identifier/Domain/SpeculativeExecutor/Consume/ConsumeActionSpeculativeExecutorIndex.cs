@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,8 +50,12 @@ namespace Gs2.Gs2Identifier.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 result.OnComplete(null);
                 yield return null;
@@ -68,9 +73,13 @@ namespace Gs2.Gs2Identifier.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
-            return () => { return null; };
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
+            return null;
         }
 #endif
     }

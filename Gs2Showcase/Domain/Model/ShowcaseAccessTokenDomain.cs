@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -98,7 +99,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Showcase> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -132,33 +132,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithShowcaseName(this.ShowcaseName);
-                GetShowcaseResult result = null;
-                try {
-                    result = await this._client.GetShowcaseAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        request.ShowcaseName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "showcase")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -209,45 +182,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            #else
         private async Task<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            #endif
             GetShowcaseRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithShowcaseName(this.ShowcaseName);
-            var future = this._client.GetShowcaseFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        request.ShowcaseName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "showcase")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -273,7 +217,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -416,8 +359,13 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
+            #endif
         {
             var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                     _parentKey,
@@ -459,16 +407,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Showcase.Model.Showcase> Model()
         {

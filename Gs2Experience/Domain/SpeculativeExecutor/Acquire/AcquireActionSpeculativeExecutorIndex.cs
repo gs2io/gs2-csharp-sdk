@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AddExperienceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AddExperienceByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AddExperienceByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AddRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AddRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AddRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -81,10 +90,12 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (SetRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = SetRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = SetRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -95,10 +106,12 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (MultiplyAcquireActionsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = MultiplyAcquireActionsByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -124,37 +137,49 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AddExperienceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AddExperienceByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AddExperienceByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AddRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AddRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AddRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (SetRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = SetRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await SetRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (MultiplyAcquireActionsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = MultiplyAcquireActionsByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

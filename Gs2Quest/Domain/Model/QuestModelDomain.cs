@@ -148,7 +148,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "questModel")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "questModel")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -217,7 +217,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "questModel")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "questModel")
                 {
                     throw;
                 }
@@ -283,7 +283,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "questModel")
+                            if (e.errors.Length == 0 || e.errors[0].component != "questModel")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -336,7 +336,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "questModel")
+                    if (e.errors.Length == 0 || e.errors[0].component != "questModel")
                     {
                         throw;
                     }

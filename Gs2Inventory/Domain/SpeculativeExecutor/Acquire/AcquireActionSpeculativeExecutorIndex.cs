@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AddCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AddCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AddCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (SetCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = SetCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = SetCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -81,10 +90,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AcquireItemSetByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AcquireItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AcquireItemSetByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -95,10 +106,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AddReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AddReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AddReferenceOfByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -109,10 +122,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (DeleteReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = DeleteReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DeleteReferenceOfByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -123,10 +138,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AcquireSimpleItemsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AcquireSimpleItemsByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AcquireSimpleItemsByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -137,10 +154,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (AcquireBigItemByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AcquireBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AcquireBigItemByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -166,58 +185,76 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AddCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AddCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AddCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AddCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (SetCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = SetCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await SetCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AcquireItemSetByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AcquireItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AcquireItemSetByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AddReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AddReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AddReferenceOfByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (DeleteReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = DeleteReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DeleteReferenceOfByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AcquireSimpleItemsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AcquireSimpleItemsByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AcquireSimpleItemsByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (AcquireBigItemByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AcquireBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AcquireBigItemByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

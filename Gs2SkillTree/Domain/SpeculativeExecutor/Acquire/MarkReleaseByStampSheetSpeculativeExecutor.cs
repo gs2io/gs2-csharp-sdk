@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
@@ -53,7 +56,6 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2SkillTree:MarkReleaseByUserId";
         }
-
         public static Gs2.Gs2SkillTree.Model.Status Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -78,11 +80,10 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             MarkReleaseByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.SkillTree.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                 ).ModelFuture();
                 yield return future;
@@ -92,38 +93,19 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
-
-                var commit = new List<Func<object>>();
-                foreach (var nodeModelName in request.NodeModelNames) {
-                    var future2 = domain.SkillTree.Namespace(
-                        request.NamespaceName
-                    ).NodeModel(
-                        nodeModelName
-                    ).ModelFuture();
-                    yield return future2;
-                    if (future2.Error != null) {
-                        result.OnError(future2.Error);
-                        yield break;
-                    }
-                    var model = future2.Result;
-
-                    var future3 = new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
-                        model.ReleaseConsumeActions,
-                        Array.Empty<AcquireAction>()
-                    ).ExecuteFuture(
-                        domain,
-                        accessToken
-                    );
-                    if (future3.Error != null) {
-                        result.OnError(future3.Error);
-                        yield break;
-                    }
-                    commit.Add(() =>
+                if (item == null) {
+                    result.OnComplete(() =>
                     {
-                        future3.Result.Invoke();
                         return null;
                     });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
                 }
 
                 var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -136,9 +118,6 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
 
                 result.OnComplete(() =>
                 {
-                    foreach (var c in commit) {
-                        c?.Invoke();
-                    }
                     domain.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
                         parentKey,
                         key,
@@ -166,11 +145,14 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
         ) {
             var item = await domain.SkillTree.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -193,5 +175,19 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static MarkReleaseByUserIdRequest Rate(
+            MarkReleaseByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static MarkReleaseByUserIdRequest Rate(
+            MarkReleaseByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

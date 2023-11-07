@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -248,45 +249,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
         }
-        #else
+        #endif
+        
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            #else
         private async Task<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            #endif
             GetShowcaseByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithShowcaseName(this.ShowcaseName);
-            var future = this._client.GetShowcaseByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        request.ShowcaseName.ToString()
-                    );
-                    _gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "showcase")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -312,7 +284,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -370,7 +341,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
@@ -386,17 +356,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName)
-                    .WithDisplayItemId(this.DisplayItemId);
-                BuyByUserIdResult result = null;
-                    result = await this._client.BuyByUserIdAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -445,27 +404,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> BuyAsync(
+            #else
         public async Task<Gs2.Core.Domain.TransactionDomain> BuyAsync(
+            #endif
             BuyByUserIdRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithShowcaseName(this.ShowcaseName)
-                .WithDisplayItemId(this.DisplayItemId);
-            var future = this._client.BuyByUserIdFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
@@ -475,7 +423,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 result = await this._client.BuyByUserIdAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -519,18 +466,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> BuyAsync(
-            BuyByUserIdRequest request
-        ) {
-            var future = BuyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to BuyFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionDomain> Buy(
             BuyByUserIdRequest request
@@ -595,8 +530,13 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.DisplayItem>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
+            #endif
         {
             var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
                     _parentKey,
@@ -637,16 +577,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> Model()
         {

@@ -163,7 +163,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "status")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -235,7 +235,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "status")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
                 {
                     throw;
                 }
@@ -298,7 +298,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "status")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -374,7 +374,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "status")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
                 {
                     throw;
                 }
@@ -1110,7 +1110,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "status")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -1179,7 +1179,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "status")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
                 {
                     throw;
                 }
@@ -1395,27 +1395,30 @@ namespace Gs2.Gs2Experience.Domain.Model
                 if (resultModel != null) {
                     
                 }
-                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                    this._gs2,
-                    this.UserId,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId
-
-                );
-                if (result?.StampSheet != null)
-                {
-                    var future2 = stampSheet.WaitFuture();
-                    yield return future2;
-                    if (future2.Error != null)
+                if (result.StampSheet != null) {
+                    var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                        this._gs2,
+                        this.UserId,
+                        result.AutoRunStampSheet ?? false,
+                        result.TransactionId,
+                        result.StampSheet,
+                        result.StampSheetEncryptionKeyId
+                    );
+                    if (result?.StampSheet != null)
                     {
-                        self.OnError(future2.Error);
-                        yield break;
+                        var future2 = stampSheet.WaitFuture();
+                        yield return future2;
+                        if (future2.Error != null)
+                        {
+                            self.OnError(future2.Error);
+                            yield break;
+                        }
                     }
-                }
 
-            self.OnComplete(stampSheet);
+                    self.OnComplete(stampSheet);
+                } else {
+                    self.OnComplete(null);
+                }
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
@@ -1445,21 +1448,23 @@ namespace Gs2.Gs2Experience.Domain.Model
             if (resultModel != null) {
                 
             }
-            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
-                this._gs2,
-                this.UserId,
-                result.AutoRunStampSheet ?? false,
-                result.TransactionId,
-                result.StampSheet,
-                result.StampSheetEncryptionKeyId
+            if (result.StampSheet != null) {
+                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                    this._gs2,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+                );
+                if (result?.StampSheet != null)
+                {
+                    await stampSheet.WaitAsync();
+                }
 
-            );
-            if (result?.StampSheet != null)
-            {
-                await stampSheet.WaitAsync();
+                return stampSheet;
             }
-
-            return stampSheet;
+            return null;
         }
         #endif
 
@@ -1508,7 +1513,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "status")
+                            if (e.errors.Length == 0 || e.errors[0].component != "status")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -1564,7 +1569,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "status")
+                    if (e.errors.Length == 0 || e.errors[0].component != "status")
                     {
                         throw;
                     }

@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,11 +26,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -52,15 +52,6 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             return "Gs2Exchange:ExchangeByUserId";
         }
 
-        public static Gs2.Gs2Exchange.Model.RateModel Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            ExchangeByUserIdRequest request,
-            Gs2.Gs2Exchange.Model.RateModel item
-        ) {
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -68,35 +59,18 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             ExchangeByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var future = domain.Exchange.Namespace(
-                    request.NamespaceName
-                ).RateModel(
-                    request.RateName
-                ).ModelFuture();
+                var future = Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
+                    domain,
+                    accessToken,
+                    request
+                );
                 yield return future;
                 if (future.Error != null) {
                     result.OnError(future.Error);
                     yield break;
                 }
-                var item = future.Result;
+                var commit = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
-                
-                var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                    item.ConsumeActions,
-                    item.AcquireActions
-                ).ExecuteFuture(
-                    domain,
-                    accessToken
-                );
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
-                    yield break;
-                }
-                var commit = future2.Result;
-                
                 result.OnComplete(() =>
                 {
                     commit?.Invoke();
@@ -119,20 +93,10 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ExchangeByUserIdRequest request
         ) {
-            var item = await domain.Exchange.Namespace(
-                request.NamespaceName
-            ).RateModel(
-                request.RateName
-            ).ModelAsync();
-
-            item = Transform(domain, accessToken, request, item);
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item.ConsumeActions,
-                item.AcquireActions
-            ).ExecuteAsync(
+            var commit = await Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                 domain,
-                accessToken
+                accessToken,
+                request
             );
 
             return () =>
@@ -142,5 +106,21 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static ExchangeByUserIdRequest Rate(
+            ExchangeByUserIdRequest request,
+            double rate
+        ) {
+            request.Count = (int?) (request.Count * rate);
+            return request;
+        }
+
+        public static ExchangeByUserIdRequest Rate(
+            ExchangeByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.Count = (int?) ((request.Count ?? 0) * rate);
+            return request;
+        }
     }
 }

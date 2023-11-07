@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (CountDownByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = CountDownByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = CountDownByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (DeleteCounterByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = DeleteCounterByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DeleteCounterByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -96,23 +105,31 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (CountDownByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = CountDownByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await CountDownByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    CountDownByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (DeleteCounterByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = DeleteCounterByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DeleteCounterByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DeleteCounterByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

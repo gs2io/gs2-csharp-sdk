@@ -28,12 +28,14 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Mission.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -41,6 +43,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
@@ -50,7 +54,6 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Mission:RevertReceiveByUserId";
         }
-
         public static Gs2.Gs2Mission.Model.Complete Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -68,11 +71,10 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             RevertReceiveByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Mission.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Complete(
                     request.MissionGroupName
                 ).ModelFuture();
@@ -83,7 +85,20 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -123,12 +138,15 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Mission.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Complete(
                 request.MissionGroupName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -152,5 +170,19 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static RevertReceiveByUserIdRequest Rate(
+            RevertReceiveByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static RevertReceiveByUserIdRequest Rate(
+            RevertReceiveByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Dictionary.Model;
 using Gs2.Gs2Dictionary.Request;
@@ -85,20 +87,35 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
 
                 var it = domain.Dictionary.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Entries();
                 var items = new List<Gs2.Gs2Dictionary.Model.Entry>();
                 while (it.HasNext()) {
-                    yield return it;
+                    yield return it.Next();
                     if (it.Error != null) {
                         result.OnError(it.Error);
                         yield break;
                     }
-                    items.Add(it.Current);
+                    if (it.Current != null) {
+                        items.Add(it.Current);
+                    }
                 }
 
-                items = Transform(domain, accessToken, request, items);
+                if (items == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    items = Transform(domain, accessToken, request, items);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 result.OnComplete(() =>
                 {
@@ -139,10 +156,13 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
         ) {
             var items = await domain.Dictionary.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).EntriesAsync().ToListAsync();
 
+            if (items == null) {
+                return () => null;
+            }
             items = Transform(domain, accessToken, request, items);
 
             return () =>
@@ -167,5 +187,19 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static AddEntriesByUserIdRequest Rate(
+            AddEntriesByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static AddEntriesByUserIdRequest Rate(
+            AddEntriesByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

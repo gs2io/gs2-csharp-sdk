@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -71,8 +73,8 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
 
                 var future = domain.Enhance.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Progress(
                 ).ModelFuture();
                 yield return future;
@@ -82,7 +84,20 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -121,11 +136,14 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Enhance.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Progress(
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -148,5 +166,19 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static DeleteProgressByUserIdRequest Rate(
+            DeleteProgressByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static DeleteProgressByUserIdRequest Rate(
+            DeleteProgressByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

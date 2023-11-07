@@ -118,7 +118,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "receiveStatus")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "receiveStatus")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -202,7 +202,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "receiveStatus")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "receiveStatus")
                 {
                     throw;
                 }
@@ -442,7 +442,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "receiveStatus")
+                            if (e.errors.Length == 0 || e.errors[0].component != "receiveStatus")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -495,7 +495,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "receiveStatus")
+                    if (e.errors.Length == 0 || e.errors[0].component != "receiveStatus")
                     {
                         throw;
                     }

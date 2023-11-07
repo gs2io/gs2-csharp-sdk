@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
@@ -43,6 +44,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
@@ -81,8 +84,8 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
 
                 var future = domain.LoginReward.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).ReceiveStatus(
                     request.BonusModelName
                 ).ModelFuture();
@@ -93,6 +96,13 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
                     item = Transform(domain, accessToken, request, item);
                 }
@@ -139,12 +149,15 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
         ) {
             var item = await domain.LoginReward.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).ReceiveStatus(
                 request.BonusModelName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -168,5 +181,19 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static MarkReceivedByUserIdRequest Rate(
+            MarkReceivedByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static MarkReceivedByUserIdRequest Rate(
+            MarkReceivedByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

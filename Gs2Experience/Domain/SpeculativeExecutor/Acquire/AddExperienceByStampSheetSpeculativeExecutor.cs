@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Experience.Model;
 using Gs2.Gs2Experience.Request;
@@ -52,7 +54,6 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Experience:AddExperienceByUserId";
         }
-
         public static Gs2.Gs2Experience.Model.Status Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -60,7 +61,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             Gs2.Gs2Experience.Model.ExperienceModel model,
             Gs2.Gs2Experience.Model.Status item
         ) {
-            item.ExperienceValue += item.ExperienceValue;
+            item.ExperienceValue += request.ExperienceValue;
             item.RankValue = model.Rank(item);
             item.NextRankUpExperienceValue = model.NextRankExperienceValue(item);
 
@@ -74,7 +75,6 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             AddExperienceByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Experience.Namespace(
                     request.NamespaceName
                 ).ExperienceModel(
@@ -87,10 +87,15 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 var model = future.Result;
 
+                if (model == null) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
+
                 var future2 = domain.Experience.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                     request.ExperienceName,
                     request.PropertyId
@@ -102,7 +107,17 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 var item = future2.Result;
 
-                item = Transform(domain, accessToken, request, model, item);
+                if (item == null) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, model, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -147,14 +162,22 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 request.ExperienceName
             ).ModelAsync();
 
+            if (model == null) {
+                return () => null;
+            }
+
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
                 request.ExperienceName,
                 request.PropertyId
             ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
 
             item = Transform(domain, accessToken, request, model, item);
 
@@ -180,5 +203,21 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static AddExperienceByUserIdRequest Rate(
+            AddExperienceByUserIdRequest request,
+            double rate
+        ) {
+            request.ExperienceValue = (long?) (request.ExperienceValue * rate);
+            return request;
+        }
+
+        public static AddExperienceByUserIdRequest Rate(
+            AddExperienceByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.ExperienceValue = (long?) ((request.ExperienceValue ?? 0) * rate);
+            return request;
+        }
     }
 }

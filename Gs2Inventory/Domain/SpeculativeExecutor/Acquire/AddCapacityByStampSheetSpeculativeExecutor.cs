@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -51,7 +52,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Inventory:AddCapacityByUserId";
         }
-
         public static Gs2.Gs2Inventory.Model.Inventory Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -69,11 +69,10 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AddCapacityByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Inventory(
                     request.InventoryName
                 ).ModelFuture();
@@ -84,6 +83,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 item = Transform(domain, accessToken, request, item);
 
                 var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -124,12 +130,15 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Inventory(
                 request.InventoryName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -153,5 +162,21 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static AddCapacityByUserIdRequest Rate(
+            AddCapacityByUserIdRequest request,
+            double rate
+        ) {
+            request.AddCapacityValue = (int?) (request.AddCapacityValue * rate);
+            return request;
+        }
+
+        public static AddCapacityByUserIdRequest Rate(
+            AddCapacityByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.AddCapacityValue = (int?) ((request.AddCapacityValue ?? 0) * rate);
+            return request;
+        }
     }
 }

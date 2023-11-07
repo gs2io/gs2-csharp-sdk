@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Stamina.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -40,6 +42,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
@@ -49,7 +53,6 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Stamina:RecoverStaminaByUserId";
         }
-
         public static Gs2.Gs2Stamina.Model.Stamina Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -60,10 +63,10 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             item.Value += request.RecoverValue;
             if (item.Value > item.MaxValue) {
                 item.OverflowValue = item.Value - item.MaxValue;
-                item.Value = item.MaxValue;
 
-                if (item.OverflowValue + item.Value > model.MaxCapacity) {
+                if (item.Value > model.MaxCapacity) {
                     item.OverflowValue = model.MaxCapacity - item.Value;
+                    item.Value = model.MaxCapacity;
                 }
             }
             return item;
@@ -76,7 +79,6 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             RecoverStaminaByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Stamina.Namespace(
                     request.NamespaceName
                 ).StaminaModel(
@@ -89,10 +91,15 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 var model = future.Result;
 
+                if (model == null) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
+
                 var future2 = domain.Stamina.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Stamina(
                     request.StaminaName
                 ).ModelFuture();
@@ -103,8 +110,19 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 var item = future2.Result;
 
-                item = Transform(domain, accessToken, request, model, item);
+                if (item == null) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
 
+                try {
+                    item = Transform(domain, accessToken, request, model, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
+                
                 var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
                     accessToken.UserId,
@@ -147,13 +165,21 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 request.StaminaName
             ).ModelAsync();
 
+            if (model == null) {
+                return () => null;
+            }
+
             var item = await domain.Stamina.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Stamina(
                 request.StaminaName
             ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
 
             item = Transform(domain, accessToken, request, model, item);
 
@@ -178,5 +204,21 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static RecoverStaminaByUserIdRequest Rate(
+            RecoverStaminaByUserIdRequest request,
+            double rate
+        ) {
+            request.RecoverValue = (int?) (request.RecoverValue * rate);
+            return request;
+        }
+
+        public static RecoverStaminaByUserIdRequest Rate(
+            RecoverStaminaByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.RecoverValue = (int?) ((request.RecoverValue ?? 0) * rate);
+            return request;
+        }
     }
 }

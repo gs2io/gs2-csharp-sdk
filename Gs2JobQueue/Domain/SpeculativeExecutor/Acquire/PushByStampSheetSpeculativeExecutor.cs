@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -40,6 +42,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
@@ -49,7 +53,6 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2JobQueue:PushByUserId";
         }
-
         public static Gs2.Gs2JobQueue.Model.Job Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -71,8 +74,15 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             PushByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                Transform(domain, accessToken, request, null);
+                try {
+                    Transform(domain, accessToken, request, null);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
+                result.OnComplete(() => null);
                 yield return null;
             }
 
@@ -92,11 +102,22 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
         ) {
             Transform(domain, accessToken, request, null);
 
-            return () =>
-            {
-                return null;
-            };
+            return () => null;
         }
 #endif
+
+        public static PushByUserIdRequest Rate(
+            PushByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static PushByUserIdRequest Rate(
+            PushByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

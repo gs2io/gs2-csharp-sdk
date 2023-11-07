@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -74,7 +76,13 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
 
-                Transform(domain, accessToken, request, null);
+                try {
+                    Transform(domain, accessToken, request, null);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 result.OnComplete(() =>
                 {
@@ -105,5 +113,19 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static UnlockIncrementalExchangeByUserIdRequest Rate(
+            UnlockIncrementalExchangeByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static UnlockIncrementalExchangeByUserIdRequest Rate(
+            UnlockIncrementalExchangeByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

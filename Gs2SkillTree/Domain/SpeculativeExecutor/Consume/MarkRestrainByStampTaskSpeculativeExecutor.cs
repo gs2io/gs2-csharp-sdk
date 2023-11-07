@@ -28,11 +28,14 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2SkillTree.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -40,6 +43,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
@@ -56,11 +61,7 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             MarkRestrainByUserIdRequest request,
             Gs2.Gs2SkillTree.Model.Status item
         ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
+            item.ReleasedNodeNames = item.ReleasedNodeNames.Where(v => !request.NodeModelNames.Contains(v)).ToArray();
             return item;
         }
 
@@ -71,10 +72,51 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             MarkRestrainByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                Transform(domain, accessToken, request, null);
+
+                var future = domain.SkillTree.Namespace(
+                    request.NamespaceName
+                ).AccessToken(
+                    accessToken
+                ).Status(
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
+
+                var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    "Status"
+                );
+                var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                );
 
                 result.OnComplete(() =>
                 {
+                    domain.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                    );
                     return null;
                 });
                 yield return null;
@@ -94,13 +136,51 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             AccessToken accessToken,
             MarkRestrainByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
+            var item = await domain.SkillTree.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).Status(
+            ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
+
+            var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
+                request.NamespaceName,
+                accessToken.UserId,
+                "Status"
+            );
+            var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+            );
 
             return () =>
             {
+                domain.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
+                    parentKey,
+                    key,
+                    item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                );
                 return null;
             };
         }
 #endif
+
+        public static MarkRestrainByUserIdRequest Rate(
+            MarkRestrainByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static MarkRestrainByUserIdRequest Rate(
+            MarkRestrainByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

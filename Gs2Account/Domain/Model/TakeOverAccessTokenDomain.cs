@@ -563,7 +563,7 @@ namespace Gs2.Gs2Account.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "takeOver")
+                            if (e.errors.Length == 0 || e.errors[0].component != "takeOver")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -616,7 +616,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "takeOver")
+                    if (e.errors.Length == 0 || e.errors[0].component != "takeOver")
                     {
                         throw;
                     }

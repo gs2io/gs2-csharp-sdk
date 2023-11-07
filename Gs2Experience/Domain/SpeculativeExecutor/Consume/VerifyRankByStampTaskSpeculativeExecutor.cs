@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -117,8 +118,8 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
 
                 var future = domain.Experience.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                     request.ExperienceName,
                     request.PropertyId
@@ -130,8 +131,15 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, item);
+                    item = Transform(domain, accessToken, request, item);
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
@@ -161,14 +169,17 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
                 request.ExperienceName,
                 request.PropertyId
             ).ModelAsync();
 
-            Transform(domain, accessToken, request, item);
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
 
             return () =>
             {
@@ -176,5 +187,19 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static VerifyRankByUserIdRequest Rate(
+            VerifyRankByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyRankByUserIdRequest Rate(
+            VerifyRankByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

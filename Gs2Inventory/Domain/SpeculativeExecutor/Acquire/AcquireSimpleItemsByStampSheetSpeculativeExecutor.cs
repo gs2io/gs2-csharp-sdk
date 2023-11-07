@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,22 +90,31 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
                 var it = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).SimpleInventory(
                     request.InventoryName
                 ).SimpleItems(
                 );
                 var items = new List<Gs2.Gs2Inventory.Model.SimpleItem>();
                 while (it.HasNext()) {
-                    yield return it;
+                    yield return it.Next();
                     if (it.Error != null) {
                         result.OnError(it.Error);
                         yield break;
                     }
-                    items.Add(it.Current);
+                    if (it.Current != null) {
+                        items.Add(it.Current);
+                    }
                 }
 
+                if (items == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 items = Transform(domain, accessToken, request, items);
                 
                 result.OnComplete(() =>
@@ -148,13 +158,16 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var items = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).SimpleInventory(
                 request.InventoryName
             ).SimpleItemsAsync(
             ).ToListAsync();
 
+            if (items == null) {
+                return () => null;
+            }
             items = Transform(domain, accessToken, request, items);
 
             return () =>
@@ -181,5 +194,25 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static AcquireSimpleItemsByUserIdRequest Rate(
+            AcquireSimpleItemsByUserIdRequest request,
+            double rate
+        ) {
+            foreach (var t in request.AcquireCounts) {
+                t.Count = (long?) (t.Count * rate);
+            }
+            return request;
+        }
+
+        public static AcquireSimpleItemsByUserIdRequest Rate(
+            AcquireSimpleItemsByUserIdRequest request,
+            BigInteger rate
+        ) {
+            foreach (var t in request.AcquireCounts) {
+                t.Count = (long?) (t.Count * rate);
+            }
+            return request;
+        }
     }
 }

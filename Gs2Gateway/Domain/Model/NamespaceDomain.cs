@@ -158,7 +158,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "namespace")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "namespace")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -211,7 +211,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "namespace")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "namespace")
                 {
                     throw;
                 }
@@ -264,7 +264,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "namespace")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "namespace")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -331,7 +331,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "namespace")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "namespace")
                 {
                     throw;
                 }
@@ -491,7 +491,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "namespace")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "namespace")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -555,7 +555,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "namespace")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "namespace")
                 {
                     throw;
                 }
@@ -632,7 +632,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "namespace")
+                            if (e.errors.Length == 0 || e.errors[0].component != "namespace")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -690,7 +690,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "namespace")
+                    if (e.errors.Length == 0 || e.errors[0].component != "namespace")
                     {
                         throw;
                     }

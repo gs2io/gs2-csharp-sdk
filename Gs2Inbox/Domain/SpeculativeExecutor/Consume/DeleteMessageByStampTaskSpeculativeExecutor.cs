@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inbox.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -71,8 +73,8 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
 
                 var future = domain.Inbox.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Message(
                     request.MessageName
                 ).ModelFuture();
@@ -83,7 +85,20 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -123,12 +138,15 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Inbox.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Message(
                 request.MessageName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -152,5 +170,19 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static DeleteMessageByUserIdRequest Rate(
+            DeleteMessageByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static DeleteMessageByUserIdRequest Rate(
+            DeleteMessageByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

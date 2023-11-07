@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (ExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = ExchangeByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = ExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (IncrementalExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = IncrementalExchangeByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -81,10 +90,12 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (UnlockIncrementalExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = UnlockIncrementalExchangeByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = UnlockIncrementalExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -95,10 +106,12 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (CreateAwaitByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = CreateAwaitByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = CreateAwaitByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -124,37 +137,49 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (ExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = ExchangeByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await ExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    ExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (IncrementalExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = IncrementalExchangeByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    IncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (UnlockIncrementalExchangeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = UnlockIncrementalExchangeByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await UnlockIncrementalExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (CreateAwaitByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = CreateAwaitByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await CreateAwaitByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

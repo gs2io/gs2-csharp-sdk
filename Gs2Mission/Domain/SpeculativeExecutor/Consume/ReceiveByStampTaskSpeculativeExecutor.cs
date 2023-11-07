@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
@@ -43,6 +44,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
@@ -84,33 +87,32 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
 
                 var future = domain.Mission.Namespace(
                     request.NamespaceName
-                ).MissionGroupModel(
+                ).AccessToken(
+                    accessToken
+                ).Complete(
                     request.MissionGroupName
-                ).MissionTaskModel(
-                    request.MissionTaskName
                 ).ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     result.OnError(future.Error);
                     yield break;
                 }
-                var model = future.Result;
+                var item = future.Result;
 
-                var future2 = domain.Mission.Namespace(
-                    request.NamespaceName
-                ).User(
-                    request.UserId
-                ).Complete(
-                    request.MissionGroupName
-                ).ModelFuture();
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
                     yield break;
                 }
-                var item = future2.Result;
-
-                item = Transform(domain, accessToken, request, item);
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -121,22 +123,8 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     request.MissionGroupName.ToString()
                 );
 
-                var future3 = new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
-                    Array.Empty<ConsumeAction>(),
-                    model.CompleteAcquireActions
-                ).ExecuteFuture(
-                    domain,
-                    accessToken
-                );
-                if (future3.Error != null) {
-                    result.OnError(future3.Error);
-                    yield break;
-                }
-                var commit = future3.Result;
-                
                 result.OnComplete(() =>
                 {
-                    commit?.Invoke(); 
                     domain.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
                         parentKey,
                         key,
@@ -164,12 +152,15 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Mission.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Complete(
                 request.MissionGroupName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -193,5 +184,19 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static ReceiveByUserIdRequest Rate(
+            ReceiveByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static ReceiveByUserIdRequest Rate(
+            ReceiveByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

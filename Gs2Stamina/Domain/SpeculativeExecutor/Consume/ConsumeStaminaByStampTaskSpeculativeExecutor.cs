@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -42,6 +43,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
@@ -77,8 +80,8 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
 
                 var future = domain.Stamina.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Stamina(
                     request.StaminaName
                 ).ModelFuture();
@@ -89,6 +92,13 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
                     item = Transform(domain, accessToken, request, item);
                 }
@@ -135,12 +145,15 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Stamina.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Stamina(
                 request.StaminaName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -164,5 +177,21 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static ConsumeStaminaByUserIdRequest Rate(
+            ConsumeStaminaByUserIdRequest request,
+            double rate
+        ) {
+            request.ConsumeValue = (int?) (request.ConsumeValue * rate);
+            return request;
+        }
+
+        public static ConsumeStaminaByUserIdRequest Rate(
+            ConsumeStaminaByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.ConsumeValue = (int?) ((request.ConsumeValue ?? 0) * rate);
+            return request;
+        }
     }
 }

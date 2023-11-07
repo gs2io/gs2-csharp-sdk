@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -26,10 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Experience.Request;
@@ -56,12 +61,50 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             VerifyRankCapByUserIdRequest request,
             Gs2.Gs2Experience.Model.Status item
         ) {
-            // TODO: Speculative execution not supported
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
+            switch (request.VerifyType) {
+                case "less":
+                    if (item.RankCapValue < request.RankCapValue) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                    break;
+                case "lessEqual":
+                    if (item.RankCapValue <= request.RankCapValue) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                    break;
+                case "greater":
+                    if (item.RankCapValue > request.RankCapValue) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                    break;
+                case "greaterEqual":
+                    if (item.RankCapValue >= request.RankCapValue) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                    break;
+                case "equal":
+                    if (item.RankCapValue == request.RankCapValue) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                    break;
+                case "notEqual":
+                    if (item.RankCapValue != request.RankCapValue) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                    break;
+            }
             return item;
         }
 
@@ -75,8 +118,8 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
 
                 var future = domain.Experience.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                     request.ExperienceName,
                     request.PropertyId
@@ -88,26 +131,23 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
-
-                var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Status"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.ExperienceName.ToString(),
-                    request.PropertyId.ToString()
-                );
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 result.OnComplete(() =>
                 {
-                    domain.Cache.Put<Gs2.Gs2Experience.Model.Status>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
                     return null;
                 });
                 yield return null;
@@ -129,36 +169,37 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
                 request.ExperienceName,
                 request.PropertyId
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Status"
-            );
-            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                request.ExperienceName.ToString(),
-                request.PropertyId.ToString()
-            );
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Experience.Model.Status>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                );
                 return null;
             };
         }
 #endif
+
+        public static VerifyRankCapByUserIdRequest Rate(
+            VerifyRankCapByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyRankCapByUserIdRequest Rate(
+            VerifyRankCapByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

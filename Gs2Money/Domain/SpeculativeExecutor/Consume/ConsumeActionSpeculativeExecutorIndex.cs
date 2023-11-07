@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (WithdrawByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    request = WithdrawByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = WithdrawByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (RecordReceiptSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    request = RecordReceiptSpeculativeExecutor.Rate(request, rate);
                     var future = RecordReceiptSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -96,23 +105,31 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (WithdrawByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                request = WithdrawByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await WithdrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                    request
                 );
             }
             if (RecordReceiptSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                request = RecordReceiptSpeculativeExecutor.Rate(request, rate);
                 return await RecordReceiptSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

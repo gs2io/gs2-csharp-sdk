@@ -28,11 +28,14 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Showcase.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -40,6 +43,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
@@ -56,11 +61,12 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             IncrementPurchaseCountByUserIdRequest request,
             Gs2.Gs2Showcase.Model.RandomDisplayItem item
         ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
+            item.CurrentPurchaseCount += request.Count;
+            if (item.CurrentPurchaseCount > item.MaximumPurchaseCount) {
+                throw new BadRequestException(new[] {
+                    new RequestError("count", "invalid"),
+                });
+            }
             return item;
         }
 
@@ -72,10 +78,55 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
 
-                Transform(domain, accessToken, request, null);
+                var future = domain.Showcase.Namespace(
+                    request.NamespaceName
+                ).AccessToken(
+                    accessToken
+                ).RandomShowcase(
+                    request.ShowcaseName
+                ).RandomDisplayItem(
+                    request.DisplayItemName
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
+
+                var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.ShowcaseName,
+                    "RandomDisplayItem"
+                );
+                var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                    request.DisplayItemName.ToString()
+                );
 
                 result.OnComplete(() =>
                 {
+                    domain.Cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                        parentKey,
+                        key,
+                        item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                    );
                     return null;
                 });
                 yield return null;
@@ -95,13 +146,56 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             AccessToken accessToken,
             IncrementPurchaseCountByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
-            
+            var item = await domain.Showcase.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).RandomShowcase(
+                request.ShowcaseName
+            ).RandomDisplayItem(
+                request.DisplayItemName
+            ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
+
+            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
+                request.NamespaceName,
+                accessToken.UserId,
+                request.ShowcaseName,
+                "RandomDisplayItem"
+            );
+            var key = Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                request.DisplayItemName.ToString()
+            );
+
             return () =>
             {
+                domain.Cache.Put<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                    parentKey,
+                    key,
+                    item,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                );
                 return null;
             };
         }
 #endif
+
+        public static IncrementPurchaseCountByUserIdRequest Rate(
+            IncrementPurchaseCountByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static IncrementPurchaseCountByUserIdRequest Rate(
+            IncrementPurchaseCountByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

@@ -92,7 +92,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> DirectFuture(
-            DirectEnhanceRequest request
+            DirectEnhanceRequest request,
+            bool speculativeExecute = true
         ) {
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
@@ -100,6 +101,22 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
+
+                if (speculativeExecute) {
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.DirectEnhanceSpeculativeExecutor.ExecuteFuture(
+                        this._gs2,
+                        AccessToken,
+                        request
+                    );
+                    yield return speculativeExecuteFuture;
+                    if (speculativeExecuteFuture.Error != null)
+                    {
+                        self.OnError(speculativeExecuteFuture.Error);
+                        yield break;
+                    }
+                    var commit = speculativeExecuteFuture.Result;
+                    commit?.Invoke();
+                }
                 var future = this._client.DirectEnhanceFuture(
                     request
                 );
@@ -133,27 +150,30 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     }
                 }
                 BonusRate = result.BonusRate;
-                var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                    this._gs2,
-                    this.AccessToken,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId
-
-                );
-                if (result?.StampSheet != null)
-                {
-                    var future2 = stampSheet.WaitFuture();
-                    yield return future2;
-                    if (future2.Error != null)
+                if (result.StampSheet != null) {
+                    var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+                        this._gs2,
+                        this.AccessToken,
+                        result.AutoRunStampSheet ?? false,
+                        result.TransactionId,
+                        result.StampSheet,
+                        result.StampSheetEncryptionKeyId
+                    );
+                    if (result?.StampSheet != null)
                     {
-                        self.OnError(future2.Error);
-                        yield break;
+                        var future2 = stampSheet.WaitFuture();
+                        yield return future2;
+                        if (future2.Error != null)
+                        {
+                            self.OnError(future2.Error);
+                            yield break;
+                        }
                     }
-                }
 
-            self.OnComplete(stampSheet);
+                    self.OnComplete(stampSheet);
+                } else {
+                    self.OnComplete(null);
+                }
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
         }
@@ -165,11 +185,21 @@ namespace Gs2.Gs2Enhance.Domain.Model
             #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> DirectAsync(
             #endif
-            DirectEnhanceRequest request
+            DirectEnhanceRequest request,
+            bool speculativeExecute = true
         ) {
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
+
+            if (speculativeExecute) {
+                var commit = await Transaction.SpeculativeExecutor.DirectEnhanceSpeculativeExecutor.ExecuteAsync(
+                    this._gs2,
+                    AccessToken,
+                    request
+                );
+                commit?.Invoke();
+            }
             DirectEnhanceResult result = null;
                 result = await this._client.DirectEnhanceAsync(
                     request
@@ -197,21 +227,23 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 }
             }
             BonusRate = result.BonusRate;
-            var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
-                this._gs2,
-                this.AccessToken,
-                result.AutoRunStampSheet ?? false,
-                result.TransactionId,
-                result.StampSheet,
-                result.StampSheetEncryptionKeyId
+            if (result.StampSheet != null) {
+                var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+                    this._gs2,
+                    this.AccessToken,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+                );
+                if (result?.StampSheet != null)
+                {
+                    await stampSheet.WaitAsync();
+                }
 
-            );
-            if (result?.StampSheet != null)
-            {
-                await stampSheet.WaitAsync();
+                return stampSheet;
             }
-
-            return stampSheet;
+            return null;
         }
         #endif
 

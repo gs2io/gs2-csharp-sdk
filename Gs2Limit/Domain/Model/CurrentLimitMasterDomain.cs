@@ -226,7 +226,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "currentLimitMaster")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "currentLimitMaster")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -290,7 +290,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "currentLimitMaster")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "currentLimitMaster")
                 {
                     throw;
                 }
@@ -548,7 +548,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "currentLimitMaster")
+                            if (e.errors.Length == 0 || e.errors[0].component != "currentLimitMaster")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -598,7 +598,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "currentLimitMaster")
+                    if (e.errors.Length == 0 || e.errors[0].component != "currentLimitMaster")
                     {
                         throw;
                     }

@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enchant.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -51,7 +53,6 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Enchant:SetBalanceParameterStatusByUserId";
         }
-
         public static Gs2.Gs2Enchant.Model.BalanceParameterStatus Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -69,11 +70,10 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             SetBalanceParameterStatusByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Enchant.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).BalanceParameterStatus(
                     request.ParameterName,
                     request.PropertyId
@@ -85,7 +85,20 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -126,13 +139,16 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Enchant.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).BalanceParameterStatus(
                 request.ParameterName,
                 request.PropertyId
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -157,5 +173,19 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static SetBalanceParameterStatusByUserIdRequest Rate(
+            SetBalanceParameterStatusByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static SetBalanceParameterStatusByUserIdRequest Rate(
+            SetBalanceParameterStatusByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

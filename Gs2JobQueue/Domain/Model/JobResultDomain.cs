@@ -263,7 +263,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "jobResult")
+                            if (e.errors.Length == 0 || e.errors[0].component != "jobResult")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -316,7 +316,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "jobResult")
+                    if (e.errors.Length == 0 || e.errors[0].component != "jobResult")
                     {
                         throw;
                     }

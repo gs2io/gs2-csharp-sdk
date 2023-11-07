@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -51,7 +52,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Inventory:DeleteReferenceOfByUserId";
         }
-
         public static Gs2.Gs2Inventory.Model.ReferenceOf Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -135,5 +135,19 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static DeleteReferenceOfByUserIdRequest Rate(
+            DeleteReferenceOfByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static DeleteReferenceOfByUserIdRequest Rate(
+            DeleteReferenceOfByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Money.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -40,6 +42,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
@@ -49,7 +53,6 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Money:DepositByUserId";
         }
-
         public static Gs2.Gs2Money.Model.Wallet Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -72,11 +75,10 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             DepositByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Money.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Wallet(
                     request.Slot
                 ).ModelFuture();
@@ -87,7 +89,20 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -127,12 +142,15 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Money.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Wallet(
                 request.Slot
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -156,5 +174,21 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static DepositByUserIdRequest Rate(
+            DepositByUserIdRequest request,
+            double rate
+        ) {
+            request.Count = (int?) (request.Count * rate);
+            return request;
+        }
+
+        public static DepositByUserIdRequest Rate(
+            DepositByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.Count = (int?) ((request.Count ?? 0) * rate);
+            return request;
+        }
     }
 }

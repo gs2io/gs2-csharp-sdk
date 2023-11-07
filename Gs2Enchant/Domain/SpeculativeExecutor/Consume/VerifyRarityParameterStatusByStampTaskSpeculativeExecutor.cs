@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
@@ -97,8 +98,8 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
 
                 var future = domain.Enchant.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).RarityParameterStatus(
                     request.ParameterName,
                     request.PropertyId
@@ -110,8 +111,15 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, item);
+                    item = Transform(domain, accessToken, request, item);
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
@@ -141,14 +149,17 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Enchant.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).RarityParameterStatus(
                 request.ParameterName,
                 request.PropertyId
             ).ModelAsync();
 
-            Transform(domain, accessToken, request, item);
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
 
             return () =>
             {
@@ -156,5 +167,19 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static VerifyRarityParameterStatusByUserIdRequest Rate(
+            VerifyRarityParameterStatusByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyRarityParameterStatusByUserIdRequest Rate(
+            VerifyRarityParameterStatusByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

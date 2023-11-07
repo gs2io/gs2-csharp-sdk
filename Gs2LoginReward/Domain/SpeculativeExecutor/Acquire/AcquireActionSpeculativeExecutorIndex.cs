@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteReceiveStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = DeleteReceiveStatusByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DeleteReceiveStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (UnmarkReceivedByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = UnmarkReceivedByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = UnmarkReceivedByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -96,23 +105,31 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            AcquireAction acquireAction
+            AcquireAction acquireAction,
+            BigInteger rate
         ) {
+            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteReceiveStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = DeleteReceiveStatusByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DeleteReceiveStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
             if (UnmarkReceivedByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = UnmarkReceivedByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await UnmarkReceivedByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

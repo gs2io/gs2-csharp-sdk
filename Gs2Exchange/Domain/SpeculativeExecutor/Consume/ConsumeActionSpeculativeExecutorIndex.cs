@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteAwaitByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    request = DeleteAwaitByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DeleteAwaitByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -82,16 +89,22 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteAwaitByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                request = DeleteAwaitByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DeleteAwaitByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

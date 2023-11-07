@@ -526,7 +526,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "gathering")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "gathering")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -595,7 +595,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "gathering")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "gathering")
                 {
                     throw;
                 }

@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enchant.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -51,7 +53,6 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Enchant:AddRarityParameterStatusByUserId";
         }
-
         public static Gs2.Gs2Enchant.Model.RarityParameterStatus Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -73,7 +74,14 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             AddRarityParameterStatusByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                Transform(domain, accessToken, request, null);
+                try {
+                    Transform(domain, accessToken, request, null);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
+
                 result.OnComplete(() =>
                 {
                     return null;
@@ -103,5 +111,21 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static AddRarityParameterStatusByUserIdRequest Rate(
+            AddRarityParameterStatusByUserIdRequest request,
+            double rate
+        ) {
+            request.Count = (int?) (request.Count * rate);
+            return request;
+        }
+
+        public static AddRarityParameterStatusByUserIdRequest Rate(
+            AddRarityParameterStatusByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.Count = (int?) ((request.Count ?? 0) * rate);
+            return request;
+        }
     }
 }

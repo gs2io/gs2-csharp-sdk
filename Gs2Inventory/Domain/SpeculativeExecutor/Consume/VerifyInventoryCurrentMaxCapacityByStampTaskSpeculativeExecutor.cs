@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -42,6 +43,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
@@ -115,8 +118,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Inventory(
                     request.InventoryName
                 ).ModelFuture();
@@ -127,8 +130,15 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, item);
+                    item = Transform(domain, accessToken, request, item);
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
@@ -158,13 +168,16 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Inventory(
                 request.InventoryName
             ).ModelAsync();
 
-            Transform(domain, accessToken, request, item);
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
 
             return () =>
             {
@@ -172,5 +185,19 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static VerifyInventoryCurrentMaxCapacityByUserIdRequest Rate(
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyInventoryCurrentMaxCapacityByUserIdRequest Rate(
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

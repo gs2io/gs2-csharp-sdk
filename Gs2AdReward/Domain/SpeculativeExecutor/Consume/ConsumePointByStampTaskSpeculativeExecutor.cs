@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2AdReward.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -72,8 +74,8 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
 
                 var future = domain.AdReward.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Point(
                 ).ModelFuture();
                 yield return future;
@@ -83,7 +85,20 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -122,11 +137,14 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
         ) {
             var item = await domain.AdReward.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Point(
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -149,5 +167,19 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static ConsumePointByUserIdRequest Rate(
+            ConsumePointByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static ConsumePointByUserIdRequest Rate(
+            ConsumePointByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

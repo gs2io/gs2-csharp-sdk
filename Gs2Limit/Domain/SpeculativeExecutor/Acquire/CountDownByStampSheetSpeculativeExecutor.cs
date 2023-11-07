@@ -28,11 +28,13 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Limit.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -40,6 +42,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
@@ -49,7 +53,6 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Limit:CountDownByUserId";
         }
-
         public static Gs2.Gs2Limit.Model.Counter Transform(
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
@@ -67,11 +70,10 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             CountDownByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Limit.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Counter(
                     request.LimitName,
                     request.CounterName
@@ -83,7 +85,20 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                item = Transform(domain, accessToken, request, item);
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
+                try {
+                    item = Transform(domain, accessToken, request, item);
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
 
                 var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
                     request.NamespaceName,
@@ -124,13 +139,16 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Limit.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Counter(
                 request.LimitName,
                 request.CounterName
             ).ModelAsync();
 
+            if (item == null) {
+                return () => null;
+            }
             item = Transform(domain, accessToken, request, item);
 
             var parentKey = Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -155,5 +173,21 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static CountDownByUserIdRequest Rate(
+            CountDownByUserIdRequest request,
+            double rate
+        ) {
+            request.CountDownValue = (int?) (request.CountDownValue * rate);
+            return request;
+        }
+
+        public static CountDownByUserIdRequest Rate(
+            CountDownByUserIdRequest request,
+            BigInteger rate
+        ) {
+            request.CountDownValue = (int?) ((request.CountDownValue ?? 0) * rate);
+            return request;
+        }
     }
 }

@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -44,6 +45,8 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
@@ -103,8 +106,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
                 var it = domain.Inventory.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Inventory(
                     request.InventoryName
                 ).ItemSet(
@@ -114,12 +117,22 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 );
                 var items = new List<string>();
                 while (it.HasNext()) {
-                    yield return it;
+                    yield return it.Next();
                     if (it.Error != null) {
                         result.OnError(it.Error);
                         yield break;
                     }
-                    items.Add(it.Current);
+                    if (it.Current != null) {
+                        items.Add(it.Current);
+                    }
+                }
+                
+                if (items == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
                 }
 
                 try {
@@ -153,8 +166,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         ) {
             var items = await domain.Inventory.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Inventory(
                 request.InventoryName
             ).ItemSet(
@@ -163,7 +176,10 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ).ReferenceOvesAsync(
             ).ToListAsync();
 
-            Transform(domain, accessToken, request, items);
+            if (items == null) {
+                return () => null;
+            }
+            items = Transform(domain, accessToken, request, items);
 
             return () =>
             {
@@ -171,5 +187,19 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static VerifyReferenceOfByUserIdRequest Rate(
+            VerifyReferenceOfByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyReferenceOfByUserIdRequest Rate(
+            VerifyReferenceOfByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }

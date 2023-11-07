@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -216,45 +217,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            #else
         private async Task<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
+            #endif
             GetShowcaseRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithShowcaseName(this.ShowcaseName);
-            var future = this._client.GetShowcaseFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        request.ShowcaseName.ToString()
-                    );
-                    _gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "showcase")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -280,7 +252,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -310,17 +281,33 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> BuyFuture(
-            BuyRequest request
+            BuyRequest request,
+            bool speculativeExecute = true
         ) {
 
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
                     .WithShowcaseName(this.ShowcaseName)
                     .WithDisplayItemId(this.DisplayItemId);
+
+                if (speculativeExecute) {
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.BuySpeculativeExecutor.ExecuteFuture(
+                        this._gs2,
+                        AccessToken,
+                        request
+                    );
+                    yield return speculativeExecuteFuture;
+                    if (speculativeExecuteFuture.Error != null)
+                    {
+                        self.OnError(speculativeExecuteFuture.Error);
+                        yield break;
+                    }
+                    var commit = speculativeExecuteFuture.Result;
+                    commit?.Invoke();
+                }
                 var future = this._client.BuyFuture(
                     request
                 );
@@ -331,17 +318,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithShowcaseName(this.ShowcaseName)
-                    .WithDisplayItemId(this.DisplayItemId);
-                BuyResult result = null;
-                    result = await this._client.BuyAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -386,41 +362,39 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     }
                 }
 
-                self.OnComplete(stampSheet);
+            self.OnComplete(stampSheet);
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
         }
-        #else
-        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> BuyAsync(
-            BuyRequest request
-        ) {
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithShowcaseName(this.ShowcaseName)
-                .WithDisplayItemId(this.DisplayItemId);
-            var future = this._client.BuyFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
+        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> BuyAsync(
             #else
+        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> BuyAsync(
+            #endif
+            BuyRequest request,
+            bool speculativeExecute = true
+        ) {
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithShowcaseName(this.ShowcaseName)
                 .WithDisplayItemId(this.DisplayItemId);
+
+            if (speculativeExecute) {
+                var commit = await Transaction.SpeculativeExecutor.BuySpeculativeExecutor.ExecuteAsync(
+                    this._gs2,
+                    AccessToken,
+                    request
+                );
+                commit?.Invoke();
+            }
             BuyResult result = null;
                 result = await this._client.BuyAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -464,18 +438,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> BuyAsync(
-            BuyRequest request
-        ) {
-            var future = BuyFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to BuyFuture.")]
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Buy(
             BuyRequest request
@@ -524,49 +486,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         this.DisplayItemId?.ToString()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetShowcaseRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            _gs2.Cache.Put<Gs2.Gs2Showcase.Model.DisplayItem>(
-                                _parentKey,
-                                Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                                    this.DisplayItemId?.ToString()
-                                ),
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors[0].component != "showcase")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        )
-                    );
-                }
                 self.OnComplete(value);
+                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.DisplayItem>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
+            #endif
         {
             var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
                     _parentKey,
@@ -574,49 +505,12 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         this.DisplayItemId?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetShowcaseRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    _gs2.Cache.Put<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        ),
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.errors[0].component != "showcase")
-                    {
-                        throw;
-                    }
-                }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        )
-                    );
-            }
             return value;
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> Model()
         {

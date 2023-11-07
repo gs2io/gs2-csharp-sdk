@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections;
+using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
@@ -49,14 +50,20 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (ReceiveByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    request = ReceiveByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -67,10 +74,12 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                     yield break;
                 }
                 if (DecreaseCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    request = DecreaseCounterByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = DecreaseCounterByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
-                        DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                        request
                     );
                     yield return future;
                     if (future.Error != null) {
@@ -96,23 +105,31 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
     #endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
-            ConsumeAction consumeAction
+            ConsumeAction consumeAction,
+            BigInteger rate
         ) {
+            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (ReceiveByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                request = ReceiveByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                    request
                 );
             }
             if (DecreaseCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                request = DecreaseCounterByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DecreaseCounterByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
-                    DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request))
+                    request
                 );
             }
-            return () => { return null; };
+            return null;
         }
 #endif
     }

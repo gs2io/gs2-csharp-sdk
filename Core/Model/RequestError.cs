@@ -72,5 +72,9 @@ namespace Gs2.Core.Model
 			set => code = value;
 			get => code;
 		}
+
+		public override string ToString() {
+			return $"{{\"component\": \"{this.component}\", \"message\": \"{this.message}\"}}";
+		}
 	}
 }

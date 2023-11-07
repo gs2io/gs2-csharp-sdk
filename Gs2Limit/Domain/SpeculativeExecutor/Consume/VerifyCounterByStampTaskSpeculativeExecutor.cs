@@ -28,6 +28,7 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
@@ -42,6 +43,8 @@ using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #endif
+#else
+using System.Threading.Tasks;
 #endif
 
 namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
@@ -115,8 +118,8 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
 
                 var future = domain.Limit.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Counter(
                     request.LimitName,
                     request.CounterName
@@ -128,8 +131,15 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                 }
                 var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() =>
+                    {
+                        return null;
+                    });
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, item);
+                    item = Transform(domain, accessToken, request, item);
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
@@ -159,14 +169,17 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Limit.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Counter(
                 request.LimitName,
                 request.CounterName
             ).ModelAsync();
 
-            Transform(domain, accessToken, request, item);
+            if (item == null) {
+                return () => null;
+            }
+            item = Transform(domain, accessToken, request, item);
 
             return () =>
             {
@@ -174,5 +187,19 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             };
         }
 #endif
+
+        public static VerifyCounterByUserIdRequest Rate(
+            VerifyCounterByUserIdRequest request,
+            double rate
+        ) {
+            return request;
+        }
+
+        public static VerifyCounterByUserIdRequest Rate(
+            VerifyCounterByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return request;
+        }
     }
 }
