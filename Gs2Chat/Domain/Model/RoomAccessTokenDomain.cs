@@ -457,6 +457,133 @@ namespace Gs2.Gs2Chat.Domain.Model
             return PostFuture(request);
         }
         #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        private IFuture<Gs2.Gs2Chat.Model.Room> GetFuture(
+            GetRoomRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Room> self)
+            {
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithRoomName(this.RoomName);
+                var future = this._client.GetRoomFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                            request.RoomName.ToString()
+                        );
+                        this._gs2.Cache.Put<Gs2.Gs2Chat.Model.Room>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors[0].Component != "room")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    else {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                var cache = this._gs2.Cache;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "Singleton",
+                            "Room"
+                        );
+                        var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                self.OnComplete(result?.Item);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Room>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Chat.Model.Room> GetAsync(
+            #else
+        private async Task<Gs2.Gs2Chat.Model.Room> GetAsync(
+            #endif
+            GetRoomRequest request
+        ) {
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithRoomName(this.RoomName);
+            GetRoomResult result = null;
+            try {
+                result = await this._client.GetRoomAsync(
+                    request
+                );
+            } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                    request.RoomName.ToString()
+                    );
+                this._gs2.Cache.Put<Gs2.Gs2Chat.Model.Room>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors[0].Component != "room")
+                {
+                    throw;
+                }
+            }
+
+            var requestModel = request;
+            var resultModel = result;
+            var cache = this._gs2.Cache;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "Singleton",
+                        "Room"
+                    );
+                    var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            return result?.Item;
+        }
+        #endif
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Chat.Model.Message> Messages(
@@ -576,8 +703,45 @@ namespace Gs2.Gs2Chat.Domain.Model
                         this.RoomName?.ToString()
                     )
                 );
+                if (!find) {
+                    var future = this.GetFuture(
+                        new GetRoomRequest()
+                    );
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
+                        {
+                            var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                                    this.RoomName?.ToString()
+                                );
+                            this._gs2.Cache.Put<Gs2.Gs2Chat.Model.Room>(
+                                _parentKey,
+                                key,
+                                null,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+
+                            if (e.errors[0].component != "room")
+                            {
+                                self.OnError(future.Error);
+                                yield break;
+                            }
+                        }
+                        else
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                    }
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Chat.Model.Room>(
+                        _parentKey,
+                        Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                            this.RoomName?.ToString()
+                        )
+                    );
+                }
                 self.OnComplete(value);
-                return null;
             }
             return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Room>(Impl);
         }
@@ -595,6 +759,34 @@ namespace Gs2.Gs2Chat.Domain.Model
                         this.RoomName?.ToString()
                     )
                 );
+            if (!find) {
+                try {
+                    await this.GetAsync(
+                        new GetRoomRequest()
+                    );
+                } catch (Gs2.Core.Exception.NotFoundException e) {
+                    var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                                    this.RoomName?.ToString()
+                                );
+                    this._gs2.Cache.Put<Gs2.Gs2Chat.Model.Room>(
+                        _parentKey,
+                        key,
+                        null,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    if (e.errors[0].component != "room")
+                    {
+                        throw;
+                    }
+                }
+                (value, _) = _gs2.Cache.Get<Gs2.Gs2Chat.Model.Room>(
+                        _parentKey,
+                        Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
+                            this.RoomName?.ToString()
+                        )
+                    );
+            }
             return value;
         }
         #endif
