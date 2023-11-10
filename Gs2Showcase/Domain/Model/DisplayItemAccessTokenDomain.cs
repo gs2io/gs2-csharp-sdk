@@ -294,10 +294,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     .WithDisplayItemId(this.DisplayItemId);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.BuySpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.BuyByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        BuyByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -384,10 +384,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 .WithDisplayItemId(this.DisplayItemId);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.BuySpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.BuyByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    BuyByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

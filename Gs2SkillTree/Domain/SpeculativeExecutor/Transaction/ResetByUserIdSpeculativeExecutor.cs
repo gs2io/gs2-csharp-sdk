@@ -62,8 +62,8 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
 
                 var future = domain.SkillTree.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                 ).ModelFuture();
                 yield return future;
@@ -110,8 +110,8 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
         ) {
             var item = await domain.SkillTree.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
             ).ModelAsync();
 

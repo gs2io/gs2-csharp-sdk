@@ -70,11 +70,19 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                 }
             }
             else {
-                item.Free -= request.Count;
-                if (item.Free < 0) {
-                    throw new BadRequestException(new [] {
-                        new RequestError("count", "invalid"),
-                    });
+                if (item.Free + item.Paid < request.Count) {
+                    if (item.Free < 0) {
+                        throw new BadRequestException(new [] {
+                            new RequestError("count", "invalid"),
+                        });
+                    }
+                }
+                else {
+                    item.Free -= request.Count;
+                    if (item.Free < 0) {
+                        item.Paid += item.Free;
+                        item.Free = 0;
+                    }
                 }
             }
             return item;

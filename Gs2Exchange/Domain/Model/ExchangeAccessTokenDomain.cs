@@ -101,10 +101,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ExchangeSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        ExchangeByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -190,10 +190,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ExchangeSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    ExchangeByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }
@@ -265,10 +265,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.IncrementalExchangeSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        IncrementalExchangeByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -354,10 +354,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.IncrementalExchangeSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    IncrementalExchangeByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

@@ -337,10 +337,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                     .WithCategoryName(this.CategoryName);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReceiveSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        ReceiveByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -412,10 +412,10 @@ namespace Gs2.Gs2Idle.Domain.Model
                 .WithCategoryName(this.CategoryName);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReceiveSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    ReceiveByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

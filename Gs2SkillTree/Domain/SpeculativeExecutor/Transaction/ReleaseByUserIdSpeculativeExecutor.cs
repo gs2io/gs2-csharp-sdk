@@ -78,7 +78,16 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
 
                     var future3 = new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
                         model.ReleaseConsumeActions,
-                        Array.Empty<AcquireAction>(),
+                        new AcquireAction[] {
+                            new AcquireAction {
+                                Action = "Gs2SkillTree:MarkReleaseByUserId",
+                                Request = new MarkReleaseByUserIdRequest()
+                                    .WithNamespaceName(request.NamespaceName)
+                                    .WithNodeModelNames(new string[]{ nodeModelName })
+                                    .WithUserId(accessToken.UserId)
+                                    .ToJson().ToJson()
+                            }
+                        },
                         1.0
                     ).ExecuteFuture(
                         domain,

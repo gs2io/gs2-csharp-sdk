@@ -63,11 +63,11 @@ namespace Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor
 
                 var future = domain.Idle.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                     request.CategoryName
-                ).PredictionFuture(new PredictionByUserIdRequest());
+                ).PredictionFuture(new PredictionRequest());
                 yield return future;
                 if (future.Error != null) {
                     result.OnError(future.Error);
@@ -114,11 +114,11 @@ namespace Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor
         ) {
             var item = await domain.Idle.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
                 request.CategoryName
-            ).PredictionAsync(new PredictionByUserIdRequest());
+            ).PredictionAsync(new PredictionRequest());
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
                 Array.Empty<ConsumeAction>(),

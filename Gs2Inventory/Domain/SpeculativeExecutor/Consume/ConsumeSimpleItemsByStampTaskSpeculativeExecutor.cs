@@ -68,13 +68,13 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             foreach (var consumeCount in request.ConsumeCounts) {
                 var item = items.FirstOrDefault(v => v.ItemName == consumeCount.ItemName);
                 if (item == null) {
-                    throw new BadGatewayException(new[] {
+                    throw new BadRequestException(new[] {
                         new RequestError("count", "invalid")
                     });
                 }
                 item.Count -= consumeCount.Count;
                 if (item.Count < 0) {
-                    throw new BadGatewayException(new [] {
+                    throw new BadRequestException(new [] {
                         new RequestError("count", "invalid")
                     });
                 }

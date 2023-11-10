@@ -373,10 +373,10 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     .WithMessageName(this.MessageName);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReadMessageSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReadMessageByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        ReadMessageByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -464,10 +464,10 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 .WithMessageName(this.MessageName);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReadMessageSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.ReadMessageByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    ReadMessageByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

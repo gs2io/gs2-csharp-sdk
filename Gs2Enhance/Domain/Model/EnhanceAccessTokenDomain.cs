@@ -103,10 +103,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.DirectEnhanceSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.DirectEnhanceByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        DirectEnhanceByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -193,10 +193,10 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.DirectEnhanceSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.DirectEnhanceByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    DirectEnhanceByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

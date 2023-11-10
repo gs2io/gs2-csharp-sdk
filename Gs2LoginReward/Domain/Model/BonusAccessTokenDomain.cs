@@ -101,10 +101,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReceiveSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        ReceiveByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -206,10 +206,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReceiveSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    ReceiveByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }
@@ -297,10 +297,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.MissedReceiveSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.MissedReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        MissedReceiveByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -402,10 +402,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.MissedReceiveSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.MissedReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    MissedReceiveByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

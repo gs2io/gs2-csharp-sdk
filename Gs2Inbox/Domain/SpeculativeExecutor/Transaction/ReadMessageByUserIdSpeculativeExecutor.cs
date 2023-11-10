@@ -63,8 +63,8 @@ namespace Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor
 
                 var future = domain.Inbox.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Message(
                     request.MessageName
                 ).ModelFuture();
@@ -123,8 +123,8 @@ namespace Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor
         ) {
             var item = await domain.Inbox.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Message(
                 request.MessageName
             ).ModelAsync();

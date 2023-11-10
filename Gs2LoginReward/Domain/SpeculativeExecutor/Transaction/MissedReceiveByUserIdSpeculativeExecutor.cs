@@ -60,7 +60,6 @@ namespace Gs2.Gs2LoginReward.Domain.Transaction.SpeculativeExecutor
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
 
-                // TODO: Speculative execution not supported
 #if UNITY_2017_1_OR_NEWER
                 UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
 #else
@@ -87,7 +86,6 @@ namespace Gs2.Gs2LoginReward.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             MissedReceiveByUserIdRequest request
         ) {
-            // TODO: Speculative execution not supported
 #if UNITY_2017_1_OR_NEWER
             UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
 #else

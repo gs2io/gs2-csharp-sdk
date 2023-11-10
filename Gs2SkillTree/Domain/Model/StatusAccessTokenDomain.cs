@@ -101,10 +101,10 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReleaseSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        ReleaseByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -190,10 +190,10 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ReleaseSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    ReleaseByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }
@@ -265,10 +265,10 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.RestrainSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        RestrainByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -354,10 +354,10 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.RestrainSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    RestrainByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }
@@ -552,10 +552,10 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     .WithAccessToken(this._accessToken?.Token);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ResetSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        ResetByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -641,10 +641,10 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 .WithAccessToken(this._accessToken?.Token);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.ResetSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    ResetByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

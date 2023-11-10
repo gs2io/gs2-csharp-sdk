@@ -106,10 +106,10 @@ namespace Gs2.Gs2Mission.Domain.Model
                     .WithMissionGroupName(this.MissionGroupName);
 
                 if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.CompleteSpeculativeExecutor.ExecuteFuture(
+                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteFuture(
                         this._gs2,
                         AccessToken,
-                        request
+                        CompleteByUserIdRequest.FromJson(request.ToJson())
                     );
                     yield return speculativeExecuteFuture;
                     if (speculativeExecuteFuture.Error != null)
@@ -181,10 +181,10 @@ namespace Gs2.Gs2Mission.Domain.Model
                 .WithMissionGroupName(this.MissionGroupName);
 
             if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.CompleteSpeculativeExecutor.ExecuteAsync(
+                var commit = await Transaction.SpeculativeExecutor.CompleteByUserIdSpeculativeExecutor.ExecuteAsync(
                     this._gs2,
                     AccessToken,
-                    request
+                    CompleteByUserIdRequest.FromJson(request.ToJson())
                 );
                 commit?.Invoke();
             }

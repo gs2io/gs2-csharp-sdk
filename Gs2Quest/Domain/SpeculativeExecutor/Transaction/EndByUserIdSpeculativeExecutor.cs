@@ -63,8 +63,8 @@ namespace Gs2.Gs2Quest.Domain.Transaction.SpeculativeExecutor
 
                 var future = domain.Quest.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Progress(
                 ).ModelFuture();
                 yield return future;
@@ -121,8 +121,8 @@ namespace Gs2.Gs2Quest.Domain.Transaction.SpeculativeExecutor
         ) {
             var item = await domain.Quest.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Progress(
             ).ModelAsync();
 
