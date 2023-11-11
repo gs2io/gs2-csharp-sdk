@@ -90,7 +90,7 @@ namespace Gs2.Gs2Showcase.Request
                 .WithDisplayItemId(!data.Keys.Contains("displayItemId") || data["displayItemId"] == null ? null : data["displayItemId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithQuantity(!data.Keys.Contains("quantity") || data["quantity"] == null ? null : (int?)int.Parse(data["quantity"].ToString()))
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Showcase.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Showcase.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.Config.FromJson(v);
                 }).ToArray());
         }

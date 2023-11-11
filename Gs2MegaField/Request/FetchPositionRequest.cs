@@ -83,7 +83,7 @@ namespace Gs2.Gs2MegaField.Request
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
-                .WithUserIds(!data.Keys.Contains("userIds") || data["userIds"] == null ? new string[]{} : data["userIds"].Cast<JsonData>().Select(v => {
+                .WithUserIds(!data.Keys.Contains("userIds") || data["userIds"] == null || !data["userIds"].IsArray ? new string[]{} : data["userIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

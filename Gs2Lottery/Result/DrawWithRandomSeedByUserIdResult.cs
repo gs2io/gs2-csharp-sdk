@@ -73,7 +73,7 @@ namespace Gs2.Gs2Lottery.Result
                 return null;
             }
             return new DrawWithRandomSeedByUserIdResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Lottery.Model.DrawnPrize[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Lottery.Model.DrawnPrize[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(v);
                 }).ToArray())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())

@@ -90,7 +90,7 @@ namespace Gs2.Gs2Lottery.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)long.Parse(data["randomSeed"].ToString()))
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2Lottery.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Lottery.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.Config.FromJson(v);
                 }).ToArray());
         }

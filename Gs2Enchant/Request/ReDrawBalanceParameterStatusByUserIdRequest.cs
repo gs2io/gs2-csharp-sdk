@@ -83,7 +83,7 @@ namespace Gs2.Gs2Enchant.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithParameterName(!data.Keys.Contains("parameterName") || data["parameterName"] == null ? null : data["parameterName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithFixedParameterNames(!data.Keys.Contains("fixedParameterNames") || data["fixedParameterNames"] == null ? new string[]{} : data["fixedParameterNames"].Cast<JsonData>().Select(v => {
+                .WithFixedParameterNames(!data.Keys.Contains("fixedParameterNames") || data["fixedParameterNames"] == null || !data["fixedParameterNames"].IsArray ? new string[]{} : data["fixedParameterNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

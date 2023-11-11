@@ -49,7 +49,7 @@ namespace Gs2.Gs2Exchange.Result
                 return null;
             }
             return new DescribeRateModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Exchange.Model.RateModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Exchange.Model.RateModel[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.RateModel.FromJson(v);
                 }).ToArray());
         }

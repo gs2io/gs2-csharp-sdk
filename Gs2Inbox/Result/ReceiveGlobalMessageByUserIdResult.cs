@@ -49,7 +49,7 @@ namespace Gs2.Gs2Inbox.Result
                 return null;
             }
             return new ReceiveGlobalMessageByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? new Gs2.Gs2Inbox.Model.Message[]{} : data["item"].Cast<JsonData>().Select(v => {
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null || !data["item"].IsArray ? new Gs2.Gs2Inbox.Model.Message[]{} : data["item"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inbox.Model.Message.FromJson(v);
                 }).ToArray());
         }

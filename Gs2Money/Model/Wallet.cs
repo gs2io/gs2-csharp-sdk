@@ -185,7 +185,7 @@ namespace Gs2.Gs2Money.Model
                 .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()))
                 .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : (int?)int.Parse(data["paid"].ToString()))
                 .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : (int?)int.Parse(data["free"].ToString()))
-                .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null ? new Gs2.Gs2Money.Model.WalletDetail[]{} : data["detail"].Cast<JsonData>().Select(v => {
+                .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null || !data["detail"].IsArray ? new Gs2.Gs2Money.Model.WalletDetail[]{} : data["detail"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money.Model.WalletDetail.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

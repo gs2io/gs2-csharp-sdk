@@ -55,7 +55,7 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new RunStampSheetExpressWithoutNamespaceResult()
-                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
+                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString());

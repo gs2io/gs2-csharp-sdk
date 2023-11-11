@@ -49,7 +49,7 @@ namespace Gs2.Gs2Lottery.Result
                 return null;
             }
             return new DescribeLotteryModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Lottery.Model.LotteryModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Lottery.Model.LotteryModel[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.LotteryModel.FromJson(v);
                 }).ToArray());
         }

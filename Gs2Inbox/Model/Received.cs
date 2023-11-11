@@ -147,7 +147,7 @@ namespace Gs2.Gs2Inbox.Model
             return new Received()
                 .WithReceivedId(!data.Keys.Contains("receivedId") || data["receivedId"] == null ? null : data["receivedId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithReceivedGlobalMessageNames(!data.Keys.Contains("receivedGlobalMessageNames") || data["receivedGlobalMessageNames"] == null ? new string[]{} : data["receivedGlobalMessageNames"].Cast<JsonData>().Select(v => {
+                .WithReceivedGlobalMessageNames(!data.Keys.Contains("receivedGlobalMessageNames") || data["receivedGlobalMessageNames"] == null || !data["receivedGlobalMessageNames"].IsArray ? new string[]{} : data["receivedGlobalMessageNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

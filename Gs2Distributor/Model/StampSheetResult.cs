@@ -189,11 +189,11 @@ namespace Gs2.Gs2Distributor.Model
                 .WithStampSheetResultId(!data.Keys.Contains("stampSheetResultId") || data["stampSheetResultId"] == null ? null : data["stampSheetResultId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithTaskRequests(!data.Keys.Contains("taskRequests") || data["taskRequests"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["taskRequests"].Cast<JsonData>().Select(v => {
+                .WithTaskRequests(!data.Keys.Contains("taskRequests") || data["taskRequests"] == null || !data["taskRequests"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["taskRequests"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithSheetRequest(!data.Keys.Contains("sheetRequest") || data["sheetRequest"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["sheetRequest"]))
-                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
+                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString())

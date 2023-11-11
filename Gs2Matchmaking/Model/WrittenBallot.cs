@@ -54,7 +54,7 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new WrittenBallot()
                 .WithBallot(!data.Keys.Contains("ballot") || data["ballot"] == null ? null : Gs2.Gs2Matchmaking.Model.Ballot.FromJson(data["ballot"]))
-                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null ? new Gs2.Gs2Matchmaking.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
+                .WithGameResults(!data.Keys.Contains("gameResults") || data["gameResults"] == null || !data["gameResults"].IsArray ? new Gs2.Gs2Matchmaking.Model.GameResult[]{} : data["gameResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.GameResult.FromJson(v);
                 }).ToArray());
         }

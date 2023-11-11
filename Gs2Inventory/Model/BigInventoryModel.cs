@@ -136,7 +136,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInventoryModelId(!data.Keys.Contains("inventoryModelId") || data["inventoryModelId"] == null ? null : data["inventoryModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithBigItemModels(!data.Keys.Contains("bigItemModels") || data["bigItemModels"] == null ? new Gs2.Gs2Inventory.Model.BigItemModel[]{} : data["bigItemModels"].Cast<JsonData>().Select(v => {
+                .WithBigItemModels(!data.Keys.Contains("bigItemModels") || data["bigItemModels"] == null || !data["bigItemModels"].IsArray ? new Gs2.Gs2Inventory.Model.BigItemModel[]{} : data["bigItemModels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.BigItemModel.FromJson(v);
                 }).ToArray());
         }

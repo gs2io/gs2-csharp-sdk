@@ -61,7 +61,7 @@ namespace Gs2.Gs2Showcase.Model
             return new SalesItemGroup()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithSalesItems(!data.Keys.Contains("salesItems") || data["salesItems"] == null ? new Gs2.Gs2Showcase.Model.SalesItem[]{} : data["salesItems"].Cast<JsonData>().Select(v => {
+                .WithSalesItems(!data.Keys.Contains("salesItems") || data["salesItems"] == null || !data["salesItems"].IsArray ? new Gs2.Gs2Showcase.Model.SalesItem[]{} : data["salesItems"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.SalesItem.FromJson(v);
                 }).ToArray());
         }

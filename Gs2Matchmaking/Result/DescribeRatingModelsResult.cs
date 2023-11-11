@@ -49,7 +49,7 @@ namespace Gs2.Gs2Matchmaking.Result
                 return null;
             }
             return new DescribeRatingModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Matchmaking.Model.RatingModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Matchmaking.Model.RatingModel[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.RatingModel.FromJson(v);
                 }).ToArray());
         }

@@ -196,10 +196,10 @@ namespace Gs2.Gs2StateMachine.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : (long?)long.Parse(data["stateMachineVersion"].ToString()))
-                .WithStacks(!data.Keys.Contains("stacks") || data["stacks"] == null ? new Gs2.Gs2StateMachine.Model.StackEntry[]{} : data["stacks"].Cast<JsonData>().Select(v => {
+                .WithStacks(!data.Keys.Contains("stacks") || data["stacks"] == null || !data["stacks"].IsArray ? new Gs2.Gs2StateMachine.Model.StackEntry[]{} : data["stacks"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.StackEntry.FromJson(v);
                 }).ToArray())
-                .WithVariables(!data.Keys.Contains("variables") || data["variables"] == null ? new Gs2.Gs2StateMachine.Model.Variable[]{} : data["variables"].Cast<JsonData>().Select(v => {
+                .WithVariables(!data.Keys.Contains("variables") || data["variables"] == null || !data["variables"].IsArray ? new Gs2.Gs2StateMachine.Model.Variable[]{} : data["variables"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.Variable.FromJson(v);
                 }).ToArray())
                 .WithValue(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())

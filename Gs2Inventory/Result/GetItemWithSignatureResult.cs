@@ -73,7 +73,7 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new GetItemWithSignatureResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Inventory.Model.ItemSet[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Inventory.Model.ItemSet[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.ItemSet.FromJson(v);
                 }).ToArray())
                 .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))

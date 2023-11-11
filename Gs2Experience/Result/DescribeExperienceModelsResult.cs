@@ -49,7 +49,7 @@ namespace Gs2.Gs2Experience.Result
                 return null;
             }
             return new DescribeExperienceModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Experience.Model.ExperienceModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Experience.Model.ExperienceModel[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Experience.Model.ExperienceModel.FromJson(v);
                 }).ToArray());
         }

@@ -49,7 +49,7 @@ namespace Gs2.Gs2Dictionary.Result
                 return null;
             }
             return new DeleteEntriesByUserIdResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Dictionary.Model.Entry[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Dictionary.Model.Entry[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Dictionary.Model.Entry.FromJson(v);
                 }).ToArray());
         }

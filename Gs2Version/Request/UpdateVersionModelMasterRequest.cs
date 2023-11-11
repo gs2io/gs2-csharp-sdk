@@ -124,7 +124,7 @@ namespace Gs2.Gs2Version.Request
                 .WithCurrentVersion(!data.Keys.Contains("currentVersion") || data["currentVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["currentVersion"]))
                 .WithWarningVersion(!data.Keys.Contains("warningVersion") || data["warningVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["warningVersion"]))
                 .WithErrorVersion(!data.Keys.Contains("errorVersion") || data["errorVersion"] == null ? null : Gs2.Gs2Version.Model.Version_.FromJson(data["errorVersion"]))
-                .WithScheduleVersions(!data.Keys.Contains("scheduleVersions") || data["scheduleVersions"] == null ? new Gs2.Gs2Version.Model.ScheduleVersion[]{} : data["scheduleVersions"].Cast<JsonData>().Select(v => {
+                .WithScheduleVersions(!data.Keys.Contains("scheduleVersions") || data["scheduleVersions"] == null || !data["scheduleVersions"].IsArray ? new Gs2.Gs2Version.Model.ScheduleVersion[]{} : data["scheduleVersions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.ScheduleVersion.FromJson(v);
                 }).ToArray())
                 .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))

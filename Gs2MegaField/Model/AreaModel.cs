@@ -136,7 +136,7 @@ namespace Gs2.Gs2MegaField.Model
                 .WithAreaModelId(!data.Keys.Contains("areaModelId") || data["areaModelId"] == null ? null : data["areaModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithLayerModels(!data.Keys.Contains("layerModels") || data["layerModels"] == null ? new Gs2.Gs2MegaField.Model.LayerModel[]{} : data["layerModels"].Cast<JsonData>().Select(v => {
+                .WithLayerModels(!data.Keys.Contains("layerModels") || data["layerModels"] == null || !data["layerModels"].IsArray ? new Gs2.Gs2MegaField.Model.LayerModel[]{} : data["layerModels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2MegaField.Model.LayerModel.FromJson(v);
                 }).ToArray());
         }

@@ -149,10 +149,10 @@ namespace Gs2.Gs2Enchant.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithMaximumParameterCount(!data.Keys.Contains("maximumParameterCount") || data["maximumParameterCount"] == null ? null : (int?)int.Parse(data["maximumParameterCount"].ToString()))
-                .WithParameterCounts(!data.Keys.Contains("parameterCounts") || data["parameterCounts"] == null ? new Gs2.Gs2Enchant.Model.RarityParameterCountModel[]{} : data["parameterCounts"].Cast<JsonData>().Select(v => {
+                .WithParameterCounts(!data.Keys.Contains("parameterCounts") || data["parameterCounts"] == null || !data["parameterCounts"].IsArray ? new Gs2.Gs2Enchant.Model.RarityParameterCountModel[]{} : data["parameterCounts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.RarityParameterCountModel.FromJson(v);
                 }).ToArray())
-                .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null ? new Gs2.Gs2Enchant.Model.RarityParameterValueModel[]{} : data["parameters"].Cast<JsonData>().Select(v => {
+                .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null || !data["parameters"].IsArray ? new Gs2.Gs2Enchant.Model.RarityParameterValueModel[]{} : data["parameters"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.RarityParameterValueModel.FromJson(v);
                 }).ToArray());
         }

@@ -66,11 +66,11 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new CapacityOfRole()
                 .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
-                .WithRoleAliases(!data.Keys.Contains("roleAliases") || data["roleAliases"] == null ? new string[]{} : data["roleAliases"].Cast<JsonData>().Select(v => {
+                .WithRoleAliases(!data.Keys.Contains("roleAliases") || data["roleAliases"] == null || !data["roleAliases"].IsArray ? new string[]{} : data["roleAliases"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()))
-                .WithParticipants(!data.Keys.Contains("participants") || data["participants"] == null ? new Gs2.Gs2Matchmaking.Model.Player[]{} : data["participants"].Cast<JsonData>().Select(v => {
+                .WithParticipants(!data.Keys.Contains("participants") || data["participants"] == null || !data["participants"].IsArray ? new Gs2.Gs2Matchmaking.Model.Player[]{} : data["participants"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.Player.FromJson(v);
                 }).ToArray());
         }

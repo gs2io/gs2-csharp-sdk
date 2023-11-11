@@ -232,7 +232,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()))
-                .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? new string[]{} : data["referenceOf"].Cast<JsonData>().Select(v => {
+                .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null || !data["referenceOf"].IsArray ? new string[]{} : data["referenceOf"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)int.Parse(data["sortValue"].ToString()))

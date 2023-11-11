@@ -69,7 +69,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new MarkReleaseByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithNodeModelNames(!data.Keys.Contains("nodeModelNames") || data["nodeModelNames"] == null ? new string[]{} : data["nodeModelNames"].Cast<JsonData>().Select(v => {
+                .WithNodeModelNames(!data.Keys.Contains("nodeModelNames") || data["nodeModelNames"] == null || !data["nodeModelNames"].IsArray ? new string[]{} : data["nodeModelNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

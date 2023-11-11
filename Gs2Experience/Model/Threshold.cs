@@ -54,7 +54,7 @@ namespace Gs2.Gs2Experience.Model
             }
             return new Threshold()
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
                     return long.Parse(v.ToString());
                 }).ToArray());
         }

@@ -49,7 +49,7 @@ namespace Gs2.Gs2Stamina.Result
                 return null;
             }
             return new DescribeStaminaModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Stamina.Model.StaminaModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Stamina.Model.StaminaModel[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Stamina.Model.StaminaModel.FromJson(v);
                 }).ToArray());
         }

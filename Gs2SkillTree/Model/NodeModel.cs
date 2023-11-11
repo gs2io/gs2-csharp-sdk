@@ -154,14 +154,14 @@ namespace Gs2.Gs2SkillTree.Model
                 .WithNodeModelId(!data.Keys.Contains("nodeModelId") || data["nodeModelId"] == null ? null : data["nodeModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithReleaseConsumeActions(!data.Keys.Contains("releaseConsumeActions") || data["releaseConsumeActions"] == null ? new Gs2.Core.Model.ConsumeAction[]{} : data["releaseConsumeActions"].Cast<JsonData>().Select(v => {
+                .WithReleaseConsumeActions(!data.Keys.Contains("releaseConsumeActions") || data["releaseConsumeActions"] == null || !data["releaseConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["releaseConsumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
-                .WithReturnAcquireActions(!data.Keys.Contains("returnAcquireActions") || data["returnAcquireActions"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["returnAcquireActions"].Cast<JsonData>().Select(v => {
+                .WithReturnAcquireActions(!data.Keys.Contains("returnAcquireActions") || data["returnAcquireActions"] == null || !data["returnAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["returnAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithRestrainReturnRate(!data.Keys.Contains("restrainReturnRate") || data["restrainReturnRate"] == null ? null : (float?)float.Parse(data["restrainReturnRate"].ToString()))
-                .WithPremiseNodeNames(!data.Keys.Contains("premiseNodeNames") || data["premiseNodeNames"] == null ? new string[]{} : data["premiseNodeNames"].Cast<JsonData>().Select(v => {
+                .WithPremiseNodeNames(!data.Keys.Contains("premiseNodeNames") || data["premiseNodeNames"] == null || !data["premiseNodeNames"].IsArray ? new string[]{} : data["premiseNodeNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

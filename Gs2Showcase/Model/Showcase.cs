@@ -143,7 +143,7 @@ namespace Gs2.Gs2Showcase.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString())
-                .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null ? new Gs2.Gs2Showcase.Model.DisplayItem[]{} : data["displayItems"].Cast<JsonData>().Select(v => {
+                .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null || !data["displayItems"].IsArray ? new Gs2.Gs2Showcase.Model.DisplayItem[]{} : data["displayItems"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.DisplayItem.FromJson(v);
                 }).ToArray());
         }

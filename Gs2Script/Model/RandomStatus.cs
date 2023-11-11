@@ -54,7 +54,7 @@ namespace Gs2.Gs2Script.Model
             }
             return new RandomStatus()
                 .WithSeed(!data.Keys.Contains("seed") || data["seed"] == null ? null : (long?)long.Parse(data["seed"].ToString()))
-                .WithUsed(!data.Keys.Contains("used") || data["used"] == null ? new Gs2.Gs2Script.Model.RandomUsed[]{} : data["used"].Cast<JsonData>().Select(v => {
+                .WithUsed(!data.Keys.Contains("used") || data["used"] == null || !data["used"].IsArray ? new Gs2.Gs2Script.Model.RandomUsed[]{} : data["used"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Script.Model.RandomUsed.FromJson(v);
                 }).ToArray());
         }

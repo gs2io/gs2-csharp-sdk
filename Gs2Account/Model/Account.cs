@@ -161,7 +161,7 @@ namespace Gs2.Gs2Account.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()))
-                .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null ? new Gs2.Gs2Account.Model.BanStatus[]{} : data["banStatuses"].Cast<JsonData>().Select(v => {
+                .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null || !data["banStatuses"].IsArray ? new Gs2.Gs2Account.Model.BanStatus[]{} : data["banStatuses"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Account.Model.BanStatus.FromJson(v);
                 }).ToArray())
                 .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))

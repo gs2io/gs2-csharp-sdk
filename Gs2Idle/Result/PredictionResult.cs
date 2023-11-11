@@ -55,7 +55,7 @@ namespace Gs2.Gs2Idle.Result
                 return null;
             }
             return new PredictionResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["status"]));

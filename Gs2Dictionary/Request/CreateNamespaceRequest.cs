@@ -36,7 +36,7 @@ namespace Gs2.Gs2Dictionary.Request
         public string Name { set; get; }
         public string Description { set; get; }
         public Gs2.Gs2Dictionary.Model.ScriptSetting EntryScript { set; get; }
-        public Gs2.Gs2Dictionary.Model.ScriptSetting DuplicateEntryScript { set; get; }
+        public string DuplicateEntryScript { set; get; }
         public Gs2.Gs2Dictionary.Model.LogSetting LogSetting { set; get; }
 
         public CreateNamespaceRequest WithName(string name) {
@@ -54,7 +54,7 @@ namespace Gs2.Gs2Dictionary.Request
             return this;
         }
 
-        public CreateNamespaceRequest WithDuplicateEntryScript(Gs2.Gs2Dictionary.Model.ScriptSetting duplicateEntryScript) {
+        public CreateNamespaceRequest WithDuplicateEntryScript(string duplicateEntryScript) {
             this.DuplicateEntryScript = duplicateEntryScript;
             return this;
         }
@@ -76,7 +76,7 @@ namespace Gs2.Gs2Dictionary.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithEntryScript(!data.Keys.Contains("entryScript") || data["entryScript"] == null ? null : Gs2.Gs2Dictionary.Model.ScriptSetting.FromJson(data["entryScript"]))
-                .WithDuplicateEntryScript(!data.Keys.Contains("duplicateEntryScript") || data["duplicateEntryScript"] == null ? null : Gs2.Gs2Dictionary.Model.ScriptSetting.FromJson(data["duplicateEntryScript"]))
+                .WithDuplicateEntryScript(!data.Keys.Contains("duplicateEntryScript") || data["duplicateEntryScript"] == null ? null : data["duplicateEntryScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Dictionary.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Dictionary.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["entryScript"] = EntryScript?.ToJson(),
-                ["duplicateEntryScript"] = DuplicateEntryScript?.ToJson(),
+                ["duplicateEntryScript"] = DuplicateEntryScript,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -106,7 +106,8 @@ namespace Gs2.Gs2Dictionary.Request
                 EntryScript.WriteJson(writer);
             }
             if (DuplicateEntryScript != null) {
-                DuplicateEntryScript.WriteJson(writer);
+                writer.WritePropertyName("duplicateEntryScript");
+                writer.Write(DuplicateEntryScript.ToString());
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

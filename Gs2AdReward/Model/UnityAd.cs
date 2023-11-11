@@ -47,7 +47,7 @@ namespace Gs2.Gs2AdReward.Model
                 return null;
             }
             return new UnityAd()
-                .WithKeys(!data.Keys.Contains("keys") || data["keys"] == null ? new string[]{} : data["keys"].Cast<JsonData>().Select(v => {
+                .WithKeys(!data.Keys.Contains("keys") || data["keys"] == null || !data["keys"].IsArray ? new string[]{} : data["keys"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

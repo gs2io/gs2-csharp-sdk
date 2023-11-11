@@ -136,7 +136,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInventoryModelId(!data.Keys.Contains("inventoryModelId") || data["inventoryModelId"] == null ? null : data["inventoryModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithSimpleItemModels(!data.Keys.Contains("simpleItemModels") || data["simpleItemModels"] == null ? new Gs2.Gs2Inventory.Model.SimpleItemModel[]{} : data["simpleItemModels"].Cast<JsonData>().Select(v => {
+                .WithSimpleItemModels(!data.Keys.Contains("simpleItemModels") || data["simpleItemModels"] == null || !data["simpleItemModels"].IsArray ? new Gs2.Gs2Inventory.Model.SimpleItemModel[]{} : data["simpleItemModels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.SimpleItemModel.FromJson(v);
                 }).ToArray());
         }

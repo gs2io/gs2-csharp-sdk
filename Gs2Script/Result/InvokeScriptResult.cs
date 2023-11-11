@@ -91,7 +91,7 @@ namespace Gs2.Gs2Script.Result
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
                 .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)int.Parse(data["executeTime"].ToString()))
                 .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)int.Parse(data["charged"].ToString()))
-                .WithOutput(!data.Keys.Contains("output") || data["output"] == null ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
+                .WithOutput(!data.Keys.Contains("output") || data["output"] == null || !data["output"].IsArray ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
         }

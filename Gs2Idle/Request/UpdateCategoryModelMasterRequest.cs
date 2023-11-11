@@ -103,7 +103,7 @@ namespace Gs2.Gs2Idle.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithRewardIntervalMinutes(!data.Keys.Contains("rewardIntervalMinutes") || data["rewardIntervalMinutes"] == null ? null : (int?)int.Parse(data["rewardIntervalMinutes"].ToString()))
                 .WithDefaultMaximumIdleMinutes(!data.Keys.Contains("defaultMaximumIdleMinutes") || data["defaultMaximumIdleMinutes"] == null ? null : (int?)int.Parse(data["defaultMaximumIdleMinutes"].ToString()))
-                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null ? new Gs2.Gs2Idle.Model.AcquireActionList[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Gs2Idle.Model.AcquireActionList[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Idle.Model.AcquireActionList.FromJson(v);
                 }).ToArray())
                 .WithIdlePeriodScheduleId(!data.Keys.Contains("idlePeriodScheduleId") || data["idlePeriodScheduleId"] == null ? null : data["idlePeriodScheduleId"].ToString())

@@ -195,7 +195,7 @@ namespace Gs2.Gs2Enchant.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithParameterName(!data.Keys.Contains("parameterName") || data["parameterName"] == null ? null : data["parameterName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithParameterValues(!data.Keys.Contains("parameterValues") || data["parameterValues"] == null ? new Gs2.Gs2Enchant.Model.RarityParameterValue[]{} : data["parameterValues"].Cast<JsonData>().Select(v => {
+                .WithParameterValues(!data.Keys.Contains("parameterValues") || data["parameterValues"] == null || !data["parameterValues"].IsArray ? new Gs2.Gs2Enchant.Model.RarityParameterValue[]{} : data["parameterValues"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.RarityParameterValue.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

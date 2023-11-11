@@ -166,7 +166,7 @@ namespace Gs2.Gs2Mission.Model
                 .WithMissionGroupId(!data.Keys.Contains("missionGroupId") || data["missionGroupId"] == null ? null : data["missionGroupId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null ? new Gs2.Gs2Mission.Model.MissionTaskModel[]{} : data["tasks"].Cast<JsonData>().Select(v => {
+                .WithTasks(!data.Keys.Contains("tasks") || data["tasks"] == null || !data["tasks"].IsArray ? new Gs2.Gs2Mission.Model.MissionTaskModel[]{} : data["tasks"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.MissionTaskModel.FromJson(v);
                 }).ToArray())
                 .WithResetType(!data.Keys.Contains("resetType") || data["resetType"] == null ? null : data["resetType"].ToString())

@@ -49,7 +49,7 @@ namespace Gs2.Gs2Version.Result
                 return null;
             }
             return new DescribeVersionModelsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Version.Model.VersionModel[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Version.Model.VersionModel[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.VersionModel.FromJson(v);
                 }).ToArray());
         }

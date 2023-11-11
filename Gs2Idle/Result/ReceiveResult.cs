@@ -73,7 +73,7 @@ namespace Gs2.Gs2Idle.Result
                 return null;
             }
             return new ReceiveResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Core.Model.AcquireAction[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())

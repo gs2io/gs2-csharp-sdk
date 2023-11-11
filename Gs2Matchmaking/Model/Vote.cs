@@ -165,7 +165,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithVoteId(!data.Keys.Contains("voteId") || data["voteId"] == null ? null : data["voteId"].ToString())
                 .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
                 .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
-                .WithWrittenBallots(!data.Keys.Contains("writtenBallots") || data["writtenBallots"] == null ? new Gs2.Gs2Matchmaking.Model.WrittenBallot[]{} : data["writtenBallots"].Cast<JsonData>().Select(v => {
+                .WithWrittenBallots(!data.Keys.Contains("writtenBallots") || data["writtenBallots"] == null || !data["writtenBallots"].IsArray ? new Gs2.Gs2Matchmaking.Model.WrittenBallot[]{} : data["writtenBallots"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.WrittenBallot.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

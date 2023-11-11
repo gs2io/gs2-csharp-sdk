@@ -68,7 +68,7 @@ namespace Gs2.Gs2Account.Result
             }
             return new AuthenticationResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Account.Model.Account.FromJson(data["item"]))
-                .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null ? new Gs2.Gs2Account.Model.BanStatus[]{} : data["banStatuses"].Cast<JsonData>().Select(v => {
+                .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null || !data["banStatuses"].IsArray ? new Gs2.Gs2Account.Model.BanStatus[]{} : data["banStatuses"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Account.Model.BanStatus.FromJson(v);
                 }).ToArray())
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())

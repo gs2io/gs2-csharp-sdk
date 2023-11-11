@@ -183,10 +183,10 @@ namespace Gs2.Gs2Mission.Model
                 .WithCompleteId(!data.Keys.Contains("completeId") || data["completeId"] == null ? null : data["completeId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
-                .WithCompletedMissionTaskNames(!data.Keys.Contains("completedMissionTaskNames") || data["completedMissionTaskNames"] == null ? new string[]{} : data["completedMissionTaskNames"].Cast<JsonData>().Select(v => {
+                .WithCompletedMissionTaskNames(!data.Keys.Contains("completedMissionTaskNames") || data["completedMissionTaskNames"] == null || !data["completedMissionTaskNames"].IsArray ? new string[]{} : data["completedMissionTaskNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithReceivedMissionTaskNames(!data.Keys.Contains("receivedMissionTaskNames") || data["receivedMissionTaskNames"] == null ? new string[]{} : data["receivedMissionTaskNames"].Cast<JsonData>().Select(v => {
+                .WithReceivedMissionTaskNames(!data.Keys.Contains("receivedMissionTaskNames") || data["receivedMissionTaskNames"] == null || !data["receivedMissionTaskNames"].IsArray ? new string[]{} : data["receivedMissionTaskNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithNextResetAt(!data.Keys.Contains("nextResetAt") || data["nextResetAt"] == null ? null : (long?)long.Parse(data["nextResetAt"].ToString()))

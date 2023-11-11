@@ -171,7 +171,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInventoryId(!data.Keys.Contains("inventoryId") || data["inventoryId"] == null ? null : data["inventoryId"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithSimpleItems(!data.Keys.Contains("simpleItems") || data["simpleItems"] == null ? new Gs2.Gs2Inventory.Model.SimpleItem[]{} : data["simpleItems"].Cast<JsonData>().Select(v => {
+                .WithSimpleItems(!data.Keys.Contains("simpleItems") || data["simpleItems"] == null || !data["simpleItems"].IsArray ? new Gs2.Gs2Inventory.Model.SimpleItem[]{} : data["simpleItems"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.SimpleItem.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

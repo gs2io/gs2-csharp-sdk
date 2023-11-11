@@ -55,7 +55,7 @@ namespace Gs2.Gs2Matchmaking.Result
                 return null;
             }
             return new DescribeRatingModelMastersResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Matchmaking.Model.RatingModelMaster[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Matchmaking.Model.RatingModelMaster[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.RatingModelMaster.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());

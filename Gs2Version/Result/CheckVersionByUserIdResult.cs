@@ -62,10 +62,10 @@ namespace Gs2.Gs2Version.Result
             }
             return new CheckVersionByUserIdResult()
                 .WithProjectToken(!data.Keys.Contains("projectToken") || data["projectToken"] == null ? null : data["projectToken"].ToString())
-                .WithWarnings(!data.Keys.Contains("warnings") || data["warnings"] == null ? new Gs2.Gs2Version.Model.Status[]{} : data["warnings"].Cast<JsonData>().Select(v => {
+                .WithWarnings(!data.Keys.Contains("warnings") || data["warnings"] == null || !data["warnings"].IsArray ? new Gs2.Gs2Version.Model.Status[]{} : data["warnings"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.Status.FromJson(v);
                 }).ToArray())
-                .WithErrors(!data.Keys.Contains("errors") || data["errors"] == null ? new Gs2.Gs2Version.Model.Status[]{} : data["errors"].Cast<JsonData>().Select(v => {
+                .WithErrors(!data.Keys.Contains("errors") || data["errors"] == null || !data["errors"].IsArray ? new Gs2.Gs2Version.Model.Status[]{} : data["errors"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.Status.FromJson(v);
                 }).ToArray());
         }

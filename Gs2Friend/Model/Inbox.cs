@@ -147,7 +147,7 @@ namespace Gs2.Gs2Friend.Model
             return new Inbox()
                 .WithInboxId(!data.Keys.Contains("inboxId") || data["inboxId"] == null ? null : data["inboxId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithFromUserIds(!data.Keys.Contains("fromUserIds") || data["fromUserIds"] == null ? new string[]{} : data["fromUserIds"].Cast<JsonData>().Select(v => {
+                .WithFromUserIds(!data.Keys.Contains("fromUserIds") || data["fromUserIds"] == null || !data["fromUserIds"].IsArray ? new string[]{} : data["fromUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

@@ -175,7 +175,7 @@ namespace Gs2.Gs2Enchant.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithTotalValue(!data.Keys.Contains("totalValue") || data["totalValue"] == null ? null : (long?)long.Parse(data["totalValue"].ToString()))
                 .WithInitialValueStrategy(!data.Keys.Contains("initialValueStrategy") || data["initialValueStrategy"] == null ? null : data["initialValueStrategy"].ToString())
-                .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null ? new Gs2.Gs2Enchant.Model.BalanceParameterValueModel[]{} : data["parameters"].Cast<JsonData>().Select(v => {
+                .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null || !data["parameters"].IsArray ? new Gs2.Gs2Enchant.Model.BalanceParameterValueModel[]{} : data["parameters"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.BalanceParameterValueModel.FromJson(v);
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

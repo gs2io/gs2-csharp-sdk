@@ -77,7 +77,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithThresholdName(!data.Keys.Contains("thresholdName") || data["thresholdName"] == null ? null : data["thresholdName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithValues(!data.Keys.Contains("values") || data["values"] == null ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
+                .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
                     return long.Parse(v.ToString());
                 }).ToArray());
         }

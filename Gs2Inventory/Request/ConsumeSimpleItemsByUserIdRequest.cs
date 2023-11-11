@@ -76,7 +76,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithConsumeCounts(!data.Keys.Contains("consumeCounts") || data["consumeCounts"] == null ? new Gs2.Gs2Inventory.Model.ConsumeCount[]{} : data["consumeCounts"].Cast<JsonData>().Select(v => {
+                .WithConsumeCounts(!data.Keys.Contains("consumeCounts") || data["consumeCounts"] == null || !data["consumeCounts"].IsArray ? new Gs2.Gs2Inventory.Model.ConsumeCount[]{} : data["consumeCounts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.ConsumeCount.FromJson(v);
                 }).ToArray());
         }

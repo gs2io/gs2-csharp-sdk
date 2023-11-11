@@ -157,7 +157,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)int.Parse(data["initialCapacity"].ToString()))
                 .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
                 .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : (bool?)bool.Parse(data["protectReferencedItem"].ToString()))
-                .WithItemModels(!data.Keys.Contains("itemModels") || data["itemModels"] == null ? new Gs2.Gs2Inventory.Model.ItemModel[]{} : data["itemModels"].Cast<JsonData>().Select(v => {
+                .WithItemModels(!data.Keys.Contains("itemModels") || data["itemModels"] == null || !data["itemModels"].IsArray ? new Gs2.Gs2Inventory.Model.ItemModel[]{} : data["itemModels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.ItemModel.FromJson(v);
                 }).ToArray());
         }

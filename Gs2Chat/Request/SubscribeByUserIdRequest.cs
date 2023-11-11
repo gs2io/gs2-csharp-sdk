@@ -76,7 +76,7 @@ namespace Gs2.Gs2Chat.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null ? new Gs2.Gs2Chat.Model.NotificationType[]{} : data["notificationTypes"].Cast<JsonData>().Select(v => {
+                .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null || !data["notificationTypes"].IsArray ? new Gs2.Gs2Chat.Model.NotificationType[]{} : data["notificationTypes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Chat.Model.NotificationType.FromJson(v);
                 }).ToArray());
         }

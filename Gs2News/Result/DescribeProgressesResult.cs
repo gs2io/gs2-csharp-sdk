@@ -55,7 +55,7 @@ namespace Gs2.Gs2News.Result
                 return null;
             }
             return new DescribeProgressesResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2News.Model.Progress[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2News.Model.Progress[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2News.Model.Progress.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());

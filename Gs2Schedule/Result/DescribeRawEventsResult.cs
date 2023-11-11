@@ -49,7 +49,7 @@ namespace Gs2.Gs2Schedule.Result
                 return null;
             }
             return new DescribeRawEventsResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Schedule.Model.Event[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Schedule.Model.Event[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Schedule.Model.Event.FromJson(v);
                 }).ToArray());
         }

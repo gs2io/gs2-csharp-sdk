@@ -69,7 +69,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new ResetByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null ? new Gs2.Gs2SkillTree.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2SkillTree.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SkillTree.Model.Config.FromJson(v);
                 }).ToArray());
         }

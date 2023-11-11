@@ -69,7 +69,7 @@ namespace Gs2.Gs2Version.Request
             return new CheckVersionByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTargetVersions(!data.Keys.Contains("targetVersions") || data["targetVersions"] == null ? new Gs2.Gs2Version.Model.TargetVersion[]{} : data["targetVersions"].Cast<JsonData>().Select(v => {
+                .WithTargetVersions(!data.Keys.Contains("targetVersions") || data["targetVersions"] == null || !data["targetVersions"].IsArray ? new Gs2.Gs2Version.Model.TargetVersion[]{} : data["targetVersions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.TargetVersion.FromJson(v);
                 }).ToArray());
         }

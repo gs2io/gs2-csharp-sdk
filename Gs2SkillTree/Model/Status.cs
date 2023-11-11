@@ -147,7 +147,7 @@ namespace Gs2.Gs2SkillTree.Model
             return new Status()
                 .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithReleasedNodeNames(!data.Keys.Contains("releasedNodeNames") || data["releasedNodeNames"] == null ? new string[]{} : data["releasedNodeNames"].Cast<JsonData>().Select(v => {
+                .WithReleasedNodeNames(!data.Keys.Contains("releasedNodeNames") || data["releasedNodeNames"] == null || !data["releasedNodeNames"].IsArray ? new string[]{} : data["releasedNodeNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))

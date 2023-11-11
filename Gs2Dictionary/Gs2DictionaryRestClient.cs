@@ -206,7 +206,7 @@ namespace Gs2.Gs2Dictionary
                 if (request.DuplicateEntryScript != null)
                 {
                     jsonWriter.WritePropertyName("duplicateEntryScript");
-                    request.DuplicateEntryScript.WriteJson(jsonWriter);
+                    jsonWriter.Write(request.DuplicateEntryScript);
                 }
                 if (request.LogSetting != null)
                 {
@@ -551,7 +551,7 @@ namespace Gs2.Gs2Dictionary
                 if (request.DuplicateEntryScript != null)
                 {
                     jsonWriter.WritePropertyName("duplicateEntryScript");
-                    request.DuplicateEntryScript.WriteJson(jsonWriter);
+                    jsonWriter.Write(request.DuplicateEntryScript);
                 }
                 if (request.LogSetting != null)
                 {

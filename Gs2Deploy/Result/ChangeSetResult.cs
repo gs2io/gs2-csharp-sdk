@@ -49,7 +49,7 @@ namespace Gs2.Gs2Deploy.Result
                 return null;
             }
             return new ChangeSetResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Deploy.Model.ChangeSet[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Deploy.Model.ChangeSet[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Deploy.Model.ChangeSet.FromJson(v);
                 }).ToArray());
         }

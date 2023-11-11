@@ -182,10 +182,10 @@ namespace Gs2.Gs2Deploy.Model
                 .WithResponse(!data.Keys.Contains("response") || data["response"] == null ? null : data["response"].ToString())
                 .WithRollbackContext(!data.Keys.Contains("rollbackContext") || data["rollbackContext"] == null ? null : data["rollbackContext"].ToString())
                 .WithRollbackRequest(!data.Keys.Contains("rollbackRequest") || data["rollbackRequest"] == null ? null : data["rollbackRequest"].ToString())
-                .WithRollbackAfter(!data.Keys.Contains("rollbackAfter") || data["rollbackAfter"] == null ? new string[]{} : data["rollbackAfter"].Cast<JsonData>().Select(v => {
+                .WithRollbackAfter(!data.Keys.Contains("rollbackAfter") || data["rollbackAfter"] == null || !data["rollbackAfter"].IsArray ? new string[]{} : data["rollbackAfter"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithOutputFields(!data.Keys.Contains("outputFields") || data["outputFields"] == null ? new Gs2.Gs2Deploy.Model.OutputField[]{} : data["outputFields"].Cast<JsonData>().Select(v => {
+                .WithOutputFields(!data.Keys.Contains("outputFields") || data["outputFields"] == null || !data["outputFields"].IsArray ? new Gs2.Gs2Deploy.Model.OutputField[]{} : data["outputFields"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Deploy.Model.OutputField.FromJson(v);
                 }).ToArray())
                 .WithWorkId(!data.Keys.Contains("workId") || data["workId"] == null ? null : data["workId"].ToString())
