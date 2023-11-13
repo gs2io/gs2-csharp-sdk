@@ -884,13 +884,24 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public async Task<Gs2.Gs2Datastore.Model.DataObject> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Datastore.Model.DataObject>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Datastore.Model.DataObject>(
+                _parentKey,
+                Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
+                    this.DataObjectName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Datastore.Model.DataObject>(
                     _parentKey,
                     Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         this.DataObjectName?.ToString()
                     )
                 );
-            return value;
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
+        # endif
         }
         #endif
 

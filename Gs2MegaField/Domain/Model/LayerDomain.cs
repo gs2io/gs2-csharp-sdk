@@ -150,14 +150,26 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.Layer> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.Layer>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.Layer>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.LayerDomain.CreateCacheKey(
+                    this.AreaModelName?.ToString(),
+                    this.LayerModelName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.Layer>(
                     _parentKey,
                     Gs2.Gs2MegaField.Domain.Model.LayerDomain.CreateCacheKey(
                         this.AreaModelName?.ToString(),
                         this.LayerModelName?.ToString()
                     )
                 );
-            return value;
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
+        # endif
         }
         #endif
 

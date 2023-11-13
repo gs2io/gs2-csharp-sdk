@@ -621,13 +621,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.SimpleInventory> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleInventory>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.SimpleInventory>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
+                    this.InventoryName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleInventory>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
                         this.InventoryName?.ToString()
                     )
                 );
-            return value;
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
+        # endif
         }
         #endif
 

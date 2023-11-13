@@ -314,41 +314,52 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public async Task<Gs2.Gs2Distributor.Model.StampSheetResult> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.StampSheetResult>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.StampSheetResult>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
+                    this.TransactionId?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.StampSheetResult>(
                     _parentKey,
                     Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
                         this.TransactionId?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetStampSheetResultByUserIdRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetStampSheetResultByUserIdRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
                                     this.TransactionId?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.StampSheetResult>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.StampSheetResult>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "stampSheetResult")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "stampSheetResult")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.StampSheetResult>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.StampSheetResult>(
                         _parentKey,
                         Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
                             this.TransactionId?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

@@ -533,41 +533,52 @@ namespace Gs2.Gs2Limit.Domain.Model
         public async Task<Gs2.Gs2Limit.Model.LimitModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Limit.Model.LimitModelMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain.CreateCacheKey(
+                    this.LimitName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Limit.Model.LimitModelMaster>(
                     _parentKey,
                     Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain.CreateCacheKey(
                         this.LimitName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetLimitModelMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetLimitModelMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain.CreateCacheKey(
                                     this.LimitName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Limit.Model.LimitModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "limitModelMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "limitModelMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Limit.Model.LimitModelMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Limit.Model.LimitModelMaster>(
                         _parentKey,
                         Gs2.Gs2Limit.Domain.Model.LimitModelMasterDomain.CreateCacheKey(
                             this.LimitName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

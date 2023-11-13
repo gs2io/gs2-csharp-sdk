@@ -594,41 +594,52 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOver>(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                    this.Type?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                         this.Type?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetTakeOverRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetTakeOverRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                                     this.Type?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Account.Model.TakeOver>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Account.Model.TakeOver>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "takeOver")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "takeOver")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
                         _parentKey,
                         Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                             this.Type?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

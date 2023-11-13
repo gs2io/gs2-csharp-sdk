@@ -462,44 +462,56 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public async Task<Gs2.Gs2Ranking.Model.SubscribeUser> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.SubscribeUser>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
+                    this.CategoryName?.ToString(),
+                    this.TargetUserId?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.SubscribeUser>(
                     _parentKey,
                     Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                         this.CategoryName?.ToString(),
                         this.TargetUserId?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetSubscribeRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetSubscribeRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                                     this.CategoryName?.ToString(),
                                     this.TargetUserId?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.SubscribeUser>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "subscribeUser")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "subscribeUser")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.SubscribeUser>(
                         _parentKey,
                         Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
                             this.CategoryName?.ToString(),
                             this.TargetUserId?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

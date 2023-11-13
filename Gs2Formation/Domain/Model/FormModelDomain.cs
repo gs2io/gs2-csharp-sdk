@@ -295,38 +295,48 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.FormModel> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.FormModel>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.FormModel>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.FormModel>(
                     _parentKey,
                     Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetFormModelRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetFormModelRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Formation.Model.FormModel>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.FormModel>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "formModel")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "formModel")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.FormModel>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.FormModel>(
                         _parentKey,
                         Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

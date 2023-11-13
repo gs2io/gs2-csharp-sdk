@@ -578,38 +578,48 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public async Task<Gs2.Gs2Enchant.Model.CurrentParameterMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
                     _parentKey,
                     Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain.CreateCacheKey(
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetCurrentParameterMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetCurrentParameterMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain.CreateCacheKey(
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "currentParameterMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "currentParameterMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
                         _parentKey,
                         Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain.CreateCacheKey(
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

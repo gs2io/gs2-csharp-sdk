@@ -578,38 +578,48 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public async Task<Gs2.Gs2Ranking.Model.CurrentRankingMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
                     _parentKey,
                     Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetCurrentRankingMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetCurrentRankingMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "currentRankingMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "currentRankingMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
                         _parentKey,
                         Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

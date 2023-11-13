@@ -130,12 +130,22 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.PublicProfile> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.PublicProfile>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                     _parentKey,
                     Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                     )
                 );
-            return value;
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
+        # endif
         }
         #endif
 

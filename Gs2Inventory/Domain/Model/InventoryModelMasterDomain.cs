@@ -720,41 +720,52 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.InventoryModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
+                    this.InventoryName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
                     _parentKey,
                     Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                         this.InventoryName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetInventoryModelMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetInventoryModelMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                                     this.InventoryName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "inventoryModelMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "inventoryModelMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
                         _parentKey,
                         Gs2.Gs2Inventory.Domain.Model.InventoryModelMasterDomain.CreateCacheKey(
                             this.InventoryName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

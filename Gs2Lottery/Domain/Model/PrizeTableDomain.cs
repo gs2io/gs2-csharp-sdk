@@ -376,41 +376,52 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public async Task<Gs2.Gs2Lottery.Model.PrizeTable> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeTable>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.PrizeTable>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                    this.PrizeTableName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeTable>(
                     _parentKey,
                     Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                         this.PrizeTableName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetPrizeTableRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetPrizeTableRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                                     this.PrizeTableName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeTable>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.PrizeTable>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "prizeTable")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "prizeTable")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeTable>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.PrizeTable>(
                         _parentKey,
                         Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheKey(
                             this.PrizeTableName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

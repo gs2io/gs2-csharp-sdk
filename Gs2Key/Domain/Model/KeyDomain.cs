@@ -678,41 +678,52 @@ namespace Gs2.Gs2Key.Domain.Model
         public async Task<Gs2.Gs2Key.Model.Key> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.Key>(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    this.KeyName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
                     _parentKey,
                     Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
                         this.KeyName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetKeyRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetKeyRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
                                     this.KeyName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "key")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "key")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
                         _parentKey,
                         Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
                             this.KeyName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

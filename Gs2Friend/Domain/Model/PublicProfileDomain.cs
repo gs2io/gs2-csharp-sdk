@@ -295,38 +295,48 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.PublicProfile> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.PublicProfile>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                     _parentKey,
                     Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetPublicProfileRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetPublicProfileRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Friend.Model.PublicProfile>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Friend.Model.PublicProfile>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "publicProfile")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "publicProfile")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.PublicProfile>(
                         _parentKey,
                         Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

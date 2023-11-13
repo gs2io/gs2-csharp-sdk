@@ -720,41 +720,52 @@ namespace Gs2.Gs2Quest.Domain.Model
         public async Task<Gs2.Gs2Quest.Model.QuestGroupModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
+                    this.QuestGroupName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
                     _parentKey,
                     Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
                         this.QuestGroupName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetQuestGroupModelMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetQuestGroupModelMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
                                     this.QuestGroupName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "questGroupModelMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "questGroupModelMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
                         _parentKey,
                         Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain.CreateCacheKey(
                             this.QuestGroupName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

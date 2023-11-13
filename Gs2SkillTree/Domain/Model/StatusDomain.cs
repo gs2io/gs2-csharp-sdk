@@ -912,38 +912,48 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public async Task<Gs2.Gs2SkillTree.Model.Status> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.Status>(
+                _parentKey,
+                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
                     _parentKey,
                     Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetStatusByUserIdRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetStatusByUserIdRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "status")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "status")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
                         _parentKey,
                         Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

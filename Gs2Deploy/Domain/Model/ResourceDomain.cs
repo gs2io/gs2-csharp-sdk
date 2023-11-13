@@ -303,41 +303,52 @@ namespace Gs2.Gs2Deploy.Domain.Model
         public async Task<Gs2.Gs2Deploy.Model.Resource> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Resource>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Deploy.Model.Resource>(
+                _parentKey,
+                Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                    this.ResourceName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Resource>(
                     _parentKey,
                     Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                         this.ResourceName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetResourceRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetResourceRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                                     this.ResourceName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Deploy.Model.Resource>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Deploy.Model.Resource>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "resource")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "resource")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Resource>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Resource>(
                         _parentKey,
                         Gs2.Gs2Deploy.Domain.Model.ResourceDomain.CreateCacheKey(
                             this.ResourceName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

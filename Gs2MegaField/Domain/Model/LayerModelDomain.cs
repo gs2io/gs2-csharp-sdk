@@ -314,41 +314,52 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.LayerModel> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModel>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
+                    this.LayerModelName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
                     _parentKey,
                     Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
                         this.LayerModelName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetLayerModelRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetLayerModelRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
                                     this.LayerModelName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "layerModel")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "layerModel")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
                         _parentKey,
                         Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
                             this.LayerModelName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

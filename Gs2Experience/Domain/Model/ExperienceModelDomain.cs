@@ -303,41 +303,52 @@ namespace Gs2.Gs2Experience.Domain.Model
         public async Task<Gs2.Gs2Experience.Model.ExperienceModel> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Experience.Model.ExperienceModel>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.ExperienceModel>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain.CreateCacheKey(
+                    this.ExperienceName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Experience.Model.ExperienceModel>(
                     _parentKey,
                     Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain.CreateCacheKey(
                         this.ExperienceName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetExperienceModelRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetExperienceModelRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain.CreateCacheKey(
                                     this.ExperienceName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Experience.Model.ExperienceModel>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Experience.Model.ExperienceModel>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "experienceModel")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "experienceModel")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Experience.Model.ExperienceModel>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Experience.Model.ExperienceModel>(
                         _parentKey,
                         Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain.CreateCacheKey(
                             this.ExperienceName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

@@ -533,41 +533,52 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public async Task<Gs2.Gs2Enhance.Model.RateModelMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.RateModelMaster>(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                    this.RateName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
                     _parentKey,
                     Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
                         this.RateName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetRateModelMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetRateModelMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
                                     this.RateName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "rateModelMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "rateModelMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
                         _parentKey,
                         Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
                             this.RateName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

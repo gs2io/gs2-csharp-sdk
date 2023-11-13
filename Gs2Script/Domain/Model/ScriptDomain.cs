@@ -641,41 +641,52 @@ namespace Gs2.Gs2Script.Domain.Model
         public async Task<Gs2.Gs2Script.Model.Script> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Script>(
+                _parentKey,
+                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                    this.ScriptName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
                     _parentKey,
                     Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                         this.ScriptName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetScriptRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetScriptRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                                     this.ScriptName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "script")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "script")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
                         _parentKey,
                         Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
                             this.ScriptName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

@@ -303,41 +303,52 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public async Task<Gs2.Gs2Exchange.Model.RateModel> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.RateModel>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.RateModel>(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
+                    this.RateName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.RateModel>(
                     _parentKey,
                     Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
                         this.RateName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetRateModelRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetRateModelRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
                                     this.RateName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.RateModel>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Exchange.Model.RateModel>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "rateModel")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "rateModel")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.RateModel>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Exchange.Model.RateModel>(
                         _parentKey,
                         Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
                             this.RateName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

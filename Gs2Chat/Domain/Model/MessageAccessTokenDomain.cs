@@ -324,41 +324,52 @@ namespace Gs2.Gs2Chat.Domain.Model
         public async Task<Gs2.Gs2Chat.Model.Message> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Chat.Model.Message>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Message>(
+                _parentKey,
+                Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                    this.MessageName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Chat.Model.Message>(
                     _parentKey,
                     Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                         this.MessageName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetMessageRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetMessageRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                                     this.MessageName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Chat.Model.Message>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Chat.Model.Message>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "message")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "message")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Chat.Model.Message>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Chat.Model.Message>(
                         _parentKey,
                         Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
                             this.MessageName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

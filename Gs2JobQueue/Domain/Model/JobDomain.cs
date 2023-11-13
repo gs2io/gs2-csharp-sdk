@@ -461,41 +461,52 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public async Task<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.Job>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.Job>(
+                _parentKey,
+                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                    this.JobName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.Job>(
                     _parentKey,
                     Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                         this.JobName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetJobByUserIdRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetJobByUserIdRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                                     this.JobName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.Job>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.Job>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "job")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "job")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.Job>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.Job>(
                         _parentKey,
                         Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                             this.JobName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

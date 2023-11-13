@@ -534,41 +534,52 @@ namespace Gs2.Gs2Key.Domain.Model
         public async Task<Gs2.Gs2Key.Model.GitHubApiKey> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.GitHubApiKey>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.GitHubApiKey>(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
+                    this.ApiKeyName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.GitHubApiKey>(
                     _parentKey,
                     Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
                         this.ApiKeyName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetGitHubApiKeyRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetGitHubApiKeyRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
                                     this.ApiKeyName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Key.Model.GitHubApiKey>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.GitHubApiKey>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "gitHubApiKey")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "gitHubApiKey")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.GitHubApiKey>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.GitHubApiKey>(
                         _parentKey,
                         Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
                             this.ApiKeyName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

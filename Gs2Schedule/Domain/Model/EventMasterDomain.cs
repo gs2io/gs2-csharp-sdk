@@ -533,41 +533,52 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public async Task<Gs2.Gs2Schedule.Model.EventMaster> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.EventMaster>(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                    this.EventName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
                     _parentKey,
                     Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
                         this.EventName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetEventMasterRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetEventMasterRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
                                     this.EventName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Schedule.Model.EventMaster>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Schedule.Model.EventMaster>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "eventMaster")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "eventMaster")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.EventMaster>(
                         _parentKey,
                         Gs2.Gs2Schedule.Domain.Model.EventMasterDomain.CreateCacheKey(
                             this.EventName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

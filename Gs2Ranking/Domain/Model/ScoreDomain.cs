@@ -370,7 +370,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.ScorerUserId,
                 "Score"
             );
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Score>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.Score>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                    this.CategoryName?.ToString(),
+                    this.ScorerUserId?.ToString(),
+                    this.UniqueId?.ToString() ?? "0"
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Score>(
                     parentKey,
                     Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                         this.CategoryName?.ToString(),
@@ -378,30 +388,30 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         this.UniqueId?.ToString() ?? "0"
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetScoreByUserIdRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetScoreByUserIdRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                                     this.CategoryName?.ToString(),
                                     this.ScorerUserId?.ToString(),
                                     this.UniqueId?.ToString() ?? "0"
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Score>(
-                        parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Score>(
+                            parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors.Length == 0 || e.errors[0].component != "score")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "score")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Score>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Score>(
                         parentKey,
                         Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
                             this.CategoryName?.ToString(),
@@ -409,8 +419,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             this.UniqueId?.ToString() ?? "0"
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 

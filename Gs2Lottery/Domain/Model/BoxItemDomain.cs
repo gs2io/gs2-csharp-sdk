@@ -121,12 +121,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public async Task<Gs2.Gs2Lottery.Model.BoxItem> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.BoxItem>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.BoxItem>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.BoxItemDomain.CreateCacheKey(
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.BoxItem>(
                     _parentKey,
                     Gs2.Gs2Lottery.Domain.Model.BoxItemDomain.CreateCacheKey(
                     )
                 );
-            return value;
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            }
+        # endif
         }
         #endif
 
