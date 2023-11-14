@@ -113,7 +113,7 @@ namespace Gs2.Gs2Experience.Request
         public override JsonData ToJson()
         {
             JsonData acquireActionRatesJsonData = null;
-            if (AcquireActionRates != null)
+            if (AcquireActionRates != null && AcquireActionRates.Length > 0)
             {
                 acquireActionRatesJsonData = new JsonData();
                 foreach (var acquireActionRate in AcquireActionRates)
@@ -169,14 +169,17 @@ namespace Gs2.Gs2Experience.Request
                 writer.WritePropertyName("rankThresholdName");
                 writer.Write(RankThresholdName.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var acquireActionRate in AcquireActionRates)
-            {
-                if (acquireActionRate != null) {
-                    acquireActionRate.WriteJson(writer);
+            if (AcquireActionRates != null) {
+                writer.WritePropertyName("acquireActionRates");
+                writer.WriteArrayStart();
+                foreach (var acquireActionRate in AcquireActionRates)
+                {
+                    if (acquireActionRate != null) {
+                        acquireActionRate.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

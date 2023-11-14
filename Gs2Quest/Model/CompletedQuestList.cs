@@ -182,7 +182,7 @@ namespace Gs2.Gs2Quest.Model
         public JsonData ToJson()
         {
             JsonData completeQuestNamesJsonData = null;
-            if (CompleteQuestNames != null)
+            if (CompleteQuestNames != null && CompleteQuestNames.Length > 0)
             {
                 completeQuestNamesJsonData = new JsonData();
                 foreach (var completeQuestName in CompleteQuestNames)

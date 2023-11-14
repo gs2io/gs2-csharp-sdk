@@ -85,7 +85,7 @@ namespace Gs2.Gs2Formation.Request
         public override JsonData ToJson()
         {
             JsonData slotsJsonData = null;
-            if (Slots != null)
+            if (Slots != null && Slots.Length > 0)
             {
                 slotsJsonData = new JsonData();
                 foreach (var slot in Slots)
@@ -121,14 +121,17 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var slot in Slots)
-            {
-                if (slot != null) {
-                    slot.WriteJson(writer);
+            if (Slots != null) {
+                writer.WritePropertyName("slots");
+                writer.WriteArrayStart();
+                foreach (var slot in Slots)
+                {
+                    if (slot != null) {
+                        slot.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

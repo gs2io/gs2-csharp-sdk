@@ -77,7 +77,7 @@ namespace Gs2.Gs2JobQueue.Request
         public override JsonData ToJson()
         {
             JsonData jobsJsonData = null;
-            if (Jobs != null)
+            if (Jobs != null && Jobs.Length > 0)
             {
                 jobsJsonData = new JsonData();
                 foreach (var job in Jobs)
@@ -103,14 +103,17 @@ namespace Gs2.Gs2JobQueue.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var job in Jobs)
-            {
-                if (job != null) {
-                    job.WriteJson(writer);
+            if (Jobs != null) {
+                writer.WritePropertyName("jobs");
+                writer.WriteArrayStart();
+                foreach (var job in Jobs)
+                {
+                    if (job != null) {
+                        job.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

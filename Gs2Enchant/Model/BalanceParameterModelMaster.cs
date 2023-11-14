@@ -186,7 +186,7 @@ namespace Gs2.Gs2Enchant.Model
         public JsonData ToJson()
         {
             JsonData parametersJsonData = null;
-            if (Parameters != null)
+            if (Parameters != null && Parameters.Length > 0)
             {
                 parametersJsonData = new JsonData();
                 foreach (var parameter in Parameters)

@@ -100,7 +100,7 @@ namespace Gs2.Gs2Enhance.Request
         public override JsonData ToJson()
         {
             JsonData materialsJsonData = null;
-            if (Materials != null)
+            if (Materials != null && Materials.Length > 0)
             {
                 materialsJsonData = new JsonData();
                 foreach (var material in Materials)
@@ -109,7 +109,7 @@ namespace Gs2.Gs2Enhance.Request
                 }
             }
             JsonData configJsonData = null;
-            if (Config != null)
+            if (Config != null && Config.Length > 0)
             {
                 configJsonData = new JsonData();
                 foreach (var confi in Config)
@@ -146,22 +146,28 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("targetItemSetId");
                 writer.Write(TargetItemSetId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var material in Materials)
-            {
-                if (material != null) {
-                    material.WriteJson(writer);
+            if (Materials != null) {
+                writer.WritePropertyName("materials");
+                writer.WriteArrayStart();
+                foreach (var material in Materials)
+                {
+                    if (material != null) {
+                        material.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var confi in Config)
-            {
-                if (confi != null) {
-                    confi.WriteJson(writer);
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

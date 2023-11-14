@@ -134,7 +134,7 @@ namespace Gs2.Gs2Exchange.Request
         public override JsonData ToJson()
         {
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)
@@ -204,14 +204,17 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("maximumExchangeCount");
                 writer.Write(int.Parse(MaximumExchangeCount.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var acquireAction in AcquireActions)
-            {
-                if (acquireAction != null) {
-                    acquireAction.WriteJson(writer);
+            if (AcquireActions != null) {
+                writer.WritePropertyName("acquireActions");
+                writer.WriteArrayStart();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

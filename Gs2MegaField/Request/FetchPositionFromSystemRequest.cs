@@ -84,7 +84,7 @@ namespace Gs2.Gs2MegaField.Request
         public override JsonData ToJson()
         {
             JsonData userIdsJsonData = null;
-            if (UserIds != null)
+            if (UserIds != null && UserIds.Length > 0)
             {
                 userIdsJsonData = new JsonData();
                 foreach (var userId in UserIds)
@@ -115,12 +115,15 @@ namespace Gs2.Gs2MegaField.Request
                 writer.WritePropertyName("layerModelName");
                 writer.Write(LayerModelName.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var userId in UserIds)
-            {
-                writer.Write(userId.ToString());
+            if (UserIds != null) {
+                writer.WritePropertyName("userIds");
+                writer.WriteArrayStart();
+                foreach (var userId in UserIds)
+                {
+                    writer.Write(userId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

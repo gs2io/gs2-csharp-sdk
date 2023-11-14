@@ -110,7 +110,7 @@ namespace Gs2.Gs2Identifier.Model
         public JsonData ToJson()
         {
             JsonData securityPolicyIdsJsonData = null;
-            if (SecurityPolicyIds != null)
+            if (SecurityPolicyIds != null && SecurityPolicyIds.Length > 0)
             {
                 securityPolicyIdsJsonData = new JsonData();
                 foreach (var securityPolicyId in SecurityPolicyIds)

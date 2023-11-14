@@ -122,7 +122,7 @@ namespace Gs2.Gs2Enhance.Request
         public override JsonData ToJson()
         {
             JsonData acquireExperienceHierarchyJsonData = null;
-            if (AcquireExperienceHierarchy != null)
+            if (AcquireExperienceHierarchy != null && AcquireExperienceHierarchy.Length > 0)
             {
                 acquireExperienceHierarchyJsonData = new JsonData();
                 foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
@@ -131,7 +131,7 @@ namespace Gs2.Gs2Enhance.Request
                 }
             }
             JsonData bonusRatesJsonData = null;
-            if (BonusRates != null)
+            if (BonusRates != null && BonusRates.Length > 0)
             {
                 bonusRatesJsonData = new JsonData();
                 foreach (var bonusRate in BonusRates)
@@ -184,24 +184,30 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("materialInventoryModelId");
                 writer.Write(MaterialInventoryModelId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
-            {
-                writer.Write(acquireExperienceHierarch.ToString());
+            if (AcquireExperienceHierarchy != null) {
+                writer.WritePropertyName("acquireExperienceHierarchy");
+                writer.WriteArrayStart();
+                foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
+                {
+                    writer.Write(acquireExperienceHierarch.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ExperienceModelId != null) {
                 writer.WritePropertyName("experienceModelId");
                 writer.Write(ExperienceModelId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var bonusRate in BonusRates)
-            {
-                if (bonusRate != null) {
-                    bonusRate.WriteJson(writer);
+            if (BonusRates != null) {
+                writer.WritePropertyName("bonusRates");
+                writer.WriteArrayStart();
+                foreach (var bonusRate in BonusRates)
+                {
+                    if (bonusRate != null) {
+                        bonusRate.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

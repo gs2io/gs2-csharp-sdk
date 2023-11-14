@@ -205,7 +205,7 @@ namespace Gs2.Gs2Distributor.Model
         public JsonData ToJson()
         {
             JsonData taskRequestsJsonData = null;
-            if (TaskRequests != null)
+            if (TaskRequests != null && TaskRequests.Length > 0)
             {
                 taskRequestsJsonData = new JsonData();
                 foreach (var taskRequest in TaskRequests)
@@ -214,7 +214,7 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             JsonData taskResultsJsonData = null;
-            if (TaskResults != null)
+            if (TaskResults != null && TaskResults.Length > 0)
             {
                 taskResultsJsonData = new JsonData();
                 foreach (var taskResult in TaskResults)

@@ -189,7 +189,7 @@ namespace Gs2.Gs2JobQueue.Model
         public JsonData ToJson()
         {
             JsonData resultJsonData = null;
-            if (Result != null)
+            if (Result != null && Result.Length > 0)
             {
                 resultJsonData = new JsonData();
                 foreach (var resul in Result)

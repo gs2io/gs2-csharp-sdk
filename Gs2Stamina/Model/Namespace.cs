@@ -34,7 +34,7 @@ namespace Gs2.Gs2Stamina.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
-        public Gs2.Gs2Stamina.Model.ScriptSetting OverflowTriggerScript { set; get; }
+        public string OverflowTriggerScript { set; get; }
         public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -55,7 +55,7 @@ namespace Gs2.Gs2Stamina.Model
             return this;
         }
 
-        public Namespace WithOverflowTriggerScript(Gs2.Gs2Stamina.Model.ScriptSetting overflowTriggerScript) {
+        public Namespace WithOverflowTriggerScript(string overflowTriggerScript) {
             this.OverflowTriggerScript = overflowTriggerScript;
             return this;
         }
@@ -143,7 +143,7 @@ namespace Gs2.Gs2Stamina.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithOverflowTriggerScript(!data.Keys.Contains("overflowTriggerScript") || data["overflowTriggerScript"] == null ? null : Gs2.Gs2Stamina.Model.ScriptSetting.FromJson(data["overflowTriggerScript"]))
+                .WithOverflowTriggerScript(!data.Keys.Contains("overflowTriggerScript") || data["overflowTriggerScript"] == null ? null : data["overflowTriggerScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Stamina.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
@@ -156,7 +156,7 @@ namespace Gs2.Gs2Stamina.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["overflowTriggerScript"] = OverflowTriggerScript?.ToJson(),
+                ["overflowTriggerScript"] = OverflowTriggerScript,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -181,7 +181,7 @@ namespace Gs2.Gs2Stamina.Model
             }
             if (OverflowTriggerScript != null) {
                 writer.WritePropertyName("overflowTriggerScript");
-                OverflowTriggerScript.WriteJson(writer);
+                writer.Write(OverflowTriggerScript.ToString());
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");

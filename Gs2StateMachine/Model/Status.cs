@@ -212,7 +212,7 @@ namespace Gs2.Gs2StateMachine.Model
         public JsonData ToJson()
         {
             JsonData stacksJsonData = null;
-            if (Stacks != null)
+            if (Stacks != null && Stacks.Length > 0)
             {
                 stacksJsonData = new JsonData();
                 foreach (var stack in Stacks)
@@ -221,7 +221,7 @@ namespace Gs2.Gs2StateMachine.Model
                 }
             }
             JsonData variablesJsonData = null;
-            if (Variables != null)
+            if (Variables != null && Variables.Length > 0)
             {
                 variablesJsonData = new JsonData();
                 foreach (var variable in Variables)

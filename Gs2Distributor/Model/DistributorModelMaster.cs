@@ -179,7 +179,7 @@ namespace Gs2.Gs2Distributor.Model
         public JsonData ToJson()
         {
             JsonData whiteListTargetIdsJsonData = null;
-            if (WhiteListTargetIds != null)
+            if (WhiteListTargetIds != null && WhiteListTargetIds.Length > 0)
             {
                 whiteListTargetIdsJsonData = new JsonData();
                 foreach (var whiteListTargetId in WhiteListTargetIds)

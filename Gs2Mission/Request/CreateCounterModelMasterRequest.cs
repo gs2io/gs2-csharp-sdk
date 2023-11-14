@@ -92,7 +92,7 @@ namespace Gs2.Gs2Mission.Request
         public override JsonData ToJson()
         {
             JsonData scopesJsonData = null;
-            if (Scopes != null)
+            if (Scopes != null && Scopes.Length > 0)
             {
                 scopesJsonData = new JsonData();
                 foreach (var scope in Scopes)
@@ -129,14 +129,17 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var scope in Scopes)
-            {
-                if (scope != null) {
-                    scope.WriteJson(writer);
+            if (Scopes != null) {
+                writer.WritePropertyName("scopes");
+                writer.WriteArrayStart();
+                foreach (var scope in Scopes)
+                {
+                    if (scope != null) {
+                        scope.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ChallengePeriodEventId != null) {
                 writer.WritePropertyName("challengePeriodEventId");
                 writer.Write(ChallengePeriodEventId.ToString());

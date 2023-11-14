@@ -86,7 +86,7 @@ namespace Gs2.Gs2SkillTree.Request
         public override JsonData ToJson()
         {
             JsonData nodeModelNamesJsonData = null;
-            if (NodeModelNames != null)
+            if (NodeModelNames != null && NodeModelNames.Length > 0)
             {
                 nodeModelNamesJsonData = new JsonData();
                 foreach (var nodeModelName in NodeModelNames)
@@ -95,7 +95,7 @@ namespace Gs2.Gs2SkillTree.Request
                 }
             }
             JsonData configJsonData = null;
-            if (Config != null)
+            if (Config != null && Config.Length > 0)
             {
                 configJsonData = new JsonData();
                 foreach (var confi in Config)
@@ -122,20 +122,26 @@ namespace Gs2.Gs2SkillTree.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var nodeModelName in NodeModelNames)
-            {
-                writer.Write(nodeModelName.ToString());
-            }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var confi in Config)
-            {
-                if (confi != null) {
-                    confi.WriteJson(writer);
+            if (NodeModelNames != null) {
+                writer.WritePropertyName("nodeModelNames");
+                writer.WriteArrayStart();
+                foreach (var nodeModelName in NodeModelNames)
+                {
+                    writer.Write(nodeModelName.ToString());
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             writer.WriteObjectEnd();
         }
 

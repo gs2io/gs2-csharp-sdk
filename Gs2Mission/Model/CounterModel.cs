@@ -151,7 +151,7 @@ namespace Gs2.Gs2Mission.Model
         public JsonData ToJson()
         {
             JsonData scopesJsonData = null;
-            if (Scopes != null)
+            if (Scopes != null && Scopes.Length > 0)
             {
                 scopesJsonData = new JsonData();
                 foreach (var scope in Scopes)

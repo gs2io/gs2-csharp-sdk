@@ -184,7 +184,7 @@ namespace Gs2.Gs2Ranking.Model
         public JsonData ToJson()
         {
             JsonData targetUserIdsJsonData = null;
-            if (TargetUserIds != null)
+            if (TargetUserIds != null && TargetUserIds.Length > 0)
             {
                 targetUserIdsJsonData = new JsonData();
                 foreach (var targetUserId in TargetUserIds)
@@ -193,7 +193,7 @@ namespace Gs2.Gs2Ranking.Model
                 }
             }
             JsonData subscribedUserIdsJsonData = null;
-            if (SubscribedUserIds != null)
+            if (SubscribedUserIds != null && SubscribedUserIds.Length > 0)
             {
                 subscribedUserIdsJsonData = new JsonData();
                 foreach (var subscribedUserId in SubscribedUserIds)

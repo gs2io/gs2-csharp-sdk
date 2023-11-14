@@ -92,7 +92,7 @@ namespace Gs2.Gs2Stamina.Request
         public override JsonData ToJson()
         {
             JsonData valuesJsonData = null;
-            if (Values != null)
+            if (Values != null && Values.Length > 0)
             {
                 valuesJsonData = new JsonData();
                 foreach (var value in Values)
@@ -133,12 +133,15 @@ namespace Gs2.Gs2Stamina.Request
                 writer.WritePropertyName("experienceModelId");
                 writer.Write(ExperienceModelId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var value in Values)
-            {
-                writer.Write(int.Parse(value.ToString()));
+            if (Values != null) {
+                writer.WritePropertyName("values");
+                writer.WriteArrayStart();
+                foreach (var value in Values)
+                {
+                    writer.Write(int.Parse(value.ToString()));
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

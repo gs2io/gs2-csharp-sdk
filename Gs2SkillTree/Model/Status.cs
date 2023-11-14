@@ -158,7 +158,7 @@ namespace Gs2.Gs2SkillTree.Model
         public JsonData ToJson()
         {
             JsonData releasedNodeNamesJsonData = null;
-            if (ReleasedNodeNames != null)
+            if (ReleasedNodeNames != null && ReleasedNodeNames.Length > 0)
             {
                 releasedNodeNamesJsonData = new JsonData();
                 foreach (var releasedNodeName in ReleasedNodeNames)

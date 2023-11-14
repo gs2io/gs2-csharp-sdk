@@ -55,7 +55,7 @@ namespace Gs2.Gs2AdReward.Model
         public JsonData ToJson()
         {
             JsonData keysJsonData = null;
-            if (Keys != null)
+            if (Keys != null && Keys.Length > 0)
             {
                 keysJsonData = new JsonData();
                 foreach (var key in Keys)

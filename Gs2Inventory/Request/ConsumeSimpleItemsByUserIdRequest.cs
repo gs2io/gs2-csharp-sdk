@@ -84,7 +84,7 @@ namespace Gs2.Gs2Inventory.Request
         public override JsonData ToJson()
         {
             JsonData consumeCountsJsonData = null;
-            if (ConsumeCounts != null)
+            if (ConsumeCounts != null && ConsumeCounts.Length > 0)
             {
                 consumeCountsJsonData = new JsonData();
                 foreach (var consumeCount in ConsumeCounts)
@@ -115,14 +115,17 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var consumeCount in ConsumeCounts)
-            {
-                if (consumeCount != null) {
-                    consumeCount.WriteJson(writer);
+            if (ConsumeCounts != null) {
+                writer.WritePropertyName("consumeCounts");
+                writer.WriteArrayStart();
+                foreach (var consumeCount in ConsumeCounts)
+                {
+                    if (consumeCount != null) {
+                        consumeCount.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

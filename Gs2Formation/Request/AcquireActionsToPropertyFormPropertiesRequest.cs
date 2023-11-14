@@ -98,7 +98,7 @@ namespace Gs2.Gs2Formation.Request
         public override JsonData ToJson()
         {
             JsonData configJsonData = null;
-            if (Config != null)
+            if (Config != null && Config.Length > 0)
             {
                 configJsonData = new JsonData();
                 foreach (var confi in Config)
@@ -138,14 +138,17 @@ namespace Gs2.Gs2Formation.Request
             if (AcquireAction != null) {
                 AcquireAction.WriteJson(writer);
             }
-            writer.WriteArrayStart();
-            foreach (var confi in Config)
-            {
-                if (confi != null) {
-                    confi.WriteJson(writer);
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

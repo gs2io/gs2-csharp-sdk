@@ -198,7 +198,7 @@ namespace Gs2.Gs2Mission.Model
         public JsonData ToJson()
         {
             JsonData completedMissionTaskNamesJsonData = null;
-            if (CompletedMissionTaskNames != null)
+            if (CompletedMissionTaskNames != null && CompletedMissionTaskNames.Length > 0)
             {
                 completedMissionTaskNamesJsonData = new JsonData();
                 foreach (var completedMissionTaskName in CompletedMissionTaskNames)
@@ -207,7 +207,7 @@ namespace Gs2.Gs2Mission.Model
                 }
             }
             JsonData receivedMissionTaskNamesJsonData = null;
-            if (ReceivedMissionTaskNames != null)
+            if (ReceivedMissionTaskNames != null && ReceivedMissionTaskNames.Length > 0)
             {
                 receivedMissionTaskNamesJsonData = new JsonData();
                 foreach (var receivedMissionTaskName in ReceivedMissionTaskNames)

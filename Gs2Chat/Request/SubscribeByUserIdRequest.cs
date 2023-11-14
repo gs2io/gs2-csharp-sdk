@@ -84,7 +84,7 @@ namespace Gs2.Gs2Chat.Request
         public override JsonData ToJson()
         {
             JsonData notificationTypesJsonData = null;
-            if (NotificationTypes != null)
+            if (NotificationTypes != null && NotificationTypes.Length > 0)
             {
                 notificationTypesJsonData = new JsonData();
                 foreach (var notificationType in NotificationTypes)
@@ -115,14 +115,17 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var notificationType in NotificationTypes)
-            {
-                if (notificationType != null) {
-                    notificationType.WriteJson(writer);
+            if (NotificationTypes != null) {
+                writer.WritePropertyName("notificationTypes");
+                writer.WriteArrayStart();
+                foreach (var notificationType in NotificationTypes)
+                {
+                    if (notificationType != null) {
+                        notificationType.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

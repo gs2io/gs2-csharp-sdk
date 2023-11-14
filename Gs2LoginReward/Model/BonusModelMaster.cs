@@ -216,7 +216,7 @@ namespace Gs2.Gs2LoginReward.Model
         public JsonData ToJson()
         {
             JsonData rewardsJsonData = null;
-            if (Rewards != null)
+            if (Rewards != null && Rewards.Length > 0)
             {
                 rewardsJsonData = new JsonData();
                 foreach (var reward in Rewards)
@@ -225,7 +225,7 @@ namespace Gs2.Gs2LoginReward.Model
                 }
             }
             JsonData missedReceiveReliefConsumeActionsJsonData = null;
-            if (MissedReceiveReliefConsumeActions != null)
+            if (MissedReceiveReliefConsumeActions != null && MissedReceiveReliefConsumeActions.Length > 0)
             {
                 missedReceiveReliefConsumeActionsJsonData = new JsonData();
                 foreach (var missedReceiveReliefConsumeAction in MissedReceiveReliefConsumeActions)

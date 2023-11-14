@@ -172,7 +172,7 @@ namespace Gs2.Gs2Inbox.Model
         public JsonData ToJson()
         {
             JsonData readAcquireActionsJsonData = null;
-            if (ReadAcquireActions != null)
+            if (ReadAcquireActions != null && ReadAcquireActions.Length > 0)
             {
                 readAcquireActionsJsonData = new JsonData();
                 foreach (var readAcquireAction in ReadAcquireActions)

@@ -265,7 +265,7 @@ namespace Gs2.Gs2Ranking.Model
         public JsonData ToJson()
         {
             JsonData additionalScopesJsonData = null;
-            if (AdditionalScopes != null)
+            if (AdditionalScopes != null && AdditionalScopes.Length > 0)
             {
                 additionalScopesJsonData = new JsonData();
                 foreach (var additionalScope in AdditionalScopes)
@@ -274,7 +274,7 @@ namespace Gs2.Gs2Ranking.Model
                 }
             }
             JsonData ignoreUserIdsJsonData = null;
-            if (IgnoreUserIds != null)
+            if (IgnoreUserIds != null && IgnoreUserIds.Length > 0)
             {
                 ignoreUserIdsJsonData = new JsonData();
                 foreach (var ignoreUserId in IgnoreUserIds)

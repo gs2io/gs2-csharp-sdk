@@ -99,7 +99,7 @@ namespace Gs2.Gs2Enchant.Request
         public override JsonData ToJson()
         {
             JsonData parametersJsonData = null;
-            if (Parameters != null)
+            if (Parameters != null && Parameters.Length > 0)
             {
                 parametersJsonData = new JsonData();
                 foreach (var parameter in Parameters)
@@ -145,14 +145,17 @@ namespace Gs2.Gs2Enchant.Request
                 writer.WritePropertyName("initialValueStrategy");
                 writer.Write(InitialValueStrategy.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var parameter in Parameters)
-            {
-                if (parameter != null) {
-                    parameter.WriteJson(writer);
+            if (Parameters != null) {
+                writer.WritePropertyName("parameters");
+                writer.WriteArrayStart();
+                foreach (var parameter in Parameters)
+                {
+                    if (parameter != null) {
+                        parameter.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

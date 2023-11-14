@@ -221,7 +221,7 @@ namespace Gs2.Gs2Version.Model
         public JsonData ToJson()
         {
             JsonData scheduleVersionsJsonData = null;
-            if (ScheduleVersions != null)
+            if (ScheduleVersions != null && ScheduleVersions.Length > 0)
             {
                 scheduleVersionsJsonData = new JsonData();
                 foreach (var scheduleVersion in ScheduleVersions)

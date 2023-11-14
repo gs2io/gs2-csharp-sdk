@@ -144,7 +144,7 @@ namespace Gs2.Gs2Inventory.Model
         public JsonData ToJson()
         {
             JsonData simpleItemModelsJsonData = null;
-            if (SimpleItemModels != null)
+            if (SimpleItemModels != null && SimpleItemModels.Length > 0)
             {
                 simpleItemModelsJsonData = new JsonData();
                 foreach (var simpleItemModel in SimpleItemModels)

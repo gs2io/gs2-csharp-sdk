@@ -116,7 +116,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public override JsonData ToJson()
         {
             JsonData attributeRangesJsonData = null;
-            if (AttributeRanges != null)
+            if (AttributeRanges != null && AttributeRanges.Length > 0)
             {
                 attributeRangesJsonData = new JsonData();
                 foreach (var attributeRange in AttributeRanges)
@@ -125,7 +125,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 }
             }
             JsonData capacityOfRolesJsonData = null;
-            if (CapacityOfRoles != null)
+            if (CapacityOfRoles != null && CapacityOfRoles.Length > 0)
             {
                 capacityOfRolesJsonData = new JsonData();
                 foreach (var capacityOfRole in CapacityOfRoles)
@@ -134,7 +134,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 }
             }
             JsonData allowUserIdsJsonData = null;
-            if (AllowUserIds != null)
+            if (AllowUserIds != null && AllowUserIds.Length > 0)
             {
                 allowUserIdsJsonData = new JsonData();
                 foreach (var allowUserId in AllowUserIds)
@@ -168,28 +168,37 @@ namespace Gs2.Gs2Matchmaking.Request
             if (Player != null) {
                 Player.WriteJson(writer);
             }
-            writer.WriteArrayStart();
-            foreach (var attributeRange in AttributeRanges)
-            {
-                if (attributeRange != null) {
-                    attributeRange.WriteJson(writer);
+            if (AttributeRanges != null) {
+                writer.WritePropertyName("attributeRanges");
+                writer.WriteArrayStart();
+                foreach (var attributeRange in AttributeRanges)
+                {
+                    if (attributeRange != null) {
+                        attributeRange.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var capacityOfRole in CapacityOfRoles)
-            {
-                if (capacityOfRole != null) {
-                    capacityOfRole.WriteJson(writer);
+            if (CapacityOfRoles != null) {
+                writer.WritePropertyName("capacityOfRoles");
+                writer.WriteArrayStart();
+                foreach (var capacityOfRole in CapacityOfRoles)
+                {
+                    if (capacityOfRole != null) {
+                        capacityOfRole.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var allowUserId in AllowUserIds)
-            {
-                writer.Write(allowUserId.ToString());
+            if (AllowUserIds != null) {
+                writer.WritePropertyName("allowUserIds");
+                writer.WriteArrayStart();
+                foreach (var allowUserId in AllowUserIds)
+                {
+                    writer.Write(allowUserId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
                 writer.Write(long.Parse(ExpiresAt.ToString()));

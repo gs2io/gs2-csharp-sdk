@@ -172,7 +172,7 @@ namespace Gs2.Gs2Account.Model
         public JsonData ToJson()
         {
             JsonData banStatusesJsonData = null;
-            if (BanStatuses != null)
+            if (BanStatuses != null && BanStatuses.Length > 0)
             {
                 banStatusesJsonData = new JsonData();
                 foreach (var banStatus in BanStatuses)

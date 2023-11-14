@@ -179,7 +179,7 @@ namespace Gs2.Gs2Mission.Model
         public JsonData ToJson()
         {
             JsonData tasksJsonData = null;
-            if (Tasks != null)
+            if (Tasks != null && Tasks.Length > 0)
             {
                 tasksJsonData = new JsonData();
                 foreach (var task in Tasks)

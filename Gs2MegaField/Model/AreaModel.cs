@@ -144,7 +144,7 @@ namespace Gs2.Gs2MegaField.Model
         public JsonData ToJson()
         {
             JsonData layerModelsJsonData = null;
-            if (LayerModels != null)
+            if (LayerModels != null && LayerModels.Length > 0)
             {
                 layerModelsJsonData = new JsonData();
                 foreach (var layerModel in LayerModels)

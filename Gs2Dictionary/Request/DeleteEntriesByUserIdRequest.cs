@@ -77,7 +77,7 @@ namespace Gs2.Gs2Dictionary.Request
         public override JsonData ToJson()
         {
             JsonData entryModelNamesJsonData = null;
-            if (EntryModelNames != null)
+            if (EntryModelNames != null && EntryModelNames.Length > 0)
             {
                 entryModelNamesJsonData = new JsonData();
                 foreach (var entryModelName in EntryModelNames)
@@ -103,12 +103,15 @@ namespace Gs2.Gs2Dictionary.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var entryModelName in EntryModelNames)
-            {
-                writer.Write(entryModelName.ToString());
+            if (EntryModelNames != null) {
+                writer.WritePropertyName("entryModelNames");
+                writer.WriteArrayStart();
+                foreach (var entryModelName in EntryModelNames)
+                {
+                    writer.Write(entryModelName.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

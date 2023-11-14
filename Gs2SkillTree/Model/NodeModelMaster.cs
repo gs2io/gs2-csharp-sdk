@@ -188,7 +188,7 @@ namespace Gs2.Gs2SkillTree.Model
         public JsonData ToJson()
         {
             JsonData releaseConsumeActionsJsonData = null;
-            if (ReleaseConsumeActions != null)
+            if (ReleaseConsumeActions != null && ReleaseConsumeActions.Length > 0)
             {
                 releaseConsumeActionsJsonData = new JsonData();
                 foreach (var releaseConsumeAction in ReleaseConsumeActions)
@@ -197,7 +197,7 @@ namespace Gs2.Gs2SkillTree.Model
                 }
             }
             JsonData premiseNodeNamesJsonData = null;
-            if (PremiseNodeNames != null)
+            if (PremiseNodeNames != null && PremiseNodeNames.Length > 0)
             {
                 premiseNodeNamesJsonData = new JsonData();
                 foreach (var premiseNodeName in PremiseNodeNames)

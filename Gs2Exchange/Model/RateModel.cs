@@ -183,7 +183,7 @@ namespace Gs2.Gs2Exchange.Model
         public JsonData ToJson()
         {
             JsonData consumeActionsJsonData = null;
-            if (ConsumeActions != null)
+            if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
                 consumeActionsJsonData = new JsonData();
                 foreach (var consumeAction in ConsumeActions)
@@ -192,7 +192,7 @@ namespace Gs2.Gs2Exchange.Model
                 }
             }
             JsonData skipConsumeActionsJsonData = null;
-            if (SkipConsumeActions != null)
+            if (SkipConsumeActions != null && SkipConsumeActions.Length > 0)
             {
                 skipConsumeActionsJsonData = new JsonData();
                 foreach (var skipConsumeAction in SkipConsumeActions)
@@ -201,7 +201,7 @@ namespace Gs2.Gs2Exchange.Model
                 }
             }
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)

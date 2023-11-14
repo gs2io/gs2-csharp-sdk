@@ -35,7 +35,9 @@ using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Quest.Request;
-using Gs2.Core.Model;
+using Gs2.Gs2Quest.Model;
+using Gs2.Util.LitJson;
+using AcquireAction = Gs2.Core.Model.AcquireAction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK

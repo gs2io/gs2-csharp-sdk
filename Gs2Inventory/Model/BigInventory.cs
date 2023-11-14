@@ -175,7 +175,7 @@ namespace Gs2.Gs2Inventory.Model
         public JsonData ToJson()
         {
             JsonData bigItemsJsonData = null;
-            if (BigItems != null)
+            if (BigItems != null && BigItems.Length > 0)
             {
                 bigItemsJsonData = new JsonData();
                 foreach (var bigItem in BigItems)

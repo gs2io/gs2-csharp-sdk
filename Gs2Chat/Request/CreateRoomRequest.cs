@@ -98,7 +98,7 @@ namespace Gs2.Gs2Chat.Request
         public override JsonData ToJson()
         {
             JsonData whiteListUserIdsJsonData = null;
-            if (WhiteListUserIds != null)
+            if (WhiteListUserIds != null && WhiteListUserIds.Length > 0)
             {
                 whiteListUserIdsJsonData = new JsonData();
                 foreach (var whiteListUserId in WhiteListUserIds)
@@ -139,12 +139,15 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("password");
                 writer.Write(Password.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var whiteListUserId in WhiteListUserIds)
-            {
-                writer.Write(whiteListUserId.ToString());
+            if (WhiteListUserIds != null) {
+                writer.WritePropertyName("whiteListUserIds");
+                writer.WriteArrayStart();
+                foreach (var whiteListUserId in WhiteListUserIds)
+                {
+                    writer.Write(whiteListUserId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

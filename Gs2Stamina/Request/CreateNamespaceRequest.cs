@@ -35,7 +35,7 @@ namespace Gs2.Gs2Stamina.Request
 	{
         public string Name { set; get; }
         public string Description { set; get; }
-        public Gs2.Gs2Stamina.Model.ScriptSetting OverflowTriggerScript { set; get; }
+        public string OverflowTriggerScript { set; get; }
         public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; }
 
         public CreateNamespaceRequest WithName(string name) {
@@ -48,7 +48,7 @@ namespace Gs2.Gs2Stamina.Request
             return this;
         }
 
-        public CreateNamespaceRequest WithOverflowTriggerScript(Gs2.Gs2Stamina.Model.ScriptSetting overflowTriggerScript) {
+        public CreateNamespaceRequest WithOverflowTriggerScript(string overflowTriggerScript) {
             this.OverflowTriggerScript = overflowTriggerScript;
             return this;
         }
@@ -69,7 +69,7 @@ namespace Gs2.Gs2Stamina.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithOverflowTriggerScript(!data.Keys.Contains("overflowTriggerScript") || data["overflowTriggerScript"] == null ? null : Gs2.Gs2Stamina.Model.ScriptSetting.FromJson(data["overflowTriggerScript"]))
+                .WithOverflowTriggerScript(!data.Keys.Contains("overflowTriggerScript") || data["overflowTriggerScript"] == null ? null : data["overflowTriggerScript"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Stamina.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -78,7 +78,7 @@ namespace Gs2.Gs2Stamina.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
-                ["overflowTriggerScript"] = OverflowTriggerScript?.ToJson(),
+                ["overflowTriggerScript"] = OverflowTriggerScript,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -95,7 +95,8 @@ namespace Gs2.Gs2Stamina.Request
                 writer.Write(Description.ToString());
             }
             if (OverflowTriggerScript != null) {
-                OverflowTriggerScript.WriteJson(writer);
+                writer.WritePropertyName("overflowTriggerScript");
+                writer.Write(OverflowTriggerScript.ToString());
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

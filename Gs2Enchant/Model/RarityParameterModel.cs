@@ -160,7 +160,7 @@ namespace Gs2.Gs2Enchant.Model
         public JsonData ToJson()
         {
             JsonData parameterCountsJsonData = null;
-            if (ParameterCounts != null)
+            if (ParameterCounts != null && ParameterCounts.Length > 0)
             {
                 parameterCountsJsonData = new JsonData();
                 foreach (var parameterCount in ParameterCounts)
@@ -169,7 +169,7 @@ namespace Gs2.Gs2Enchant.Model
                 }
             }
             JsonData parametersJsonData = null;
-            if (Parameters != null)
+            if (Parameters != null && Parameters.Length > 0)
             {
                 parametersJsonData = new JsonData();
                 foreach (var parameter in Parameters)

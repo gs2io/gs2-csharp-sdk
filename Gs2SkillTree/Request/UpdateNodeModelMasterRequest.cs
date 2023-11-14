@@ -101,7 +101,7 @@ namespace Gs2.Gs2SkillTree.Request
         public override JsonData ToJson()
         {
             JsonData releaseConsumeActionsJsonData = null;
-            if (ReleaseConsumeActions != null)
+            if (ReleaseConsumeActions != null && ReleaseConsumeActions.Length > 0)
             {
                 releaseConsumeActionsJsonData = new JsonData();
                 foreach (var releaseConsumeAction in ReleaseConsumeActions)
@@ -110,7 +110,7 @@ namespace Gs2.Gs2SkillTree.Request
                 }
             }
             JsonData premiseNodeNamesJsonData = null;
-            if (PremiseNodeNames != null)
+            if (PremiseNodeNames != null && PremiseNodeNames.Length > 0)
             {
                 premiseNodeNamesJsonData = new JsonData();
                 foreach (var premiseNodeName in PremiseNodeNames)
@@ -148,24 +148,30 @@ namespace Gs2.Gs2SkillTree.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var releaseConsumeAction in ReleaseConsumeActions)
-            {
-                if (releaseConsumeAction != null) {
-                    releaseConsumeAction.WriteJson(writer);
+            if (ReleaseConsumeActions != null) {
+                writer.WritePropertyName("releaseConsumeActions");
+                writer.WriteArrayStart();
+                foreach (var releaseConsumeAction in ReleaseConsumeActions)
+                {
+                    if (releaseConsumeAction != null) {
+                        releaseConsumeAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (RestrainReturnRate != null) {
                 writer.WritePropertyName("restrainReturnRate");
                 writer.Write(float.Parse(RestrainReturnRate.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var premiseNodeName in PremiseNodeNames)
-            {
-                writer.Write(premiseNodeName.ToString());
+            if (PremiseNodeNames != null) {
+                writer.WritePropertyName("premiseNodeNames");
+                writer.WriteArrayStart();
+                foreach (var premiseNodeName in PremiseNodeNames)
+                {
+                    writer.Write(premiseNodeName.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

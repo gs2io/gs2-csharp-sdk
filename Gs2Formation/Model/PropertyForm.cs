@@ -206,7 +206,7 @@ namespace Gs2.Gs2Formation.Model
         public JsonData ToJson()
         {
             JsonData slotsJsonData = null;
-            if (Slots != null)
+            if (Slots != null && Slots.Length > 0)
             {
                 slotsJsonData = new JsonData();
                 foreach (var slot in Slots)

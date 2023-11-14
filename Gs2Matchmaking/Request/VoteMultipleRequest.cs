@@ -80,7 +80,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public override JsonData ToJson()
         {
             JsonData signedBallotsJsonData = null;
-            if (SignedBallots != null)
+            if (SignedBallots != null && SignedBallots.Length > 0)
             {
                 signedBallotsJsonData = new JsonData();
                 foreach (var signedBallot in SignedBallots)
@@ -89,7 +89,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 }
             }
             JsonData gameResultsJsonData = null;
-            if (GameResults != null)
+            if (GameResults != null && GameResults.Length > 0)
             {
                 gameResultsJsonData = new JsonData();
                 foreach (var gameResult in GameResults)
@@ -112,22 +112,28 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var signedBallot in SignedBallots)
-            {
-                if (signedBallot != null) {
-                    signedBallot.WriteJson(writer);
+            if (SignedBallots != null) {
+                writer.WritePropertyName("signedBallots");
+                writer.WriteArrayStart();
+                foreach (var signedBallot in SignedBallots)
+                {
+                    if (signedBallot != null) {
+                        signedBallot.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var gameResult in GameResults)
-            {
-                if (gameResult != null) {
-                    gameResult.WriteJson(writer);
+            if (GameResults != null) {
+                writer.WritePropertyName("gameResults");
+                writer.WriteArrayStart();
+                foreach (var gameResult in GameResults)
+                {
+                    if (gameResult != null) {
+                        gameResult.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());

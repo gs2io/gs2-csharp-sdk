@@ -62,7 +62,7 @@ namespace Gs2.Gs2Formation.Model
         public JsonData ToJson()
         {
             JsonData configJsonData = null;
-            if (Config != null)
+            if (Config != null && Config.Length > 0)
             {
                 configJsonData = new JsonData();
                 foreach (var confi in Config)

@@ -182,7 +182,7 @@ namespace Gs2.Gs2Mission.Model
         public JsonData ToJson()
         {
             JsonData valuesJsonData = null;
-            if (Values != null)
+            if (Values != null && Values.Length > 0)
             {
                 valuesJsonData = new JsonData();
                 foreach (var value in Values)

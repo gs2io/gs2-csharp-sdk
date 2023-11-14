@@ -129,7 +129,7 @@ namespace Gs2.Gs2LoginReward.Request
         public override JsonData ToJson()
         {
             JsonData rewardsJsonData = null;
-            if (Rewards != null)
+            if (Rewards != null && Rewards.Length > 0)
             {
                 rewardsJsonData = new JsonData();
                 foreach (var reward in Rewards)
@@ -138,7 +138,7 @@ namespace Gs2.Gs2LoginReward.Request
                 }
             }
             JsonData missedReceiveReliefConsumeActionsJsonData = null;
-            if (MissedReceiveReliefConsumeActions != null)
+            if (MissedReceiveReliefConsumeActions != null && MissedReceiveReliefConsumeActions.Length > 0)
             {
                 missedReceiveReliefConsumeActionsJsonData = new JsonData();
                 foreach (var missedReceiveReliefConsumeAction in MissedReceiveReliefConsumeActions)
@@ -196,26 +196,32 @@ namespace Gs2.Gs2LoginReward.Request
                 writer.WritePropertyName("repeat");
                 writer.Write(Repeat.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var reward in Rewards)
-            {
-                if (reward != null) {
-                    reward.WriteJson(writer);
+            if (Rewards != null) {
+                writer.WritePropertyName("rewards");
+                writer.WriteArrayStart();
+                foreach (var reward in Rewards)
+                {
+                    if (reward != null) {
+                        reward.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (MissedReceiveRelief != null) {
                 writer.WritePropertyName("missedReceiveRelief");
                 writer.Write(MissedReceiveRelief.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var missedReceiveReliefConsumeAction in MissedReceiveReliefConsumeActions)
-            {
-                if (missedReceiveReliefConsumeAction != null) {
-                    missedReceiveReliefConsumeAction.WriteJson(writer);
+            if (MissedReceiveReliefConsumeActions != null) {
+                writer.WritePropertyName("missedReceiveReliefConsumeActions");
+                writer.WriteArrayStart();
+                foreach (var missedReceiveReliefConsumeAction in MissedReceiveReliefConsumeActions)
+                {
+                    if (missedReceiveReliefConsumeAction != null) {
+                        missedReceiveReliefConsumeAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

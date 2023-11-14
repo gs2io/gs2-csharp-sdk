@@ -78,7 +78,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public JsonData ToJson()
         {
             JsonData roleAliasesJsonData = null;
-            if (RoleAliases != null)
+            if (RoleAliases != null && RoleAliases.Length > 0)
             {
                 roleAliasesJsonData = new JsonData();
                 foreach (var roleAlias in RoleAliases)
@@ -87,7 +87,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 }
             }
             JsonData participantsJsonData = null;
-            if (Participants != null)
+            if (Participants != null && Participants.Length > 0)
             {
                 participantsJsonData = new JsonData();
                 foreach (var participant in Participants)

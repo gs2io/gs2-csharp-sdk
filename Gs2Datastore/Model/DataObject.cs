@@ -210,7 +210,7 @@ namespace Gs2.Gs2Datastore.Model
         public JsonData ToJson()
         {
             JsonData allowUserIdsJsonData = null;
-            if (AllowUserIds != null)
+            if (AllowUserIds != null && AllowUserIds.Length > 0)
             {
                 allowUserIdsJsonData = new JsonData();
                 foreach (var allowUserId in AllowUserIds)

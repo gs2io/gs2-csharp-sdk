@@ -172,7 +172,7 @@ namespace Gs2.Gs2Experience.Model
         public JsonData ToJson()
         {
             JsonData acquireActionRatesJsonData = null;
-            if (AcquireActionRates != null)
+            if (AcquireActionRates != null && AcquireActionRates.Length > 0)
             {
                 acquireActionRatesJsonData = new JsonData();
                 foreach (var acquireActionRate in AcquireActionRates)

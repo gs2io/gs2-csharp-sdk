@@ -98,7 +98,7 @@ namespace Gs2.Gs2Enhance.Request
         public override JsonData ToJson()
         {
             JsonData materialsJsonData = null;
-            if (Materials != null)
+            if (Materials != null && Materials.Length > 0)
             {
                 materialsJsonData = new JsonData();
                 foreach (var material in Materials)
@@ -135,14 +135,17 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("targetItemSetId");
                 writer.Write(TargetItemSetId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var material in Materials)
-            {
-                if (material != null) {
-                    material.WriteJson(writer);
+            if (Materials != null) {
+                writer.WritePropertyName("materials");
+                writer.WriteArrayStart();
+                foreach (var material in Materials)
+                {
+                    if (material != null) {
+                        material.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (Force != null) {
                 writer.WritePropertyName("force");
                 writer.Write(bool.Parse(Force.ToString()));

@@ -204,7 +204,7 @@ namespace Gs2.Gs2Quest.Model
         public JsonData ToJson()
         {
             JsonData contentsJsonData = null;
-            if (Contents != null)
+            if (Contents != null && Contents.Length > 0)
             {
                 contentsJsonData = new JsonData();
                 foreach (var content in Contents)
@@ -213,7 +213,7 @@ namespace Gs2.Gs2Quest.Model
                 }
             }
             JsonData firstCompleteAcquireActionsJsonData = null;
-            if (FirstCompleteAcquireActions != null)
+            if (FirstCompleteAcquireActions != null && FirstCompleteAcquireActions.Length > 0)
             {
                 firstCompleteAcquireActionsJsonData = new JsonData();
                 foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
@@ -222,7 +222,7 @@ namespace Gs2.Gs2Quest.Model
                 }
             }
             JsonData consumeActionsJsonData = null;
-            if (ConsumeActions != null)
+            if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
                 consumeActionsJsonData = new JsonData();
                 foreach (var consumeAction in ConsumeActions)
@@ -231,7 +231,7 @@ namespace Gs2.Gs2Quest.Model
                 }
             }
             JsonData failedAcquireActionsJsonData = null;
-            if (FailedAcquireActions != null)
+            if (FailedAcquireActions != null && FailedAcquireActions.Length > 0)
             {
                 failedAcquireActionsJsonData = new JsonData();
                 foreach (var failedAcquireAction in FailedAcquireActions)
@@ -240,7 +240,7 @@ namespace Gs2.Gs2Quest.Model
                 }
             }
             JsonData premiseQuestNamesJsonData = null;
-            if (PremiseQuestNames != null)
+            if (PremiseQuestNames != null && PremiseQuestNames.Length > 0)
             {
                 premiseQuestNamesJsonData = new JsonData();
                 foreach (var premiseQuestName in PremiseQuestNames)

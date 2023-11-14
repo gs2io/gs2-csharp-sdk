@@ -195,7 +195,7 @@ namespace Gs2.Gs2Deploy.Model
         public JsonData ToJson()
         {
             JsonData rollbackAfterJsonData = null;
-            if (RollbackAfter != null)
+            if (RollbackAfter != null && RollbackAfter.Length > 0)
             {
                 rollbackAfterJsonData = new JsonData();
                 foreach (var rollbackAfter in RollbackAfter)
@@ -204,7 +204,7 @@ namespace Gs2.Gs2Deploy.Model
                 }
             }
             JsonData outputFieldsJsonData = null;
-            if (OutputFields != null)
+            if (OutputFields != null && OutputFields.Length > 0)
             {
                 outputFieldsJsonData = new JsonData();
                 foreach (var outputField in OutputFields)

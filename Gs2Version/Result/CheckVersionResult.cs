@@ -73,7 +73,7 @@ namespace Gs2.Gs2Version.Result
         public JsonData ToJson()
         {
             JsonData warningsJsonData = null;
-            if (Warnings != null)
+            if (Warnings != null && Warnings.Length > 0)
             {
                 warningsJsonData = new JsonData();
                 foreach (var warning in Warnings)
@@ -82,7 +82,7 @@ namespace Gs2.Gs2Version.Result
                 }
             }
             JsonData errorsJsonData = null;
-            if (Errors != null)
+            if (Errors != null && Errors.Length > 0)
             {
                 errorsJsonData = new JsonData();
                 foreach (var error in Errors)
@@ -104,22 +104,28 @@ namespace Gs2.Gs2Version.Result
                 writer.WritePropertyName("projectToken");
                 writer.Write(ProjectToken.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var warning in Warnings)
-            {
-                if (warning != null) {
-                    warning.WriteJson(writer);
+            if (Warnings != null) {
+                writer.WritePropertyName("warnings");
+                writer.WriteArrayStart();
+                foreach (var warning in Warnings)
+                {
+                    if (warning != null) {
+                        warning.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var error in Errors)
-            {
-                if (error != null) {
-                    error.WriteJson(writer);
+            if (Errors != null) {
+                writer.WritePropertyName("errors");
+                writer.WriteArrayStart();
+                foreach (var error in Errors)
+                {
+                    if (error != null) {
+                        error.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
     }

@@ -158,7 +158,7 @@ namespace Gs2.Gs2Friend.Model
         public JsonData ToJson()
         {
             JsonData targetUserIdsJsonData = null;
-            if (TargetUserIds != null)
+            if (TargetUserIds != null && TargetUserIds.Length > 0)
             {
                 targetUserIdsJsonData = new JsonData();
                 foreach (var targetUserId in TargetUserIds)

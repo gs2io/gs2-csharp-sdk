@@ -179,7 +179,7 @@ namespace Gs2.Gs2Chat.Model
         public JsonData ToJson()
         {
             JsonData whiteListUserIdsJsonData = null;
-            if (WhiteListUserIds != null)
+            if (WhiteListUserIds != null && WhiteListUserIds.Length > 0)
             {
                 whiteListUserIdsJsonData = new JsonData();
                 foreach (var whiteListUserId in WhiteListUserIds)

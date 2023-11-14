@@ -135,7 +135,7 @@ namespace Gs2.Gs2Quest.Request
         public override JsonData ToJson()
         {
             JsonData contentsJsonData = null;
-            if (Contents != null)
+            if (Contents != null && Contents.Length > 0)
             {
                 contentsJsonData = new JsonData();
                 foreach (var content in Contents)
@@ -144,7 +144,7 @@ namespace Gs2.Gs2Quest.Request
                 }
             }
             JsonData firstCompleteAcquireActionsJsonData = null;
-            if (FirstCompleteAcquireActions != null)
+            if (FirstCompleteAcquireActions != null && FirstCompleteAcquireActions.Length > 0)
             {
                 firstCompleteAcquireActionsJsonData = new JsonData();
                 foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
@@ -153,7 +153,7 @@ namespace Gs2.Gs2Quest.Request
                 }
             }
             JsonData consumeActionsJsonData = null;
-            if (ConsumeActions != null)
+            if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
                 consumeActionsJsonData = new JsonData();
                 foreach (var consumeAction in ConsumeActions)
@@ -162,7 +162,7 @@ namespace Gs2.Gs2Quest.Request
                 }
             }
             JsonData failedAcquireActionsJsonData = null;
-            if (FailedAcquireActions != null)
+            if (FailedAcquireActions != null && FailedAcquireActions.Length > 0)
             {
                 failedAcquireActionsJsonData = new JsonData();
                 foreach (var failedAcquireAction in FailedAcquireActions)
@@ -171,7 +171,7 @@ namespace Gs2.Gs2Quest.Request
                 }
             }
             JsonData premiseQuestNamesJsonData = null;
-            if (PremiseQuestNames != null)
+            if (PremiseQuestNames != null && PremiseQuestNames.Length > 0)
             {
                 premiseQuestNamesJsonData = new JsonData();
                 foreach (var premiseQuestName in PremiseQuestNames)
@@ -217,48 +217,63 @@ namespace Gs2.Gs2Quest.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var content in Contents)
-            {
-                if (content != null) {
-                    content.WriteJson(writer);
+            if (Contents != null) {
+                writer.WritePropertyName("contents");
+                writer.WriteArrayStart();
+                foreach (var content in Contents)
+                {
+                    if (content != null) {
+                        content.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ChallengePeriodEventId != null) {
                 writer.WritePropertyName("challengePeriodEventId");
                 writer.Write(ChallengePeriodEventId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
-            {
-                if (firstCompleteAcquireAction != null) {
-                    firstCompleteAcquireAction.WriteJson(writer);
+            if (FirstCompleteAcquireActions != null) {
+                writer.WritePropertyName("firstCompleteAcquireActions");
+                writer.WriteArrayStart();
+                foreach (var firstCompleteAcquireAction in FirstCompleteAcquireActions)
+                {
+                    if (firstCompleteAcquireAction != null) {
+                        firstCompleteAcquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var consumeAction in ConsumeActions)
-            {
-                if (consumeAction != null) {
-                    consumeAction.WriteJson(writer);
+            if (ConsumeActions != null) {
+                writer.WritePropertyName("consumeActions");
+                writer.WriteArrayStart();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    if (consumeAction != null) {
+                        consumeAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var failedAcquireAction in FailedAcquireActions)
-            {
-                if (failedAcquireAction != null) {
-                    failedAcquireAction.WriteJson(writer);
+            if (FailedAcquireActions != null) {
+                writer.WritePropertyName("failedAcquireActions");
+                writer.WriteArrayStart();
+                foreach (var failedAcquireAction in FailedAcquireActions)
+                {
+                    if (failedAcquireAction != null) {
+                        failedAcquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var premiseQuestName in PremiseQuestNames)
-            {
-                writer.Write(premiseQuestName.ToString());
+            if (PremiseQuestNames != null) {
+                writer.WritePropertyName("premiseQuestNames");
+                writer.WriteArrayStart();
+                foreach (var premiseQuestName in PremiseQuestNames)
+                {
+                    writer.Write(premiseQuestName.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

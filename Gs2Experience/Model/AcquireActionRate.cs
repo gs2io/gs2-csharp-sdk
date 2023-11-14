@@ -78,7 +78,7 @@ namespace Gs2.Gs2Experience.Model
         public JsonData ToJson()
         {
             JsonData ratesJsonData = null;
-            if (Rates != null)
+            if (Rates != null && Rates.Length > 0)
             {
                 ratesJsonData = new JsonData();
                 foreach (var rate in Rates)
@@ -87,7 +87,7 @@ namespace Gs2.Gs2Experience.Model
                 }
             }
             JsonData bigRatesJsonData = null;
-            if (BigRates != null)
+            if (BigRates != null && BigRates.Length > 0)
             {
                 bigRatesJsonData = new JsonData();
                 foreach (var bigRate in BigRates)

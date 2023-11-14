@@ -55,7 +55,7 @@ namespace Gs2.Gs2Idle.Model
         public JsonData ToJson()
         {
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)

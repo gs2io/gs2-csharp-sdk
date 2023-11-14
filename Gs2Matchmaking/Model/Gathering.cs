@@ -190,7 +190,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public JsonData ToJson()
         {
             JsonData attributeRangesJsonData = null;
-            if (AttributeRanges != null)
+            if (AttributeRanges != null && AttributeRanges.Length > 0)
             {
                 attributeRangesJsonData = new JsonData();
                 foreach (var attributeRange in AttributeRanges)
@@ -199,7 +199,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 }
             }
             JsonData capacityOfRolesJsonData = null;
-            if (CapacityOfRoles != null)
+            if (CapacityOfRoles != null && CapacityOfRoles.Length > 0)
             {
                 capacityOfRolesJsonData = new JsonData();
                 foreach (var capacityOfRole in CapacityOfRoles)
@@ -208,7 +208,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 }
             }
             JsonData allowUserIdsJsonData = null;
-            if (AllowUserIds != null)
+            if (AllowUserIds != null && AllowUserIds.Length > 0)
             {
                 allowUserIdsJsonData = new JsonData();
                 foreach (var allowUserId in AllowUserIds)

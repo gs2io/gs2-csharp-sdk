@@ -85,7 +85,7 @@ namespace Gs2.Gs2Experience.Request
         public override JsonData ToJson()
         {
             JsonData valuesJsonData = null;
-            if (Values != null)
+            if (Values != null && Values.Length > 0)
             {
                 valuesJsonData = new JsonData();
                 foreach (var value in Values)
@@ -121,12 +121,15 @@ namespace Gs2.Gs2Experience.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var value in Values)
-            {
-                writer.Write(long.Parse(value.ToString()));
+            if (Values != null) {
+                writer.WritePropertyName("values");
+                writer.WriteArrayStart();
+                foreach (var value in Values)
+                {
+                    writer.Write(long.Parse(value.ToString()));
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

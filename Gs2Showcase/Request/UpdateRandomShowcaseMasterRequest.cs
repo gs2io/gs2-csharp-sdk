@@ -113,7 +113,7 @@ namespace Gs2.Gs2Showcase.Request
         public override JsonData ToJson()
         {
             JsonData displayItemsJsonData = null;
-            if (DisplayItems != null)
+            if (DisplayItems != null && DisplayItems.Length > 0)
             {
                 displayItemsJsonData = new JsonData();
                 foreach (var displayItem in DisplayItems)
@@ -157,14 +157,17 @@ namespace Gs2.Gs2Showcase.Request
                 writer.WritePropertyName("maximumNumberOfChoice");
                 writer.Write(int.Parse(MaximumNumberOfChoice.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var displayItem in DisplayItems)
-            {
-                if (displayItem != null) {
-                    displayItem.WriteJson(writer);
+            if (DisplayItems != null) {
+                writer.WritePropertyName("displayItems");
+                writer.WriteArrayStart();
+                foreach (var displayItem in DisplayItems)
+                {
+                    if (displayItem != null) {
+                        displayItem.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (BaseTimestamp != null) {
                 writer.WritePropertyName("baseTimestamp");
                 writer.Write(long.Parse(BaseTimestamp.ToString()));

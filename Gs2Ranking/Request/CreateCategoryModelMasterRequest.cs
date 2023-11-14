@@ -178,7 +178,7 @@ namespace Gs2.Gs2Ranking.Request
         public override JsonData ToJson()
         {
             JsonData additionalScopesJsonData = null;
-            if (AdditionalScopes != null)
+            if (AdditionalScopes != null && AdditionalScopes.Length > 0)
             {
                 additionalScopesJsonData = new JsonData();
                 foreach (var additionalScope in AdditionalScopes)
@@ -187,7 +187,7 @@ namespace Gs2.Gs2Ranking.Request
                 }
             }
             JsonData ignoreUserIdsJsonData = null;
-            if (IgnoreUserIds != null)
+            if (IgnoreUserIds != null && IgnoreUserIds.Length > 0)
             {
                 ignoreUserIdsJsonData = new JsonData();
                 foreach (var ignoreUserId in IgnoreUserIds)
@@ -272,14 +272,17 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("calculateIntervalMinutes");
                 writer.Write(int.Parse(CalculateIntervalMinutes.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var additionalScope in AdditionalScopes)
-            {
-                if (additionalScope != null) {
-                    additionalScope.WriteJson(writer);
+            if (AdditionalScopes != null) {
+                writer.WritePropertyName("additionalScopes");
+                writer.WriteArrayStart();
+                foreach (var additionalScope in AdditionalScopes)
+                {
+                    if (additionalScope != null) {
+                        additionalScope.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (EntryPeriodEventId != null) {
                 writer.WritePropertyName("entryPeriodEventId");
                 writer.Write(EntryPeriodEventId.ToString());
@@ -288,12 +291,15 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("accessPeriodEventId");
                 writer.Write(AccessPeriodEventId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var ignoreUserId in IgnoreUserIds)
-            {
-                writer.Write(ignoreUserId.ToString());
+            if (IgnoreUserIds != null) {
+                writer.WritePropertyName("ignoreUserIds");
+                writer.WriteArrayStart();
+                foreach (var ignoreUserId in IgnoreUserIds)
+                {
+                    writer.Write(ignoreUserId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (Generation != null) {
                 writer.WritePropertyName("generation");
                 writer.Write(Generation.ToString());

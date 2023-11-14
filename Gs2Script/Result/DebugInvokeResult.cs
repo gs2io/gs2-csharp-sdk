@@ -99,7 +99,7 @@ namespace Gs2.Gs2Script.Result
         public JsonData ToJson()
         {
             JsonData outputJsonData = null;
-            if (Output != null)
+            if (Output != null && Output.Length > 0)
             {
                 outputJsonData = new JsonData();
                 foreach (var outpu in Output)
@@ -144,14 +144,17 @@ namespace Gs2.Gs2Script.Result
                 writer.WritePropertyName("charged");
                 writer.Write(int.Parse(Charged.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var outpu in Output)
-            {
-                if (outpu != null) {
-                    writer.Write(outpu.ToString());
+            if (Output != null) {
+                writer.WritePropertyName("output");
+                writer.WriteArrayStart();
+                foreach (var outpu in Output)
+                {
+                    if (outpu != null) {
+                        writer.Write(outpu.ToString());
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
     }

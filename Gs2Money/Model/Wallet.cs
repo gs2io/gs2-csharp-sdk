@@ -196,7 +196,7 @@ namespace Gs2.Gs2Money.Model
         public JsonData ToJson()
         {
             JsonData detailJsonData = null;
-            if (Detail != null)
+            if (Detail != null && Detail.Length > 0)
             {
                 detailJsonData = new JsonData();
                 foreach (var detai in Detail)

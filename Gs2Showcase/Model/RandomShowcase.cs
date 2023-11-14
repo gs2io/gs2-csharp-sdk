@@ -172,7 +172,7 @@ namespace Gs2.Gs2Showcase.Model
         public JsonData ToJson()
         {
             JsonData displayItemsJsonData = null;
-            if (DisplayItems != null)
+            if (DisplayItems != null && DisplayItems.Length > 0)
             {
                 displayItemsJsonData = new JsonData();
                 foreach (var displayItem in DisplayItems)

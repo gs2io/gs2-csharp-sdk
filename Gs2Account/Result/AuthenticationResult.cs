@@ -78,7 +78,7 @@ namespace Gs2.Gs2Account.Result
         public JsonData ToJson()
         {
             JsonData banStatusesJsonData = null;
-            if (BanStatuses != null)
+            if (BanStatuses != null && BanStatuses.Length > 0)
             {
                 banStatusesJsonData = new JsonData();
                 foreach (var banStatus in BanStatuses)
@@ -100,14 +100,17 @@ namespace Gs2.Gs2Account.Result
             if (Item != null) {
                 Item.WriteJson(writer);
             }
-            writer.WriteArrayStart();
-            foreach (var banStatus in BanStatuses)
-            {
-                if (banStatus != null) {
-                    banStatus.WriteJson(writer);
+            if (BanStatuses != null) {
+                writer.WritePropertyName("banStatuses");
+                writer.WriteArrayStart();
+                foreach (var banStatus in BanStatuses)
+                {
+                    if (banStatus != null) {
+                        banStatus.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (Body != null) {
                 writer.WritePropertyName("body");
                 writer.Write(Body.ToString());

@@ -175,7 +175,7 @@ namespace Gs2.Gs2Chat.Model
         public JsonData ToJson()
         {
             JsonData notificationTypesJsonData = null;
-            if (NotificationTypes != null)
+            if (NotificationTypes != null && NotificationTypes.Length > 0)
             {
                 notificationTypesJsonData = new JsonData();
                 foreach (var notificationType in NotificationTypes)

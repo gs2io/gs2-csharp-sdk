@@ -155,7 +155,7 @@ namespace Gs2.Gs2Ranking.Model
         public JsonData ToJson()
         {
             JsonData lastCalculatedAtsJsonData = null;
-            if (LastCalculatedAts != null)
+            if (LastCalculatedAts != null && LastCalculatedAts.Length > 0)
             {
                 lastCalculatedAtsJsonData = new JsonData();
                 foreach (var lastCalculatedAt in LastCalculatedAts)

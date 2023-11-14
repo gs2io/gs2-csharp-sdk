@@ -169,7 +169,7 @@ namespace Gs2.Gs2SkillTree.Model
         public JsonData ToJson()
         {
             JsonData releaseConsumeActionsJsonData = null;
-            if (ReleaseConsumeActions != null)
+            if (ReleaseConsumeActions != null && ReleaseConsumeActions.Length > 0)
             {
                 releaseConsumeActionsJsonData = new JsonData();
                 foreach (var releaseConsumeAction in ReleaseConsumeActions)
@@ -178,7 +178,7 @@ namespace Gs2.Gs2SkillTree.Model
                 }
             }
             JsonData returnAcquireActionsJsonData = null;
-            if (ReturnAcquireActions != null)
+            if (ReturnAcquireActions != null && ReturnAcquireActions.Length > 0)
             {
                 returnAcquireActionsJsonData = new JsonData();
                 foreach (var returnAcquireAction in ReturnAcquireActions)
@@ -187,7 +187,7 @@ namespace Gs2.Gs2SkillTree.Model
                 }
             }
             JsonData premiseNodeNamesJsonData = null;
-            if (PremiseNodeNames != null)
+            if (PremiseNodeNames != null && PremiseNodeNames.Length > 0)
             {
                 premiseNodeNamesJsonData = new JsonData();
                 foreach (var premiseNodeName in PremiseNodeNames)

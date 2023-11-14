@@ -85,7 +85,7 @@ namespace Gs2.Gs2Showcase.Request
         public override JsonData ToJson()
         {
             JsonData salesItemNamesJsonData = null;
-            if (SalesItemNames != null)
+            if (SalesItemNames != null && SalesItemNames.Length > 0)
             {
                 salesItemNamesJsonData = new JsonData();
                 foreach (var salesItemName in SalesItemNames)
@@ -121,12 +121,15 @@ namespace Gs2.Gs2Showcase.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var salesItemName in SalesItemNames)
-            {
-                writer.Write(salesItemName.ToString());
+            if (SalesItemNames != null) {
+                writer.WritePropertyName("salesItemNames");
+                writer.WriteArrayStart();
+                foreach (var salesItemName in SalesItemNames)
+                {
+                    writer.Write(salesItemName.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

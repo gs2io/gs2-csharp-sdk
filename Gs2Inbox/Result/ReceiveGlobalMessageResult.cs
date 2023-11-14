@@ -57,7 +57,7 @@ namespace Gs2.Gs2Inbox.Result
         public JsonData ToJson()
         {
             JsonData itemJsonData = null;
-            if (Item != null)
+            if (Item != null && Item.Length > 0)
             {
                 itemJsonData = new JsonData();
                 foreach (var ite in Item)
@@ -73,14 +73,17 @@ namespace Gs2.Gs2Inbox.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            writer.WriteArrayStart();
-            foreach (var ite in Item)
-            {
-                if (ite != null) {
-                    ite.WriteJson(writer);
+            if (Item != null) {
+                writer.WritePropertyName("item");
+                writer.WriteArrayStart();
+                foreach (var ite in Item)
+                {
+                    if (ite != null) {
+                        ite.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
     }

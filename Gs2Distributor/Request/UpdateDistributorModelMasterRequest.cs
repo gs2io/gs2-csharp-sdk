@@ -92,7 +92,7 @@ namespace Gs2.Gs2Distributor.Request
         public override JsonData ToJson()
         {
             JsonData whiteListTargetIdsJsonData = null;
-            if (WhiteListTargetIds != null)
+            if (WhiteListTargetIds != null && WhiteListTargetIds.Length > 0)
             {
                 whiteListTargetIdsJsonData = new JsonData();
                 foreach (var whiteListTargetId in WhiteListTargetIds)
@@ -133,12 +133,15 @@ namespace Gs2.Gs2Distributor.Request
                 writer.WritePropertyName("inboxNamespaceId");
                 writer.Write(InboxNamespaceId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var whiteListTargetId in WhiteListTargetIds)
-            {
-                writer.Write(whiteListTargetId.ToString());
+            if (WhiteListTargetIds != null) {
+                writer.WritePropertyName("whiteListTargetIds");
+                writer.WriteArrayStart();
+                foreach (var whiteListTargetId in WhiteListTargetIds)
+                {
+                    writer.Write(whiteListTargetId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

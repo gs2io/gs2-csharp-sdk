@@ -134,7 +134,7 @@ namespace Gs2.Gs2Version.Request
         public override JsonData ToJson()
         {
             JsonData scheduleVersionsJsonData = null;
-            if (ScheduleVersions != null)
+            if (ScheduleVersions != null && ScheduleVersions.Length > 0)
             {
                 scheduleVersionsJsonData = new JsonData();
                 foreach (var scheduleVersion in ScheduleVersions)
@@ -194,14 +194,17 @@ namespace Gs2.Gs2Version.Request
             if (ErrorVersion != null) {
                 ErrorVersion.WriteJson(writer);
             }
-            writer.WriteArrayStart();
-            foreach (var scheduleVersion in ScheduleVersions)
-            {
-                if (scheduleVersion != null) {
-                    scheduleVersion.WriteJson(writer);
+            if (ScheduleVersions != null) {
+                writer.WritePropertyName("scheduleVersions");
+                writer.WriteArrayStart();
+                foreach (var scheduleVersion in ScheduleVersions)
+                {
+                    if (scheduleVersion != null) {
+                        scheduleVersion.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (NeedSignature != null) {
                 writer.WritePropertyName("needSignature");
                 writer.Write(bool.Parse(NeedSignature.ToString()));

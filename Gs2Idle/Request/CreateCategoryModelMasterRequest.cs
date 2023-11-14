@@ -113,7 +113,7 @@ namespace Gs2.Gs2Idle.Request
         public override JsonData ToJson()
         {
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)
@@ -161,14 +161,17 @@ namespace Gs2.Gs2Idle.Request
                 writer.WritePropertyName("defaultMaximumIdleMinutes");
                 writer.Write(int.Parse(DefaultMaximumIdleMinutes.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var acquireAction in AcquireActions)
-            {
-                if (acquireAction != null) {
-                    acquireAction.WriteJson(writer);
+            if (AcquireActions != null) {
+                writer.WritePropertyName("acquireActions");
+                writer.WriteArrayStart();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (IdlePeriodScheduleId != null) {
                 writer.WritePropertyName("idlePeriodScheduleId");
                 writer.Write(IdlePeriodScheduleId.ToString());

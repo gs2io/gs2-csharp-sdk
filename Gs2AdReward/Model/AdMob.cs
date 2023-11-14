@@ -55,7 +55,7 @@ namespace Gs2.Gs2AdReward.Model
         public JsonData ToJson()
         {
             JsonData allowAdUnitIdsJsonData = null;
-            if (AllowAdUnitIds != null)
+            if (AllowAdUnitIds != null && AllowAdUnitIds.Length > 0)
             {
                 allowAdUnitIdsJsonData = new JsonData();
                 foreach (var allowAdUnitId in AllowAdUnitIds)

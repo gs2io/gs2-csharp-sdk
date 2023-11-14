@@ -93,7 +93,7 @@ namespace Gs2.Gs2Quest.Request
         public override JsonData ToJson()
         {
             JsonData rewardsJsonData = null;
-            if (Rewards != null)
+            if (Rewards != null && Rewards.Length > 0)
             {
                 rewardsJsonData = new JsonData();
                 foreach (var reward in Rewards)
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Quest.Request
                 }
             }
             JsonData configJsonData = null;
-            if (Config != null)
+            if (Config != null && Config.Length > 0)
             {
                 configJsonData = new JsonData();
                 foreach (var confi in Config)
@@ -130,26 +130,32 @@ namespace Gs2.Gs2Quest.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var reward in Rewards)
-            {
-                if (reward != null) {
-                    reward.WriteJson(writer);
+            if (Rewards != null) {
+                writer.WritePropertyName("rewards");
+                writer.WriteArrayStart();
+                foreach (var reward in Rewards)
+                {
+                    if (reward != null) {
+                        reward.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (IsComplete != null) {
                 writer.WritePropertyName("isComplete");
                 writer.Write(bool.Parse(IsComplete.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var confi in Config)
-            {
-                if (confi != null) {
-                    confi.WriteJson(writer);
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

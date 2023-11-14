@@ -77,7 +77,7 @@ namespace Gs2.Gs2Version.Request
         public override JsonData ToJson()
         {
             JsonData targetVersionsJsonData = null;
-            if (TargetVersions != null)
+            if (TargetVersions != null && TargetVersions.Length > 0)
             {
                 targetVersionsJsonData = new JsonData();
                 foreach (var targetVersion in TargetVersions)
@@ -103,14 +103,17 @@ namespace Gs2.Gs2Version.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var targetVersion in TargetVersions)
-            {
-                if (targetVersion != null) {
-                    targetVersion.WriteJson(writer);
+            if (TargetVersions != null) {
+                writer.WritePropertyName("targetVersions");
+                writer.WriteArrayStart();
+                foreach (var targetVersion in TargetVersions)
+                {
+                    if (targetVersion != null) {
+                        targetVersion.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

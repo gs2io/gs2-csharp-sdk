@@ -77,7 +77,7 @@ namespace Gs2.Gs2Inbox.Request
         public override JsonData ToJson()
         {
             JsonData receivedGlobalMessageNamesJsonData = null;
-            if (ReceivedGlobalMessageNames != null)
+            if (ReceivedGlobalMessageNames != null && ReceivedGlobalMessageNames.Length > 0)
             {
                 receivedGlobalMessageNamesJsonData = new JsonData();
                 foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)
@@ -103,12 +103,15 @@ namespace Gs2.Gs2Inbox.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)
-            {
-                writer.Write(receivedGlobalMessageName.ToString());
+            if (ReceivedGlobalMessageNames != null) {
+                writer.WritePropertyName("receivedGlobalMessageNames");
+                writer.WriteArrayStart();
+                foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)
+                {
+                    writer.Write(receivedGlobalMessageName.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

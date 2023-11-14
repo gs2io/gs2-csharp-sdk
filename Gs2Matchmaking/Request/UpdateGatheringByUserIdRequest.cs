@@ -84,7 +84,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public override JsonData ToJson()
         {
             JsonData attributeRangesJsonData = null;
-            if (AttributeRanges != null)
+            if (AttributeRanges != null && AttributeRanges.Length > 0)
             {
                 attributeRangesJsonData = new JsonData();
                 foreach (var attributeRange in AttributeRanges)
@@ -115,14 +115,17 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var attributeRange in AttributeRanges)
-            {
-                if (attributeRange != null) {
-                    attributeRange.WriteJson(writer);
+            if (AttributeRanges != null) {
+                writer.WritePropertyName("attributeRanges");
+                writer.WriteArrayStart();
+                foreach (var attributeRange in AttributeRanges)
+                {
+                    if (attributeRange != null) {
+                        attributeRange.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

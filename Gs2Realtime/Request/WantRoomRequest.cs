@@ -71,7 +71,7 @@ namespace Gs2.Gs2Realtime.Request
         public override JsonData ToJson()
         {
             JsonData notificationUserIdsJsonData = null;
-            if (NotificationUserIds != null)
+            if (NotificationUserIds != null && NotificationUserIds.Length > 0)
             {
                 notificationUserIdsJsonData = new JsonData();
                 foreach (var notificationUserId in NotificationUserIds)
@@ -97,12 +97,15 @@ namespace Gs2.Gs2Realtime.Request
                 writer.WritePropertyName("name");
                 writer.Write(Name.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var notificationUserId in NotificationUserIds)
-            {
-                writer.Write(notificationUserId.ToString());
+            if (NotificationUserIds != null) {
+                writer.WritePropertyName("notificationUserIds");
+                writer.WriteArrayStart();
+                foreach (var notificationUserId in NotificationUserIds)
+                {
+                    writer.Write(notificationUserId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

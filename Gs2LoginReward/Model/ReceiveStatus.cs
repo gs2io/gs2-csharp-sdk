@@ -189,7 +189,7 @@ namespace Gs2.Gs2LoginReward.Model
         public JsonData ToJson()
         {
             JsonData receivedStepsJsonData = null;
-            if (ReceivedSteps != null)
+            if (ReceivedSteps != null && ReceivedSteps.Length > 0)
             {
                 receivedStepsJsonData = new JsonData();
                 foreach (var receivedStep in ReceivedSteps)

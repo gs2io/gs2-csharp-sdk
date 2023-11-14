@@ -124,7 +124,7 @@ namespace Gs2.Gs2Exchange.Request
         public override JsonData ToJson()
         {
             JsonData skipConsumeActionsJsonData = null;
-            if (SkipConsumeActions != null)
+            if (SkipConsumeActions != null && SkipConsumeActions.Length > 0)
             {
                 skipConsumeActionsJsonData = new JsonData();
                 foreach (var skipConsumeAction in SkipConsumeActions)
@@ -133,7 +133,7 @@ namespace Gs2.Gs2Exchange.Request
                 }
             }
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)
@@ -142,7 +142,7 @@ namespace Gs2.Gs2Exchange.Request
                 }
             }
             JsonData consumeActionsJsonData = null;
-            if (ConsumeActions != null)
+            if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
                 consumeActionsJsonData = new JsonData();
                 foreach (var consumeAction in ConsumeActions)
@@ -195,30 +195,39 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("enableSkip");
                 writer.Write(bool.Parse(EnableSkip.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var skipConsumeAction in SkipConsumeActions)
-            {
-                if (skipConsumeAction != null) {
-                    skipConsumeAction.WriteJson(writer);
+            if (SkipConsumeActions != null) {
+                writer.WritePropertyName("skipConsumeActions");
+                writer.WriteArrayStart();
+                foreach (var skipConsumeAction in SkipConsumeActions)
+                {
+                    if (skipConsumeAction != null) {
+                        skipConsumeAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var acquireAction in AcquireActions)
-            {
-                if (acquireAction != null) {
-                    acquireAction.WriteJson(writer);
+            if (AcquireActions != null) {
+                writer.WritePropertyName("acquireActions");
+                writer.WriteArrayStart();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var consumeAction in ConsumeActions)
-            {
-                if (consumeAction != null) {
-                    consumeAction.WriteJson(writer);
+            if (ConsumeActions != null) {
+                writer.WritePropertyName("consumeActions");
+                writer.WriteArrayStart();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    if (consumeAction != null) {
+                        consumeAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

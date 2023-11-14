@@ -62,7 +62,7 @@ namespace Gs2.Gs2Script.Model
         public JsonData ToJson()
         {
             JsonData usedJsonData = null;
-            if (Used != null)
+            if (Used != null && Used.Length > 0)
             {
                 usedJsonData = new JsonData();
                 foreach (var use in Used)

@@ -91,7 +91,7 @@ namespace Gs2.Gs2Quest.Request
         public override JsonData ToJson()
         {
             JsonData configJsonData = null;
-            if (Config != null)
+            if (Config != null && Config.Length > 0)
             {
                 configJsonData = new JsonData();
                 foreach (var confi in Config)
@@ -127,14 +127,17 @@ namespace Gs2.Gs2Quest.Request
                 writer.WritePropertyName("force");
                 writer.Write(bool.Parse(Force.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var confi in Config)
-            {
-                if (confi != null) {
-                    confi.WriteJson(writer);
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

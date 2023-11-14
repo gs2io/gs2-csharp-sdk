@@ -158,7 +158,7 @@ namespace Gs2.Gs2Inbox.Model
         public JsonData ToJson()
         {
             JsonData receivedGlobalMessageNamesJsonData = null;
-            if (ReceivedGlobalMessageNames != null)
+            if (ReceivedGlobalMessageNames != null && ReceivedGlobalMessageNames.Length > 0)
             {
                 receivedGlobalMessageNamesJsonData = new JsonData();
                 foreach (var receivedGlobalMessageName in ReceivedGlobalMessageNames)

@@ -188,7 +188,7 @@ namespace Gs2.Gs2Enhance.Model
         public JsonData ToJson()
         {
             JsonData acquireExperienceHierarchyJsonData = null;
-            if (AcquireExperienceHierarchy != null)
+            if (AcquireExperienceHierarchy != null && AcquireExperienceHierarchy.Length > 0)
             {
                 acquireExperienceHierarchyJsonData = new JsonData();
                 foreach (var acquireExperienceHierarch in AcquireExperienceHierarchy)
@@ -197,7 +197,7 @@ namespace Gs2.Gs2Enhance.Model
                 }
             }
             JsonData bonusRatesJsonData = null;
-            if (BonusRates != null)
+            if (BonusRates != null && BonusRates.Length > 0)
             {
                 bonusRatesJsonData = new JsonData();
                 foreach (var bonusRate in BonusRates)

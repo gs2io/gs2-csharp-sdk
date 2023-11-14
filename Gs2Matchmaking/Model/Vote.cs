@@ -175,7 +175,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public JsonData ToJson()
         {
             JsonData writtenBallotsJsonData = null;
-            if (WrittenBallots != null)
+            if (WrittenBallots != null && WrittenBallots.Length > 0)
             {
                 writtenBallotsJsonData = new JsonData();
                 foreach (var writtenBallot in WrittenBallots)

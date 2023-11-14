@@ -75,7 +75,7 @@ namespace Gs2.Gs2Stamina
                 if (request.OverflowTriggerScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowTriggerScript");
-                    request.OverflowTriggerScript.WriteJson(jsonWriter);
+                    jsonWriter.Write(request.OverflowTriggerScript.ToString());
                 }
                 if (request.LogSetting != null)
                 {
@@ -296,7 +296,7 @@ namespace Gs2.Gs2Stamina
                 if (request.OverflowTriggerScript != null)
                 {
                     jsonWriter.WritePropertyName("overflowTriggerScript");
-                    request.OverflowTriggerScript.WriteJson(jsonWriter);
+                    jsonWriter.Write(request.OverflowTriggerScript.ToString());
                 }
                 if (request.LogSetting != null)
                 {

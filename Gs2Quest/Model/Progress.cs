@@ -186,7 +186,7 @@ namespace Gs2.Gs2Quest.Model
         public JsonData ToJson()
         {
             JsonData rewardsJsonData = null;
-            if (Rewards != null)
+            if (Rewards != null && Rewards.Length > 0)
             {
                 rewardsJsonData = new JsonData();
                 foreach (var reward in Rewards)

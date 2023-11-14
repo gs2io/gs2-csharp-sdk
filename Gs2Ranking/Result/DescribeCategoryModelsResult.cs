@@ -57,7 +57,7 @@ namespace Gs2.Gs2Ranking.Result
         public JsonData ToJson()
         {
             JsonData itemsJsonData = null;
-            if (Items != null)
+            if (Items != null && Items.Length > 0)
             {
                 itemsJsonData = new JsonData();
                 foreach (var item in Items)
@@ -73,14 +73,17 @@ namespace Gs2.Gs2Ranking.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            writer.WriteArrayStart();
-            foreach (var item in Items)
-            {
-                if (item != null) {
-                    item.WriteJson(writer);
+            if (Items != null) {
+                writer.WritePropertyName("items");
+                writer.WriteArrayStart();
+                foreach (var item in Items)
+                {
+                    if (item != null) {
+                        item.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
     }

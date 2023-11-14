@@ -99,7 +99,7 @@ namespace Gs2.Gs2Showcase.Model
         public JsonData ToJson()
         {
             JsonData consumeActionsJsonData = null;
-            if (ConsumeActions != null)
+            if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
                 consumeActionsJsonData = new JsonData();
                 foreach (var consumeAction in ConsumeActions)
@@ -108,7 +108,7 @@ namespace Gs2.Gs2Showcase.Model
                 }
             }
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)

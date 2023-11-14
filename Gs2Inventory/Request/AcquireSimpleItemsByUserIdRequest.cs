@@ -84,7 +84,7 @@ namespace Gs2.Gs2Inventory.Request
         public override JsonData ToJson()
         {
             JsonData acquireCountsJsonData = null;
-            if (AcquireCounts != null)
+            if (AcquireCounts != null && AcquireCounts.Length > 0)
             {
                 acquireCountsJsonData = new JsonData();
                 foreach (var acquireCount in AcquireCounts)
@@ -115,14 +115,17 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var acquireCount in AcquireCounts)
-            {
-                if (acquireCount != null) {
-                    acquireCount.WriteJson(writer);
+            if (AcquireCounts != null) {
+                writer.WritePropertyName("acquireCounts");
+                writer.WriteArrayStart();
+                foreach (var acquireCount in AcquireCounts)
+                {
+                    if (acquireCount != null) {
+                        acquireCount.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

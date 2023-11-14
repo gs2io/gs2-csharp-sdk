@@ -244,7 +244,7 @@ namespace Gs2.Gs2Inventory.Model
         public JsonData ToJson()
         {
             JsonData referenceOfJsonData = null;
-            if (ReferenceOf != null)
+            if (ReferenceOf != null && ReferenceOf.Length > 0)
             {
                 referenceOfJsonData = new JsonData();
                 foreach (var referenceO in ReferenceOf)

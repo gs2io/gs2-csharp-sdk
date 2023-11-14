@@ -62,7 +62,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public JsonData ToJson()
         {
             JsonData gameResultsJsonData = null;
-            if (GameResults != null)
+            if (GameResults != null && GameResults.Length > 0)
             {
                 gameResultsJsonData = new JsonData();
                 foreach (var gameResult in GameResults)

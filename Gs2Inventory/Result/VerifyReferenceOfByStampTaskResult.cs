@@ -85,7 +85,7 @@ namespace Gs2.Gs2Inventory.Result
         public JsonData ToJson()
         {
             JsonData itemJsonData = null;
-            if (Item != null)
+            if (Item != null && Item.Length > 0)
             {
                 itemJsonData = new JsonData();
                 foreach (var ite in Item)
@@ -105,14 +105,17 @@ namespace Gs2.Gs2Inventory.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            writer.WriteArrayStart();
-            foreach (var ite in Item)
-            {
-                if (ite != null) {
-                    writer.Write(ite.ToString());
+            if (Item != null) {
+                writer.WritePropertyName("item");
+                writer.WriteArrayStart();
+                foreach (var ite in Item)
+                {
+                    if (ite != null) {
+                        writer.Write(ite.ToString());
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ItemSet != null) {
                 ItemSet.WriteJson(writer);
             }

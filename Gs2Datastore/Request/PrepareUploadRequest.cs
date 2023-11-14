@@ -105,7 +105,7 @@ namespace Gs2.Gs2Datastore.Request
         public override JsonData ToJson()
         {
             JsonData allowUserIdsJsonData = null;
-            if (AllowUserIds != null)
+            if (AllowUserIds != null && AllowUserIds.Length > 0)
             {
                 allowUserIdsJsonData = new JsonData();
                 foreach (var allowUserId in AllowUserIds)
@@ -147,12 +147,15 @@ namespace Gs2.Gs2Datastore.Request
                 writer.WritePropertyName("scope");
                 writer.Write(Scope.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var allowUserId in AllowUserIds)
-            {
-                writer.Write(allowUserId.ToString());
+            if (AllowUserIds != null) {
+                writer.WritePropertyName("allowUserIds");
+                writer.WriteArrayStart();
+                foreach (var allowUserId in AllowUserIds)
+                {
+                    writer.Write(allowUserId.ToString());
+                }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (UpdateIfExists != null) {
                 writer.WritePropertyName("updateIfExists");
                 writer.Write(bool.Parse(UpdateIfExists.ToString()));

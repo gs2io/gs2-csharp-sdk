@@ -64,7 +64,7 @@ namespace Gs2.Gs2News.Model
         public JsonData ToJson()
         {
             JsonData contentsJsonData = null;
-            if (Contents != null)
+            if (Contents != null && Contents.Length > 0)
             {
                 contentsJsonData = new JsonData();
                 foreach (var content in Contents)
@@ -73,7 +73,7 @@ namespace Gs2.Gs2News.Model
                 }
             }
             JsonData removeContentsJsonData = null;
-            if (RemoveContents != null)
+            if (RemoveContents != null && RemoveContents.Length > 0)
             {
                 removeContentsJsonData = new JsonData();
                 foreach (var removeContent in RemoveContents)

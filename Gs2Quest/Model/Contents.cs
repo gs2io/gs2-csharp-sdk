@@ -69,7 +69,7 @@ namespace Gs2.Gs2Quest.Model
         public JsonData ToJson()
         {
             JsonData completeAcquireActionsJsonData = null;
-            if (CompleteAcquireActions != null)
+            if (CompleteAcquireActions != null && CompleteAcquireActions.Length > 0)
             {
                 completeAcquireActionsJsonData = new JsonData();
                 foreach (var completeAcquireAction in CompleteAcquireActions)

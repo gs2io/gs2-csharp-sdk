@@ -94,7 +94,7 @@ namespace Gs2.Gs2Showcase.Request
         public override JsonData ToJson()
         {
             JsonData consumeActionsJsonData = null;
-            if (ConsumeActions != null)
+            if (ConsumeActions != null && ConsumeActions.Length > 0)
             {
                 consumeActionsJsonData = new JsonData();
                 foreach (var consumeAction in ConsumeActions)
@@ -103,7 +103,7 @@ namespace Gs2.Gs2Showcase.Request
                 }
             }
             JsonData acquireActionsJsonData = null;
-            if (AcquireActions != null)
+            if (AcquireActions != null && AcquireActions.Length > 0)
             {
                 acquireActionsJsonData = new JsonData();
                 foreach (var acquireAction in AcquireActions)
@@ -140,22 +140,28 @@ namespace Gs2.Gs2Showcase.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var consumeAction in ConsumeActions)
-            {
-                if (consumeAction != null) {
-                    consumeAction.WriteJson(writer);
+            if (ConsumeActions != null) {
+                writer.WritePropertyName("consumeActions");
+                writer.WriteArrayStart();
+                foreach (var consumeAction in ConsumeActions)
+                {
+                    if (consumeAction != null) {
+                        consumeAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var acquireAction in AcquireActions)
-            {
-                if (acquireAction != null) {
-                    acquireAction.WriteJson(writer);
+            if (AcquireActions != null) {
+                writer.WritePropertyName("acquireActions");
+                writer.WriteArrayStart();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

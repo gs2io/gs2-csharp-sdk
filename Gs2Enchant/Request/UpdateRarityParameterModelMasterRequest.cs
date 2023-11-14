@@ -101,7 +101,7 @@ namespace Gs2.Gs2Enchant.Request
         public override JsonData ToJson()
         {
             JsonData parameterCountsJsonData = null;
-            if (ParameterCounts != null)
+            if (ParameterCounts != null && ParameterCounts.Length > 0)
             {
                 parameterCountsJsonData = new JsonData();
                 foreach (var parameterCount in ParameterCounts)
@@ -110,7 +110,7 @@ namespace Gs2.Gs2Enchant.Request
                 }
             }
             JsonData parametersJsonData = null;
-            if (Parameters != null)
+            if (Parameters != null && Parameters.Length > 0)
             {
                 parametersJsonData = new JsonData();
                 foreach (var parameter in Parameters)
@@ -152,22 +152,28 @@ namespace Gs2.Gs2Enchant.Request
                 writer.WritePropertyName("maximumParameterCount");
                 writer.Write(int.Parse(MaximumParameterCount.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var parameterCount in ParameterCounts)
-            {
-                if (parameterCount != null) {
-                    parameterCount.WriteJson(writer);
+            if (ParameterCounts != null) {
+                writer.WritePropertyName("parameterCounts");
+                writer.WriteArrayStart();
+                foreach (var parameterCount in ParameterCounts)
+                {
+                    if (parameterCount != null) {
+                        parameterCount.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
-            writer.WriteArrayStart();
-            foreach (var parameter in Parameters)
-            {
-                if (parameter != null) {
-                    parameter.WriteJson(writer);
+            if (Parameters != null) {
+                writer.WritePropertyName("parameters");
+                writer.WriteArrayStart();
+                foreach (var parameter in Parameters)
+                {
+                    if (parameter != null) {
+                        parameter.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

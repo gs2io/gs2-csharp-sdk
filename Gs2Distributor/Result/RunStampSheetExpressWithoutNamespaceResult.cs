@@ -64,7 +64,7 @@ namespace Gs2.Gs2Distributor.Result
         public JsonData ToJson()
         {
             JsonData taskResultsJsonData = null;
-            if (TaskResults != null)
+            if (TaskResults != null && TaskResults.Length > 0)
             {
                 taskResultsJsonData = new JsonData();
                 foreach (var taskResult in TaskResults)
@@ -81,14 +81,17 @@ namespace Gs2.Gs2Distributor.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            writer.WriteArrayStart();
-            foreach (var taskResult in TaskResults)
-            {
-                if (taskResult != null) {
-                    writer.Write(taskResult.ToString());
+            if (TaskResults != null) {
+                writer.WritePropertyName("taskResults");
+                writer.WriteArrayStart();
+                foreach (var taskResult in TaskResults)
+                {
+                    if (taskResult != null) {
+                        writer.Write(taskResult.ToString());
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (SheetResult != null) {
                 writer.WritePropertyName("sheetResult");
                 writer.Write(SheetResult.ToString());

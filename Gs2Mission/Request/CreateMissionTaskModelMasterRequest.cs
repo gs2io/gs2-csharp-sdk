@@ -127,7 +127,7 @@ namespace Gs2.Gs2Mission.Request
         public override JsonData ToJson()
         {
             JsonData completeAcquireActionsJsonData = null;
-            if (CompleteAcquireActions != null)
+            if (CompleteAcquireActions != null && CompleteAcquireActions.Length > 0)
             {
                 completeAcquireActionsJsonData = new JsonData();
                 foreach (var completeAcquireAction in CompleteAcquireActions)
@@ -185,14 +185,17 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("targetValue");
                 writer.Write(long.Parse(TargetValue.ToString()));
             }
-            writer.WriteArrayStart();
-            foreach (var completeAcquireAction in CompleteAcquireActions)
-            {
-                if (completeAcquireAction != null) {
-                    completeAcquireAction.WriteJson(writer);
+            if (CompleteAcquireActions != null) {
+                writer.WritePropertyName("completeAcquireActions");
+                writer.WriteArrayStart();
+                foreach (var completeAcquireAction in CompleteAcquireActions)
+                {
+                    if (completeAcquireAction != null) {
+                        completeAcquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ChallengePeriodEventId != null) {
                 writer.WritePropertyName("challengePeriodEventId");
                 writer.Write(ChallengePeriodEventId.ToString());

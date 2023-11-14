@@ -92,7 +92,7 @@ namespace Gs2.Gs2Inbox.Request
         public override JsonData ToJson()
         {
             JsonData readAcquireActionsJsonData = null;
-            if (ReadAcquireActions != null)
+            if (ReadAcquireActions != null && ReadAcquireActions.Length > 0)
             {
                 readAcquireActionsJsonData = new JsonData();
                 foreach (var readAcquireAction in ReadAcquireActions)
@@ -125,14 +125,17 @@ namespace Gs2.Gs2Inbox.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var readAcquireAction in ReadAcquireActions)
-            {
-                if (readAcquireAction != null) {
-                    readAcquireAction.WriteJson(writer);
+            if (ReadAcquireActions != null) {
+                writer.WritePropertyName("readAcquireActions");
+                writer.WriteArrayStart();
+                foreach (var readAcquireAction in ReadAcquireActions)
+                {
+                    if (readAcquireAction != null) {
+                        readAcquireAction.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (ExpiresTimeSpan != null) {
                 ExpiresTimeSpan.WriteJson(writer);
             }

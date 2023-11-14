@@ -179,7 +179,7 @@ namespace Gs2.Gs2Realtime.Model
         public JsonData ToJson()
         {
             JsonData notificationUserIdsJsonData = null;
-            if (NotificationUserIds != null)
+            if (NotificationUserIds != null && NotificationUserIds.Length > 0)
             {
                 notificationUserIdsJsonData = new JsonData();
                 foreach (var notificationUserId in NotificationUserIds)

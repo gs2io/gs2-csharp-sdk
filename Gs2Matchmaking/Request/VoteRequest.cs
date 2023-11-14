@@ -85,7 +85,7 @@ namespace Gs2.Gs2Matchmaking.Request
         public override JsonData ToJson()
         {
             JsonData gameResultsJsonData = null;
-            if (GameResults != null)
+            if (GameResults != null && GameResults.Length > 0)
             {
                 gameResultsJsonData = new JsonData();
                 foreach (var gameResult in GameResults)
@@ -117,14 +117,17 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("ballotSignature");
                 writer.Write(BallotSignature.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var gameResult in GameResults)
-            {
-                if (gameResult != null) {
-                    gameResult.WriteJson(writer);
+            if (GameResults != null) {
+                writer.WritePropertyName("gameResults");
+                writer.WriteArrayStart();
+                foreach (var gameResult in GameResults)
+                {
+                    if (gameResult != null) {
+                        gameResult.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (KeyId != null) {
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());

@@ -78,7 +78,7 @@ namespace Gs2.Gs2Matchmaking.Model
         public JsonData ToJson()
         {
             JsonData attributesJsonData = null;
-            if (Attributes != null)
+            if (Attributes != null && Attributes.Length > 0)
             {
                 attributesJsonData = new JsonData();
                 foreach (var attribute in Attributes)
@@ -87,7 +87,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 }
             }
             JsonData denyUserIdsJsonData = null;
-            if (DenyUserIds != null)
+            if (DenyUserIds != null && DenyUserIds.Length > 0)
             {
                 denyUserIdsJsonData = new JsonData();
                 foreach (var denyUserId in DenyUserIds)
