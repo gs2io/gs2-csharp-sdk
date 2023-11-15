@@ -85,7 +85,7 @@ namespace Gs2.Gs2Lottery.Request
         public override JsonData ToJson()
         {
             JsonData prizesJsonData = null;
-            if (Prizes != null)
+            if (Prizes != null && Prizes.Length > 0)
             {
                 prizesJsonData = new JsonData();
                 foreach (var prize in Prizes)
@@ -121,14 +121,17 @@ namespace Gs2.Gs2Lottery.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
-            writer.WriteArrayStart();
-            foreach (var prize in Prizes)
-            {
-                if (prize != null) {
-                    prize.WriteJson(writer);
+            if (Prizes != null) {
+                writer.WritePropertyName("prizes");
+                writer.WriteArrayStart();
+                foreach (var prize in Prizes)
+                {
+                    if (prize != null) {
+                        prize.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             writer.WriteObjectEnd();
         }
 

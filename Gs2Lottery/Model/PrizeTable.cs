@@ -144,7 +144,7 @@ namespace Gs2.Gs2Lottery.Model
         public JsonData ToJson()
         {
             JsonData prizesJsonData = null;
-            if (Prizes != null)
+            if (Prizes != null && Prizes.Length > 0)
             {
                 prizesJsonData = new JsonData();
                 foreach (var prize in Prizes)
