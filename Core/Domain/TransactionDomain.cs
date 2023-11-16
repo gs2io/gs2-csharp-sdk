@@ -91,6 +91,13 @@ namespace Gs2.Core.Domain
 
                         if (future.Result == null) {
                             yield return new WaitForSeconds(0.1f);
+                                    
+                            var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                            yield return dispatchFuture;
+                            if (dispatchFuture.Error != null) {
+                                self.OnError(dispatchFuture.Error);
+                                yield break;
+                            }
                             continue;
                         }
                         var result = future.Result;
@@ -98,7 +105,7 @@ namespace Gs2.Core.Domain
                         if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
                         {
                             var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
-                            if (result2?.AutoRun != null && !result2.AutoRun.Value)
+                            if (all)
                             {
                                 foreach (var job in result2.Items) {
                                     var future3 = new JobQueueJobDomain(
@@ -106,10 +113,17 @@ namespace Gs2.Core.Domain
                                         this._userId,
                                         true,
                                         job.JobId
-                                    ).WaitFuture();
+                                    ).WaitFuture(all);
                                     yield return future3;
                                     if (future3.Error != null) {
                                         self.OnError(future3.Error);
+                                        yield break;
+                                    }
+                                    
+                                    var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                                    yield return dispatchFuture;
+                                    if (dispatchFuture.Error != null) {
+                                        self.OnError(dispatchFuture.Error);
                                         yield break;
                                     }
                                 }
@@ -126,7 +140,7 @@ namespace Gs2.Core.Domain
                                 !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
                             );
-                            if (all) {
+                            if (all || !next.AutoRunStampSheet) {
                                 while (next != null) {
                                     var future2 = next.WaitFuture(all);
                                     yield return future2;
@@ -135,6 +149,13 @@ namespace Gs2.Core.Domain
                                         yield break;
                                     }
                                     next = future2.Result;
+                                    
+                                    var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                                    yield return dispatchFuture;
+                                    if (dispatchFuture.Error != null) {
+                                        self.OnError(dispatchFuture.Error);
+                                        yield break;
+                                    }
                                 }
                             }
                         }
@@ -153,6 +174,13 @@ namespace Gs2.Core.Domain
                     yield return future4;
                     if (future4.Error != null) {
                         self.OnError(new TransactionException(stampSheet, future4.Error));
+                        yield break;
+                    }
+                    
+                    var dispatchFuture = Gs2Distributor.Domain.Gs2Distributor.DispatchByUserIdFuture(this._gs2, this._userId);
+                    yield return dispatchFuture;
+                    if (dispatchFuture.Error != null) {
+                        self.OnError(dispatchFuture.Error);
                         yield break;
                     }
 
@@ -189,13 +217,14 @@ namespace Gs2.Core.Domain
 #else
                         await Task.Delay(TimeSpan.FromMilliseconds(100));
 #endif
+                        await this._gs2.DispatchByUserIdAsync(this._userId);
                         continue;
                     }
 
                     if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
                     {
                         var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
-                        if (result2?.AutoRun != null && !result2.AutoRun.Value)
+                        if (all)
                         {
                             foreach (var job in result2.Items) {
                                 await new JobQueueJobDomain(
@@ -203,7 +232,8 @@ namespace Gs2.Core.Domain
                                     this._userId,
                                     true,
                                     job.JobId
-                                ).WaitAsync();
+                                ).WaitAsync(all);
+                                await this._gs2.DispatchByUserIdAsync(this._userId);
                             }
                         }
                     }
@@ -218,9 +248,10 @@ namespace Gs2.Core.Domain
                             !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                             !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
                         );
-                        if (all) {
+                        if (all || !next.AutoRunStampSheet) {
                             while (next != null) {
                                 next = await next.WaitAsync(all);
+                                await this._gs2.DispatchByUserIdAsync(this._userId);
                             }
                         }
                     }
@@ -237,6 +268,7 @@ namespace Gs2.Core.Domain
                 );
                 try {
                     await stampSheet.RunAsync();
+                    await Gs2Distributor.Domain.Gs2Distributor.DispatchByUserIdAsync(this._gs2, this._userId);
                 } catch (Gs2Exception e) {
                     throw new TransactionException(stampSheet, e);
                 }

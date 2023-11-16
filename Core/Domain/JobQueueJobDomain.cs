@@ -63,18 +63,20 @@ namespace Gs2.Core.Domain
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public IFuture<JobQueueJobDomain> WaitFuture() {
+        public IFuture<JobQueueJobDomain> WaitFuture(
+            bool all = false
+        ) {
             IEnumerator Impl(IFuture<JobQueueJobDomain> self) {
                 if (this.AutoRunJobQueue) {
                     while (true) {
                         var future = new Gs2JobQueue.Domain.Gs2JobQueue(
                             this._gs2
                         ).Namespace(
-                            this._gs2.StampSheetConfiguration.NamespaceName
+                            Job.GetNamespaceNameFromGrn(this.JobId)
                         ).User(
                             this._userId
                         ).Job(
-                            this.JobId
+                            Job.GetJobNameFromGrn(this.JobId)
                         ).JobResult().ModelFuture();
 
                         yield return future;
@@ -86,6 +88,13 @@ namespace Gs2.Core.Domain
 
                         if (result == null) {
                             yield return new WaitForSeconds(0.1f);
+                            
+                            var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                            yield return dispatchFuture;
+                            if (dispatchFuture.Error != null) {
+                                self.OnError(dispatchFuture.Error);
+                                yield break;
+                            }
                             continue;
                         }
 
@@ -98,10 +107,17 @@ namespace Gs2.Core.Domain
                                 !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                            ).WaitFuture();
+                            ).WaitFuture(all);
                             yield return future2;
                             if (future2.Error != null) {
                                 self.OnError(future2.Error);
+                                yield break;
+                            }
+                            
+                            var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                            yield return dispatchFuture;
+                            if (dispatchFuture.Error != null) {
+                                self.OnError(dispatchFuture.Error);
                                 yield break;
                             }
                         }
@@ -109,7 +125,7 @@ namespace Gs2.Core.Domain
                         if (result.ScriptId.EndsWith("push_by_user_id"))
                         {
                             var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                            if (result2?.AutoRun != null && result2.AutoRun.Value)
+                            if (all || result2?.AutoRun != null && result2.AutoRun.Value)
                             {
                                 foreach (var job in result2.Items) {
                                     var future3 = new JobQueueJobDomain(
@@ -117,10 +133,17 @@ namespace Gs2.Core.Domain
                                         this._userId,
                                         true,
                                         job.JobId
-                                    ).WaitFuture();
+                                    ).WaitFuture(all);
                                     yield return future3;
                                     if (future3.Error != null) {
                                         self.OnError(future3.Error);
+                                        yield break;
+                                    }
+                                    
+                                    var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                                    yield return dispatchFuture;
+                                    if (dispatchFuture.Error != null) {
+                                        self.OnError(dispatchFuture.Error);
                                         yield break;
                                     }
                                 }
@@ -156,10 +179,17 @@ namespace Gs2.Core.Domain
                             this._userId,
                             true,
                             this.JobId
-                        ).WaitFuture();
+                        ).WaitFuture(all);
                         yield return future2;
                         if (future2.Error != null) {
                             self.OnError(future2.Error);
+                            yield break;
+                        }
+                        
+                        var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                        yield return dispatchFuture;
+                        if (dispatchFuture.Error != null) {
+                            self.OnError(dispatchFuture.Error);
                             yield break;
                         }
                     }
@@ -176,17 +206,18 @@ namespace Gs2.Core.Domain
     #else
         public async Task<JobQueueJobDomain> WaitAsync(
     #endif
+            bool all = false
         ) {
             if (this.AutoRunJobQueue) {
                 while (true) {
                     var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
                         this._gs2
                     ).Namespace(
-                        this._gs2.StampSheetConfiguration.NamespaceName
+                        Job.GetNamespaceNameFromGrn(this.JobId)
                     ).User(
                         this._userId
                     ).Job(
-                        this.JobId
+                        Job.GetJobNameFromGrn(this.JobId)
                     ).JobResult().ModelAsync();
                     if (result == null) {
 #if UNITY_2017_1_OR_NEWER
@@ -194,6 +225,7 @@ namespace Gs2.Core.Domain
 #else
                         await Task.Delay(TimeSpan.FromMilliseconds(100));
 #endif
+                        await this._gs2.DispatchByUserIdAsync(this._userId);
                         continue;
                     }
 
@@ -206,13 +238,14 @@ namespace Gs2.Core.Domain
                             !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
                             !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                             !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                        ).WaitAsync();
+                        ).WaitAsync(all);
+                        await this._gs2.DispatchByUserIdAsync(this._userId);
                     }
                     
                     if (result.ScriptId.EndsWith("push_by_user_id"))
                     {
                         var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        if (result2?.AutoRun != null && result2.AutoRun.Value)
+                        if (all || result2?.AutoRun != null && result2.AutoRun.Value)
                         {
                             foreach (var job in result2.Items) {
                                 await new JobQueueJobDomain(
@@ -220,7 +253,8 @@ namespace Gs2.Core.Domain
                                     this._userId,
                                     true,
                                     job.JobId
-                                ).WaitAsync();
+                                ).WaitAsync(all);
+                                await this._gs2.DispatchByUserIdAsync(this._userId);
                             }
                         }
                     }
@@ -250,7 +284,8 @@ namespace Gs2.Core.Domain
                         this._userId,
                         true,
                         this.JobId
-                    ).WaitAsync();
+                    ).WaitAsync(all);
+                    await this._gs2.DispatchByUserIdAsync(this._userId);
                 }
             }
             return this;

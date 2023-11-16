@@ -118,6 +118,12 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this.InventoryName,
                 "ItemSet"
             );
+            var nullParentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                this.NamespaceName,
+                this.UserId,
+                this.InventoryName,
+                "ItemSet:Null"
+            );
             if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.ItemSet>
             (
                     parentKey,
@@ -172,6 +178,25 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     );
                 }
             }
+            var items = this._result.ToList();
+            
+            var _ = this._result.Where(v => v.Count > 0).GroupBy(v => v.ItemName).Select(group =>
+            {
+                var items = group.ToArray();
+                this._cache.Put(
+                    nullParentKey,
+                    Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                        group.Key,
+                        null
+                    ),
+                    items,
+                    items == null || items.Length == 0 ? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes : items.Min(v => v.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes)
+                );
+                return items;
+            }).ToArray();
+            
+            items.Sort((v1, v2) => (v1.SortValue ?? 0) - (v2.SortValue ?? 0));
+            this._result = items.ToArray();
         }
 
         private bool _hasNext()

@@ -301,30 +301,20 @@ namespace Gs2.Gs2Distributor.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
-    #if GS2_ENABLE_UNITASK
-        public static async UniTask Dispatch(
-    #else
-        public static Gs2Future Dispatch(
-    #endif
+        public static Gs2Future DispatchFuture(
             Gs2.Core.Domain.Gs2 gs2,
             AccessToken accessToken
         )
         {
             AutoRunStampSheetNotification[] copiedCompletedStampSheets;
 
-    #if !GS2_ENABLE_UNITASK
             IEnumerator Impl(Gs2Future self)
             {
-    #endif
                 lock (_completedStampSheets)
                 {
                     if (_completedStampSheets.Count == 0)
                     {
-    #if GS2_ENABLE_UNITASK
-                        return;
-    #else
                         yield break;
-    #endif
                     }
 
                     copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
@@ -333,20 +323,11 @@ namespace Gs2.Gs2Distributor.Domain
                 }
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
-                    var autoRun = new AutoStampSheetDomain(
+                    var autoRun = new AutoStampSheetAccessTokenDomain(
                         gs2,
                         accessToken,
                         completedStampSheet.TransactionId
                     );
-    #if GS2_ENABLE_UNITASK
-                    try
-                    {
-                        await autoRun.RunAsync();
-                    }
-                    catch (NotFoundException)
-                    {
-                    }
-    #else
                     var future = autoRun.RunFuture();
                     yield return future;
                     if (future.Error != null)
@@ -357,13 +338,133 @@ namespace Gs2.Gs2Distributor.Domain
                         }
                         yield break;
                     }
-    #endif
                 }
-    #if !GS2_ENABLE_UNITASK
             }
 
             return new Gs2InlineFuture(Impl);
+        }
+        
+        public static Gs2Future DispatchByUserIdFuture(
+            Gs2.Core.Domain.Gs2 gs2,
+            string userId
+        )
+        {
+            AutoRunStampSheetNotification[] copiedCompletedStampSheets;
+
+            IEnumerator Impl(Gs2Future self)
+            {
+                lock (_completedStampSheets)
+                {
+                    if (_completedStampSheets.Count == 0)
+                    {
+                        yield break;
+                    }
+
+                    copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
+                    _completedStampSheets.CopyTo(copiedCompletedStampSheets);
+                    _completedStampSheets.Clear();
+                }
+
+                foreach (var completedStampSheet in copiedCompletedStampSheets) {
+                    var autoRun = new AutoStampSheetDomain(
+                        gs2,
+                        userId,
+                        completedStampSheet.TransactionId
+                    );
+                    var future = autoRun.RunFuture();
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        } else {
+                            self.OnError(future.Error);
+                        }
+                        yield break;
+                    }
+                }
+            }
+
+            return new Gs2InlineFuture(Impl);
+        }
     #endif
+
+    #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER
+        public static async UniTask DispatchAsync(
+        #else
+        public static async Task DispatchAsync(
+        #endif
+            Gs2.Core.Domain.Gs2 gs2,
+            AccessToken accessToken
+        )
+        {
+            AutoRunStampSheetNotification[] copiedCompletedStampSheets;
+
+                lock (_completedStampSheets)
+                {
+                    if (_completedStampSheets.Count == 0)
+                    {
+                        return;
+                    }
+
+                    copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
+                    _completedStampSheets.CopyTo(copiedCompletedStampSheets);
+                    _completedStampSheets.Clear();
+                }
+
+                foreach (var completedStampSheet in copiedCompletedStampSheets) {
+                    var autoRun = new AutoStampSheetAccessTokenDomain(
+                        gs2,
+                        accessToken,
+                        completedStampSheet.TransactionId
+                    );
+                    try
+                    {
+                        await autoRun.RunAsync();
+                    }
+                    catch (NotFoundException)
+                    {
+                    }
+                }
+        }
+        
+        #if UNITY_2017_1_OR_NEWER
+        public static async UniTask DispatchByUserIdAsync(
+        #else
+        public static async Task DispatchByUserIdAsync(
+        #endif
+            Gs2.Core.Domain.Gs2 gs2,
+            string userId
+        )
+        {
+            AutoRunStampSheetNotification[] copiedCompletedStampSheets;
+
+                lock (_completedStampSheets)
+                {
+                    if (_completedStampSheets.Count == 0)
+                    {
+                        return;
+                    }
+
+                    copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
+                    _completedStampSheets.CopyTo(copiedCompletedStampSheets);
+                    _completedStampSheets.Clear();
+                }
+
+                foreach (var completedStampSheet in copiedCompletedStampSheets) {
+                    var autoRun = new AutoStampSheetDomain(
+                        gs2,
+                        userId,
+                        completedStampSheet.TransactionId
+                    );
+                    try
+                    {
+                        await autoRun.RunAsync();
+                    }
+                    catch (NotFoundException)
+                    {
+                    }
+                }
         }
     #endif
     }

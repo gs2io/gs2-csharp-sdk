@@ -288,8 +288,7 @@ namespace Gs2.Core.Domain
             _cache.Delete<TKind>(parentKey, key);
         }
 #if UNITY_2017_1_OR_NEWER
-#if !GS2_ENABLE_UNITASK
-        public Gs2Future<bool> Dispatch(
+        public Gs2Future<bool> DispatchFuture(
             AccessToken accessToken
         )
         {
@@ -304,7 +303,7 @@ namespace Gs2.Core.Domain
                     }
                     
                     {
-                        var future = Gs2Distributor.Domain.Gs2Distributor.Dispatch(
+                        var future = Gs2Distributor.Domain.Gs2Distributor.DispatchFuture(
                             this,
                             accessToken
                         );
@@ -316,7 +315,7 @@ namespace Gs2.Core.Domain
                         }
                     }
                     {
-                        var future = Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
+                        var future = Gs2JobQueue.Domain.Gs2JobQueue.DispatchFuture(
                             this,
                             accessToken
                         );
@@ -328,7 +327,7 @@ namespace Gs2.Core.Domain
                         }
                     }
                     {
-                        Gs2Future<bool> future = _jobQueueDomain.Run(
+                        var future = _jobQueueDomain.RunFuture(
                             accessToken
                         );
                         yield return future;
@@ -349,7 +348,7 @@ namespace Gs2.Core.Domain
             return new Gs2InlineFuture<bool>(Impl);
         }
 
-        public Gs2Future DispatchByUserId(
+        public Gs2Future DispatchByUserIdFuture(
             string userId
         )
         {
@@ -357,11 +356,11 @@ namespace Gs2.Core.Domain
             {
                 while (true)
                 {
-                    var future = _jobQueueDomain.RunByUserId(
+                    var future = _jobQueueDomain.RunByUserIdFuture(
                         userId
                     );
                     yield return future;
-                    if (future != null)
+                    if (future.Error != null)
                     {
                         self.OnError(future.Error);
                         yield break;
@@ -375,8 +374,14 @@ namespace Gs2.Core.Domain
 
             return new Gs2InlineFuture(Impl);
         }
-#else
+#endif
+
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+        public async UniTask DispatchAsync(
+    #else
         public async Task DispatchAsync(
+    #endif
             AccessToken accessToken
         )
         {
@@ -388,17 +393,17 @@ namespace Gs2.Core.Domain
                     _lastPingAt = DateTime.Now;
                 }
 
-                await Gs2Distributor.Domain.Gs2Distributor.Dispatch(
+                await Gs2Distributor.Domain.Gs2Distributor.DispatchAsync(
                     this,
                     accessToken
                 );
 
-                await Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
+                await Gs2JobQueue.Domain.Gs2JobQueue.DispatchAsync(
                     this,
                     accessToken
                 );
 
-                if (await _jobQueueDomain.Run(
+                if (await _jobQueueDomain.RunAsync(
                         accessToken
                     ))
                 {
@@ -407,13 +412,17 @@ namespace Gs2.Core.Domain
             }
         }
 
+    #if UNITY_2017_1_OR_NEWER
+        public async UniTask DispatchByUserIdAsync(
+    #else
         public async Task DispatchByUserIdAsync(
+    #endif
             string userId
         )
         {
             while (true)
             {
-                if (await _jobQueueDomain.RunByUserId(
+                if (await _jobQueueDomain.RunByUserIdAsync(
                     userId
                 ))
                 {
@@ -421,7 +430,6 @@ namespace Gs2.Core.Domain
                 }
             }
         }
-#endif
 #endif
 
         public static void UpdateCacheFromStampSheet(

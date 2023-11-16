@@ -64,7 +64,9 @@ namespace Gs2.Core.Domain
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public IFuture<JobQueueJobAccessTokenDomain> WaitFuture() {
+        public IFuture<JobQueueJobAccessTokenDomain> WaitFuture(
+            bool all = false
+        ) {
             IEnumerator Impl(IFuture<JobQueueJobAccessTokenDomain> self) {
                 var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
                 if (this.AutoRunJobQueue) {
@@ -76,7 +78,7 @@ namespace Gs2.Core.Domain
                         ).AccessToken(
                             this._accessToken
                         ).Job(
-                            this.JobId
+                            Job.GetJobNameFromGrn(this.JobId)
                         ).JobResult().ModelFuture();
 
                         yield return future;
@@ -88,10 +90,13 @@ namespace Gs2.Core.Domain
 
                         if (result == null) {
                             yield return new WaitForSeconds(0.1f);
-                            yield return Gs2JobQueue.Domain.Gs2JobQueue.Dispatch(
-                                this._gs2,
-                                this._accessToken
-                            );
+                            
+                            var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                            yield return dispatchFuture;
+                            if (dispatchFuture.Error != null) {
+                                self.OnError(dispatchFuture.Error);
+                                yield break;
+                            }
                             continue;
                         }
 
@@ -104,10 +109,17 @@ namespace Gs2.Core.Domain
                                 !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                                 !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                            ).WaitFuture();
+                            ).WaitFuture(all);
                             yield return future2;
                             if (future2.Error != null) {
                                 self.OnError(future2.Error);
+                                yield break;
+                            }
+                            
+                            var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                            yield return dispatchFuture;
+                            if (dispatchFuture.Error != null) {
+                                self.OnError(dispatchFuture.Error);
                                 yield break;
                             }
                         }
@@ -115,7 +127,7 @@ namespace Gs2.Core.Domain
                         if (result.ScriptId.EndsWith("push_by_user_id"))
                         {
                             var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                            if (result2?.AutoRun != null && result2.AutoRun.Value)
+                            if (all)
                             {
                                 foreach (var job in result2.Items) {
                                     var future3 = new JobQueueJobAccessTokenDomain(
@@ -123,10 +135,17 @@ namespace Gs2.Core.Domain
                                         this._accessToken,
                                         true,
                                         job.JobId
-                                    ).WaitFuture();
+                                    ).WaitFuture(all);
                                     yield return future3;
                                     if (future3.Error != null) {
                                         self.OnError(future3.Error);
+                                        yield break;
+                                    }
+                                    
+                                    var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                                    yield return dispatchFuture;
+                                    if (dispatchFuture.Error != null) {
+                                        self.OnError(dispatchFuture.Error);
                                         yield break;
                                     }
                                 }
@@ -161,10 +180,17 @@ namespace Gs2.Core.Domain
                             this._accessToken,
                             true,
                             this.JobId
-                        ).WaitFuture();
+                        ).WaitFuture(all);
                         yield return future2;
                         if (future2.Error != null) {
                             self.OnError(future2.Error);
+                            yield break;
+                        }
+                        
+                        var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                        yield return dispatchFuture;
+                        if (dispatchFuture.Error != null) {
+                            self.OnError(dispatchFuture.Error);
                             yield break;
                         }
                     }
@@ -181,6 +207,7 @@ namespace Gs2.Core.Domain
     #else
         public async Task<JobQueueJobAccessTokenDomain> WaitAsync(
     #endif
+            bool all = false
         ) {
             var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
             if (this.AutoRunJobQueue) {
@@ -192,7 +219,7 @@ namespace Gs2.Core.Domain
                     ).AccessToken(
                         this._accessToken
                     ).Job(
-                        this.JobId
+                        Job.GetJobNameFromGrn(this.JobId)
                     ).JobResult().ModelAsync();
                     if (result == null) {
 #if UNITY_2017_1_OR_NEWER
@@ -200,6 +227,7 @@ namespace Gs2.Core.Domain
 #else
                         await Task.Delay(TimeSpan.FromMilliseconds(100));
 #endif
+                        await this._gs2.DispatchAsync(this._accessToken);
                         continue;
                     }
 
@@ -212,13 +240,14 @@ namespace Gs2.Core.Domain
                             !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
                             !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
                             !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                        ).WaitAsync();
+                        ).WaitAsync(all);
+                        await this._gs2.DispatchAsync(this._accessToken);
                     }
                     
                     if (result.ScriptId.EndsWith("push_by_user_id"))
                     {
                         var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        if (result2?.AutoRun != null && result2.AutoRun.Value)
+                        if (all)
                         {
                             foreach (var job in result2.Items) {
                                 await new JobQueueJobAccessTokenDomain(
@@ -226,7 +255,8 @@ namespace Gs2.Core.Domain
                                     this._accessToken,
                                     true,
                                     job.JobId
-                                ).WaitAsync();
+                                ).WaitAsync(all);
+                                await this._gs2.DispatchAsync(this._accessToken);
                             }
                         }
                     }
@@ -255,7 +285,8 @@ namespace Gs2.Core.Domain
                         this._accessToken,
                         true,
                         this.JobId
-                    ).WaitAsync();
+                    ).WaitAsync(all);
+                    await this._gs2.DispatchAsync(this._accessToken);
                 }
             }
             return this;

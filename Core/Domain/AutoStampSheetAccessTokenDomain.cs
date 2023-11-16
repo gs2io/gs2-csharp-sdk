@@ -10,20 +10,20 @@ using Cysharp.Threading.Tasks;
 
 namespace Gs2.Core.Domain
 {
-    public class AutoStampSheetDomain
+    public class AutoStampSheetAccessTokenDomain
     {
         private readonly Gs2 _gs2;
-        private readonly string _userId;
+        private readonly AccessToken _accessToken;
         private readonly string _transactionId;
 
-        public AutoStampSheetDomain(
+        public AutoStampSheetAccessTokenDomain(
             Gs2 gs2,
-            string userId,
+            AccessToken accessToken,
             string transactionId
         )
         {
             this._gs2 = gs2;
-            this._userId = userId;
+            this._accessToken = accessToken;
             this._transactionId = transactionId;
         }
         
@@ -35,7 +35,7 @@ namespace Gs2.Core.Domain
                 this._gs2.Cache.Delete<StampSheetResult>(
                     UserDomain.CreateCacheParentKey(
                         this._gs2.StampSheetConfiguration.NamespaceName,
-                        this._userId,
+                        this._accessToken.UserId,
                         "StampSheetResult"
                     ),
                     StampSheetResultDomain.CreateCacheKey(
@@ -44,8 +44,8 @@ namespace Gs2.Core.Domain
                 );
                 var future = this._gs2.Distributor.Namespace(
                     this._gs2.StampSheetConfiguration.NamespaceName
-                ).User(
-                    this._userId
+                ).AccessToken(
+                    this._accessToken
                 ).StampSheetResult(
                     this._transactionId
                 ).ModelFuture();
@@ -106,7 +106,7 @@ namespace Gs2.Core.Domain
             this._gs2.Cache.Delete<StampSheetResult>(
                 UserDomain.CreateCacheParentKey(
                     this._gs2.StampSheetConfiguration.NamespaceName,
-                    this._userId,
+                    this._accessToken.UserId,
                     "StampSheetResult"
                 ),
                 StampSheetResultDomain.CreateCacheKey(
@@ -115,8 +115,8 @@ namespace Gs2.Core.Domain
             );
             var result = await this._gs2.Distributor.Namespace(
                 this._gs2.StampSheetConfiguration.NamespaceName
-            ).User(
-                this._userId
+            ).AccessToken(
+                this._accessToken
             ).StampSheetResult(
                 this._transactionId
             ).ModelAsync();

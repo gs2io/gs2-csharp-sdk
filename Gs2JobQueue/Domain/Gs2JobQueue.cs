@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -877,30 +879,85 @@ namespace Gs2.Gs2JobQueue.Domain
             }
     #endif
         }
+        
+#if UNITY_2017_1_OR_NEWER
+        public static Gs2Future DispatchFuture(
+            Gs2.Core.Domain.Gs2 gs2,
+            AccessToken accessToken
+        )
+        {
+            RunNotification[] copiedCompletedJobs;
+            IEnumerator Impl(Gs2Future self)
+            {
+                lock (_completedJobs)
+                {
+                    if (_completedJobs.Count == 0)
+                    {
+                        yield break;
+                    }
+                    copiedCompletedJobs = new RunNotification[_completedJobs.Count];
+                    _completedJobs.CopyTo(copiedCompletedJobs);
+                    _completedJobs.Clear();
+                }
+                foreach (var completedJob in copiedCompletedJobs)
+                {
+                    var client = new Gs2JobQueueRestClient(
+                        gs2.RestSession
+                    );
+                    var future = client.GetJobResultFuture(
+                        new GetJobResultRequest()
+                            .WithNamespaceName(completedJob.NamespaceName)
+                            .WithJobName(completedJob.JobName)
+                            .WithAccessToken(accessToken.Token)
+                    );
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    var result = future.Result;
+                    if (result != null)
+                    {
+                        Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
+                            gs2.Cache,
+                            new Job
+                            {
+                                ScriptId = result?.Item.ScriptId,
+                                Args = result?.Item.Args,
+                            },
+                            new JobResultBody
+                            {
+                                TryNumber = result?.Item.TryNumber,
+                                StatusCode = result?.Item.StatusCode,
+                                Result = result?.Item.Result,
+                                TryAt = result?.Item.TryAt
+                            }
+                        );
+                    }
+                }
+            }
+
+            return new Gs2InlineFuture(Impl);
+        }
+#endif
+        
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-    #if GS2_ENABLE_UNITASK
-        public static async UniTask Dispatch(
+        public static async UniTask DispatchAsync(
     #else
-        public static Gs2Future Dispatch(
+        public static async Task DispatchAsync(
     #endif
             Gs2.Core.Domain.Gs2 gs2,
             AccessToken accessToken
         )
         {
             RunNotification[] copiedCompletedJobs;
-    #if !GS2_ENABLE_UNITASK
-            IEnumerator Impl(Gs2Future self)
-            {
-    #endif
             lock (_completedJobs)
             {
                 if (_completedJobs.Count == 0)
                 {
-    #if GS2_ENABLE_UNITASK
                     return;
-    #else
-                    yield break;
-    #endif
                 }
                 copiedCompletedJobs = new RunNotification[_completedJobs.Count];
                 _completedJobs.CopyTo(copiedCompletedJobs);
@@ -911,7 +968,6 @@ namespace Gs2.Gs2JobQueue.Domain
                 var client = new Gs2JobQueueRestClient(
                     gs2.RestSession
                 );
-    #if GS2_ENABLE_UNITASK
                 GetJobResultResult result = null;
                 try
                 {
@@ -925,21 +981,6 @@ namespace Gs2.Gs2JobQueue.Domain
                 catch (NotFoundException)
                 {
                 }
-    #else
-                var future = client.GetJobResultFuture(
-                    new GetJobResultRequest()
-                        .WithNamespaceName(completedJob.NamespaceName)
-                        .WithJobName(completedJob.JobName)
-                        .WithAccessToken(accessToken.Token)
-                );
-                yield return future;
-                if (future.Error != null)
-                {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-    #endif
                 if (result != null)
                 {
                     Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
@@ -959,12 +1000,7 @@ namespace Gs2.Gs2JobQueue.Domain
                     );
                 }
             }
-    #if !GS2_ENABLE_UNITASK
-            }
-
-            return new Gs2InlineFuture(Impl);
-    #endif
         }
-    #endif
+#endif
     }
 }
