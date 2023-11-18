@@ -77,7 +77,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithCampaignModelName(!data.Keys.Contains("campaignModelName") || data["campaignModelName"] == null ? null : data["campaignModelName"].ToString())
                 .WithIssueJobName(!data.Keys.Contains("issueJobName") || data["issueJobName"] == null ? null : data["issueJobName"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -112,7 +112,7 @@ namespace Gs2.Gs2SerialKey.Request
             }
             if (Limit != null) {
                 writer.WritePropertyName("limit");
-                writer.Write(int.Parse(Limit.ToString()));
+                writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
             writer.WriteObjectEnd();
         }

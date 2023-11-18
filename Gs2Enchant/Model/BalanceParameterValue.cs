@@ -54,7 +54,7 @@ namespace Gs2.Gs2Enchant.Model
             }
             return new BalanceParameterValue()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)long.Parse(data["value"].ToString()));
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (long?)(data["value"].ToString().Contains(".") ? (long)double.Parse(data["value"].ToString()) : long.Parse(data["value"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Enchant.Model
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(long.Parse(Value.ToString()));
+                writer.Write((Value.ToString().Contains(".") ? (long)double.Parse(Value.ToString()) : long.Parse(Value.ToString())));
             }
             writer.WriteObjectEnd();
         }

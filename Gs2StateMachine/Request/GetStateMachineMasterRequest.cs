@@ -56,7 +56,7 @@ namespace Gs2.Gs2StateMachine.Request
             }
             return new GetStateMachineMasterRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : (long?)long.Parse(data["version"].ToString()));
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : (long?)(data["version"].ToString().Contains(".") ? (long)double.Parse(data["version"].ToString()) : long.Parse(data["version"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -76,7 +76,7 @@ namespace Gs2.Gs2StateMachine.Request
             }
             if (Version != null) {
                 writer.WritePropertyName("version");
-                writer.Write(long.Parse(Version.ToString()));
+                writer.Write((Version.ToString().Contains(".") ? (long)double.Parse(Version.ToString()) : long.Parse(Version.ToString())));
             }
             writer.WriteObjectEnd();
         }

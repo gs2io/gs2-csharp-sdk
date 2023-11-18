@@ -142,8 +142,8 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithRatingModelId(!data.Keys.Contains("ratingModelId") || data["ratingModelId"] == null ? null : data["ratingModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithInitialValue(!data.Keys.Contains("initialValue") || data["initialValue"] == null ? null : (int?)int.Parse(data["initialValue"].ToString()))
-                .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)int.Parse(data["volatility"].ToString()));
+                .WithInitialValue(!data.Keys.Contains("initialValue") || data["initialValue"] == null ? null : (int?)(data["initialValue"].ToString().Contains(".") ? (int)double.Parse(data["initialValue"].ToString()) : int.Parse(data["initialValue"].ToString())))
+                .WithVolatility(!data.Keys.Contains("volatility") || data["volatility"] == null ? null : (int?)(data["volatility"].ToString().Contains(".") ? (int)double.Parse(data["volatility"].ToString()) : int.Parse(data["volatility"].ToString())));
         }
 
         public JsonData ToJson()
@@ -174,11 +174,11 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             if (InitialValue != null) {
                 writer.WritePropertyName("initialValue");
-                writer.Write(int.Parse(InitialValue.ToString()));
+                writer.Write((InitialValue.ToString().Contains(".") ? (int)double.Parse(InitialValue.ToString()) : int.Parse(InitialValue.ToString())));
             }
             if (Volatility != null) {
                 writer.WritePropertyName("volatility");
-                writer.Write(int.Parse(Volatility.ToString()));
+                writer.Write((Volatility.ToString().Contains(".") ? (int)double.Parse(Volatility.ToString()) : int.Parse(Volatility.ToString())));
             }
             writer.WriteObjectEnd();
         }

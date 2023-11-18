@@ -76,7 +76,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()));
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)(data["maxValue"].ToString().Contains(".") ? (int)double.Parse(data["maxValue"].ToString()) : int.Parse(data["maxValue"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -106,7 +106,7 @@ namespace Gs2.Gs2Stamina.Request
             }
             if (MaxValue != null) {
                 writer.WritePropertyName("maxValue");
-                writer.Write(int.Parse(MaxValue.ToString()));
+                writer.Write((MaxValue.ToString().Contains(".") ? (int)double.Parse(MaxValue.ToString()) : int.Parse(MaxValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

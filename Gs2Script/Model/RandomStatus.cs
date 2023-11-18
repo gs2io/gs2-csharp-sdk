@@ -53,7 +53,7 @@ namespace Gs2.Gs2Script.Model
                 return null;
             }
             return new RandomStatus()
-                .WithSeed(!data.Keys.Contains("seed") || data["seed"] == null ? null : (long?)long.Parse(data["seed"].ToString()))
+                .WithSeed(!data.Keys.Contains("seed") || data["seed"] == null ? null : (long?)(data["seed"].ToString().Contains(".") ? (long)double.Parse(data["seed"].ToString()) : long.Parse(data["seed"].ToString())))
                 .WithUsed(!data.Keys.Contains("used") || data["used"] == null || !data["used"].IsArray ? new Gs2.Gs2Script.Model.RandomUsed[]{} : data["used"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Script.Model.RandomUsed.FromJson(v);
                 }).ToArray());
@@ -81,7 +81,7 @@ namespace Gs2.Gs2Script.Model
             writer.WriteObjectStart();
             if (Seed != null) {
                 writer.WritePropertyName("seed");
-                writer.Write(long.Parse(Seed.ToString()));
+                writer.Write((Seed.ToString().Contains(".") ? (long)double.Parse(Seed.ToString()) : long.Parse(Seed.ToString())));
             }
             if (Used != null) {
                 writer.WritePropertyName("used");

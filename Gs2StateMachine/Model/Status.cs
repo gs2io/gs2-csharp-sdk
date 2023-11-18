@@ -195,7 +195,7 @@ namespace Gs2.Gs2StateMachine.Model
                 .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : (long?)long.Parse(data["stateMachineVersion"].ToString()))
+                .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : (long?)(data["stateMachineVersion"].ToString().Contains(".") ? (long)double.Parse(data["stateMachineVersion"].ToString()) : long.Parse(data["stateMachineVersion"].ToString())))
                 .WithStacks(!data.Keys.Contains("stacks") || data["stacks"] == null || !data["stacks"].IsArray ? new Gs2.Gs2StateMachine.Model.StackEntry[]{} : data["stacks"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.StackEntry.FromJson(v);
                 }).ToArray())
@@ -204,9 +204,9 @@ namespace Gs2.Gs2StateMachine.Model
                 }).ToArray())
                 .WithValue(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithLastError(!data.Keys.Contains("lastError") || data["lastError"] == null ? null : data["lastError"].ToString())
-                .WithTransitionCount(!data.Keys.Contains("transitionCount") || data["transitionCount"] == null ? null : (int?)int.Parse(data["transitionCount"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithTransitionCount(!data.Keys.Contains("transitionCount") || data["transitionCount"] == null ? null : (int?)(data["transitionCount"].ToString().Contains(".") ? (int)double.Parse(data["transitionCount"].ToString()) : int.Parse(data["transitionCount"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -261,7 +261,7 @@ namespace Gs2.Gs2StateMachine.Model
             }
             if (StateMachineVersion != null) {
                 writer.WritePropertyName("stateMachineVersion");
-                writer.Write(long.Parse(StateMachineVersion.ToString()));
+                writer.Write((StateMachineVersion.ToString().Contains(".") ? (long)double.Parse(StateMachineVersion.ToString()) : long.Parse(StateMachineVersion.ToString())));
             }
             if (Stacks != null) {
                 writer.WritePropertyName("stacks");
@@ -295,15 +295,15 @@ namespace Gs2.Gs2StateMachine.Model
             }
             if (TransitionCount != null) {
                 writer.WritePropertyName("transitionCount");
-                writer.Write(int.Parse(TransitionCount.ToString()));
+                writer.Write((TransitionCount.ToString().Contains(".") ? (int)double.Parse(TransitionCount.ToString()) : int.Parse(TransitionCount.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

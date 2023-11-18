@@ -54,7 +54,7 @@ namespace Gs2.Gs2Enhance.Model
             }
             return new Material()
                 .WithMaterialItemSetId(!data.Keys.Contains("materialItemSetId") || data["materialItemSetId"] == null ? null : data["materialItemSetId"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Enhance.Model
             }
             if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(int.Parse(Count.ToString()));
+                writer.Write((Count.ToString().Contains(".") ? (int)double.Parse(Count.ToString()) : int.Parse(Count.ToString())));
             }
             writer.WriteObjectEnd();
         }

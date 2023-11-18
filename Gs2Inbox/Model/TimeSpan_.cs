@@ -59,9 +59,9 @@ namespace Gs2.Gs2Inbox.Model
                 return null;
             }
             return new TimeSpan_()
-                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)int.Parse(data["days"].ToString()))
-                .WithHours(!data.Keys.Contains("hours") || data["hours"] == null ? null : (int?)int.Parse(data["hours"].ToString()))
-                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : (int?)int.Parse(data["minutes"].ToString()));
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)(data["days"].ToString().Contains(".") ? (int)double.Parse(data["days"].ToString()) : int.Parse(data["days"].ToString())))
+                .WithHours(!data.Keys.Contains("hours") || data["hours"] == null ? null : (int?)(data["hours"].ToString().Contains(".") ? (int)double.Parse(data["hours"].ToString()) : int.Parse(data["hours"].ToString())))
+                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : (int?)(data["minutes"].ToString().Contains(".") ? (int)double.Parse(data["minutes"].ToString()) : int.Parse(data["minutes"].ToString())));
         }
 
         public JsonData ToJson()
@@ -78,15 +78,15 @@ namespace Gs2.Gs2Inbox.Model
             writer.WriteObjectStart();
             if (Days != null) {
                 writer.WritePropertyName("days");
-                writer.Write(int.Parse(Days.ToString()));
+                writer.Write((Days.ToString().Contains(".") ? (int)double.Parse(Days.ToString()) : int.Parse(Days.ToString())));
             }
             if (Hours != null) {
                 writer.WritePropertyName("hours");
-                writer.Write(int.Parse(Hours.ToString()));
+                writer.Write((Hours.ToString().Contains(".") ? (int)double.Parse(Hours.ToString()) : int.Parse(Hours.ToString())));
             }
             if (Minutes != null) {
                 writer.WritePropertyName("minutes");
-                writer.Write(int.Parse(Minutes.ToString()));
+                writer.Write((Minutes.ToString().Contains(".") ? (int)double.Parse(Minutes.ToString()) : int.Parse(Minutes.ToString())));
             }
             writer.WriteObjectEnd();
         }

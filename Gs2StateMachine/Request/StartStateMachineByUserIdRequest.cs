@@ -76,7 +76,7 @@ namespace Gs2.Gs2StateMachine.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)int.Parse(data["ttl"].ToString()));
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)(data["ttl"].ToString().Contains(".") ? (int)double.Parse(data["ttl"].ToString()) : int.Parse(data["ttl"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -106,7 +106,7 @@ namespace Gs2.Gs2StateMachine.Request
             }
             if (Ttl != null) {
                 writer.WritePropertyName("ttl");
-                writer.Write(int.Parse(Ttl.ToString()));
+                writer.Write((Ttl.ToString().Contains(".") ? (int)double.Parse(Ttl.ToString()) : int.Parse(Ttl.ToString())));
             }
             writer.WriteObjectEnd();
         }

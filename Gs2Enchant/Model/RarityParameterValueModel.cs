@@ -74,8 +74,8 @@ namespace Gs2.Gs2Enchant.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString())
-                .WithResourceValue(!data.Keys.Contains("resourceValue") || data["resourceValue"] == null ? null : (long?)long.Parse(data["resourceValue"].ToString()))
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+                .WithResourceValue(!data.Keys.Contains("resourceValue") || data["resourceValue"] == null ? null : (long?)(data["resourceValue"].ToString().Contains(".") ? (long)double.Parse(data["resourceValue"].ToString()) : long.Parse(data["resourceValue"].ToString())))
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
         }
 
         public JsonData ToJson()
@@ -106,11 +106,11 @@ namespace Gs2.Gs2Enchant.Model
             }
             if (ResourceValue != null) {
                 writer.WritePropertyName("resourceValue");
-                writer.Write(long.Parse(ResourceValue.ToString()));
+                writer.Write((ResourceValue.ToString().Contains(".") ? (long)double.Parse(ResourceValue.ToString()) : long.Parse(ResourceValue.ToString())));
             }
             if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(int.Parse(Weight.ToString()));
+                writer.Write((Weight.ToString().Contains(".") ? (int)double.Parse(Weight.ToString()) : int.Parse(Weight.ToString())));
             }
             writer.WriteObjectEnd();
         }

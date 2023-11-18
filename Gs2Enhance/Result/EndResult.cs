@@ -90,7 +90,7 @@ namespace Gs2.Gs2Enhance.Result
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
                 .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()))
-                .WithAcquireExperience(!data.Keys.Contains("acquireExperience") || data["acquireExperience"] == null ? null : (long?)long.Parse(data["acquireExperience"].ToString()))
+                .WithAcquireExperience(!data.Keys.Contains("acquireExperience") || data["acquireExperience"] == null ? null : (long?)(data["acquireExperience"].ToString().Contains(".") ? (long)double.Parse(data["acquireExperience"].ToString()) : long.Parse(data["acquireExperience"].ToString())))
                 .WithBonusRate(!data.Keys.Contains("bonusRate") || data["bonusRate"] == null ? null : (float?)float.Parse(data["bonusRate"].ToString()));
         }
 
@@ -131,7 +131,7 @@ namespace Gs2.Gs2Enhance.Result
             }
             if (AcquireExperience != null) {
                 writer.WritePropertyName("acquireExperience");
-                writer.Write(long.Parse(AcquireExperience.ToString()));
+                writer.Write((AcquireExperience.ToString().Contains(".") ? (long)double.Parse(AcquireExperience.ToString()) : long.Parse(AcquireExperience.ToString())));
             }
             if (BonusRate != null) {
                 writer.WritePropertyName("bonusRate");

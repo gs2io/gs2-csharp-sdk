@@ -165,9 +165,9 @@ namespace Gs2.Gs2MegaField.Model
                 .WithLayerId(!data.Keys.Contains("layerId") || data["layerId"] == null ? null : data["layerId"].ToString())
                 .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
-                .WithNumberOfMinEntries(!data.Keys.Contains("numberOfMinEntries") || data["numberOfMinEntries"] == null ? null : (int?)int.Parse(data["numberOfMinEntries"].ToString()))
-                .WithNumberOfMaxEntries(!data.Keys.Contains("numberOfMaxEntries") || data["numberOfMaxEntries"] == null ? null : (int?)int.Parse(data["numberOfMaxEntries"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithNumberOfMinEntries(!data.Keys.Contains("numberOfMinEntries") || data["numberOfMinEntries"] == null ? null : (int?)(data["numberOfMinEntries"].ToString().Contains(".") ? (int)double.Parse(data["numberOfMinEntries"].ToString()) : int.Parse(data["numberOfMinEntries"].ToString())))
+                .WithNumberOfMaxEntries(!data.Keys.Contains("numberOfMaxEntries") || data["numberOfMaxEntries"] == null ? null : (int?)(data["numberOfMaxEntries"].ToString().Contains(".") ? (int)double.Parse(data["numberOfMaxEntries"].ToString()) : int.Parse(data["numberOfMaxEntries"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -199,15 +199,15 @@ namespace Gs2.Gs2MegaField.Model
             }
             if (NumberOfMinEntries != null) {
                 writer.WritePropertyName("numberOfMinEntries");
-                writer.Write(int.Parse(NumberOfMinEntries.ToString()));
+                writer.Write((NumberOfMinEntries.ToString().Contains(".") ? (int)double.Parse(NumberOfMinEntries.ToString()) : int.Parse(NumberOfMinEntries.ToString())));
             }
             if (NumberOfMaxEntries != null) {
                 writer.WritePropertyName("numberOfMaxEntries");
-                writer.Write(int.Parse(NumberOfMaxEntries.ToString()));
+                writer.Write((NumberOfMaxEntries.ToString().Contains(".") ? (int)double.Parse(NumberOfMaxEntries.ToString()) : int.Parse(NumberOfMaxEntries.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

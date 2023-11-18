@@ -83,8 +83,8 @@ namespace Gs2.Gs2Chat.Request
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)long.Parse(data["startAt"].ToString()))
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+                .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)(data["startAt"].ToString().Contains(".") ? (long)double.Parse(data["startAt"].ToString()) : long.Parse(data["startAt"].ToString())))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -120,11 +120,11 @@ namespace Gs2.Gs2Chat.Request
             }
             if (StartAt != null) {
                 writer.WritePropertyName("startAt");
-                writer.Write(long.Parse(StartAt.ToString()));
+                writer.Write((StartAt.ToString().Contains(".") ? (long)double.Parse(StartAt.ToString()) : long.Parse(StartAt.ToString())));
             }
             if (Limit != null) {
                 writer.WritePropertyName("limit");
-                writer.Write(int.Parse(Limit.ToString()));
+                writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
             writer.WriteObjectEnd();
         }

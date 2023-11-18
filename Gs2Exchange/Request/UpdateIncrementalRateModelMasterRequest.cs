@@ -121,11 +121,11 @@ namespace Gs2.Gs2Exchange.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithConsumeAction(!data.Keys.Contains("consumeAction") || data["consumeAction"] == null ? null : Gs2.Core.Model.ConsumeAction.FromJson(data["consumeAction"]))
                 .WithCalculateType(!data.Keys.Contains("calculateType") || data["calculateType"] == null ? null : data["calculateType"].ToString())
-                .WithBaseValue(!data.Keys.Contains("baseValue") || data["baseValue"] == null ? null : (long?)long.Parse(data["baseValue"].ToString()))
-                .WithCoefficientValue(!data.Keys.Contains("coefficientValue") || data["coefficientValue"] == null ? null : (long?)long.Parse(data["coefficientValue"].ToString()))
+                .WithBaseValue(!data.Keys.Contains("baseValue") || data["baseValue"] == null ? null : (long?)(data["baseValue"].ToString().Contains(".") ? (long)double.Parse(data["baseValue"].ToString()) : long.Parse(data["baseValue"].ToString())))
+                .WithCoefficientValue(!data.Keys.Contains("coefficientValue") || data["coefficientValue"] == null ? null : (long?)(data["coefficientValue"].ToString().Contains(".") ? (long)double.Parse(data["coefficientValue"].ToString()) : long.Parse(data["coefficientValue"].ToString())))
                 .WithCalculateScriptId(!data.Keys.Contains("calculateScriptId") || data["calculateScriptId"] == null ? null : data["calculateScriptId"].ToString())
                 .WithExchangeCountId(!data.Keys.Contains("exchangeCountId") || data["exchangeCountId"] == null ? null : data["exchangeCountId"].ToString())
-                .WithMaximumExchangeCount(!data.Keys.Contains("maximumExchangeCount") || data["maximumExchangeCount"] == null ? null : (int?)int.Parse(data["maximumExchangeCount"].ToString()))
+                .WithMaximumExchangeCount(!data.Keys.Contains("maximumExchangeCount") || data["maximumExchangeCount"] == null ? null : (int?)(data["maximumExchangeCount"].ToString().Contains(".") ? (int)double.Parse(data["maximumExchangeCount"].ToString()) : int.Parse(data["maximumExchangeCount"].ToString())))
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray());
@@ -186,11 +186,11 @@ namespace Gs2.Gs2Exchange.Request
             }
             if (BaseValue != null) {
                 writer.WritePropertyName("baseValue");
-                writer.Write(long.Parse(BaseValue.ToString()));
+                writer.Write((BaseValue.ToString().Contains(".") ? (long)double.Parse(BaseValue.ToString()) : long.Parse(BaseValue.ToString())));
             }
             if (CoefficientValue != null) {
                 writer.WritePropertyName("coefficientValue");
-                writer.Write(long.Parse(CoefficientValue.ToString()));
+                writer.Write((CoefficientValue.ToString().Contains(".") ? (long)double.Parse(CoefficientValue.ToString()) : long.Parse(CoefficientValue.ToString())));
             }
             if (CalculateScriptId != null) {
                 writer.WritePropertyName("calculateScriptId");
@@ -202,7 +202,7 @@ namespace Gs2.Gs2Exchange.Request
             }
             if (MaximumExchangeCount != null) {
                 writer.WritePropertyName("maximumExchangeCount");
-                writer.Write(int.Parse(MaximumExchangeCount.ToString()));
+                writer.Write((MaximumExchangeCount.ToString().Contains(".") ? (int)double.Parse(MaximumExchangeCount.ToString()) : int.Parse(MaximumExchangeCount.ToString())));
             }
             if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");

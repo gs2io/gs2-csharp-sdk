@@ -76,7 +76,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithAddCapacityValue(!data.Keys.Contains("addCapacityValue") || data["addCapacityValue"] == null ? null : (int?)int.Parse(data["addCapacityValue"].ToString()));
+                .WithAddCapacityValue(!data.Keys.Contains("addCapacityValue") || data["addCapacityValue"] == null ? null : (int?)(data["addCapacityValue"].ToString().Contains(".") ? (int)double.Parse(data["addCapacityValue"].ToString()) : int.Parse(data["addCapacityValue"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -106,7 +106,7 @@ namespace Gs2.Gs2Inventory.Request
             }
             if (AddCapacityValue != null) {
                 writer.WritePropertyName("addCapacityValue");
-                writer.Write(int.Parse(AddCapacityValue.ToString()));
+                writer.Write((AddCapacityValue.ToString().Contains(".") ? (int)double.Parse(AddCapacityValue.ToString()) : int.Parse(AddCapacityValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

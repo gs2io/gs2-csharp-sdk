@@ -61,7 +61,7 @@ namespace Gs2.Gs2Enchant.Model
             return new RarityParameterValue()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString())
-                .WithResourceValue(!data.Keys.Contains("resourceValue") || data["resourceValue"] == null ? null : (long?)long.Parse(data["resourceValue"].ToString()));
+                .WithResourceValue(!data.Keys.Contains("resourceValue") || data["resourceValue"] == null ? null : (long?)(data["resourceValue"].ToString().Contains(".") ? (long)double.Parse(data["resourceValue"].ToString()) : long.Parse(data["resourceValue"].ToString())));
         }
 
         public JsonData ToJson()
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Enchant.Model
             }
             if (ResourceValue != null) {
                 writer.WritePropertyName("resourceValue");
-                writer.Write(long.Parse(ResourceValue.ToString()));
+                writer.Write((ResourceValue.ToString().Contains(".") ? (long)double.Parse(ResourceValue.ToString()) : long.Parse(ResourceValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

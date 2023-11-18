@@ -183,12 +183,12 @@ namespace Gs2.Gs2Idle.Model
                 .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)long.Parse(data["randomSeed"].ToString()))
-                .WithIdleMinutes(!data.Keys.Contains("idleMinutes") || data["idleMinutes"] == null ? null : (int?)int.Parse(data["idleMinutes"].ToString()))
-                .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : (int?)int.Parse(data["maximumIdleMinutes"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)(data["randomSeed"].ToString().Contains(".") ? (long)double.Parse(data["randomSeed"].ToString()) : long.Parse(data["randomSeed"].ToString())))
+                .WithIdleMinutes(!data.Keys.Contains("idleMinutes") || data["idleMinutes"] == null ? null : (int?)(data["idleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["idleMinutes"].ToString()) : int.Parse(data["idleMinutes"].ToString())))
+                .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : (int?)(data["maximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["maximumIdleMinutes"].ToString()) : int.Parse(data["maximumIdleMinutes"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -223,27 +223,27 @@ namespace Gs2.Gs2Idle.Model
             }
             if (RandomSeed != null) {
                 writer.WritePropertyName("randomSeed");
-                writer.Write(long.Parse(RandomSeed.ToString()));
+                writer.Write((RandomSeed.ToString().Contains(".") ? (long)double.Parse(RandomSeed.ToString()) : long.Parse(RandomSeed.ToString())));
             }
             if (IdleMinutes != null) {
                 writer.WritePropertyName("idleMinutes");
-                writer.Write(int.Parse(IdleMinutes.ToString()));
+                writer.Write((IdleMinutes.ToString().Contains(".") ? (int)double.Parse(IdleMinutes.ToString()) : int.Parse(IdleMinutes.ToString())));
             }
             if (MaximumIdleMinutes != null) {
                 writer.WritePropertyName("maximumIdleMinutes");
-                writer.Write(int.Parse(MaximumIdleMinutes.ToString()));
+                writer.Write((MaximumIdleMinutes.ToString().Contains(".") ? (int)double.Parse(MaximumIdleMinutes.ToString()) : int.Parse(MaximumIdleMinutes.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }

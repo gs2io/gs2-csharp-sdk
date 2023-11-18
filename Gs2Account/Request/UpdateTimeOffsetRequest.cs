@@ -69,7 +69,7 @@ namespace Gs2.Gs2Account.Request
             return new UpdateTimeOffsetRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()));
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -94,7 +94,7 @@ namespace Gs2.Gs2Account.Request
             }
             if (TimeOffset != null) {
                 writer.WritePropertyName("timeOffset");
-                writer.Write(int.Parse(TimeOffset.ToString()));
+                writer.Write((TimeOffset.ToString().Contains(".") ? (int)double.Parse(TimeOffset.ToString()) : int.Parse(TimeOffset.ToString())));
             }
             writer.WriteObjectEnd();
         }

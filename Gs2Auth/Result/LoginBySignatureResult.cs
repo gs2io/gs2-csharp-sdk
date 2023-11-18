@@ -63,7 +63,7 @@ namespace Gs2.Gs2Auth.Result
             return new LoginBySignatureResult()
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)long.Parse(data["expire"].ToString()));
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())));
         }
 
         public JsonData ToJson()
@@ -88,7 +88,7 @@ namespace Gs2.Gs2Auth.Result
             }
             if (Expire != null) {
                 writer.WritePropertyName("expire");
-                writer.Write(long.Parse(Expire.ToString()));
+                writer.Write((Expire.ToString().Contains(".") ? (long)double.Parse(Expire.ToString()) : long.Parse(Expire.ToString())));
             }
             writer.WriteObjectEnd();
         }

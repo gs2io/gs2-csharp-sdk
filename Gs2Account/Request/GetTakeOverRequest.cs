@@ -63,7 +63,7 @@ namespace Gs2.Gs2Account.Request
             return new GetTakeOverRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)int.Parse(data["type"].ToString()));
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -88,7 +88,7 @@ namespace Gs2.Gs2Account.Request
             }
             if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(int.Parse(Type.ToString()));
+                writer.Write((Type.ToString().Contains(".") ? (int)double.Parse(Type.ToString()) : int.Parse(Type.ToString())));
             }
             writer.WriteObjectEnd();
         }

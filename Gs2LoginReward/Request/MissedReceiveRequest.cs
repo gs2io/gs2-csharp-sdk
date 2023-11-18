@@ -82,7 +82,7 @@ namespace Gs2.Gs2LoginReward.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithBonusModelName(!data.Keys.Contains("bonusModelName") || data["bonusModelName"] == null ? null : data["bonusModelName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : (int?)int.Parse(data["stepNumber"].ToString()))
+                .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : (int?)(data["stepNumber"].ToString().Contains(".") ? (int)double.Parse(data["stepNumber"].ToString()) : int.Parse(data["stepNumber"].ToString())))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2LoginReward.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2LoginReward.Model.Config.FromJson(v);
                 }).ToArray());
@@ -125,7 +125,7 @@ namespace Gs2.Gs2LoginReward.Request
             }
             if (StepNumber != null) {
                 writer.WritePropertyName("stepNumber");
-                writer.Write(int.Parse(StepNumber.ToString()));
+                writer.Write((StepNumber.ToString().Contains(".") ? (int)double.Parse(StepNumber.ToString()) : int.Parse(StepNumber.ToString())));
             }
             if (Config != null) {
                 writer.WritePropertyName("config");

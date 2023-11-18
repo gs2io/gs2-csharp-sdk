@@ -75,8 +75,8 @@ namespace Gs2.Gs2Schedule.Result
             return new GetEventByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.Event.FromJson(data["item"]))
                 .WithInSchedule(!data.Keys.Contains("inSchedule") || data["inSchedule"] == null ? null : (bool?)bool.Parse(data["inSchedule"].ToString()))
-                .WithScheduleStartAt(!data.Keys.Contains("scheduleStartAt") || data["scheduleStartAt"] == null ? null : (long?)long.Parse(data["scheduleStartAt"].ToString()))
-                .WithScheduleEndAt(!data.Keys.Contains("scheduleEndAt") || data["scheduleEndAt"] == null ? null : (long?)long.Parse(data["scheduleEndAt"].ToString()))
+                .WithScheduleStartAt(!data.Keys.Contains("scheduleStartAt") || data["scheduleStartAt"] == null ? null : (long?)(data["scheduleStartAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleStartAt"].ToString()) : long.Parse(data["scheduleStartAt"].ToString())))
+                .WithScheduleEndAt(!data.Keys.Contains("scheduleEndAt") || data["scheduleEndAt"] == null ? null : (long?)(data["scheduleEndAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleEndAt"].ToString()) : long.Parse(data["scheduleEndAt"].ToString())))
                 .WithRepeatSchedule(!data.Keys.Contains("repeatSchedule") || data["repeatSchedule"] == null ? null : Gs2.Gs2Schedule.Model.RepeatSchedule.FromJson(data["repeatSchedule"]));
         }
 
@@ -103,11 +103,11 @@ namespace Gs2.Gs2Schedule.Result
             }
             if (ScheduleStartAt != null) {
                 writer.WritePropertyName("scheduleStartAt");
-                writer.Write(long.Parse(ScheduleStartAt.ToString()));
+                writer.Write((ScheduleStartAt.ToString().Contains(".") ? (long)double.Parse(ScheduleStartAt.ToString()) : long.Parse(ScheduleStartAt.ToString())));
             }
             if (ScheduleEndAt != null) {
                 writer.WritePropertyName("scheduleEndAt");
-                writer.Write(long.Parse(ScheduleEndAt.ToString()));
+                writer.Write((ScheduleEndAt.ToString().Contains(".") ? (long)double.Parse(ScheduleEndAt.ToString()) : long.Parse(ScheduleEndAt.ToString())));
             }
             if (RepeatSchedule != null) {
                 RepeatSchedule.WriteJson(writer);

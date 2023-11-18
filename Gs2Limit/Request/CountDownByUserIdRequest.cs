@@ -83,7 +83,7 @@ namespace Gs2.Gs2Limit.Request
                 .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCountDownValue(!data.Keys.Contains("countDownValue") || data["countDownValue"] == null ? null : (int?)int.Parse(data["countDownValue"].ToString()));
+                .WithCountDownValue(!data.Keys.Contains("countDownValue") || data["countDownValue"] == null ? null : (int?)(data["countDownValue"].ToString().Contains(".") ? (int)double.Parse(data["countDownValue"].ToString()) : int.Parse(data["countDownValue"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -118,7 +118,7 @@ namespace Gs2.Gs2Limit.Request
             }
             if (CountDownValue != null) {
                 writer.WritePropertyName("countDownValue");
-                writer.Write(int.Parse(CountDownValue.ToString()));
+                writer.Write((CountDownValue.ToString().Contains(".") ? (int)double.Parse(CountDownValue.ToString()) : int.Parse(CountDownValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

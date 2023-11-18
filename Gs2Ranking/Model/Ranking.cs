@@ -83,13 +83,13 @@ namespace Gs2.Gs2Ranking.Model
                 return null;
             }
             return new Ranking()
-                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (long?)long.Parse(data["rank"].ToString()))
-                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (long?)long.Parse(data["index"].ToString()))
+                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (long?)(data["rank"].ToString().Contains(".") ? (long)double.Parse(data["rank"].ToString()) : long.Parse(data["rank"].ToString())))
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (long?)(data["index"].ToString().Contains(".") ? (long)double.Parse(data["index"].ToString()) : long.Parse(data["index"].ToString())))
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)long.Parse(data["score"].ToString()))
+                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)(data["score"].ToString().Contains(".") ? (long)double.Parse(data["score"].ToString()) : long.Parse(data["score"].ToString())))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -110,11 +110,11 @@ namespace Gs2.Gs2Ranking.Model
             writer.WriteObjectStart();
             if (Rank != null) {
                 writer.WritePropertyName("rank");
-                writer.Write(long.Parse(Rank.ToString()));
+                writer.Write((Rank.ToString().Contains(".") ? (long)double.Parse(Rank.ToString()) : long.Parse(Rank.ToString())));
             }
             if (Index != null) {
                 writer.WritePropertyName("index");
-                writer.Write(long.Parse(Index.ToString()));
+                writer.Write((Index.ToString().Contains(".") ? (long)double.Parse(Index.ToString()) : long.Parse(Index.ToString())));
             }
             if (CategoryName != null) {
                 writer.WritePropertyName("categoryName");
@@ -126,7 +126,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             if (Score != null) {
                 writer.WritePropertyName("score");
-                writer.Write(long.Parse(Score.ToString()));
+                writer.Write((Score.ToString().Contains(".") ? (long)double.Parse(Score.ToString()) : long.Parse(Score.ToString())));
             }
             if (Metadata != null) {
                 writer.WritePropertyName("metadata");
@@ -134,7 +134,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

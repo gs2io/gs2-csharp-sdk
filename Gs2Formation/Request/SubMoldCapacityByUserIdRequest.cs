@@ -76,7 +76,7 @@ namespace Gs2.Gs2Formation.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
-                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()));
+                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)(data["capacity"].ToString().Contains(".") ? (int)double.Parse(data["capacity"].ToString()) : int.Parse(data["capacity"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -106,7 +106,7 @@ namespace Gs2.Gs2Formation.Request
             }
             if (Capacity != null) {
                 writer.WritePropertyName("capacity");
-                writer.Write(int.Parse(Capacity.ToString()));
+                writer.Write((Capacity.ToString().Contains(".") ? (int)double.Parse(Capacity.ToString()) : int.Parse(Capacity.ToString())));
             }
             writer.WriteObjectEnd();
         }

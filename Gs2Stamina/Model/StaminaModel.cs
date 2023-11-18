@@ -178,11 +178,11 @@ namespace Gs2.Gs2Stamina.Model
                 .WithStaminaModelId(!data.Keys.Contains("staminaModelId") || data["staminaModelId"] == null ? null : data["staminaModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)int.Parse(data["recoverIntervalMinutes"].ToString()))
-                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)int.Parse(data["recoverValue"].ToString()))
-                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)int.Parse(data["initialCapacity"].ToString()))
+                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)(data["recoverIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["recoverIntervalMinutes"].ToString()) : int.Parse(data["recoverIntervalMinutes"].ToString())))
+                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)(data["recoverValue"].ToString().Contains(".") ? (int)double.Parse(data["recoverValue"].ToString()) : int.Parse(data["recoverValue"].ToString())))
+                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)(data["initialCapacity"].ToString().Contains(".") ? (int)double.Parse(data["initialCapacity"].ToString()) : int.Parse(data["initialCapacity"].ToString())))
                 .WithIsOverflow(!data.Keys.Contains("isOverflow") || data["isOverflow"] == null ? null : (bool?)bool.Parse(data["isOverflow"].ToString()))
-                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)int.Parse(data["maxCapacity"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)(data["maxCapacity"].ToString().Contains(".") ? (int)double.Parse(data["maxCapacity"].ToString()) : int.Parse(data["maxCapacity"].ToString())))
                 .WithMaxStaminaTable(!data.Keys.Contains("maxStaminaTable") || data["maxStaminaTable"] == null ? null : Gs2.Gs2Stamina.Model.MaxStaminaTable.FromJson(data["maxStaminaTable"]))
                 .WithRecoverIntervalTable(!data.Keys.Contains("recoverIntervalTable") || data["recoverIntervalTable"] == null ? null : Gs2.Gs2Stamina.Model.RecoverIntervalTable.FromJson(data["recoverIntervalTable"]))
                 .WithRecoverValueTable(!data.Keys.Contains("recoverValueTable") || data["recoverValueTable"] == null ? null : Gs2.Gs2Stamina.Model.RecoverValueTable.FromJson(data["recoverValueTable"]));
@@ -222,15 +222,15 @@ namespace Gs2.Gs2Stamina.Model
             }
             if (RecoverIntervalMinutes != null) {
                 writer.WritePropertyName("recoverIntervalMinutes");
-                writer.Write(int.Parse(RecoverIntervalMinutes.ToString()));
+                writer.Write((RecoverIntervalMinutes.ToString().Contains(".") ? (int)double.Parse(RecoverIntervalMinutes.ToString()) : int.Parse(RecoverIntervalMinutes.ToString())));
             }
             if (RecoverValue != null) {
                 writer.WritePropertyName("recoverValue");
-                writer.Write(int.Parse(RecoverValue.ToString()));
+                writer.Write((RecoverValue.ToString().Contains(".") ? (int)double.Parse(RecoverValue.ToString()) : int.Parse(RecoverValue.ToString())));
             }
             if (InitialCapacity != null) {
                 writer.WritePropertyName("initialCapacity");
-                writer.Write(int.Parse(InitialCapacity.ToString()));
+                writer.Write((InitialCapacity.ToString().Contains(".") ? (int)double.Parse(InitialCapacity.ToString()) : int.Parse(InitialCapacity.ToString())));
             }
             if (IsOverflow != null) {
                 writer.WritePropertyName("isOverflow");
@@ -238,7 +238,7 @@ namespace Gs2.Gs2Stamina.Model
             }
             if (MaxCapacity != null) {
                 writer.WritePropertyName("maxCapacity");
-                writer.Write(int.Parse(MaxCapacity.ToString()));
+                writer.Write((MaxCapacity.ToString().Contains(".") ? (int)double.Parse(MaxCapacity.ToString()) : int.Parse(MaxCapacity.ToString())));
             }
             if (MaxStaminaTable != null) {
                 writer.WritePropertyName("maxStaminaTable");

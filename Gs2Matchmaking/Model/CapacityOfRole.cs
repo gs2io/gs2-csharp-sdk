@@ -69,7 +69,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithRoleAliases(!data.Keys.Contains("roleAliases") || data["roleAliases"] == null || !data["roleAliases"].IsArray ? new string[]{} : data["roleAliases"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)int.Parse(data["capacity"].ToString()))
+                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)(data["capacity"].ToString().Contains(".") ? (int)double.Parse(data["capacity"].ToString()) : int.Parse(data["capacity"].ToString())))
                 .WithParticipants(!data.Keys.Contains("participants") || data["participants"] == null || !data["participants"].IsArray ? new Gs2.Gs2Matchmaking.Model.Player[]{} : data["participants"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Matchmaking.Model.Player.FromJson(v);
                 }).ToArray());
@@ -123,7 +123,7 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             if (Capacity != null) {
                 writer.WritePropertyName("capacity");
-                writer.Write(int.Parse(Capacity.ToString()));
+                writer.Write((Capacity.ToString().Contains(".") ? (int)double.Parse(Capacity.ToString()) : int.Parse(Capacity.ToString())));
             }
             if (Participants != null) {
                 writer.WritePropertyName("participants");

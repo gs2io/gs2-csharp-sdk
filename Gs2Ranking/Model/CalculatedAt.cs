@@ -54,7 +54,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             return new CalculatedAt()
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithValue(!data.Keys.Contains("calculatedAt") || data["calculatedAt"] == null ? null : (long?)long.Parse(data["calculatedAt"].ToString()));
+                .WithValue(!data.Keys.Contains("calculatedAt") || data["calculatedAt"] == null ? null : (long?)(data["calculatedAt"].ToString().Contains(".") ? (long)double.Parse(data["calculatedAt"].ToString()) : long.Parse(data["calculatedAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(long.Parse(Value.ToString()));
+                writer.Write((Value.ToString().Contains(".") ? (long)double.Parse(Value.ToString()) : long.Parse(Value.ToString())));
             }
             writer.WriteObjectEnd();
         }

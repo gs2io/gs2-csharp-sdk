@@ -53,8 +53,8 @@ namespace Gs2.Gs2Enchant.Model
                 return null;
             }
             return new RarityParameterCountModel()
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)int.Parse(data["count"].ToString()))
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
         }
 
         public JsonData ToJson()
@@ -70,11 +70,11 @@ namespace Gs2.Gs2Enchant.Model
             writer.WriteObjectStart();
             if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(int.Parse(Count.ToString()));
+                writer.Write((Count.ToString().Contains(".") ? (int)double.Parse(Count.ToString()) : int.Parse(Count.ToString())));
             }
             if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(int.Parse(Weight.ToString()));
+                writer.Write((Weight.ToString().Contains(".") ? (int)double.Parse(Weight.ToString()) : int.Parse(Weight.ToString())));
             }
             writer.WriteObjectEnd();
         }

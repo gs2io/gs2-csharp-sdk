@@ -180,10 +180,10 @@ namespace Gs2.Gs2LoginReward.Model
                 .WithReceivedSteps(!data.Keys.Contains("receivedSteps") || data["receivedSteps"] == null || !data["receivedSteps"].IsArray ? new bool[]{} : data["receivedSteps"].Cast<JsonData>().Select(v => {
                     return bool.Parse(v.ToString());
                 }).ToArray())
-                .WithLastReceivedAt(!data.Keys.Contains("lastReceivedAt") || data["lastReceivedAt"] == null ? null : (long?)long.Parse(data["lastReceivedAt"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithLastReceivedAt(!data.Keys.Contains("lastReceivedAt") || data["lastReceivedAt"] == null ? null : (long?)(data["lastReceivedAt"].ToString().Contains(".") ? (long)double.Parse(data["lastReceivedAt"].ToString()) : long.Parse(data["lastReceivedAt"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -235,19 +235,19 @@ namespace Gs2.Gs2LoginReward.Model
             }
             if (LastReceivedAt != null) {
                 writer.WritePropertyName("lastReceivedAt");
-                writer.Write(long.Parse(LastReceivedAt.ToString()));
+                writer.Write((LastReceivedAt.ToString().Contains(".") ? (long)double.Parse(LastReceivedAt.ToString()) : long.Parse(LastReceivedAt.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }

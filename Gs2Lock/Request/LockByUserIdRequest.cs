@@ -83,7 +83,7 @@ namespace Gs2.Gs2Lock.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (long?)long.Parse(data["ttl"].ToString()));
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (long?)(data["ttl"].ToString().Contains(".") ? (long)double.Parse(data["ttl"].ToString()) : long.Parse(data["ttl"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -118,7 +118,7 @@ namespace Gs2.Gs2Lock.Request
             }
             if (Ttl != null) {
                 writer.WritePropertyName("ttl");
-                writer.Write(long.Parse(Ttl.ToString()));
+                writer.Write((Ttl.ToString().Contains(".") ? (long)double.Parse(Ttl.ToString()) : long.Parse(Ttl.ToString())));
             }
             writer.WriteObjectEnd();
         }

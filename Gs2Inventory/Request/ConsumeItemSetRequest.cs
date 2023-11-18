@@ -89,7 +89,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
-                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : (long?)long.Parse(data["consumeCount"].ToString()))
+                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : (long?)(data["consumeCount"].ToString().Contains(".") ? (long)double.Parse(data["consumeCount"].ToString()) : long.Parse(data["consumeCount"].ToString())))
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString());
         }
 
@@ -126,7 +126,7 @@ namespace Gs2.Gs2Inventory.Request
             }
             if (ConsumeCount != null) {
                 writer.WritePropertyName("consumeCount");
-                writer.Write(long.Parse(ConsumeCount.ToString()));
+                writer.Write((ConsumeCount.ToString().Contains(".") ? (long)double.Parse(ConsumeCount.ToString()) : long.Parse(ConsumeCount.ToString())));
             }
             if (ItemSetName != null) {
                 writer.WritePropertyName("itemSetName");

@@ -61,7 +61,7 @@ namespace Gs2.Gs2JobQueue.Model
             return new JobEntry()
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : (int?)int.Parse(data["maxTryCount"].ToString()));
+                .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : (int?)(data["maxTryCount"].ToString().Contains(".") ? (int)double.Parse(data["maxTryCount"].ToString()) : int.Parse(data["maxTryCount"].ToString())));
         }
 
         public JsonData ToJson()
@@ -86,7 +86,7 @@ namespace Gs2.Gs2JobQueue.Model
             }
             if (MaxTryCount != null) {
                 writer.WritePropertyName("maxTryCount");
-                writer.Write(int.Parse(MaxTryCount.ToString()));
+                writer.Write((MaxTryCount.ToString().Contains(".") ? (int)double.Parse(MaxTryCount.ToString()) : int.Parse(MaxTryCount.ToString())));
             }
             writer.WriteObjectEnd();
         }

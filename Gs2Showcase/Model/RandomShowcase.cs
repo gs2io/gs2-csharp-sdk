@@ -160,12 +160,12 @@ namespace Gs2.Gs2Showcase.Model
                 .WithRandomShowcaseId(!data.Keys.Contains("randomShowcaseId") || data["randomShowcaseId"] == null ? null : data["randomShowcaseId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithMaximumNumberOfChoice(!data.Keys.Contains("maximumNumberOfChoice") || data["maximumNumberOfChoice"] == null ? null : (int?)int.Parse(data["maximumNumberOfChoice"].ToString()))
+                .WithMaximumNumberOfChoice(!data.Keys.Contains("maximumNumberOfChoice") || data["maximumNumberOfChoice"] == null ? null : (int?)(data["maximumNumberOfChoice"].ToString().Contains(".") ? (int)double.Parse(data["maximumNumberOfChoice"].ToString()) : int.Parse(data["maximumNumberOfChoice"].ToString())))
                 .WithDisplayItems(!data.Keys.Contains("displayItems") || data["displayItems"] == null || !data["displayItems"].IsArray ? new Gs2.Gs2Showcase.Model.RandomDisplayItemModel[]{} : data["displayItems"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.RandomDisplayItemModel.FromJson(v);
                 }).ToArray())
-                .WithBaseTimestamp(!data.Keys.Contains("baseTimestamp") || data["baseTimestamp"] == null ? null : (long?)long.Parse(data["baseTimestamp"].ToString()))
-                .WithResetIntervalHours(!data.Keys.Contains("resetIntervalHours") || data["resetIntervalHours"] == null ? null : (int?)int.Parse(data["resetIntervalHours"].ToString()))
+                .WithBaseTimestamp(!data.Keys.Contains("baseTimestamp") || data["baseTimestamp"] == null ? null : (long?)(data["baseTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["baseTimestamp"].ToString()) : long.Parse(data["baseTimestamp"].ToString())))
+                .WithResetIntervalHours(!data.Keys.Contains("resetIntervalHours") || data["resetIntervalHours"] == null ? null : (int?)(data["resetIntervalHours"].ToString().Contains(".") ? (int)double.Parse(data["resetIntervalHours"].ToString()) : int.Parse(data["resetIntervalHours"].ToString())))
                 .WithSalesPeriodEventId(!data.Keys.Contains("salesPeriodEventId") || data["salesPeriodEventId"] == null ? null : data["salesPeriodEventId"].ToString());
         }
 
@@ -209,7 +209,7 @@ namespace Gs2.Gs2Showcase.Model
             }
             if (MaximumNumberOfChoice != null) {
                 writer.WritePropertyName("maximumNumberOfChoice");
-                writer.Write(int.Parse(MaximumNumberOfChoice.ToString()));
+                writer.Write((MaximumNumberOfChoice.ToString().Contains(".") ? (int)double.Parse(MaximumNumberOfChoice.ToString()) : int.Parse(MaximumNumberOfChoice.ToString())));
             }
             if (DisplayItems != null) {
                 writer.WritePropertyName("displayItems");
@@ -224,11 +224,11 @@ namespace Gs2.Gs2Showcase.Model
             }
             if (BaseTimestamp != null) {
                 writer.WritePropertyName("baseTimestamp");
-                writer.Write(long.Parse(BaseTimestamp.ToString()));
+                writer.Write((BaseTimestamp.ToString().Contains(".") ? (long)double.Parse(BaseTimestamp.ToString()) : long.Parse(BaseTimestamp.ToString())));
             }
             if (ResetIntervalHours != null) {
                 writer.WritePropertyName("resetIntervalHours");
-                writer.Write(int.Parse(ResetIntervalHours.ToString()));
+                writer.Write((ResetIntervalHours.ToString().Contains(".") ? (int)double.Parse(ResetIntervalHours.ToString()) : int.Parse(ResetIntervalHours.ToString())));
             }
             if (SalesPeriodEventId != null) {
                 writer.WritePropertyName("salesPeriodEventId");

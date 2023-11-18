@@ -195,10 +195,10 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithJobId(!data.Keys.Contains("jobId") || data["jobId"] == null ? null : data["jobId"].ToString())
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)int.Parse(data["tryNumber"].ToString()))
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)int.Parse(data["statusCode"].ToString()))
+                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)(data["tryNumber"].ToString().Contains(".") ? (int)double.Parse(data["tryNumber"].ToString()) : int.Parse(data["tryNumber"].ToString())))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
-                .WithTryAt(!data.Keys.Contains("tryAt") || data["tryAt"] == null ? null : (long?)long.Parse(data["tryAt"].ToString()));
+                .WithTryAt(!data.Keys.Contains("tryAt") || data["tryAt"] == null ? null : (long?)(data["tryAt"].ToString().Contains(".") ? (long)double.Parse(data["tryAt"].ToString()) : long.Parse(data["tryAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -236,11 +236,11 @@ namespace Gs2.Gs2JobQueue.Model
             }
             if (TryNumber != null) {
                 writer.WritePropertyName("tryNumber");
-                writer.Write(int.Parse(TryNumber.ToString()));
+                writer.Write((TryNumber.ToString().Contains(".") ? (int)double.Parse(TryNumber.ToString()) : int.Parse(TryNumber.ToString())));
             }
             if (StatusCode != null) {
                 writer.WritePropertyName("statusCode");
-                writer.Write(int.Parse(StatusCode.ToString()));
+                writer.Write((StatusCode.ToString().Contains(".") ? (int)double.Parse(StatusCode.ToString()) : int.Parse(StatusCode.ToString())));
             }
             if (Result != null) {
                 writer.WritePropertyName("result");
@@ -248,7 +248,7 @@ namespace Gs2.Gs2JobQueue.Model
             }
             if (TryAt != null) {
                 writer.WritePropertyName("tryAt");
-                writer.Write(long.Parse(TryAt.ToString()));
+                writer.Write((TryAt.ToString().Contains(".") ? (long)double.Parse(TryAt.ToString()) : long.Parse(TryAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

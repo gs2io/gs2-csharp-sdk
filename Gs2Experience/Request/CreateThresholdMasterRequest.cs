@@ -78,7 +78,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new long[]{} : data["values"].Cast<JsonData>().Select(v => {
-                    return long.Parse(v.ToString());
+                    return (v.ToString().Contains(".") ? (long)double.Parse(v.ToString()) : long.Parse(v.ToString()));
                 }).ToArray());
         }
 
@@ -126,7 +126,7 @@ namespace Gs2.Gs2Experience.Request
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    writer.Write(long.Parse(value.ToString()));
+                    writer.Write((value.ToString().Contains(".") ? (long)double.Parse(value.ToString()) : long.Parse(value.ToString())));
                 }
                 writer.WriteArrayEnd();
             }

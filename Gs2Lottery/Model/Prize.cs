@@ -88,10 +88,10 @@ namespace Gs2.Gs2Lottery.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithDrawnLimit(!data.Keys.Contains("drawnLimit") || data["drawnLimit"] == null ? null : (int?)int.Parse(data["drawnLimit"].ToString()))
+                .WithDrawnLimit(!data.Keys.Contains("drawnLimit") || data["drawnLimit"] == null ? null : (int?)(data["drawnLimit"].ToString().Contains(".") ? (int)double.Parse(data["drawnLimit"].ToString()) : int.Parse(data["drawnLimit"].ToString())))
                 .WithLimitFailOverPrizeId(!data.Keys.Contains("limitFailOverPrizeId") || data["limitFailOverPrizeId"] == null ? null : data["limitFailOverPrizeId"].ToString())
                 .WithPrizeTableName(!data.Keys.Contains("prizeTableName") || data["prizeTableName"] == null ? null : data["prizeTableName"].ToString())
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
         }
 
         public JsonData ToJson()
@@ -140,7 +140,7 @@ namespace Gs2.Gs2Lottery.Model
             }
             if (DrawnLimit != null) {
                 writer.WritePropertyName("drawnLimit");
-                writer.Write(int.Parse(DrawnLimit.ToString()));
+                writer.Write((DrawnLimit.ToString().Contains(".") ? (int)double.Parse(DrawnLimit.ToString()) : int.Parse(DrawnLimit.ToString())));
             }
             if (LimitFailOverPrizeId != null) {
                 writer.WritePropertyName("limitFailOverPrizeId");
@@ -152,7 +152,7 @@ namespace Gs2.Gs2Lottery.Model
             }
             if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(int.Parse(Weight.ToString()));
+                writer.Write((Weight.ToString().Contains(".") ? (int)double.Parse(Weight.ToString()) : int.Parse(Weight.ToString())));
             }
             writer.WriteObjectEnd();
         }

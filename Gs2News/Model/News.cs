@@ -81,7 +81,7 @@ namespace Gs2.Gs2News.Model
                 .WithContent(!data.Keys.Contains("content") || data["content"] == null ? null : data["content"].ToString())
                 .WithTitle(!data.Keys.Contains("title") || data["title"] == null ? null : data["title"].ToString())
                 .WithScheduleEventId(!data.Keys.Contains("scheduleEventId") || data["scheduleEventId"] == null ? null : data["scheduleEventId"].ToString())
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)long.Parse(data["timestamp"].ToString()))
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
                 .WithFrontMatter(!data.Keys.Contains("frontMatter") || data["frontMatter"] == null ? null : data["frontMatter"].ToString());
         }
 
@@ -118,7 +118,7 @@ namespace Gs2.Gs2News.Model
             }
             if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
-                writer.Write(long.Parse(Timestamp.ToString()));
+                writer.Write((Timestamp.ToString().Contains(".") ? (long)double.Parse(Timestamp.ToString()) : long.Parse(Timestamp.ToString())));
             }
             if (FrontMatter != null) {
                 writer.WritePropertyName("frontMatter");

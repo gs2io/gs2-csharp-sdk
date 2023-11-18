@@ -54,7 +54,7 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new Attribute_()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)int.Parse(data["value"].ToString()));
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)(data["value"].ToString().Contains(".") ? (int)double.Parse(data["value"].ToString()) : int.Parse(data["value"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             if (Value != null) {
                 writer.WritePropertyName("value");
-                writer.Write(int.Parse(Value.ToString()));
+                writer.Write((Value.ToString().Contains(".") ? (int)double.Parse(Value.ToString()) : int.Parse(Value.ToString())));
             }
             writer.WriteObjectEnd();
         }

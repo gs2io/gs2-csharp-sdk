@@ -165,9 +165,9 @@ namespace Gs2.Gs2Inventory.Model
                 .WithItemModelId(!data.Keys.Contains("itemModelId") || data["itemModelId"] == null ? null : data["itemModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithStackingLimit(!data.Keys.Contains("stackingLimit") || data["stackingLimit"] == null ? null : (long?)long.Parse(data["stackingLimit"].ToString()))
+                .WithStackingLimit(!data.Keys.Contains("stackingLimit") || data["stackingLimit"] == null ? null : (long?)(data["stackingLimit"].ToString().Contains(".") ? (long)double.Parse(data["stackingLimit"].ToString()) : long.Parse(data["stackingLimit"].ToString())))
                 .WithAllowMultipleStacks(!data.Keys.Contains("allowMultipleStacks") || data["allowMultipleStacks"] == null ? null : (bool?)bool.Parse(data["allowMultipleStacks"].ToString()))
-                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)int.Parse(data["sortValue"].ToString()));
+                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)(data["sortValue"].ToString().Contains(".") ? (int)double.Parse(data["sortValue"].ToString()) : int.Parse(data["sortValue"].ToString())));
         }
 
         public JsonData ToJson()
@@ -199,7 +199,7 @@ namespace Gs2.Gs2Inventory.Model
             }
             if (StackingLimit != null) {
                 writer.WritePropertyName("stackingLimit");
-                writer.Write(long.Parse(StackingLimit.ToString()));
+                writer.Write((StackingLimit.ToString().Contains(".") ? (long)double.Parse(StackingLimit.ToString()) : long.Parse(StackingLimit.ToString())));
             }
             if (AllowMultipleStacks != null) {
                 writer.WritePropertyName("allowMultipleStacks");
@@ -207,7 +207,7 @@ namespace Gs2.Gs2Inventory.Model
             }
             if (SortValue != null) {
                 writer.WritePropertyName("sortValue");
-                writer.Write(int.Parse(SortValue.ToString()));
+                writer.Write((SortValue.ToString().Contains(".") ? (int)double.Parse(SortValue.ToString()) : int.Parse(SortValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

@@ -71,11 +71,11 @@ namespace Gs2.Gs2Schedule.Model
                 return null;
             }
             return new RepeatSchedule()
-                .WithRepeatCount(!data.Keys.Contains("repeatCount") || data["repeatCount"] == null ? null : (int?)int.Parse(data["repeatCount"].ToString()))
-                .WithCurrentRepeatStartAt(!data.Keys.Contains("currentRepeatStartAt") || data["currentRepeatStartAt"] == null ? null : (long?)long.Parse(data["currentRepeatStartAt"].ToString()))
-                .WithCurrentRepeatEndAt(!data.Keys.Contains("currentRepeatEndAt") || data["currentRepeatEndAt"] == null ? null : (long?)long.Parse(data["currentRepeatEndAt"].ToString()))
-                .WithLastRepeatEndAt(!data.Keys.Contains("lastRepeatEndAt") || data["lastRepeatEndAt"] == null ? null : (long?)long.Parse(data["lastRepeatEndAt"].ToString()))
-                .WithNextRepeatStartAt(!data.Keys.Contains("nextRepeatStartAt") || data["nextRepeatStartAt"] == null ? null : (long?)long.Parse(data["nextRepeatStartAt"].ToString()));
+                .WithRepeatCount(!data.Keys.Contains("repeatCount") || data["repeatCount"] == null ? null : (int?)(data["repeatCount"].ToString().Contains(".") ? (int)double.Parse(data["repeatCount"].ToString()) : int.Parse(data["repeatCount"].ToString())))
+                .WithCurrentRepeatStartAt(!data.Keys.Contains("currentRepeatStartAt") || data["currentRepeatStartAt"] == null ? null : (long?)(data["currentRepeatStartAt"].ToString().Contains(".") ? (long)double.Parse(data["currentRepeatStartAt"].ToString()) : long.Parse(data["currentRepeatStartAt"].ToString())))
+                .WithCurrentRepeatEndAt(!data.Keys.Contains("currentRepeatEndAt") || data["currentRepeatEndAt"] == null ? null : (long?)(data["currentRepeatEndAt"].ToString().Contains(".") ? (long)double.Parse(data["currentRepeatEndAt"].ToString()) : long.Parse(data["currentRepeatEndAt"].ToString())))
+                .WithLastRepeatEndAt(!data.Keys.Contains("lastRepeatEndAt") || data["lastRepeatEndAt"] == null ? null : (long?)(data["lastRepeatEndAt"].ToString().Contains(".") ? (long)double.Parse(data["lastRepeatEndAt"].ToString()) : long.Parse(data["lastRepeatEndAt"].ToString())))
+                .WithNextRepeatStartAt(!data.Keys.Contains("nextRepeatStartAt") || data["nextRepeatStartAt"] == null ? null : (long?)(data["nextRepeatStartAt"].ToString().Contains(".") ? (long)double.Parse(data["nextRepeatStartAt"].ToString()) : long.Parse(data["nextRepeatStartAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -94,23 +94,23 @@ namespace Gs2.Gs2Schedule.Model
             writer.WriteObjectStart();
             if (RepeatCount != null) {
                 writer.WritePropertyName("repeatCount");
-                writer.Write(int.Parse(RepeatCount.ToString()));
+                writer.Write((RepeatCount.ToString().Contains(".") ? (int)double.Parse(RepeatCount.ToString()) : int.Parse(RepeatCount.ToString())));
             }
             if (CurrentRepeatStartAt != null) {
                 writer.WritePropertyName("currentRepeatStartAt");
-                writer.Write(long.Parse(CurrentRepeatStartAt.ToString()));
+                writer.Write((CurrentRepeatStartAt.ToString().Contains(".") ? (long)double.Parse(CurrentRepeatStartAt.ToString()) : long.Parse(CurrentRepeatStartAt.ToString())));
             }
             if (CurrentRepeatEndAt != null) {
                 writer.WritePropertyName("currentRepeatEndAt");
-                writer.Write(long.Parse(CurrentRepeatEndAt.ToString()));
+                writer.Write((CurrentRepeatEndAt.ToString().Contains(".") ? (long)double.Parse(CurrentRepeatEndAt.ToString()) : long.Parse(CurrentRepeatEndAt.ToString())));
             }
             if (LastRepeatEndAt != null) {
                 writer.WritePropertyName("lastRepeatEndAt");
-                writer.Write(long.Parse(LastRepeatEndAt.ToString()));
+                writer.Write((LastRepeatEndAt.ToString().Contains(".") ? (long)double.Parse(LastRepeatEndAt.ToString()) : long.Parse(LastRepeatEndAt.ToString())));
             }
             if (NextRepeatStartAt != null) {
                 writer.WritePropertyName("nextRepeatStartAt");
-                writer.Write(long.Parse(NextRepeatStartAt.ToString()));
+                writer.Write((NextRepeatStartAt.ToString().Contains(".") ? (long)double.Parse(NextRepeatStartAt.ToString()) : long.Parse(NextRepeatStartAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

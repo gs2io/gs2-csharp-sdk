@@ -67,8 +67,8 @@ namespace Gs2.Gs2Auth.Model
             return new AccessToken()
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)long.Parse(data["expire"].ToString()))
-                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)int.Parse(data["timeOffset"].ToString()));
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())))
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())));
         }
 
         public JsonData ToJson()
@@ -94,11 +94,11 @@ namespace Gs2.Gs2Auth.Model
             }
             if (Expire != null) {
                 writer.WritePropertyName("expire");
-                writer.Write(long.Parse(Expire.ToString()));
+                writer.Write((Expire.ToString().Contains(".") ? (long)double.Parse(Expire.ToString()) : long.Parse(Expire.ToString())));
             }
             if (TimeOffset != null) {
                 writer.WritePropertyName("timeOffset");
-                writer.Write(int.Parse(TimeOffset.ToString()));
+                writer.Write((TimeOffset.ToString().Contains(".") ? (int)double.Parse(TimeOffset.ToString()) : int.Parse(TimeOffset.ToString())));
             }
             writer.WriteObjectEnd();
         }

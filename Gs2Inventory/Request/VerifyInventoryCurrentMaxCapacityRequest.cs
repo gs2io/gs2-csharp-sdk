@@ -83,7 +83,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
-                .WithCurrentInventoryMaxCapacity(!data.Keys.Contains("currentInventoryMaxCapacity") || data["currentInventoryMaxCapacity"] == null ? null : (int?)int.Parse(data["currentInventoryMaxCapacity"].ToString()));
+                .WithCurrentInventoryMaxCapacity(!data.Keys.Contains("currentInventoryMaxCapacity") || data["currentInventoryMaxCapacity"] == null ? null : (int?)(data["currentInventoryMaxCapacity"].ToString().Contains(".") ? (int)double.Parse(data["currentInventoryMaxCapacity"].ToString()) : int.Parse(data["currentInventoryMaxCapacity"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -118,7 +118,7 @@ namespace Gs2.Gs2Inventory.Request
             }
             if (CurrentInventoryMaxCapacity != null) {
                 writer.WritePropertyName("currentInventoryMaxCapacity");
-                writer.Write(int.Parse(CurrentInventoryMaxCapacity.ToString()));
+                writer.Write((CurrentInventoryMaxCapacity.ToString().Contains(".") ? (int)double.Parse(CurrentInventoryMaxCapacity.ToString()) : int.Parse(CurrentInventoryMaxCapacity.ToString())));
             }
             writer.WriteObjectEnd();
         }

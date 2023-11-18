@@ -148,7 +148,7 @@ namespace Gs2.Gs2Enchant.Model
                 .WithBalanceParameterModelId(!data.Keys.Contains("balanceParameterModelId") || data["balanceParameterModelId"] == null ? null : data["balanceParameterModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithTotalValue(!data.Keys.Contains("totalValue") || data["totalValue"] == null ? null : (long?)long.Parse(data["totalValue"].ToString()))
+                .WithTotalValue(!data.Keys.Contains("totalValue") || data["totalValue"] == null ? null : (long?)(data["totalValue"].ToString().Contains(".") ? (long)double.Parse(data["totalValue"].ToString()) : long.Parse(data["totalValue"].ToString())))
                 .WithInitialValueStrategy(!data.Keys.Contains("initialValueStrategy") || data["initialValueStrategy"] == null ? null : data["initialValueStrategy"].ToString())
                 .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null || !data["parameters"].IsArray ? new Gs2.Gs2Enchant.Model.BalanceParameterValueModel[]{} : data["parameters"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.BalanceParameterValueModel.FromJson(v);
@@ -193,7 +193,7 @@ namespace Gs2.Gs2Enchant.Model
             }
             if (TotalValue != null) {
                 writer.WritePropertyName("totalValue");
-                writer.Write(long.Parse(TotalValue.ToString()));
+                writer.Write((TotalValue.ToString().Contains(".") ? (long)double.Parse(TotalValue.ToString()) : long.Parse(TotalValue.ToString())));
             }
             if (InitialValueStrategy != null) {
                 writer.WritePropertyName("initialValueStrategy");

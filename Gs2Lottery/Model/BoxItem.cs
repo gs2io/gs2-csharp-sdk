@@ -69,8 +69,8 @@ namespace Gs2.Gs2Lottery.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : (int?)int.Parse(data["remaining"].ToString()))
-                .WithInitial(!data.Keys.Contains("initial") || data["initial"] == null ? null : (int?)int.Parse(data["initial"].ToString()));
+                .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : (int?)(data["remaining"].ToString().Contains(".") ? (int)double.Parse(data["remaining"].ToString()) : int.Parse(data["remaining"].ToString())))
+                .WithInitial(!data.Keys.Contains("initial") || data["initial"] == null ? null : (int?)(data["initial"].ToString().Contains(".") ? (int)double.Parse(data["initial"].ToString()) : int.Parse(data["initial"].ToString())));
         }
 
         public JsonData ToJson()
@@ -112,11 +112,11 @@ namespace Gs2.Gs2Lottery.Model
             }
             if (Remaining != null) {
                 writer.WritePropertyName("remaining");
-                writer.Write(int.Parse(Remaining.ToString()));
+                writer.Write((Remaining.ToString().Contains(".") ? (int)double.Parse(Remaining.ToString()) : int.Parse(Remaining.ToString())));
             }
             if (Initial != null) {
                 writer.WritePropertyName("initial");
-                writer.Write(int.Parse(Initial.ToString()));
+                writer.Write((Initial.ToString().Contains(".") ? (int)double.Parse(Initial.ToString()) : int.Parse(Initial.ToString())));
             }
             writer.WriteObjectEnd();
         }

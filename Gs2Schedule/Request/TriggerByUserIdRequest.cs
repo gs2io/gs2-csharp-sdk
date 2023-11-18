@@ -83,7 +83,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTriggerStrategy(!data.Keys.Contains("triggerStrategy") || data["triggerStrategy"] == null ? null : data["triggerStrategy"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)int.Parse(data["ttl"].ToString()));
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)(data["ttl"].ToString().Contains(".") ? (int)double.Parse(data["ttl"].ToString()) : int.Parse(data["ttl"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -118,7 +118,7 @@ namespace Gs2.Gs2Schedule.Request
             }
             if (Ttl != null) {
                 writer.WritePropertyName("ttl");
-                writer.Write(int.Parse(Ttl.ToString()));
+                writer.Write((Ttl.ToString().Contains(".") ? (int)double.Parse(Ttl.ToString()) : int.Parse(Ttl.ToString())));
             }
             writer.WriteObjectEnd();
         }

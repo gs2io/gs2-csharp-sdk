@@ -85,7 +85,7 @@ namespace Gs2.Gs2Stamina.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
                 .WithValues(!data.Keys.Contains("values") || data["values"] == null || !data["values"].IsArray ? new int[]{} : data["values"].Cast<JsonData>().Select(v => {
-                    return int.Parse(v.ToString());
+                    return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray());
         }
 
@@ -138,7 +138,7 @@ namespace Gs2.Gs2Stamina.Request
                 writer.WriteArrayStart();
                 foreach (var value in Values)
                 {
-                    writer.Write(int.Parse(value.ToString()));
+                    writer.Write((value.ToString().Contains(".") ? (int)double.Parse(value.ToString()) : int.Parse(value.ToString())));
                 }
                 writer.WriteArrayEnd();
             }

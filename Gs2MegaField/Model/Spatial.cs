@@ -204,8 +204,8 @@ namespace Gs2.Gs2MegaField.Model
                 .WithPosition(!data.Keys.Contains("position") || data["position"] == null ? null : Gs2.Gs2MegaField.Model.Position.FromJson(data["position"]))
                 .WithVector(!data.Keys.Contains("vector") || data["vector"] == null ? null : Gs2.Gs2MegaField.Model.Vector.FromJson(data["vector"]))
                 .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
-                .WithLastSyncAt(!data.Keys.Contains("lastSyncAt") || data["lastSyncAt"] == null ? null : (long?)long.Parse(data["lastSyncAt"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()));
+                .WithLastSyncAt(!data.Keys.Contains("lastSyncAt") || data["lastSyncAt"] == null ? null : (long?)(data["lastSyncAt"].ToString().Contains(".") ? (long)double.Parse(data["lastSyncAt"].ToString()) : long.Parse(data["lastSyncAt"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -256,11 +256,11 @@ namespace Gs2.Gs2MegaField.Model
             }
             if (LastSyncAt != null) {
                 writer.WritePropertyName("lastSyncAt");
-                writer.Write(long.Parse(LastSyncAt.ToString()));
+                writer.Write((LastSyncAt.ToString().Contains(".") ? (long)double.Parse(LastSyncAt.ToString()) : long.Parse(LastSyncAt.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

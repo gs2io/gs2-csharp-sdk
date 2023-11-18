@@ -156,8 +156,8 @@ namespace Gs2.Gs2Deploy.Model
                 .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithMessage(!data.Keys.Contains("message") || data["message"] == null ? null : data["message"].ToString())
-                .WithEventAt(!data.Keys.Contains("eventAt") || data["eventAt"] == null ? null : (long?)long.Parse(data["eventAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithEventAt(!data.Keys.Contains("eventAt") || data["eventAt"] == null ? null : (long?)(data["eventAt"].ToString().Contains(".") ? (long)double.Parse(data["eventAt"].ToString()) : long.Parse(data["eventAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -198,11 +198,11 @@ namespace Gs2.Gs2Deploy.Model
             }
             if (EventAt != null) {
                 writer.WritePropertyName("eventAt");
-                writer.Write(long.Parse(EventAt.ToString()));
+                writer.Write((EventAt.ToString().Contains(".") ? (long)double.Parse(EventAt.ToString()) : long.Parse(EventAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }

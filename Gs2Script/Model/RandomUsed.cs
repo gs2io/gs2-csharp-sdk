@@ -53,8 +53,8 @@ namespace Gs2.Gs2Script.Model
                 return null;
             }
             return new RandomUsed()
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (long?)long.Parse(data["category"].ToString()))
-                .WithUsed(!data.Keys.Contains("used") || data["used"] == null ? null : (long?)long.Parse(data["used"].ToString()));
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (long?)(data["category"].ToString().Contains(".") ? (long)double.Parse(data["category"].ToString()) : long.Parse(data["category"].ToString())))
+                .WithUsed(!data.Keys.Contains("used") || data["used"] == null ? null : (long?)(data["used"].ToString().Contains(".") ? (long)double.Parse(data["used"].ToString()) : long.Parse(data["used"].ToString())));
         }
 
         public JsonData ToJson()
@@ -70,11 +70,11 @@ namespace Gs2.Gs2Script.Model
             writer.WriteObjectStart();
             if (Category != null) {
                 writer.WritePropertyName("category");
-                writer.Write(long.Parse(Category.ToString()));
+                writer.Write((Category.ToString().Contains(".") ? (long)double.Parse(Category.ToString()) : long.Parse(Category.ToString())));
             }
             if (Used != null) {
                 writer.WritePropertyName("used");
-                writer.Write(long.Parse(Used.ToString()));
+                writer.Write((Used.ToString().Contains(".") ? (long)double.Parse(Used.ToString()) : long.Parse(Used.ToString())));
             }
             writer.WriteObjectEnd();
         }

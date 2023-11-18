@@ -60,8 +60,8 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new AttributeRange()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : (int?)int.Parse(data["min"].ToString()))
-                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : (int?)int.Parse(data["max"].ToString()));
+                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : (int?)(data["min"].ToString().Contains(".") ? (int)double.Parse(data["min"].ToString()) : int.Parse(data["min"].ToString())))
+                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : (int?)(data["max"].ToString().Contains(".") ? (int)double.Parse(data["max"].ToString()) : int.Parse(data["max"].ToString())));
         }
 
         public JsonData ToJson()
@@ -82,11 +82,11 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             if (Min != null) {
                 writer.WritePropertyName("min");
-                writer.Write(int.Parse(Min.ToString()));
+                writer.Write((Min.ToString().Contains(".") ? (int)double.Parse(Min.ToString()) : int.Parse(Min.ToString())));
             }
             if (Max != null) {
                 writer.WritePropertyName("max");
-                writer.Write(int.Parse(Max.ToString()));
+                writer.Write((Max.ToString().Contains(".") ? (int)double.Parse(Max.ToString()) : int.Parse(Max.ToString())));
             }
             writer.WriteObjectEnd();
         }

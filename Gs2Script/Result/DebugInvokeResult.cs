@@ -85,12 +85,12 @@ namespace Gs2.Gs2Script.Result
                 return null;
             }
             return new DebugInvokeResult()
-                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)int.Parse(data["code"].ToString()))
+                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)(data["code"].ToString().Contains(".") ? (int)double.Parse(data["code"].ToString()) : int.Parse(data["code"].ToString())))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : data["transaction"].ToString())
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
-                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)int.Parse(data["executeTime"].ToString()))
-                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)int.Parse(data["charged"].ToString()))
+                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)(data["executeTime"].ToString().Contains(".") ? (int)double.Parse(data["executeTime"].ToString()) : int.Parse(data["executeTime"].ToString())))
+                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)(data["charged"].ToString().Contains(".") ? (int)double.Parse(data["charged"].ToString()) : int.Parse(data["charged"].ToString())))
                 .WithOutput(!data.Keys.Contains("output") || data["output"] == null || !data["output"].IsArray ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
@@ -123,7 +123,7 @@ namespace Gs2.Gs2Script.Result
             writer.WriteObjectStart();
             if (Code != null) {
                 writer.WritePropertyName("code");
-                writer.Write(int.Parse(Code.ToString()));
+                writer.Write((Code.ToString().Contains(".") ? (int)double.Parse(Code.ToString()) : int.Parse(Code.ToString())));
             }
             if (Result != null) {
                 writer.WritePropertyName("result");
@@ -138,11 +138,11 @@ namespace Gs2.Gs2Script.Result
             }
             if (ExecuteTime != null) {
                 writer.WritePropertyName("executeTime");
-                writer.Write(int.Parse(ExecuteTime.ToString()));
+                writer.Write((ExecuteTime.ToString().Contains(".") ? (int)double.Parse(ExecuteTime.ToString()) : int.Parse(ExecuteTime.ToString())));
             }
             if (Charged != null) {
                 writer.WritePropertyName("charged");
-                writer.Write(int.Parse(Charged.ToString()));
+                writer.Write((Charged.ToString().Contains(".") ? (int)double.Parse(Charged.ToString()) : int.Parse(Charged.ToString())));
             }
             if (Output != null) {
                 writer.WritePropertyName("output");

@@ -54,7 +54,7 @@ namespace Gs2.Gs2Enhance.Model
             }
             return new BonusRate()
                 .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()))
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Enhance.Model
             }
             if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(int.Parse(Weight.ToString()));
+                writer.Write((Weight.ToString().Contains(".") ? (int)double.Parse(Weight.ToString()) : int.Parse(Weight.ToString())));
             }
             writer.WriteObjectEnd();
         }

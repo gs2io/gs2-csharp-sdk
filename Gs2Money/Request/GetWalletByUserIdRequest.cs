@@ -63,7 +63,7 @@ namespace Gs2.Gs2Money.Request
             return new GetWalletByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)int.Parse(data["slot"].ToString()));
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -88,7 +88,7 @@ namespace Gs2.Gs2Money.Request
             }
             if (Slot != null) {
                 writer.WritePropertyName("slot");
-                writer.Write(int.Parse(Slot.ToString()));
+                writer.Write((Slot.ToString().Contains(".") ? (int)double.Parse(Slot.ToString()) : int.Parse(Slot.ToString())));
             }
             writer.WriteObjectEnd();
         }

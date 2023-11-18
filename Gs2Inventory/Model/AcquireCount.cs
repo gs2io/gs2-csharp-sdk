@@ -54,7 +54,7 @@ namespace Gs2.Gs2Inventory.Model
             }
             return new AcquireCount()
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)(data["count"].ToString().Contains(".") ? (long)double.Parse(data["count"].ToString()) : long.Parse(data["count"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Inventory.Model
             }
             if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(long.Parse(Count.ToString()));
+                writer.Write((Count.ToString().Contains(".") ? (long)double.Parse(Count.ToString()) : long.Parse(Count.ToString())));
             }
             writer.WriteObjectEnd();
         }

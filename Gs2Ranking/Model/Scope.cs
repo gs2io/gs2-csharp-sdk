@@ -54,7 +54,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             return new Scope()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithTargetDays(!data.Keys.Contains("targetDays") || data["targetDays"] == null ? null : (long?)long.Parse(data["targetDays"].ToString()));
+                .WithTargetDays(!data.Keys.Contains("targetDays") || data["targetDays"] == null ? null : (long?)(data["targetDays"].ToString().Contains(".") ? (long)double.Parse(data["targetDays"].ToString()) : long.Parse(data["targetDays"].ToString())));
         }
 
         public JsonData ToJson()
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             if (TargetDays != null) {
                 writer.WritePropertyName("targetDays");
-                writer.Write(long.Parse(TargetDays.ToString()));
+                writer.Write((TargetDays.ToString().Contains(".") ? (long)double.Parse(TargetDays.ToString()) : long.Parse(TargetDays.ToString())));
             }
             writer.WriteObjectEnd();
         }

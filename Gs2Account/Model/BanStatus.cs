@@ -61,7 +61,7 @@ namespace Gs2.Gs2Account.Model
             return new BanStatus()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithReason(!data.Keys.Contains("reason") || data["reason"] == null ? null : data["reason"].ToString())
-                .WithReleaseTimestamp(!data.Keys.Contains("releaseTimestamp") || data["releaseTimestamp"] == null ? null : (long?)long.Parse(data["releaseTimestamp"].ToString()));
+                .WithReleaseTimestamp(!data.Keys.Contains("releaseTimestamp") || data["releaseTimestamp"] == null ? null : (long?)(data["releaseTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["releaseTimestamp"].ToString()) : long.Parse(data["releaseTimestamp"].ToString())));
         }
 
         public JsonData ToJson()
@@ -86,7 +86,7 @@ namespace Gs2.Gs2Account.Model
             }
             if (ReleaseTimestamp != null) {
                 writer.WritePropertyName("releaseTimestamp");
-                writer.Write(long.Parse(ReleaseTimestamp.ToString()));
+                writer.Write((ReleaseTimestamp.ToString().Contains(".") ? (long)double.Parse(ReleaseTimestamp.ToString()) : long.Parse(ReleaseTimestamp.ToString())));
             }
             writer.WriteObjectEnd();
         }

@@ -92,8 +92,8 @@ namespace Gs2.Gs2Showcase.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithCurrentPurchaseCount(!data.Keys.Contains("currentPurchaseCount") || data["currentPurchaseCount"] == null ? null : (int?)int.Parse(data["currentPurchaseCount"].ToString()))
-                .WithMaximumPurchaseCount(!data.Keys.Contains("maximumPurchaseCount") || data["maximumPurchaseCount"] == null ? null : (int?)int.Parse(data["maximumPurchaseCount"].ToString()));
+                .WithCurrentPurchaseCount(!data.Keys.Contains("currentPurchaseCount") || data["currentPurchaseCount"] == null ? null : (int?)(data["currentPurchaseCount"].ToString().Contains(".") ? (int)double.Parse(data["currentPurchaseCount"].ToString()) : int.Parse(data["currentPurchaseCount"].ToString())))
+                .WithMaximumPurchaseCount(!data.Keys.Contains("maximumPurchaseCount") || data["maximumPurchaseCount"] == null ? null : (int?)(data["maximumPurchaseCount"].ToString().Contains(".") ? (int)double.Parse(data["maximumPurchaseCount"].ToString()) : int.Parse(data["maximumPurchaseCount"].ToString())));
         }
 
         public JsonData ToJson()
@@ -166,11 +166,11 @@ namespace Gs2.Gs2Showcase.Model
             }
             if (CurrentPurchaseCount != null) {
                 writer.WritePropertyName("currentPurchaseCount");
-                writer.Write(int.Parse(CurrentPurchaseCount.ToString()));
+                writer.Write((CurrentPurchaseCount.ToString().Contains(".") ? (int)double.Parse(CurrentPurchaseCount.ToString()) : int.Parse(CurrentPurchaseCount.ToString())));
             }
             if (MaximumPurchaseCount != null) {
                 writer.WritePropertyName("maximumPurchaseCount");
-                writer.Write(int.Parse(MaximumPurchaseCount.ToString()));
+                writer.Write((MaximumPurchaseCount.ToString().Contains(".") ? (int)double.Parse(MaximumPurchaseCount.ToString()) : int.Parse(MaximumPurchaseCount.ToString())));
             }
             writer.WriteObjectEnd();
         }

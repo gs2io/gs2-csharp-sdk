@@ -49,7 +49,7 @@ namespace Gs2.Gs2Realtime.Result
                 return null;
             }
             return new NowResult()
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)long.Parse(data["timestamp"].ToString()));
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())));
         }
 
         public JsonData ToJson()
@@ -64,7 +64,7 @@ namespace Gs2.Gs2Realtime.Result
             writer.WriteObjectStart();
             if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
-                writer.Write(long.Parse(Timestamp.ToString()));
+                writer.Write((Timestamp.ToString().Contains(".") ? (long)double.Parse(Timestamp.ToString()) : long.Parse(Timestamp.ToString())));
             }
             writer.WriteObjectEnd();
         }

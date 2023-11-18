@@ -69,7 +69,7 @@ namespace Gs2.Gs2AdReward.Request
             return new ConsumePointRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : (long?)long.Parse(data["point"].ToString()));
+                .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : (long?)(data["point"].ToString().Contains(".") ? (long)double.Parse(data["point"].ToString()) : long.Parse(data["point"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -94,7 +94,7 @@ namespace Gs2.Gs2AdReward.Request
             }
             if (Point != null) {
                 writer.WritePropertyName("point");
-                writer.Write(long.Parse(Point.ToString()));
+                writer.Write((Point.ToString().Contains(".") ? (long)double.Parse(Point.ToString()) : long.Parse(Point.ToString())));
             }
             writer.WriteObjectEnd();
         }

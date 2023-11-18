@@ -194,10 +194,10 @@ namespace Gs2.Gs2Inbox.Model
                 .WithReadAcquireActions(!data.Keys.Contains("readAcquireActions") || data["readAcquireActions"] == null || !data["readAcquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["readAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithReceivedAt(!data.Keys.Contains("receivedAt") || data["receivedAt"] == null ? null : (long?)long.Parse(data["receivedAt"].ToString()))
-                .WithReadAt(!data.Keys.Contains("readAt") || data["readAt"] == null ? null : (long?)long.Parse(data["readAt"].ToString()))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)long.Parse(data["expiresAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithReceivedAt(!data.Keys.Contains("receivedAt") || data["receivedAt"] == null ? null : (long?)(data["receivedAt"].ToString().Contains(".") ? (long)double.Parse(data["receivedAt"].ToString()) : long.Parse(data["receivedAt"].ToString())))
+                .WithReadAt(!data.Keys.Contains("readAt") || data["readAt"] == null ? null : (long?)(data["readAt"].ToString().Contains(".") ? (long)double.Parse(data["readAt"].ToString()) : long.Parse(data["readAt"].ToString())))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -261,19 +261,19 @@ namespace Gs2.Gs2Inbox.Model
             }
             if (ReceivedAt != null) {
                 writer.WritePropertyName("receivedAt");
-                writer.Write(long.Parse(ReceivedAt.ToString()));
+                writer.Write((ReceivedAt.ToString().Contains(".") ? (long)double.Parse(ReceivedAt.ToString()) : long.Parse(ReceivedAt.ToString())));
             }
             if (ReadAt != null) {
                 writer.WritePropertyName("readAt");
-                writer.Write(long.Parse(ReadAt.ToString()));
+                writer.Write((ReadAt.ToString().Contains(".") ? (long)double.Parse(ReadAt.ToString()) : long.Parse(ReadAt.ToString())));
             }
             if (ExpiresAt != null) {
                 writer.WritePropertyName("expiresAt");
-                writer.Write(long.Parse(ExpiresAt.ToString()));
+                writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }

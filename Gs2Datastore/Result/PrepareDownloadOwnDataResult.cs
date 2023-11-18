@@ -63,7 +63,7 @@ namespace Gs2.Gs2Datastore.Result
             return new PrepareDownloadOwnDataResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]))
                 .WithFileUrl(!data.Keys.Contains("fileUrl") || data["fileUrl"] == null ? null : data["fileUrl"].ToString())
-                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)long.Parse(data["contentLength"].ToString()));
+                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)(data["contentLength"].ToString().Contains(".") ? (long)double.Parse(data["contentLength"].ToString()) : long.Parse(data["contentLength"].ToString())));
         }
 
         public JsonData ToJson()
@@ -87,7 +87,7 @@ namespace Gs2.Gs2Datastore.Result
             }
             if (ContentLength != null) {
                 writer.WritePropertyName("contentLength");
-                writer.Write(long.Parse(ContentLength.ToString()));
+                writer.Write((ContentLength.ToString().Contains(".") ? (long)double.Parse(ContentLength.ToString()) : long.Parse(ContentLength.ToString())));
             }
             writer.WriteObjectEnd();
         }

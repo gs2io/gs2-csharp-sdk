@@ -72,7 +72,7 @@ namespace Gs2.Gs2Inventory.Result
                 }).ToArray())
                 .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
                 .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]))
-                .WithOverflowCount(!data.Keys.Contains("overflowCount") || data["overflowCount"] == null ? null : (long?)long.Parse(data["overflowCount"].ToString()));
+                .WithOverflowCount(!data.Keys.Contains("overflowCount") || data["overflowCount"] == null ? null : (long?)(data["overflowCount"].ToString().Contains(".") ? (long)double.Parse(data["overflowCount"].ToString()) : long.Parse(data["overflowCount"].ToString())));
         }
 
         public JsonData ToJson()
@@ -116,7 +116,7 @@ namespace Gs2.Gs2Inventory.Result
             }
             if (OverflowCount != null) {
                 writer.WritePropertyName("overflowCount");
-                writer.Write(long.Parse(OverflowCount.ToString()));
+                writer.Write((OverflowCount.ToString().Contains(".") ? (long)double.Parse(OverflowCount.ToString()) : long.Parse(OverflowCount.ToString())));
             }
             writer.WriteObjectEnd();
         }

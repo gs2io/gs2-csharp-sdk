@@ -177,11 +177,11 @@ namespace Gs2.Gs2SerialKey.Model
                 .WithIssueJobId(!data.Keys.Contains("issueJobId") || data["issueJobId"] == null ? null : data["issueJobId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithIssuedCount(!data.Keys.Contains("issuedCount") || data["issuedCount"] == null ? null : (int?)int.Parse(data["issuedCount"].ToString()))
-                .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : (int?)int.Parse(data["issueRequestCount"].ToString()))
+                .WithIssuedCount(!data.Keys.Contains("issuedCount") || data["issuedCount"] == null ? null : (int?)(data["issuedCount"].ToString().Contains(".") ? (int)double.Parse(data["issuedCount"].ToString()) : int.Parse(data["issuedCount"].ToString())))
+                .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : (int?)(data["issueRequestCount"].ToString().Contains(".") ? (int)double.Parse(data["issueRequestCount"].ToString()) : int.Parse(data["issueRequestCount"].ToString())))
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -215,11 +215,11 @@ namespace Gs2.Gs2SerialKey.Model
             }
             if (IssuedCount != null) {
                 writer.WritePropertyName("issuedCount");
-                writer.Write(int.Parse(IssuedCount.ToString()));
+                writer.Write((IssuedCount.ToString().Contains(".") ? (int)double.Parse(IssuedCount.ToString()) : int.Parse(IssuedCount.ToString())));
             }
             if (IssueRequestCount != null) {
                 writer.WritePropertyName("issueRequestCount");
-                writer.Write(int.Parse(IssueRequestCount.ToString()));
+                writer.Write((IssueRequestCount.ToString().Contains(".") ? (int)double.Parse(IssueRequestCount.ToString()) : int.Parse(IssueRequestCount.ToString())));
             }
             if (Status != null) {
                 writer.WritePropertyName("status");
@@ -227,11 +227,11 @@ namespace Gs2.Gs2SerialKey.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }

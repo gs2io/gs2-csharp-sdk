@@ -59,9 +59,9 @@ namespace Gs2.Gs2Version.Model
                 return null;
             }
             return new Version_()
-                .WithMajor(!data.Keys.Contains("major") || data["major"] == null ? null : (int?)int.Parse(data["major"].ToString()))
-                .WithMinor(!data.Keys.Contains("minor") || data["minor"] == null ? null : (int?)int.Parse(data["minor"].ToString()))
-                .WithMicro(!data.Keys.Contains("micro") || data["micro"] == null ? null : (int?)int.Parse(data["micro"].ToString()));
+                .WithMajor(!data.Keys.Contains("major") || data["major"] == null ? null : (int?)(data["major"].ToString().Contains(".") ? (int)double.Parse(data["major"].ToString()) : int.Parse(data["major"].ToString())))
+                .WithMinor(!data.Keys.Contains("minor") || data["minor"] == null ? null : (int?)(data["minor"].ToString().Contains(".") ? (int)double.Parse(data["minor"].ToString()) : int.Parse(data["minor"].ToString())))
+                .WithMicro(!data.Keys.Contains("micro") || data["micro"] == null ? null : (int?)(data["micro"].ToString().Contains(".") ? (int)double.Parse(data["micro"].ToString()) : int.Parse(data["micro"].ToString())));
         }
 
         public JsonData ToJson()
@@ -78,15 +78,15 @@ namespace Gs2.Gs2Version.Model
             writer.WriteObjectStart();
             if (Major != null) {
                 writer.WritePropertyName("major");
-                writer.Write(int.Parse(Major.ToString()));
+                writer.Write((Major.ToString().Contains(".") ? (int)double.Parse(Major.ToString()) : int.Parse(Major.ToString())));
             }
             if (Minor != null) {
                 writer.WritePropertyName("minor");
-                writer.Write(int.Parse(Minor.ToString()));
+                writer.Write((Minor.ToString().Contains(".") ? (int)double.Parse(Minor.ToString()) : int.Parse(Minor.ToString())));
             }
             if (Micro != null) {
                 writer.WritePropertyName("micro");
-                writer.Write(int.Parse(Micro.ToString()));
+                writer.Write((Micro.ToString().Contains(".") ? (int)double.Parse(Micro.ToString()) : int.Parse(Micro.ToString())));
             }
             writer.WriteObjectEnd();
         }

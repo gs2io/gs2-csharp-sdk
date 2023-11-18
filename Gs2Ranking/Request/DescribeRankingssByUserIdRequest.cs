@@ -89,9 +89,9 @@ namespace Gs2.Gs2Ranking.Request
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithAdditionalScopeName(!data.Keys.Contains("additionalScopeName") || data["additionalScopeName"] == null ? null : data["additionalScopeName"].ToString())
-                .WithStartIndex(!data.Keys.Contains("startIndex") || data["startIndex"] == null ? null : (long?)long.Parse(data["startIndex"].ToString()))
+                .WithStartIndex(!data.Keys.Contains("startIndex") || data["startIndex"] == null ? null : (long?)(data["startIndex"].ToString().Contains(".") ? (long)double.Parse(data["startIndex"].ToString()) : long.Parse(data["startIndex"].ToString())))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -128,7 +128,7 @@ namespace Gs2.Gs2Ranking.Request
             }
             if (StartIndex != null) {
                 writer.WritePropertyName("startIndex");
-                writer.Write(long.Parse(StartIndex.ToString()));
+                writer.Write((StartIndex.ToString().Contains(".") ? (long)double.Parse(StartIndex.ToString()) : long.Parse(StartIndex.ToString())));
             }
             if (PageToken != null) {
                 writer.WritePropertyName("pageToken");
@@ -136,7 +136,7 @@ namespace Gs2.Gs2Ranking.Request
             }
             if (Limit != null) {
                 writer.WritePropertyName("limit");
-                writer.Write(int.Parse(Limit.ToString()));
+                writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
             writer.WriteObjectEnd();
         }

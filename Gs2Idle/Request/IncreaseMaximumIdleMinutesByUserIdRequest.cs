@@ -76,7 +76,7 @@ namespace Gs2.Gs2Idle.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithIncreaseMinutes(!data.Keys.Contains("increaseMinutes") || data["increaseMinutes"] == null ? null : (int?)int.Parse(data["increaseMinutes"].ToString()));
+                .WithIncreaseMinutes(!data.Keys.Contains("increaseMinutes") || data["increaseMinutes"] == null ? null : (int?)(data["increaseMinutes"].ToString().Contains(".") ? (int)double.Parse(data["increaseMinutes"].ToString()) : int.Parse(data["increaseMinutes"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -106,7 +106,7 @@ namespace Gs2.Gs2Idle.Request
             }
             if (IncreaseMinutes != null) {
                 writer.WritePropertyName("increaseMinutes");
-                writer.Write(int.Parse(IncreaseMinutes.ToString()));
+                writer.Write((IncreaseMinutes.ToString().Contains(".") ? (int)double.Parse(IncreaseMinutes.ToString()) : int.Parse(IncreaseMinutes.ToString())));
             }
             writer.WriteObjectEnd();
         }

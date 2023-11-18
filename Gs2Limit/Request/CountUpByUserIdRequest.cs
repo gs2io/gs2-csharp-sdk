@@ -89,8 +89,8 @@ namespace Gs2.Gs2Limit.Request
                 .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCountUpValue(!data.Keys.Contains("countUpValue") || data["countUpValue"] == null ? null : (int?)int.Parse(data["countUpValue"].ToString()))
-                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)int.Parse(data["maxValue"].ToString()));
+                .WithCountUpValue(!data.Keys.Contains("countUpValue") || data["countUpValue"] == null ? null : (int?)(data["countUpValue"].ToString().Contains(".") ? (int)double.Parse(data["countUpValue"].ToString()) : int.Parse(data["countUpValue"].ToString())))
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)(data["maxValue"].ToString().Contains(".") ? (int)double.Parse(data["maxValue"].ToString()) : int.Parse(data["maxValue"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -126,11 +126,11 @@ namespace Gs2.Gs2Limit.Request
             }
             if (CountUpValue != null) {
                 writer.WritePropertyName("countUpValue");
-                writer.Write(int.Parse(CountUpValue.ToString()));
+                writer.Write((CountUpValue.ToString().Contains(".") ? (int)double.Parse(CountUpValue.ToString()) : int.Parse(CountUpValue.ToString())));
             }
             if (MaxValue != null) {
                 writer.WritePropertyName("maxValue");
-                writer.Write(int.Parse(MaxValue.ToString()));
+                writer.Write((MaxValue.ToString().Contains(".") ? (int)double.Parse(MaxValue.ToString()) : int.Parse(MaxValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

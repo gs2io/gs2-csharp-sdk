@@ -97,7 +97,7 @@ namespace Gs2.Gs2Enchant.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithParameterValueName(!data.Keys.Contains("parameterValueName") || data["parameterValueName"] == null ? null : data["parameterValueName"].ToString())
-                .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : (int?)int.Parse(data["parameterCount"].ToString()));
+                .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : (int?)(data["parameterCount"].ToString().Contains(".") ? (int)double.Parse(data["parameterCount"].ToString()) : int.Parse(data["parameterCount"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -142,7 +142,7 @@ namespace Gs2.Gs2Enchant.Request
             }
             if (ParameterCount != null) {
                 writer.WritePropertyName("parameterCount");
-                writer.Write(int.Parse(ParameterCount.ToString()));
+                writer.Write((ParameterCount.ToString().Contains(".") ? (int)double.Parse(ParameterCount.ToString()) : int.Parse(ParameterCount.ToString())));
             }
             writer.WriteObjectEnd();
         }

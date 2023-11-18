@@ -56,7 +56,7 @@ namespace Gs2.Gs2Exchange.Result
             }
             return new CreateAwaitByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.Await.FromJson(data["item"]))
-                .WithUnlockAt(!data.Keys.Contains("unlockAt") || data["unlockAt"] == null ? null : (long?)long.Parse(data["unlockAt"].ToString()));
+                .WithUnlockAt(!data.Keys.Contains("unlockAt") || data["unlockAt"] == null ? null : (long?)(data["unlockAt"].ToString().Contains(".") ? (long)double.Parse(data["unlockAt"].ToString()) : long.Parse(data["unlockAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -75,7 +75,7 @@ namespace Gs2.Gs2Exchange.Result
             }
             if (UnlockAt != null) {
                 writer.WritePropertyName("unlockAt");
-                writer.Write(long.Parse(UnlockAt.ToString()));
+                writer.Write((UnlockAt.ToString().Contains(".") ? (long)double.Parse(UnlockAt.ToString()) : long.Parse(UnlockAt.ToString())));
             }
             writer.WriteObjectEnd();
         }

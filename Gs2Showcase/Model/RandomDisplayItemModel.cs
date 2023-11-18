@@ -85,8 +85,8 @@ namespace Gs2.Gs2Showcase.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithStock(!data.Keys.Contains("stock") || data["stock"] == null ? null : (int?)int.Parse(data["stock"].ToString()))
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)int.Parse(data["weight"].ToString()));
+                .WithStock(!data.Keys.Contains("stock") || data["stock"] == null ? null : (int?)(data["stock"].ToString().Contains(".") ? (int)double.Parse(data["stock"].ToString()) : int.Parse(data["stock"].ToString())))
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
         }
 
         public JsonData ToJson()
@@ -154,11 +154,11 @@ namespace Gs2.Gs2Showcase.Model
             }
             if (Stock != null) {
                 writer.WritePropertyName("stock");
-                writer.Write(int.Parse(Stock.ToString()));
+                writer.Write((Stock.ToString().Contains(".") ? (int)double.Parse(Stock.ToString()) : int.Parse(Stock.ToString())));
             }
             if (Weight != null) {
                 writer.WritePropertyName("weight");
-                writer.Write(int.Parse(Weight.ToString()));
+                writer.Write((Weight.ToString().Contains(".") ? (int)double.Parse(Weight.ToString()) : int.Parse(Weight.ToString())));
             }
             writer.WriteObjectEnd();
         }

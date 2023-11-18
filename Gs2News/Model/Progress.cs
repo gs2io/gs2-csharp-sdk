@@ -153,11 +153,11 @@ namespace Gs2.Gs2News.Model
             return new Progress()
                 .WithProgressId(!data.Keys.Contains("progressId") || data["progressId"] == null ? null : data["progressId"].ToString())
                 .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString())
-                .WithGenerated(!data.Keys.Contains("generated") || data["generated"] == null ? null : (int?)int.Parse(data["generated"].ToString()))
-                .WithPatternCount(!data.Keys.Contains("patternCount") || data["patternCount"] == null ? null : (int?)int.Parse(data["patternCount"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithGenerated(!data.Keys.Contains("generated") || data["generated"] == null ? null : (int?)(data["generated"].ToString().Contains(".") ? (int)double.Parse(data["generated"].ToString()) : int.Parse(data["generated"].ToString())))
+                .WithPatternCount(!data.Keys.Contains("patternCount") || data["patternCount"] == null ? null : (int?)(data["patternCount"].ToString().Contains(".") ? (int)double.Parse(data["patternCount"].ToString()) : int.Parse(data["patternCount"].ToString())))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -186,23 +186,23 @@ namespace Gs2.Gs2News.Model
             }
             if (Generated != null) {
                 writer.WritePropertyName("generated");
-                writer.Write(int.Parse(Generated.ToString()));
+                writer.Write((Generated.ToString().Contains(".") ? (int)double.Parse(Generated.ToString()) : int.Parse(Generated.ToString())));
             }
             if (PatternCount != null) {
                 writer.WritePropertyName("patternCount");
-                writer.Write(int.Parse(PatternCount.ToString()));
+                writer.Write((PatternCount.ToString().Contains(".") ? (int)double.Parse(PatternCount.ToString()) : int.Parse(PatternCount.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }

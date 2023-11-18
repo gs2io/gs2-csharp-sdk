@@ -83,7 +83,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)long.Parse(data["experienceValue"].ToString()));
+                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)(data["experienceValue"].ToString().Contains(".") ? (long)double.Parse(data["experienceValue"].ToString()) : long.Parse(data["experienceValue"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -118,7 +118,7 @@ namespace Gs2.Gs2Experience.Request
             }
             if (ExperienceValue != null) {
                 writer.WritePropertyName("experienceValue");
-                writer.Write(long.Parse(ExperienceValue.ToString()));
+                writer.Write((ExperienceValue.ToString().Contains(".") ? (long)double.Parse(ExperienceValue.ToString()) : long.Parse(ExperienceValue.ToString())));
             }
             writer.WriteObjectEnd();
         }

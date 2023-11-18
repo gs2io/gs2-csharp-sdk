@@ -160,8 +160,8 @@ namespace Gs2.Gs2Idle.Model
                 .WithCategoryModelId(!data.Keys.Contains("categoryModelId") || data["categoryModelId"] == null ? null : data["categoryModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithRewardIntervalMinutes(!data.Keys.Contains("rewardIntervalMinutes") || data["rewardIntervalMinutes"] == null ? null : (int?)int.Parse(data["rewardIntervalMinutes"].ToString()))
-                .WithDefaultMaximumIdleMinutes(!data.Keys.Contains("defaultMaximumIdleMinutes") || data["defaultMaximumIdleMinutes"] == null ? null : (int?)int.Parse(data["defaultMaximumIdleMinutes"].ToString()))
+                .WithRewardIntervalMinutes(!data.Keys.Contains("rewardIntervalMinutes") || data["rewardIntervalMinutes"] == null ? null : (int?)(data["rewardIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["rewardIntervalMinutes"].ToString()) : int.Parse(data["rewardIntervalMinutes"].ToString())))
+                .WithDefaultMaximumIdleMinutes(!data.Keys.Contains("defaultMaximumIdleMinutes") || data["defaultMaximumIdleMinutes"] == null ? null : (int?)(data["defaultMaximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["defaultMaximumIdleMinutes"].ToString()) : int.Parse(data["defaultMaximumIdleMinutes"].ToString())))
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Gs2Idle.Model.AcquireActionList[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Idle.Model.AcquireActionList.FromJson(v);
                 }).ToArray())
@@ -209,11 +209,11 @@ namespace Gs2.Gs2Idle.Model
             }
             if (RewardIntervalMinutes != null) {
                 writer.WritePropertyName("rewardIntervalMinutes");
-                writer.Write(int.Parse(RewardIntervalMinutes.ToString()));
+                writer.Write((RewardIntervalMinutes.ToString().Contains(".") ? (int)double.Parse(RewardIntervalMinutes.ToString()) : int.Parse(RewardIntervalMinutes.ToString())));
             }
             if (DefaultMaximumIdleMinutes != null) {
                 writer.WritePropertyName("defaultMaximumIdleMinutes");
-                writer.Write(int.Parse(DefaultMaximumIdleMinutes.ToString()));
+                writer.Write((DefaultMaximumIdleMinutes.ToString().Contains(".") ? (int)double.Parse(DefaultMaximumIdleMinutes.ToString()) : int.Parse(DefaultMaximumIdleMinutes.ToString())));
             }
             if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");

@@ -68,7 +68,7 @@ namespace Gs2.Gs2Account.Request
             }
             return new DoTakeOverRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)int.Parse(data["type"].ToString()))
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
                 .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString());
         }
@@ -92,7 +92,7 @@ namespace Gs2.Gs2Account.Request
             }
             if (Type != null) {
                 writer.WritePropertyName("type");
-                writer.Write(int.Parse(Type.ToString()));
+                writer.Write((Type.ToString().Contains(".") ? (int)double.Parse(Type.ToString()) : int.Parse(Type.ToString())));
             }
             if (UserIdentifier != null) {
                 writer.WritePropertyName("userIdentifier");

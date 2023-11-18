@@ -53,7 +53,7 @@ namespace Gs2.Gs2Chat.Model
                 return null;
             }
             return new NotificationType()
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)int.Parse(data["category"].ToString()))
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
                 .WithEnableTransferMobilePushNotification(!data.Keys.Contains("enableTransferMobilePushNotification") || data["enableTransferMobilePushNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobilePushNotification"].ToString()));
         }
 
@@ -70,7 +70,7 @@ namespace Gs2.Gs2Chat.Model
             writer.WriteObjectStart();
             if (Category != null) {
                 writer.WritePropertyName("category");
-                writer.Write(int.Parse(Category.ToString()));
+                writer.Write((Category.ToString().Contains(".") ? (int)double.Parse(Category.ToString()) : int.Parse(Category.ToString())));
             }
             if (EnableTransferMobilePushNotification != null) {
                 writer.WritePropertyName("enableTransferMobilePushNotification");
