@@ -33,8 +33,7 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class GetCurrentParameterMasterRequest : Gs2Request<GetCurrentParameterMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public GetCurrentParameterMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

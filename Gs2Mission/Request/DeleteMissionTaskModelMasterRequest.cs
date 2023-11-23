@@ -33,20 +33,17 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DeleteMissionTaskModelMasterRequest : Gs2Request<DeleteMissionTaskModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MissionGroupName { set; get; }
-        public string MissionTaskName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MissionGroupName { set; get; }
+         public string MissionTaskName { set; get; }
         public DeleteMissionTaskModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteMissionTaskModelMasterRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public DeleteMissionTaskModelMasterRequest WithMissionTaskName(string missionTaskName) {
             this.MissionTaskName = missionTaskName;
             return this;

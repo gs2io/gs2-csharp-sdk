@@ -33,27 +33,23 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class AcquireForceByUserIdRequest : Gs2Request<AcquireForceByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string AwaitName { set; get; }
-        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string AwaitName { set; get; }
+         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AcquireForceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcquireForceByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AcquireForceByUserIdRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;
         }
-
         public AcquireForceByUserIdRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
             return this;

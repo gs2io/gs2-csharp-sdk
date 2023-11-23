@@ -33,27 +33,23 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class ConsumeStaminaByUserIdRequest : Gs2Request<ConsumeStaminaByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string UserId { set; get; }
-        public int? ConsumeValue { set; get; }
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string UserId { set; get; }
+         public int? ConsumeValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ConsumeStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ConsumeStaminaByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public ConsumeStaminaByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ConsumeStaminaByUserIdRequest WithConsumeValue(int? consumeValue) {
             this.ConsumeValue = consumeValue;
             return this;

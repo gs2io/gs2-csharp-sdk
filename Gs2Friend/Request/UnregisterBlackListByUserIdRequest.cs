@@ -33,21 +33,18 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class UnregisterBlackListByUserIdRequest : Gs2Request<UnregisterBlackListByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string TargetUserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string TargetUserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UnregisterBlackListByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UnregisterBlackListByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UnregisterBlackListByUserIdRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

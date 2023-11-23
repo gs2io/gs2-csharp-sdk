@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class UpdateCurrentItemModelMasterRequest : Gs2Request<UpdateCurrentItemModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentItemModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentItemModelMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

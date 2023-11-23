@@ -33,50 +33,42 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class CreateItemModelMasterRequest : Gs2Request<CreateItemModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public long? StackingLimit { set; get; }
-        public bool? AllowMultipleStacks { set; get; }
-        public int? SortValue { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public long? StackingLimit { set; get; }
+         public bool? AllowMultipleStacks { set; get; }
+         public int? SortValue { set; get; }
         public CreateItemModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateItemModelMasterRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public CreateItemModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateItemModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateItemModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateItemModelMasterRequest WithStackingLimit(long? stackingLimit) {
             this.StackingLimit = stackingLimit;
             return this;
         }
-
         public CreateItemModelMasterRequest WithAllowMultipleStacks(bool? allowMultipleStacks) {
             this.AllowMultipleStacks = allowMultipleStacks;
             return this;
         }
-
         public CreateItemModelMasterRequest WithSortValue(int? sortValue) {
             this.SortValue = sortValue;
             return this;

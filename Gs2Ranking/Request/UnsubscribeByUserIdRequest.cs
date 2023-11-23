@@ -33,27 +33,23 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class UnsubscribeByUserIdRequest : Gs2Request<UnsubscribeByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-        public string UserId { set; get; }
-        public string TargetUserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
+         public string UserId { set; get; }
+         public string TargetUserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UnsubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UnsubscribeByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public UnsubscribeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UnsubscribeByUserIdRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

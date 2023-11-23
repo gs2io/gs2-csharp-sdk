@@ -33,32 +33,27 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class DescribeStatusesRequest : Gs2Request<DescribeStatusesRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ExperienceName { set; get; }
-        public string AccessToken { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ExperienceName { set; get; }
+         public string AccessToken { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeStatusesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeStatusesRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
-
         public DescribeStatusesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeStatusesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeStatusesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

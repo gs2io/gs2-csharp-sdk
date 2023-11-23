@@ -33,12 +33,10 @@ namespace Gs2.Gs2Experience.Model
 	{
         public string Metadata { set; get; }
         public long[] Values { set; get; }
-
         public Threshold WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Threshold WithValues(long[] values) {
             this.Values = values;
             return this;

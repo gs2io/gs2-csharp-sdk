@@ -33,32 +33,27 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DescribeAwaitsRequest : Gs2Request<DescribeAwaitsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string RateName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string RateName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeAwaitsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeAwaitsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeAwaitsRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public DescribeAwaitsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeAwaitsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,20 +33,17 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class GetInventoryRequest : Gs2Request<GetInventoryRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string AccessToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string AccessToken { set; get; }
         public GetInventoryRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetInventoryRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public GetInventoryRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

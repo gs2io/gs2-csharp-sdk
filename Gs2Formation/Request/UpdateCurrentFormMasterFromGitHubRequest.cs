@@ -33,14 +33,12 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateCurrentFormMasterFromGitHubRequest : Gs2Request<UpdateCurrentFormMasterFromGitHubRequest>
 	{
-        public string NamespaceName { set; get; }
-        public Gs2.Gs2Formation.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public Gs2.Gs2Formation.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
         public UpdateCurrentFormMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentFormMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Formation.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

@@ -33,8 +33,7 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class GetCurrentCategoryMasterRequest : Gs2Request<GetCurrentCategoryMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public GetCurrentCategoryMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

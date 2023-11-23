@@ -35,22 +35,18 @@ namespace Gs2.Gs2Stamina.Model
         public string Metadata { set; get; }
         public string ExperienceModelId { set; get; }
         public int[] Values { set; get; }
-
         public MaxStaminaTable WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public MaxStaminaTable WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public MaxStaminaTable WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public MaxStaminaTable WithValues(int[] values) {
             this.Values = values;
             return this;

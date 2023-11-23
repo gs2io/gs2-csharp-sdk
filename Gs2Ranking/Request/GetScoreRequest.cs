@@ -33,32 +33,27 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetScoreRequest : Gs2Request<GetScoreRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-        public string AccessToken { set; get; }
-        public string ScorerUserId { set; get; }
-        public string UniqueId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
+         public string AccessToken { set; get; }
+         public string ScorerUserId { set; get; }
+         public string UniqueId { set; get; }
         public GetScoreRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetScoreRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public GetScoreRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetScoreRequest WithScorerUserId(string scorerUserId) {
             this.ScorerUserId = scorerUserId;
             return this;
         }
-
         public GetScoreRequest WithUniqueId(string uniqueId) {
             this.UniqueId = uniqueId;
             return this;

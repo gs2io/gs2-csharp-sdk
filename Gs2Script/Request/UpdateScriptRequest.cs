@@ -33,26 +33,22 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class UpdateScriptRequest : Gs2Request<UpdateScriptRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ScriptName { set; get; }
-        public string Description { set; get; }
-        public string Script { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ScriptName { set; get; }
+         public string Description { set; get; }
+         public string Script { set; get; }
         public UpdateScriptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateScriptRequest WithScriptName(string scriptName) {
             this.ScriptName = scriptName;
             return this;
         }
-
         public UpdateScriptRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateScriptRequest WithScript(string script) {
             this.Script = script;
             return this;

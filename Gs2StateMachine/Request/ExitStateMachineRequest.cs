@@ -33,21 +33,18 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class ExitStateMachineRequest : Gs2Request<ExitStateMachineRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string StatusName { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string StatusName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ExitStateMachineRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ExitStateMachineRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public ExitStateMachineRequest WithStatusName(string statusName) {
             this.StatusName = statusName;
             return this;

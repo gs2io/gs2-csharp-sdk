@@ -33,32 +33,27 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateThresholdMasterRequest : Gs2Request<UpdateThresholdMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ThresholdName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public long[] Values { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ThresholdName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public long[] Values { set; get; }
         public UpdateThresholdMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateThresholdMasterRequest WithThresholdName(string thresholdName) {
             this.ThresholdName = thresholdName;
             return this;
         }
-
         public UpdateThresholdMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateThresholdMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateThresholdMasterRequest WithValues(long[] values) {
             this.Values = values;
             return this;

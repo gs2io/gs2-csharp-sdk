@@ -33,20 +33,17 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class GetCompletedQuestListRequest : Gs2Request<GetCompletedQuestListRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string QuestGroupName { set; get; }
-        public string AccessToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string QuestGroupName { set; get; }
+         public string AccessToken { set; get; }
         public GetCompletedQuestListRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCompletedQuestListRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public GetCompletedQuestListRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

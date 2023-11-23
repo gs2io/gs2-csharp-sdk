@@ -33,14 +33,12 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DeleteStaminaModelMasterRequest : Gs2Request<DeleteStaminaModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
         public DeleteStaminaModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteStaminaModelMasterRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;

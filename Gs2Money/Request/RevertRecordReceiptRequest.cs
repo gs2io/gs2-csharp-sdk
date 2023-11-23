@@ -33,21 +33,18 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class RevertRecordReceiptRequest : Gs2Request<RevertRecordReceiptRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string Receipt { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string Receipt { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RevertRecordReceiptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RevertRecordReceiptRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public RevertRecordReceiptRequest WithReceipt(string receipt) {
             this.Receipt = receipt;
             return this;

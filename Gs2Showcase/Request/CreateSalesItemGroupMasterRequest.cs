@@ -33,32 +33,27 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class CreateSalesItemGroupMasterRequest : Gs2Request<CreateSalesItemGroupMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string[] SalesItemNames { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string[] SalesItemNames { set; get; }
         public CreateSalesItemGroupMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateSalesItemGroupMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateSalesItemGroupMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateSalesItemGroupMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateSalesItemGroupMasterRequest WithSalesItemNames(string[] salesItemNames) {
             this.SalesItemNames = salesItemNames;
             return this;

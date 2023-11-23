@@ -33,14 +33,12 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class DeleteCategoryModelMasterRequest : Gs2Request<DeleteCategoryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
         public DeleteCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteCategoryModelMasterRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;

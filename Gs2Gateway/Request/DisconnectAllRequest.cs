@@ -33,8 +33,7 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class DisconnectAllRequest : Gs2Request<DisconnectAllRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public DisconnectAllRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

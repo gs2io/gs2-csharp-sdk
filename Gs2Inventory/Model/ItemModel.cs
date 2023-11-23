@@ -37,32 +37,26 @@ namespace Gs2.Gs2Inventory.Model
         public long? StackingLimit { set; get; }
         public bool? AllowMultipleStacks { set; get; }
         public int? SortValue { set; get; }
-
         public ItemModel WithItemModelId(string itemModelId) {
             this.ItemModelId = itemModelId;
             return this;
         }
-
         public ItemModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public ItemModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public ItemModel WithStackingLimit(long? stackingLimit) {
             this.StackingLimit = stackingLimit;
             return this;
         }
-
         public ItemModel WithAllowMultipleStacks(bool? allowMultipleStacks) {
             this.AllowMultipleStacks = allowMultipleStacks;
             return this;
         }
-
         public ItemModel WithSortValue(int? sortValue) {
             this.SortValue = sortValue;
             return this;

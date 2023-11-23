@@ -33,33 +33,28 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class ExchangeRequest : Gs2Request<ExchangeRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-        public string AccessToken { set; get; }
-        public int? Count { set; get; }
-        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
+         public string AccessToken { set; get; }
+         public int? Count { set; get; }
+         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ExchangeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ExchangeRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public ExchangeRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public ExchangeRequest WithCount(int? count) {
             this.Count = count;
             return this;
         }
-
         public ExchangeRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
             return this;

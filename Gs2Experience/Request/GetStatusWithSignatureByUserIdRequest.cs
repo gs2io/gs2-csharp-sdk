@@ -33,32 +33,27 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class GetStatusWithSignatureByUserIdRequest : Gs2Request<GetStatusWithSignatureByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string ExperienceName { set; get; }
-        public string PropertyId { set; get; }
-        public string KeyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string ExperienceName { set; get; }
+         public string PropertyId { set; get; }
+         public string KeyId { set; get; }
         public GetStatusWithSignatureByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetStatusWithSignatureByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetStatusWithSignatureByUserIdRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
-
         public GetStatusWithSignatureByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public GetStatusWithSignatureByUserIdRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

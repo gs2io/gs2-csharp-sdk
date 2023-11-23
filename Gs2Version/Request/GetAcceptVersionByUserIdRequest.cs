@@ -33,20 +33,17 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class GetAcceptVersionByUserIdRequest : Gs2Request<GetAcceptVersionByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string VersionName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string VersionName { set; get; }
         public GetAcceptVersionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetAcceptVersionByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetAcceptVersionByUserIdRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;

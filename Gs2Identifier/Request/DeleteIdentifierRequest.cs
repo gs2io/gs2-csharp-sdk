@@ -33,14 +33,12 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DeleteIdentifierRequest : Gs2Request<DeleteIdentifierRequest>
 	{
-        public string UserName { set; get; }
-        public string ClientId { set; get; }
-
+         public string UserName { set; get; }
+         public string ClientId { set; get; }
         public DeleteIdentifierRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public DeleteIdentifierRequest WithClientId(string clientId) {
             this.ClientId = clientId;
             return this;

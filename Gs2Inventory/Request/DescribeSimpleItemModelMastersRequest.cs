@@ -33,26 +33,22 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DescribeSimpleItemModelMastersRequest : Gs2Request<DescribeSimpleItemModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeSimpleItemModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeSimpleItemModelMastersRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public DescribeSimpleItemModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeSimpleItemModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

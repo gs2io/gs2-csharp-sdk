@@ -33,14 +33,12 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class VerifyRankCapByStampTaskRequest : Gs2Request<VerifyRankCapByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public VerifyRankCapByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public VerifyRankCapByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

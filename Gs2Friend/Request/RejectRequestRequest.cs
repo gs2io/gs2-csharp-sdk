@@ -33,21 +33,18 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class RejectRequestRequest : Gs2Request<RejectRequestRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string FromUserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string FromUserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RejectRequestRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RejectRequestRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public RejectRequestRequest WithFromUserId(string fromUserId) {
             this.FromUserId = fromUserId;
             return this;

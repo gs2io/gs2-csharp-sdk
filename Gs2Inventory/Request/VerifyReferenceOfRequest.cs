@@ -33,45 +33,38 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyReferenceOfRequest : Gs2Request<VerifyReferenceOfRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string AccessToken { set; get; }
-        public string ItemName { set; get; }
-        public string ItemSetName { set; get; }
-        public string ReferenceOf { set; get; }
-        public string VerifyType { set; get; }
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string AccessToken { set; get; }
+         public string ItemName { set; get; }
+         public string ItemSetName { set; get; }
+         public string ReferenceOf { set; get; }
+         public string VerifyType { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyReferenceOfRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public VerifyReferenceOfRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
-
         public VerifyReferenceOfRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
             return this;
         }
-
         public VerifyReferenceOfRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;

@@ -33,92 +33,77 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public bool? EnableRating { set; get; }
-        public string CreateGatheringTriggerType { set; get; }
-        public string CreateGatheringTriggerRealtimeNamespaceId { set; get; }
-        public string CreateGatheringTriggerScriptId { set; get; }
-        public string CompleteMatchmakingTriggerType { set; get; }
-        public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; }
-        public string CompleteMatchmakingTriggerScriptId { set; get; }
-        public Gs2.Gs2Matchmaking.Model.ScriptSetting ChangeRatingScript { set; get; }
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
-        public Gs2.Gs2Matchmaking.Model.NotificationSetting ChangeRatingNotification { set; get; }
-        public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public bool? EnableRating { set; get; }
+         public string CreateGatheringTriggerType { set; get; }
+         public string CreateGatheringTriggerRealtimeNamespaceId { set; get; }
+         public string CreateGatheringTriggerScriptId { set; get; }
+         public string CompleteMatchmakingTriggerType { set; get; }
+         public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; }
+         public string CompleteMatchmakingTriggerScriptId { set; get; }
+         public Gs2.Gs2Matchmaking.Model.ScriptSetting ChangeRatingScript { set; get; }
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting CompleteNotification { set; get; }
+         public Gs2.Gs2Matchmaking.Model.NotificationSetting ChangeRatingNotification { set; get; }
+         public Gs2.Gs2Matchmaking.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithEnableRating(bool? enableRating) {
             this.EnableRating = enableRating;
             return this;
         }
-
         public CreateNamespaceRequest WithCreateGatheringTriggerType(string createGatheringTriggerType) {
             this.CreateGatheringTriggerType = createGatheringTriggerType;
             return this;
         }
-
         public CreateNamespaceRequest WithCreateGatheringTriggerRealtimeNamespaceId(string createGatheringTriggerRealtimeNamespaceId) {
             this.CreateGatheringTriggerRealtimeNamespaceId = createGatheringTriggerRealtimeNamespaceId;
             return this;
         }
-
         public CreateNamespaceRequest WithCreateGatheringTriggerScriptId(string createGatheringTriggerScriptId) {
             this.CreateGatheringTriggerScriptId = createGatheringTriggerScriptId;
             return this;
         }
-
         public CreateNamespaceRequest WithCompleteMatchmakingTriggerType(string completeMatchmakingTriggerType) {
             this.CompleteMatchmakingTriggerType = completeMatchmakingTriggerType;
             return this;
         }
-
         public CreateNamespaceRequest WithCompleteMatchmakingTriggerRealtimeNamespaceId(string completeMatchmakingTriggerRealtimeNamespaceId) {
             this.CompleteMatchmakingTriggerRealtimeNamespaceId = completeMatchmakingTriggerRealtimeNamespaceId;
             return this;
         }
-
         public CreateNamespaceRequest WithCompleteMatchmakingTriggerScriptId(string completeMatchmakingTriggerScriptId) {
             this.CompleteMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
             return this;
         }
-
         public CreateNamespaceRequest WithChangeRatingScript(Gs2.Gs2Matchmaking.Model.ScriptSetting changeRatingScript) {
             this.ChangeRatingScript = changeRatingScript;
             return this;
         }
-
         public CreateNamespaceRequest WithJoinNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting joinNotification) {
             this.JoinNotification = joinNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLeaveNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting leaveNotification) {
             this.LeaveNotification = leaveNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithCompleteNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting completeNotification) {
             this.CompleteNotification = completeNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithChangeRatingNotification(Gs2.Gs2Matchmaking.Model.NotificationSetting changeRatingNotification) {
             this.ChangeRatingNotification = changeRatingNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Matchmaking.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

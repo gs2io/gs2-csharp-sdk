@@ -33,44 +33,37 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdateMoldModelMasterRequest : Gs2Request<UpdateMoldModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MoldModelName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string FormModelName { set; get; }
-        public int? InitialMaxCapacity { set; get; }
-        public int? MaxCapacity { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MoldModelName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string FormModelName { set; get; }
+         public int? InitialMaxCapacity { set; get; }
+         public int? MaxCapacity { set; get; }
         public UpdateMoldModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithFormModelName(string formModelName) {
             this.FormModelName = formModelName;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithInitialMaxCapacity(int? initialMaxCapacity) {
             this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
-
         public UpdateMoldModelMasterRequest WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;

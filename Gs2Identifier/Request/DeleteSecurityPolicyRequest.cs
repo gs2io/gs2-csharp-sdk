@@ -33,8 +33,7 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DeleteSecurityPolicyRequest : Gs2Request<DeleteSecurityPolicyRequest>
 	{
-        public string SecurityPolicyName { set; get; }
-
+         public string SecurityPolicyName { set; get; }
         public DeleteSecurityPolicyRequest WithSecurityPolicyName(string securityPolicyName) {
             this.SecurityPolicyName = securityPolicyName;
             return this;

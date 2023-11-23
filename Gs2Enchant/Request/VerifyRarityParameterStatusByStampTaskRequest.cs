@@ -33,14 +33,12 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class VerifyRarityParameterStatusByStampTaskRequest : Gs2Request<VerifyRarityParameterStatusByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public VerifyRarityParameterStatusByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public VerifyRarityParameterStatusByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

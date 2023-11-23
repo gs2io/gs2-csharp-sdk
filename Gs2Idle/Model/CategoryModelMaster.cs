@@ -43,62 +43,50 @@ namespace Gs2.Gs2Idle.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public CategoryModelMaster WithCategoryModelId(string categoryModelId) {
             this.CategoryModelId = categoryModelId;
             return this;
         }
-
         public CategoryModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CategoryModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CategoryModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CategoryModelMaster WithRewardIntervalMinutes(int? rewardIntervalMinutes) {
             this.RewardIntervalMinutes = rewardIntervalMinutes;
             return this;
         }
-
         public CategoryModelMaster WithDefaultMaximumIdleMinutes(int? defaultMaximumIdleMinutes) {
             this.DefaultMaximumIdleMinutes = defaultMaximumIdleMinutes;
             return this;
         }
-
         public CategoryModelMaster WithAcquireActions(Gs2.Gs2Idle.Model.AcquireActionList[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public CategoryModelMaster WithIdlePeriodScheduleId(string idlePeriodScheduleId) {
             this.IdlePeriodScheduleId = idlePeriodScheduleId;
             return this;
         }
-
         public CategoryModelMaster WithReceivePeriodScheduleId(string receivePeriodScheduleId) {
             this.ReceivePeriodScheduleId = receivePeriodScheduleId;
             return this;
         }
-
         public CategoryModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public CategoryModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public CategoryModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

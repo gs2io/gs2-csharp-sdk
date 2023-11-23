@@ -33,14 +33,12 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class UpdateCurrentRankingMasterRequest : Gs2Request<UpdateCurrentRankingMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentRankingMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentRankingMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

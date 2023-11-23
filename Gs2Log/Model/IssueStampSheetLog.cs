@@ -89,7 +89,7 @@ namespace Gs2.Gs2Log.Model
                 return null;
             }
             return new IssueStampSheetLog()
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)long.Parse(data["timestamp"].ToString()))
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
@@ -129,7 +129,7 @@ namespace Gs2.Gs2Log.Model
             writer.WriteObjectStart();
             if (Timestamp != null) {
                 writer.WritePropertyName("timestamp");
-                writer.Write(long.Parse(Timestamp.ToString()));
+                writer.Write((Timestamp.ToString().Contains(".") ? (long)double.Parse(Timestamp.ToString()) : long.Parse(Timestamp.ToString())));
             }
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");

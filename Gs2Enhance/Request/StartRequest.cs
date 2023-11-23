@@ -33,45 +33,38 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class StartRequest : Gs2Request<StartRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-        public string TargetItemSetId { set; get; }
-        public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
-        public string AccessToken { set; get; }
-        public bool? Force { set; get; }
-        public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
+         public string TargetItemSetId { set; get; }
+         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
+         public string AccessToken { set; get; }
+         public bool? Force { set; get; }
+         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public StartRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public StartRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public StartRequest WithTargetItemSetId(string targetItemSetId) {
             this.TargetItemSetId = targetItemSetId;
             return this;
         }
-
         public StartRequest WithMaterials(Gs2.Gs2Enhance.Model.Material[] materials) {
             this.Materials = materials;
             return this;
         }
-
         public StartRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public StartRequest WithForce(bool? force) {
             this.Force = force;
             return this;
         }
-
         public StartRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

@@ -33,45 +33,38 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareUploadByUserIdRequest : Gs2Request<PrepareUploadByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string Name { set; get; }
-        public string ContentType { set; get; }
-        public string Scope { set; get; }
-        public string[] AllowUserIds { set; get; }
-        public bool? UpdateIfExists { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string Name { set; get; }
+         public string ContentType { set; get; }
+         public string Scope { set; get; }
+         public string[] AllowUserIds { set; get; }
+         public bool? UpdateIfExists { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PrepareUploadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareUploadByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public PrepareUploadByUserIdRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public PrepareUploadByUserIdRequest WithContentType(string contentType) {
             this.ContentType = contentType;
             return this;
         }
-
         public PrepareUploadByUserIdRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public PrepareUploadByUserIdRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
-
         public PrepareUploadByUserIdRequest WithUpdateIfExists(bool? updateIfExists) {
             this.UpdateIfExists = updateIfExists;
             return this;

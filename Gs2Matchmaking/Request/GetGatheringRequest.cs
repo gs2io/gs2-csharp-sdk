@@ -33,14 +33,12 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class GetGatheringRequest : Gs2Request<GetGatheringRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string GatheringName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string GatheringName { set; get; }
         public GetGatheringRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetGatheringRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;

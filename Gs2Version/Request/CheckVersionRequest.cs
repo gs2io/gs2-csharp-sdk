@@ -33,21 +33,18 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class CheckVersionRequest : Gs2Request<CheckVersionRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public Gs2.Gs2Version.Model.TargetVersion[] TargetVersions { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public Gs2.Gs2Version.Model.TargetVersion[] TargetVersions { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CheckVersionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CheckVersionRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public CheckVersionRequest WithTargetVersions(Gs2.Gs2Version.Model.TargetVersion[] targetVersions) {
             this.TargetVersions = targetVersions;
             return this;

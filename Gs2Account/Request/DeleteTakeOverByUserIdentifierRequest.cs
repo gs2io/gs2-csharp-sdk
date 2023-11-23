@@ -33,21 +33,18 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DeleteTakeOverByUserIdentifierRequest : Gs2Request<DeleteTakeOverByUserIdentifierRequest>
 	{
-        public string NamespaceName { set; get; }
-        public int? Type { set; get; }
-        public string UserIdentifier { set; get; }
+         public string NamespaceName { set; get; }
+         public int? Type { set; get; }
+         public string UserIdentifier { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteTakeOverByUserIdentifierRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteTakeOverByUserIdentifierRequest WithType(int? type) {
             this.Type = type;
             return this;
         }
-
         public DeleteTakeOverByUserIdentifierRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
             return this;

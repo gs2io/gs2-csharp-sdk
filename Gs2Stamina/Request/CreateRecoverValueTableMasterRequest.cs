@@ -33,38 +33,32 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class CreateRecoverValueTableMasterRequest : Gs2Request<CreateRecoverValueTableMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string ExperienceModelId { set; get; }
-        public int[] Values { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string ExperienceModelId { set; get; }
+         public int[] Values { set; get; }
         public CreateRecoverValueTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateRecoverValueTableMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateRecoverValueTableMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateRecoverValueTableMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateRecoverValueTableMasterRequest WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public CreateRecoverValueTableMasterRequest WithValues(int[] values) {
             this.Values = values;
             return this;

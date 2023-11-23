@@ -33,56 +33,47 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class CreateRandomShowcaseMasterRequest : Gs2Request<CreateRandomShowcaseMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public int? MaximumNumberOfChoice { set; get; }
-        public Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] DisplayItems { set; get; }
-        public long? BaseTimestamp { set; get; }
-        public int? ResetIntervalHours { set; get; }
-        public string SalesPeriodEventId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public int? MaximumNumberOfChoice { set; get; }
+         public Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] DisplayItems { set; get; }
+         public long? BaseTimestamp { set; get; }
+         public int? ResetIntervalHours { set; get; }
+         public string SalesPeriodEventId { set; get; }
         public CreateRandomShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithMaximumNumberOfChoice(int? maximumNumberOfChoice) {
             this.MaximumNumberOfChoice = maximumNumberOfChoice;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithDisplayItems(Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] displayItems) {
             this.DisplayItems = displayItems;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithBaseTimestamp(long? baseTimestamp) {
             this.BaseTimestamp = baseTimestamp;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithResetIntervalHours(int? resetIntervalHours) {
             this.ResetIntervalHours = resetIntervalHours;
             return this;
         }
-
         public CreateRandomShowcaseMasterRequest WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;

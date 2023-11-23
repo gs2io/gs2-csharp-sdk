@@ -33,27 +33,23 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class CreateAwaitByUserIdRequest : Gs2Request<CreateAwaitByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string RateName { set; get; }
-        public int? Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string RateName { set; get; }
+         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CreateAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateAwaitByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public CreateAwaitByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public CreateAwaitByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;

@@ -33,26 +33,22 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DoTakeOverRequest : Gs2Request<DoTakeOverRequest>
 	{
-        public string NamespaceName { set; get; }
-        public int? Type { set; get; }
-        public string UserIdentifier { set; get; }
-        public string Password { set; get; }
-
+         public string NamespaceName { set; get; }
+         public int? Type { set; get; }
+         public string UserIdentifier { set; get; }
+         public string Password { set; get; }
         public DoTakeOverRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DoTakeOverRequest WithType(int? type) {
             this.Type = type;
             return this;
         }
-
         public DoTakeOverRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
             return this;
         }
-
         public DoTakeOverRequest WithPassword(string password) {
             this.Password = password;
             return this;

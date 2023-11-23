@@ -33,15 +33,13 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DeleteAccountRequest : Gs2Request<DeleteAccountRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteAccountRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteAccountRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

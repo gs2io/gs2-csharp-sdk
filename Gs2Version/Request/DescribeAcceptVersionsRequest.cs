@@ -33,26 +33,22 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class DescribeAcceptVersionsRequest : Gs2Request<DescribeAcceptVersionsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeAcceptVersionsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeAcceptVersionsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeAcceptVersionsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeAcceptVersionsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

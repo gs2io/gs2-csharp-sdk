@@ -33,21 +33,18 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class RemoveBanRequest : Gs2Request<RemoveBanRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string BanStatusName { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string BanStatusName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RemoveBanRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RemoveBanRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public RemoveBanRequest WithBanStatusName(string banStatusName) {
             this.BanStatusName = banStatusName;
             return this;

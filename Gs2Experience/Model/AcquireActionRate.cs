@@ -35,22 +35,18 @@ namespace Gs2.Gs2Experience.Model
         public string Mode { set; get; }
         public double[] Rates { set; get; }
         public string[] BigRates { set; get; }
-
         public AcquireActionRate WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public AcquireActionRate WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public AcquireActionRate WithRates(double[] rates) {
             this.Rates = rates;
             return this;
         }
-
         public AcquireActionRate WithBigRates(string[] bigRates) {
             this.BigRates = bigRates;
             return this;

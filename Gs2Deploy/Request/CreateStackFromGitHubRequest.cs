@@ -33,20 +33,17 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class CreateStackFromGitHubRequest : Gs2Request<CreateStackFromGitHubRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Deploy.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Deploy.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
         public CreateStackFromGitHubRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateStackFromGitHubRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateStackFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Deploy.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

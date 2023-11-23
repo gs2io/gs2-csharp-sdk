@@ -33,68 +33,57 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class CreateQuestModelMasterRequest : Gs2Request<CreateQuestModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string QuestGroupName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
-        public string ChallengePeriodEventId { set; get; }
-        public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
-        public string[] PremiseQuestNames { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string QuestGroupName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public Gs2.Gs2Quest.Model.Contents[] Contents { set; get; }
+         public string ChallengePeriodEventId { set; get; }
+         public Gs2.Core.Model.AcquireAction[] FirstCompleteAcquireActions { set; get; }
+         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+         public Gs2.Core.Model.AcquireAction[] FailedAcquireActions { set; get; }
+         public string[] PremiseQuestNames { set; get; }
         public CreateQuestModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithContents(Gs2.Gs2Quest.Model.Contents[] contents) {
             this.Contents = contents;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithFirstCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] firstCompleteAcquireActions) {
             this.FirstCompleteAcquireActions = firstCompleteAcquireActions;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithFailedAcquireActions(Gs2.Core.Model.AcquireAction[] failedAcquireActions) {
             this.FailedAcquireActions = failedAcquireActions;
             return this;
         }
-
         public CreateQuestModelMasterRequest WithPremiseQuestNames(string[] premiseQuestNames) {
             this.PremiseQuestNames = premiseQuestNames;
             return this;

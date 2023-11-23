@@ -33,27 +33,23 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DeleteFormByUserIdRequest : Gs2Request<DeleteFormByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string MoldModelName { set; get; }
-        public int? Index { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string MoldModelName { set; get; }
+         public int? Index { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteFormByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteFormByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DeleteFormByUserIdRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;
         }
-
         public DeleteFormByUserIdRequest WithIndex(int? index) {
             this.Index = index;
             return this;

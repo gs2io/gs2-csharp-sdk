@@ -37,32 +37,26 @@ namespace Gs2.Gs2MegaField.Model
         public int? NumberOfMinEntries { set; get; }
         public int? NumberOfMaxEntries { set; get; }
         public long? CreatedAt { set; get; }
-
         public Layer WithLayerId(string layerId) {
             this.LayerId = layerId;
             return this;
         }
-
         public Layer WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
-
         public Layer WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
-
         public Layer WithNumberOfMinEntries(int? numberOfMinEntries) {
             this.NumberOfMinEntries = numberOfMinEntries;
             return this;
         }
-
         public Layer WithNumberOfMaxEntries(int? numberOfMaxEntries) {
             this.NumberOfMaxEntries = numberOfMaxEntries;
             return this;
         }
-
         public Layer WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

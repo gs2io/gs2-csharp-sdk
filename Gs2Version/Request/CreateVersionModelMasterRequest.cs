@@ -33,74 +33,62 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class CreateVersionModelMasterRequest : Gs2Request<CreateVersionModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string Scope { set; get; }
-        public string Type { set; get; }
-        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
-        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
-        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
-        public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
-        public bool? NeedSignature { set; get; }
-        public string SignatureKeyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string Scope { set; get; }
+         public string Type { set; get; }
+         public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
+         public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
+         public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
+         public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
+         public bool? NeedSignature { set; get; }
+         public string SignatureKeyId { set; get; }
         public CreateVersionModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithType(string type) {
             this.Type = type;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithCurrentVersion(Gs2.Gs2Version.Model.Version_ currentVersion) {
             this.CurrentVersion = currentVersion;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithWarningVersion(Gs2.Gs2Version.Model.Version_ warningVersion) {
             this.WarningVersion = warningVersion;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithErrorVersion(Gs2.Gs2Version.Model.Version_ errorVersion) {
             this.ErrorVersion = errorVersion;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithScheduleVersions(Gs2.Gs2Version.Model.ScheduleVersion[] scheduleVersions) {
             this.ScheduleVersions = scheduleVersions;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithNeedSignature(bool? needSignature) {
             this.NeedSignature = needSignature;
             return this;
         }
-
         public CreateVersionModelMasterRequest WithSignatureKeyId(string signatureKeyId) {
             this.SignatureKeyId = signatureKeyId;
             return this;

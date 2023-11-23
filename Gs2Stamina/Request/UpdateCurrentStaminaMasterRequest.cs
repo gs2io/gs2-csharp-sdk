@@ -33,14 +33,12 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateCurrentStaminaMasterRequest : Gs2Request<UpdateCurrentStaminaMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentStaminaMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentStaminaMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

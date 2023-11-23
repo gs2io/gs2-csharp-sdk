@@ -33,20 +33,17 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class GetDeadLetterJobByUserIdRequest : Gs2Request<GetDeadLetterJobByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string DeadLetterJobName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string DeadLetterJobName { set; get; }
         public GetDeadLetterJobByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetDeadLetterJobByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetDeadLetterJobByUserIdRequest WithDeadLetterJobName(string deadLetterJobName) {
             this.DeadLetterJobName = deadLetterJobName;
             return this;

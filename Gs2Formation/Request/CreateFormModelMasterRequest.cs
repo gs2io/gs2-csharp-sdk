@@ -33,32 +33,27 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class CreateFormModelMasterRequest : Gs2Request<CreateFormModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
         public CreateFormModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateFormModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateFormModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateFormModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateFormModelMasterRequest WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
             this.Slots = slots;
             return this;

@@ -33,12 +33,10 @@ namespace Gs2.Gs2Lottery.Model
 	{
         public string PrizeId { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-
         public DrawnPrize WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;
         }
-
         public DrawnPrize WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

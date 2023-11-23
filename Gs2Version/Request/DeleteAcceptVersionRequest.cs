@@ -33,21 +33,18 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class DeleteAcceptVersionRequest : Gs2Request<DeleteAcceptVersionRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string VersionName { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string VersionName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteAcceptVersionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteAcceptVersionRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DeleteAcceptVersionRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;

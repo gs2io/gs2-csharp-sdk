@@ -49,92 +49,74 @@ namespace Gs2.Gs2Friend.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithFollowScript(Gs2.Gs2Friend.Model.ScriptSetting followScript) {
             this.FollowScript = followScript;
             return this;
         }
-
         public Namespace WithUnfollowScript(Gs2.Gs2Friend.Model.ScriptSetting unfollowScript) {
             this.UnfollowScript = unfollowScript;
             return this;
         }
-
         public Namespace WithSendRequestScript(Gs2.Gs2Friend.Model.ScriptSetting sendRequestScript) {
             this.SendRequestScript = sendRequestScript;
             return this;
         }
-
         public Namespace WithCancelRequestScript(Gs2.Gs2Friend.Model.ScriptSetting cancelRequestScript) {
             this.CancelRequestScript = cancelRequestScript;
             return this;
         }
-
         public Namespace WithAcceptRequestScript(Gs2.Gs2Friend.Model.ScriptSetting acceptRequestScript) {
             this.AcceptRequestScript = acceptRequestScript;
             return this;
         }
-
         public Namespace WithRejectRequestScript(Gs2.Gs2Friend.Model.ScriptSetting rejectRequestScript) {
             this.RejectRequestScript = rejectRequestScript;
             return this;
         }
-
         public Namespace WithDeleteFriendScript(Gs2.Gs2Friend.Model.ScriptSetting deleteFriendScript) {
             this.DeleteFriendScript = deleteFriendScript;
             return this;
         }
-
         public Namespace WithUpdateProfileScript(Gs2.Gs2Friend.Model.ScriptSetting updateProfileScript) {
             this.UpdateProfileScript = updateProfileScript;
             return this;
         }
-
         public Namespace WithFollowNotification(Gs2.Gs2Friend.Model.NotificationSetting followNotification) {
             this.FollowNotification = followNotification;
             return this;
         }
-
         public Namespace WithReceiveRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting receiveRequestNotification) {
             this.ReceiveRequestNotification = receiveRequestNotification;
             return this;
         }
-
         public Namespace WithAcceptRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting acceptRequestNotification) {
             this.AcceptRequestNotification = acceptRequestNotification;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Friend.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

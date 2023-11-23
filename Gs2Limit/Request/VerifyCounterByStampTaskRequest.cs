@@ -33,14 +33,12 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class VerifyCounterByStampTaskRequest : Gs2Request<VerifyCounterByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public VerifyCounterByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public VerifyCounterByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

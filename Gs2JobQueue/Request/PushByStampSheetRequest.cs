@@ -33,14 +33,12 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class PushByStampSheetRequest : Gs2Request<PushByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public PushByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public PushByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

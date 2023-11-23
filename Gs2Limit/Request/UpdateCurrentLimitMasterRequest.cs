@@ -33,14 +33,12 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class UpdateCurrentLimitMasterRequest : Gs2Request<UpdateCurrentLimitMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentLimitMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentLimitMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

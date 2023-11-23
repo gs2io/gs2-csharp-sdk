@@ -41,52 +41,42 @@ namespace Gs2.Gs2Enchant.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public RarityParameterModelMaster WithRarityParameterModelId(string rarityParameterModelId) {
             this.RarityParameterModelId = rarityParameterModelId;
             return this;
         }
-
         public RarityParameterModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RarityParameterModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public RarityParameterModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RarityParameterModelMaster WithMaximumParameterCount(int? maximumParameterCount) {
             this.MaximumParameterCount = maximumParameterCount;
             return this;
         }
-
         public RarityParameterModelMaster WithParameterCounts(Gs2.Gs2Enchant.Model.RarityParameterCountModel[] parameterCounts) {
             this.ParameterCounts = parameterCounts;
             return this;
         }
-
         public RarityParameterModelMaster WithParameters(Gs2.Gs2Enchant.Model.RarityParameterValueModel[] parameters) {
             this.Parameters = parameters;
             return this;
         }
-
         public RarityParameterModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public RarityParameterModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public RarityParameterModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

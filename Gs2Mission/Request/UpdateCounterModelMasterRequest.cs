@@ -33,38 +33,32 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class UpdateCounterModelMasterRequest : Gs2Request<UpdateCounterModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CounterName { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
-        public string ChallengePeriodEventId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CounterName { set; get; }
+         public string Metadata { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Mission.Model.CounterScopeModel[] Scopes { set; get; }
+         public string ChallengePeriodEventId { set; get; }
         public UpdateCounterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCounterModelMasterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public UpdateCounterModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateCounterModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateCounterModelMasterRequest WithScopes(Gs2.Gs2Mission.Model.CounterScopeModel[] scopes) {
             this.Scopes = scopes;
             return this;
         }
-
         public UpdateCounterModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class ConsumeStaminaByStampTaskRequest : Gs2Request<ConsumeStaminaByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public ConsumeStaminaByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public ConsumeStaminaByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

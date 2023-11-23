@@ -33,14 +33,12 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DeleteRateModelMasterRequest : Gs2Request<DeleteRateModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
         public DeleteRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteRateModelMasterRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;

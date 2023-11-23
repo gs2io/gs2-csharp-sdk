@@ -33,92 +33,77 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class UpdateEventMasterRequest : Gs2Request<UpdateEventMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string EventName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string ScheduleType { set; get; }
-        public long? AbsoluteBegin { set; get; }
-        public long? AbsoluteEnd { set; get; }
-        public string RepeatType { set; get; }
-        public int? RepeatBeginDayOfMonth { set; get; }
-        public int? RepeatEndDayOfMonth { set; get; }
-        public string RepeatBeginDayOfWeek { set; get; }
-        public string RepeatEndDayOfWeek { set; get; }
-        public int? RepeatBeginHour { set; get; }
-        public int? RepeatEndHour { set; get; }
-        public string RelativeTriggerName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string EventName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string ScheduleType { set; get; }
+         public long? AbsoluteBegin { set; get; }
+         public long? AbsoluteEnd { set; get; }
+         public string RepeatType { set; get; }
+         public int? RepeatBeginDayOfMonth { set; get; }
+         public int? RepeatEndDayOfMonth { set; get; }
+         public string RepeatBeginDayOfWeek { set; get; }
+         public string RepeatEndDayOfWeek { set; get; }
+         public int? RepeatBeginHour { set; get; }
+         public int? RepeatEndHour { set; get; }
+         public string RelativeTriggerName { set; get; }
         public UpdateEventMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateEventMasterRequest WithEventName(string eventName) {
             this.EventName = eventName;
             return this;
         }
-
         public UpdateEventMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateEventMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateEventMasterRequest WithScheduleType(string scheduleType) {
             this.ScheduleType = scheduleType;
             return this;
         }
-
         public UpdateEventMasterRequest WithAbsoluteBegin(long? absoluteBegin) {
             this.AbsoluteBegin = absoluteBegin;
             return this;
         }
-
         public UpdateEventMasterRequest WithAbsoluteEnd(long? absoluteEnd) {
             this.AbsoluteEnd = absoluteEnd;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatType(string repeatType) {
             this.RepeatType = repeatType;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatBeginDayOfMonth(int? repeatBeginDayOfMonth) {
             this.RepeatBeginDayOfMonth = repeatBeginDayOfMonth;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatEndDayOfMonth(int? repeatEndDayOfMonth) {
             this.RepeatEndDayOfMonth = repeatEndDayOfMonth;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatBeginDayOfWeek(string repeatBeginDayOfWeek) {
             this.RepeatBeginDayOfWeek = repeatBeginDayOfWeek;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatEndDayOfWeek(string repeatEndDayOfWeek) {
             this.RepeatEndDayOfWeek = repeatEndDayOfWeek;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatBeginHour(int? repeatBeginHour) {
             this.RepeatBeginHour = repeatBeginHour;
             return this;
         }
-
         public UpdateEventMasterRequest WithRepeatEndHour(int? repeatEndHour) {
             this.RepeatEndHour = repeatEndHour;
             return this;
         }
-
         public UpdateEventMasterRequest WithRelativeTriggerName(string relativeTriggerName) {
             this.RelativeTriggerName = relativeTriggerName;
             return this;

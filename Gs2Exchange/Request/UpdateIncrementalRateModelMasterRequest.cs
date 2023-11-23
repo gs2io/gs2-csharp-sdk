@@ -33,74 +33,62 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class UpdateIncrementalRateModelMasterRequest : Gs2Request<UpdateIncrementalRateModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; }
-        public string CalculateType { set; get; }
-        public long? BaseValue { set; get; }
-        public long? CoefficientValue { set; get; }
-        public string CalculateScriptId { set; get; }
-        public string ExchangeCountId { set; get; }
-        public int? MaximumExchangeCount { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public Gs2.Core.Model.ConsumeAction ConsumeAction { set; get; }
+         public string CalculateType { set; get; }
+         public long? BaseValue { set; get; }
+         public long? CoefficientValue { set; get; }
+         public string CalculateScriptId { set; get; }
+         public string ExchangeCountId { set; get; }
+         public int? MaximumExchangeCount { set; get; }
+         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public UpdateIncrementalRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithConsumeAction(Gs2.Core.Model.ConsumeAction consumeAction) {
             this.ConsumeAction = consumeAction;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithCalculateType(string calculateType) {
             this.CalculateType = calculateType;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithBaseValue(long? baseValue) {
             this.BaseValue = baseValue;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithCoefficientValue(long? coefficientValue) {
             this.CoefficientValue = coefficientValue;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithCalculateScriptId(string calculateScriptId) {
             this.CalculateScriptId = calculateScriptId;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithExchangeCountId(string exchangeCountId) {
             this.ExchangeCountId = exchangeCountId;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithMaximumExchangeCount(int? maximumExchangeCount) {
             this.MaximumExchangeCount = maximumExchangeCount;
             return this;
         }
-
         public UpdateIncrementalRateModelMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

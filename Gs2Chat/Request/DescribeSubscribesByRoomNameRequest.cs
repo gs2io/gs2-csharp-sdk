@@ -33,26 +33,22 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class DescribeSubscribesByRoomNameRequest : Gs2Request<DescribeSubscribesByRoomNameRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RoomName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeSubscribesByRoomNameRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeSubscribesByRoomNameRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public DescribeSubscribesByRoomNameRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeSubscribesByRoomNameRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

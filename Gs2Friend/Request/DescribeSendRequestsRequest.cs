@@ -33,26 +33,22 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class DescribeSendRequestsRequest : Gs2Request<DescribeSendRequestsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeSendRequestsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeSendRequestsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeSendRequestsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeSendRequestsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

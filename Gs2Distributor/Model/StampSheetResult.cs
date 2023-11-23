@@ -41,52 +41,42 @@ namespace Gs2.Gs2Distributor.Model
         public string NextTransactionId { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public StampSheetResult WithStampSheetResultId(string stampSheetResultId) {
             this.StampSheetResultId = stampSheetResultId;
             return this;
         }
-
         public StampSheetResult WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public StampSheetResult WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public StampSheetResult WithTaskRequests(Gs2.Core.Model.ConsumeAction[] taskRequests) {
             this.TaskRequests = taskRequests;
             return this;
         }
-
         public StampSheetResult WithSheetRequest(Gs2.Core.Model.AcquireAction sheetRequest) {
             this.SheetRequest = sheetRequest;
             return this;
         }
-
         public StampSheetResult WithTaskResults(string[] taskResults) {
             this.TaskResults = taskResults;
             return this;
         }
-
         public StampSheetResult WithSheetResult(string sheetResult) {
             this.SheetResult = sheetResult;
             return this;
         }
-
         public StampSheetResult WithNextTransactionId(string nextTransactionId) {
             this.NextTransactionId = nextTransactionId;
             return this;
         }
-
         public StampSheetResult WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public StampSheetResult WithRevision(long? revision) {
             this.Revision = revision;
             return this;

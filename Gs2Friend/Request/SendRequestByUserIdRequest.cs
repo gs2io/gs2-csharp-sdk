@@ -33,21 +33,18 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class SendRequestByUserIdRequest : Gs2Request<SendRequestByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string TargetUserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string TargetUserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SendRequestByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SendRequestByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SendRequestByUserIdRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

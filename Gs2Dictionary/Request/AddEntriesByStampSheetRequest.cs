@@ -33,14 +33,12 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class AddEntriesByStampSheetRequest : Gs2Request<AddEntriesByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public AddEntriesByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public AddEntriesByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

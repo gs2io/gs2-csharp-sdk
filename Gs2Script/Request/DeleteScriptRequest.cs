@@ -33,14 +33,12 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class DeleteScriptRequest : Gs2Request<DeleteScriptRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ScriptName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ScriptName { set; get; }
         public DeleteScriptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteScriptRequest WithScriptName(string scriptName) {
             this.ScriptName = scriptName;
             return this;

@@ -33,38 +33,32 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class UpdateSalesItemMasterRequest : Gs2Request<UpdateSalesItemMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string SalesItemName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string SalesItemName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
+         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public UpdateSalesItemMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateSalesItemMasterRequest WithSalesItemName(string salesItemName) {
             this.SalesItemName = salesItemName;
             return this;
         }
-
         public UpdateSalesItemMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateSalesItemMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateSalesItemMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public UpdateSalesItemMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;

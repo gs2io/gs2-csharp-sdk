@@ -33,38 +33,32 @@ namespace Gs2.Gs2AdReward.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
-        public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
-        public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public Gs2.Gs2AdReward.Model.AdMob Admob { set; get; }
+         public Gs2.Gs2AdReward.Model.UnityAd UnityAd { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2AdReward.Model.NotificationSetting ChangePointNotification { set; get; }
+         public Gs2.Gs2AdReward.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithAdmob(Gs2.Gs2AdReward.Model.AdMob admob) {
             this.Admob = admob;
             return this;
         }
-
         public CreateNamespaceRequest WithUnityAd(Gs2.Gs2AdReward.Model.UnityAd unityAd) {
             this.UnityAd = unityAd;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithChangePointNotification(Gs2.Gs2AdReward.Model.NotificationSetting changePointNotification) {
             this.ChangePointNotification = changePointNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2AdReward.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

@@ -33,27 +33,23 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class UnmarkReceivedByUserIdRequest : Gs2Request<UnmarkReceivedByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BonusModelName { set; get; }
-        public string UserId { set; get; }
-        public int? StepNumber { set; get; }
+         public string NamespaceName { set; get; }
+         public string BonusModelName { set; get; }
+         public string UserId { set; get; }
+         public int? StepNumber { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UnmarkReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UnmarkReceivedByUserIdRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
-
         public UnmarkReceivedByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UnmarkReceivedByUserIdRequest WithStepNumber(int? stepNumber) {
             this.StepNumber = stepNumber;
             return this;

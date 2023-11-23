@@ -34,17 +34,14 @@ namespace Gs2.Gs2MegaField.Model
         public Gs2.Gs2MegaField.Model.Position Position { set; get; }
         public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
         public float? R { set; get; }
-
         public MyPosition WithPosition(Gs2.Gs2MegaField.Model.Position position) {
             this.Position = position;
             return this;
         }
-
         public MyPosition WithVector(Gs2.Gs2MegaField.Model.Vector vector) {
             this.Vector = vector;
             return this;
         }
-
         public MyPosition WithR(float? r) {
             this.R = r;
             return this;

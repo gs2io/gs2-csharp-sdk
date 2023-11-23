@@ -33,33 +33,28 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class SubRankCapByUserIdRequest : Gs2Request<SubRankCapByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string ExperienceName { set; get; }
-        public string PropertyId { set; get; }
-        public long? RankCapValue { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string ExperienceName { set; get; }
+         public string PropertyId { set; get; }
+         public long? RankCapValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SubRankCapByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SubRankCapByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SubRankCapByUserIdRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
-
         public SubRankCapByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public SubRankCapByUserIdRequest WithRankCapValue(long? rankCapValue) {
             this.RankCapValue = rankCapValue;
             return this;

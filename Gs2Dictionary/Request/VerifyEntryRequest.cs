@@ -33,27 +33,23 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class VerifyEntryRequest : Gs2Request<VerifyEntryRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string EntryModelName { set; get; }
-        public string VerifyType { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string EntryModelName { set; get; }
+         public string VerifyType { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyEntryRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyEntryRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public VerifyEntryRequest WithEntryModelName(string entryModelName) {
             this.EntryModelName = entryModelName;
             return this;
         }
-
         public VerifyEntryRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;

@@ -48,87 +48,70 @@ namespace Gs2.Gs2Ranking.Model
         public string AccessPeriodEventId { set; get; }
         public string[] IgnoreUserIds { set; get; }
         public string Generation { set; get; }
-
         public CategoryModel WithCategoryModelId(string categoryModelId) {
             this.CategoryModelId = categoryModelId;
             return this;
         }
-
         public CategoryModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CategoryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CategoryModel WithMinimumValue(long? minimumValue) {
             this.MinimumValue = minimumValue;
             return this;
         }
-
         public CategoryModel WithMaximumValue(long? maximumValue) {
             this.MaximumValue = maximumValue;
             return this;
         }
-
         public CategoryModel WithOrderDirection(string orderDirection) {
             this.OrderDirection = orderDirection;
             return this;
         }
-
         public CategoryModel WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public CategoryModel WithUniqueByUserId(bool? uniqueByUserId) {
             this.UniqueByUserId = uniqueByUserId;
             return this;
         }
-
         public CategoryModel WithSum(bool? sum) {
             this.Sum = sum;
             return this;
         }
-
         public CategoryModel WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
             this.CalculateFixedTimingHour = calculateFixedTimingHour;
             return this;
         }
-
         public CategoryModel WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
             this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
             return this;
         }
-
         public CategoryModel WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
             this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
-
         public CategoryModel WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
             this.AdditionalScopes = additionalScopes;
             return this;
         }
-
         public CategoryModel WithEntryPeriodEventId(string entryPeriodEventId) {
             this.EntryPeriodEventId = entryPeriodEventId;
             return this;
         }
-
         public CategoryModel WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
-
         public CategoryModel WithIgnoreUserIds(string[] ignoreUserIds) {
             this.IgnoreUserIds = ignoreUserIds;
             return this;
         }
-
         public CategoryModel WithGeneration(string generation) {
             this.Generation = generation;
             return this;

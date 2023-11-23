@@ -33,20 +33,17 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DoMatchmakingByPlayerRequest : Gs2Request<DoMatchmakingByPlayerRequest>
 	{
-        public string NamespaceName { set; get; }
-        public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
-        public string MatchmakingContextToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
+         public string MatchmakingContextToken { set; get; }
         public DoMatchmakingByPlayerRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DoMatchmakingByPlayerRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
             this.Player = player;
             return this;
         }
-
         public DoMatchmakingByPlayerRequest WithMatchmakingContextToken(string matchmakingContextToken) {
             this.MatchmakingContextToken = matchmakingContextToken;
             return this;

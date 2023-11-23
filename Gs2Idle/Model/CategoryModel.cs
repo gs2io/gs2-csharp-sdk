@@ -39,42 +39,34 @@ namespace Gs2.Gs2Idle.Model
         public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
         public string IdlePeriodScheduleId { set; get; }
         public string ReceivePeriodScheduleId { set; get; }
-
         public CategoryModel WithCategoryModelId(string categoryModelId) {
             this.CategoryModelId = categoryModelId;
             return this;
         }
-
         public CategoryModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CategoryModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CategoryModel WithRewardIntervalMinutes(int? rewardIntervalMinutes) {
             this.RewardIntervalMinutes = rewardIntervalMinutes;
             return this;
         }
-
         public CategoryModel WithDefaultMaximumIdleMinutes(int? defaultMaximumIdleMinutes) {
             this.DefaultMaximumIdleMinutes = defaultMaximumIdleMinutes;
             return this;
         }
-
         public CategoryModel WithAcquireActions(Gs2.Gs2Idle.Model.AcquireActionList[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public CategoryModel WithIdlePeriodScheduleId(string idlePeriodScheduleId) {
             this.IdlePeriodScheduleId = idlePeriodScheduleId;
             return this;
         }
-
         public CategoryModel WithReceivePeriodScheduleId(string receivePeriodScheduleId) {
             this.ReceivePeriodScheduleId = receivePeriodScheduleId;
             return this;

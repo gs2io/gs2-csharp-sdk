@@ -33,20 +33,17 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class GetMoldByUserIdRequest : Gs2Request<GetMoldByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string MoldModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string MoldModelName { set; get; }
         public GetMoldByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMoldByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetMoldByUserIdRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;

@@ -33,8 +33,7 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class DescribeCampaignModelsRequest : Gs2Request<DescribeCampaignModelsRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public DescribeCampaignModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

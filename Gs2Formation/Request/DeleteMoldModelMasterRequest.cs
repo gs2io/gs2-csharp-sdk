@@ -33,14 +33,12 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DeleteMoldModelMasterRequest : Gs2Request<DeleteMoldModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MoldModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MoldModelName { set; get; }
         public DeleteMoldModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteMoldModelMasterRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;

@@ -33,26 +33,22 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public string OverflowTriggerScript { set; get; }
-        public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public string OverflowTriggerScript { set; get; }
+         public Gs2.Gs2Stamina.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithOverflowTriggerScript(string overflowTriggerScript) {
             this.OverflowTriggerScript = overflowTriggerScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Stamina.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

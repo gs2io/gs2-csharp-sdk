@@ -33,27 +33,23 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class AddMoldCapacityByUserIdRequest : Gs2Request<AddMoldCapacityByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string MoldModelName { set; get; }
-        public int? Capacity { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string MoldModelName { set; get; }
+         public int? Capacity { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AddMoldCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AddMoldCapacityByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AddMoldCapacityByUserIdRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;
         }
-
         public AddMoldCapacityByUserIdRequest WithCapacity(int? capacity) {
             this.Capacity = capacity;
             return this;

@@ -33,68 +33,57 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class UpdateBonusModelMasterRequest : Gs2Request<UpdateBonusModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BonusModelName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string Mode { set; get; }
-        public string PeriodEventId { set; get; }
-        public int? ResetHour { set; get; }
-        public string Repeat { set; get; }
-        public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; }
-        public string MissedReceiveRelief { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string BonusModelName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string Mode { set; get; }
+         public string PeriodEventId { set; get; }
+         public int? ResetHour { set; get; }
+         public string Repeat { set; get; }
+         public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; }
+         public string MissedReceiveRelief { set; get; }
+         public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; }
         public UpdateBonusModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithPeriodEventId(string periodEventId) {
             this.PeriodEventId = periodEventId;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithRepeat(string repeat) {
             this.Repeat = repeat;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithRewards(Gs2.Gs2LoginReward.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithMissedReceiveRelief(string missedReceiveRelief) {
             this.MissedReceiveRelief = missedReceiveRelief;
             return this;
         }
-
         public UpdateBonusModelMasterRequest WithMissedReceiveReliefConsumeActions(Gs2.Core.Model.ConsumeAction[] missedReceiveReliefConsumeActions) {
             this.MissedReceiveReliefConsumeActions = missedReceiveReliefConsumeActions;
             return this;

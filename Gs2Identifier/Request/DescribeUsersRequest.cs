@@ -33,14 +33,12 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class DescribeUsersRequest : Gs2Request<DescribeUsersRequest>
 	{
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeUsersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeUsersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

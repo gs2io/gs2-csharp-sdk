@@ -36,27 +36,22 @@ namespace Gs2.Gs2Identifier.Model
         public string ClientSecret { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Identifier WithClientId(string clientId) {
             this.ClientId = clientId;
             return this;
         }
-
         public Identifier WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public Identifier WithClientSecret(string clientSecret) {
             this.ClientSecret = clientSecret;
             return this;
         }
-
         public Identifier WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Identifier WithRevision(long? revision) {
             this.Revision = revision;
             return this;

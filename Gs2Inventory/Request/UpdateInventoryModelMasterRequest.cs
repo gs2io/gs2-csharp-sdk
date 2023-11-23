@@ -33,44 +33,37 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class UpdateInventoryModelMasterRequest : Gs2Request<UpdateInventoryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public int? InitialCapacity { set; get; }
-        public int? MaxCapacity { set; get; }
-        public bool? ProtectReferencedItem { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public int? InitialCapacity { set; get; }
+         public int? MaxCapacity { set; get; }
+         public bool? ProtectReferencedItem { set; get; }
         public UpdateInventoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateInventoryModelMasterRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public UpdateInventoryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateInventoryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateInventoryModelMasterRequest WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
-
         public UpdateInventoryModelMasterRequest WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public UpdateInventoryModelMasterRequest WithProtectReferencedItem(bool? protectReferencedItem) {
             this.ProtectReferencedItem = protectReferencedItem;
             return this;

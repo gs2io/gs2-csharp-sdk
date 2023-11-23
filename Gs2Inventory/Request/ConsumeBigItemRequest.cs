@@ -33,33 +33,28 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class ConsumeBigItemRequest : Gs2Request<ConsumeBigItemRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string AccessToken { set; get; }
-        public string ItemName { set; get; }
-        public string ConsumeCount { set; get; }
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string AccessToken { set; get; }
+         public string ItemName { set; get; }
+         public string ConsumeCount { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ConsumeBigItemRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ConsumeBigItemRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public ConsumeBigItemRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public ConsumeBigItemRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public ConsumeBigItemRequest WithConsumeCount(string consumeCount) {
             this.ConsumeCount = consumeCount;
             return this;

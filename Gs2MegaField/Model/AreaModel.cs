@@ -35,22 +35,18 @@ namespace Gs2.Gs2MegaField.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2MegaField.Model.LayerModel[] LayerModels { set; get; }
-
         public AreaModel WithAreaModelId(string areaModelId) {
             this.AreaModelId = areaModelId;
             return this;
         }
-
         public AreaModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public AreaModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public AreaModel WithLayerModels(Gs2.Gs2MegaField.Model.LayerModel[] layerModels) {
             this.LayerModels = layerModels;
             return this;

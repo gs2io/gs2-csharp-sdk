@@ -33,14 +33,12 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class AcquireActionToPropertyFormPropertiesByStampSheetRequest : Gs2Request<AcquireActionToPropertyFormPropertiesByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public AcquireActionToPropertyFormPropertiesByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public AcquireActionToPropertyFormPropertiesByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

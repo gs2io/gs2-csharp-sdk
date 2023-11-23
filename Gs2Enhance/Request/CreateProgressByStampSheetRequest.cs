@@ -33,14 +33,12 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class CreateProgressByStampSheetRequest : Gs2Request<CreateProgressByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public CreateProgressByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public CreateProgressByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

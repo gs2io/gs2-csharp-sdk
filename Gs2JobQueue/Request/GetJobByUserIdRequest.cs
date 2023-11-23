@@ -33,20 +33,17 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class GetJobByUserIdRequest : Gs2Request<GetJobByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string JobName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string JobName { set; get; }
         public GetJobByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetJobByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetJobByUserIdRequest WithJobName(string jobName) {
             this.JobName = jobName;
             return this;

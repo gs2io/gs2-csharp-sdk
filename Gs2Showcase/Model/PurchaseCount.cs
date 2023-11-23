@@ -33,12 +33,10 @@ namespace Gs2.Gs2Showcase.Model
 	{
         public string Name { set; get; }
         public int? Count { set; get; }
-
         public PurchaseCount WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public PurchaseCount WithCount(int? count) {
             this.Count = count;
             return this;

@@ -33,32 +33,27 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class UpdateCampaignModelMasterRequest : Gs2Request<UpdateCampaignModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CampaignModelName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public bool? EnableCampaignCode { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CampaignModelName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public bool? EnableCampaignCode { set; get; }
         public UpdateCampaignModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCampaignModelMasterRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;
         }
-
         public UpdateCampaignModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateCampaignModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateCampaignModelMasterRequest WithEnableCampaignCode(bool? enableCampaignCode) {
             this.EnableCampaignCode = enableCampaignCode;
             return this;

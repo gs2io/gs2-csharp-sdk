@@ -33,39 +33,33 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyBigItemRequest : Gs2Request<VerifyBigItemRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string InventoryName { set; get; }
-        public string ItemName { set; get; }
-        public string VerifyType { set; get; }
-        public string Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string InventoryName { set; get; }
+         public string ItemName { set; get; }
+         public string VerifyType { set; get; }
+         public string Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyBigItemRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyBigItemRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public VerifyBigItemRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public VerifyBigItemRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public VerifyBigItemRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
-
         public VerifyBigItemRequest WithCount(string count) {
             this.Count = count;
             return this;

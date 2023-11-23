@@ -33,44 +33,37 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class DescribeReceiptsRequest : Gs2Request<DescribeReceiptsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public int? Slot { set; get; }
-        public long? Begin { set; get; }
-        public long? End { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public int? Slot { set; get; }
+         public long? Begin { set; get; }
+         public long? End { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeReceiptsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeReceiptsRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeReceiptsRequest WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
-
         public DescribeReceiptsRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
-
         public DescribeReceiptsRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
-
         public DescribeReceiptsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeReceiptsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

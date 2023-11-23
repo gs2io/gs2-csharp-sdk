@@ -33,44 +33,37 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class CreateMoldModelMasterRequest : Gs2Request<CreateMoldModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string FormModelName { set; get; }
-        public int? InitialMaxCapacity { set; get; }
-        public int? MaxCapacity { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string FormModelName { set; get; }
+         public int? InitialMaxCapacity { set; get; }
+         public int? MaxCapacity { set; get; }
         public CreateMoldModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateMoldModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateMoldModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateMoldModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateMoldModelMasterRequest WithFormModelName(string formModelName) {
             this.FormModelName = formModelName;
             return this;
         }
-
         public CreateMoldModelMasterRequest WithInitialMaxCapacity(int? initialMaxCapacity) {
             this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
-
         public CreateMoldModelMasterRequest WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;

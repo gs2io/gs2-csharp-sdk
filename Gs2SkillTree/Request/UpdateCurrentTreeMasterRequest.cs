@@ -33,14 +33,12 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class UpdateCurrentTreeMasterRequest : Gs2Request<UpdateCurrentTreeMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentTreeMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentTreeMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

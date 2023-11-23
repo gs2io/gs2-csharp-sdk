@@ -33,50 +33,42 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class UpdateLotteryModelMasterRequest : Gs2Request<UpdateLotteryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string LotteryName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string Mode { set; get; }
-        public string Method { set; get; }
-        public string PrizeTableName { set; get; }
-        public string ChoicePrizeTableScriptId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string LotteryName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string Mode { set; get; }
+         public string Method { set; get; }
+         public string PrizeTableName { set; get; }
+         public string ChoicePrizeTableScriptId { set; get; }
         public UpdateLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
-
         public UpdateLotteryModelMasterRequest WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
             this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;

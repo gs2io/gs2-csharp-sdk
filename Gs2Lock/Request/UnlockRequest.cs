@@ -33,27 +33,23 @@ namespace Gs2.Gs2Lock.Request
 	[System.Serializable]
 	public class UnlockRequest : Gs2Request<UnlockRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PropertyId { set; get; }
-        public string AccessToken { set; get; }
-        public string TransactionId { set; get; }
+         public string NamespaceName { set; get; }
+         public string PropertyId { set; get; }
+         public string AccessToken { set; get; }
+         public string TransactionId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UnlockRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UnlockRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public UnlockRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public UnlockRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

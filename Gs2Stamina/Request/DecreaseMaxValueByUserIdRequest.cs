@@ -33,27 +33,23 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DecreaseMaxValueByUserIdRequest : Gs2Request<DecreaseMaxValueByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string UserId { set; get; }
-        public int? DecreaseValue { set; get; }
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string UserId { set; get; }
+         public int? DecreaseValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DecreaseMaxValueByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DecreaseMaxValueByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public DecreaseMaxValueByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DecreaseMaxValueByUserIdRequest WithDecreaseValue(int? decreaseValue) {
             this.DecreaseValue = decreaseValue;
             return this;

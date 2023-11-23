@@ -33,20 +33,17 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class DeleteQuestModelMasterRequest : Gs2Request<DeleteQuestModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string QuestGroupName { set; get; }
-        public string QuestName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string QuestGroupName { set; get; }
+         public string QuestName { set; get; }
         public DeleteQuestModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteQuestModelMasterRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public DeleteQuestModelMasterRequest WithQuestName(string questName) {
             this.QuestName = questName;
             return this;

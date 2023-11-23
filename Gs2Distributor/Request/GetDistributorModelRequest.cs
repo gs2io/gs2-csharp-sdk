@@ -33,14 +33,12 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class GetDistributorModelRequest : Gs2Request<GetDistributorModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string DistributorName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string DistributorName { set; get; }
         public GetDistributorModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetDistributorModelRequest WithDistributorName(string distributorName) {
             this.DistributorName = distributorName;
             return this;

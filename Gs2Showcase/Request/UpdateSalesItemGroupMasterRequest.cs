@@ -33,32 +33,27 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class UpdateSalesItemGroupMasterRequest : Gs2Request<UpdateSalesItemGroupMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string SalesItemGroupName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string[] SalesItemNames { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string SalesItemGroupName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string[] SalesItemNames { set; get; }
         public UpdateSalesItemGroupMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateSalesItemGroupMasterRequest WithSalesItemGroupName(string salesItemGroupName) {
             this.SalesItemGroupName = salesItemGroupName;
             return this;
         }
-
         public UpdateSalesItemGroupMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateSalesItemGroupMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateSalesItemGroupMasterRequest WithSalesItemNames(string[] salesItemNames) {
             this.SalesItemNames = salesItemNames;
             return this;

@@ -33,26 +33,22 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class UpdateSimpleInventoryModelMasterRequest : Gs2Request<UpdateSimpleInventoryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
         public UpdateSimpleInventoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateSimpleInventoryModelMasterRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public UpdateSimpleInventoryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateSimpleInventoryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

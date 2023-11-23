@@ -33,21 +33,18 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CancelMatchmakingRequest : Gs2Request<CancelMatchmakingRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string GatheringName { set; get; }
-        public string AccessToken { set; get; }
+         public string NamespaceName { set; get; }
+         public string GatheringName { set; get; }
+         public string AccessToken { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CancelMatchmakingRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CancelMatchmakingRequest WithGatheringName(string gatheringName) {
             this.GatheringName = gatheringName;
             return this;
         }
-
         public CancelMatchmakingRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

@@ -33,27 +33,23 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class DoMatchmakingByUserIdRequest : Gs2Request<DoMatchmakingByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
-        public string MatchmakingContextToken { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
+         public string MatchmakingContextToken { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DoMatchmakingByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DoMatchmakingByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DoMatchmakingByUserIdRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
             this.Player = player;
             return this;
         }
-
         public DoMatchmakingByUserIdRequest WithMatchmakingContextToken(string matchmakingContextToken) {
             this.MatchmakingContextToken = matchmakingContextToken;
             return this;

@@ -33,12 +33,10 @@ namespace Gs2.Gs2SkillTree.Model
 	{
         public string Key { set; get; }
         public string Value { set; get; }
-
         public Config WithKey(string key) {
             this.Key = key;
             return this;
         }
-
         public Config WithValue(string value) {
             this.Value = value;
             return this;

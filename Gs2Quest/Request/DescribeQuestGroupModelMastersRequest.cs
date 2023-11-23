@@ -33,20 +33,17 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class DescribeQuestGroupModelMastersRequest : Gs2Request<DescribeQuestGroupModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeQuestGroupModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeQuestGroupModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeQuestGroupModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

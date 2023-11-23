@@ -33,21 +33,18 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class FollowRequest : Gs2Request<FollowRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string TargetUserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string TargetUserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public FollowRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public FollowRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public FollowRequest WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

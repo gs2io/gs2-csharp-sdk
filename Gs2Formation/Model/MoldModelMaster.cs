@@ -41,52 +41,42 @@ namespace Gs2.Gs2Formation.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public MoldModelMaster WithMoldModelId(string moldModelId) {
             this.MoldModelId = moldModelId;
             return this;
         }
-
         public MoldModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public MoldModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public MoldModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public MoldModelMaster WithInitialMaxCapacity(int? initialMaxCapacity) {
             this.InitialMaxCapacity = initialMaxCapacity;
             return this;
         }
-
         public MoldModelMaster WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public MoldModelMaster WithFormModelName(string formModelName) {
             this.FormModelName = formModelName;
             return this;
         }
-
         public MoldModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public MoldModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public MoldModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

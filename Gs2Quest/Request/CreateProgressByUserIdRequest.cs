@@ -33,33 +33,28 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class CreateProgressByUserIdRequest : Gs2Request<CreateProgressByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string QuestModelId { set; get; }
-        public bool? Force { set; get; }
-        public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string QuestModelId { set; get; }
+         public bool? Force { set; get; }
+         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CreateProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateProgressByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public CreateProgressByUserIdRequest WithQuestModelId(string questModelId) {
             this.QuestModelId = questModelId;
             return this;
         }
-
         public CreateProgressByUserIdRequest WithForce(bool? force) {
             this.Force = force;
             return this;
         }
-
         public CreateProgressByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
             return this;

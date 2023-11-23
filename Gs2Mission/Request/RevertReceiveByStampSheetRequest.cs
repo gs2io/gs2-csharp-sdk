@@ -33,14 +33,12 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class RevertReceiveByStampSheetRequest : Gs2Request<RevertReceiveByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public RevertReceiveByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public RevertReceiveByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

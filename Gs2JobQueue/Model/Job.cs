@@ -40,47 +40,38 @@ namespace Gs2.Gs2JobQueue.Model
         public int? MaxTryCount { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Job WithJobId(string jobId) {
             this.JobId = jobId;
             return this;
         }
-
         public Job WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Job WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Job WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
         }
-
         public Job WithArgs(string args) {
             this.Args = args;
             return this;
         }
-
         public Job WithCurrentRetryCount(int? currentRetryCount) {
             this.CurrentRetryCount = currentRetryCount;
             return this;
         }
-
         public Job WithMaxTryCount(int? maxTryCount) {
             this.MaxTryCount = maxTryCount;
             return this;
         }
-
         public Job WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Job WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

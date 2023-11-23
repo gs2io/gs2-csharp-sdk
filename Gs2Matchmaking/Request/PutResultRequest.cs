@@ -33,20 +33,17 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class PutResultRequest : Gs2Request<PutResultRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RatingName { set; get; }
-        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RatingName { set; get; }
+         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
         public PutResultRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PutResultRequest WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;
         }
-
         public PutResultRequest WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
             this.GameResults = gameResults;
             return this;

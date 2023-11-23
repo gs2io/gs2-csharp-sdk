@@ -33,32 +33,27 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class UpdateLayerModelMasterRequest : Gs2Request<UpdateLayerModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AreaModelName { set; get; }
+         public string LayerModelName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
         public UpdateLayerModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateLayerModelMasterRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
-
         public UpdateLayerModelMasterRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
-
         public UpdateLayerModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateLayerModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

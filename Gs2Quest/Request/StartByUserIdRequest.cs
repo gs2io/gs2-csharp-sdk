@@ -33,39 +33,33 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class StartByUserIdRequest : Gs2Request<StartByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string QuestGroupName { set; get; }
-        public string QuestName { set; get; }
-        public string UserId { set; get; }
-        public bool? Force { set; get; }
-        public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string QuestGroupName { set; get; }
+         public string QuestName { set; get; }
+         public string UserId { set; get; }
+         public bool? Force { set; get; }
+         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public StartByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public StartByUserIdRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public StartByUserIdRequest WithQuestName(string questName) {
             this.QuestName = questName;
             return this;
         }
-
         public StartByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public StartByUserIdRequest WithForce(bool? force) {
             this.Force = force;
             return this;
         }
-
         public StartByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
             return this;

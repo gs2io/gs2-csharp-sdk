@@ -33,14 +33,12 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class UpdateCurrentShowcaseMasterRequest : Gs2Request<UpdateCurrentShowcaseMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentShowcaseMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentShowcaseMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class GetLimitModelMasterRequest : Gs2Request<GetLimitModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string LimitName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string LimitName { set; get; }
         public GetLimitModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetLimitModelMasterRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;

@@ -35,22 +35,18 @@ namespace Gs2.Gs2Matchmaking.Model
         public Gs2.Gs2Matchmaking.Model.Attribute_[] Attributes { set; get; }
         public string RoleName { set; get; }
         public string[] DenyUserIds { set; get; }
-
         public Player WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Player WithAttributes(Gs2.Gs2Matchmaking.Model.Attribute_[] attributes) {
             this.Attributes = attributes;
             return this;
         }
-
         public Player WithRoleName(string roleName) {
             this.RoleName = roleName;
             return this;
         }
-
         public Player WithDenyUserIds(string[] denyUserIds) {
             this.DenyUserIds = denyUserIds;
             return this;

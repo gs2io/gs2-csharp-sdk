@@ -33,20 +33,17 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DescribeMaxStaminaTableMastersRequest : Gs2Request<DescribeMaxStaminaTableMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeMaxStaminaTableMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeMaxStaminaTableMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeMaxStaminaTableMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

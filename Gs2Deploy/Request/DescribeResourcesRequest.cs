@@ -33,20 +33,17 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class DescribeResourcesRequest : Gs2Request<DescribeResourcesRequest>
 	{
-        public string StackName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string StackName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeResourcesRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
-
         public DescribeResourcesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeResourcesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class DeleteThresholdMasterRequest : Gs2Request<DeleteThresholdMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ThresholdName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ThresholdName { set; get; }
         public DeleteThresholdMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteThresholdMasterRequest WithThresholdName(string thresholdName) {
             this.ThresholdName = thresholdName;
             return this;

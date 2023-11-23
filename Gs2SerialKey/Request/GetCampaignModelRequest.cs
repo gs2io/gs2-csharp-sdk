@@ -33,14 +33,12 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class GetCampaignModelRequest : Gs2Request<GetCampaignModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CampaignModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CampaignModelName { set; get; }
         public GetCampaignModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCampaignModelRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;

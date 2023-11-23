@@ -33,14 +33,12 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class GetCategoryModelMasterRequest : Gs2Request<GetCategoryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
         public GetCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCategoryModelMasterRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;

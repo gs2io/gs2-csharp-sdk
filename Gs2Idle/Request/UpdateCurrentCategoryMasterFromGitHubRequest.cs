@@ -33,14 +33,12 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class UpdateCurrentCategoryMasterFromGitHubRequest : Gs2Request<UpdateCurrentCategoryMasterFromGitHubRequest>
 	{
-        public string NamespaceName { set; get; }
-        public Gs2.Gs2Idle.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public Gs2.Gs2Idle.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
         public UpdateCurrentCategoryMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentCategoryMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Idle.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

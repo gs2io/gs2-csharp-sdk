@@ -36,27 +36,22 @@ namespace Gs2.Gs2News.Model
         public string Text { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Output WithOutputId(string outputId) {
             this.OutputId = outputId;
             return this;
         }
-
         public Output WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Output WithText(string text) {
             this.Text = text;
             return this;
         }
-
         public Output WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Output WithRevision(long? revision) {
             this.Revision = revision;
             return this;

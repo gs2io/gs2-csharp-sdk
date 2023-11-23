@@ -33,32 +33,27 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2LoginReward.Model.TransactionSetting TransactionSetting { set; get; }
-        public Gs2.Gs2LoginReward.Model.ScriptSetting ReceiveScript { set; get; }
-        public Gs2.Gs2LoginReward.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2LoginReward.Model.TransactionSetting TransactionSetting { set; get; }
+         public Gs2.Gs2LoginReward.Model.ScriptSetting ReceiveScript { set; get; }
+         public Gs2.Gs2LoginReward.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2LoginReward.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithReceiveScript(Gs2.Gs2LoginReward.Model.ScriptSetting receiveScript) {
             this.ReceiveScript = receiveScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2LoginReward.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

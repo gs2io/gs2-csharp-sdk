@@ -33,9 +33,8 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class PrepareImportUserDataByUserIdRequest : Gs2Request<PrepareImportUserDataByUserIdRequest>
 	{
-        public string UserId { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PrepareImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

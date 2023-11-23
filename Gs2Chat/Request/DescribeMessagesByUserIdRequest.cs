@@ -33,38 +33,32 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class DescribeMessagesByUserIdRequest : Gs2Request<DescribeMessagesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string Password { set; get; }
-        public string UserId { set; get; }
-        public long? StartAt { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RoomName { set; get; }
+         public string Password { set; get; }
+         public string UserId { set; get; }
+         public long? StartAt { set; get; }
+         public int? Limit { set; get; }
         public DescribeMessagesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeMessagesByUserIdRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public DescribeMessagesByUserIdRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public DescribeMessagesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeMessagesByUserIdRequest WithStartAt(long? startAt) {
             this.StartAt = startAt;
             return this;
         }
-
         public DescribeMessagesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

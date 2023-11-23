@@ -33,15 +33,13 @@ namespace Gs2.Gs2AdReward.Request
 	[System.Serializable]
 	public class DeletePointByUserIdRequest : Gs2Request<DeletePointByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeletePointByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeletePointByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

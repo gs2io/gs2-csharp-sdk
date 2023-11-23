@@ -33,21 +33,18 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class RevertUseByUserIdRequest : Gs2Request<RevertUseByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string Code { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string Code { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RevertUseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RevertUseByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public RevertUseByUserIdRequest WithCode(string code) {
             this.Code = code;
             return this;

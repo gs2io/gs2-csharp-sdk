@@ -33,20 +33,17 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DeleteBigItemModelMasterRequest : Gs2Request<DeleteBigItemModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string ItemName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string ItemName { set; get; }
         public DeleteBigItemModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteBigItemModelMasterRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public DeleteBigItemModelMasterRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;

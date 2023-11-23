@@ -33,20 +33,17 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class DescribeExperienceModelMastersRequest : Gs2Request<DescribeExperienceModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeExperienceModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeExperienceModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeExperienceModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

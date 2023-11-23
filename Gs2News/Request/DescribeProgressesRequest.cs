@@ -33,20 +33,17 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class DescribeProgressesRequest : Gs2Request<DescribeProgressesRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeProgressesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeProgressesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeProgressesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

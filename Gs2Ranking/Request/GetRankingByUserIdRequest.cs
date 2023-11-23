@@ -33,38 +33,32 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetRankingByUserIdRequest : Gs2Request<GetRankingByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-        public string UserId { set; get; }
-        public string ScorerUserId { set; get; }
-        public string UniqueId { set; get; }
-        public string AdditionalScopeName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
+         public string UserId { set; get; }
+         public string ScorerUserId { set; get; }
+         public string UniqueId { set; get; }
+         public string AdditionalScopeName { set; get; }
         public GetRankingByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetRankingByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public GetRankingByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetRankingByUserIdRequest WithScorerUserId(string scorerUserId) {
             this.ScorerUserId = scorerUserId;
             return this;
         }
-
         public GetRankingByUserIdRequest WithUniqueId(string uniqueId) {
             this.UniqueId = uniqueId;
             return this;
         }
-
         public GetRankingByUserIdRequest WithAdditionalScopeName(string additionalScopeName) {
             this.AdditionalScopeName = additionalScopeName;
             return this;

@@ -33,20 +33,17 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class GetStaminaRequest : Gs2Request<GetStaminaRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string AccessToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string AccessToken { set; get; }
         public GetStaminaRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetStaminaRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public GetStaminaRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class AcquireBigItemByStampSheetRequest : Gs2Request<AcquireBigItemByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public AcquireBigItemByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public AcquireBigItemByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

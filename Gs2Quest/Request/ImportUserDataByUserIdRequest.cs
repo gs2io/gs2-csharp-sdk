@@ -33,15 +33,13 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class ImportUserDataByUserIdRequest : Gs2Request<ImportUserDataByUserIdRequest>
 	{
-        public string UserId { set; get; }
-        public string UploadToken { set; get; }
+         public string UserId { set; get; }
+         public string UploadToken { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ImportUserDataByUserIdRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;

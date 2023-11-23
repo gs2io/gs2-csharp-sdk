@@ -33,14 +33,12 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class CountUpByStampTaskRequest : Gs2Request<CountUpByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public CountUpByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public CountUpByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

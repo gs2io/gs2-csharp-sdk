@@ -33,21 +33,18 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class UpdateReceivedByUserIdRequest : Gs2Request<UpdateReceivedByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string[] ReceivedGlobalMessageNames { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string[] ReceivedGlobalMessageNames { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UpdateReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateReceivedByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public UpdateReceivedByUserIdRequest WithReceivedGlobalMessageNames(string[] receivedGlobalMessageNames) {
             this.ReceivedGlobalMessageNames = receivedGlobalMessageNames;
             return this;

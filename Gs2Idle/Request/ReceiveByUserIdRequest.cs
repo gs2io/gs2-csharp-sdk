@@ -33,27 +33,23 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class ReceiveByUserIdRequest : Gs2Request<ReceiveByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string CategoryName { set; get; }
-        public Gs2.Gs2Idle.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string CategoryName { set; get; }
+         public Gs2.Gs2Idle.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ReceiveByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ReceiveByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public ReceiveByUserIdRequest WithConfig(Gs2.Gs2Idle.Model.Config[] config) {
             this.Config = config;
             return this;

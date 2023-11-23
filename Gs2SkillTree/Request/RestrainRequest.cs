@@ -33,27 +33,23 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class RestrainRequest : Gs2Request<RestrainRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string[] NodeModelNames { set; get; }
-        public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string[] NodeModelNames { set; get; }
+         public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RestrainRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RestrainRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public RestrainRequest WithNodeModelNames(string[] nodeModelNames) {
             this.NodeModelNames = nodeModelNames;
             return this;
         }
-
         public RestrainRequest WithConfig(Gs2.Gs2SkillTree.Model.Config[] config) {
             this.Config = config;
             return this;

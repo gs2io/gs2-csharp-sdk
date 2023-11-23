@@ -38,37 +38,30 @@ namespace Gs2.Gs2Gateway.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public WebSocketSession WithWebSocketSessionId(string webSocketSessionId) {
             this.WebSocketSessionId = webSocketSessionId;
             return this;
         }
-
         public WebSocketSession WithConnectionId(string connectionId) {
             this.ConnectionId = connectionId;
             return this;
         }
-
         public WebSocketSession WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public WebSocketSession WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public WebSocketSession WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public WebSocketSession WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public WebSocketSession WithRevision(long? revision) {
             this.Revision = revision;
             return this;

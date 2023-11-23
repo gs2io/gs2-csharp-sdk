@@ -33,14 +33,12 @@ namespace Gs2.Gs2News.Request
 	[System.Serializable]
 	public class DescribeNewsByUserIdRequest : Gs2Request<DescribeNewsByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public DescribeNewsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeNewsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

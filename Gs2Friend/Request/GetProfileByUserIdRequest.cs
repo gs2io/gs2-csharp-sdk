@@ -33,14 +33,12 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class GetProfileByUserIdRequest : Gs2Request<GetProfileByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public GetProfileByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetProfileByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

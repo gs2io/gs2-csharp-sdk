@@ -33,86 +33,72 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting CancelRequestScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting AcceptRequestScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting RejectRequestScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting DeleteFriendScript { set; get; }
-        public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; }
-        public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; }
-        public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; }
-        public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; }
-        public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting FollowScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting UnfollowScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting SendRequestScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting CancelRequestScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting AcceptRequestScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting RejectRequestScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting DeleteFriendScript { set; get; }
+         public Gs2.Gs2Friend.Model.ScriptSetting UpdateProfileScript { set; get; }
+         public Gs2.Gs2Friend.Model.NotificationSetting FollowNotification { set; get; }
+         public Gs2.Gs2Friend.Model.NotificationSetting ReceiveRequestNotification { set; get; }
+         public Gs2.Gs2Friend.Model.NotificationSetting AcceptRequestNotification { set; get; }
+         public Gs2.Gs2Friend.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithFollowScript(Gs2.Gs2Friend.Model.ScriptSetting followScript) {
             this.FollowScript = followScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithUnfollowScript(Gs2.Gs2Friend.Model.ScriptSetting unfollowScript) {
             this.UnfollowScript = unfollowScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithSendRequestScript(Gs2.Gs2Friend.Model.ScriptSetting sendRequestScript) {
             this.SendRequestScript = sendRequestScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithCancelRequestScript(Gs2.Gs2Friend.Model.ScriptSetting cancelRequestScript) {
             this.CancelRequestScript = cancelRequestScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithAcceptRequestScript(Gs2.Gs2Friend.Model.ScriptSetting acceptRequestScript) {
             this.AcceptRequestScript = acceptRequestScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithRejectRequestScript(Gs2.Gs2Friend.Model.ScriptSetting rejectRequestScript) {
             this.RejectRequestScript = rejectRequestScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithDeleteFriendScript(Gs2.Gs2Friend.Model.ScriptSetting deleteFriendScript) {
             this.DeleteFriendScript = deleteFriendScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithUpdateProfileScript(Gs2.Gs2Friend.Model.ScriptSetting updateProfileScript) {
             this.UpdateProfileScript = updateProfileScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithFollowNotification(Gs2.Gs2Friend.Model.NotificationSetting followNotification) {
             this.FollowNotification = followNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithReceiveRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting receiveRequestNotification) {
             this.ReceiveRequestNotification = receiveRequestNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithAcceptRequestNotification(Gs2.Gs2Friend.Model.NotificationSetting acceptRequestNotification) {
             this.AcceptRequestNotification = acceptRequestNotification;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Friend.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

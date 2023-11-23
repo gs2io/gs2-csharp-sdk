@@ -38,37 +38,30 @@ namespace Gs2.Gs2Mission.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Counter WithCounterId(string counterId) {
             this.CounterId = counterId;
             return this;
         }
-
         public Counter WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Counter WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Counter WithValues(Gs2.Gs2Mission.Model.ScopedValue[] values) {
             this.Values = values;
             return this;
         }
-
         public Counter WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Counter WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Counter WithRevision(long? revision) {
             this.Revision = revision;
             return this;

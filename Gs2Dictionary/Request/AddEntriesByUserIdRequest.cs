@@ -33,21 +33,18 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class AddEntriesByUserIdRequest : Gs2Request<AddEntriesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string[] EntryModelNames { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string[] EntryModelNames { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AddEntriesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AddEntriesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AddEntriesByUserIdRequest WithEntryModelNames(string[] entryModelNames) {
             this.EntryModelNames = entryModelNames;
             return this;

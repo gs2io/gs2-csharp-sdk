@@ -39,42 +39,34 @@ namespace Gs2.Gs2Inbox.Model
         public long? CreatedAt { set; get; }
         public long? ExpiresAt { set; get; }
         public long? Revision { set; get; }
-
         public GlobalMessageMaster WithGlobalMessageId(string globalMessageId) {
             this.GlobalMessageId = globalMessageId;
             return this;
         }
-
         public GlobalMessageMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public GlobalMessageMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public GlobalMessageMaster WithReadAcquireActions(Gs2.Core.Model.AcquireAction[] readAcquireActions) {
             this.ReadAcquireActions = readAcquireActions;
             return this;
         }
-
         public GlobalMessageMaster WithExpiresTimeSpan(Gs2.Gs2Inbox.Model.TimeSpan_ expiresTimeSpan) {
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
-
         public GlobalMessageMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public GlobalMessageMaster WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
-
         public GlobalMessageMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

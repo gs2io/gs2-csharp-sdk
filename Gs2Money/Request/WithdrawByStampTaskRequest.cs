@@ -33,14 +33,12 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class WithdrawByStampTaskRequest : Gs2Request<WithdrawByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public WithdrawByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public WithdrawByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

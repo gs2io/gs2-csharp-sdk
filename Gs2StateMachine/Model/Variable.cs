@@ -33,12 +33,10 @@ namespace Gs2.Gs2StateMachine.Model
 	{
         public string StateMachineName { set; get; }
         public string Value { set; get; }
-
         public Variable WithStateMachineName(string stateMachineName) {
             this.StateMachineName = stateMachineName;
             return this;
         }
-
         public Variable WithValue(string value) {
             this.Value = value;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class UnmarkReceivedByStampSheetRequest : Gs2Request<UnmarkReceivedByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public UnmarkReceivedByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public UnmarkReceivedByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

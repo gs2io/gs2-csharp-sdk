@@ -33,38 +33,32 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
-        public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
-        public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
-        public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
+         public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting acquireScript) {
             this.AcquireScript = acquireScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithOverflowScript(Gs2.Gs2Inventory.Model.ScriptSetting overflowScript) {
             this.OverflowScript = overflowScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting consumeScript) {
             this.ConsumeScript = consumeScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

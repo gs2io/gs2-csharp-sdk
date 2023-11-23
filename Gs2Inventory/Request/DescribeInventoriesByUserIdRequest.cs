@@ -33,26 +33,22 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class DescribeInventoriesByUserIdRequest : Gs2Request<DescribeInventoriesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeInventoriesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeInventoriesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeInventoriesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeInventoriesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

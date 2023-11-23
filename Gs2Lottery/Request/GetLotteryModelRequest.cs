@@ -33,14 +33,12 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class GetLotteryModelRequest : Gs2Request<GetLotteryModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string LotteryName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string LotteryName { set; get; }
         public GetLotteryModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetLotteryModelRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;

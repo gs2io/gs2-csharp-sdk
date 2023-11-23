@@ -33,8 +33,7 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class GetCurrentTreeMasterRequest : Gs2Request<GetCurrentTreeMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public GetCurrentTreeMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

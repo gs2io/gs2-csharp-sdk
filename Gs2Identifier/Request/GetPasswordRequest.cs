@@ -33,8 +33,7 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class GetPasswordRequest : Gs2Request<GetPasswordRequest>
 	{
-        public string UserName { set; get; }
-
+         public string UserName { set; get; }
         public GetPasswordRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;

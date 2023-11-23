@@ -33,20 +33,17 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class GetCounterRequest : Gs2Request<GetCounterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CounterName { set; get; }
-        public string AccessToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CounterName { set; get; }
+         public string AccessToken { set; get; }
         public GetCounterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCounterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public GetCounterRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2AdReward.Request
 	[System.Serializable]
 	public class AcquirePointByStampSheetRequest : Gs2Request<AcquirePointByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public AcquirePointByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public AcquirePointByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

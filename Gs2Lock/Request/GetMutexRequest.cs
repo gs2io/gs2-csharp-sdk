@@ -33,20 +33,17 @@ namespace Gs2.Gs2Lock.Request
 	[System.Serializable]
 	public class GetMutexRequest : Gs2Request<GetMutexRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string PropertyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string PropertyId { set; get; }
         public GetMutexRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMutexRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetMutexRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;

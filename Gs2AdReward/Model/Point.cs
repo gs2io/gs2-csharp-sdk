@@ -37,32 +37,26 @@ namespace Gs2.Gs2AdReward.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Point WithPointId(string pointId) {
             this.PointId = pointId;
             return this;
         }
-
         public Point WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Point WithValue(long? value) {
             this.Value = value;
             return this;
         }
-
         public Point WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Point WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Point WithRevision(long? revision) {
             this.Revision = revision;
             return this;

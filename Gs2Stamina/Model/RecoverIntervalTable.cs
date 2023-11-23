@@ -35,22 +35,18 @@ namespace Gs2.Gs2Stamina.Model
         public string Metadata { set; get; }
         public string ExperienceModelId { set; get; }
         public int[] Values { set; get; }
-
         public RecoverIntervalTable WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RecoverIntervalTable WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RecoverIntervalTable WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
             return this;
         }
-
         public RecoverIntervalTable WithValues(int[] values) {
             this.Values = values;
             return this;

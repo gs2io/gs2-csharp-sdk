@@ -33,14 +33,12 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class DeleteBonusModelMasterRequest : Gs2Request<DeleteBonusModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BonusModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string BonusModelName { set; get; }
         public DeleteBonusModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteBonusModelMasterRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;

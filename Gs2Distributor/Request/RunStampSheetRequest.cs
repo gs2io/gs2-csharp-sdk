@@ -33,20 +33,17 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class RunStampSheetRequest : Gs2Request<RunStampSheetRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public RunStampSheetRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RunStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public RunStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

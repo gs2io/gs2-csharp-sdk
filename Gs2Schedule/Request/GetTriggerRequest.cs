@@ -33,20 +33,17 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class GetTriggerRequest : Gs2Request<GetTriggerRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string TriggerName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string TriggerName { set; get; }
         public GetTriggerRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetTriggerRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetTriggerRequest WithTriggerName(string triggerName) {
             this.TriggerName = triggerName;
             return this;

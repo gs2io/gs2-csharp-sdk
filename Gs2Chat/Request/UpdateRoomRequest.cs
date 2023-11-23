@@ -33,39 +33,33 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class UpdateRoomRequest : Gs2Request<UpdateRoomRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string Metadata { set; get; }
-        public string Password { set; get; }
-        public string[] WhiteListUserIds { set; get; }
-        public string AccessToken { set; get; }
+         public string NamespaceName { set; get; }
+         public string RoomName { set; get; }
+         public string Metadata { set; get; }
+         public string Password { set; get; }
+         public string[] WhiteListUserIds { set; get; }
+         public string AccessToken { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UpdateRoomRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateRoomRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public UpdateRoomRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateRoomRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public UpdateRoomRequest WithWhiteListUserIds(string[] whiteListUserIds) {
             this.WhiteListUserIds = whiteListUserIds;
             return this;
         }
-
         public UpdateRoomRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

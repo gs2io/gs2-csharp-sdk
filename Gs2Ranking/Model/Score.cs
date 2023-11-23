@@ -39,42 +39,34 @@ namespace Gs2.Gs2Ranking.Model
         public long? Value { set; get; }
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
-
         public Score WithScoreId(string scoreId) {
             this.ScoreId = scoreId;
             return this;
         }
-
         public Score WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public Score WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Score WithUniqueId(string uniqueId) {
             this.UniqueId = uniqueId;
             return this;
         }
-
         public Score WithScorerUserId(string scorerUserId) {
             this.ScorerUserId = scorerUserId;
             return this;
         }
-
         public Score WithValue(long? value) {
             this.Value = value;
             return this;
         }
-
         public Score WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Score WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

@@ -39,42 +39,34 @@ namespace Gs2.Gs2LoginReward.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public ReceiveStatus WithReceiveStatusId(string receiveStatusId) {
             this.ReceiveStatusId = receiveStatusId;
             return this;
         }
-
         public ReceiveStatus WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
-
         public ReceiveStatus WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ReceiveStatus WithReceivedSteps(bool[] receivedSteps) {
             this.ReceivedSteps = receivedSteps;
             return this;
         }
-
         public ReceiveStatus WithLastReceivedAt(long? lastReceivedAt) {
             this.LastReceivedAt = lastReceivedAt;
             return this;
         }
-
         public ReceiveStatus WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public ReceiveStatus WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public ReceiveStatus WithRevision(long? revision) {
             this.Revision = revision;
             return this;

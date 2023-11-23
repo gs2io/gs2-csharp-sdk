@@ -37,32 +37,26 @@ namespace Gs2.Gs2Datastore.Model
         public long? ContentLength { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public DataObjectHistory WithDataObjectHistoryId(string dataObjectHistoryId) {
             this.DataObjectHistoryId = dataObjectHistoryId;
             return this;
         }
-
         public DataObjectHistory WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public DataObjectHistory WithGeneration(string generation) {
             this.Generation = generation;
             return this;
         }
-
         public DataObjectHistory WithContentLength(long? contentLength) {
             this.ContentLength = contentLength;
             return this;
         }
-
         public DataObjectHistory WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public DataObjectHistory WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -33,44 +33,37 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class CreateNodeModelMasterRequest : Gs2Request<CreateNodeModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; }
-        public float? RestrainReturnRate { set; get; }
-        public string[] PremiseNodeNames { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public Gs2.Core.Model.ConsumeAction[] ReleaseConsumeActions { set; get; }
+         public float? RestrainReturnRate { set; get; }
+         public string[] PremiseNodeNames { set; get; }
         public CreateNodeModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateNodeModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNodeModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNodeModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateNodeModelMasterRequest WithReleaseConsumeActions(Gs2.Core.Model.ConsumeAction[] releaseConsumeActions) {
             this.ReleaseConsumeActions = releaseConsumeActions;
             return this;
         }
-
         public CreateNodeModelMasterRequest WithRestrainReturnRate(float? restrainReturnRate) {
             this.RestrainReturnRate = restrainReturnRate;
             return this;
         }
-
         public CreateNodeModelMasterRequest WithPremiseNodeNames(string[] premiseNodeNames) {
             this.PremiseNodeNames = premiseNodeNames;
             return this;

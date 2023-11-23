@@ -33,26 +33,22 @@ namespace Gs2.Gs2Script.Request
 	[System.Serializable]
 	public class InvokeScriptRequest : Gs2Request<InvokeScriptRequest>
 	{
-        public string ScriptId { set; get; }
-        public string UserId { set; get; }
-        public string Args { set; get; }
-        public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
-
+         public string ScriptId { set; get; }
+         public string UserId { set; get; }
+         public string Args { set; get; }
+         public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
         public InvokeScriptRequest WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
         }
-
         public InvokeScriptRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public InvokeScriptRequest WithArgs(string args) {
             this.Args = args;
             return this;
         }
-
         public InvokeScriptRequest WithRandomStatus(Gs2.Gs2Script.Model.RandomStatus randomStatus) {
             this.RandomStatus = randomStatus;
             return this;

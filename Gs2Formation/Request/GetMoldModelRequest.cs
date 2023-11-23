@@ -33,14 +33,12 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class GetMoldModelRequest : Gs2Request<GetMoldModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MoldModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MoldModelName { set; get; }
         public GetMoldModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMoldModelRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;

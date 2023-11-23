@@ -33,56 +33,47 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class UpdateCategoryModelMasterRequest : Gs2Request<UpdateCategoryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public int? RewardIntervalMinutes { set; get; }
-        public int? DefaultMaximumIdleMinutes { set; get; }
-        public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
-        public string IdlePeriodScheduleId { set; get; }
-        public string ReceivePeriodScheduleId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public int? RewardIntervalMinutes { set; get; }
+         public int? DefaultMaximumIdleMinutes { set; get; }
+         public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
+         public string IdlePeriodScheduleId { set; get; }
+         public string ReceivePeriodScheduleId { set; get; }
         public UpdateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithRewardIntervalMinutes(int? rewardIntervalMinutes) {
             this.RewardIntervalMinutes = rewardIntervalMinutes;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithDefaultMaximumIdleMinutes(int? defaultMaximumIdleMinutes) {
             this.DefaultMaximumIdleMinutes = defaultMaximumIdleMinutes;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithAcquireActions(Gs2.Gs2Idle.Model.AcquireActionList[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithIdlePeriodScheduleId(string idlePeriodScheduleId) {
             this.IdlePeriodScheduleId = idlePeriodScheduleId;
             return this;
         }
-
         public UpdateCategoryModelMasterRequest WithReceivePeriodScheduleId(string receivePeriodScheduleId) {
             this.ReceivePeriodScheduleId = receivePeriodScheduleId;
             return this;

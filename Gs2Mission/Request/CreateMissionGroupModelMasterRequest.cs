@@ -33,56 +33,47 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CreateMissionGroupModelMasterRequest : Gs2Request<CreateMissionGroupModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public string ResetType { set; get; }
-        public int? ResetDayOfMonth { set; get; }
-        public string ResetDayOfWeek { set; get; }
-        public int? ResetHour { set; get; }
-        public string CompleteNotificationNamespaceId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Metadata { set; get; }
+         public string Description { set; get; }
+         public string ResetType { set; get; }
+         public int? ResetDayOfMonth { set; get; }
+         public string ResetDayOfWeek { set; get; }
+         public int? ResetHour { set; get; }
+         public string CompleteNotificationNamespaceId { set; get; }
         public CreateMissionGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
-
         public CreateMissionGroupModelMasterRequest WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
             this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;

@@ -38,37 +38,30 @@ namespace Gs2.Gs2Ranking.Model
         public long? Score { set; get; }
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
-
         public Ranking WithRank(long? rank) {
             this.Rank = rank;
             return this;
         }
-
         public Ranking WithIndex(long? index) {
             this.Index = index;
             return this;
         }
-
         public Ranking WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public Ranking WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Ranking WithScore(long? score) {
             this.Score = score;
             return this;
         }
-
         public Ranking WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Ranking WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;

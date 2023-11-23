@@ -33,14 +33,12 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class UpdateCurrentRateMasterFromGitHubRequest : Gs2Request<UpdateCurrentRateMasterFromGitHubRequest>
 	{
-        public string NamespaceName { set; get; }
-        public Gs2.Gs2Exchange.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public Gs2.Gs2Exchange.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
         public UpdateCurrentRateMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentRateMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Exchange.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

@@ -33,12 +33,10 @@ namespace Gs2.Gs2Enchant.Model
 	{
         public int? Count { set; get; }
         public int? Weight { set; get; }
-
         public RarityParameterCountModel WithCount(int? count) {
             this.Count = count;
             return this;
         }
-
         public RarityParameterCountModel WithWeight(int? weight) {
             this.Weight = weight;
             return this;

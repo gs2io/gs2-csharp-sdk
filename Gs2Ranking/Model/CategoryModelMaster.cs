@@ -52,107 +52,86 @@ namespace Gs2.Gs2Ranking.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public CategoryModelMaster WithCategoryModelId(string categoryModelId) {
             this.CategoryModelId = categoryModelId;
             return this;
         }
-
         public CategoryModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CategoryModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CategoryModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CategoryModelMaster WithMinimumValue(long? minimumValue) {
             this.MinimumValue = minimumValue;
             return this;
         }
-
         public CategoryModelMaster WithMaximumValue(long? maximumValue) {
             this.MaximumValue = maximumValue;
             return this;
         }
-
         public CategoryModelMaster WithOrderDirection(string orderDirection) {
             this.OrderDirection = orderDirection;
             return this;
         }
-
         public CategoryModelMaster WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public CategoryModelMaster WithUniqueByUserId(bool? uniqueByUserId) {
             this.UniqueByUserId = uniqueByUserId;
             return this;
         }
-
         public CategoryModelMaster WithSum(bool? sum) {
             this.Sum = sum;
             return this;
         }
-
         public CategoryModelMaster WithCalculateFixedTimingHour(int? calculateFixedTimingHour) {
             this.CalculateFixedTimingHour = calculateFixedTimingHour;
             return this;
         }
-
         public CategoryModelMaster WithCalculateFixedTimingMinute(int? calculateFixedTimingMinute) {
             this.CalculateFixedTimingMinute = calculateFixedTimingMinute;
             return this;
         }
-
         public CategoryModelMaster WithCalculateIntervalMinutes(int? calculateIntervalMinutes) {
             this.CalculateIntervalMinutes = calculateIntervalMinutes;
             return this;
         }
-
         public CategoryModelMaster WithAdditionalScopes(Gs2.Gs2Ranking.Model.Scope[] additionalScopes) {
             this.AdditionalScopes = additionalScopes;
             return this;
         }
-
         public CategoryModelMaster WithEntryPeriodEventId(string entryPeriodEventId) {
             this.EntryPeriodEventId = entryPeriodEventId;
             return this;
         }
-
         public CategoryModelMaster WithAccessPeriodEventId(string accessPeriodEventId) {
             this.AccessPeriodEventId = accessPeriodEventId;
             return this;
         }
-
         public CategoryModelMaster WithIgnoreUserIds(string[] ignoreUserIds) {
             this.IgnoreUserIds = ignoreUserIds;
             return this;
         }
-
         public CategoryModelMaster WithGeneration(string generation) {
             this.Generation = generation;
             return this;
         }
-
         public CategoryModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public CategoryModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public CategoryModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

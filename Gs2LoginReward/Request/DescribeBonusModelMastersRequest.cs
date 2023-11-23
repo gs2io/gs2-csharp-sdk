@@ -33,20 +33,17 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class DescribeBonusModelMastersRequest : Gs2Request<DescribeBonusModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeBonusModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeBonusModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeBonusModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

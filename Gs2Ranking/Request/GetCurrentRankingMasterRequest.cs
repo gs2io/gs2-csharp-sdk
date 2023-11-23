@@ -33,8 +33,7 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class GetCurrentRankingMasterRequest : Gs2Request<GetCurrentRankingMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public GetCurrentRankingMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

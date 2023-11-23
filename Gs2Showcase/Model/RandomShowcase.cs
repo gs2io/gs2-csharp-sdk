@@ -39,42 +39,34 @@ namespace Gs2.Gs2Showcase.Model
         public long? BaseTimestamp { set; get; }
         public int? ResetIntervalHours { set; get; }
         public string SalesPeriodEventId { set; get; }
-
         public RandomShowcase WithRandomShowcaseId(string randomShowcaseId) {
             this.RandomShowcaseId = randomShowcaseId;
             return this;
         }
-
         public RandomShowcase WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RandomShowcase WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RandomShowcase WithMaximumNumberOfChoice(int? maximumNumberOfChoice) {
             this.MaximumNumberOfChoice = maximumNumberOfChoice;
             return this;
         }
-
         public RandomShowcase WithDisplayItems(Gs2.Gs2Showcase.Model.RandomDisplayItemModel[] displayItems) {
             this.DisplayItems = displayItems;
             return this;
         }
-
         public RandomShowcase WithBaseTimestamp(long? baseTimestamp) {
             this.BaseTimestamp = baseTimestamp;
             return this;
         }
-
         public RandomShowcase WithResetIntervalHours(int? resetIntervalHours) {
             this.ResetIntervalHours = resetIntervalHours;
             return this;
         }
-
         public RandomShowcase WithSalesPeriodEventId(string salesPeriodEventId) {
             this.SalesPeriodEventId = salesPeriodEventId;
             return this;

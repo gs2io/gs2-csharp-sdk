@@ -33,27 +33,23 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class StartStateMachineByUserIdRequest : Gs2Request<StartStateMachineByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string Args { set; get; }
-        public int? Ttl { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string Args { set; get; }
+         public int? Ttl { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public StartStateMachineByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public StartStateMachineByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public StartStateMachineByUserIdRequest WithArgs(string args) {
             this.Args = args;
             return this;
         }
-
         public StartStateMachineByUserIdRequest WithTtl(int? ttl) {
             this.Ttl = ttl;
             return this;

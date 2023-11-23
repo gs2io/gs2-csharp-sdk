@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class UpdateCurrentMessageMasterFromGitHubRequest : Gs2Request<UpdateCurrentMessageMasterFromGitHubRequest>
 	{
-        public string NamespaceName { set; get; }
-        public Gs2.Gs2Inbox.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public Gs2.Gs2Inbox.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
         public UpdateCurrentMessageMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentMessageMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Inbox.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

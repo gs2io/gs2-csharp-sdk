@@ -33,20 +33,17 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DescribeRecoverValueTableMastersRequest : Gs2Request<DescribeRecoverValueTableMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeRecoverValueTableMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeRecoverValueTableMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeRecoverValueTableMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

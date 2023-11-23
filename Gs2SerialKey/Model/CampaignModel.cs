@@ -35,22 +35,18 @@ namespace Gs2.Gs2SerialKey.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public bool? EnableCampaignCode { set; get; }
-
         public CampaignModel WithCampaignId(string campaignId) {
             this.CampaignId = campaignId;
             return this;
         }
-
         public CampaignModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CampaignModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CampaignModel WithEnableCampaignCode(bool? enableCampaignCode) {
             this.EnableCampaignCode = enableCampaignCode;
             return this;

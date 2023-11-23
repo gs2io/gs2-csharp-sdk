@@ -33,14 +33,12 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class GetAccountRequest : Gs2Request<GetAccountRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public GetAccountRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetAccountRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

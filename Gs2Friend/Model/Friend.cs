@@ -37,32 +37,26 @@ namespace Gs2.Gs2Friend.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Friend WithFriendId(string friendId) {
             this.FriendId = friendId;
             return this;
         }
-
         public Friend WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Friend WithTargetUserIds(string[] targetUserIds) {
             this.TargetUserIds = targetUserIds;
             return this;
         }
-
         public Friend WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Friend WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Friend WithRevision(long? revision) {
             this.Revision = revision;
             return this;

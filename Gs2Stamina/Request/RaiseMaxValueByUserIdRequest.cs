@@ -33,27 +33,23 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class RaiseMaxValueByUserIdRequest : Gs2Request<RaiseMaxValueByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string UserId { set; get; }
-        public int? RaiseValue { set; get; }
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string UserId { set; get; }
+         public int? RaiseValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RaiseMaxValueByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RaiseMaxValueByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public RaiseMaxValueByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public RaiseMaxValueByUserIdRequest WithRaiseValue(int? raiseValue) {
             this.RaiseValue = raiseValue;
             return this;

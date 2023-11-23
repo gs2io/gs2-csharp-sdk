@@ -33,8 +33,7 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class DescribeBalanceParameterModelsRequest : Gs2Request<DescribeBalanceParameterModelsRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public DescribeBalanceParameterModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

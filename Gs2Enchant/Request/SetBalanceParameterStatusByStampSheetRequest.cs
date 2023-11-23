@@ -33,14 +33,12 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class SetBalanceParameterStatusByStampSheetRequest : Gs2Request<SetBalanceParameterStatusByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public SetBalanceParameterStatusByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public SetBalanceParameterStatusByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

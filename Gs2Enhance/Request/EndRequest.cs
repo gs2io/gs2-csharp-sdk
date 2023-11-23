@@ -33,21 +33,18 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class EndRequest : Gs2Request<EndRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public EndRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public EndRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public EndRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

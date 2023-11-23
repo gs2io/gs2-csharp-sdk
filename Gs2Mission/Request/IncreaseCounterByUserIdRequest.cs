@@ -33,27 +33,23 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class IncreaseCounterByUserIdRequest : Gs2Request<IncreaseCounterByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CounterName { set; get; }
-        public string UserId { set; get; }
-        public long? Value { set; get; }
+         public string NamespaceName { set; get; }
+         public string CounterName { set; get; }
+         public string UserId { set; get; }
+         public long? Value { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public IncreaseCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public IncreaseCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public IncreaseCounterByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public IncreaseCounterByUserIdRequest WithValue(long? value) {
             this.Value = value;
             return this;

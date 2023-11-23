@@ -33,20 +33,17 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class GetStampSheetResultByUserIdRequest : Gs2Request<GetStampSheetResultByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string TransactionId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string TransactionId { set; get; }
         public GetStampSheetResultByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetStampSheetResultByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetStampSheetResultByUserIdRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;

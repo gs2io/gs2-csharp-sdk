@@ -33,21 +33,18 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareDownloadOwnDataRequest : Gs2Request<PrepareDownloadOwnDataRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string DataObjectName { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string DataObjectName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PrepareDownloadOwnDataRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareDownloadOwnDataRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PrepareDownloadOwnDataRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;

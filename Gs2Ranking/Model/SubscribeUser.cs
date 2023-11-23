@@ -35,22 +35,18 @@ namespace Gs2.Gs2Ranking.Model
         public string CategoryName { set; get; }
         public string UserId { set; get; }
         public string TargetUserId { set; get; }
-
         public SubscribeUser WithSubscribeUserId(string subscribeUserId) {
             this.SubscribeUserId = subscribeUserId;
             return this;
         }
-
         public SubscribeUser WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public SubscribeUser WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SubscribeUser WithTargetUserId(string targetUserId) {
             this.TargetUserId = targetUserId;
             return this;

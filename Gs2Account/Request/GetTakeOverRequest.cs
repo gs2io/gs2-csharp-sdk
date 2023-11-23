@@ -33,20 +33,17 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class GetTakeOverRequest : Gs2Request<GetTakeOverRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public int? Type { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public int? Type { set; get; }
         public GetTakeOverRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetTakeOverRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetTakeOverRequest WithType(int? type) {
             this.Type = type;
             return this;

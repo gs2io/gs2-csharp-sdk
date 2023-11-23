@@ -35,22 +35,18 @@ namespace Gs2.Gs2Identifier.Model
         public string[] SecurityPolicyIds { set; get; }
         public long? AttachedAt { set; get; }
         public long? Revision { set; get; }
-
         public AttachSecurityPolicy WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AttachSecurityPolicy WithSecurityPolicyIds(string[] securityPolicyIds) {
             this.SecurityPolicyIds = securityPolicyIds;
             return this;
         }
-
         public AttachSecurityPolicy WithAttachedAt(long? attachedAt) {
             this.AttachedAt = attachedAt;
             return this;
         }
-
         public AttachSecurityPolicy WithRevision(long? revision) {
             this.Revision = revision;
             return this;

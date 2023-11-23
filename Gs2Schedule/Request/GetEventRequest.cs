@@ -33,26 +33,22 @@ namespace Gs2.Gs2Schedule.Request
 	[System.Serializable]
 	public class GetEventRequest : Gs2Request<GetEventRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string EventName { set; get; }
-        public string AccessToken { set; get; }
-        public bool? IsInSchedule { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string EventName { set; get; }
+         public string AccessToken { set; get; }
+         public bool? IsInSchedule { set; get; }
         public GetEventRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetEventRequest WithEventName(string eventName) {
             this.EventName = eventName;
             return this;
         }
-
         public GetEventRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetEventRequest WithIsInSchedule(bool? isInSchedule) {
             this.IsInSchedule = isInSchedule;
             return this;

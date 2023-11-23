@@ -33,38 +33,32 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class GetItemWithSignatureRequest : Gs2Request<GetItemWithSignatureRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string AccessToken { set; get; }
-        public string ItemName { set; get; }
-        public string ItemSetName { set; get; }
-        public string KeyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string AccessToken { set; get; }
+         public string ItemName { set; get; }
+         public string ItemSetName { set; get; }
+         public string KeyId { set; get; }
         public GetItemWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetItemWithSignatureRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public GetItemWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetItemWithSignatureRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public GetItemWithSignatureRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
-
         public GetItemWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

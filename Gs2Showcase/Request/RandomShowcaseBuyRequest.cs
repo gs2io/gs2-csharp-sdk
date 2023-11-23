@@ -33,39 +33,33 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class RandomShowcaseBuyRequest : Gs2Request<RandomShowcaseBuyRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ShowcaseName { set; get; }
-        public string DisplayItemName { set; get; }
-        public string AccessToken { set; get; }
-        public int? Quantity { set; get; }
-        public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string ShowcaseName { set; get; }
+         public string DisplayItemName { set; get; }
+         public string AccessToken { set; get; }
+         public int? Quantity { set; get; }
+         public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public RandomShowcaseBuyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public RandomShowcaseBuyRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
-
         public RandomShowcaseBuyRequest WithDisplayItemName(string displayItemName) {
             this.DisplayItemName = displayItemName;
             return this;
         }
-
         public RandomShowcaseBuyRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public RandomShowcaseBuyRequest WithQuantity(int? quantity) {
             this.Quantity = quantity;
             return this;
         }
-
         public RandomShowcaseBuyRequest WithConfig(Gs2.Gs2Showcase.Model.Config[] config) {
             this.Config = config;
             return this;

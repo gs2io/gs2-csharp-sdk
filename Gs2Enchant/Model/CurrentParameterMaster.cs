@@ -33,12 +33,10 @@ namespace Gs2.Gs2Enchant.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
-
         public CurrentParameterMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public CurrentParameterMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

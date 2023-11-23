@@ -33,14 +33,12 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class AddRarityParameterStatusByStampSheetRequest : Gs2Request<AddRarityParameterStatusByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public AddRarityParameterStatusByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public AddRarityParameterStatusByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

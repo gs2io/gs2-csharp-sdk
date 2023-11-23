@@ -42,57 +42,46 @@ namespace Gs2.Gs2Lottery.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public LotteryModelMaster WithLotteryModelId(string lotteryModelId) {
             this.LotteryModelId = lotteryModelId;
             return this;
         }
-
         public LotteryModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public LotteryModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public LotteryModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public LotteryModelMaster WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public LotteryModelMaster WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public LotteryModelMaster WithPrizeTableName(string prizeTableName) {
             this.PrizeTableName = prizeTableName;
             return this;
         }
-
         public LotteryModelMaster WithChoicePrizeTableScriptId(string choicePrizeTableScriptId) {
             this.ChoicePrizeTableScriptId = choicePrizeTableScriptId;
             return this;
         }
-
         public LotteryModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public LotteryModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public LotteryModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

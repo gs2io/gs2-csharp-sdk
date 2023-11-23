@@ -33,15 +33,13 @@ namespace Gs2.Gs2Gateway.Request
 	[System.Serializable]
 	public class DisconnectByUserIdRequest : Gs2Request<DisconnectByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DisconnectByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DisconnectByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

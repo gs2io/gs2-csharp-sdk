@@ -33,14 +33,12 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class DecreaseMaximumIdleMinutesByStampTaskRequest : Gs2Request<DecreaseMaximumIdleMinutesByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public DecreaseMaximumIdleMinutesByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public DecreaseMaximumIdleMinutesByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

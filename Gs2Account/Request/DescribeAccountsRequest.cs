@@ -33,20 +33,17 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DescribeAccountsRequest : Gs2Request<DescribeAccountsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeAccountsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeAccountsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeAccountsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,20 +33,17 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class GetAwaitByUserIdRequest : Gs2Request<GetAwaitByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string AwaitName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string AwaitName { set; get; }
         public GetAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetAwaitByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetAwaitByUserIdRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;

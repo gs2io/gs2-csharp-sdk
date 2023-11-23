@@ -33,32 +33,27 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class UpdateQuestGroupModelMasterRequest : Gs2Request<UpdateQuestGroupModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string QuestGroupName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string ChallengePeriodEventId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string QuestGroupName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string ChallengePeriodEventId { set; get; }
         public UpdateQuestGroupModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateQuestGroupModelMasterRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public UpdateQuestGroupModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateQuestGroupModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateQuestGroupModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;

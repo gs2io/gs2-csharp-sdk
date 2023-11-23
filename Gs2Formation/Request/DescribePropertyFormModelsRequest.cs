@@ -33,8 +33,7 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class DescribePropertyFormModelsRequest : Gs2Request<DescribePropertyFormModelsRequest>
 	{
-        public string NamespaceName { set; get; }
-
+         public string NamespaceName { set; get; }
         public DescribePropertyFormModelsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;

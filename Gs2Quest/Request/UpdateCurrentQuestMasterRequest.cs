@@ -33,14 +33,12 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class UpdateCurrentQuestMasterRequest : Gs2Request<UpdateCurrentQuestMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentQuestMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentQuestMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

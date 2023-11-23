@@ -38,37 +38,30 @@ namespace Gs2.Gs2Limit.Model
         public int? ResetDayOfMonth { set; get; }
         public string ResetDayOfWeek { set; get; }
         public int? ResetHour { set; get; }
-
         public LimitModel WithLimitModelId(string limitModelId) {
             this.LimitModelId = limitModelId;
             return this;
         }
-
         public LimitModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public LimitModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public LimitModel WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
-
         public LimitModel WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
-
         public LimitModel WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
-
         public LimitModel WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;

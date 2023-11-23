@@ -33,32 +33,27 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class DescribeDataObjectHistoriesRequest : Gs2Request<DescribeDataObjectHistoriesRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string DataObjectName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string DataObjectName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeDataObjectHistoriesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeDataObjectHistoriesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeDataObjectHistoriesRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public DescribeDataObjectHistoriesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeDataObjectHistoriesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

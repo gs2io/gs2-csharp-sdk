@@ -33,38 +33,32 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class CreateDistributorModelMasterRequest : Gs2Request<CreateDistributorModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string InboxNamespaceId { set; get; }
-        public string[] WhiteListTargetIds { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string InboxNamespaceId { set; get; }
+         public string[] WhiteListTargetIds { set; get; }
         public CreateDistributorModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateDistributorModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateDistributorModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateDistributorModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateDistributorModelMasterRequest WithInboxNamespaceId(string inboxNamespaceId) {
             this.InboxNamespaceId = inboxNamespaceId;
             return this;
         }
-
         public CreateDistributorModelMasterRequest WithWhiteListTargetIds(string[] whiteListTargetIds) {
             this.WhiteListTargetIds = whiteListTargetIds;
             return this;

@@ -34,17 +34,14 @@ namespace Gs2.Gs2Enchant.Model
         public string Name { set; get; }
         public string ResourceName { set; get; }
         public long? ResourceValue { set; get; }
-
         public RarityParameterValue WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RarityParameterValue WithResourceName(string resourceName) {
             this.ResourceName = resourceName;
             return this;
         }
-
         public RarityParameterValue WithResourceValue(long? resourceValue) {
             this.ResourceValue = resourceValue;
             return this;

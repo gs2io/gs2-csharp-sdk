@@ -33,9 +33,8 @@ namespace Gs2.Gs2AdReward.Request
 	[System.Serializable]
 	public class CheckDumpUserDataByUserIdRequest : Gs2Request<CheckDumpUserDataByUserIdRequest>
 	{
-        public string UserId { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CheckDumpUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

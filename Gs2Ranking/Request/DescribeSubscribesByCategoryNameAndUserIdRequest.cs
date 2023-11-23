@@ -33,20 +33,17 @@ namespace Gs2.Gs2Ranking.Request
 	[System.Serializable]
 	public class DescribeSubscribesByCategoryNameAndUserIdRequest : Gs2Request<DescribeSubscribesByCategoryNameAndUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CategoryName { set; get; }
-        public string UserId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CategoryName { set; get; }
+         public string UserId { set; get; }
         public DescribeSubscribesByCategoryNameAndUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeSubscribesByCategoryNameAndUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public DescribeSubscribesByCategoryNameAndUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

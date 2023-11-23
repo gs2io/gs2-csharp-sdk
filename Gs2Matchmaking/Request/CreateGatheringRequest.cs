@@ -33,51 +33,43 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class CreateGatheringRequest : Gs2Request<CreateGatheringRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
-        public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
-        public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; }
-        public string[] AllowUserIds { set; get; }
-        public long? ExpiresAt { set; get; }
-        public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
+         public Gs2.Gs2Matchmaking.Model.AttributeRange[] AttributeRanges { set; get; }
+         public Gs2.Gs2Matchmaking.Model.CapacityOfRole[] CapacityOfRoles { set; get; }
+         public string[] AllowUserIds { set; get; }
+         public long? ExpiresAt { set; get; }
+         public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CreateGatheringRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateGatheringRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public CreateGatheringRequest WithPlayer(Gs2.Gs2Matchmaking.Model.Player player) {
             this.Player = player;
             return this;
         }
-
         public CreateGatheringRequest WithAttributeRanges(Gs2.Gs2Matchmaking.Model.AttributeRange[] attributeRanges) {
             this.AttributeRanges = attributeRanges;
             return this;
         }
-
         public CreateGatheringRequest WithCapacityOfRoles(Gs2.Gs2Matchmaking.Model.CapacityOfRole[] capacityOfRoles) {
             this.CapacityOfRoles = capacityOfRoles;
             return this;
         }
-
         public CreateGatheringRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
-
         public CreateGatheringRequest WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
-
         public CreateGatheringRequest WithExpiresAtTimeSpan(Gs2.Gs2Matchmaking.Model.TimeSpan_ expiresAtTimeSpan) {
             this.ExpiresAtTimeSpan = expiresAtTimeSpan;
             return this;

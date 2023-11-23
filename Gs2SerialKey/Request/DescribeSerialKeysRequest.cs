@@ -33,32 +33,27 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class DescribeSerialKeysRequest : Gs2Request<DescribeSerialKeysRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CampaignModelName { set; get; }
-        public string IssueJobName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CampaignModelName { set; get; }
+         public string IssueJobName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeSerialKeysRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeSerialKeysRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;
         }
-
         public DescribeSerialKeysRequest WithIssueJobName(string issueJobName) {
             this.IssueJobName = issueJobName;
             return this;
         }
-
         public DescribeSerialKeysRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeSerialKeysRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

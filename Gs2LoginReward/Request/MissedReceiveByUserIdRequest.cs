@@ -33,33 +33,28 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class MissedReceiveByUserIdRequest : Gs2Request<MissedReceiveByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BonusModelName { set; get; }
-        public string UserId { set; get; }
-        public int? StepNumber { set; get; }
-        public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string BonusModelName { set; get; }
+         public string UserId { set; get; }
+         public int? StepNumber { set; get; }
+         public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public MissedReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public MissedReceiveByUserIdRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
-
         public MissedReceiveByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public MissedReceiveByUserIdRequest WithStepNumber(int? stepNumber) {
             this.StepNumber = stepNumber;
             return this;
         }
-
         public MissedReceiveByUserIdRequest WithConfig(Gs2.Gs2LoginReward.Model.Config[] config) {
             this.Config = config;
             return this;

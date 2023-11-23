@@ -33,26 +33,22 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DescribeBoxesByUserIdRequest : Gs2Request<DescribeBoxesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeBoxesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeBoxesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeBoxesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeBoxesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

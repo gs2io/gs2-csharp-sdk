@@ -33,14 +33,12 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class GetVersionModelRequest : Gs2Request<GetVersionModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string VersionName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string VersionName { set; get; }
         public GetVersionModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetVersionModelRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;

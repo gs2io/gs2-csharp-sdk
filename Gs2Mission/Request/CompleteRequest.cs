@@ -33,33 +33,28 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CompleteRequest : Gs2Request<CompleteRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MissionGroupName { set; get; }
-        public string MissionTaskName { set; get; }
-        public string AccessToken { set; get; }
-        public Gs2.Gs2Mission.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string MissionGroupName { set; get; }
+         public string MissionTaskName { set; get; }
+         public string AccessToken { set; get; }
+         public Gs2.Gs2Mission.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CompleteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CompleteRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public CompleteRequest WithMissionTaskName(string missionTaskName) {
             this.MissionTaskName = missionTaskName;
             return this;
         }
-
         public CompleteRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public CompleteRequest WithConfig(Gs2.Gs2Mission.Model.Config[] config) {
             this.Config = config;
             return this;

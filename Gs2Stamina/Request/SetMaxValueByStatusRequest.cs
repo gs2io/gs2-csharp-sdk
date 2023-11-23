@@ -33,39 +33,33 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class SetMaxValueByStatusRequest : Gs2Request<SetMaxValueByStatusRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string AccessToken { set; get; }
-        public string KeyId { set; get; }
-        public string SignedStatusBody { set; get; }
-        public string SignedStatusSignature { set; get; }
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string AccessToken { set; get; }
+         public string KeyId { set; get; }
+         public string SignedStatusBody { set; get; }
+         public string SignedStatusSignature { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SetMaxValueByStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetMaxValueByStatusRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public SetMaxValueByStatusRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public SetMaxValueByStatusRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
-
         public SetMaxValueByStatusRequest WithSignedStatusBody(string signedStatusBody) {
             this.SignedStatusBody = signedStatusBody;
             return this;
         }
-
         public SetMaxValueByStatusRequest WithSignedStatusSignature(string signedStatusSignature) {
             this.SignedStatusSignature = signedStatusSignature;
             return this;

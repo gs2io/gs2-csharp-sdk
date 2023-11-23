@@ -34,17 +34,14 @@ namespace Gs2.Gs2Quest.Model
         public string Metadata { set; get; }
         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public int? Weight { set; get; }
-
         public Contents WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Contents WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
-
         public Contents WithWeight(int? weight) {
             this.Weight = weight;
             return this;

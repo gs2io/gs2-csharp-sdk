@@ -39,42 +39,34 @@ namespace Gs2.Gs2Inventory.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Inventory WithInventoryId(string inventoryId) {
             this.InventoryId = inventoryId;
             return this;
         }
-
         public Inventory WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public Inventory WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Inventory WithCurrentInventoryCapacityUsage(int? currentInventoryCapacityUsage) {
             this.CurrentInventoryCapacityUsage = currentInventoryCapacityUsage;
             return this;
         }
-
         public Inventory WithCurrentInventoryMaxCapacity(int? currentInventoryMaxCapacity) {
             this.CurrentInventoryMaxCapacity = currentInventoryMaxCapacity;
             return this;
         }
-
         public Inventory WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Inventory WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Inventory WithRevision(long? revision) {
             this.Revision = revision;
             return this;

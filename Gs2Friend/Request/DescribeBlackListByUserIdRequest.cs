@@ -33,26 +33,22 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class DescribeBlackListByUserIdRequest : Gs2Request<DescribeBlackListByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeBlackListByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeBlackListByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeBlackListByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeBlackListByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

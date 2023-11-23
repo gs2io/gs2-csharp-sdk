@@ -33,56 +33,47 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Experience.Model.TransactionSetting TransactionSetting { set; get; }
-        public string RankCapScriptId { set; get; }
-        public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
-        public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
-        public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
-        public string OverflowExperienceScript { set; get; }
-        public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Experience.Model.TransactionSetting TransactionSetting { set; get; }
+         public string RankCapScriptId { set; get; }
+         public Gs2.Gs2Experience.Model.ScriptSetting ChangeExperienceScript { set; get; }
+         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankScript { set; get; }
+         public Gs2.Gs2Experience.Model.ScriptSetting ChangeRankCapScript { set; get; }
+         public string OverflowExperienceScript { set; get; }
+         public Gs2.Gs2Experience.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Experience.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithRankCapScriptId(string rankCapScriptId) {
             this.RankCapScriptId = rankCapScriptId;
             return this;
         }
-
         public UpdateNamespaceRequest WithChangeExperienceScript(Gs2.Gs2Experience.Model.ScriptSetting changeExperienceScript) {
             this.ChangeExperienceScript = changeExperienceScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithChangeRankScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankScript) {
             this.ChangeRankScript = changeRankScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithChangeRankCapScript(Gs2.Gs2Experience.Model.ScriptSetting changeRankCapScript) {
             this.ChangeRankCapScript = changeRankCapScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithOverflowExperienceScript(string overflowExperienceScript) {
             this.OverflowExperienceScript = overflowExperienceScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Experience.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

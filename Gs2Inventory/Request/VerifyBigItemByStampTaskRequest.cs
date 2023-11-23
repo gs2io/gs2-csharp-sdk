@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyBigItemByStampTaskRequest : Gs2Request<VerifyBigItemByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public VerifyBigItemByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public VerifyBigItemByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

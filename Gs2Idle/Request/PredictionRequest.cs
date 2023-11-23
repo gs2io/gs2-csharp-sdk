@@ -33,21 +33,18 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class PredictionRequest : Gs2Request<PredictionRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string CategoryName { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string CategoryName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PredictionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PredictionRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PredictionRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;

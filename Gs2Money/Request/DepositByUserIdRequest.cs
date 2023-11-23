@@ -33,33 +33,28 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class DepositByUserIdRequest : Gs2Request<DepositByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public int? Slot { set; get; }
-        public float? Price { set; get; }
-        public int? Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public int? Slot { set; get; }
+         public float? Price { set; get; }
+         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DepositByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DepositByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DepositByUserIdRequest WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
-
         public DepositByUserIdRequest WithPrice(float? price) {
             this.Price = price;
             return this;
         }
-
         public DepositByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;

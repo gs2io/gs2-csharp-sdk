@@ -33,45 +33,38 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class VerifyRarityParameterStatusRequest : Gs2Request<VerifyRarityParameterStatusRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ParameterName { set; get; }
-        public string AccessToken { set; get; }
-        public string PropertyId { set; get; }
-        public string VerifyType { set; get; }
-        public string ParameterValueName { set; get; }
-        public int? ParameterCount { set; get; }
+         public string NamespaceName { set; get; }
+         public string ParameterName { set; get; }
+         public string AccessToken { set; get; }
+         public string PropertyId { set; get; }
+         public string VerifyType { set; get; }
+         public string ParameterValueName { set; get; }
+         public int? ParameterCount { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyRarityParameterStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyRarityParameterStatusRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
-
         public VerifyRarityParameterStatusRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public VerifyRarityParameterStatusRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public VerifyRarityParameterStatusRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
-
         public VerifyRarityParameterStatusRequest WithParameterValueName(string parameterValueName) {
             this.ParameterValueName = parameterValueName;
             return this;
         }
-
         public VerifyRarityParameterStatusRequest WithParameterCount(int? parameterCount) {
             this.ParameterCount = parameterCount;
             return this;

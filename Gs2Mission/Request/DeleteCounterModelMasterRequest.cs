@@ -33,14 +33,12 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DeleteCounterModelMasterRequest : Gs2Request<DeleteCounterModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CounterName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CounterName { set; get; }
         public DeleteCounterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteCounterModelMasterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

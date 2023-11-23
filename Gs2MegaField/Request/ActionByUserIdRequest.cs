@@ -33,39 +33,33 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class ActionByUserIdRequest : Gs2Request<ActionByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-        public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; }
-        public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string AreaModelName { set; get; }
+         public string LayerModelName { set; get; }
+         public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; }
+         public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ActionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ActionByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ActionByUserIdRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
-
         public ActionByUserIdRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
-
         public ActionByUserIdRequest WithPosition(Gs2.Gs2MegaField.Model.MyPosition position) {
             this.Position = position;
             return this;
         }
-
         public ActionByUserIdRequest WithScopes(Gs2.Gs2MegaField.Model.Scope[] scopes) {
             this.Scopes = scopes;
             return this;

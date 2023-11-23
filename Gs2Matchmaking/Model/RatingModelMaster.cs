@@ -40,47 +40,38 @@ namespace Gs2.Gs2Matchmaking.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public RatingModelMaster WithRatingModelId(string ratingModelId) {
             this.RatingModelId = ratingModelId;
             return this;
         }
-
         public RatingModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RatingModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RatingModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public RatingModelMaster WithInitialValue(int? initialValue) {
             this.InitialValue = initialValue;
             return this;
         }
-
         public RatingModelMaster WithVolatility(int? volatility) {
             this.Volatility = volatility;
             return this;
         }
-
         public RatingModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public RatingModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public RatingModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

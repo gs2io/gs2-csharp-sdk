@@ -33,20 +33,17 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class UpdateKeyRequest : Gs2Request<UpdateKeyRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string KeyName { set; get; }
-        public string Description { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string KeyName { set; get; }
+         public string Description { set; get; }
         public UpdateKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateKeyRequest WithKeyName(string keyName) {
             this.KeyName = keyName;
             return this;
         }
-
         public UpdateKeyRequest WithDescription(string description) {
             this.Description = description;
             return this;

@@ -33,32 +33,41 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Showcase.Model.TransactionSetting TransactionSetting { set; get; }
-        public Gs2.Gs2Showcase.Model.ScriptSetting BuyScript { set; get; }
-        public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Showcase.Model.TransactionSetting TransactionSetting { set; get; }
+         public Gs2.Gs2Showcase.Model.ScriptSetting BuyScript { set; get; }
+        [Obsolete("This method is deprecated")]
+         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
+         public string KeyId { set; get; }
+         public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Showcase.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public CreateNamespaceRequest WithBuyScript(Gs2.Gs2Showcase.Model.ScriptSetting buyScript) {
             this.BuyScript = buyScript;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
+        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public CreateNamespaceRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
+            return this;
+        }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -107,6 +116,14 @@ namespace Gs2.Gs2Showcase.Request
             }
             if (BuyScript != null) {
                 BuyScript.WriteJson(writer);
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);

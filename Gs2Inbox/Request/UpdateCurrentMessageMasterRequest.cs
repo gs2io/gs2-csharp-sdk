@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class UpdateCurrentMessageMasterRequest : Gs2Request<UpdateCurrentMessageMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentMessageMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentMessageMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

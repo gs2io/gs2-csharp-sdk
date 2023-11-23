@@ -33,27 +33,23 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class DecreaseMaximumIdleMinutesByUserIdRequest : Gs2Request<DecreaseMaximumIdleMinutesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string CategoryName { set; get; }
-        public int? DecreaseMinutes { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string CategoryName { set; get; }
+         public int? DecreaseMinutes { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DecreaseMaximumIdleMinutesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DecreaseMaximumIdleMinutesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DecreaseMaximumIdleMinutesByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public DecreaseMaximumIdleMinutesByUserIdRequest WithDecreaseMinutes(int? decreaseMinutes) {
             this.DecreaseMinutes = decreaseMinutes;
             return this;

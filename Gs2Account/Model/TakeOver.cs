@@ -38,37 +38,30 @@ namespace Gs2.Gs2Account.Model
         public string Password { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public TakeOver WithTakeOverId(string takeOverId) {
             this.TakeOverId = takeOverId;
             return this;
         }
-
         public TakeOver WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public TakeOver WithType(int? type) {
             this.Type = type;
             return this;
         }
-
         public TakeOver WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
             return this;
         }
-
         public TakeOver WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public TakeOver WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public TakeOver WithRevision(long? revision) {
             this.Revision = revision;
             return this;

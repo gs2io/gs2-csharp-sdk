@@ -33,14 +33,12 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class DeleteLotteryModelMasterRequest : Gs2Request<DeleteLotteryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string LotteryName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string LotteryName { set; get; }
         public DeleteLotteryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteLotteryModelMasterRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;

@@ -33,20 +33,17 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class DescribeRoomsRequest : Gs2Request<DescribeRoomsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeRoomsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeRoomsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeRoomsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,33 +33,28 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class CreateTakeOverByUserIdRequest : Gs2Request<CreateTakeOverByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public int? Type { set; get; }
-        public string UserIdentifier { set; get; }
-        public string Password { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public int? Type { set; get; }
+         public string UserIdentifier { set; get; }
+         public string Password { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CreateTakeOverByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateTakeOverByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public CreateTakeOverByUserIdRequest WithType(int? type) {
             this.Type = type;
             return this;
         }
-
         public CreateTakeOverByUserIdRequest WithUserIdentifier(string userIdentifier) {
             this.UserIdentifier = userIdentifier;
             return this;
         }
-
         public CreateTakeOverByUserIdRequest WithPassword(string password) {
             this.Password = password;
             return this;

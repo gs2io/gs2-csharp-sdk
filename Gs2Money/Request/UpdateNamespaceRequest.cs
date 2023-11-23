@@ -33,62 +33,52 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public string Priority { set; get; }
-        public string AppleKey { set; get; }
-        public string GoogleKey { set; get; }
-        public bool? EnableFakeReceipt { set; get; }
-        public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; }
-        public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
-        public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
-        public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public string Priority { set; get; }
+         public string AppleKey { set; get; }
+         public string GoogleKey { set; get; }
+         public bool? EnableFakeReceipt { set; get; }
+         public Gs2.Gs2Money.Model.ScriptSetting CreateWalletScript { set; get; }
+         public Gs2.Gs2Money.Model.ScriptSetting DepositScript { set; get; }
+         public Gs2.Gs2Money.Model.ScriptSetting WithdrawScript { set; get; }
+         public Gs2.Gs2Money.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithPriority(string priority) {
             this.Priority = priority;
             return this;
         }
-
         public UpdateNamespaceRequest WithAppleKey(string appleKey) {
             this.AppleKey = appleKey;
             return this;
         }
-
         public UpdateNamespaceRequest WithGoogleKey(string googleKey) {
             this.GoogleKey = googleKey;
             return this;
         }
-
         public UpdateNamespaceRequest WithEnableFakeReceipt(bool? enableFakeReceipt) {
             this.EnableFakeReceipt = enableFakeReceipt;
             return this;
         }
-
         public UpdateNamespaceRequest WithCreateWalletScript(Gs2.Gs2Money.Model.ScriptSetting createWalletScript) {
             this.CreateWalletScript = createWalletScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithDepositScript(Gs2.Gs2Money.Model.ScriptSetting depositScript) {
             this.DepositScript = depositScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithWithdrawScript(Gs2.Gs2Money.Model.ScriptSetting withdrawScript) {
             this.WithdrawScript = withdrawScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Money.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

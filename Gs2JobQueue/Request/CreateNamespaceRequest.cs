@@ -33,38 +33,32 @@ namespace Gs2.Gs2JobQueue.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public bool? EnableAutoRun { set; get; }
-        public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; }
-        public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; }
-        public Gs2.Gs2JobQueue.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public bool? EnableAutoRun { set; get; }
+         public Gs2.Gs2JobQueue.Model.NotificationSetting PushNotification { set; get; }
+         public Gs2.Gs2JobQueue.Model.NotificationSetting RunNotification { set; get; }
+         public Gs2.Gs2JobQueue.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithEnableAutoRun(bool? enableAutoRun) {
             this.EnableAutoRun = enableAutoRun;
             return this;
         }
-
         public CreateNamespaceRequest WithPushNotification(Gs2.Gs2JobQueue.Model.NotificationSetting pushNotification) {
             this.PushNotification = pushNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithRunNotification(Gs2.Gs2JobQueue.Model.NotificationSetting runNotification) {
             this.RunNotification = runNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2JobQueue.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

@@ -33,38 +33,32 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
-        public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
-        public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
-        public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
+         public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting acquireScript) {
             this.AcquireScript = acquireScript;
             return this;
         }
-
         public CreateNamespaceRequest WithOverflowScript(Gs2.Gs2Inventory.Model.ScriptSetting overflowScript) {
             this.OverflowScript = overflowScript;
             return this;
         }
-
         public CreateNamespaceRequest WithConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting consumeScript) {
             this.ConsumeScript = consumeScript;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

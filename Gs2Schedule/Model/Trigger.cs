@@ -37,32 +37,26 @@ namespace Gs2.Gs2Schedule.Model
         public long? CreatedAt { set; get; }
         public long? ExpiresAt { set; get; }
         public long? Revision { set; get; }
-
         public Trigger WithTriggerId(string triggerId) {
             this.TriggerId = triggerId;
             return this;
         }
-
         public Trigger WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Trigger WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Trigger WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Trigger WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
-
         public Trigger WithRevision(long? revision) {
             this.Revision = revision;
             return this;

@@ -33,26 +33,22 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class DistributeRequest : Gs2Request<DistributeRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string DistributorName { set; get; }
-        public string UserId { set; get; }
-        public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string DistributorName { set; get; }
+         public string UserId { set; get; }
+         public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
         public DistributeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DistributeRequest WithDistributorName(string distributorName) {
             this.DistributorName = distributorName;
             return this;
         }
-
         public DistributeRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DistributeRequest WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
             this.DistributeResource = distributeResource;
             return this;

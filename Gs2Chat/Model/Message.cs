@@ -39,42 +39,34 @@ namespace Gs2.Gs2Chat.Model
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Message WithMessageId(string messageId) {
             this.MessageId = messageId;
             return this;
         }
-
         public Message WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public Message WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Message WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Message WithCategory(int? category) {
             this.Category = category;
             return this;
         }
-
         public Message WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public Message WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Message WithRevision(long? revision) {
             this.Revision = revision;
             return this;

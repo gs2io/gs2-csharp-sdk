@@ -33,21 +33,18 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class DeleteStaminaByUserIdRequest : Gs2Request<DeleteStaminaByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteStaminaByUserIdRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public DeleteStaminaByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

@@ -33,20 +33,17 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class DeleteLayerModelMasterRequest : Gs2Request<DeleteLayerModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AreaModelName { set; get; }
+         public string LayerModelName { set; get; }
         public DeleteLayerModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteLayerModelMasterRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
-
         public DeleteLayerModelMasterRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;

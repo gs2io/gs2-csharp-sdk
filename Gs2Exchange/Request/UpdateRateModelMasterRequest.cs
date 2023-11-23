@@ -33,62 +33,52 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class UpdateRateModelMasterRequest : Gs2Request<UpdateRateModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string TimingType { set; get; }
-        public int? LockTime { set; get; }
-        public bool? EnableSkip { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] SkipConsumeActions { set; get; }
-        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string TimingType { set; get; }
+         public int? LockTime { set; get; }
+         public bool? EnableSkip { set; get; }
+         public Gs2.Core.Model.ConsumeAction[] SkipConsumeActions { set; get; }
+         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public UpdateRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithTimingType(string timingType) {
             this.TimingType = timingType;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithLockTime(int? lockTime) {
             this.LockTime = lockTime;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithEnableSkip(bool? enableSkip) {
             this.EnableSkip = enableSkip;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithSkipConsumeActions(Gs2.Core.Model.ConsumeAction[] skipConsumeActions) {
             this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public UpdateRateModelMasterRequest WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;

@@ -48,87 +48,70 @@ namespace Gs2.Gs2Money.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithPriority(string priority) {
             this.Priority = priority;
             return this;
         }
-
         public Namespace WithShareFree(bool? shareFree) {
             this.ShareFree = shareFree;
             return this;
         }
-
         public Namespace WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
-
         public Namespace WithAppleKey(string appleKey) {
             this.AppleKey = appleKey;
             return this;
         }
-
         public Namespace WithGoogleKey(string googleKey) {
             this.GoogleKey = googleKey;
             return this;
         }
-
         public Namespace WithEnableFakeReceipt(bool? enableFakeReceipt) {
             this.EnableFakeReceipt = enableFakeReceipt;
             return this;
         }
-
         public Namespace WithCreateWalletScript(Gs2.Gs2Money.Model.ScriptSetting createWalletScript) {
             this.CreateWalletScript = createWalletScript;
             return this;
         }
-
         public Namespace WithDepositScript(Gs2.Gs2Money.Model.ScriptSetting depositScript) {
             this.DepositScript = depositScript;
             return this;
         }
-
         public Namespace WithWithdrawScript(Gs2.Gs2Money.Model.ScriptSetting withdrawScript) {
             this.WithdrawScript = withdrawScript;
             return this;
         }
-
         public Namespace WithBalance(double? balance) {
             this.Balance = balance;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Money.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

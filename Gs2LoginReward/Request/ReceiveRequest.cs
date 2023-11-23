@@ -33,27 +33,23 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class ReceiveRequest : Gs2Request<ReceiveRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BonusModelName { set; get; }
-        public string AccessToken { set; get; }
-        public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string BonusModelName { set; get; }
+         public string AccessToken { set; get; }
+         public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ReceiveRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ReceiveRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
-
         public ReceiveRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public ReceiveRequest WithConfig(Gs2.Gs2LoginReward.Model.Config[] config) {
             this.Config = config;
             return this;

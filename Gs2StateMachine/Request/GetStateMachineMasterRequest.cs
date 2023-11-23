@@ -33,14 +33,12 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class GetStateMachineMasterRequest : Gs2Request<GetStateMachineMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public long? Version { set; get; }
-
+         public string NamespaceName { set; get; }
+         public long? Version { set; get; }
         public GetStateMachineMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetStateMachineMasterRequest WithVersion(long? version) {
             this.Version = version;
             return this;

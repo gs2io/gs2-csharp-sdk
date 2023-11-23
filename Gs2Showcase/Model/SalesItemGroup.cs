@@ -34,17 +34,14 @@ namespace Gs2.Gs2Showcase.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2Showcase.Model.SalesItem[] SalesItems { set; get; }
-
         public SalesItemGroup WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public SalesItemGroup WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public SalesItemGroup WithSalesItems(Gs2.Gs2Showcase.Model.SalesItem[] salesItems) {
             this.SalesItems = salesItems;
             return this;

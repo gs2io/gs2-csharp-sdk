@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class DeleteMessageByStampTaskRequest : Gs2Request<DeleteMessageByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public DeleteMessageByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public DeleteMessageByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

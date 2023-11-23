@@ -33,12 +33,10 @@ namespace Gs2.Gs2Script.Model
 	{
         public long? Category { set; get; }
         public long? Used { set; get; }
-
         public RandomUsed WithCategory(long? category) {
             this.Category = category;
             return this;
         }
-
         public RandomUsed WithUsed(long? used) {
             this.Used = used;
             return this;

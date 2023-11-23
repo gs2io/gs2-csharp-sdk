@@ -33,38 +33,32 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class GetReferenceOfRequest : Gs2Request<GetReferenceOfRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string AccessToken { set; get; }
-        public string ItemName { set; get; }
-        public string ItemSetName { set; get; }
-        public string ReferenceOf { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string AccessToken { set; get; }
+         public string ItemName { set; get; }
+         public string ItemSetName { set; get; }
+         public string ReferenceOf { set; get; }
         public GetReferenceOfRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetReferenceOfRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public GetReferenceOfRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetReferenceOfRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public GetReferenceOfRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;
         }
-
         public GetReferenceOfRequest WithReferenceOf(string referenceOf) {
             this.ReferenceOf = referenceOf;
             return this;

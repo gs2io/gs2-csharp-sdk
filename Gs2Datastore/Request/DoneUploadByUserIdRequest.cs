@@ -33,21 +33,18 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class DoneUploadByUserIdRequest : Gs2Request<DoneUploadByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string DataObjectName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string DataObjectName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DoneUploadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DoneUploadByUserIdRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public DoneUploadByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

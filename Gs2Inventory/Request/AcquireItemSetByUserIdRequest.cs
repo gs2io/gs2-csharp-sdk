@@ -33,51 +33,43 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class AcquireItemSetByUserIdRequest : Gs2Request<AcquireItemSetByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string ItemName { set; get; }
-        public string UserId { set; get; }
-        public long? AcquireCount { set; get; }
-        public long? ExpiresAt { set; get; }
-        public bool? CreateNewItemSet { set; get; }
-        public string ItemSetName { set; get; }
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string ItemName { set; get; }
+         public string UserId { set; get; }
+         public long? AcquireCount { set; get; }
+         public long? ExpiresAt { set; get; }
+         public bool? CreateNewItemSet { set; get; }
+         public string ItemSetName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AcquireItemSetByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithAcquireCount(long? acquireCount) {
             this.AcquireCount = acquireCount;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithExpiresAt(long? expiresAt) {
             this.ExpiresAt = expiresAt;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithCreateNewItemSet(bool? createNewItemSet) {
             this.CreateNewItemSet = createNewItemSet;
             return this;
         }
-
         public AcquireItemSetByUserIdRequest WithItemSetName(string itemSetName) {
             this.ItemSetName = itemSetName;
             return this;

@@ -33,27 +33,23 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class UpdateNotificationTypeRequest : Gs2Request<UpdateNotificationTypeRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string AccessToken { set; get; }
-        public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
+         public string NamespaceName { set; get; }
+         public string RoomName { set; get; }
+         public string AccessToken { set; get; }
+         public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UpdateNotificationTypeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNotificationTypeRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public UpdateNotificationTypeRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public UpdateNotificationTypeRequest WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
             this.NotificationTypes = notificationTypes;
             return this;

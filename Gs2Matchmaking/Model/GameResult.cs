@@ -33,12 +33,10 @@ namespace Gs2.Gs2Matchmaking.Model
 	{
         public int? Rank { set; get; }
         public string UserId { set; get; }
-
         public GameResult WithRank(int? rank) {
             this.Rank = rank;
             return this;
         }
-
         public GameResult WithUserId(string userId) {
             this.UserId = userId;
             return this;

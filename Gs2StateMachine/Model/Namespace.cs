@@ -42,57 +42,46 @@ namespace Gs2.Gs2StateMachine.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithStartScript(Gs2.Gs2StateMachine.Model.ScriptSetting startScript) {
             this.StartScript = startScript;
             return this;
         }
-
         public Namespace WithPassScript(Gs2.Gs2StateMachine.Model.ScriptSetting passScript) {
             this.PassScript = passScript;
             return this;
         }
-
         public Namespace WithErrorScript(Gs2.Gs2StateMachine.Model.ScriptSetting errorScript) {
             this.ErrorScript = errorScript;
             return this;
         }
-
         public Namespace WithLowestStateMachineVersion(long? lowestStateMachineVersion) {
             this.LowestStateMachineVersion = lowestStateMachineVersion;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2StateMachine.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

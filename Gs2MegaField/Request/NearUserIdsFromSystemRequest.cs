@@ -33,39 +33,33 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class NearUserIdsFromSystemRequest : Gs2Request<NearUserIdsFromSystemRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-        public Gs2.Gs2MegaField.Model.Position Point { set; get; }
-        public float? R { set; get; }
-        public int? Limit { set; get; }
+         public string NamespaceName { set; get; }
+         public string AreaModelName { set; get; }
+         public string LayerModelName { set; get; }
+         public Gs2.Gs2MegaField.Model.Position Point { set; get; }
+         public float? R { set; get; }
+         public int? Limit { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public NearUserIdsFromSystemRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public NearUserIdsFromSystemRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
-
         public NearUserIdsFromSystemRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
-
         public NearUserIdsFromSystemRequest WithPoint(Gs2.Gs2MegaField.Model.Position point) {
             this.Point = point;
             return this;
         }
-
         public NearUserIdsFromSystemRequest WithR(float? r) {
             this.R = r;
             return this;
         }
-
         public NearUserIdsFromSystemRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

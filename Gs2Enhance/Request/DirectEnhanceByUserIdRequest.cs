@@ -33,39 +33,33 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DirectEnhanceByUserIdRequest : Gs2Request<DirectEnhanceByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-        public string UserId { set; get; }
-        public string TargetItemSetId { set; get; }
-        public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
-        public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
+         public string UserId { set; get; }
+         public string TargetItemSetId { set; get; }
+         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
+         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DirectEnhanceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DirectEnhanceByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public DirectEnhanceByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DirectEnhanceByUserIdRequest WithTargetItemSetId(string targetItemSetId) {
             this.TargetItemSetId = targetItemSetId;
             return this;
         }
-
         public DirectEnhanceByUserIdRequest WithMaterials(Gs2.Gs2Enhance.Model.Material[] materials) {
             this.Materials = materials;
             return this;
         }
-
         public DirectEnhanceByUserIdRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

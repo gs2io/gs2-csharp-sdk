@@ -33,14 +33,12 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class ChangeSetRequest : Gs2Request<ChangeSetRequest>
 	{
-        public string StackName { set; get; }
-        public string Template { set; get; }
-
+         public string StackName { set; get; }
+         public string Template { set; get; }
         public ChangeSetRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
-
         public ChangeSetRequest WithTemplate(string template) {
             this.Template = template;
             return this;

@@ -33,14 +33,12 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class GetRatingModelRequest : Gs2Request<GetRatingModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RatingName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string RatingName { set; get; }
         public GetRatingModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetRatingModelRequest WithRatingName(string ratingName) {
             this.RatingName = ratingName;
             return this;

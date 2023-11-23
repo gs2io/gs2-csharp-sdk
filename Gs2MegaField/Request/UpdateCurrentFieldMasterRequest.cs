@@ -33,14 +33,12 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class UpdateCurrentFieldMasterRequest : Gs2Request<UpdateCurrentFieldMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentFieldMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentFieldMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

@@ -33,33 +33,28 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class ReDrawRarityParameterStatusByUserIdRequest : Gs2Request<ReDrawRarityParameterStatusByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string ParameterName { set; get; }
-        public string PropertyId { set; get; }
-        public string[] FixedParameterNames { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string ParameterName { set; get; }
+         public string PropertyId { set; get; }
+         public string[] FixedParameterNames { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ReDrawRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ReDrawRarityParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ReDrawRarityParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
-
         public ReDrawRarityParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public ReDrawRarityParameterStatusByUserIdRequest WithFixedParameterNames(string[] fixedParameterNames) {
             this.FixedParameterNames = fixedParameterNames;
             return this;

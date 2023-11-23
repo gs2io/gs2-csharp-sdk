@@ -33,45 +33,38 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareUploadRequest : Gs2Request<PrepareUploadRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string Name { set; get; }
-        public string ContentType { set; get; }
-        public string Scope { set; get; }
-        public string[] AllowUserIds { set; get; }
-        public bool? UpdateIfExists { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string Name { set; get; }
+         public string ContentType { set; get; }
+         public string Scope { set; get; }
+         public string[] AllowUserIds { set; get; }
+         public bool? UpdateIfExists { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PrepareUploadRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareUploadRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PrepareUploadRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public PrepareUploadRequest WithContentType(string contentType) {
             this.ContentType = contentType;
             return this;
         }
-
         public PrepareUploadRequest WithScope(string scope) {
             this.Scope = scope;
             return this;
         }
-
         public PrepareUploadRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
             return this;
         }
-
         public PrepareUploadRequest WithUpdateIfExists(bool? updateIfExists) {
             this.UpdateIfExists = updateIfExists;
             return this;

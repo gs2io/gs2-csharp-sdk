@@ -33,20 +33,17 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class DescribeEventsRequest : Gs2Request<DescribeEventsRequest>
 	{
-        public string StackName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string StackName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeEventsRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;
         }
-
         public DescribeEventsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeEventsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

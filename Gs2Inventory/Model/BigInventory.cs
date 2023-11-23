@@ -37,32 +37,26 @@ namespace Gs2.Gs2Inventory.Model
         public Gs2.Gs2Inventory.Model.BigItem[] BigItems { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public BigInventory WithInventoryId(string inventoryId) {
             this.InventoryId = inventoryId;
             return this;
         }
-
         public BigInventory WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public BigInventory WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public BigInventory WithBigItems(Gs2.Gs2Inventory.Model.BigItem[] bigItems) {
             this.BigItems = bigItems;
             return this;
         }
-
         public BigInventory WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public BigInventory WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;

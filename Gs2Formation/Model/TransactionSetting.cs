@@ -33,24 +33,22 @@ namespace Gs2.Gs2Formation.Model
 	{
         public bool? EnableAutoRun { set; get; }
         public string DistributorNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
         public string KeyId { set; get; }
         public string QueueNamespaceId { set; get; }
-
         public TransactionSetting WithEnableAutoRun(bool? enableAutoRun) {
             this.EnableAutoRun = enableAutoRun;
             return this;
         }
-
         public TransactionSetting WithDistributorNamespaceId(string distributorNamespaceId) {
             this.DistributorNamespaceId = distributorNamespaceId;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
         public TransactionSetting WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;
         }
-
         public TransactionSetting WithQueueNamespaceId(string queueNamespaceId) {
             this.QueueNamespaceId = queueNamespaceId;
             return this;
@@ -67,7 +65,6 @@ namespace Gs2.Gs2Formation.Model
             return new TransactionSetting()
                 .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : (bool?)bool.Parse(data["enableAutoRun"].ToString()))
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString());
         }
 
@@ -76,7 +73,6 @@ namespace Gs2.Gs2Formation.Model
             return new JsonData {
                 ["enableAutoRun"] = EnableAutoRun,
                 ["distributorNamespaceId"] = DistributorNamespaceId,
-                ["keyId"] = KeyId,
                 ["queueNamespaceId"] = QueueNamespaceId,
             };
         }

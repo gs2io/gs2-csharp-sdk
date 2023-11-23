@@ -33,20 +33,17 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class DownloadSerialCodesRequest : Gs2Request<DownloadSerialCodesRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CampaignModelName { set; get; }
-        public string IssueJobName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CampaignModelName { set; get; }
+         public string IssueJobName { set; get; }
         public DownloadSerialCodesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DownloadSerialCodesRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;
         }
-
         public DownloadSerialCodesRequest WithIssueJobName(string issueJobName) {
             this.IssueJobName = issueJobName;
             return this;

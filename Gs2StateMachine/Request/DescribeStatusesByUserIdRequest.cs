@@ -33,32 +33,27 @@ namespace Gs2.Gs2StateMachine.Request
 	[System.Serializable]
 	public class DescribeStatusesByUserIdRequest : Gs2Request<DescribeStatusesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string Status { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string Status { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeStatusesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeStatusesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeStatusesByUserIdRequest WithStatus(string status) {
             this.Status = status;
             return this;
         }
-
         public DescribeStatusesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeStatusesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

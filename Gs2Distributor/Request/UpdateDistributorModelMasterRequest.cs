@@ -33,38 +33,32 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class UpdateDistributorModelMasterRequest : Gs2Request<UpdateDistributorModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string DistributorName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public string InboxNamespaceId { set; get; }
-        public string[] WhiteListTargetIds { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string DistributorName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public string InboxNamespaceId { set; get; }
+         public string[] WhiteListTargetIds { set; get; }
         public UpdateDistributorModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateDistributorModelMasterRequest WithDistributorName(string distributorName) {
             this.DistributorName = distributorName;
             return this;
         }
-
         public UpdateDistributorModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateDistributorModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateDistributorModelMasterRequest WithInboxNamespaceId(string inboxNamespaceId) {
             this.InboxNamespaceId = inboxNamespaceId;
             return this;
         }
-
         public UpdateDistributorModelMasterRequest WithWhiteListTargetIds(string[] whiteListTargetIds) {
             this.WhiteListTargetIds = whiteListTargetIds;
             return this;

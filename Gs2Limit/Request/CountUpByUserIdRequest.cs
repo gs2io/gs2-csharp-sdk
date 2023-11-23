@@ -33,39 +33,33 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class CountUpByUserIdRequest : Gs2Request<CountUpByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string LimitName { set; get; }
-        public string CounterName { set; get; }
-        public string UserId { set; get; }
-        public int? CountUpValue { set; get; }
-        public int? MaxValue { set; get; }
+         public string NamespaceName { set; get; }
+         public string LimitName { set; get; }
+         public string CounterName { set; get; }
+         public string UserId { set; get; }
+         public int? CountUpValue { set; get; }
+         public int? MaxValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CountUpByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CountUpByUserIdRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public CountUpByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public CountUpByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public CountUpByUserIdRequest WithCountUpValue(int? countUpValue) {
             this.CountUpValue = countUpValue;
             return this;
         }
-
         public CountUpByUserIdRequest WithMaxValue(int? maxValue) {
             this.MaxValue = maxValue;
             return this;

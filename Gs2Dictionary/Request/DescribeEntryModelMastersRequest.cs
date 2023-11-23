@@ -33,20 +33,17 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class DescribeEntryModelMastersRequest : Gs2Request<DescribeEntryModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeEntryModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeEntryModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeEntryModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

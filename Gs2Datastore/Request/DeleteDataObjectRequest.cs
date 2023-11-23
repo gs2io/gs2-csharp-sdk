@@ -33,21 +33,18 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class DeleteDataObjectRequest : Gs2Request<DeleteDataObjectRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string DataObjectName { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string DataObjectName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteDataObjectRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteDataObjectRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DeleteDataObjectRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;

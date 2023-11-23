@@ -33,14 +33,12 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class GetRarityParameterModelMasterRequest : Gs2Request<GetRarityParameterModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ParameterName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ParameterName { set; get; }
         public GetRarityParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetRarityParameterModelMasterRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;

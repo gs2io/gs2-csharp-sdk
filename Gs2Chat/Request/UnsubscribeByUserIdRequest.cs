@@ -33,21 +33,18 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class UnsubscribeByUserIdRequest : Gs2Request<UnsubscribeByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string RoomName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public UnsubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UnsubscribeByUserIdRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public UnsubscribeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

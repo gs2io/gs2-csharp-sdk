@@ -37,32 +37,26 @@ namespace Gs2.Gs2Lottery.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public PrizeLimit WithPrizeLimitId(string prizeLimitId) {
             this.PrizeLimitId = prizeLimitId;
             return this;
         }
-
         public PrizeLimit WithPrizeId(string prizeId) {
             this.PrizeId = prizeId;
             return this;
         }
-
         public PrizeLimit WithDrawnCount(int? drawnCount) {
             this.DrawnCount = drawnCount;
             return this;
         }
-
         public PrizeLimit WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public PrizeLimit WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public PrizeLimit WithRevision(long? revision) {
             this.Revision = revision;
             return this;

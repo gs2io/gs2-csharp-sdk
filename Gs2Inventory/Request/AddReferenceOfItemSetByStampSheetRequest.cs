@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class AddReferenceOfItemSetByStampSheetRequest : Gs2Request<AddReferenceOfItemSetByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public AddReferenceOfItemSetByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public AddReferenceOfItemSetByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

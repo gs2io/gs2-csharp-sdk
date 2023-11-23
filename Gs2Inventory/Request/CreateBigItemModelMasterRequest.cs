@@ -33,32 +33,27 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class CreateBigItemModelMasterRequest : Gs2Request<CreateBigItemModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
         public CreateBigItemModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateBigItemModelMasterRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public CreateBigItemModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateBigItemModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateBigItemModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;

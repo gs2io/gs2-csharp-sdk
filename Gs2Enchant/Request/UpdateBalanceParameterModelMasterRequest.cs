@@ -33,44 +33,37 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class UpdateBalanceParameterModelMasterRequest : Gs2Request<UpdateBalanceParameterModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ParameterName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public long? TotalValue { set; get; }
-        public string InitialValueStrategy { set; get; }
-        public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string ParameterName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public long? TotalValue { set; get; }
+         public string InitialValueStrategy { set; get; }
+         public Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] Parameters { set; get; }
         public UpdateBalanceParameterModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateBalanceParameterModelMasterRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
-
         public UpdateBalanceParameterModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateBalanceParameterModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateBalanceParameterModelMasterRequest WithTotalValue(long? totalValue) {
             this.TotalValue = totalValue;
             return this;
         }
-
         public UpdateBalanceParameterModelMasterRequest WithInitialValueStrategy(string initialValueStrategy) {
             this.InitialValueStrategy = initialValueStrategy;
             return this;
         }
-
         public UpdateBalanceParameterModelMasterRequest WithParameters(Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] parameters) {
             this.Parameters = parameters;
             return this;

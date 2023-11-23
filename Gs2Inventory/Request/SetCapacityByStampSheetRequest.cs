@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class SetCapacityByStampSheetRequest : Gs2Request<SetCapacityByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public SetCapacityByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public SetCapacityByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

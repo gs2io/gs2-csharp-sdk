@@ -39,42 +39,34 @@ namespace Gs2.Gs2Formation.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public PropertyForm WithFormId(string formId) {
             this.FormId = formId;
             return this;
         }
-
         public PropertyForm WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public PropertyForm WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public PropertyForm WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public PropertyForm WithSlots(Gs2.Gs2Formation.Model.Slot[] slots) {
             this.Slots = slots;
             return this;
         }
-
         public PropertyForm WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public PropertyForm WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public PropertyForm WithRevision(long? revision) {
             this.Revision = revision;
             return this;

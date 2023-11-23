@@ -33,14 +33,12 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class DeleteEntriesByStampTaskRequest : Gs2Request<DeleteEntriesByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public DeleteEntriesByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public DeleteEntriesByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

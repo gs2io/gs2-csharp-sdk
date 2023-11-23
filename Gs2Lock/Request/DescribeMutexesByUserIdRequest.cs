@@ -33,26 +33,22 @@ namespace Gs2.Gs2Lock.Request
 	[System.Serializable]
 	public class DescribeMutexesByUserIdRequest : Gs2Request<DescribeMutexesByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeMutexesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeMutexesByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeMutexesByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeMutexesByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

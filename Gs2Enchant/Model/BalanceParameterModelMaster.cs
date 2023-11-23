@@ -41,52 +41,42 @@ namespace Gs2.Gs2Enchant.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public BalanceParameterModelMaster WithBalanceParameterModelId(string balanceParameterModelId) {
             this.BalanceParameterModelId = balanceParameterModelId;
             return this;
         }
-
         public BalanceParameterModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public BalanceParameterModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public BalanceParameterModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public BalanceParameterModelMaster WithTotalValue(long? totalValue) {
             this.TotalValue = totalValue;
             return this;
         }
-
         public BalanceParameterModelMaster WithInitialValueStrategy(string initialValueStrategy) {
             this.InitialValueStrategy = initialValueStrategy;
             return this;
         }
-
         public BalanceParameterModelMaster WithParameters(Gs2.Gs2Enchant.Model.BalanceParameterValueModel[] parameters) {
             this.Parameters = parameters;
             return this;
         }
-
         public BalanceParameterModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public BalanceParameterModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public BalanceParameterModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

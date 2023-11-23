@@ -33,20 +33,17 @@ namespace Gs2.Gs2Key.Request
 	[System.Serializable]
 	public class EncryptRequest : Gs2Request<EncryptRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string KeyName { set; get; }
-        public string Data { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string KeyName { set; get; }
+         public string Data { set; get; }
         public EncryptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public EncryptRequest WithKeyName(string keyName) {
             this.KeyName = keyName;
             return this;
         }
-
         public EncryptRequest WithData(string data) {
             this.Data = data;
             return this;

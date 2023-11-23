@@ -33,33 +33,28 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class AddExperienceByUserIdRequest : Gs2Request<AddExperienceByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string ExperienceName { set; get; }
-        public string PropertyId { set; get; }
-        public long? ExperienceValue { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string ExperienceName { set; get; }
+         public string PropertyId { set; get; }
+         public long? ExperienceValue { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AddExperienceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AddExperienceByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public AddExperienceByUserIdRequest WithExperienceName(string experienceName) {
             this.ExperienceName = experienceName;
             return this;
         }
-
         public AddExperienceByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public AddExperienceByUserIdRequest WithExperienceValue(long? experienceValue) {
             this.ExperienceValue = experienceValue;
             return this;

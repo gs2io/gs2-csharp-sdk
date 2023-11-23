@@ -33,8 +33,7 @@ namespace Gs2.Gs2Realtime.Request
 	[System.Serializable]
 	public class NowRequest : Gs2Request<NowRequest>
 	{
-        public string AccessToken { set; get; }
-
+         public string AccessToken { set; get; }
         public NowRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

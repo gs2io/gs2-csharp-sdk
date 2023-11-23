@@ -33,33 +33,28 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class SetRarityParameterStatusByUserIdRequest : Gs2Request<SetRarityParameterStatusByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string ParameterName { set; get; }
-        public string PropertyId { set; get; }
-        public Gs2.Gs2Enchant.Model.RarityParameterValue[] ParameterValues { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string ParameterName { set; get; }
+         public string PropertyId { set; get; }
+         public Gs2.Gs2Enchant.Model.RarityParameterValue[] ParameterValues { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SetRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetRarityParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SetRarityParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
-
         public SetRarityParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public SetRarityParameterStatusByUserIdRequest WithParameterValues(Gs2.Gs2Enchant.Model.RarityParameterValue[] parameterValues) {
             this.ParameterValues = parameterValues;
             return this;

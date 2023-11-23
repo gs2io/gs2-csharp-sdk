@@ -33,14 +33,12 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class GetStatusRequest : Gs2Request<GetStatusRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
         public GetStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetStatusRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

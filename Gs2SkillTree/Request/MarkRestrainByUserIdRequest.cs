@@ -33,21 +33,18 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class MarkRestrainByUserIdRequest : Gs2Request<MarkRestrainByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string[] NodeModelNames { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string[] NodeModelNames { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public MarkRestrainByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public MarkRestrainByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public MarkRestrainByUserIdRequest WithNodeModelNames(string[] nodeModelNames) {
             this.NodeModelNames = nodeModelNames;
             return this;

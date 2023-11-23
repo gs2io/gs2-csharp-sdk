@@ -33,38 +33,32 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2SkillTree.Model.TransactionSetting TransactionSetting { set; get; }
-        public Gs2.Gs2SkillTree.Model.ScriptSetting ReleaseScript { set; get; }
-        public Gs2.Gs2SkillTree.Model.ScriptSetting RestrainScript { set; get; }
-        public Gs2.Gs2SkillTree.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2SkillTree.Model.TransactionSetting TransactionSetting { set; get; }
+         public Gs2.Gs2SkillTree.Model.ScriptSetting ReleaseScript { set; get; }
+         public Gs2.Gs2SkillTree.Model.ScriptSetting RestrainScript { set; get; }
+         public Gs2.Gs2SkillTree.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2SkillTree.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public CreateNamespaceRequest WithReleaseScript(Gs2.Gs2SkillTree.Model.ScriptSetting releaseScript) {
             this.ReleaseScript = releaseScript;
             return this;
         }
-
         public CreateNamespaceRequest WithRestrainScript(Gs2.Gs2SkillTree.Model.ScriptSetting restrainScript) {
             this.RestrainScript = restrainScript;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2SkillTree.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

@@ -33,15 +33,13 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DeleteDataOwnerByUserIdRequest : Gs2Request<DeleteDataOwnerByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteDataOwnerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteDataOwnerByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

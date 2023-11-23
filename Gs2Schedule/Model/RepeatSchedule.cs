@@ -36,27 +36,22 @@ namespace Gs2.Gs2Schedule.Model
         public long? CurrentRepeatEndAt { set; get; }
         public long? LastRepeatEndAt { set; get; }
         public long? NextRepeatStartAt { set; get; }
-
         public RepeatSchedule WithRepeatCount(int? repeatCount) {
             this.RepeatCount = repeatCount;
             return this;
         }
-
         public RepeatSchedule WithCurrentRepeatStartAt(long? currentRepeatStartAt) {
             this.CurrentRepeatStartAt = currentRepeatStartAt;
             return this;
         }
-
         public RepeatSchedule WithCurrentRepeatEndAt(long? currentRepeatEndAt) {
             this.CurrentRepeatEndAt = currentRepeatEndAt;
             return this;
         }
-
         public RepeatSchedule WithLastRepeatEndAt(long? lastRepeatEndAt) {
             this.LastRepeatEndAt = lastRepeatEndAt;
             return this;
         }
-
         public RepeatSchedule WithNextRepeatStartAt(long? nextRepeatStartAt) {
             this.NextRepeatStartAt = nextRepeatStartAt;
             return this;

@@ -33,45 +33,38 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class StartByUserIdRequest : Gs2Request<StartByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RateName { set; get; }
-        public string TargetItemSetId { set; get; }
-        public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
-        public string UserId { set; get; }
-        public bool? Force { set; get; }
-        public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string RateName { set; get; }
+         public string TargetItemSetId { set; get; }
+         public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
+         public string UserId { set; get; }
+         public bool? Force { set; get; }
+         public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public StartByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public StartByUserIdRequest WithRateName(string rateName) {
             this.RateName = rateName;
             return this;
         }
-
         public StartByUserIdRequest WithTargetItemSetId(string targetItemSetId) {
             this.TargetItemSetId = targetItemSetId;
             return this;
         }
-
         public StartByUserIdRequest WithMaterials(Gs2.Gs2Enhance.Model.Material[] materials) {
             this.Materials = materials;
             return this;
         }
-
         public StartByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public StartByUserIdRequest WithForce(bool? force) {
             this.Force = force;
             return this;
         }
-
         public StartByUserIdRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
             return this;

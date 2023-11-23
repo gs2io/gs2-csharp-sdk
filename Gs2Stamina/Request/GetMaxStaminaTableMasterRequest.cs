@@ -33,14 +33,12 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class GetMaxStaminaTableMasterRequest : Gs2Request<GetMaxStaminaTableMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MaxStaminaTableName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MaxStaminaTableName { set; get; }
         public GetMaxStaminaTableMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMaxStaminaTableMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
             this.MaxStaminaTableName = maxStaminaTableName;
             return this;

@@ -33,32 +33,27 @@ namespace Gs2.Gs2Matchmaking.Request
 	[System.Serializable]
 	public class VoteRequest : Gs2Request<VoteRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BallotBody { set; get; }
-        public string BallotSignature { set; get; }
-        public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
-        public string KeyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string BallotBody { set; get; }
+         public string BallotSignature { set; get; }
+         public Gs2.Gs2Matchmaking.Model.GameResult[] GameResults { set; get; }
+         public string KeyId { set; get; }
         public VoteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VoteRequest WithBallotBody(string ballotBody) {
             this.BallotBody = ballotBody;
             return this;
         }
-
         public VoteRequest WithBallotSignature(string ballotSignature) {
             this.BallotSignature = ballotSignature;
             return this;
         }
-
         public VoteRequest WithGameResults(Gs2.Gs2Matchmaking.Model.GameResult[] gameResults) {
             this.GameResults = gameResults;
             return this;
         }
-
         public VoteRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

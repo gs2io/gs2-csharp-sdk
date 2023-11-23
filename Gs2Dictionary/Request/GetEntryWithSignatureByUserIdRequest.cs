@@ -33,26 +33,22 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class GetEntryWithSignatureByUserIdRequest : Gs2Request<GetEntryWithSignatureByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string EntryModelName { set; get; }
-        public string KeyId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string EntryModelName { set; get; }
+         public string KeyId { set; get; }
         public GetEntryWithSignatureByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetEntryWithSignatureByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetEntryWithSignatureByUserIdRequest WithEntryModelName(string entryModelName) {
             this.EntryModelName = entryModelName;
             return this;
         }
-
         public GetEntryWithSignatureByUserIdRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

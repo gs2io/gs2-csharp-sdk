@@ -33,14 +33,12 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class DeleteDistributorModelMasterRequest : Gs2Request<DeleteDistributorModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string DistributorName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string DistributorName { set; get; }
         public DeleteDistributorModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteDistributorModelMasterRequest WithDistributorName(string distributorName) {
             this.DistributorName = distributorName;
             return this;

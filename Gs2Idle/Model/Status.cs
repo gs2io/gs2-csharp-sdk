@@ -40,47 +40,38 @@ namespace Gs2.Gs2Idle.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Status WithStatusId(string statusId) {
             this.StatusId = statusId;
             return this;
         }
-
         public Status WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
             return this;
         }
-
         public Status WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Status WithRandomSeed(long? randomSeed) {
             this.RandomSeed = randomSeed;
             return this;
         }
-
         public Status WithIdleMinutes(int? idleMinutes) {
             this.IdleMinutes = idleMinutes;
             return this;
         }
-
         public Status WithMaximumIdleMinutes(int? maximumIdleMinutes) {
             this.MaximumIdleMinutes = maximumIdleMinutes;
             return this;
         }
-
         public Status WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Status WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Status WithRevision(long? revision) {
             this.Revision = revision;
             return this;

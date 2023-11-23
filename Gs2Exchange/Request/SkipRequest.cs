@@ -33,27 +33,23 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class SkipRequest : Gs2Request<SkipRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string AwaitName { set; get; }
-        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string AwaitName { set; get; }
+         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SkipRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SkipRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public SkipRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
             return this;
         }
-
         public SkipRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
             return this;

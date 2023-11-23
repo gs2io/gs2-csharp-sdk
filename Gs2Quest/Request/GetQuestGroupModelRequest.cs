@@ -33,14 +33,12 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class GetQuestGroupModelRequest : Gs2Request<GetQuestGroupModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string QuestGroupName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string QuestGroupName { set; get; }
         public GetQuestGroupModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetQuestGroupModelRequest WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;

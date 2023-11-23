@@ -33,32 +33,27 @@ namespace Gs2.Gs2Distributor.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string AssumeUserId { set; get; }
-        public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; }
-        public Gs2.Gs2Distributor.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string AssumeUserId { set; get; }
+         public Gs2.Gs2Distributor.Model.NotificationSetting AutoRunStampSheetNotification { set; get; }
+         public Gs2.Gs2Distributor.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithAssumeUserId(string assumeUserId) {
             this.AssumeUserId = assumeUserId;
             return this;
         }
-
         public CreateNamespaceRequest WithAutoRunStampSheetNotification(Gs2.Gs2Distributor.Model.NotificationSetting autoRunStampSheetNotification) {
             this.AutoRunStampSheetNotification = autoRunStampSheetNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Distributor.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

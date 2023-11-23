@@ -33,14 +33,12 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DirectEnhanceByStampSheetRequest : Gs2Request<DirectEnhanceByStampSheetRequest>
 	{
-        public string StampSheet { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampSheet { set; get; }
+         public string KeyId { set; get; }
         public DirectEnhanceByStampSheetRequest WithStampSheet(string stampSheet) {
             this.StampSheet = stampSheet;
             return this;
         }
-
         public DirectEnhanceByStampSheetRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

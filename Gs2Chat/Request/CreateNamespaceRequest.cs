@@ -33,62 +33,52 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public bool? AllowCreateRoom { set; get; }
-        public Gs2.Gs2Chat.Model.ScriptSetting PostMessageScript { set; get; }
-        public Gs2.Gs2Chat.Model.ScriptSetting CreateRoomScript { set; get; }
-        public Gs2.Gs2Chat.Model.ScriptSetting DeleteRoomScript { set; get; }
-        public Gs2.Gs2Chat.Model.ScriptSetting SubscribeRoomScript { set; get; }
-        public Gs2.Gs2Chat.Model.ScriptSetting UnsubscribeRoomScript { set; get; }
-        public Gs2.Gs2Chat.Model.NotificationSetting PostNotification { set; get; }
-        public Gs2.Gs2Chat.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public bool? AllowCreateRoom { set; get; }
+         public Gs2.Gs2Chat.Model.ScriptSetting PostMessageScript { set; get; }
+         public Gs2.Gs2Chat.Model.ScriptSetting CreateRoomScript { set; get; }
+         public Gs2.Gs2Chat.Model.ScriptSetting DeleteRoomScript { set; get; }
+         public Gs2.Gs2Chat.Model.ScriptSetting SubscribeRoomScript { set; get; }
+         public Gs2.Gs2Chat.Model.ScriptSetting UnsubscribeRoomScript { set; get; }
+         public Gs2.Gs2Chat.Model.NotificationSetting PostNotification { set; get; }
+         public Gs2.Gs2Chat.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithAllowCreateRoom(bool? allowCreateRoom) {
             this.AllowCreateRoom = allowCreateRoom;
             return this;
         }
-
         public CreateNamespaceRequest WithPostMessageScript(Gs2.Gs2Chat.Model.ScriptSetting postMessageScript) {
             this.PostMessageScript = postMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithCreateRoomScript(Gs2.Gs2Chat.Model.ScriptSetting createRoomScript) {
             this.CreateRoomScript = createRoomScript;
             return this;
         }
-
         public CreateNamespaceRequest WithDeleteRoomScript(Gs2.Gs2Chat.Model.ScriptSetting deleteRoomScript) {
             this.DeleteRoomScript = deleteRoomScript;
             return this;
         }
-
         public CreateNamespaceRequest WithSubscribeRoomScript(Gs2.Gs2Chat.Model.ScriptSetting subscribeRoomScript) {
             this.SubscribeRoomScript = subscribeRoomScript;
             return this;
         }
-
         public CreateNamespaceRequest WithUnsubscribeRoomScript(Gs2.Gs2Chat.Model.ScriptSetting unsubscribeRoomScript) {
             this.UnsubscribeRoomScript = unsubscribeRoomScript;
             return this;
         }
-
         public CreateNamespaceRequest WithPostNotification(Gs2.Gs2Chat.Model.NotificationSetting postNotification) {
             this.PostNotification = postNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Chat.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

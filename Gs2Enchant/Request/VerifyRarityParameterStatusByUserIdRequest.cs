@@ -33,45 +33,38 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class VerifyRarityParameterStatusByUserIdRequest : Gs2Request<VerifyRarityParameterStatusByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ParameterName { set; get; }
-        public string UserId { set; get; }
-        public string PropertyId { set; get; }
-        public string VerifyType { set; get; }
-        public string ParameterValueName { set; get; }
-        public int? ParameterCount { set; get; }
+         public string NamespaceName { set; get; }
+         public string ParameterName { set; get; }
+         public string UserId { set; get; }
+         public string PropertyId { set; get; }
+         public string VerifyType { set; get; }
+         public string ParameterValueName { set; get; }
+         public int? ParameterCount { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyRarityParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
-
         public VerifyRarityParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public VerifyRarityParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public VerifyRarityParameterStatusByUserIdRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
-
         public VerifyRarityParameterStatusByUserIdRequest WithParameterValueName(string parameterValueName) {
             this.ParameterValueName = parameterValueName;
             return this;
         }
-
         public VerifyRarityParameterStatusByUserIdRequest WithParameterCount(int? parameterCount) {
             this.ParameterCount = parameterCount;
             return this;

@@ -33,12 +33,10 @@ namespace Gs2.Gs2Inbox.Model
 	{
         public string NamespaceId { set; get; }
         public string Settings { set; get; }
-
         public CurrentMessageMaster WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public CurrentMessageMaster WithSettings(string settings) {
             this.Settings = settings;
             return this;

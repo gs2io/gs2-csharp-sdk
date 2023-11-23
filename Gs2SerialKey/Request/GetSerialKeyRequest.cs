@@ -33,14 +33,12 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class GetSerialKeyRequest : Gs2Request<GetSerialKeyRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Code { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Code { set; get; }
         public GetSerialKeyRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetSerialKeyRequest WithCode(string code) {
             this.Code = code;
             return this;

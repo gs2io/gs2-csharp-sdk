@@ -33,20 +33,17 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class DescribeRarityParameterModelMastersRequest : Gs2Request<DescribeRarityParameterModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeRarityParameterModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeRarityParameterModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeRarityParameterModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

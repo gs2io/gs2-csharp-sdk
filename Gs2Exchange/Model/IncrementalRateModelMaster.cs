@@ -46,77 +46,62 @@ namespace Gs2.Gs2Exchange.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public IncrementalRateModelMaster WithIncrementalRateModelId(string incrementalRateModelId) {
             this.IncrementalRateModelId = incrementalRateModelId;
             return this;
         }
-
         public IncrementalRateModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public IncrementalRateModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public IncrementalRateModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public IncrementalRateModelMaster WithConsumeAction(Gs2.Core.Model.ConsumeAction consumeAction) {
             this.ConsumeAction = consumeAction;
             return this;
         }
-
         public IncrementalRateModelMaster WithCalculateType(string calculateType) {
             this.CalculateType = calculateType;
             return this;
         }
-
         public IncrementalRateModelMaster WithBaseValue(long? baseValue) {
             this.BaseValue = baseValue;
             return this;
         }
-
         public IncrementalRateModelMaster WithCoefficientValue(long? coefficientValue) {
             this.CoefficientValue = coefficientValue;
             return this;
         }
-
         public IncrementalRateModelMaster WithCalculateScriptId(string calculateScriptId) {
             this.CalculateScriptId = calculateScriptId;
             return this;
         }
-
         public IncrementalRateModelMaster WithExchangeCountId(string exchangeCountId) {
             this.ExchangeCountId = exchangeCountId;
             return this;
         }
-
         public IncrementalRateModelMaster WithMaximumExchangeCount(int? maximumExchangeCount) {
             this.MaximumExchangeCount = maximumExchangeCount;
             return this;
         }
-
         public IncrementalRateModelMaster WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public IncrementalRateModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public IncrementalRateModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public IncrementalRateModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

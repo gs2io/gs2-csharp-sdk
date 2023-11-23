@@ -39,48 +39,53 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Gs2Showcase.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
+        [Obsolete("This method is deprecated")]
+        public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
+        public string KeyId { set; get; }
         public long? Revision { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithTransactionSetting(Gs2.Gs2Showcase.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public Namespace WithBuyScript(Gs2.Gs2Showcase.Model.ScriptSetting buyScript) {
             this.BuyScript = buyScript;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Showcase.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
+        [Obsolete("This method is deprecated")]
+        public Namespace WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public Namespace WithKeyId(string keyId) {
+            this.KeyId = keyId;
+            return this;
+        }
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;
@@ -207,6 +212,14 @@ namespace Gs2.Gs2Showcase.Model
                 writer.WritePropertyName("updatedAt");
                 writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
+            }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
                 writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
@@ -281,6 +294,22 @@ namespace Gs2.Gs2Showcase.Model
             else
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
+            }
+            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
+            }
+            if (KeyId == null && KeyId == other.KeyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += KeyId.CompareTo(other.KeyId);
             }
             if (Revision == null && Revision == other.Revision)
             {

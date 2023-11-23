@@ -33,14 +33,12 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class SubCapacityByStampTaskRequest : Gs2Request<SubCapacityByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public SubCapacityByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public SubCapacityByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

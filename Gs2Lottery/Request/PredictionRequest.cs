@@ -33,33 +33,28 @@ namespace Gs2.Gs2Lottery.Request
 	[System.Serializable]
 	public class PredictionRequest : Gs2Request<PredictionRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string LotteryName { set; get; }
-        public string AccessToken { set; get; }
-        public long? RandomSeed { set; get; }
-        public int? Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string LotteryName { set; get; }
+         public string AccessToken { set; get; }
+         public long? RandomSeed { set; get; }
+         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PredictionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PredictionRequest WithLotteryName(string lotteryName) {
             this.LotteryName = lotteryName;
             return this;
         }
-
         public PredictionRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PredictionRequest WithRandomSeed(long? randomSeed) {
             this.RandomSeed = randomSeed;
             return this;
         }
-
         public PredictionRequest WithCount(int? count) {
             this.Count = count;
             return this;

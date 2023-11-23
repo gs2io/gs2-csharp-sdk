@@ -33,32 +33,27 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class DescribeCountersByUserIdRequest : Gs2Request<DescribeCountersByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string LimitName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string LimitName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeCountersByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeCountersByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeCountersByUserIdRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public DescribeCountersByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeCountersByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

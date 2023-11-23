@@ -33,33 +33,28 @@ namespace Gs2.Gs2Money.Request
 	[System.Serializable]
 	public class WithdrawByUserIdRequest : Gs2Request<WithdrawByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public int? Slot { set; get; }
-        public int? Count { set; get; }
-        public bool? PaidOnly { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public int? Slot { set; get; }
+         public int? Count { set; get; }
+         public bool? PaidOnly { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public WithdrawByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public WithdrawByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public WithdrawByUserIdRequest WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
-
         public WithdrawByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;
         }
-
         public WithdrawByUserIdRequest WithPaidOnly(bool? paidOnly) {
             this.PaidOnly = paidOnly;
             return this;

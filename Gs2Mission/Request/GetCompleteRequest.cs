@@ -33,20 +33,17 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class GetCompleteRequest : Gs2Request<GetCompleteRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MissionGroupName { set; get; }
-        public string AccessToken { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MissionGroupName { set; get; }
+         public string AccessToken { set; get; }
         public GetCompleteRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCompleteRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public GetCompleteRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

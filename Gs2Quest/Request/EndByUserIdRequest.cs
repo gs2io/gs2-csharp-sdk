@@ -33,33 +33,28 @@ namespace Gs2.Gs2Quest.Request
 	[System.Serializable]
 	public class EndByUserIdRequest : Gs2Request<EndByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
-        public bool? IsComplete { set; get; }
-        public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
+         public bool? IsComplete { set; get; }
+         public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public EndByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public EndByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public EndByUserIdRequest WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
-
         public EndByUserIdRequest WithIsComplete(bool? isComplete) {
             this.IsComplete = isComplete;
             return this;
         }
-
         public EndByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
             return this;

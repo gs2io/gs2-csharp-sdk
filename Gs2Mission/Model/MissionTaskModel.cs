@@ -40,47 +40,38 @@ namespace Gs2.Gs2Mission.Model
         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
         public string ChallengePeriodEventId { set; get; }
         public string PremiseMissionTaskName { set; get; }
-
         public MissionTaskModel WithMissionTaskId(string missionTaskId) {
             this.MissionTaskId = missionTaskId;
             return this;
         }
-
         public MissionTaskModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public MissionTaskModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public MissionTaskModel WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public MissionTaskModel WithTargetResetType(string targetResetType) {
             this.TargetResetType = targetResetType;
             return this;
         }
-
         public MissionTaskModel WithTargetValue(long? targetValue) {
             this.TargetValue = targetValue;
             return this;
         }
-
         public MissionTaskModel WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
-
         public MissionTaskModel WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public MissionTaskModel WithPremiseMissionTaskName(string premiseMissionTaskName) {
             this.PremiseMissionTaskName = premiseMissionTaskName;
             return this;

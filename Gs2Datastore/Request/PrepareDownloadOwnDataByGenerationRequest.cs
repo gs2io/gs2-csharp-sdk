@@ -33,27 +33,23 @@ namespace Gs2.Gs2Datastore.Request
 	[System.Serializable]
 	public class PrepareDownloadOwnDataByGenerationRequest : Gs2Request<PrepareDownloadOwnDataByGenerationRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string DataObjectName { set; get; }
-        public string Generation { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string DataObjectName { set; get; }
+         public string Generation { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PrepareDownloadOwnDataByGenerationRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PrepareDownloadOwnDataByGenerationRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PrepareDownloadOwnDataByGenerationRequest WithDataObjectName(string dataObjectName) {
             this.DataObjectName = dataObjectName;
             return this;
         }
-
         public PrepareDownloadOwnDataByGenerationRequest WithGeneration(string generation) {
             this.Generation = generation;
             return this;

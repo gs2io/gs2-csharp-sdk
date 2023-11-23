@@ -33,20 +33,17 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class DescribeGlobalMessageMastersRequest : Gs2Request<DescribeGlobalMessageMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeGlobalMessageMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeGlobalMessageMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeGlobalMessageMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

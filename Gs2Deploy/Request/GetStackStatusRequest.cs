@@ -33,8 +33,7 @@ namespace Gs2.Gs2Deploy.Request
 	[System.Serializable]
 	public class GetStackStatusRequest : Gs2Request<GetStackStatusRequest>
 	{
-        public string StackName { set; get; }
-
+         public string StackName { set; get; }
         public GetStackStatusRequest WithStackName(string stackName) {
             this.StackName = stackName;
             return this;

@@ -33,56 +33,47 @@ namespace Gs2.Gs2Idle.Request
 	[System.Serializable]
 	public class CreateCategoryModelMasterRequest : Gs2Request<CreateCategoryModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public int? RewardIntervalMinutes { set; get; }
-        public int? DefaultMaximumIdleMinutes { set; get; }
-        public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
-        public string IdlePeriodScheduleId { set; get; }
-        public string ReceivePeriodScheduleId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public int? RewardIntervalMinutes { set; get; }
+         public int? DefaultMaximumIdleMinutes { set; get; }
+         public Gs2.Gs2Idle.Model.AcquireActionList[] AcquireActions { set; get; }
+         public string IdlePeriodScheduleId { set; get; }
+         public string ReceivePeriodScheduleId { set; get; }
         public CreateCategoryModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithRewardIntervalMinutes(int? rewardIntervalMinutes) {
             this.RewardIntervalMinutes = rewardIntervalMinutes;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithDefaultMaximumIdleMinutes(int? defaultMaximumIdleMinutes) {
             this.DefaultMaximumIdleMinutes = defaultMaximumIdleMinutes;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithAcquireActions(Gs2.Gs2Idle.Model.AcquireActionList[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithIdlePeriodScheduleId(string idlePeriodScheduleId) {
             this.IdlePeriodScheduleId = idlePeriodScheduleId;
             return this;
         }
-
         public CreateCategoryModelMasterRequest WithReceivePeriodScheduleId(string receivePeriodScheduleId) {
             this.ReceivePeriodScheduleId = receivePeriodScheduleId;
             return this;

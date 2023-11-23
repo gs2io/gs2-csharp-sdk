@@ -38,37 +38,30 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public int? CurrentPurchaseCount { set; get; }
         public int? MaximumPurchaseCount { set; get; }
-
         public RandomDisplayItem WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
-
         public RandomDisplayItem WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public RandomDisplayItem WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public RandomDisplayItem WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
         }
-
         public RandomDisplayItem WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
         }
-
         public RandomDisplayItem WithCurrentPurchaseCount(int? currentPurchaseCount) {
             this.CurrentPurchaseCount = currentPurchaseCount;
             return this;
         }
-
         public RandomDisplayItem WithMaximumPurchaseCount(int? maximumPurchaseCount) {
             this.MaximumPurchaseCount = maximumPurchaseCount;
             return this;

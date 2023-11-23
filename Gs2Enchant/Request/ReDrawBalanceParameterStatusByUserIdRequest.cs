@@ -33,33 +33,28 @@ namespace Gs2.Gs2Enchant.Request
 	[System.Serializable]
 	public class ReDrawBalanceParameterStatusByUserIdRequest : Gs2Request<ReDrawBalanceParameterStatusByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string ParameterName { set; get; }
-        public string PropertyId { set; get; }
-        public string[] FixedParameterNames { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string ParameterName { set; get; }
+         public string PropertyId { set; get; }
+         public string[] FixedParameterNames { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ReDrawBalanceParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ReDrawBalanceParameterStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ReDrawBalanceParameterStatusByUserIdRequest WithParameterName(string parameterName) {
             this.ParameterName = parameterName;
             return this;
         }
-
         public ReDrawBalanceParameterStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
             return this;
         }
-
         public ReDrawBalanceParameterStatusByUserIdRequest WithFixedParameterNames(string[] fixedParameterNames) {
             this.FixedParameterNames = fixedParameterNames;
             return this;

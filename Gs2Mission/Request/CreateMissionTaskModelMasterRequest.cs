@@ -33,68 +33,57 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class CreateMissionTaskModelMasterRequest : Gs2Request<CreateMissionTaskModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string MissionGroupName { set; get; }
-        public string Name { set; get; }
-        public string Metadata { set; get; }
-        public string Description { set; get; }
-        public string CounterName { set; get; }
-        public string TargetResetType { set; get; }
-        public long? TargetValue { set; get; }
-        public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
-        public string ChallengePeriodEventId { set; get; }
-        public string PremiseMissionTaskName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string MissionGroupName { set; get; }
+         public string Name { set; get; }
+         public string Metadata { set; get; }
+         public string Description { set; get; }
+         public string CounterName { set; get; }
+         public string TargetResetType { set; get; }
+         public long? TargetValue { set; get; }
+         public Gs2.Core.Model.AcquireAction[] CompleteAcquireActions { set; get; }
+         public string ChallengePeriodEventId { set; get; }
+         public string PremiseMissionTaskName { set; get; }
         public CreateMissionTaskModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithTargetResetType(string targetResetType) {
             this.TargetResetType = targetResetType;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithTargetValue(long? targetValue) {
             this.TargetValue = targetValue;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithCompleteAcquireActions(Gs2.Core.Model.AcquireAction[] completeAcquireActions) {
             this.CompleteAcquireActions = completeAcquireActions;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
             this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
-
         public CreateMissionTaskModelMasterRequest WithPremiseMissionTaskName(string premiseMissionTaskName) {
             this.PremiseMissionTaskName = premiseMissionTaskName;
             return this;

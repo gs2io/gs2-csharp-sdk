@@ -33,26 +33,22 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class DescribeReceiveStatusesRequest : Gs2Request<DescribeReceiveStatusesRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeReceiveStatusesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeReceiveStatusesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeReceiveStatusesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeReceiveStatusesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,26 +33,22 @@ namespace Gs2.Gs2Account.Request
 	[System.Serializable]
 	public class DescribeTakeOversByUserIdRequest : Gs2Request<DescribeTakeOversByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeTakeOversByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeTakeOversByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DescribeTakeOversByUserIdRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeTakeOversByUserIdRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

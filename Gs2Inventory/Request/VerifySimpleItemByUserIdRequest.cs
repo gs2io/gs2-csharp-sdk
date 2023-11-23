@@ -33,39 +33,33 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifySimpleItemByUserIdRequest : Gs2Request<VerifySimpleItemByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string InventoryName { set; get; }
-        public string ItemName { set; get; }
-        public string VerifyType { set; get; }
-        public long? Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string InventoryName { set; get; }
+         public string ItemName { set; get; }
+         public string VerifyType { set; get; }
+         public long? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifySimpleItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifySimpleItemByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public VerifySimpleItemByUserIdRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public VerifySimpleItemByUserIdRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;
         }
-
         public VerifySimpleItemByUserIdRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
-
         public VerifySimpleItemByUserIdRequest WithCount(long? count) {
             this.Count = count;
             return this;

@@ -33,27 +33,23 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class ConsumeSimpleItemsByUserIdRequest : Gs2Request<ConsumeSimpleItemsByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string UserId { set; get; }
-        public Gs2.Gs2Inventory.Model.ConsumeCount[] ConsumeCounts { set; get; }
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string UserId { set; get; }
+         public Gs2.Gs2Inventory.Model.ConsumeCount[] ConsumeCounts { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ConsumeSimpleItemsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public ConsumeSimpleItemsByUserIdRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public ConsumeSimpleItemsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ConsumeSimpleItemsByUserIdRequest WithConsumeCounts(Gs2.Gs2Inventory.Model.ConsumeCount[] consumeCounts) {
             this.ConsumeCounts = consumeCounts;
             return this;

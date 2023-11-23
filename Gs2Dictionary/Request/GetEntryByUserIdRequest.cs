@@ -33,20 +33,17 @@ namespace Gs2.Gs2Dictionary.Request
 	[System.Serializable]
 	public class GetEntryByUserIdRequest : Gs2Request<GetEntryByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string EntryModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string EntryModelName { set; get; }
         public GetEntryByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetEntryByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetEntryByUserIdRequest WithEntryModelName(string entryModelName) {
             this.EntryModelName = entryModelName;
             return this;

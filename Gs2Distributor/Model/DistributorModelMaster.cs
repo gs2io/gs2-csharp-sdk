@@ -40,47 +40,38 @@ namespace Gs2.Gs2Distributor.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public DistributorModelMaster WithDistributorModelId(string distributorModelId) {
             this.DistributorModelId = distributorModelId;
             return this;
         }
-
         public DistributorModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public DistributorModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public DistributorModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public DistributorModelMaster WithInboxNamespaceId(string inboxNamespaceId) {
             this.InboxNamespaceId = inboxNamespaceId;
             return this;
         }
-
         public DistributorModelMaster WithWhiteListTargetIds(string[] whiteListTargetIds) {
             this.WhiteListTargetIds = whiteListTargetIds;
             return this;
         }
-
         public DistributorModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public DistributorModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public DistributorModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;

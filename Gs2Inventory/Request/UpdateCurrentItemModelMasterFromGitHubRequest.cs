@@ -33,14 +33,12 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class UpdateCurrentItemModelMasterFromGitHubRequest : Gs2Request<UpdateCurrentItemModelMasterFromGitHubRequest>
 	{
-        public string NamespaceName { set; get; }
-        public Gs2.Gs2Inventory.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public Gs2.Gs2Inventory.Model.GitHubCheckoutSetting CheckoutSetting { set; get; }
         public UpdateCurrentItemModelMasterFromGitHubRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentItemModelMasterFromGitHubRequest WithCheckoutSetting(Gs2.Gs2Inventory.Model.GitHubCheckoutSetting checkoutSetting) {
             this.CheckoutSetting = checkoutSetting;
             return this;

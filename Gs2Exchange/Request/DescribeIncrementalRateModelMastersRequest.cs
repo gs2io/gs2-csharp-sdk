@@ -33,20 +33,17 @@ namespace Gs2.Gs2Exchange.Request
 	[System.Serializable]
 	public class DescribeIncrementalRateModelMastersRequest : Gs2Request<DescribeIncrementalRateModelMastersRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeIncrementalRateModelMastersRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeIncrementalRateModelMastersRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeIncrementalRateModelMastersRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,21 +33,18 @@ namespace Gs2.Gs2Version.Request
 	[System.Serializable]
 	public class AcceptRequest : Gs2Request<AcceptRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string VersionName { set; get; }
-        public string AccessToken { set; get; }
+         public string NamespaceName { set; get; }
+         public string VersionName { set; get; }
+         public string AccessToken { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public AcceptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public AcceptRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
             return this;
         }
-
         public AcceptRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;

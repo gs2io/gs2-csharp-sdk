@@ -33,39 +33,33 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class SetFormWithSignatureRequest : Gs2Request<SetFormWithSignatureRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string MoldModelName { set; get; }
-        public int? Index { set; get; }
-        public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
-        public string KeyId { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string MoldModelName { set; get; }
+         public int? Index { set; get; }
+         public Gs2.Gs2Formation.Model.SlotWithSignature[] Slots { set; get; }
+         public string KeyId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SetFormWithSignatureRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SetFormWithSignatureRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public SetFormWithSignatureRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
             return this;
         }
-
         public SetFormWithSignatureRequest WithIndex(int? index) {
             this.Index = index;
             return this;
         }
-
         public SetFormWithSignatureRequest WithSlots(Gs2.Gs2Formation.Model.SlotWithSignature[] slots) {
             this.Slots = slots;
             return this;
         }
-
         public SetFormWithSignatureRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

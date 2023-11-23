@@ -41,52 +41,42 @@ namespace Gs2.Gs2LoginReward.Model
         public Gs2.Gs2LoginReward.Model.Reward[] Rewards { set; get; }
         public string MissedReceiveRelief { set; get; }
         public Gs2.Core.Model.ConsumeAction[] MissedReceiveReliefConsumeActions { set; get; }
-
         public BonusModel WithBonusModelId(string bonusModelId) {
             this.BonusModelId = bonusModelId;
             return this;
         }
-
         public BonusModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public BonusModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public BonusModel WithMode(string mode) {
             this.Mode = mode;
             return this;
         }
-
         public BonusModel WithPeriodEventId(string periodEventId) {
             this.PeriodEventId = periodEventId;
             return this;
         }
-
         public BonusModel WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
-
         public BonusModel WithRepeat(string repeat) {
             this.Repeat = repeat;
             return this;
         }
-
         public BonusModel WithRewards(Gs2.Gs2LoginReward.Model.Reward[] rewards) {
             this.Rewards = rewards;
             return this;
         }
-
         public BonusModel WithMissedReceiveRelief(string missedReceiveRelief) {
             this.MissedReceiveRelief = missedReceiveRelief;
             return this;
         }
-
         public BonusModel WithMissedReceiveReliefConsumeActions(Gs2.Core.Model.ConsumeAction[] missedReceiveReliefConsumeActions) {
             this.MissedReceiveReliefConsumeActions = missedReceiveReliefConsumeActions;
             return this;

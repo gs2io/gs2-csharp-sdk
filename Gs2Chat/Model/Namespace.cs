@@ -45,72 +45,58 @@ namespace Gs2.Gs2Chat.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Namespace WithNamespaceId(string namespaceId) {
             this.NamespaceId = namespaceId;
             return this;
         }
-
         public Namespace WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Namespace WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Namespace WithAllowCreateRoom(bool? allowCreateRoom) {
             this.AllowCreateRoom = allowCreateRoom;
             return this;
         }
-
         public Namespace WithPostMessageScript(Gs2.Gs2Chat.Model.ScriptSetting postMessageScript) {
             this.PostMessageScript = postMessageScript;
             return this;
         }
-
         public Namespace WithCreateRoomScript(Gs2.Gs2Chat.Model.ScriptSetting createRoomScript) {
             this.CreateRoomScript = createRoomScript;
             return this;
         }
-
         public Namespace WithDeleteRoomScript(Gs2.Gs2Chat.Model.ScriptSetting deleteRoomScript) {
             this.DeleteRoomScript = deleteRoomScript;
             return this;
         }
-
         public Namespace WithSubscribeRoomScript(Gs2.Gs2Chat.Model.ScriptSetting subscribeRoomScript) {
             this.SubscribeRoomScript = subscribeRoomScript;
             return this;
         }
-
         public Namespace WithUnsubscribeRoomScript(Gs2.Gs2Chat.Model.ScriptSetting unsubscribeRoomScript) {
             this.UnsubscribeRoomScript = unsubscribeRoomScript;
             return this;
         }
-
         public Namespace WithPostNotification(Gs2.Gs2Chat.Model.NotificationSetting postNotification) {
             this.PostNotification = postNotification;
             return this;
         }
-
         public Namespace WithLogSetting(Gs2.Gs2Chat.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
         }
-
         public Namespace WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Namespace WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Namespace WithRevision(long? revision) {
             this.Revision = revision;
             return this;

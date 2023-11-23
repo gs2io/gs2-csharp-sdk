@@ -34,17 +34,14 @@ namespace Gs2.Gs2Account.Model
         public string Name { set; get; }
         public string Reason { set; get; }
         public long? ReleaseTimestamp { set; get; }
-
         public BanStatus WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public BanStatus WithReason(string reason) {
             this.Reason = reason;
             return this;
         }
-
         public BanStatus WithReleaseTimestamp(long? releaseTimestamp) {
             this.ReleaseTimestamp = releaseTimestamp;
             return this;

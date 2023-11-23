@@ -33,39 +33,33 @@ namespace Gs2.Gs2Limit.Request
 	[System.Serializable]
 	public class VerifyCounterRequest : Gs2Request<VerifyCounterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string LimitName { set; get; }
-        public string CounterName { set; get; }
-        public string VerifyType { set; get; }
-        public int? Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string LimitName { set; get; }
+         public string CounterName { set; get; }
+         public string VerifyType { set; get; }
+         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyCounterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyCounterRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public VerifyCounterRequest WithLimitName(string limitName) {
             this.LimitName = limitName;
             return this;
         }
-
         public VerifyCounterRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;
         }
-
         public VerifyCounterRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
-
         public VerifyCounterRequest WithCount(int? count) {
             this.Count = count;
             return this;

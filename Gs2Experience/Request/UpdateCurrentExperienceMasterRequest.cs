@@ -33,14 +33,12 @@ namespace Gs2.Gs2Experience.Request
 	[System.Serializable]
 	public class UpdateCurrentExperienceMasterRequest : Gs2Request<UpdateCurrentExperienceMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Settings { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Settings { set; get; }
         public UpdateCurrentExperienceMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateCurrentExperienceMasterRequest WithSettings(string settings) {
             this.Settings = settings;
             return this;

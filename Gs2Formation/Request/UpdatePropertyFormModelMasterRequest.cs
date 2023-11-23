@@ -33,32 +33,27 @@ namespace Gs2.Gs2Formation.Request
 	[System.Serializable]
 	public class UpdatePropertyFormModelMasterRequest : Gs2Request<UpdatePropertyFormModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PropertyFormModelName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PropertyFormModelName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
         public UpdatePropertyFormModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdatePropertyFormModelMasterRequest WithPropertyFormModelName(string propertyFormModelName) {
             this.PropertyFormModelName = propertyFormModelName;
             return this;
         }
-
         public UpdatePropertyFormModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdatePropertyFormModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdatePropertyFormModelMasterRequest WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
             this.Slots = slots;
             return this;

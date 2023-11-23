@@ -33,27 +33,23 @@ namespace Gs2.Gs2Chat.Request
 	[System.Serializable]
 	public class SubscribeByUserIdRequest : Gs2Request<SubscribeByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string RoomName { set; get; }
-        public string UserId { set; get; }
-        public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
+         public string NamespaceName { set; get; }
+         public string RoomName { set; get; }
+         public string UserId { set; get; }
+         public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public SubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public SubscribeByUserIdRequest WithRoomName(string roomName) {
             this.RoomName = roomName;
             return this;
         }
-
         public SubscribeByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public SubscribeByUserIdRequest WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
             this.NotificationTypes = notificationTypes;
             return this;

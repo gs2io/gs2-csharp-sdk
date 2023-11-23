@@ -33,38 +33,32 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class UpdateNamespaceRequest : Gs2Request<UpdateNamespaceRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Description { set; get; }
-        public Gs2.Gs2SkillTree.Model.TransactionSetting TransactionSetting { set; get; }
-        public Gs2.Gs2SkillTree.Model.ScriptSetting ReleaseScript { set; get; }
-        public Gs2.Gs2SkillTree.Model.ScriptSetting RestrainScript { set; get; }
-        public Gs2.Gs2SkillTree.Model.LogSetting LogSetting { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string Description { set; get; }
+         public Gs2.Gs2SkillTree.Model.TransactionSetting TransactionSetting { set; get; }
+         public Gs2.Gs2SkillTree.Model.ScriptSetting ReleaseScript { set; get; }
+         public Gs2.Gs2SkillTree.Model.ScriptSetting RestrainScript { set; get; }
+         public Gs2.Gs2SkillTree.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2SkillTree.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public UpdateNamespaceRequest WithReleaseScript(Gs2.Gs2SkillTree.Model.ScriptSetting releaseScript) {
             this.ReleaseScript = releaseScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithRestrainScript(Gs2.Gs2SkillTree.Model.ScriptSetting restrainScript) {
             this.RestrainScript = restrainScript;
             return this;
         }
-
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2SkillTree.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;

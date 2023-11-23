@@ -70,7 +70,6 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                         UserId = accessToken.UserId,
                         Name = entryModelName,
                         AcquiredAt = UnixTime.ToUnixTime(DateTime.Now),
-                        Revision = 0
                     });
                 }
             }

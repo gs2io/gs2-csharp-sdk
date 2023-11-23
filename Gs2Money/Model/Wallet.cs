@@ -40,47 +40,38 @@ namespace Gs2.Gs2Money.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Wallet WithWalletId(string walletId) {
             this.WalletId = walletId;
             return this;
         }
-
         public Wallet WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Wallet WithSlot(int? slot) {
             this.Slot = slot;
             return this;
         }
-
         public Wallet WithPaid(int? paid) {
             this.Paid = paid;
             return this;
         }
-
         public Wallet WithFree(int? free) {
             this.Free = free;
             return this;
         }
-
         public Wallet WithDetail(Gs2.Gs2Money.Model.WalletDetail[] detail) {
             this.Detail = detail;
             return this;
         }
-
         public Wallet WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Wallet WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Wallet WithRevision(long? revision) {
             this.Revision = revision;
             return this;

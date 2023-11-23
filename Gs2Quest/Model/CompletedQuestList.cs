@@ -38,37 +38,30 @@ namespace Gs2.Gs2Quest.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public CompletedQuestList WithCompletedQuestListId(string completedQuestListId) {
             this.CompletedQuestListId = completedQuestListId;
             return this;
         }
-
         public CompletedQuestList WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public CompletedQuestList WithQuestGroupName(string questGroupName) {
             this.QuestGroupName = questGroupName;
             return this;
         }
-
         public CompletedQuestList WithCompleteQuestNames(string[] completeQuestNames) {
             this.CompleteQuestNames = completeQuestNames;
             return this;
         }
-
         public CompletedQuestList WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public CompletedQuestList WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public CompletedQuestList WithRevision(long? revision) {
             this.Revision = revision;
             return this;

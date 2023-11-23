@@ -33,21 +33,18 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class DeleteMessageByUserIdRequest : Gs2Request<DeleteMessageByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string MessageName { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string MessageName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteMessageByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DeleteMessageByUserIdRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;

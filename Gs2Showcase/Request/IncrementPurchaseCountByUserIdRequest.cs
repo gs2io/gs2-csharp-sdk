@@ -33,33 +33,28 @@ namespace Gs2.Gs2Showcase.Request
 	[System.Serializable]
 	public class IncrementPurchaseCountByUserIdRequest : Gs2Request<IncrementPurchaseCountByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string ShowcaseName { set; get; }
-        public string DisplayItemName { set; get; }
-        public string UserId { set; get; }
-        public int? Count { set; get; }
+         public string NamespaceName { set; get; }
+         public string ShowcaseName { set; get; }
+         public string DisplayItemName { set; get; }
+         public string UserId { set; get; }
+         public int? Count { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public IncrementPurchaseCountByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public IncrementPurchaseCountByUserIdRequest WithShowcaseName(string showcaseName) {
             this.ShowcaseName = showcaseName;
             return this;
         }
-
         public IncrementPurchaseCountByUserIdRequest WithDisplayItemName(string displayItemName) {
             this.DisplayItemName = displayItemName;
             return this;
         }
-
         public IncrementPurchaseCountByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public IncrementPurchaseCountByUserIdRequest WithCount(int? count) {
             this.Count = count;
             return this;

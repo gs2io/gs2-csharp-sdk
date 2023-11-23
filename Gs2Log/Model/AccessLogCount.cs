@@ -68,7 +68,7 @@ namespace Gs2.Gs2Log.Model
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)long.Parse(data["count"].ToString()));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)(data["count"].ToString().Contains(".") ? (long)double.Parse(data["count"].ToString()) : long.Parse(data["count"].ToString())));
         }
 
         public JsonData ToJson()
@@ -98,7 +98,7 @@ namespace Gs2.Gs2Log.Model
             }
             if (Count != null) {
                 writer.WritePropertyName("count");
-                writer.Write(long.Parse(Count.ToString()));
+                writer.Write((Count.ToString().Contains(".") ? (long)double.Parse(Count.ToString()) : long.Parse(Count.ToString())));
             }
             writer.WriteObjectEnd();
         }

@@ -33,20 +33,17 @@ namespace Gs2.Gs2LoginReward.Request
 	[System.Serializable]
 	public class GetReceiveStatusByUserIdRequest : Gs2Request<GetReceiveStatusByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string BonusModelName { set; get; }
-        public string UserId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string BonusModelName { set; get; }
+         public string UserId { set; get; }
         public GetReceiveStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetReceiveStatusByUserIdRequest WithBonusModelName(string bonusModelName) {
             this.BonusModelName = bonusModelName;
             return this;
         }
-
         public GetReceiveStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

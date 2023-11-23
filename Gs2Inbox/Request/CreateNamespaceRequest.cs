@@ -33,58 +33,63 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class CreateNamespaceRequest : Gs2Request<CreateNamespaceRequest>
 	{
-        public string Name { set; get; }
-        public string Description { set; get; }
-        public bool? IsAutomaticDeletingEnabled { set; get; }
-        public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; }
-        public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; }
-        public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; }
-        public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
-        public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; }
-        public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
-
+         public string Name { set; get; }
+         public string Description { set; get; }
+         public bool? IsAutomaticDeletingEnabled { set; get; }
+         public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; }
+         public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; }
+         public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; }
+         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
+         public Gs2.Gs2Inbox.Model.NotificationSetting ReceiveNotification { set; get; }
+         public Gs2.Gs2Inbox.Model.LogSetting LogSetting { set; get; }
+        [Obsolete("This method is deprecated")]
+         public string QueueNamespaceId { set; get; }
+        [Obsolete("This method is deprecated")]
+         public string KeyId { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateNamespaceRequest WithIsAutomaticDeletingEnabled(bool? isAutomaticDeletingEnabled) {
             this.IsAutomaticDeletingEnabled = isAutomaticDeletingEnabled;
             return this;
         }
-
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
             return this;
         }
-
         public CreateNamespaceRequest WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
             this.ReceiveMessageScript = receiveMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithReadMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting readMessageScript) {
             this.ReadMessageScript = readMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithDeleteMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting deleteMessageScript) {
             this.DeleteMessageScript = deleteMessageScript;
             return this;
         }
-
         public CreateNamespaceRequest WithReceiveNotification(Gs2.Gs2Inbox.Model.NotificationSetting receiveNotification) {
             this.ReceiveNotification = receiveNotification;
             return this;
         }
-
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Inbox.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public CreateNamespaceRequest WithQueueNamespaceId(string queueNamespaceId) {
+            this.QueueNamespaceId = queueNamespaceId;
+            return this;
+        }
+        [Obsolete("This method is deprecated")]
+        public CreateNamespaceRequest WithKeyId(string keyId) {
+            this.KeyId = keyId;
             return this;
         }
 
@@ -155,6 +160,14 @@ namespace Gs2.Gs2Inbox.Request
             }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
+            }
+            if (QueueNamespaceId != null) {
+                writer.WritePropertyName("queueNamespaceId");
+                writer.Write(QueueNamespaceId.ToString());
+            }
+            if (KeyId != null) {
+                writer.WritePropertyName("keyId");
+                writer.Write(KeyId.ToString());
             }
             writer.WriteObjectEnd();
         }

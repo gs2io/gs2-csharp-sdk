@@ -33,14 +33,12 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class GetCounterModelRequest : Gs2Request<GetCounterModelRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CounterName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CounterName { set; get; }
         public GetCounterModelRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetCounterModelRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

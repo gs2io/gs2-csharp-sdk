@@ -33,74 +33,62 @@ namespace Gs2.Gs2Stamina.Request
 	[System.Serializable]
 	public class UpdateStaminaModelMasterRequest : Gs2Request<UpdateStaminaModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string StaminaName { set; get; }
-        public string Description { set; get; }
-        public string Metadata { set; get; }
-        public int? RecoverIntervalMinutes { set; get; }
-        public int? RecoverValue { set; get; }
-        public int? InitialCapacity { set; get; }
-        public bool? IsOverflow { set; get; }
-        public int? MaxCapacity { set; get; }
-        public string MaxStaminaTableName { set; get; }
-        public string RecoverIntervalTableName { set; get; }
-        public string RecoverValueTableName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string StaminaName { set; get; }
+         public string Description { set; get; }
+         public string Metadata { set; get; }
+         public int? RecoverIntervalMinutes { set; get; }
+         public int? RecoverValue { set; get; }
+         public int? InitialCapacity { set; get; }
+         public bool? IsOverflow { set; get; }
+         public int? MaxCapacity { set; get; }
+         public string MaxStaminaTableName { set; get; }
+         public string RecoverIntervalTableName { set; get; }
+         public string RecoverValueTableName { set; get; }
         public UpdateStaminaModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithStaminaName(string staminaName) {
             this.StaminaName = staminaName;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithRecoverIntervalMinutes(int? recoverIntervalMinutes) {
             this.RecoverIntervalMinutes = recoverIntervalMinutes;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithRecoverValue(int? recoverValue) {
             this.RecoverValue = recoverValue;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithInitialCapacity(int? initialCapacity) {
             this.InitialCapacity = initialCapacity;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithIsOverflow(bool? isOverflow) {
             this.IsOverflow = isOverflow;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithMaxCapacity(int? maxCapacity) {
             this.MaxCapacity = maxCapacity;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithMaxStaminaTableName(string maxStaminaTableName) {
             this.MaxStaminaTableName = maxStaminaTableName;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithRecoverIntervalTableName(string recoverIntervalTableName) {
             this.RecoverIntervalTableName = recoverIntervalTableName;
             return this;
         }
-
         public UpdateStaminaModelMasterRequest WithRecoverValueTableName(string recoverValueTableName) {
             this.RecoverValueTableName = recoverValueTableName;
             return this;

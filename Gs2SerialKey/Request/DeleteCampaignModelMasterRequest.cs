@@ -33,14 +33,12 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class DeleteCampaignModelMasterRequest : Gs2Request<DeleteCampaignModelMasterRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CampaignModelName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CampaignModelName { set; get; }
         public DeleteCampaignModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteCampaignModelMasterRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;

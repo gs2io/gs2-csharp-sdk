@@ -33,32 +33,27 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class DescribeFollowsRequest : Gs2Request<DescribeFollowsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public bool? WithProfile { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public bool? WithProfile { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeFollowsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeFollowsRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public DescribeFollowsRequest WithWithProfile(bool? withProfile) {
             this.WithProfile = withProfile;
             return this;
         }
-
         public DescribeFollowsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeFollowsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

@@ -33,20 +33,17 @@ namespace Gs2.Gs2Friend.Request
 	[System.Serializable]
 	public class GetReceiveRequestRequest : Gs2Request<GetReceiveRequestRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string FromUserId { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string FromUserId { set; get; }
         public GetReceiveRequestRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetReceiveRequestRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public GetReceiveRequestRequest WithFromUserId(string fromUserId) {
             this.FromUserId = fromUserId;
             return this;

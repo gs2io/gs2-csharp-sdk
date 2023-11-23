@@ -33,14 +33,12 @@ namespace Gs2.Gs2Identifier.Request
 	[System.Serializable]
 	public class LoginByUserRequest : Gs2Request<LoginByUserRequest>
 	{
-        public string UserName { set; get; }
-        public string Password { set; get; }
-
+         public string UserName { set; get; }
+         public string Password { set; get; }
         public LoginByUserRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public LoginByUserRequest WithPassword(string password) {
             this.Password = password;
             return this;

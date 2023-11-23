@@ -33,20 +33,17 @@ namespace Gs2.Gs2SerialKey.Request
 	[System.Serializable]
 	public class GetIssueJobRequest : Gs2Request<GetIssueJobRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string CampaignModelName { set; get; }
-        public string IssueJobName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string CampaignModelName { set; get; }
+         public string IssueJobName { set; get; }
         public GetIssueJobRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetIssueJobRequest WithCampaignModelName(string campaignModelName) {
             this.CampaignModelName = campaignModelName;
             return this;
         }
-
         public GetIssueJobRequest WithIssueJobName(string issueJobName) {
             this.IssueJobName = issueJobName;
             return this;

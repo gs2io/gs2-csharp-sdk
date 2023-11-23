@@ -33,20 +33,17 @@ namespace Gs2.Gs2Inbox.Request
 	[System.Serializable]
 	public class GetMessageByUserIdRequest : Gs2Request<GetMessageByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string MessageName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string MessageName { set; get; }
         public GetMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetMessageByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetMessageByUserIdRequest WithMessageName(string messageName) {
             this.MessageName = messageName;
             return this;

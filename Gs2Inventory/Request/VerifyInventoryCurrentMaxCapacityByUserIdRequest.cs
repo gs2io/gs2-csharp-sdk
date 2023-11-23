@@ -33,33 +33,28 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class VerifyInventoryCurrentMaxCapacityByUserIdRequest : Gs2Request<VerifyInventoryCurrentMaxCapacityByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string InventoryName { set; get; }
-        public string VerifyType { set; get; }
-        public int? CurrentInventoryMaxCapacity { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string InventoryName { set; get; }
+         public string VerifyType { set; get; }
+         public int? CurrentInventoryMaxCapacity { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithVerifyType(string verifyType) {
             this.VerifyType = verifyType;
             return this;
         }
-
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithCurrentInventoryMaxCapacity(int? currentInventoryMaxCapacity) {
             this.CurrentInventoryMaxCapacity = currentInventoryMaxCapacity;
             return this;

@@ -33,26 +33,22 @@ namespace Gs2.Gs2Inventory.Request
 	[System.Serializable]
 	public class GetSimpleItemByUserIdRequest : Gs2Request<GetSimpleItemByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string InventoryName { set; get; }
-        public string UserId { set; get; }
-        public string ItemName { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string InventoryName { set; get; }
+         public string UserId { set; get; }
+         public string ItemName { set; get; }
         public GetSimpleItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public GetSimpleItemByUserIdRequest WithInventoryName(string inventoryName) {
             this.InventoryName = inventoryName;
             return this;
         }
-
         public GetSimpleItemByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public GetSimpleItemByUserIdRequest WithItemName(string itemName) {
             this.ItemName = itemName;
             return this;

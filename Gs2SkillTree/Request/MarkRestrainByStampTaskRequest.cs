@@ -33,14 +33,12 @@ namespace Gs2.Gs2SkillTree.Request
 	[System.Serializable]
 	public class MarkRestrainByStampTaskRequest : Gs2Request<MarkRestrainByStampTaskRequest>
 	{
-        public string StampTask { set; get; }
-        public string KeyId { set; get; }
-
+         public string StampTask { set; get; }
+         public string KeyId { set; get; }
         public MarkRestrainByStampTaskRequest WithStampTask(string stampTask) {
             this.StampTask = stampTask;
             return this;
         }
-
         public MarkRestrainByStampTaskRequest WithKeyId(string keyId) {
             this.KeyId = keyId;
             return this;

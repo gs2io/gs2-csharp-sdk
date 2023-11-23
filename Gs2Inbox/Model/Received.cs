@@ -37,32 +37,26 @@ namespace Gs2.Gs2Inbox.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Received WithReceivedId(string receivedId) {
             this.ReceivedId = receivedId;
             return this;
         }
-
         public Received WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Received WithReceivedGlobalMessageNames(string[] receivedGlobalMessageNames) {
             this.ReceivedGlobalMessageNames = receivedGlobalMessageNames;
             return this;
         }
-
         public Received WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Received WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Received WithRevision(long? revision) {
             this.Revision = revision;
             return this;

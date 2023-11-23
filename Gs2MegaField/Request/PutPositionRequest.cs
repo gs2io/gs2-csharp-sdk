@@ -33,45 +33,38 @@ namespace Gs2.Gs2MegaField.Request
 	[System.Serializable]
 	public class PutPositionRequest : Gs2Request<PutPositionRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string AccessToken { set; get; }
-        public string AreaModelName { set; get; }
-        public string LayerModelName { set; get; }
-        public Gs2.Gs2MegaField.Model.Position Position { set; get; }
-        public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
-        public float? R { set; get; }
+         public string NamespaceName { set; get; }
+         public string AccessToken { set; get; }
+         public string AreaModelName { set; get; }
+         public string LayerModelName { set; get; }
+         public Gs2.Gs2MegaField.Model.Position Position { set; get; }
+         public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
+         public float? R { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public PutPositionRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public PutPositionRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-
         public PutPositionRequest WithAreaModelName(string areaModelName) {
             this.AreaModelName = areaModelName;
             return this;
         }
-
         public PutPositionRequest WithLayerModelName(string layerModelName) {
             this.LayerModelName = layerModelName;
             return this;
         }
-
         public PutPositionRequest WithPosition(Gs2.Gs2MegaField.Model.Position position) {
             this.Position = position;
             return this;
         }
-
         public PutPositionRequest WithVector(Gs2.Gs2MegaField.Model.Vector vector) {
             this.Vector = vector;
             return this;
         }
-
         public PutPositionRequest WithR(float? r) {
             this.R = r;
             return this;

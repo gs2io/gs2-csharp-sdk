@@ -39,42 +39,34 @@ namespace Gs2.Gs2Friend.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Profile WithProfileId(string profileId) {
             this.ProfileId = profileId;
             return this;
         }
-
         public Profile WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public Profile WithPublicProfile(string publicProfile) {
             this.PublicProfile = publicProfile;
             return this;
         }
-
         public Profile WithFollowerProfile(string followerProfile) {
             this.FollowerProfile = followerProfile;
             return this;
         }
-
         public Profile WithFriendProfile(string friendProfile) {
             this.FriendProfile = friendProfile;
             return this;
         }
-
         public Profile WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Profile WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Profile WithRevision(long? revision) {
             this.Revision = revision;
             return this;

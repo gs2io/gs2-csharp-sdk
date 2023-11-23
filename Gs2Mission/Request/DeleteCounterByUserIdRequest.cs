@@ -33,21 +33,18 @@ namespace Gs2.Gs2Mission.Request
 	[System.Serializable]
 	public class DeleteCounterByUserIdRequest : Gs2Request<DeleteCounterByUserIdRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string UserId { set; get; }
-        public string CounterName { set; get; }
+         public string NamespaceName { set; get; }
+         public string UserId { set; get; }
+         public string CounterName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DeleteCounterByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DeleteCounterByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public DeleteCounterByUserIdRequest WithCounterName(string counterName) {
             this.CounterName = counterName;
             return this;

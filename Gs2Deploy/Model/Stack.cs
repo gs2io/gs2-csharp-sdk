@@ -39,42 +39,34 @@ namespace Gs2.Gs2Deploy.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Stack WithStackId(string stackId) {
             this.StackId = stackId;
             return this;
         }
-
         public Stack WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Stack WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Stack WithTemplate(string template) {
             this.Template = template;
             return this;
         }
-
         public Stack WithStatus(string status) {
             this.Status = status;
             return this;
         }
-
         public Stack WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Stack WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public Stack WithRevision(long? revision) {
             this.Revision = revision;
             return this;

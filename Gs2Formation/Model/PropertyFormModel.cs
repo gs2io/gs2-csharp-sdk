@@ -35,22 +35,18 @@ namespace Gs2.Gs2Formation.Model
         public string Name { set; get; }
         public string Metadata { set; get; }
         public Gs2.Gs2Formation.Model.SlotModel[] Slots { set; get; }
-
         public PropertyFormModel WithPropertyFormModelId(string propertyFormModelId) {
             this.PropertyFormModelId = propertyFormModelId;
             return this;
         }
-
         public PropertyFormModel WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public PropertyFormModel WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public PropertyFormModel WithSlots(Gs2.Gs2Formation.Model.SlotModel[] slots) {
             this.Slots = slots;
             return this;

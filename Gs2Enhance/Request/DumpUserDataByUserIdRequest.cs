@@ -33,9 +33,8 @@ namespace Gs2.Gs2Enhance.Request
 	[System.Serializable]
 	public class DumpUserDataByUserIdRequest : Gs2Request<DumpUserDataByUserIdRequest>
 	{
-        public string UserId { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public DumpUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;

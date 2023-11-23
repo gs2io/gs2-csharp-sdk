@@ -43,62 +43,50 @@ namespace Gs2.Gs2Mission.Model
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
-
         public MissionGroupModelMaster WithMissionGroupId(string missionGroupId) {
             this.MissionGroupId = missionGroupId;
             return this;
         }
-
         public MissionGroupModelMaster WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public MissionGroupModelMaster WithMetadata(string metadata) {
             this.Metadata = metadata;
             return this;
         }
-
         public MissionGroupModelMaster WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public MissionGroupModelMaster WithResetType(string resetType) {
             this.ResetType = resetType;
             return this;
         }
-
         public MissionGroupModelMaster WithResetDayOfMonth(int? resetDayOfMonth) {
             this.ResetDayOfMonth = resetDayOfMonth;
             return this;
         }
-
         public MissionGroupModelMaster WithResetDayOfWeek(string resetDayOfWeek) {
             this.ResetDayOfWeek = resetDayOfWeek;
             return this;
         }
-
         public MissionGroupModelMaster WithResetHour(int? resetHour) {
             this.ResetHour = resetHour;
             return this;
         }
-
         public MissionGroupModelMaster WithCompleteNotificationNamespaceId(string completeNotificationNamespaceId) {
             this.CompleteNotificationNamespaceId = completeNotificationNamespaceId;
             return this;
         }
-
         public MissionGroupModelMaster WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public MissionGroupModelMaster WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
         }
-
         public MissionGroupModelMaster WithRevision(long? revision) {
             this.Revision = revision;
             return this;
