@@ -103,7 +103,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -115,7 +114,7 @@ namespace Gs2.Gs2JobQueue.Domain
                         var key = Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -148,7 +147,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -160,7 +158,7 @@ namespace Gs2.Gs2JobQueue.Domain
                     var key = Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -205,7 +203,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -231,7 +228,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -269,7 +265,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -296,7 +291,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -335,7 +329,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -361,7 +354,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -399,7 +391,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -425,7 +416,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -463,7 +453,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -491,7 +480,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -531,7 +519,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -557,7 +544,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -595,7 +581,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -622,7 +607,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -705,8 +689,7 @@ namespace Gs2.Gs2JobQueue.Domain
         public static Action<string, PushByUserIdRequest, PushByUserIdResult> PushByUserIdComplete;
     #endif
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -726,13 +709,17 @@ namespace Gs2.Gs2JobQueue.Domain
                                 var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                                     item.Name.ToString()
                                 );
-                                cache.Put(
+                                _gs2.Cache.Put(
                                     parentKey,
                                     key,
                                     item,
                                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                                 );
                             }
+                        }
+
+                        if (!resultModel.AutoRun ?? false) {
+                            this._gs2.PushJobQueue(requestModel.NamespaceName);
                         }
 
                         PushByUserIdComplete?.Invoke(
@@ -751,8 +738,7 @@ namespace Gs2.Gs2JobQueue.Domain
         public static Action<string, DeleteJobByUserIdRequest, DeleteJobByUserIdResult> DeleteJobByUserIdComplete;
     #endif
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -772,7 +758,7 @@ namespace Gs2.Gs2JobQueue.Domain
                             var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
                             );
-                            cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                            _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
                         }
 
                         DeleteJobByUserIdComplete?.Invoke(
@@ -785,8 +771,7 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
@@ -805,7 +790,7 @@ namespace Gs2.Gs2JobQueue.Domain
                             var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                                 item.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 item,
@@ -881,8 +866,7 @@ namespace Gs2.Gs2JobQueue.Domain
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public static Gs2Future DispatchFuture(
-            Gs2.Core.Domain.Gs2 gs2,
+        public Gs2Future DispatchFuture(
             AccessToken accessToken
         )
         {
@@ -902,7 +886,7 @@ namespace Gs2.Gs2JobQueue.Domain
                 foreach (var completedJob in copiedCompletedJobs)
                 {
                     var client = new Gs2JobQueueRestClient(
-                        gs2.RestSession
+                        _gs2.RestSession
                     );
                     var future = client.GetJobResultFuture(
                         new GetJobResultRequest()
@@ -919,8 +903,21 @@ namespace Gs2.Gs2JobQueue.Domain
                     var result = future.Result;
                     if (result != null)
                     {
-                        Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
-                            gs2.Cache,
+                        this._gs2.Cache.Put(
+                            global::Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                                completedJob.NamespaceName,
+                                accessToken.UserId,
+                                Job.GetJobNameFromGrn(result.Item.JobId),
+                                "JobResult"
+                            ),
+                            global::Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                                result.Item.TryNumber?.ToString()
+                            ),
+                            result.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * global::Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        _gs2.UpdateCacheFromJobResult(
                             new Job
                             {
                                 ScriptId = result?.Item.ScriptId,
@@ -944,11 +941,10 @@ namespace Gs2.Gs2JobQueue.Domain
         
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask DispatchAsync(
+        public async UniTask DispatchAsync(
     #else
-        public static async Task DispatchAsync(
+        public async Task DispatchAsync(
     #endif
-            Gs2.Core.Domain.Gs2 gs2,
             AccessToken accessToken
         )
         {
@@ -966,7 +962,7 @@ namespace Gs2.Gs2JobQueue.Domain
             foreach (var completedJob in copiedCompletedJobs)
             {
                 var client = new Gs2JobQueueRestClient(
-                    gs2.RestSession
+                    _gs2.RestSession
                 );
                 GetJobResultResult result = null;
                 try
@@ -983,8 +979,21 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
                 if (result != null)
                 {
-                    Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
-                        gs2.Cache,
+                    this._gs2.Cache.Put(
+                        global::Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                            completedJob.NamespaceName,
+                            accessToken.UserId,
+                            Job.GetJobNameFromGrn(result.Item.JobId),
+                            "JobResult"
+                        ),
+                        global::Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                            result.Item.TryNumber?.ToString()
+                        ),
+                        result.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * global::Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+
+                    _gs2.UpdateCacheFromJobResult(
                         new Job
                         {
                             ScriptId = result?.Item.ScriptId,

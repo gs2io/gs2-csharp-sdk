@@ -118,7 +118,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -130,7 +129,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -165,7 +164,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -177,7 +175,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -224,7 +222,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -236,7 +233,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -272,7 +269,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -284,7 +280,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -332,7 +328,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -344,13 +339,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
-                        cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                        _gs2.Cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                             Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
                                 this.NamespaceName?.ToString(),
                                 this.UserId?.ToString(),
@@ -387,7 +382,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -399,13 +393,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
-                    cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObjectHistory>(
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Datastore.Model.DataObjectHistory>(
                         Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
                             this.UserId?.ToString(),
@@ -454,7 +448,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -466,7 +459,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -501,7 +494,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -513,7 +505,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -560,7 +552,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -572,7 +563,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -609,7 +600,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -621,7 +611,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -670,7 +660,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -682,7 +671,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                         var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -719,7 +708,6 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -731,7 +719,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     var key = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,

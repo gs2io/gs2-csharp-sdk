@@ -99,7 +99,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -111,7 +110,7 @@ namespace Gs2.Gs2Schedule.Domain
                         var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -144,7 +143,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -156,7 +154,7 @@ namespace Gs2.Gs2Schedule.Domain
                     var key = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -201,7 +199,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -227,7 +224,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -265,7 +261,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -292,7 +287,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -331,7 +325,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -357,7 +350,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -395,7 +387,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -421,7 +412,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -459,7 +449,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -487,7 +476,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -527,7 +515,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -553,7 +540,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -591,7 +577,6 @@ namespace Gs2.Gs2Schedule.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -618,7 +603,6 @@ namespace Gs2.Gs2Schedule.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -701,8 +685,7 @@ namespace Gs2.Gs2Schedule.Domain
         public static Action<string, TriggerByUserIdRequest, TriggerByUserIdResult> TriggerByUserIdComplete;
     #endif
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -722,13 +705,13 @@ namespace Gs2.Gs2Schedule.Domain
                             var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
-                            cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
+                            _gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
                                 parentKey.Replace("Trigger", "Event")
                             );
                         }
@@ -749,8 +732,7 @@ namespace Gs2.Gs2Schedule.Domain
         public static Action<string, DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult> DeleteTriggerByUserIdComplete;
     #endif
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -770,7 +752,7 @@ namespace Gs2.Gs2Schedule.Domain
                             var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                                 resultModel.Item.Name.ToString()
                             );
-                            cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(parentKey, key);
+                            _gs2.Cache.Delete<Gs2.Gs2Schedule.Model.Trigger>(parentKey, key);
                         }
 
                         DeleteTriggerByUserIdComplete?.Invoke(
@@ -783,8 +765,7 @@ namespace Gs2.Gs2Schedule.Domain
                 }
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
@@ -803,13 +784,13 @@ namespace Gs2.Gs2Schedule.Domain
                         var key = Gs2.Gs2Schedule.Domain.Model.TriggerDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
-                        cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
+                        _gs2.Cache.ClearListCache<Gs2.Gs2Schedule.Model.Event>(
                             parentKey.Replace("Trigger", "Event")
                         );
                     }

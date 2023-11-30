@@ -143,7 +143,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -156,7 +155,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             resultModel.Item.Index.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -172,7 +171,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                             resultModel.Mold.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Mold,
@@ -187,7 +186,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                             resultModel.MoldModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.MoldModel,
@@ -202,7 +201,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         );
                         var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.FormModel,
@@ -253,7 +252,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -266,7 +264,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                         resultModel.Item.Index.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -282,7 +280,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                         resultModel.Mold.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Mold,
@@ -297,7 +295,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                         resultModel.MoldModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.MoldModel,
@@ -312,7 +310,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.FormModel,
@@ -368,7 +366,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -381,7 +378,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             resultModel.Item.Index.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -397,7 +394,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                             resultModel.Mold.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Mold,
@@ -412,7 +409,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                             resultModel.MoldModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.MoldModel,
@@ -427,7 +424,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         );
                         var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.FormModel,
@@ -482,7 +479,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -495,7 +491,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                         resultModel.Item.Index.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -511,7 +507,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                         resultModel.Mold.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Mold,
@@ -526,7 +522,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                         resultModel.MoldModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.MoldModel,
@@ -541,7 +537,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.FormModel,
@@ -591,7 +587,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -604,7 +599,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             resultModel.Item.Index.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -620,7 +615,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                             resultModel.Mold.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Mold,
@@ -635,7 +630,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                             resultModel.MoldModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.MoldModel,
@@ -650,7 +645,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         );
                         var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.FormModel,
@@ -686,7 +681,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -699,7 +693,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                         resultModel.Item.Index.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -715,7 +709,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                         resultModel.Mold.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Mold,
@@ -730,7 +724,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                         resultModel.MoldModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.MoldModel,
@@ -745,7 +739,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.FormModel,
@@ -812,7 +806,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -825,7 +818,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                             resultModel.Item.Index.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Formation.Model.Form>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.Form>(parentKey, key);
                     }
                     if (resultModel.Mold != null) {
                         var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -836,7 +829,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                             resultModel.Mold.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Formation.Model.Mold>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.Mold>(parentKey, key);
                     }
                     if (resultModel.MoldModel != null) {
                         var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -846,7 +839,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                             resultModel.MoldModel.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(parentKey, key);
                     }
                     if (resultModel.FormModel != null) {
                         var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
@@ -856,7 +849,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         );
                         var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                         );
-                        cache.Delete<Gs2.Gs2Formation.Model.FormModel>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.FormModel>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -904,7 +897,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -917,7 +909,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
                         resultModel.Item.Index.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Formation.Model.Form>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.Form>(parentKey, key);
                 }
                 if (resultModel.Mold != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -928,7 +920,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldDomain.CreateCacheKey(
                         resultModel.Mold.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Formation.Model.Mold>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.Mold>(parentKey, key);
                 }
                 if (resultModel.MoldModel != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -938,7 +930,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheKey(
                         resultModel.MoldModel.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.MoldModel>(parentKey, key);
                 }
                 if (resultModel.FormModel != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.MoldModelDomain.CreateCacheParentKey(
@@ -948,7 +940,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     );
                     var key = Gs2.Gs2Formation.Domain.Model.FormModelDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Formation.Model.FormModel>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.FormModel>(parentKey, key);
                 }
             }
                 var domain = this;

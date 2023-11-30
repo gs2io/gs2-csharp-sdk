@@ -222,7 +222,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -234,7 +233,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -273,7 +272,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -285,7 +283,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -336,7 +334,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -348,7 +345,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                             var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                                 item.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 item,
@@ -356,7 +353,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                             );
                         }
                     }
-                    cache.Delete<Gs2.Gs2Inbox.Model.Received>(
+                    _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Received>(
                         Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
                             this.UserId?.ToString(),
@@ -414,7 +411,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -426,7 +422,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             item,
@@ -434,7 +430,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         );
                     }
                 }
-                cache.Delete<Gs2.Gs2Inbox.Model.Received>(
+                _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Received>(
                     Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),

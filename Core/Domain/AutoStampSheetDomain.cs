@@ -34,7 +34,7 @@ namespace Gs2.Core.Domain
             {
                 this._gs2.Cache.Delete<StampSheetResult>(
                     UserDomain.CreateCacheParentKey(
-                        this._gs2.StampSheetConfiguration.NamespaceName,
+                        this._gs2.TransactionConfiguration.NamespaceName,
                         this._userId,
                         "StampSheetResult"
                     ),
@@ -43,7 +43,7 @@ namespace Gs2.Core.Domain
                     )
                 );
                 var future = this._gs2.Distributor.Namespace(
-                    this._gs2.StampSheetConfiguration.NamespaceName
+                    this._gs2.TransactionConfiguration.NamespaceName
                 ).User(
                     this._userId
                 ).StampSheetResult(
@@ -60,7 +60,7 @@ namespace Gs2.Core.Domain
                     for (var i = 0; i < result.TaskRequests.Length; i++) {
                         var stampTask = result.TaskRequests[i];
                         if (i < result.TaskResults.Length) {
-                            this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                            this._gs2.TransactionConfiguration.StampTaskEventHandler.Invoke(
                                 this._gs2.Cache,
                                 this._transactionId + "[" + i + "]",
                                 stampTask.Action,
@@ -71,7 +71,7 @@ namespace Gs2.Core.Domain
                     }
                 }
 
-                this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                this._gs2.TransactionConfiguration.StampSheetEventHandler.Invoke(
                     this._gs2.Cache,
                     this._transactionId,
                     result.SheetRequest.Action,
@@ -85,8 +85,7 @@ namespace Gs2.Core.Domain
                     var autoRun = jobResult?.AutoRun;
                     if (autoRun != null && !autoRun.Value)
                     {
-                        Gs2.PushJobQueue(
-                            this._gs2.JobQueueDomain,
+                        this._gs2.PushJobQueue(
                             requestJson["namespaceName"].ToString()
                         );
                     }
@@ -105,7 +104,7 @@ namespace Gs2.Core.Domain
         {
             this._gs2.Cache.Delete<StampSheetResult>(
                 UserDomain.CreateCacheParentKey(
-                    this._gs2.StampSheetConfiguration.NamespaceName,
+                    this._gs2.TransactionConfiguration.NamespaceName,
                     this._userId,
                     "StampSheetResult"
                 ),
@@ -114,7 +113,7 @@ namespace Gs2.Core.Domain
                 )
             );
             var result = await this._gs2.Distributor.Namespace(
-                this._gs2.StampSheetConfiguration.NamespaceName
+                this._gs2.TransactionConfiguration.NamespaceName
             ).User(
                 this._userId
             ).StampSheetResult(
@@ -125,7 +124,7 @@ namespace Gs2.Core.Domain
                     for (var i = 0; i < result.TaskRequests.Length; i++) {
                         var stampTask = result.TaskRequests[i];
                         if (i < result.TaskResults.Length) {
-                            this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                            this._gs2.TransactionConfiguration.StampTaskEventHandler.Invoke(
                                 this._gs2.Cache,
                                 this._transactionId + "[" + i + "]",
                                 stampTask.Action,
@@ -136,7 +135,7 @@ namespace Gs2.Core.Domain
                     }
                 }
 
-                this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                this._gs2.TransactionConfiguration.StampSheetEventHandler.Invoke(
                     this._gs2.Cache,
                     this._transactionId,
                     result.SheetRequest.Action,
@@ -149,8 +148,7 @@ namespace Gs2.Core.Domain
                     var jobResult = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
                     var autoRun = jobResult?.AutoRun;
                     if (autoRun != null && !autoRun.Value) {
-                        Gs2.PushJobQueue(
-                            this._gs2.JobQueueDomain,
+                        this._gs2.PushJobQueue(
                             requestJson["namespaceName"].ToString()
                         );
                     }

@@ -166,7 +166,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -212,7 +211,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -272,7 +270,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -284,7 +281,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                         var key = Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -332,7 +329,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -344,7 +340,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                     var key = Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -378,7 +374,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -390,7 +385,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                         var key = Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -423,7 +418,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -435,7 +429,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                     var key = Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -499,7 +493,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -511,7 +504,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                         var key = Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Lock.Model.Namespace>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Lock.Model.Namespace>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -556,7 +549,6 @@ namespace Gs2.Gs2Lock.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -568,7 +560,7 @@ namespace Gs2.Gs2Lock.Domain.Model
                     var key = Gs2.Gs2Lock.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Lock.Model.Namespace>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Lock.Model.Namespace>(parentKey, key);
                 }
             }
                 var domain = this;

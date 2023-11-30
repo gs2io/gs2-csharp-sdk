@@ -144,7 +144,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -157,7 +156,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             resultModel.Item.Name.ToString(),
                             requestModel.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -172,7 +171,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                             resultModel.PropertyFormModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.PropertyFormModel,
@@ -224,7 +223,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -237,7 +235,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         resultModel.Item.Name.ToString(),
                         requestModel.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -252,7 +250,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                         resultModel.PropertyFormModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.PropertyFormModel,
@@ -309,7 +307,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -322,7 +319,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             resultModel.Item.Name.ToString(),
                             requestModel.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -337,7 +334,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                             resultModel.PropertyFormModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.PropertyFormModel,
@@ -393,7 +390,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -406,7 +402,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         resultModel.Item.Name.ToString(),
                         requestModel.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -421,7 +417,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                         resultModel.PropertyFormModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.PropertyFormModel,
@@ -471,7 +467,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -484,7 +479,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             resultModel.Item.Name.ToString(),
                             requestModel.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -499,7 +494,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                             resultModel.ProeprtyFormModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.ProeprtyFormModel,
@@ -535,7 +530,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -548,7 +542,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         resultModel.Item.Name.ToString(),
                         requestModel.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -563,7 +557,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                         resultModel.ProeprtyFormModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.ProeprtyFormModel,
@@ -631,7 +625,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -644,7 +637,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             resultModel.Item.Name.ToString(),
                             requestModel.PropertyId.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
                     }
                     if (resultModel.PropertyFormModel != null) {
                         var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -654,7 +647,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                             resultModel.PropertyFormModel.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -703,7 +696,6 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -716,7 +708,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                         resultModel.Item.Name.ToString(),
                         requestModel.PropertyId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
                 }
                 if (resultModel.PropertyFormModel != null) {
                     var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -726,7 +718,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                     var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
                         resultModel.PropertyFormModel.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(parentKey, key);
                 }
             }
                 var domain = this;

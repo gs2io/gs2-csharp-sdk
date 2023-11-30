@@ -136,7 +136,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -148,7 +147,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -198,7 +197,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -210,7 +208,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,

@@ -115,7 +115,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -127,12 +126,11 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                         var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
                     }
                 }
                 if (result?.Item != null) {
-                    Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
-                        this._gs2.Cache,
+                    this._gs2.UpdateCacheFromJobResult(
                         result?.Item,
                         result?.Result
                     );
@@ -172,7 +170,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -184,14 +181,13 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
                 }
             }
             if (result?.Item != null) {
-                Gs2.Core.Domain.Gs2.UpdateCacheFromJobResult(
-                        this._gs2.Cache,
-                        result?.Item,
-                        result?.Result
+                this._gs2.UpdateCacheFromJobResult(
+                    result?.Item,
+                    result?.Result
                 );
             }
                 var domain = new Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain(

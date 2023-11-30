@@ -165,7 +165,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -177,7 +176,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -227,7 +226,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -239,7 +237,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -294,7 +292,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -306,8 +303,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
-                        cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
+                        _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                        _gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
                             parentKey
                         );
                     }
@@ -356,7 +353,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -368,8 +364,8 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
-                    cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
+                    _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
                         parentKey
                     );
                 }
@@ -413,7 +409,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -425,7 +420,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -442,7 +437,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture();
+                    var future2 = stampSheet.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -475,7 +470,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -487,7 +481,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -562,7 +556,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -574,7 +567,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -621,7 +614,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -633,7 +625,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     var key = Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Message>(parentKey, key);
                 }
             }
                 var domain = this;

@@ -81,8 +81,7 @@ namespace Gs2.Gs2Auth.Domain
             );
         }
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -90,8 +89,7 @@ namespace Gs2.Gs2Auth.Domain
         ) {
         }
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -99,8 +97,7 @@ namespace Gs2.Gs2Auth.Domain
         ) {
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result

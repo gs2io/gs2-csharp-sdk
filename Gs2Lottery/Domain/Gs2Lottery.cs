@@ -99,7 +99,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -111,7 +110,7 @@ namespace Gs2.Gs2Lottery.Domain
                         var key = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -144,7 +143,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -156,7 +154,7 @@ namespace Gs2.Gs2Lottery.Domain
                     var key = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -201,7 +199,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -227,7 +224,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -265,7 +261,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -292,7 +287,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -331,7 +325,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -357,7 +350,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -395,7 +387,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -421,7 +412,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -459,7 +449,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -487,7 +476,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -527,7 +515,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -553,7 +540,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -591,7 +577,6 @@ namespace Gs2.Gs2Lottery.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -618,7 +603,6 @@ namespace Gs2.Gs2Lottery.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -713,8 +697,7 @@ namespace Gs2.Gs2Lottery.Domain
             this._gs2.Cache.ClearListCache<DrawnPrize>(parentKey);
         }
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -731,7 +714,7 @@ namespace Gs2.Gs2Lottery.Domain
                         "DrawnPrize"
                     );
                     foreach (var item in resultModel.Items) {
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                                 _drawPrizeIndex++
@@ -740,7 +723,7 @@ namespace Gs2.Gs2Lottery.Domain
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
-                    cache.SetListCached<DrawnPrize>(parentKey);
+                    _gs2.Cache.SetListCached<DrawnPrize>(parentKey);
 
                         DrawByUserIdComplete?.Invoke(
                             transactionId,
@@ -752,8 +735,7 @@ namespace Gs2.Gs2Lottery.Domain
                 }
         }
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -761,8 +743,7 @@ namespace Gs2.Gs2Lottery.Domain
         ) {
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
@@ -778,7 +759,7 @@ namespace Gs2.Gs2Lottery.Domain
                         "DrawnPrize"
                     );
                     foreach (var item in resultModel.Items) {
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                                 _drawPrizeIndex++
@@ -787,7 +768,7 @@ namespace Gs2.Gs2Lottery.Domain
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
-                    cache.SetListCached<DrawnPrize>(parentKey);
+                    _gs2.Cache.SetListCached<DrawnPrize>(parentKey);
 
                     DrawByUserIdComplete?.Invoke(
                         job.JobId,

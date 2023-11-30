@@ -135,7 +135,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -147,7 +146,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                         var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                             resultModel.Item.CategoryName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -197,7 +196,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -209,7 +207,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                         resultModel.Item.CategoryName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -245,7 +243,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Status != null) {
@@ -257,7 +254,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                         var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                             resultModel.Status.CategoryName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Status,
@@ -290,7 +287,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Status != null) {
@@ -302,7 +298,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     var key = Gs2.Gs2Idle.Domain.Model.StatusDomain.CreateCacheKey(
                         resultModel.Status.CategoryName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Status,
@@ -364,7 +360,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -377,7 +372,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture();
+                    var future2 = stampSheet.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -420,7 +415,6 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }

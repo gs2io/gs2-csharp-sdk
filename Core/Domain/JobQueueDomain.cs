@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
 #if UNITY_2017_1_OR_NEWER 
@@ -13,13 +16,13 @@ using System.Threading.Tasks;
 
 namespace Gs2.Core.Domain
 {
+    [Obsolete("Use of the auto-execute feature is strongly recommended")]
     public class JobQueueDomain
     {
-        
-        private readonly object _lockObject = new object();
+        private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
 
         private readonly Gs2 _gs2;
-        private readonly List<string> _tasks = new List<string>();
+        private readonly HashSet<string> _tasks = new HashSet<string>();
 
         public JobQueueDomain(
             Gs2 gs2
@@ -30,10 +33,7 @@ namespace Gs2.Core.Domain
         public void Push(
             string namespaceName
         ) {
-            lock (this._lockObject)
-            {
-                this._tasks.Add(namespaceName);
-            }
+            this._tasks.Add(namespaceName);
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -43,37 +43,34 @@ namespace Gs2.Core.Domain
             IEnumerator Impl(Gs2Future<bool> self)
             {
                 string namespaceName = null;
-                lock (this._lockObject) {
-                    if (this._tasks.Count > 0) {
-                        namespaceName = this._tasks[0];
-                    }
+                while (!this._semaphore.Wait(0)) {
+                    yield return null;
                 }
-                if (namespaceName != null) {
-                    var future = this._gs2.JobQueue.Namespace(
-                        namespaceName
-                    ).AccessToken(
-                        accessToken
-                    ).RunFuture(
-                        new RunRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        
+                try {
+                    if (this._tasks.Count > 0) {
+                        namespaceName = this._tasks.First();
                     }
-                    var job = future.Result;
-                    if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                        lock (this._lockObject) {
+                    if (namespaceName != null) {
+                        var future = this._gs2.JobQueue.Namespace(
+                            namespaceName
+                        ).AccessToken(
+                            accessToken
+                        ).RunFuture(
+                            new RunRequest()
+                        );
+                        yield return future;
+                        if (future.Error != null) {
+
+                        }
+                        var job = future.Result;
+                        if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
                             this._tasks.Remove(namespaceName);
                         }
                     }
-                }
-                if (this._lockObject != null) {
-                    self.OnComplete(true);
-                    yield break;
-                }
-                lock (this._lockObject) {
                     self.OnComplete(this._tasks.Count == 0);
+                }
+                finally {
+                    this._semaphore.Release();
                 }
             }
 
@@ -90,30 +87,33 @@ namespace Gs2.Core.Domain
             AccessToken accessToken
         ) {
             string namespaceName = null;
-            lock (this._lockObject) {
-                if (this._tasks.Count > 0) {
-                    namespaceName = this._tasks[0];
-                }
+            while (!await this._semaphore.WaitAsync(0)) {
+    #if GS2_ENABLE_UNITASK
+                await UniTask.Yield();
+    #else
+                await Task.Yield();
+    #endif
             }
-            if (namespaceName != null) {
-                var job = await this._gs2.JobQueue.Namespace(
-                    namespaceName
-                ).AccessToken(
-                    accessToken
-                ).RunAsync(
-                    new RunRequest()
-                );
-                if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                    lock (this._lockObject) {
+            try {
+                if (this._tasks.Count > 0) {
+                    namespaceName = this._tasks.First();
+                }
+                if (namespaceName != null) {
+                    var job = await this._gs2.JobQueue.Namespace(
+                        namespaceName
+                    ).AccessToken(
+                        accessToken
+                    ).RunAsync(
+                        new RunRequest()
+                    );
+                    if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
                         this._tasks.Remove(namespaceName);
                     }
                 }
-            }
-            if (this._lockObject != null) {
-                return true;
-            }
-            lock (this._lockObject) {
                 return this._tasks.Count == 0;
+            }
+            finally {
+                this._semaphore.Release();
             }
         }
 #endif
@@ -125,38 +125,36 @@ namespace Gs2.Core.Domain
             IEnumerator Impl(Gs2Future<bool> self)
             {
                 string namespaceName = null;
-                lock (this._lockObject) {
-                    if (this._tasks.Count > 0) {
-                        namespaceName = this._tasks[0];
-                    }
+                while (!this._semaphore.Wait(0)) {
+                    yield return null;
                 }
-                if (namespaceName != null) {
-                    var future = this._gs2.JobQueue.Namespace(
-                        namespaceName
-                    ).User(
-                        userId
-                    ).RunFuture(
-                        new RunByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        self.OnError(future.Error);
-                        yield break;
+                try {
+                    if (this._tasks.Count > 0) {
+                        namespaceName = this._tasks.First();
                     }
-                    var job = future.Result;
-                    if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                        lock (this._lockObject) {
+                    if (namespaceName != null) {
+                        var future = this._gs2.JobQueue.Namespace(
+                            namespaceName
+                        ).User(
+                            userId
+                        ).RunFuture(
+                            new RunByUserIdRequest()
+                        );
+                        yield return future;
+                        if (future.Error != null)
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
+                        var job = future.Result;
+                        if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
                             this._tasks.Remove(namespaceName);
                         }
                     }
-                }
-                if (this._lockObject != null) {
-                    self.OnComplete(true);
-                    yield break;
-                }
-                lock (this._lockObject) {
                     self.OnComplete(this._tasks.Count == 0);
+                }
+                finally {
+                    this._semaphore.Release();
                 }
             }
 
@@ -173,30 +171,33 @@ namespace Gs2.Core.Domain
             string userId
         ) {
             string namespaceName = null;
-            lock (this._lockObject) {
-                if (this._tasks.Count > 0) {
-                    namespaceName = this._tasks[0];
-                }
+            while (!await this._semaphore.WaitAsync(0)) {
+    #if GS2_ENABLE_UNITASK
+                await UniTask.Yield();
+    #else
+                await Task.Yield();
+    #endif
             }
-            if (namespaceName != null) {
-                var job = await this._gs2.JobQueue.Namespace(
-                    namespaceName
-                ).User(
-                    userId
-                ).RunAsync(
-                    new RunByUserIdRequest()
-                );
-                if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                    lock (this._lockObject) {
+            try {
+                if (this._tasks.Count > 0) {
+                    namespaceName = this._tasks.First();
+                }
+                if (namespaceName != null) {
+                    var job = await this._gs2.JobQueue.Namespace(
+                        namespaceName
+                    ).User(
+                        userId
+                    ).RunAsync(
+                        new RunByUserIdRequest()
+                    );
+                    if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
                         this._tasks.Remove(namespaceName);
                     }
                 }
-            }
-            if (this._lockObject != null) {
-                return true;
-            }
-            lock (this._lockObject) {
                 return this._tasks.Count == 0;
+            }
+            finally {
+                this._semaphore.Release();
             }
         }
 #endif

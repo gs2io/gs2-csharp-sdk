@@ -100,7 +100,6 @@ namespace Gs2.Gs2Distributor.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -112,7 +111,7 @@ namespace Gs2.Gs2Distributor.Domain
                         var key = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -145,7 +144,6 @@ namespace Gs2.Gs2Distributor.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -157,7 +155,7 @@ namespace Gs2.Gs2Distributor.Domain
                     var key = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -240,8 +238,7 @@ namespace Gs2.Gs2Distributor.Domain
             );
         }
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -249,8 +246,7 @@ namespace Gs2.Gs2Distributor.Domain
         ) {
         }
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -258,8 +254,7 @@ namespace Gs2.Gs2Distributor.Domain
         ) {
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
@@ -303,8 +298,7 @@ namespace Gs2.Gs2Distributor.Domain
         }
 
     #if UNITY_2017_1_OR_NEWER
-        public static Gs2Future DispatchFuture(
-            Gs2.Core.Domain.Gs2 gs2,
+        public Gs2Future DispatchFuture(
             AccessToken accessToken
         )
         {
@@ -326,7 +320,7 @@ namespace Gs2.Gs2Distributor.Domain
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
                     var autoRun = new AutoStampSheetAccessTokenDomain(
-                        gs2,
+                        _gs2,
                         accessToken,
                         completedStampSheet.TransactionId
                     );
@@ -346,8 +340,7 @@ namespace Gs2.Gs2Distributor.Domain
             return new Gs2InlineFuture(Impl);
         }
         
-        public static Gs2Future DispatchByUserIdFuture(
-            Gs2.Core.Domain.Gs2 gs2,
+        public Gs2Future DispatchByUserIdFuture(
             string userId
         )
         {
@@ -369,7 +362,7 @@ namespace Gs2.Gs2Distributor.Domain
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
                     var autoRun = new AutoStampSheetDomain(
-                        gs2,
+                        _gs2,
                         userId,
                         completedStampSheet.TransactionId
                     );
@@ -392,11 +385,10 @@ namespace Gs2.Gs2Distributor.Domain
 
     #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
         #if UNITY_2017_1_OR_NEWER
-        public static async UniTask DispatchAsync(
+        public async UniTask DispatchAsync(
         #else
-        public static async Task DispatchAsync(
+        public async Task DispatchAsync(
         #endif
-            Gs2.Core.Domain.Gs2 gs2,
             AccessToken accessToken
         )
         {
@@ -416,7 +408,7 @@ namespace Gs2.Gs2Distributor.Domain
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
                     var autoRun = new AutoStampSheetAccessTokenDomain(
-                        gs2,
+                        _gs2,
                         accessToken,
                         completedStampSheet.TransactionId
                     );
@@ -431,11 +423,10 @@ namespace Gs2.Gs2Distributor.Domain
         }
         
         #if UNITY_2017_1_OR_NEWER
-        public static async UniTask DispatchByUserIdAsync(
+        public async UniTask DispatchByUserIdAsync(
         #else
-        public static async Task DispatchByUserIdAsync(
+        public async Task DispatchByUserIdAsync(
         #endif
-            Gs2.Core.Domain.Gs2 gs2,
             string userId
         )
         {
@@ -455,7 +446,7 @@ namespace Gs2.Gs2Distributor.Domain
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
                     var autoRun = new AutoStampSheetDomain(
-                        gs2,
+                        _gs2,
                         userId,
                         completedStampSheet.TransactionId
                     );

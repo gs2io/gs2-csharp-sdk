@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -119,36 +121,63 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Lottery.Model.Probability> Model() {
-            #else
-        public IFuture<Gs2.Gs2Lottery.Model.Probability> Model() {
-            #endif
-        #else
-        public async Task<Gs2.Gs2Lottery.Model.Probability> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+#if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Lottery.Model.Probability> ModelFuture() {
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.Probability> self)
             {
-        #endif
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Lottery.Model.Probability>(
+                    _parentKey,
+                    Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
+                        this._prizeId
+                    )
+                );
+                self.OnComplete(value);
+                return null;
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.Probability>(Impl);
+        }
+
+    #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Lottery.Model.Probability> ModelAsync()
+        {
+            var future = ModelFuture();
+            await future;
+            if (future.Error != null) {
+                throw future.Error;
+            }
+            return future.Result;
+        }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Lottery.Model.Probability> Model()
+        {
+            return await ModelAsync();
+        }
+    #else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Lottery.Model.Probability> Model()
+        {
+            return ModelFuture();
+        }
+    #endif
+#else
+        public async Task<Gs2.Gs2Lottery.Model.Probability> ModelAsync()
+        {
             var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Lottery.Model.Probability>(
                 _parentKey,
                 Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
                     this._prizeId
                 )
             );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
             return value;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.Probability>(Impl);
-        #endif
         }
+
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Lottery.Model.Probability> Model()
+        {
+            return await ModelAsync();
+        }
+#endif
 
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.Probability> callback)
         {

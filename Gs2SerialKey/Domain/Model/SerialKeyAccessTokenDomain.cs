@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -100,7 +102,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             {
                 request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithCode(SerialKeyCode);
                 var future = this._client.UseFuture(
                     request
                 );
@@ -114,7 +117,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -126,7 +128,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                         var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
                             resultModel.Item.Code.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -141,7 +143,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                         var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
                             resultModel.CampaignModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.CampaignModel,
@@ -167,7 +169,8 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         ) {
             request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this._accessToken?.Token)
+                .WithCode(SerialKeyCode);
             UseResult result = null;
                 result = await this._client.UseAsync(
                     request
@@ -175,7 +178,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -187,7 +189,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
                         resultModel.Item.Code.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -202,7 +204,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
                         resultModel.CampaignModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.CampaignModel,

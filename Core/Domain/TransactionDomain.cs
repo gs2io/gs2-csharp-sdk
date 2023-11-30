@@ -76,7 +76,7 @@ namespace Gs2.Core.Domain
                         var future = new Gs2Distributor.Domain.Gs2Distributor(
                             this._gs2
                         ).Namespace(
-                            this._gs2.StampSheetConfiguration.NamespaceName
+                            this._gs2.TransactionConfiguration.NamespaceName
                         ).User(
                             this._userId
                         ).StampSheetResult(
@@ -177,7 +177,7 @@ namespace Gs2.Core.Domain
                         yield break;
                     }
                     
-                    var dispatchFuture = Gs2Distributor.Domain.Gs2Distributor.DispatchByUserIdFuture(this._gs2, this._userId);
+                    var dispatchFuture = this._gs2.Distributor.DispatchByUserIdFuture(this._userId);
                     yield return dispatchFuture;
                     if (dispatchFuture.Error != null) {
                         self.OnError(dispatchFuture.Error);
@@ -205,7 +205,7 @@ namespace Gs2.Core.Domain
                     var result = await new Gs2Distributor.Domain.Gs2Distributor(
                         this._gs2
                     ).Namespace(
-                        this._gs2.StampSheetConfiguration.NamespaceName
+                        this._gs2.TransactionConfiguration.NamespaceName
                     ).User(
                         this._userId
                     ).StampSheetResult(
@@ -268,7 +268,7 @@ namespace Gs2.Core.Domain
                 );
                 try {
                     await stampSheet.RunAsync();
-                    await Gs2Distributor.Domain.Gs2Distributor.DispatchByUserIdAsync(this._gs2, this._userId);
+                    await this._gs2.Distributor.DispatchByUserIdAsync(this._userId);
                 } catch (Gs2Exception e) {
                     throw new TransactionException(stampSheet, e);
                 }

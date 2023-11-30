@@ -137,7 +137,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
-                    .WithJobName(this.JobName);
+                    .WithJobName(this.JobName)
+                    .WithTryNumber(this.TryNumber);
                 var future = this._client.GetJobResultByUserIdFuture(
                     request
                 );
@@ -145,6 +146,21 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 if (future.Error != null)
                 {
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                            request.TryNumber.ToString()
+                        );
+                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "jobResult")
+                        {
+                            self.OnError(future.Error);
+                            yield break;
+                        }
                     }
                     else {
                         self.OnError(future.Error);
@@ -155,7 +171,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -168,7 +183,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                         var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
                             resultModel.Item.TryNumber.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -193,18 +208,32 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithJobName(this.JobName);
+                .WithJobName(this.JobName)
+                .WithTryNumber(this.TryNumber);
             GetJobResultByUserIdResult result = null;
             try {
                 result = await this._client.GetJobResultByUserIdAsync(
                     request
                 );
             } catch (Gs2.Core.Exception.NotFoundException e) {
+                var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                    request.TryNumber.ToString()
+                    );
+                this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
+                    _parentKey,
+                    key,
+                    null,
+                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                );
+
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "jobResult")
+                {
+                    throw;
+                }
             }
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -217,7 +246,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
                         resultModel.Item.TryNumber.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,

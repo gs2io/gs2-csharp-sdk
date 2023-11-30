@@ -96,7 +96,6 @@ namespace Gs2.Gs2MegaField.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -108,7 +107,7 @@ namespace Gs2.Gs2MegaField.Domain
                         var key = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -141,7 +140,6 @@ namespace Gs2.Gs2MegaField.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -153,7 +151,7 @@ namespace Gs2.Gs2MegaField.Domain
                     var key = Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -236,8 +234,7 @@ namespace Gs2.Gs2MegaField.Domain
             );
         }
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -245,8 +242,7 @@ namespace Gs2.Gs2MegaField.Domain
         ) {
         }
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -254,8 +250,7 @@ namespace Gs2.Gs2MegaField.Domain
         ) {
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result

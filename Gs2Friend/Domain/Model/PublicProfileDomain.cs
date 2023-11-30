@@ -151,7 +151,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -162,7 +161,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         );
                         var key = Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -210,7 +209,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -221,7 +219,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.PublicProfileDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,

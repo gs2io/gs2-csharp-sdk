@@ -2580,6 +2580,9 @@ namespace Gs2.Gs2JobQueue
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
                 }
+                if (request.TryNumber != null) {
+                    sessionRequest.AddQueryString("tryNumber", $"{request.TryNumber}");
+                }
 
                 if (request.RequestId != null)
                 {
@@ -2689,6 +2692,9 @@ namespace Gs2.Gs2JobQueue
                 if (request.ContextStack != null)
                 {
                     sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.TryNumber != null) {
+                    sessionRequest.AddQueryString("tryNumber", $"{request.TryNumber}");
                 }
 
                 if (request.RequestId != null)

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -130,11 +132,11 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Friend.Model.Friend> ModelFuture()
+        public IFuture<Gs2.Gs2Friend.Model.FriendUser> ModelFuture()
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Friend> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.FriendUser> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.Friend>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
                     _parentKey,
                     Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheKey(
                         this.WithProfile?.ToString()
@@ -143,25 +145,25 @@ namespace Gs2.Gs2Friend.Domain.Model
                 self.OnComplete(value);
                 return null;
             }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.Friend>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.FriendUser>(Impl);
         }
         #endif
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Friend.Model.Friend> ModelAsync()
+        public async UniTask<Gs2.Gs2Friend.Model.FriendUser> ModelAsync()
             #else
-        public async Task<Gs2.Gs2Friend.Model.Friend> ModelAsync()
+        public async Task<Gs2.Gs2Friend.Model.FriendUser> ModelAsync()
             #endif
         {
         #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.Friend>(
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendUser>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheKey(
                     this.WithProfile?.ToString()
                 )).LockAsync())
             {
         # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.Friend>(
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendUser>(
                     _parentKey,
                     Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheKey(
                         this.WithProfile?.ToString()
@@ -177,27 +179,27 @@ namespace Gs2.Gs2Friend.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Friend.Model.Friend> Model()
+        public async UniTask<Gs2.Gs2Friend.Model.FriendUser> Model()
         {
             return await ModelAsync();
         }
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Friend.Model.Friend> Model()
+        public IFuture<Gs2.Gs2Friend.Model.FriendUser> Model()
         {
             return ModelFuture();
         }
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Friend.Model.Friend> Model()
+        public async Task<Gs2.Gs2Friend.Model.FriendUser> Model()
         {
             return await ModelAsync();
         }
         #endif
 
 
-        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.Friend> callback)
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FriendUser> callback)
         {
             return this._gs2.Cache.Subscribe(
                 _parentKey,
@@ -210,7 +212,7 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.Friend>(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.FriendUser>(
                 _parentKey,
                 Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheKey(
                     this.WithProfile.ToString()

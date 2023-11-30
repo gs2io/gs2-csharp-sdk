@@ -36,6 +36,7 @@ namespace Gs2.Gs2JobQueue.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string JobName { set; get; }
+         public int? TryNumber { set; get; }
         public GetJobResultByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2JobQueue.Request
         }
         public GetJobResultByUserIdRequest WithJobName(string jobName) {
             this.JobName = jobName;
+            return this;
+        }
+        public GetJobResultByUserIdRequest WithTryNumber(int? tryNumber) {
+            this.TryNumber = tryNumber;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2JobQueue.Request
             return new GetJobResultByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString());
+                .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString())
+                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)(data["tryNumber"].ToString().Contains(".") ? (int)double.Parse(data["tryNumber"].ToString()) : int.Parse(data["tryNumber"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2JobQueue.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["jobName"] = JobName,
+                ["tryNumber"] = TryNumber,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2JobQueue.Request
                 writer.WritePropertyName("jobName");
                 writer.Write(JobName.ToString());
             }
+            if (TryNumber != null) {
+                writer.WritePropertyName("tryNumber");
+                writer.Write((TryNumber.ToString().Contains(".") ? (int)double.Parse(TryNumber.ToString()) : int.Parse(TryNumber.ToString())));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2JobQueue.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += JobName + ":";
+            key += TryNumber + ":";
             return key;
         }
 

@@ -163,7 +163,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -175,7 +174,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                             resultModel.Item.TargetUserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -225,7 +224,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -237,7 +235,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                         resultModel.Item.TargetUserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -292,7 +290,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -304,7 +301,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                             resultModel.Item.TargetUserId.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(parentKey, key);
                     }
                 }
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestDomain(
@@ -357,7 +354,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -369,7 +365,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                         resultModel.Item.TargetUserId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(parentKey, key);
                 }
             }
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestDomain(

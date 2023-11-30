@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Authentication;
+using System.Threading;
 using Gs2.Core.Domain;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
@@ -38,6 +39,7 @@ namespace Gs2.Core.Net
         internal WebSocket _session;
 #endif
         public State State;
+        private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
 
         internal Dictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
         private Dictionary<Gs2SessionTaskId, WebSocketResult> _result = new Dictionary<Gs2SessionTaskId, WebSocketResult>();
@@ -48,7 +50,6 @@ namespace Gs2.Core.Net
 
         public Gs2WebSocketSession(IGs2Credential basicGs2Credential, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : this(basicGs2Credential, region.DisplayName(), checkCertificateRevocation)
         {
-            
         }
 
         public Gs2WebSocketSession(IGs2Credential basicGs2Credential, string region, bool checkCertificateRevocation = true)
@@ -220,86 +221,108 @@ namespace Gs2.Core.Net
         public Gs2Future<OpenResult> OpenFuture()
         {
             IEnumerator Impl(Gs2Future<OpenResult> result) {
-                OpenImpl();
-                {
-                    var begin = DateTime.Now;
-                    while (this.State == State.LoggingIn) {
-                        if ((DateTime.Now - begin).Seconds > 10) {
-                            result.OnError(
-                                new RequestTimeoutException(new RequestError[0])
-                            );
-                            yield break;
-                        }
-
-#if UNITY_2017_1_OR_NEWER
-                        yield return new WaitForSeconds(0.05f);
-#endif
-                    }
+                while (!this._semaphore.Wait(0)) {
+                    yield return null;
                 }
-                {
-                    var begin = DateTime.Now;
-#if UNITY_WEBGL && !UNITY_EDITOR
-                    while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
-#else
-                    while (this._session.ReadyState != WebSocketState.Open)
-#endif
+                try {
+                    OpenImpl();
                     {
-                        if ((DateTime.Now - begin).Seconds > 10) {
-                            result.OnError(
-                                new RequestTimeoutException(new RequestError[0])
-                            );
-                            yield break;
-                        }
+                        var begin = DateTime.Now;
+                        while (this.State == State.LoggingIn) {
+                            if ((DateTime.Now - begin).Seconds > 10) {
+                                result.OnError(
+                                    new RequestTimeoutException(new RequestError[0])
+                                );
+                                yield break;
+                            }
 
-#if UNITY_2017_1_OR_NEWER
-                        yield return new WaitForSeconds(0.05f);
-#endif
+    #if UNITY_2017_1_OR_NEWER
+                            yield return new WaitForSeconds(0.05f);
+    #endif
+                        }
                     }
+                    {
+                        var begin = DateTime.Now;
+    #if UNITY_WEBGL && !UNITY_EDITOR
+                        while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
+    #else
+                        while (this._session.ReadyState != WebSocketState.Open)
+    #endif
+                        {
+                            if ((DateTime.Now - begin).Seconds > 10) {
+                                result.OnError(
+                                    new RequestTimeoutException(new RequestError[0])
+                                );
+                                yield break;
+                            }
+
+    #if UNITY_2017_1_OR_NEWER
+                            yield return new WaitForSeconds(0.05f);
+    #endif
+                        }
+                    }
+                    result.OnComplete(new OpenResult());
                 }
-                result.OnComplete(new OpenResult());
+                finally {
+                    this._semaphore.Release();
+                }
             }
 
             return new Gs2InlineFuture<OpenResult>(Impl);
         }
         
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
         public async UniTask<OpenResult> OpenAsync()
-#else
+    #else
         public async Task<OpenResult> OpenAsync()
-#endif
+    #endif
         {
-            var result = OpenImpl();
-            {
-                var begin = DateTime.Now;
-                while (State == State.LoggingIn)
-                {
-                    if ((DateTime.Now - begin).Seconds > 10)
-                    {
-                        throw new RequestTimeoutException(new RequestError[0]);
-                    }
-
-                    await Task.Delay(TimeSpan.FromMilliseconds(50));
-                }
+            while (!this._semaphore.Wait(0)) {
+    #if UNITY_2017_1_OR_NEWER
+                await UniTask.Yield();
+    #else
+                await Task.Yield();
+    #endif
             }
-            {
-                var begin = DateTime.Now;
-#if UNITY_WEBGL && !UNITY_EDITOR
-                while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
-#else
-                while (_session.ReadyState != WebSocketState.Open)
-#endif
+            try {
+                var result = OpenImpl();
                 {
-                    if ((DateTime.Now - begin).Seconds > 10)
+                    var begin = DateTime.Now;
+                    while (State != State.Available)
                     {
-                        throw new RequestTimeoutException(new RequestError[0]);
+                        if ((DateTime.Now - begin).Seconds > 10)
+                        {
+                            throw new RequestTimeoutException(new RequestError[0]);
+                        }
+
+                        await Task.Delay(TimeSpan.FromMilliseconds(50));
                     }
-
-                    await Task.Delay(TimeSpan.FromMilliseconds(50));
                 }
-            }
+                {
+                    var begin = DateTime.Now;
+    #if UNITY_WEBGL && !UNITY_EDITOR
+                    while (_session.GetState() != Gs2.HybridWebSocket.WebSocketState.Open)
+    #else
+                    while (_session.ReadyState != WebSocketState.Open)
+    #endif
+                    {
+                        if ((DateTime.Now - begin).Seconds > 10)
+                        {
+                            throw new RequestTimeoutException(new RequestError[0]);
+                        }
 
-            return result;
+                        await Task.Delay(TimeSpan.FromMilliseconds(50));
+                    }
+                }
+
+                return result;
+            }
+            finally {
+                this._semaphore.Release();
+            }
         }
+#endif
         
         // ReOpen
         
@@ -342,7 +365,7 @@ namespace Gs2.Core.Net
                 OpenImpl();
                 {
                     var begin = DateTime.Now;
-                    while (this.State == State.LoggingIn) {
+                    while (this.State != State.Available) {
                         if ((DateTime.Now - begin).Seconds > 10) {
                             result.OnError(
                                 new RequestTimeoutException(new RequestError[0])
@@ -375,17 +398,18 @@ namespace Gs2.Core.Net
 #endif
                     }
                 }
-                result.OnComplete(null);
+                result.OnComplete(new OpenResult());
             }
 
             return new Gs2InlineFuture<OpenResult>(Impl);
         }
         
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
         public async UniTask<OpenResult> ReOpenAsync()
-#else
+    #else
         public async Task<OpenResult> ReOpenAsync()
-#endif
+    #endif
         {
             if (this.State == State.Opening || this.State == State.LoggingIn) {
                 var begin = DateTime.Now;
@@ -402,6 +426,7 @@ namespace Gs2.Core.Net
 
             return new OpenResult();
         }
+#endif
         
         // Close
 
@@ -540,11 +565,12 @@ namespace Gs2.Core.Net
             yield return null;
         }
         
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
         public async UniTask SendAsync(IGs2SessionRequest request)
-#else
+    #else
         public async Task SendAsync(IGs2SessionRequest request)
-#endif
+    #endif
         {
             if (request is WebSocketSessionRequest sessionRequest) {
                 this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
@@ -557,6 +583,7 @@ namespace Gs2.Core.Net
                 }
             }
         }
+#endif
         
         public void SendNonBlocking(IGs2SessionRequest request)
         {

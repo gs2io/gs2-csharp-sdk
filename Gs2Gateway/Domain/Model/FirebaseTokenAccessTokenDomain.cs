@@ -113,7 +113,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -124,7 +123,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                         );
                         var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -158,7 +157,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -169,7 +167,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     );
                     var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -233,7 +231,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -244,7 +241,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                         );
                         var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -292,7 +289,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -303,7 +299,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     );
                     var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -356,7 +352,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -367,7 +362,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                         );
                         var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                         );
-                        cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -412,7 +407,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -423,7 +417,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     );
                     var key = Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Gateway.Model.FirebaseToken>(parentKey, key);
                 }
             }
                 var domain = this;

@@ -99,7 +99,7 @@ namespace Gs2.Core.Domain
                         }
 
                         var resultJson = JsonMapper.ToObject(result.Result);
-                        if (!string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
+                        if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
                             var future2 = new TransactionDomain(
                                 this._gs2,
                                 this._userId,

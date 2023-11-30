@@ -28,177 +28,114 @@ namespace Gs2.Gs2Datastore.Domain.Model
     {
         
 #if UNITY_2017_1_OR_NEWER
-	#if GS2_ENABLE_UNITASK
-	    public async UniTask<DataObjectDomain> Upload(
-	#else
-	    private class UploadImplFuture : Gs2Future<RestResult>
-	    {
-		    private UserDomain _domain;
-		    private string _uploadUrl;
-		    private byte[] _data;
 
-		    public UploadImplFuture(
-			    UserDomain domain,
-			    string uploadUrl,
-			    byte[] data
-		    )
-		    {
-			    _domain = domain;
-			    _uploadUrl = uploadUrl;
-			    _data = data;
-		    }
-
-		    public override IEnumerator Action()
-		    {
-			    using var request = UnityWebRequest.Put(_uploadUrl, _data);
-			    request.downloadHandler = new DownloadHandlerBuffer();
-			    yield return request.SendWebRequest();
-			    OnComplete(new RestResult(
-				    (int) request.responseCode,
-				    request.responseCode == 200 ? "{}" : string.IsNullOrEmpty(request.error) ? "{}" : request.error
-			    ));
-		    }
-	    }
-
-	    public class UploadFuture : Gs2Future<DataObjectDomain>
-	    {
-		    private readonly UserDomain _domain;
-		    private readonly string _scope;
-		    private readonly List<string> _allowUserIds;
-		    private readonly byte[] _data;
-		    private readonly string _name;
-		    private readonly bool? _updateIfExists;
-
-		    public UploadFuture(
-			    UserDomain domain,
-			    string scope,
-			    List<string> allowUserIds,
-			    byte[] data,
-			    string name=null,
-			    bool? updateIfExists=null
-		    )
-		    {
-			    this._domain = domain;
-			    this._scope = scope;
-			    this._allowUserIds = allowUserIds;
-			    this._data = data;
-			    this._name = name;
-			    this._updateIfExists = updateIfExists;
-		    }
-
-		    public override IEnumerator Action()
-		    {
+	    public Gs2Future<DataObjectDomain> UploadFuture(
+		    string scope,
+		    List<string> allowUserIds,
+		    byte[] data,
+		    string name = null,
+		    bool? updateIfExists = null
+	    ) {
+		    IEnumerator Impl(Gs2Future<DataObjectDomain> self) {
 			    {
 				    string dataObjectName;
 				    string uploadUrl;
 				    {
-					    var task = this._domain.PrepareUploadFuture(
+					    var future = PrepareUploadFuture(
 						    new PrepareUploadByUserIdRequest()
-							    .WithScope(this._scope)
-							    .WithAllowUserIds(this._allowUserIds.ToArray())
-							    .WithName(this._name)
-							    .WithUpdateIfExists(this._updateIfExists)
+							    .WithScope(scope)
+							    .WithAllowUserIds(allowUserIds.ToArray())
+							    .WithName(name)
+							    .WithUpdateIfExists(updateIfExists)
 					    );
-					    yield return task;
-					    if (task.Error != null)
+					    yield return future;
+					    if (future.Error != null)
 					    {
-						    OnError(task.Error);
+						    self.OnError(future.Error);
 						    yield break;
 					    }
-						var task2 = task.Result.ModelFuture();
-						yield return task2;
-					    if (task2.Error != null)
+					    var future2 = future.Result.ModelFuture();
+					    yield return future2;
+					    if (future2.Error != null)
 					    {
-						    OnError(task2.Error);
+						    self.OnError(future2.Error);
 						    yield break;
 					    }
 
-					    dataObjectName = task2.Result.Name;
-					    uploadUrl = task.Result.UploadUrl;
+					    dataObjectName = future2.Result.Name;
+					    uploadUrl = future.Result.UploadUrl;
 				    }
 				    {
-					    var task = new UploadImplFuture(
-						    this._domain,
-						    uploadUrl,
-						    this._data
-					    );
-					    yield return task;
-					    if (task.Error != null)
-					    {
-						    OnError(task.Error);
-						    yield break;
-					    }
+					    using var request = UnityWebRequest.Put(uploadUrl, data);
+					    request.downloadHandler = new DownloadHandlerBuffer();
+					    yield return request.SendWebRequest();
 				    }
 				    {
-					    var task = this._domain.DataObject(
+					    var future = DataObject(
 						    dataObjectName
 					    ).DoneUploadFuture(
 						    new DoneUploadByUserIdRequest()
 					    );
-					    yield return task;
-					    if (task.Error != null)
+					    yield return future;
+					    if (future.Error != null)
 					    {
-						    OnError(task.Error);
+						    self.OnError(future.Error);
 						    yield break;
 					    }
-					    OnComplete(task.Result);
+					    self.OnComplete(future.Result);
 				    }
 			    }
 		    }
+
+		    return new Gs2InlineFuture<DataObjectDomain>(Impl);
 	    }
 
-        public UploadFuture Upload(
-	#endif
-#else
-	    public async Task<DataObjectDomain> Upload(
-#endif
-	        string scope,
-	        List<string> allowUserIds,
-	        byte[] data,
-	        string name=null,
-	        bool? updateIfExists=null
-        )
-        {
-#if UNITY_2017_1_OR_NEWER
 	#if GS2_ENABLE_UNITASK
-	        string dataObjectName = null;
-	        {
-		        var result = await this.PrepareUploadAsync(
-			        new PrepareUploadByUserIdRequest()
-				        .WithScope(scope)
-				        .WithAllowUserIds(allowUserIds.ToArray())
-				        .WithName(name)
-				        .WithUpdateIfExists(updateIfExists)
-		        );
-		        dataObjectName = result.DataObjectName;
-		        
-		        using var request = UnityWebRequest.Put(result.UploadUrl, data);
-		        request.downloadHandler = new DownloadHandlerBuffer();
-		        await request.SendWebRequest();
-		        if (request.responseCode != 200)
-		        {
-			        throw new UnknownException(Array.Empty<RequestError>());
-		        }
-	        }
-	        {
-		        var result = await this.DataObject(
-			        dataObjectName
-		        ).DoneUploadAsync(
-			        new DoneUploadByUserIdRequest()
-		        );
-		        return result;
-	        }
-	#else
-	        return new UploadFuture(
-		        this,
-		        scope,
-		        allowUserIds,
-		        data,
-		        name,
-		        updateIfExists
-	        );
+	    public async UniTask<DataObjectDomain> UploadAsync(
+		    string scope,
+		    List<string> allowUserIds,
+		    byte[] data,
+		    string name = null,
+		    bool? updateIfExists = null
+	    ) {
+		    string dataObjectName = null;
+		    {
+			    var result = await this.PrepareUploadAsync(
+				    new PrepareUploadByUserIdRequest()
+					    .WithScope(scope)
+					    .WithAllowUserIds(allowUserIds.ToArray())
+					    .WithName(name)
+					    .WithUpdateIfExists(updateIfExists)
+			    );
+			    dataObjectName = result.DataObjectName;
+
+			    using var request = UnityWebRequest.Put(result.UploadUrl, data);
+			    request.downloadHandler = new DownloadHandlerBuffer();
+			    await request.SendWebRequest();
+			    if (request.responseCode != 200) {
+				    throw new UnknownException(Array.Empty<RequestError>());
+			    }
+		    }
+		    {
+			    var result = await this.DataObject(
+				    dataObjectName
+			    ).DoneUploadAsync(
+				    new DoneUploadByUserIdRequest()
+			    );
+			    return result;
+		    }
+	    }
 	#endif
-#else
+#endif
+	        
+#if !UNITY_2017_1_OR_NEWER
+	    public async Task<DataObjectDomain> UploadAsync(
+		    string scope,
+		    List<string> allowUserIds,
+		    byte[] data,
+		    string name = null,
+		    bool? updateIfExists = null
+	    ) {
 	        string dataObjectName = null;
 	        {
 		        var result = await this.PrepareUploadAsync(
@@ -224,7 +161,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        );
 		        return result;
 	        }
-#endif
         }
+#endif
     }
 }

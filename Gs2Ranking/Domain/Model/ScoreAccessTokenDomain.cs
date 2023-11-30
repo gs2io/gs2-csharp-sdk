@@ -145,7 +145,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -162,7 +161,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             resultModel.Item.ScorerUserId.ToString(),
                             resultModel.Item.UniqueId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -216,7 +215,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -233,7 +231,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         resultModel.Item.ScorerUserId.ToString(),
                         resultModel.Item.UniqueId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,

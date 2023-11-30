@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Gs2.Core.Exception;
 using Gs2.Core.Net;
 using Gs2.Gs2Distributor;
 using Gs2.Gs2Distributor.Request;
@@ -48,7 +49,7 @@ namespace Gs2.Core.Domain
                     var stampTaskJson = JsonMapper.ToObject(stampTasks[i].ToString());
                     var stampTaskPayload = stampTaskJson["body"].ToString();
                     var stampTaskPayloadJson = JsonMapper.ToObject(stampTaskPayload);
-                	if (string.IsNullOrEmpty(this._gs2.StampSheetConfiguration.NamespaceName))
+                	if (string.IsNullOrEmpty(this._gs2.TransactionConfiguration?.NamespaceName))
                     {
                         var future = client.RunStampTaskWithoutNamespaceFuture(
                             new RunStampTaskWithoutNamespaceRequest()
@@ -64,7 +65,7 @@ namespace Gs2.Core.Domain
                         }
                         var result = future.Result;
                         contextStack = result.ContextStack;
-                        this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                        this._gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                             this._gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
@@ -77,19 +78,26 @@ namespace Gs2.Core.Domain
                         var future = client.RunStampTaskFuture(
                             new RunStampTaskRequest()
                                 .WithContextStack(contextStack)
-                                .WithNamespaceName(this._gs2.StampSheetConfiguration.NamespaceName)
+                                .WithNamespaceName(this._gs2.TransactionConfiguration?.NamespaceName)
                                 .WithStampTask(stampTasks[i].ToString())
                                 .WithKeyId(_stampSheetEncryptionKeyId)
                         );
                         yield return future;
                         if (future.Error != null)
                         {
+                            if (future.Error is NotFoundException) {
+                                if (this._gs2.TransactionConfiguration != null) {
+                                    this._gs2.TransactionConfiguration.NamespaceName = null;
+                                    yield return Impl(self);
+                                    yield break;
+                                }
+                            }
                             self.OnError(future.Error);
                             yield break;
                         }
                         var result = future.Result;
                         contextStack = result.ContextStack;
-                        this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                        this._gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                             this._gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             stampTaskPayloadJson["action"].ToString(),
@@ -102,7 +110,7 @@ namespace Gs2.Core.Domain
                 string action = null;
                 JsonData requestJson = null;
                 JsonData resultJson = null;
-                if (string.IsNullOrEmpty(this._gs2.StampSheetConfiguration.NamespaceName))
+                if (string.IsNullOrEmpty(this._gs2.TransactionConfiguration?.NamespaceName))
                 {
                     var future = client.RunStampSheetWithoutNamespaceFuture(
                         new RunStampSheetWithoutNamespaceRequest()
@@ -117,7 +125,7 @@ namespace Gs2.Core.Domain
                         yield break;
                     }
                     var result = future.Result;
-                    this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                    this._gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                         this._gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),
@@ -133,18 +141,25 @@ namespace Gs2.Core.Domain
                     var future = client.RunStampSheetFuture(
                         new RunStampSheetRequest()
                             .WithContextStack(contextStack)
-                            .WithNamespaceName(this._gs2.StampSheetConfiguration.NamespaceName)
+                            .WithNamespaceName(this._gs2.TransactionConfiguration?.NamespaceName)
                             .WithStampSheet(_stampSheet)
                             .WithKeyId(_stampSheetEncryptionKeyId)
                     );
                     yield return future;
                     if (future.Error != null)
                     {
+                        if (future.Error is NotFoundException) {
+                            if (this._gs2.TransactionConfiguration != null) {
+                                this._gs2.TransactionConfiguration.NamespaceName = null;
+                                yield return Impl(self);
+                                yield break;
+                            }
+                        }
                         self.OnError(future.Error);
                         yield break;
                     }
                     var result = future.Result;
-                    this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                    this._gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                         this._gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
                         stampSheetPayloadJson["action"].ToString(),
@@ -168,8 +183,7 @@ namespace Gs2.Core.Domain
 
                 if (action == "Gs2JobQueue:PushByUserId")
                 {
-                    Gs2.PushJobQueue(
-                        this._gs2.JobQueueDomain,
+                    this._gs2.PushJobQueue(
                         requestJson["namespaceName"].ToString()
                     );
                 }
@@ -199,7 +213,7 @@ namespace Gs2.Core.Domain
                 var stampTaskJson = JsonMapper.ToObject(stampTasks[i].ToString());
                 var stampTaskPayload = stampTaskJson["body"].ToString();
                 var stampTaskPayloadJson = JsonMapper.ToObject(stampTaskPayload);
-                if (string.IsNullOrEmpty(this._gs2.StampSheetConfiguration.NamespaceName))
+                if (string.IsNullOrEmpty(this._gs2.TransactionConfiguration?.NamespaceName))
                 {
                     var result = await client.RunStampTaskWithoutNamespaceAsync(
                         new RunStampTaskWithoutNamespaceRequest()
@@ -208,7 +222,7 @@ namespace Gs2.Core.Domain
                                 .WithKeyId(_stampSheetEncryptionKeyId)
                     );
                     contextStack = result.ContextStack;
-                    this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
+                    this._gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                         this._gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                         stampTaskPayloadJson["action"].ToString(),
@@ -218,28 +232,37 @@ namespace Gs2.Core.Domain
                 }
                 else
                 {
-                    var result = await client.RunStampTaskAsync(
-                        new RunStampTaskRequest()
-                            .WithContextStack(contextStack)
-                            .WithNamespaceName(this._gs2.StampSheetConfiguration.NamespaceName)
-                            .WithStampTask(stampTasks[i].ToString())
-                            .WithKeyId(_stampSheetEncryptionKeyId)
-                    );
-                    contextStack = result.ContextStack;
-                    this._gs2.StampSheetConfiguration.StampTaskEventHandler.Invoke(
-                        this._gs2.Cache,
-                        stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
-                        stampTaskPayloadJson["action"].ToString(),
-                        stampTaskPayloadJson["args"].ToString(),
-                        result.Result
-                    );
+                    try {
+                        var result = await client.RunStampTaskAsync(
+                            new RunStampTaskRequest()
+                                .WithContextStack(contextStack)
+                                .WithNamespaceName(this._gs2.TransactionConfiguration?.NamespaceName)
+                                .WithStampTask(stampTasks[i].ToString())
+                                .WithKeyId(_stampSheetEncryptionKeyId)
+                        );
+                        contextStack = result.ContextStack;
+                        this._gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
+                            this._gs2.Cache,
+                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            stampTaskPayloadJson["action"].ToString(),
+                            stampTaskPayloadJson["args"].ToString(),
+                            result.Result
+                        );
+                    }
+                    catch (NotFoundException) {
+                        if (this._gs2.TransactionConfiguration != null) {
+                            this._gs2.TransactionConfiguration.NamespaceName = null;
+                            await RunAsync();
+                            return;
+                        }
+                    }
                 }
             }
 
             string action = null;
             JsonData requestJson = null;
             JsonData resultJson = null;
-            if (string.IsNullOrEmpty(this._gs2.StampSheetConfiguration.NamespaceName))
+            if (string.IsNullOrEmpty(this._gs2.TransactionConfiguration?.NamespaceName))
             {
                 var result = await client.RunStampSheetWithoutNamespaceAsync(
                     new RunStampSheetWithoutNamespaceRequest()
@@ -247,7 +270,7 @@ namespace Gs2.Core.Domain
                         .WithStampSheet(_stampSheet)
                         .WithKeyId(_stampSheetEncryptionKeyId)
                 );
-                this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
+                this._gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                     this._gs2.Cache,
                     stampSheetPayloadJson["transactionId"].ToString(),
                     stampSheetPayloadJson["action"].ToString(),
@@ -260,23 +283,32 @@ namespace Gs2.Core.Domain
             }
             else
             {
-                var result = await client.RunStampSheetAsync(
-                    new RunStampSheetRequest()
-                        .WithContextStack(contextStack)
-                        .WithNamespaceName(this._gs2.StampSheetConfiguration.NamespaceName)
-                        .WithStampSheet(_stampSheet)
-                        .WithKeyId(_stampSheetEncryptionKeyId)
-                );
-                this._gs2.StampSheetConfiguration.StampSheetEventHandler.Invoke(
-                    this._gs2.Cache,
-                    stampSheetPayloadJson["transactionId"].ToString(),
-                    stampSheetPayloadJson["action"].ToString(),
-                    stampSheetPayloadJson["args"].ToString(),
-                    result.Result
-                );
-                action = stampSheetPayloadJson["action"].ToString();
-                requestJson = JsonMapper.ToObject(stampSheetPayloadJson["args"].ToString());
-                resultJson = JsonMapper.ToObject(result.Result.Length != 0 ? result.Result : "{}");
+                try {
+                    var result = await client.RunStampSheetAsync(
+                        new RunStampSheetRequest()
+                            .WithContextStack(contextStack)
+                            .WithNamespaceName(this._gs2.TransactionConfiguration?.NamespaceName)
+                            .WithStampSheet(_stampSheet)
+                            .WithKeyId(_stampSheetEncryptionKeyId)
+                    );
+                    this._gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
+                        this._gs2.Cache,
+                        stampSheetPayloadJson["transactionId"].ToString(),
+                        stampSheetPayloadJson["action"].ToString(),
+                        stampSheetPayloadJson["args"].ToString(),
+                        result.Result
+                    );
+                    action = stampSheetPayloadJson["action"].ToString();
+                    requestJson = JsonMapper.ToObject(stampSheetPayloadJson["args"].ToString());
+                    resultJson = JsonMapper.ToObject(result.Result.Length != 0 ? result.Result : "{}");
+                }
+                catch (NotFoundException) {
+                    if (this._gs2.TransactionConfiguration != null) {
+                        this._gs2.TransactionConfiguration.NamespaceName = null;
+                        await RunAsync();
+                        return;
+                    }
+                }
             }
 
             if (resultJson.ContainsKey("stampSheet") && resultJson.ContainsKey("stampSheetEncryptionKeyId") && resultJson.ContainsKey("autoRunStampSheet") && !bool.Parse(resultJson["autoRunStampSheet"].ToString()))
@@ -291,8 +323,7 @@ namespace Gs2.Core.Domain
 
             if (action == "Gs2JobQueue:PushByUserId")
             {
-                Gs2.PushJobQueue(
-                    this._gs2.JobQueueDomain,
+                this._gs2.PushJobQueue(
                     requestJson["namespaceName"].ToString()
                 );
             }

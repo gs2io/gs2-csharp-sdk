@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -94,7 +95,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -108,15 +108,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                SendRequestResult result = null;
-                    result = await this._client.SendRequestAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
@@ -152,25 +143,16 @@ namespace Gs2.Gs2Friend.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> SendRequestAsync(
+            #else
         public async Task<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> SendRequestAsync(
+            #endif
             SendRequestRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.SendRequestFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -178,7 +160,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 result = await this._client.SendRequestAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
@@ -215,18 +196,6 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> SendRequestAsync(
-            SendRequestRequest request
-        ) {
-            var future = SendRequestFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SendRequestFuture.")]
         public IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> SendRequest(
             SendRequestRequest request

@@ -99,7 +99,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -111,7 +110,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -144,7 +143,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -156,7 +154,7 @@ namespace Gs2.Gs2Stamina.Domain
                     var key = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -201,7 +199,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -227,7 +224,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -265,7 +261,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -292,7 +287,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -331,7 +325,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -357,7 +350,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -395,7 +387,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -421,7 +412,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -459,7 +449,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -487,7 +476,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -527,7 +515,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -553,7 +540,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -591,7 +577,6 @@ namespace Gs2.Gs2Stamina.Domain
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -618,7 +603,6 @@ namespace Gs2.Gs2Stamina.Domain
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -725,8 +709,7 @@ namespace Gs2.Gs2Stamina.Domain
         public static Action<string, SetRecoverValueByUserIdRequest, SetRecoverValueByUserIdResult> SetRecoverValueByUserIdComplete;
     #endif
 
-        public static void UpdateCacheFromStampSheet(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
                 string request,
@@ -746,7 +729,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -761,7 +744,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -789,7 +772,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -804,7 +787,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -832,7 +815,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -847,7 +830,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -875,7 +858,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -890,7 +873,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -918,7 +901,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -933,7 +916,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -963,8 +946,7 @@ namespace Gs2.Gs2Stamina.Domain
         public static Action<string, ConsumeStaminaByUserIdRequest, ConsumeStaminaByUserIdResult> ConsumeStaminaByUserIdComplete;
     #endif
 
-        public static void UpdateCacheFromStampTask(
-                CacheDatabase cache,
+        public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
                 string request,
@@ -984,7 +966,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -999,7 +981,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -1027,7 +1009,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                 resultModel.Item.StaminaName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.Item,
@@ -1042,7 +1024,7 @@ namespace Gs2.Gs2Stamina.Domain
                             var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                                 resultModel.StaminaModel.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 resultModel.StaminaModel,
@@ -1060,8 +1042,7 @@ namespace Gs2.Gs2Stamina.Domain
                 }
         }
 
-        public static void UpdateCacheFromJobResult(
-                CacheDatabase cache,
+        public void UpdateCacheFromJobResult(
                 string method,
                 Gs2.Gs2JobQueue.Model.Job job,
                 Gs2.Gs2JobQueue.Model.JobResultBody result
@@ -1080,7 +1061,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -1095,7 +1076,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -1123,7 +1104,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -1138,7 +1119,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -1166,7 +1147,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -1181,7 +1162,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -1209,7 +1190,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -1224,7 +1205,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -1252,7 +1233,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -1267,7 +1248,7 @@ namespace Gs2.Gs2Stamina.Domain
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,

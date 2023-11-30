@@ -27,6 +27,7 @@ using System;
 using System.Collections;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Gs2JobQueue.Request;
@@ -70,84 +71,83 @@ namespace Gs2.Core.Domain
             IEnumerator Impl(IFuture<JobQueueJobAccessTokenDomain> self) {
                 var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
                 if (this.AutoRunJobQueue) {
-                    while (true) {
-                        var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                            this._gs2
-                        ).Namespace(
-                            namespaceName
-                        ).AccessToken(
-                            this._accessToken
-                        ).Job(
-                            Job.GetJobNameFromGrn(this.JobId)
-                        ).JobResult().ModelFuture();
+                    RETRY:
+                    var future = new Gs2JobQueue.Domain.Gs2JobQueue(
+                        this._gs2
+                    ).Namespace(
+                        namespaceName
+                    ).AccessToken(
+                        this._accessToken
+                    ).Job(
+                        Job.GetJobNameFromGrn(this.JobId)
+                    ).JobResult().ModelFuture();
 
-                        yield return future;
-                        if (future.Error != null) {
-                            self.OnError(future.Error);
+                    yield return future;
+                    if (future.Error != null) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    var result = future.Result;
+
+                    if (result == null) {
+                        yield return new WaitForSeconds(0.01f);
+                        
+                        var dispatchFuture = this._gs2.JobQueue.DispatchFuture(this._accessToken);
+                        yield return dispatchFuture;
+                        if (dispatchFuture.Error != null) {
+                            self.OnError(dispatchFuture.Error);
                             yield break;
                         }
-                        var result = future.Result;
+                        goto RETRY;
+                    }
 
-                        if (result == null) {
-                            yield return new WaitForSeconds(0.1f);
-                            
-                            var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
-                            yield return dispatchFuture;
-                            if (dispatchFuture.Error != null) {
-                                self.OnError(dispatchFuture.Error);
-                                yield break;
-                            }
-                            continue;
-                        }
-
-                        var resultJson = JsonMapper.ToObject(result.Result);
-                        if (!string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
-                            var future2 = new TransactionAccessTokenDomain(
-                                this._gs2,
-                                this._accessToken,
-                                resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
-                                !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
-                                !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
-                                !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                            ).WaitFuture(all);
-                            yield return future2;
-                            if (future2.Error != null) {
-                                self.OnError(future2.Error);
-                                yield break;
-                            }
-                            
-                            var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
-                            yield return dispatchFuture;
-                            if (dispatchFuture.Error != null) {
-                                self.OnError(dispatchFuture.Error);
-                                yield break;
-                            }
+                    var resultJson = JsonMapper.ToObject(result.Result);
+                    if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
+                        var future2 = new TransactionAccessTokenDomain(
+                            this._gs2,
+                            this._accessToken,
+                            resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
+                            !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
+                            !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
+                            !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
+                        ).WaitFuture(all);
+                        yield return future2;
+                        if (future2.Error != null) {
+                            self.OnError(future2.Error);
+                            yield break;
                         }
                         
-                        if (result.ScriptId.EndsWith("push_by_user_id"))
+                        var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                        yield return dispatchFuture;
+                        if (dispatchFuture.Error != null) {
+                            self.OnError(dispatchFuture.Error);
+                            yield break;
+                        }
+                    }
+                    
+                    if (result.ScriptId.EndsWith("push_by_user_id"))
+                    {
+                        var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                        if (all)
                         {
-                            var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                            if (all)
-                            {
-                                foreach (var job in result2.Items) {
-                                    var future3 = new JobQueueJobAccessTokenDomain(
-                                        this._gs2,
-                                        this._accessToken,
-                                        true,
-                                        job.JobId
-                                    ).WaitFuture(all);
-                                    yield return future3;
-                                    if (future3.Error != null) {
-                                        self.OnError(future3.Error);
-                                        yield break;
-                                    }
-                                    
-                                    var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
-                                    yield return dispatchFuture;
-                                    if (dispatchFuture.Error != null) {
-                                        self.OnError(dispatchFuture.Error);
-                                        yield break;
-                                    }
+                            foreach (var job in result2.Items) {
+                                var future3 = new JobQueueJobAccessTokenDomain(
+                                    this._gs2,
+                                    this._accessToken,
+                                    true,
+                                    job.JobId
+                                ).WaitFuture(all);
+                                yield return future3;
+                                if (future3.Error != null) {
+                                    self.OnError(future3.Error);
+                                    yield break;
+                                }
+                                
+                                var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                                yield return dispatchFuture;
+                                if (dispatchFuture.Error != null) {
+                                    self.OnError(dispatchFuture.Error);
+                                    yield break;
                                 }
                             }
                         }
@@ -211,57 +211,54 @@ namespace Gs2.Core.Domain
         ) {
             var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
             if (this.AutoRunJobQueue) {
-                while (true) {
-                    var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                        this._gs2
-                    ).Namespace(
-                        namespaceName
-                    ).AccessToken(
-                        this._accessToken
-                    ).Job(
-                        Job.GetJobNameFromGrn(this.JobId)
-                    ).JobResult().ModelAsync();
-                    if (result == null) {
+                RETRY:
+                var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
+                    this._gs2
+                ).Namespace(
+                    namespaceName
+                ).AccessToken(
+                    this._accessToken
+                ).Job(
+                    Job.GetJobNameFromGrn(this.JobId)
+                ).JobResult().ModelAsync();
+                if (result == null) {
 #if UNITY_2017_1_OR_NEWER
-                        await UniTask.Delay(TimeSpan.FromMilliseconds(100));
+                    await UniTask.Delay(TimeSpan.FromMilliseconds(10));
 #else
-                        await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    await Task.Delay(TimeSpan.FromMilliseconds(10));
 #endif
-                        await this._gs2.DispatchAsync(this._accessToken);
-                        continue;
-                    }
+                    await this._gs2.DispatchAsync(this._accessToken);
+                    goto RETRY;
+                }
 
-                    var resultJson = JsonMapper.ToObject(result.Result);
-                    if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
-                        await new TransactionAccessTokenDomain(
-                            this._gs2,
-                            this._accessToken,
-                            resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
-                            !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
-                            !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
-                            !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                        ).WaitAsync(all);
-                        await this._gs2.DispatchAsync(this._accessToken);
-                    }
-                    
-                    if (result.ScriptId.EndsWith("push_by_user_id"))
+                var resultJson = JsonMapper.ToObject(result.Result);
+                if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
+                    await new TransactionAccessTokenDomain(
+                        this._gs2,
+                        this._accessToken,
+                        resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
+                        !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
+                        !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
+                        !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
+                    ).WaitAsync(all);
+                    await this._gs2.DispatchAsync(this._accessToken);
+                }
+                
+                if (result.ScriptId.EndsWith("push_by_user_id"))
+                {
+                    var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    if (all)
                     {
-                        var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                        if (all)
-                        {
-                            foreach (var job in result2.Items) {
-                                await new JobQueueJobAccessTokenDomain(
-                                    this._gs2,
-                                    this._accessToken,
-                                    true,
-                                    job.JobId
-                                ).WaitAsync(all);
-                                await this._gs2.DispatchAsync(this._accessToken);
-                            }
+                        foreach (var job in result2.Items) {
+                            await new JobQueueJobAccessTokenDomain(
+                                this._gs2,
+                                this._accessToken,
+                                true,
+                                job.JobId
+                            ).WaitAsync(all);
+                            await this._gs2.DispatchAsync(this._accessToken);
                         }
                     }
-                    
-                    break;
                 }
             }
             else {

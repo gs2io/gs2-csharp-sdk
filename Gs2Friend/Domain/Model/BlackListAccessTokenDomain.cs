@@ -109,7 +109,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -120,14 +119,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                         );
                         var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
-                    cache.ClearListCache<string>(
+                    _gs2.Cache.ClearListCache<string>(
                         Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
                             resultModel.Item.UserId.ToString(),
@@ -161,7 +160,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -172,14 +170,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                cache.ClearListCache<string>(
+                _gs2.Cache.ClearListCache<string>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         resultModel.Item.UserId.ToString(),
@@ -225,7 +223,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -236,14 +233,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                         );
                         var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
-                    cache.ClearListCache<string>(
+                    _gs2.Cache.ClearListCache<string>(
                         Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
                             resultModel.Item.UserId.ToString(),
@@ -277,7 +274,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -288,14 +284,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                     );
                     var key = Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                cache.ClearListCache<string>(
+                _gs2.Cache.ClearListCache<string>(
                     Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         resultModel.Item.UserId.ToString(),

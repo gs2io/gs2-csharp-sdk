@@ -23,90 +23,42 @@ namespace Gs2.Gs2Datastore.Domain.Model
 {
     public partial class DataObjectAccessTokenDomain
     {
-#if UNITY_2017_1_OR_NEWER
-	#if GS2_ENABLE_UNITASK
-        public async UniTask<byte[]> Download(
-	#else
-	    private class DownloadImplFuture : Gs2Future<byte[]>
-	    {
-		    private readonly string _fileUrl;
-
-		    public DownloadImplFuture(
-			    // ReSharper disable once UnusedParameter.Local
-			    DataObjectAccessTokenDomain domain,
-			    string fileUrl
-		    )
-		    {
-			    this._fileUrl = fileUrl;
-		    }
-
-		    public override IEnumerator Action()
-		    {
-			    using var request = UnityWebRequest.Get(this._fileUrl);
-			    request.downloadHandler = new DownloadHandlerBuffer();
-			    yield return request.SendWebRequest();
-			    if (request.responseCode != 200)
-			    {
-				    OnError(new UnknownException(Array.Empty<RequestError>()));
-			    }
-			    OnComplete(request.downloadHandler.data);
-		    }
-	    }
 	    
-	    public class DownloadFuture : Gs2Future<byte[]>
-	    {
-		    private readonly DataObjectAccessTokenDomain _domain;
-
-		    public DownloadFuture(
-			    DataObjectAccessTokenDomain domain
-		    )
-		    {
-			    this._domain = domain;
-		    }
-
-		    public override IEnumerator Action()
-		    {
+#if UNITY_2017_1_OR_NEWER
+	    public Gs2Future<byte[]> DownloadFuture() {
+		    IEnumerator Impl(Gs2Future<byte[]> self) {
+			    string fileUrl;
 			    {
-				    string fileUrl;
-				    {
-					    var task = this._domain.PrepareDownloadOwnDataFuture(
-						    new PrepareDownloadOwnDataRequest()
-					    );
-					    yield return task;
-					    if (task.Error != null)
-					    {
-						    OnError(task.Error);
-						    yield break;
-					    }
+				    var task = PrepareDownloadOwnDataFuture(
+					    new PrepareDownloadOwnDataRequest()
+				    );
+				    yield return task;
+				    if (task.Error != null) {
+					    self.OnError(task.Error);
+					    yield break;
+				    }
 
-					    fileUrl = task.Result.FileUrl;
+				    fileUrl = task.Result.FileUrl;
+			    }
+			    {
+				    using var request = UnityWebRequest.Get(fileUrl);
+				    request.downloadHandler = new DownloadHandlerBuffer();
+				    yield return request.SendWebRequest();
+				    if (request.responseCode != 200) {
+					    self.OnError(new UnknownException(Array.Empty<RequestError>()));
+					    yield break;
 				    }
-				    {
-					    var task = new DownloadImplFuture(
-						    this._domain,
-						    fileUrl
-					    );
-					    yield return task;
-					    if (task.Error != null)
-					    {
-						    OnError(task.Error);
-						    yield break;
-					    }
-					    OnComplete(task.Result);
-				    }
+				    self.OnComplete(request.downloadHandler.data);
 			    }
 		    }
-	    }
 
-        public DownloadFuture Download(
-	#endif
-#else
-	    public async Task<byte[]> Download(
+		    return new Gs2InlineFuture<byte[]>(Impl);
+	    }
 #endif
-	    )
+
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<byte[]> DownloadAsync()
         {
-#if UNITY_2017_1_OR_NEWER
-	#if GS2_ENABLE_UNITASK
 	        var result = await this.PrepareDownloadOwnDataAsync(
 		        new PrepareDownloadOwnDataRequest()
 	        );
@@ -116,14 +68,14 @@ namespace Gs2.Gs2Datastore.Domain.Model
 	        if (request.responseCode != 200) {
 		        throw new UnknownException(Array.Empty<RequestError>());
 	        }
-	        var data = request.downloadHandler.data;
-	        return data;
-#else
-	        return new DownloadFuture(
-		        this
-	        );
-	#endif
-#else
+	        return request.downloadHandler.data;
+        }
+#endif
+	    
+#if !UNITY_2017_1_OR_NEWER
+        public async Task<byte[]> DownloadAsync(
+	    )
+        {
 	        var result = await this.PrepareDownloadOwnDataAsync(
 		        new PrepareDownloadOwnDataRequest()
 	        );
@@ -133,156 +85,102 @@ namespace Gs2.Gs2Datastore.Domain.Model
 		        throw new UnknownException(Array.Empty<RequestError>());
 	        }
 	        return await response.Content.ReadAsByteArrayAsync();
-#endif
         }
+#endif
         
 #if UNITY_2017_1_OR_NEWER
-	#if GS2_ENABLE_UNITASK
-	    public async UniTask<DataObjectAccessTokenDomain> ReUpload(
-	#else
-	    private class ReUploadImplFuture : Gs2Future<RestResult>
-	    {
-		    private readonly string _uploadUrl;
-		    private readonly byte[] _data;
-
-		    public ReUploadImplFuture(
-			    // ReSharper disable once UnusedParameter.Local
-			    DataObjectAccessTokenDomain domain,
-			    string uploadUrl,
-			    byte[] data
-		    )
-		    {
-			    this._uploadUrl = uploadUrl;
-			    this._data = data;
-		    }
-
-		    public override IEnumerator Action()
-		    {
-			    using var request = UnityWebRequest.Put(this._uploadUrl, this._data);
-			    request.downloadHandler = new DownloadHandlerBuffer();
-			    yield return request.SendWebRequest();
-			    OnComplete(new RestResult(
-				    (int) request.responseCode,
-				    request.responseCode == 200 ? "{}" : string.IsNullOrEmpty(request.error) ? "{}" : request.error
-			    ));
-		    }
-	    }
-
-	    public class ReUploadFuture : Gs2Future<DataObjectAccessTokenDomain>
-	    {
-		    private readonly DataObjectAccessTokenDomain _domain;
-		    private readonly byte[] _data;
-
-		    public ReUploadFuture(
-			    DataObjectAccessTokenDomain domain,
-			    byte[] data
-		    )
-		    {
-			    this._domain = domain;
-			    this._data = data;
-		    }
-
-		    public override IEnumerator Action()
-		    {
+	    public Gs2Future<DataObjectAccessTokenDomain> ReUploadFuture(
+		    byte[] data
+		) {
+		    IEnumerator Impl(Gs2Future<DataObjectAccessTokenDomain> self) {
+			    string uploadUrl;
 			    {
-				    string uploadUrl;
+				    var future = PrepareReUploadFuture(
+					    new PrepareReUploadRequest()
+				    );
+				    yield return future;
+				    if (future.Error != null)
 				    {
-					    var task = _domain.PrepareReUploadFuture(
-						    new PrepareReUploadRequest()
-					    );
-					    yield return task;
-					    if (task.Error != null)
-					    {
-						    OnError(task.Error);
-						    yield break;
-					    }
-						var task2 = task.Result.ModelFuture();
-						yield return task2;
-
-						uploadUrl = task.Result.UploadUrl;
+					    self.OnError(future.Error);
+					    yield break;
 				    }
+				    uploadUrl = future.Result.UploadUrl;
+			    }
+			    {
+				    using var request = UnityWebRequest.Put(uploadUrl, data);
+				    request.downloadHandler = new DownloadHandlerBuffer();
+				    yield return request.SendWebRequest();
+			    }
+			    {
+				    var future = DoneUploadFuture(
+					    new DoneUploadRequest()
+				    );
+				    yield return future;
+				    if (future.Error != null)
 				    {
-					    var task = new ReUploadImplFuture(
-						    this._domain,
-						    uploadUrl,
-						    this._data
-					    );
-					    yield return task;
-					    if (task.Error != null)
-					    {
-						    OnError(task.Error);
-						    yield break;
-					    }
+					    self.OnError(future.Error);
+					    yield break;
 				    }
-				    {
-					    var task = _domain.DoneUploadFuture(
-						    new DoneUploadRequest()
-					    );
-					    yield return task;
-					    if (task.Error != null)
-					    {
-						    OnError(task.Error);
-						    yield break;
-					    }
-					    OnComplete(_domain);
-				    }
+				    self.OnComplete(this);
 			    }
 		    }
+
+		    return new Gs2InlineFuture<DataObjectAccessTokenDomain>(Impl);
 	    }
-
-        public ReUploadFuture ReUpload(
-	#endif
-#else
-	    public async Task<DataObjectAccessTokenDomain> ReUpload(
 #endif
-	        byte[] data
-        )
-        {
-#if UNITY_2017_1_OR_NEWER
-	#if GS2_ENABLE_UNITASK
-	        {
-		        var result = await this.PrepareReUploadAsync(
-			        new PrepareReUploadRequest()
-		        );
 
-		        using var request = UnityWebRequest.Put(result.UploadUrl, data);
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<DataObjectAccessTokenDomain> ReUploadAsync(
+	        byte[] data
+	    )
+        {
+	        string uploadUrl;
+	        {
+		        var result = await PrepareReUploadAsync(
+			        new PrepareReUploadRequest()
+			    );
+		        uploadUrl = result.UploadUrl;
+	        }
+	        {
+		        using var request = UnityWebRequest.Put(uploadUrl, data);
 		        request.downloadHandler = new DownloadHandlerBuffer();
 		        await request.SendWebRequest();
-		        if (request.responseCode != 200) {
-			        throw new UnknownException(Array.Empty<RequestError>());
-		        }
 	        }
 	        {
-		        var result = await this.DoneUploadAsync(
+		        await DoneUploadAsync(
 			        new DoneUploadRequest()
 		        );
-		        return result;
 	        }
-	#else
-	        return new ReUploadFuture(
-		        this,
-		        data
-	        );
-	#endif
-#else
+	        return this;
+        }
+#endif
+	    
+#if !UNITY_2017_1_OR_NEWER
+        public async Task<DataObjectAccessTokenDomain> ReUploadAsync(
+		    byte[] data
+	    )
+        {
+	        string uploadUrl;
 	        {
-		        var result = await this.PrepareReUploadAsync(
+		        var result = await PrepareReUploadAsync(
 			        new PrepareReUploadRequest()
-		        );
-		        
-		        var response = await new HttpClient().PutAsync(result.UploadUrl, new ByteArrayContent(data));
+			    );
+		        uploadUrl = result.UploadUrl;
+	        }
+	        {
+		        var response = await new HttpClient().PutAsync(uploadUrl, new ByteArrayContent(data));
 		        if (response.StatusCode != HttpStatusCode.OK)
 		        {
 			        throw new UnknownException(Array.Empty<RequestError>());
 		        }
 	        }
 	        {
-		        var result = await this.DoneUploadAsync(
+		        await DoneUploadAsync(
 			        new DoneUploadRequest()
 		        );
-		        return result;
 	        }
-#endif
+	        return this;
         }
+#endif
     }
 }

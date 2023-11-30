@@ -209,7 +209,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -221,7 +220,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                             var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                 item.Name.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 item,
@@ -278,7 +277,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -290,7 +288,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             item,
@@ -359,7 +357,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     var parentKey = CreateCacheParentKey(
@@ -367,10 +364,10 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         requestModel.UserId.ToString(),
                         "Entry"
                     );
-                    foreach (Gs2.Gs2Dictionary.Model.Entry item in cache.List<Gs2.Gs2Dictionary.Model.Entry>(
+                    foreach (Gs2.Gs2Dictionary.Model.Entry item in _gs2.Cache.List<Gs2.Gs2Dictionary.Model.Entry>(
                         parentKey
                     )) {
-                        cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
+                        _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
                                 parentKey,
                                 Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                     item?.Name?.ToString()
@@ -403,7 +400,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 var parentKey = CreateCacheParentKey(
@@ -411,10 +407,10 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     requestModel.UserId.ToString(),
                     "Entry"
                 );
-                foreach (Gs2.Gs2Dictionary.Model.Entry item in cache.List<Gs2.Gs2Dictionary.Model.Entry>(
+                foreach (Gs2.Gs2Dictionary.Model.Entry item in _gs2.Cache.List<Gs2.Gs2Dictionary.Model.Entry>(
                     parentKey
                 )) {
-                    cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
+                    _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
                             parentKey,
                             Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                 item?.Name?.ToString()
@@ -459,7 +455,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -488,7 +483,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -533,7 +527,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -545,7 +538,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                             var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                 item.Name.ToString()
                             );
-                            cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
+                            _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
                                 parentKey,
                                 key
                             );
@@ -589,7 +582,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -601,7 +593,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
+                        _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
                             parentKey,
                             key
                         );

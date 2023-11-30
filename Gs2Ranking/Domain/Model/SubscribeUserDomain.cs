@@ -173,7 +173,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -186,7 +185,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             resultModel.Item.CategoryName.ToString(),
                             resultModel.Item.TargetUserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -238,7 +237,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -251,7 +249,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         resultModel.Item.CategoryName.ToString(),
                         resultModel.Item.TargetUserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -308,7 +306,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -321,7 +318,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             resultModel.Item.CategoryName.ToString(),
                             resultModel.Item.TargetUserId.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Ranking.Model.SubscribeUser>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Ranking.Model.SubscribeUser>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -370,7 +367,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -383,7 +379,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         resultModel.Item.CategoryName.ToString(),
                         resultModel.Item.TargetUserId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Ranking.Model.SubscribeUser>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Ranking.Model.SubscribeUser>(parentKey, key);
                 }
             }
                 var domain = this;

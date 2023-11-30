@@ -139,7 +139,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -152,7 +151,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
                             resultModel.Item.ItemName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -168,7 +167,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.BigItemModelDomain.CreateCacheKey(
                             resultModel.ItemModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.ItemModel,
@@ -219,7 +218,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -232,7 +230,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
                         resultModel.Item.ItemName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -248,7 +246,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.BigItemModelDomain.CreateCacheKey(
                         resultModel.ItemModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.ItemModel,
@@ -285,7 +283,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -298,7 +295,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
                             resultModel.Item.ItemName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -334,7 +331,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -347,7 +343,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
                         resultModel.Item.ItemName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -395,7 +391,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -426,7 +421,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }

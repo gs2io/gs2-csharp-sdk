@@ -130,7 +130,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -141,7 +140,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         );
                         var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -156,7 +155,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
                             resultModel.QuestGroup.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.QuestGroup,
@@ -172,7 +171,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                             resultModel.Quest.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Quest,
@@ -220,7 +219,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -231,7 +229,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     );
                     var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -246,7 +244,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     var key = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheKey(
                         resultModel.QuestGroup.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.QuestGroup,
@@ -262,7 +260,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     var key = Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
                         resultModel.Quest.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Quest,
@@ -332,7 +330,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -343,9 +340,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                         );
                         var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                         );
-                        cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
                     }
-                    cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    _gs2.Cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
                         Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
                             this.UserId?.ToString(),
@@ -355,7 +352,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                             Gs2.Gs2Quest.Model.QuestModel.GetQuestGroupNameFromGrn(result.Item?.QuestModelId)
                         )
                     );
-                    cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
                         Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
                             this.UserId?.ToString(),
@@ -372,7 +369,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture();
+                    var future2 = stampSheet.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -430,7 +427,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -441,9 +437,9 @@ namespace Gs2.Gs2Quest.Domain.Model
                     );
                     var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
                 }
-                cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                _gs2.Cache.Delete<Gs2.Gs2Quest.Model.CompletedQuestList>(
                     Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
@@ -453,7 +449,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         Gs2.Gs2Quest.Model.QuestModel.GetQuestGroupNameFromGrn(result.Item?.QuestModelId)
                     )
                 );
-                cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
+                _gs2.Cache.ClearListCache<Gs2.Gs2Quest.Model.CompletedQuestList>(
                     Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
                         this.UserId?.ToString(),
@@ -526,7 +522,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -537,7 +532,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                         );
                         var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                         );
-                        cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -582,7 +577,6 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -593,7 +587,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                     );
                     var key = Gs2.Gs2Quest.Domain.Model.ProgressDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Quest.Model.Progress>(parentKey, key);
                 }
             }
                 var domain = this;

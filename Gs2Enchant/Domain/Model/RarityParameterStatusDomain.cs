@@ -174,7 +174,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -187,7 +186,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             resultModel.Item.ParameterName.ToString(),
                             resultModel.Item.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -239,7 +238,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -252,7 +250,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         resultModel.Item.ParameterName.ToString(),
                         resultModel.Item.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -309,7 +307,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -322,7 +319,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             resultModel.Item.ParameterName.ToString(),
                             resultModel.Item.PropertyId.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Enchant.Model.RarityParameterStatus>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Enchant.Model.RarityParameterStatus>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -371,7 +368,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -384,7 +380,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         resultModel.Item.ParameterName.ToString(),
                         resultModel.Item.PropertyId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Enchant.Model.RarityParameterStatus>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Enchant.Model.RarityParameterStatus>(parentKey, key);
                 }
             }
                 var domain = this;
@@ -427,7 +423,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -440,7 +435,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             resultModel.Item.ParameterName.ToString(),
                             resultModel.Item.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -476,7 +471,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -489,7 +483,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         resultModel.Item.ParameterName.ToString(),
                         resultModel.Item.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -537,7 +531,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -550,7 +543,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             resultModel.Item.ParameterName.ToString(),
                             resultModel.Item.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -586,7 +579,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -599,7 +591,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         resultModel.Item.ParameterName.ToString(),
                         resultModel.Item.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -647,7 +639,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -660,7 +651,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             resultModel.Item.ParameterName.ToString(),
                             resultModel.Item.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -696,7 +687,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -709,7 +699,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         resultModel.Item.ParameterName.ToString(),
                         resultModel.Item.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -757,7 +747,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -770,7 +759,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                             resultModel.Item.ParameterName.ToString(),
                             resultModel.Item.PropertyId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -806,7 +795,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -819,7 +807,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         resultModel.Item.ParameterName.ToString(),
                         resultModel.Item.PropertyId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,

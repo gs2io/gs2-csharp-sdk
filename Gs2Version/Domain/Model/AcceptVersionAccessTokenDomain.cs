@@ -114,7 +114,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -126,7 +125,7 @@ namespace Gs2.Gs2Version.Domain.Model
                         var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                             resultModel.Item.VersionName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -161,7 +160,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -173,7 +171,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                         resultModel.Item.VersionName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -239,7 +237,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -251,7 +248,7 @@ namespace Gs2.Gs2Version.Domain.Model
                         var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                             resultModel.Item.VersionName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -301,7 +298,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -313,7 +309,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                         resultModel.Item.VersionName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -368,7 +364,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -380,7 +375,7 @@ namespace Gs2.Gs2Version.Domain.Model
                         var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                             resultModel.Item.VersionName.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -427,7 +422,6 @@ namespace Gs2.Gs2Version.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -439,7 +433,7 @@ namespace Gs2.Gs2Version.Domain.Model
                     var key = Gs2.Gs2Version.Domain.Model.AcceptVersionDomain.CreateCacheKey(
                         resultModel.Item.VersionName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Version.Model.AcceptVersion>(parentKey, key);
                 }
             }
                 var domain = this;

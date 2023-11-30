@@ -135,7 +135,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -148,7 +147,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture();
+                    var future2 = stampSheet.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -180,7 +179,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -231,7 +229,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -259,7 +256,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -299,7 +295,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -312,7 +307,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture();
+                    var future2 = stampSheet.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -344,7 +339,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }

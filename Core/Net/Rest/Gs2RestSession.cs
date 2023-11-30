@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
@@ -22,6 +23,7 @@ namespace Gs2.Core.Net
         public static string EndpointHost = "https://{service}.{region}.gen2.gs2io.com";
 
         public State State;
+        private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
         
         private Dictionary<Gs2SessionTaskId, RestSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, RestSessionRequest>();
         private Dictionary<Gs2SessionTaskId, RestResult> _result = new Dictionary<Gs2SessionTaskId, RestResult>();
@@ -65,9 +67,76 @@ namespace Gs2.Core.Net
         public Gs2Future<OpenResult> OpenFuture()
         {
             IEnumerator Impl(Gs2Future<OpenResult> result) {
-                if (this.State == State.Available) {
+                while (!this._semaphore.Wait(0)) {
+                    yield return null;
+                }
+                try {
+                    if (this.State == State.Available) {
+                        result.OnComplete(new OpenResult());
+                        yield break;
+                    }
+
+                    if (this.State != State.Idle && this.State != State.Closed) {
+                        throw new InvalidOperationException("invalid state: " + this.State);
+                    }
+
+                    this._result.Clear();
+                    this._inflightRequest.Clear();
+                    this.State = State.Opening;
+                    var task = new RestOpenTask(
+                        this,
+#if UNITY_2017_1_OR_NEWER
+                        new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
+#else
+                    new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+#endif
+                        new LoginRequest {
+                            ClientId = Credential.ClientId,
+                            ClientSecret = Credential.ClientSecret,
+                        }
+                    );
+                    yield return task;
+
+                    if (task.Error != null) {
+                        this.State = State.Closed;
+                        result.OnError(task.Error);
+                        yield break;
+                    }
+
+                    Credential.ProjectToken = task.Result.AccessToken;
+                    OwnerId = task.Result.OwnerId;
+                    this.State = State.Available;
+
                     result.OnComplete(new OpenResult());
+#if !UNITY_2017_1_OR_NEWER
                     yield break;
+#endif
+                }
+                finally {
+                    this._semaphore.Release();
+                }
+            }
+
+            return new Gs2InlineFuture<OpenResult>(Impl);
+        }
+        
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+        public async UniTask<OpenResult> OpenAsync()
+    #else
+        public async Task<OpenResult> OpenAsync()
+    #endif
+        {
+            while (!this._semaphore.Wait(0)) {
+    #if UNITY_2017_1_OR_NEWER
+                await UniTask.Yield();
+    #else
+                await Task.Yield();
+    #endif
+            }
+            try {
+                if (this.State == State.Available) {
+                    return new OpenResult();
                 }
 
                 if (this.State != State.Idle && this.State != State.Closed) {
@@ -79,73 +148,35 @@ namespace Gs2.Core.Net
                 this.State = State.Opening;
                 var task = new RestOpenTask(
                     this,
-#if UNITY_2017_1_OR_NEWER
+    #if UNITY_2017_1_OR_NEWER
                     new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
-#else
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-#endif
+    #else
+                    new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+    #endif
                     new LoginRequest {
                         ClientId = Credential.ClientId,
                         ClientSecret = Credential.ClientSecret,
                     }
                 );
-                yield return task;
+                try {
+                    var result = await task.Invoke();
 
-                if (task.Error != null) {
-                    result.OnError(task.Error);
-                    yield break;
+                    Credential.ProjectToken = result.AccessToken;
+                    OwnerId = result.OwnerId;
+                    this.State = State.Available;
+
+                    return new OpenResult();
                 }
-
-                Credential.ProjectToken = task.Result.AccessToken;
-                OwnerId = task.Result.OwnerId;
-                this.State = State.Available;
-
-                result.OnComplete(new OpenResult());
-#if !UNITY_2017_1_OR_NEWER
-                yield break;
-#endif
-            }
-
-            return new Gs2InlineFuture<OpenResult>(Impl);
-        }
-        
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<OpenResult> OpenAsync()
-#else
-        public async Task<OpenResult> OpenAsync()
-#endif
-        {
-            if (this.State == State.Available) {
-                return new OpenResult();
-            }
-
-            if (this.State != State.Idle && this.State != State.Closed) {
-                throw new InvalidOperationException("invalid state");
-            }
-
-            this._result.Clear();
-            this._inflightRequest.Clear();
-            this.State = State.Opening;
-            var task = new RestOpenTask(
-                this,
-#if UNITY_2017_1_OR_NEWER
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
-#else
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-#endif
-                new LoginRequest {
-                    ClientId = Credential.ClientId,
-                    ClientSecret = Credential.ClientSecret,
+                catch (System.Exception) {
+                    this.State = State.Closed;
+                    throw;
                 }
-            );
-            var result = await task.Invoke();
-
-            Credential.ProjectToken = result.AccessToken;
-            OwnerId = result.OwnerId;
-            this.State = State.Available;
-
-            return new OpenResult();
+            }
+            finally {
+                this._semaphore.Release();
+            }
         }
+#endif
         
         // ReOpen
         
@@ -201,11 +232,12 @@ namespace Gs2.Core.Net
             return new Gs2InlineFuture<OpenResult>(Impl);
         }
         
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
         public async UniTask<OpenResult> ReOpenAsync()
-#else
+    #else
         public async Task<OpenResult> ReOpenAsync()
-#endif
+    #endif
         {
             if (this.State == State.Opening || this.State == State.LoggingIn) {
                 var begin = DateTime.Now;
@@ -220,6 +252,7 @@ namespace Gs2.Core.Net
 
             return await OpenAsync();
         }
+#endif
         
         // Close
         
@@ -319,11 +352,12 @@ namespace Gs2.Core.Net
             yield return null;
         }
         
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
         public async UniTask SendAsync(IGs2SessionRequest request)
-#else
+    #else
         public async Task SendAsync(IGs2SessionRequest request)
-#endif
+    #endif
         {
             if (request is RestSessionRequestFuture sessionRequest) {
                 this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
@@ -337,7 +371,8 @@ namespace Gs2.Core.Net
                 this._result[sessionRequest.TaskId] = sessionRequest.Result;
             }
         }
-        
+#endif
+
         public bool Ping()
         {
             return true;

@@ -144,7 +144,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -156,13 +155,13 @@ namespace Gs2.Gs2Mission.Domain.Model
                         var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
-                        cache.ClearListCache<Gs2.Gs2Mission.Model.Complete>(
+                        _gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.Complete>(
                             parentKey.Replace("Counter", "Complete")
                         );
                     }
@@ -194,7 +193,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -206,13 +204,13 @@ namespace Gs2.Gs2Mission.Domain.Model
                     var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
-                    cache.ClearListCache<Gs2.Gs2Mission.Model.Complete>(
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Mission.Model.Complete>(
                         parentKey.Replace("Counter", "Complete")
                     );
                 }
@@ -256,7 +254,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -268,7 +265,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                         var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -303,7 +300,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -315,7 +311,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -381,7 +377,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -393,7 +388,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                         var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -443,7 +438,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -455,7 +449,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -510,7 +504,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -522,7 +515,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                         var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Mission.Model.Counter>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Counter>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -569,7 +562,6 @@ namespace Gs2.Gs2Mission.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -581,7 +573,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                     var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Mission.Model.Counter>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Counter>(parentKey, key);
                 }
             }
                 var domain = this;

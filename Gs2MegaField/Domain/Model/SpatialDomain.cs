@@ -153,7 +153,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -166,7 +165,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                             resultModel.Item.AreaModelName.ToString(),
                             resultModel.Item.LayerModelName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -202,7 +201,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -215,7 +213,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         resultModel.Item.AreaModelName.ToString(),
                         resultModel.Item.LayerModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -263,7 +261,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     {
                         var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -276,7 +273,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                                 item.AreaModelName.ToString(),
                                 item.LayerModelName.ToString()
                             );
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 parentKey,
                                 key,
                                 item,
@@ -337,7 +334,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 {
                     var parentKey = Gs2.Gs2MegaField.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -350,7 +346,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                             item.AreaModelName.ToString(),
                             item.LayerModelName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             item,

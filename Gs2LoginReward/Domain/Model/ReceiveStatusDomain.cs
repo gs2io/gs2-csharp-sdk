@@ -163,7 +163,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -175,7 +174,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             resultModel.Item.BonusModelName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -190,7 +189,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                             resultModel.BonusModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.BonusModel,
@@ -240,7 +239,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -252,7 +250,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                         resultModel.Item.BonusModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -267,7 +265,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                         resultModel.BonusModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.BonusModel,
@@ -322,7 +320,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -334,7 +331,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             resultModel.Item.BonusModelName.ToString()
                         );
-                        cache.Delete<Gs2.Gs2LoginReward.Model.ReceiveStatus>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2LoginReward.Model.ReceiveStatus>(parentKey, key);
                     }
                     if (resultModel.BonusModel != null) {
                         var parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -344,7 +341,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                             resultModel.BonusModel.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -391,7 +388,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -403,7 +399,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                         resultModel.Item.BonusModelName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2LoginReward.Model.ReceiveStatus>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2LoginReward.Model.ReceiveStatus>(parentKey, key);
                 }
                 if (resultModel.BonusModel != null) {
                     var parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -413,7 +409,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                         resultModel.BonusModel.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2LoginReward.Model.BonusModel>(parentKey, key);
                 }
             }
                 var domain = this;
@@ -455,7 +451,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -467,7 +462,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             resultModel.Item.BonusModelName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -482,7 +477,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                             resultModel.BonusModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.BonusModel,
@@ -517,7 +512,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -529,7 +523,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                         resultModel.Item.BonusModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -544,7 +538,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                         resultModel.BonusModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.BonusModel,
@@ -591,7 +585,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -603,7 +596,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                             resultModel.Item.BonusModelName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -618,7 +611,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                         var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                             resultModel.BonusModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.BonusModel,
@@ -653,7 +646,6 @@ namespace Gs2.Gs2LoginReward.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -665,7 +657,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusDomain.CreateCacheKey(
                         resultModel.Item.BonusModelName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -680,7 +672,7 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     var key = Gs2.Gs2LoginReward.Domain.Model.BonusModelDomain.CreateCacheKey(
                         resultModel.BonusModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.BonusModel,

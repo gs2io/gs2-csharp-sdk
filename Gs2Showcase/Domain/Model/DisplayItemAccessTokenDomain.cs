@@ -478,16 +478,20 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Model.DisplayItem> ModelFuture()
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.DisplayItem> self)
-            {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                        this.DisplayItemId?.ToString()
-                    )
-                );
-                self.OnComplete(value);
-                return null;
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.DisplayItem> self) {
+                var future = this._gs2.Showcase.Namespace(
+                    NamespaceName
+                ).AccessToken(
+                    AccessToken
+                ).Showcase(
+                    ShowcaseName
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                self.OnComplete(future.Result.DisplayItems.FirstOrDefault(v => v.DisplayItemId == DisplayItemId));
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.DisplayItem>(Impl);
         }
@@ -499,13 +503,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                        this.DisplayItemId?.ToString()
-                    )
-                );
-            return value;
+            var item = await this._gs2.Showcase.Namespace(
+                NamespaceName
+            ).AccessToken(
+                AccessToken
+            ).Showcase(
+                ShowcaseName
+            ).ModelAsync();
+            return item.DisplayItems.FirstOrDefault(v => v.DisplayItemId == DisplayItemId);
         }
         #endif
 
