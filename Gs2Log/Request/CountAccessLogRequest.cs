@@ -33,56 +33,47 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class CountAccessLogRequest : Gs2Request<CountAccessLogRequest>
 	{
-        public string NamespaceName { set; get; }
-        public bool? Service { set; get; }
-        public bool? Method { set; get; }
-        public bool? UserId { set; get; }
-        public long? Begin { set; get; }
-        public long? End { set; get; }
-        public bool? LongTerm { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public bool? Service { set; get; }
+         public bool? Method { set; get; }
+         public bool? UserId { set; get; }
+         public long? Begin { set; get; }
+         public long? End { set; get; }
+         public bool? LongTerm { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public CountAccessLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CountAccessLogRequest WithService(bool? service) {
             this.Service = service;
             return this;
         }
-
         public CountAccessLogRequest WithMethod(bool? method) {
             this.Method = method;
             return this;
         }
-
         public CountAccessLogRequest WithUserId(bool? userId) {
             this.UserId = userId;
             return this;
         }
-
         public CountAccessLogRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
-
         public CountAccessLogRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
-
         public CountAccessLogRequest WithLongTerm(bool? longTerm) {
             this.LongTerm = longTerm;
             return this;
         }
-
         public CountAccessLogRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public CountAccessLogRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

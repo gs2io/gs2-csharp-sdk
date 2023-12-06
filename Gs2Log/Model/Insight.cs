@@ -39,42 +39,34 @@ namespace Gs2.Gs2Log.Model
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public Insight WithInsightId(string insightId) {
             this.InsightId = insightId;
             return this;
         }
-
         public Insight WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Insight WithTaskId(string taskId) {
             this.TaskId = taskId;
             return this;
         }
-
         public Insight WithHost(string host) {
             this.Host = host;
             return this;
         }
-
         public Insight WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public Insight WithStatus(string status) {
             this.Status = status;
             return this;
         }
-
         public Insight WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Insight WithRevision(long? revision) {
             this.Revision = revision;
             return this;

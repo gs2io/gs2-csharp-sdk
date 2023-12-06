@@ -33,62 +33,52 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class CountIssueStampSheetLogRequest : Gs2Request<CountIssueStampSheetLogRequest>
 	{
-        public string NamespaceName { set; get; }
-        public bool? Service { set; get; }
-        public bool? Method { set; get; }
-        public bool? UserId { set; get; }
-        public bool? Action { set; get; }
-        public long? Begin { set; get; }
-        public long? End { set; get; }
-        public bool? LongTerm { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public bool? Service { set; get; }
+         public bool? Method { set; get; }
+         public bool? UserId { set; get; }
+         public bool? Action { set; get; }
+         public long? Begin { set; get; }
+         public long? End { set; get; }
+         public bool? LongTerm { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public CountIssueStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithService(bool? service) {
             this.Service = service;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithMethod(bool? method) {
             this.Method = method;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithUserId(bool? userId) {
             this.UserId = userId;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithAction(bool? action) {
             this.Action = action;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithLongTerm(bool? longTerm) {
             this.LongTerm = longTerm;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public CountIssueStampSheetLogRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

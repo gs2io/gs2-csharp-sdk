@@ -33,20 +33,17 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class DescribeInsightsRequest : Gs2Request<DescribeInsightsRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string NamespaceName { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeInsightsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public DescribeInsightsRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeInsightsRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;

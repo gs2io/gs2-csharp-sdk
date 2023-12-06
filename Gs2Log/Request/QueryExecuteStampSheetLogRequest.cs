@@ -33,63 +33,53 @@ namespace Gs2.Gs2Log.Request
 	[System.Serializable]
 	public class QueryExecuteStampSheetLogRequest : Gs2Request<QueryExecuteStampSheetLogRequest>
 	{
-        public string NamespaceName { set; get; }
-        public string Service { set; get; }
-        public string Method { set; get; }
-        public string UserId { set; get; }
-        public string Action { set; get; }
-        public long? Begin { set; get; }
-        public long? End { set; get; }
-        public bool? LongTerm { set; get; }
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
+         public string NamespaceName { set; get; }
+         public string Service { set; get; }
+         public string Method { set; get; }
+         public string UserId { set; get; }
+         public string Action { set; get; }
+         public long? Begin { set; get; }
+         public long? End { set; get; }
+         public bool? LongTerm { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public QueryExecuteStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithService(string service) {
             this.Service = service;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithMethod(string method) {
             this.Method = method;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithAction(string action) {
             this.Action = action;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithBegin(long? begin) {
             this.Begin = begin;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithEnd(long? end) {
             this.End = end;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithLongTerm(bool? longTerm) {
             this.LongTerm = longTerm;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public QueryExecuteStampSheetLogRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;
