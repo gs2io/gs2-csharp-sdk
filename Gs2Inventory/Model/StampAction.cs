@@ -64,8 +64,12 @@ namespace Gs2.Gs2Inventory.Model
                     return DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:AcquireSimpleItemsByUserId":
                     return AcquireSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:SetSimpleItemsByUserId":
+                    return SetSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:AcquireBigItemByUserId":
                     return AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:SetBigItemByUserId":
+                    return SetBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

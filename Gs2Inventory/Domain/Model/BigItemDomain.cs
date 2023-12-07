@@ -507,6 +507,114 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> SetFuture(
+            SetBigItemByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> self)
+            {
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                var future = this._client.SetBigItemByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.InventoryName,
+                            "BigItem"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                            resultModel.Item.ItemName.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> SetAsync(
+            #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> SetAsync(
+            #endif
+            SetBigItemByUserIdRequest request
+        ) {
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName)
+                .WithItemName(this.ItemName);
+            SetBigItemByUserIdResult result = null;
+                result = await this._client.SetBigItemByUserIdAsync(
+                    request
+                );
+
+            var requestModel = request;
+            var resultModel = result;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        this.InventoryName,
+                        "BigItem"
+                    );
+                    var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
+                        resultModel.Item.ItemName.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        [Obsolete("The name has been changed to SetFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> Set(
+            SetBigItemByUserIdRequest request
+        ) {
+            return SetFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemDomain> DeleteFuture(
             DeleteBigItemByUserIdRequest request
         ) {

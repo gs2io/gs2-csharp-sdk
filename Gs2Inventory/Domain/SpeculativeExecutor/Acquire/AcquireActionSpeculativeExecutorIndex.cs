@@ -153,10 +153,42 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (SetSimpleItemsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = SetSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = SetSimpleItemsByUserIdSpeculativeExecutor.Rate(request, rate);
+                    var future = SetSimpleItemsByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 if (AcquireBigItemByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                     request = AcquireBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
                     var future = AcquireBigItemByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
+                if (SetBigItemByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = SetBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = SetBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                    var future = SetBigItemByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
                         request
@@ -245,10 +277,28 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     request
                 );
             }
+            if (SetSimpleItemsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = SetSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = SetSimpleItemsByUserIdSpeculativeExecutor.Rate(request, rate);
+                return await SetSimpleItemsByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
             if (AcquireBigItemByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AcquireBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 request = AcquireBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AcquireBigItemByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (SetBigItemByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = SetBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = SetBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                return await SetBigItemByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request
