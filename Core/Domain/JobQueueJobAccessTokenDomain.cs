@@ -134,7 +134,7 @@ namespace Gs2.Core.Domain
                                 var future3 = new JobQueueJobAccessTokenDomain(
                                     this._gs2,
                                     this._accessToken,
-                                    true,
+                                    result2.AutoRun ?? false,
                                     job.JobId
                                 ).WaitFuture(all);
                                 yield return future3;
@@ -153,46 +153,11 @@ namespace Gs2.Core.Domain
                         }
                     }
                 } else {
-                    if (!string.IsNullOrEmpty(namespaceName)) {
-                        while (true) {
-                            var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                                this._gs2
-                            ).Namespace(
-                                namespaceName
-                            ).AccessToken(
-                                this._accessToken
-                            ).RunFuture(
-                                new RunRequest()
-                            );
-                            yield return future;
-                            if (future.Error != null) {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                            var result = future.Result;
-                            
-                            if (result.IsLastJob ?? true) {
-                                break;
-                            }
-                        }
-                        var future2 = new JobQueueJobAccessTokenDomain(
-                            this._gs2,
-                            this._accessToken,
-                            true,
-                            this.JobId
-                        ).WaitFuture(all);
-                        yield return future2;
-                        if (future2.Error != null) {
-                            self.OnError(future2.Error);
-                            yield break;
-                        }
-                        
-                        var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
-                        yield return dispatchFuture;
-                        if (dispatchFuture.Error != null) {
-                            self.OnError(dispatchFuture.Error);
-                            yield break;
-                        }
+                    var dispatchFuture = this._gs2.DispatchFuture(this._accessToken);
+                    yield return dispatchFuture;
+                    if (dispatchFuture.Error != null) {
+                        self.OnError(dispatchFuture.Error);
+                        yield break;
                     }
                 }
             }
@@ -253,7 +218,7 @@ namespace Gs2.Core.Domain
                             await new JobQueueJobAccessTokenDomain(
                                 this._gs2,
                                 this._accessToken,
-                                true,
+                                result2.AutoRun ?? false,
                                 job.JobId
                             ).WaitAsync(all);
                             await this._gs2.DispatchAsync(this._accessToken);
@@ -262,29 +227,7 @@ namespace Gs2.Core.Domain
                 }
             }
             else {
-                if (!string.IsNullOrEmpty(namespaceName)) {
-                    while (true) {
-                        var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                            this._gs2
-                        ).Namespace(
-                            namespaceName
-                        ).AccessToken(
-                            this._accessToken
-                        ).RunAsync(
-                            new RunRequest()
-                        );
-                        if (result.IsLastJob ?? true) {
-                            break;
-                        }
-                    }
-                    await new JobQueueJobAccessTokenDomain(
-                        this._gs2,
-                        this._accessToken,
-                        true,
-                        this.JobId
-                    ).WaitAsync(all);
-                    await this._gs2.DispatchAsync(this._accessToken);
-                }
+                await this._gs2.DispatchAsync(this._accessToken);
             }
             return this;
         }

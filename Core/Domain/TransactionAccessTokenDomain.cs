@@ -171,7 +171,7 @@ namespace Gs2.Core.Domain
                         this.StampSheet.ToString(),
                         this.StampSheetEncryptionKey.ToString()
                     );
-                    var future4 = stampSheet.RunFuture();
+                    var future4 = stampSheet.RunFuture(this._accessToken);
                     yield return future4;
                     if (future4.Error != null) {
                         self.OnError(new TransactionException(stampSheet, future4.Error));
@@ -228,13 +228,39 @@ namespace Gs2.Core.Domain
                         if (all || !(result2.AutoRun ?? false))
                         {
                             foreach (var job in result2.Items) {
-                                await new JobQueueJobAccessTokenDomain(
-                                    this._gs2,
-                                    this._accessToken,
-                                    result2.AutoRun ?? false,
-                                    job.JobId
-                                ).WaitAsync(all);
-                                await this._gs2.DispatchAsync(this._accessToken);
+                                bool[] cancel = {false};
+#if UNITY_2017_1_OR_NEWER
+                                async UniTask Dispatch()
+#else
+                                async Task Dispatch()
+#endif
+                                {
+                                    while (!cancel[0]) {
+                                        await this._gs2.DispatchAsync(this._accessToken);
+#if UNITY_2017_1_OR_NEWER
+                                        await UniTask.Delay(TimeSpan.FromMilliseconds(1));
+#else
+                                        await Task.Delay(TimeSpan.FromMilliseconds(1));
+#endif
+                                    }
+                                }
+#if UNITY_2017_1_OR_NEWER
+                                await UniTask.WhenAny(
+                                    new UniTask[] {
+#else
+                                await Task.WhenAny(
+                                    new Task[] {
+#endif
+                                        new JobQueueJobAccessTokenDomain(
+                                            this._gs2,
+                                            this._accessToken,
+                                            result2.AutoRun ?? false,
+                                            job.JobId
+                                        ).WaitAsync(all),
+                                        Dispatch(),
+                                    }
+                                );
+                                cancel[0] = true;
                             }
                         }
                     }
@@ -267,8 +293,34 @@ namespace Gs2.Core.Domain
                     this.StampSheetEncryptionKey.ToString()
                 );
                 try {
-                    await stampSheet.RunAsync();
-                    await this._gs2.DispatchAsync(this._accessToken);
+                    bool[] cancel = {false};
+#if UNITY_2017_1_OR_NEWER
+                    async UniTask Dispatch()
+#else
+                    async Task Dispatch()
+#endif
+                    {
+                        while (!cancel[0]) {
+                            await this._gs2.DispatchAsync(this._accessToken);
+#if UNITY_2017_1_OR_NEWER
+                            await UniTask.Delay(TimeSpan.FromMilliseconds(1));
+#else
+                            await Task.Delay(TimeSpan.FromMilliseconds(1));
+#endif
+                        }
+                    }
+#if UNITY_2017_1_OR_NEWER
+                    await UniTask.WhenAny(
+                        new UniTask[] {
+#else
+                    await Task.WhenAny(
+                        new Task[] {
+#endif
+                            stampSheet.RunAsync(this._accessToken),
+                            Dispatch(),
+                        }
+                    );
+                    cancel[0] = true;
                 } catch (Gs2Exception e) {
                     throw new TransactionException(stampSheet, e);
                 }

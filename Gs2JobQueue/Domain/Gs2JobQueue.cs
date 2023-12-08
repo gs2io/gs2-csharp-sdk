@@ -32,6 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
@@ -64,6 +65,7 @@ namespace Gs2.Gs2JobQueue.Domain
 
     public class Gs2JobQueue {
 
+        private static readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
         private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
@@ -852,12 +854,18 @@ namespace Gs2.Gs2JobQueue.Domain
                     onPushNotification.Invoke(PushNotification.FromJson(JsonMapper.ToObject(payload)));
                     break;
                 }
-                case "RunNotification": {
-                    lock (_completedJobs)
-                    {
+                case "RunNotification":
+                {
+                    _semaphore.Wait();
+                    try {
                         var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
-                        _completedJobs.Add(notification);
-                        onRunNotification.Invoke(notification);
+                        if (_completedJobs.Count(v => v.JobName == notification.JobName) == 0) {
+                            _completedJobs.Add(notification);
+                            onRunNotification.Invoke(notification);
+                        }
+                    }
+                    finally {
+                        _semaphore.Release();
                     }
                     break;
                 }
@@ -873,15 +881,19 @@ namespace Gs2.Gs2JobQueue.Domain
             RunNotification[] copiedCompletedJobs;
             IEnumerator Impl(Gs2Future self)
             {
-                lock (_completedJobs)
-                {
-                    if (_completedJobs.Count == 0)
-                    {
+                while (!_semaphore.Wait(0)) {
+                    yield return null;
+                }
+                try {
+                    if (_completedJobs.Count == 0) {
                         yield break;
                     }
                     copiedCompletedJobs = new RunNotification[_completedJobs.Count];
                     _completedJobs.CopyTo(copiedCompletedJobs);
                     _completedJobs.Clear();
+                }
+                finally {
+                    _semaphore.Release();
                 }
                 foreach (var completedJob in copiedCompletedJobs)
                 {
@@ -949,15 +961,17 @@ namespace Gs2.Gs2JobQueue.Domain
         )
         {
             RunNotification[] copiedCompletedJobs;
-            lock (_completedJobs)
-            {
-                if (_completedJobs.Count == 0)
-                {
+            await _semaphore.WaitAsync();
+            try {
+                if (_completedJobs.Count == 0) {
                     return;
                 }
                 copiedCompletedJobs = new RunNotification[_completedJobs.Count];
                 _completedJobs.CopyTo(copiedCompletedJobs);
                 _completedJobs.Clear();
+            }
+            finally {
+                _semaphore.Release();
             }
             foreach (var completedJob in copiedCompletedJobs)
             {

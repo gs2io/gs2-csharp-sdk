@@ -87,7 +87,7 @@ namespace Gs2.Core.Domain
                         var result = future.Result;
 
                         if (result == null) {
-                            yield return new WaitForSeconds(0.1f);
+                            yield return new WaitForSeconds(0.01f);
                             
                             var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
                             yield return dispatchFuture;
@@ -131,7 +131,7 @@ namespace Gs2.Core.Domain
                                     var future3 = new JobQueueJobDomain(
                                         this._gs2,
                                         this._userId,
-                                        true,
+                                        result2.AutoRun ?? false,
                                         job.JobId
                                     ).WaitFuture(all);
                                     yield return future3;
@@ -151,47 +151,11 @@ namespace Gs2.Core.Domain
                         }
                     }
                 } else {
-                    var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
-                    if (!string.IsNullOrEmpty(namespaceName)) {
-                        while (true) {
-                            var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                                this._gs2
-                            ).Namespace(
-                                namespaceName
-                            ).User(
-                                this._userId
-                            ).RunFuture(
-                                new RunByUserIdRequest()
-                            );
-                            yield return future;
-                            if (future.Error != null) {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                            var result = future.Result;
-                            
-                            if (result.IsLastJob ?? true) {
-                                break;
-                            }
-                        }
-                        var future2 = new JobQueueJobDomain(
-                            this._gs2,
-                            this._userId,
-                            true,
-                            this.JobId
-                        ).WaitFuture(all);
-                        yield return future2;
-                        if (future2.Error != null) {
-                            self.OnError(future2.Error);
-                            yield break;
-                        }
-                        
-                        var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
-                        yield return dispatchFuture;
-                        if (dispatchFuture.Error != null) {
-                            self.OnError(dispatchFuture.Error);
-                            yield break;
-                        }
+                    var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
+                    yield return dispatchFuture;
+                    if (dispatchFuture.Error != null) {
+                        self.OnError(dispatchFuture.Error);
+                        yield break;
                     }
                 }
             }
@@ -221,7 +185,7 @@ namespace Gs2.Core.Domain
                     ).JobResult().ModelAsync();
                     if (result == null) {
 #if UNITY_2017_1_OR_NEWER
-                        await UniTask.Delay(TimeSpan.FromMilliseconds(100));
+                        await UniTask.Delay(TimeSpan.FromMilliseconds(10));
 #else
                         await Task.Delay(TimeSpan.FromMilliseconds(100));
 #endif
@@ -251,7 +215,7 @@ namespace Gs2.Core.Domain
                                 await new JobQueueJobDomain(
                                     this._gs2,
                                     this._userId,
-                                    true,
+                                    result2.AutoRun ?? false,
                                     job.JobId
                                 ).WaitAsync(all);
                                 await this._gs2.DispatchByUserIdAsync(this._userId);
@@ -263,30 +227,7 @@ namespace Gs2.Core.Domain
                 }
             }
             else {
-                var namespaceName = Job.GetNamespaceNameFromGrn(this.JobId);
-                if (!string.IsNullOrEmpty(namespaceName)) {
-                    while (true) {
-                        var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                            this._gs2
-                        ).Namespace(
-                            namespaceName
-                        ).User(
-                            this._userId
-                        ).RunAsync(
-                            new RunByUserIdRequest()
-                        );
-                        if (result.IsLastJob ?? true) {
-                            break;
-                        }
-                    }
-                    await new JobQueueJobDomain(
-                        this._gs2,
-                        this._userId,
-                        true,
-                        this.JobId
-                    ).WaitAsync(all);
-                    await this._gs2.DispatchByUserIdAsync(this._userId);
-                }
+                await this._gs2.DispatchByUserIdAsync(this._userId);
             }
             return this;
         }

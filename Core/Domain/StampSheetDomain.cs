@@ -3,9 +3,11 @@ using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor;
 using Gs2.Gs2Distributor.Request;
 using Gs2.Gs2Distributor.Result;
+using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
@@ -31,7 +33,9 @@ namespace Gs2.Core.Domain
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public Gs2Future RunFuture()
+        public Gs2Future RunFuture(
+            AccessToken accessToken = null
+        )
         {
             IEnumerator Impl(Gs2Future self)
             {
@@ -178,7 +182,7 @@ namespace Gs2.Core.Domain
                         resultJson["stampSheet"].ToString(),
                         resultJson["stampSheetEncryptionKeyId"].ToString()
                     );
-                    yield return newStampSheet.RunFuture();
+                    yield return newStampSheet.RunFuture(accessToken);
                 }
 
                 if (action == "Gs2JobQueue:PushByUserId")
@@ -194,9 +198,13 @@ namespace Gs2.Core.Domain
         
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public async UniTask RunAsync()
+        public async UniTask RunAsync(
+            AccessToken accessToken = null
+        )
     #else
-        public async Task RunAsync()
+        public async Task RunAsync(
+            AccessToken accessToken = null
+        )
     #endif
         {
             var client = new Gs2DistributorRestClient(
@@ -252,7 +260,7 @@ namespace Gs2.Core.Domain
                     catch (NotFoundException) {
                         if (this._gs2.TransactionConfiguration != null) {
                             this._gs2.TransactionConfiguration.NamespaceName = null;
-                            await RunAsync();
+                            await RunAsync(accessToken);
                             return;
                         }
                     }
@@ -305,7 +313,7 @@ namespace Gs2.Core.Domain
                 catch (NotFoundException) {
                     if (this._gs2.TransactionConfiguration != null) {
                         this._gs2.TransactionConfiguration.NamespaceName = null;
-                        await RunAsync();
+                        await RunAsync(accessToken);
                         return;
                     }
                 }
@@ -318,14 +326,54 @@ namespace Gs2.Core.Domain
                     resultJson["stampSheet"].ToString(),
                     resultJson["stampSheetEncryptionKeyId"].ToString()
                 );
-                await newStampSheet.RunAsync();
+                await newStampSheet.RunAsync(accessToken);
             }
 
             if (action == "Gs2JobQueue:PushByUserId")
             {
-                this._gs2.PushJobQueue(
-                    requestJson["namespaceName"].ToString()
-                );
+                if (accessToken == null) {
+                    this._gs2.PushJobQueue(
+                        requestJson["namespaceName"].ToString()
+                    );
+                }
+                else {
+                    var result2 = PushByUserIdResult.FromJson(resultJson);
+                    foreach (var job in result2.Items) {
+                        bool[] cancel = {false};
+#if UNITY_2017_1_OR_NEWER
+                        async UniTask Dispatch()
+#else
+                        async Task Dispatch()
+#endif
+                        {
+                            while (!cancel[0]) {
+                                await this._gs2.DispatchAsync(accessToken);
+#if UNITY_2017_1_OR_NEWER
+                                await UniTask.Delay(TimeSpan.FromMilliseconds(1));
+#else
+                                await Task.Delay(TimeSpan.FromMilliseconds(1));
+#endif
+                            }
+                        }
+#if UNITY_2017_1_OR_NEWER
+                        await UniTask.WhenAny(
+                            new UniTask[] {
+#else
+                        await Task.WhenAny(
+                            new Task[] {
+#endif
+                                new JobQueueJobAccessTokenDomain(
+                                    this._gs2,
+                                    accessToken,
+                                    result2.AutoRun ?? false,
+                                    job.JobId
+                                ).WaitAsync(true),
+                                Dispatch()
+                            }
+                        );
+                        cancel[0] = true;
+                    }
+                }
             }
         }
 #endif
