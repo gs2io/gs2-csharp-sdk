@@ -322,6 +322,110 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> ReportFuture(
+            ReportRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> self)
+            {
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this._accessToken?.Token)
+                    .WithStatusName(this.StatusName);
+                var future = this._client.ReportFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> ReportAsync(
+            #else
+        public async Task<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> ReportAsync(
+            #endif
+            ReportRequest request
+        ) {
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this._accessToken?.Token)
+                .WithStatusName(this.StatusName);
+            ReportResult result = null;
+                result = await this._client.ReportAsync(
+                    request
+                );
+
+            var requestModel = request;
+            var resultModel = result;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = this;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        [Obsolete("The name has been changed to ReportFuture.")]
+        public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> Report(
+            ReportRequest request
+        ) {
+            return ReportFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusAccessTokenDomain> ExitStateMachineFuture(
             ExitStateMachineRequest request
         ) {

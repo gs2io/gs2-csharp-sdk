@@ -35,6 +35,9 @@ namespace Gs2.Gs2StateMachine.Model
         public string UserId { set; get; }
         public string Name { set; get; }
         public long? StateMachineVersion { set; get; }
+        public string EnableSpeculativeExecution { set; get; }
+        public string StateMachineDefinition { set; get; }
+        public Gs2.Gs2StateMachine.Model.RandomStatus RandomStatus { set; get; }
         public Gs2.Gs2StateMachine.Model.StackEntry[] Stacks { set; get; }
         public Gs2.Gs2StateMachine.Model.Variable[] Variables { set; get; }
         public string Value { set; get; }
@@ -56,6 +59,18 @@ namespace Gs2.Gs2StateMachine.Model
         }
         public Status WithStateMachineVersion(long? stateMachineVersion) {
             this.StateMachineVersion = stateMachineVersion;
+            return this;
+        }
+        public Status WithEnableSpeculativeExecution(string enableSpeculativeExecution) {
+            this.EnableSpeculativeExecution = enableSpeculativeExecution;
+            return this;
+        }
+        public Status WithStateMachineDefinition(string stateMachineDefinition) {
+            this.StateMachineDefinition = stateMachineDefinition;
+            return this;
+        }
+        public Status WithRandomStatus(Gs2.Gs2StateMachine.Model.RandomStatus randomStatus) {
+            this.RandomStatus = randomStatus;
             return this;
         }
         public Status WithStacks(Gs2.Gs2StateMachine.Model.StackEntry[] stacks) {
@@ -185,6 +200,9 @@ namespace Gs2.Gs2StateMachine.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : (long?)(data["stateMachineVersion"].ToString().Contains(".") ? (long)double.Parse(data["stateMachineVersion"].ToString()) : long.Parse(data["stateMachineVersion"].ToString())))
+                .WithEnableSpeculativeExecution(!data.Keys.Contains("enableSpeculativeExecution") || data["enableSpeculativeExecution"] == null ? null : data["enableSpeculativeExecution"].ToString())
+                .WithStateMachineDefinition(!data.Keys.Contains("stateMachineDefinition") || data["stateMachineDefinition"] == null ? null : data["stateMachineDefinition"].ToString())
+                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2StateMachine.Model.RandomStatus.FromJson(data["randomStatus"]))
                 .WithStacks(!data.Keys.Contains("stacks") || data["stacks"] == null || !data["stacks"].IsArray ? new Gs2.Gs2StateMachine.Model.StackEntry[]{} : data["stacks"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2StateMachine.Model.StackEntry.FromJson(v);
                 }).ToArray())
@@ -223,6 +241,9 @@ namespace Gs2.Gs2StateMachine.Model
                 ["userId"] = UserId,
                 ["name"] = Name,
                 ["stateMachineVersion"] = StateMachineVersion,
+                ["enableSpeculativeExecution"] = EnableSpeculativeExecution,
+                ["stateMachineDefinition"] = StateMachineDefinition,
+                ["randomStatus"] = RandomStatus?.ToJson(),
                 ["stacks"] = stacksJsonData,
                 ["variables"] = variablesJsonData,
                 ["status"] = Value,
@@ -251,6 +272,18 @@ namespace Gs2.Gs2StateMachine.Model
             if (StateMachineVersion != null) {
                 writer.WritePropertyName("stateMachineVersion");
                 writer.Write((StateMachineVersion.ToString().Contains(".") ? (long)double.Parse(StateMachineVersion.ToString()) : long.Parse(StateMachineVersion.ToString())));
+            }
+            if (EnableSpeculativeExecution != null) {
+                writer.WritePropertyName("enableSpeculativeExecution");
+                writer.Write(EnableSpeculativeExecution.ToString());
+            }
+            if (StateMachineDefinition != null) {
+                writer.WritePropertyName("stateMachineDefinition");
+                writer.Write(StateMachineDefinition.ToString());
+            }
+            if (RandomStatus != null) {
+                writer.WritePropertyName("randomStatus");
+                RandomStatus.WriteJson(writer);
             }
             if (Stacks != null) {
                 writer.WritePropertyName("stacks");
@@ -332,6 +365,30 @@ namespace Gs2.Gs2StateMachine.Model
             else
             {
                 diff += (int)(StateMachineVersion - other.StateMachineVersion);
+            }
+            if (EnableSpeculativeExecution == null && EnableSpeculativeExecution == other.EnableSpeculativeExecution)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += EnableSpeculativeExecution.CompareTo(other.EnableSpeculativeExecution);
+            }
+            if (StateMachineDefinition == null && StateMachineDefinition == other.StateMachineDefinition)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += StateMachineDefinition.CompareTo(other.StateMachineDefinition);
+            }
+            if (RandomStatus == null && RandomStatus == other.RandomStatus)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += RandomStatus.CompareTo(other.RandomStatus);
             }
             if (Stacks == null && Stacks == other.Stacks)
             {

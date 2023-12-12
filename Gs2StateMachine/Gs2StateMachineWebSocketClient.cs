@@ -72,6 +72,16 @@ namespace Gs2.Gs2StateMachine
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
                 }
+                if (request.SupportSpeculativeExecution != null)
+                {
+                    jsonWriter.WritePropertyName("supportSpeculativeExecution");
+                    jsonWriter.Write(request.SupportSpeculativeExecution.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.StartScript != null)
                 {
                     jsonWriter.WritePropertyName("startScript");
@@ -307,6 +317,16 @@ namespace Gs2.Gs2StateMachine
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.SupportSpeculativeExecution != null)
+                {
+                    jsonWriter.WritePropertyName("supportSpeculativeExecution");
+                    jsonWriter.Write(request.SupportSpeculativeExecution.ToString());
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.StartScript != null)
                 {

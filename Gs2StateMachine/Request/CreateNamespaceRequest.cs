@@ -35,6 +35,8 @@ namespace Gs2.Gs2StateMachine.Request
 	{
          public string Name { set; get; }
          public string Description { set; get; }
+         public string SupportSpeculativeExecution { set; get; }
+         public Gs2.Gs2StateMachine.Model.TransactionSetting TransactionSetting { set; get; }
          public Gs2.Gs2StateMachine.Model.ScriptSetting StartScript { set; get; }
          public Gs2.Gs2StateMachine.Model.ScriptSetting PassScript { set; get; }
          public Gs2.Gs2StateMachine.Model.ScriptSetting ErrorScript { set; get; }
@@ -46,6 +48,14 @@ namespace Gs2.Gs2StateMachine.Request
         }
         public CreateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public CreateNamespaceRequest WithSupportSpeculativeExecution(string supportSpeculativeExecution) {
+            this.SupportSpeculativeExecution = supportSpeculativeExecution;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2StateMachine.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public CreateNamespaceRequest WithStartScript(Gs2.Gs2StateMachine.Model.ScriptSetting startScript) {
@@ -80,6 +90,8 @@ namespace Gs2.Gs2StateMachine.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithSupportSpeculativeExecution(!data.Keys.Contains("supportSpeculativeExecution") || data["supportSpeculativeExecution"] == null ? null : data["supportSpeculativeExecution"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2StateMachine.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithStartScript(!data.Keys.Contains("startScript") || data["startScript"] == null ? null : Gs2.Gs2StateMachine.Model.ScriptSetting.FromJson(data["startScript"]))
                 .WithPassScript(!data.Keys.Contains("passScript") || data["passScript"] == null ? null : Gs2.Gs2StateMachine.Model.ScriptSetting.FromJson(data["passScript"]))
                 .WithErrorScript(!data.Keys.Contains("errorScript") || data["errorScript"] == null ? null : Gs2.Gs2StateMachine.Model.ScriptSetting.FromJson(data["errorScript"]))
@@ -92,6 +104,8 @@ namespace Gs2.Gs2StateMachine.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
+                ["supportSpeculativeExecution"] = SupportSpeculativeExecution,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["startScript"] = StartScript?.ToJson(),
                 ["passScript"] = PassScript?.ToJson(),
                 ["errorScript"] = ErrorScript?.ToJson(),
@@ -110,6 +124,13 @@ namespace Gs2.Gs2StateMachine.Request
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (SupportSpeculativeExecution != null) {
+                writer.WritePropertyName("supportSpeculativeExecution");
+                writer.Write(SupportSpeculativeExecution.ToString());
+            }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
             }
             if (StartScript != null) {
                 StartScript.WriteJson(writer);
@@ -134,6 +155,8 @@ namespace Gs2.Gs2StateMachine.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
+            key += SupportSpeculativeExecution + ":";
+            key += TransactionSetting + ":";
             key += StartScript + ":";
             key += PassScript + ":";
             key += ErrorScript + ":";

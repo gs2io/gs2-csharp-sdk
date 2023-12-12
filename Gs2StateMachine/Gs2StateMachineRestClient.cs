@@ -198,6 +198,16 @@ namespace Gs2.Gs2StateMachine
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.SupportSpeculativeExecution != null)
+                {
+                    jsonWriter.WritePropertyName("supportSpeculativeExecution");
+                    jsonWriter.Write(request.SupportSpeculativeExecution);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.StartScript != null)
                 {
                     jsonWriter.WritePropertyName("startScript");
@@ -552,6 +562,16 @@ namespace Gs2.Gs2StateMachine
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.SupportSpeculativeExecution != null)
+                {
+                    jsonWriter.WritePropertyName("supportSpeculativeExecution");
+                    jsonWriter.Write(request.SupportSpeculativeExecution);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.StartScript != null)
                 {
@@ -2512,6 +2532,11 @@ namespace Gs2.Gs2StateMachine
                     jsonWriter.WritePropertyName("args");
                     jsonWriter.Write(request.Args);
                 }
+                if (request.EnableSpeculativeExecution != null)
+                {
+                    jsonWriter.WritePropertyName("enableSpeculativeExecution");
+                    jsonWriter.Write(request.EnableSpeculativeExecution);
+                }
                 if (request.Ttl != null)
                 {
                     jsonWriter.WritePropertyName("ttl");
@@ -3003,6 +3028,285 @@ namespace Gs2.Gs2StateMachine
         )
 		{
 			var task = new EmitByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ReportTask : Gs2RestSessionTask<ReportRequest, ReportResult>
+        {
+            public ReportTask(IGs2Session session, RestSessionRequestFactory factory, ReportRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ReportRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "state-machine")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/{statusName}/report";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{statusName}", !string.IsNullOrEmpty(request.StatusName) ? request.StatusName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Events != null)
+                {
+                    jsonWriter.WritePropertyName("events");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Events)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "stateMachine.state.mismatch") > 0) {
+                    base.OnError(new Exception.StateMismatchException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Report(
+                Request.ReportRequest request,
+                UnityAction<AsyncResult<Result.ReportResult>> callback
+        )
+		{
+			var task = new ReportTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ReportResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ReportResult> ReportFuture(
+                Request.ReportRequest request
+        )
+		{
+			return new ReportTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ReportResult> ReportAsync(
+                Request.ReportRequest request
+        )
+		{
+            AsyncResult<Result.ReportResult> result = null;
+			await Report(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ReportTask ReportAsync(
+                Request.ReportRequest request
+        )
+		{
+			return new ReportTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ReportResult> ReportAsync(
+                Request.ReportRequest request
+        )
+		{
+			var task = new ReportTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class ReportByUserIdTask : Gs2RestSessionTask<ReportByUserIdRequest, ReportByUserIdResult>
+        {
+            public ReportByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ReportByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ReportByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "state-machine")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/{statusName}/report";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{statusName}", !string.IsNullOrEmpty(request.StatusName) ? request.StatusName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Events != null)
+                {
+                    jsonWriter.WritePropertyName("events");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Events)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ReportByUserId(
+                Request.ReportByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ReportByUserIdResult>> callback
+        )
+		{
+			var task = new ReportByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ReportByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ReportByUserIdResult> ReportByUserIdFuture(
+                Request.ReportByUserIdRequest request
+        )
+		{
+			return new ReportByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ReportByUserIdResult> ReportByUserIdAsync(
+                Request.ReportByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.ReportByUserIdResult> result = null;
+			await ReportByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public ReportByUserIdTask ReportByUserIdAsync(
+                Request.ReportByUserIdRequest request
+        )
+		{
+			return new ReportByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ReportByUserIdResult> ReportByUserIdAsync(
+                Request.ReportByUserIdRequest request
+        )
+		{
+			var task = new ReportByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request
