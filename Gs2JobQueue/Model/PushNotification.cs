@@ -21,8 +21,13 @@ namespace Gs2.Gs2JobQueue.Model
 	public class PushNotification
 	{
         public string NamespaceName { set; get; }
+        public string UserId { set; get; }
         public PushNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public PushNotification WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
 
@@ -35,7 +40,8 @@ namespace Gs2.Gs2JobQueue.Model
                 return null;
             }
             return new PushNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
     }
 }

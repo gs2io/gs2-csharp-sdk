@@ -314,35 +314,48 @@ namespace Gs2.Gs2Distributor.Domain
                     }
 
                     copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                    _completedStampSheets.CopyTo(copiedCompletedStampSheets);
-                    _completedStampSheets.Clear();
+                    _completedStampSheets.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedStampSheets);
+                    foreach (var copiedCompletedStampSheet in copiedCompletedStampSheets) {
+                        _completedStampSheets.Remove(copiedCompletedStampSheet);
+                    }
                 }
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
-                    _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
-                        Gs2.Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
-                            completedStampSheet.NamespaceName,
-                            accessToken.UserId,
-                            "StampSheetResult"
-                        ),
-                        Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
-                            completedStampSheet.TransactionId
-                        )
-                    );
-                    var autoRun = new AutoTransactionAccessTokenDomain(
-                        _gs2,
-                        accessToken,
-                        completedStampSheet.TransactionId
-                    );
-                    var future = autoRun.WaitFuture();
-                    yield return future;
-                    if (future.Error != null)
+                    if (completedStampSheet == null) continue;
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        } else {
-                            self.OnError(future.Error);
+                        var future = _gs2.Distributor.Namespace(
+                            completedStampSheet.NamespaceName
+                        ).AccessToken(
+                            accessToken
+                        ).StampSheetResult(
+                            completedStampSheet.TransactionId
+                        ).ModelNoCacheFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
                         }
-                        yield break;
+                    }
+                    {
+                        var autoRun = new AutoTransactionAccessTokenDomain(
+                            _gs2,
+                            accessToken,
+                            completedStampSheet.TransactionId
+                        );
+                        var future = autoRun.WaitFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
+                        }
                     }
                 }
             }
@@ -366,35 +379,48 @@ namespace Gs2.Gs2Distributor.Domain
                     }
 
                     copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                    _completedStampSheets.CopyTo(copiedCompletedStampSheets);
-                    _completedStampSheets.Clear();
+                    _completedStampSheets.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedStampSheets);
+                    foreach (var copiedCompletedStampSheet in copiedCompletedStampSheets) {
+                        _completedStampSheets.Remove(copiedCompletedStampSheet);
+                    }
                 }
 
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
-                    _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
-                        Gs2.Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
-                            completedStampSheet.NamespaceName,
-                            userId,
-                            "StampSheetResult"
-                        ),
-                        Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
-                            completedStampSheet.TransactionId
-                        )
-                    );
-                    var autoRun = new AutoTransactionDomain(
-                        _gs2,
-                        userId,
-                        completedStampSheet.TransactionId
-                    );
-                    var future = autoRun.WaitFuture();
-                    yield return future;
-                    if (future.Error != null)
+                    if (completedStampSheet == null) continue;
                     {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        } else {
-                            self.OnError(future.Error);
+                        var future = _gs2.Distributor.Namespace(
+                            completedStampSheet.NamespaceName
+                        ).User(
+                            userId
+                        ).StampSheetResult(
+                            completedStampSheet.TransactionId
+                        ).ModelNoCacheFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                                yield break;
+                            }
                         }
-                        yield break;
+                    }
+                    {
+                        var autoRun = new AutoTransactionDomain(
+                            _gs2,
+                            userId,
+                            completedStampSheet.TransactionId
+                        );
+                        var future = autoRun.WaitFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
+                        }
                     }
                 }
             }
@@ -422,21 +448,14 @@ namespace Gs2.Gs2Distributor.Domain
                 }
 
                 copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                _completedStampSheets.CopyTo(copiedCompletedStampSheets);
-                _completedStampSheets.Clear();
+                _completedStampSheets.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedStampSheets);
+                foreach (var copiedCompletedStampSheet in copiedCompletedStampSheets) {
+                    _completedStampSheets.Remove(copiedCompletedStampSheet);
+                }
             }
 
             foreach (var completedStampSheet in copiedCompletedStampSheets) {
-                _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
-                    Gs2.Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
-                        completedStampSheet.NamespaceName,
-                        accessToken.UserId,
-                        "StampSheetResult"
-                    ),
-                    Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
-                        completedStampSheet.TransactionId
-                    )
-                );
+                if (completedStampSheet == null) continue;
                 var autoRun = new AutoTransactionAccessTokenDomain(
                     _gs2,
                     accessToken,
@@ -444,6 +463,16 @@ namespace Gs2.Gs2Distributor.Domain
                 );
                 try
                 {
+                    for (var i = 0; i < 3; i++) {
+                        var item = await _gs2.Distributor.Namespace(
+                            completedStampSheet.NamespaceName
+                        ).AccessToken(
+                            accessToken
+                        ).StampSheetResult(
+                            completedStampSheet.TransactionId
+                        ).ModelNoCacheAsync();
+                        if (item != null) break;
+                    }
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
@@ -470,21 +499,14 @@ namespace Gs2.Gs2Distributor.Domain
                 }
 
                 copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                _completedStampSheets.CopyTo(copiedCompletedStampSheets);
-                _completedStampSheets.Clear();
+                _completedStampSheets.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedStampSheets);
+                foreach (var copiedCompletedStampSheet in copiedCompletedStampSheets) {
+                    _completedStampSheets.Remove(copiedCompletedStampSheet);
+                }
             }
 
             foreach (var completedStampSheet in copiedCompletedStampSheets) {
-                _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
-                    Gs2.Gs2Distributor.Domain.Model.UserDomain.CreateCacheParentKey(
-                        completedStampSheet.NamespaceName,
-                        userId,
-                        "StampSheetResult"
-                    ),
-                    Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
-                        completedStampSheet.TransactionId
-                    )
-                );
+                if (completedStampSheet == null) continue;
                 var autoRun = new AutoTransactionDomain(
                     _gs2,
                     userId,
@@ -492,6 +514,13 @@ namespace Gs2.Gs2Distributor.Domain
                 );
                 try
                 {
+                    await _gs2.Distributor.Namespace(
+                        completedStampSheet.NamespaceName
+                    ).User(
+                        userId
+                    ).StampSheetResult(
+                        completedStampSheet.TransactionId
+                    ).ModelNoCacheAsync();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)

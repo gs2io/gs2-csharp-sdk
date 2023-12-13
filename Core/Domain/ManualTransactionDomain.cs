@@ -111,7 +111,6 @@ namespace Gs2.Core.Domain
                 var client = new Gs2DistributorRestClient(
                     Gs2.RestSession
                 );
-                Debug.Log("[" + _stampSheet + "]");
                 var stampSheetJson = JsonMapper.ToObject(_stampSheet);
                 var stampSheetPayload = stampSheetJson["body"].ToString();
                 var stampSheetPayloadJson = JsonMapper.ToObject(stampSheetPayload);

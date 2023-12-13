@@ -32,6 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
@@ -72,8 +73,8 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
                 var item = future.Result;
 
                 var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                    item.ConsumeActions,
-                    item.AcquireActions,
+                    item?.ConsumeActions ?? new ConsumeAction[]{},
+                    item?.AcquireActions ?? new AcquireAction[]{},
                     request.Count ?? 1.0
                 ).ExecuteFuture(
                     domain,
@@ -115,8 +116,8 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
             ).ModelAsync();
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item.ConsumeActions,
-                item.AcquireActions,
+                item?.ConsumeActions ?? new ConsumeAction[]{},
+                item?.AcquireActions ?? new AcquireAction[]{},
                 request.Count ?? 1.0
             ).ExecuteAsync(
                 domain,

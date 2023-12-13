@@ -21,9 +21,14 @@ namespace Gs2.Gs2Distributor.Model
 	public class AutoRunStampSheetNotification
 	{
         public string NamespaceName { set; get; }
+        public string UserId { set; get; }
         public string TransactionId { set; get; }
         public AutoRunStampSheetNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
+            return this;
+        }
+        public AutoRunStampSheetNotification WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
         public AutoRunStampSheetNotification WithTransactionId(string transactionId) {
@@ -41,6 +46,7 @@ namespace Gs2.Gs2Distributor.Model
             }
             return new AutoRunStampSheetNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString());
         }
     }

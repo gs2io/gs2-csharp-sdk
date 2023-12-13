@@ -88,6 +88,14 @@ namespace Gs2.Core.Domain
                     nextActions
                 );
                 if (!all) {
+                    {
+                        var dispatchFuture = this.Gs2.DispatchFuture(this.AccessToken);
+                        yield return dispatchFuture;
+                        if (dispatchFuture.Error != null) {
+                            self.OnError(dispatchFuture.Error);
+                            yield break;
+                        }
+                    }
                     self.OnComplete(next);
                     yield break;
                 }
@@ -96,6 +104,14 @@ namespace Gs2.Core.Domain
                 if (nextFuture.Error != null) {
                     self.OnError(nextFuture.Error);
                     yield break;
+                }
+                {
+                    var dispatchFuture = this.Gs2.DispatchFuture(this.AccessToken);
+                    yield return dispatchFuture;
+                    if (dispatchFuture.Error != null) {
+                        self.OnError(dispatchFuture.Error);
+                        yield break;
+                    }
                 }
                 self.OnComplete(null);
             }
@@ -128,9 +144,11 @@ namespace Gs2.Core.Domain
                 nextActions
             );
             if (!all) {
+                await this.Gs2.DispatchAsync(this.AccessToken);
                 return next;
             }
             await next.WaitAsync(true);
+            await this.Gs2.DispatchAsync(this.AccessToken);
             return null;
         }
 #endif

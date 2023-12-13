@@ -65,7 +65,6 @@ namespace Gs2.Gs2JobQueue.Domain
 
     public class Gs2JobQueue {
 
-        private static readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
         private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
@@ -856,16 +855,13 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
                 case "RunNotification":
                 {
-                    _semaphore.Wait();
-                    try {
+                    lock (_completedJobs)
+                    {
                         var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
                         if (_completedJobs.Count(v => v.JobName == notification.JobName) == 0) {
                             _completedJobs.Add(notification);
                             onRunNotification.Invoke(notification);
                         }
-                    }
-                    finally {
-                        _semaphore.Release();
                     }
                     break;
                 }
@@ -881,44 +877,55 @@ namespace Gs2.Gs2JobQueue.Domain
             RunNotification[] copiedCompletedJobs;
             IEnumerator Impl(Gs2Future self)
             {
-                while (!_semaphore.Wait(0)) {
-                    yield return null;
-                }
-                try {
+                lock (_completedJobs)
+                {
                     if (_completedJobs.Count == 0) {
                         yield break;
                     }
                     copiedCompletedJobs = new RunNotification[_completedJobs.Count];
-                    _completedJobs.CopyTo(copiedCompletedJobs);
-                    _completedJobs.Clear();
+                    _completedJobs.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedJobs);
+                    foreach (var copiedCompletedJob in copiedCompletedJobs) {
+                        _completedJobs.Remove(copiedCompletedJob);
+                    }
                 }
-                finally {
-                    _semaphore.Release();
-                }
-                foreach (var completedJob in copiedCompletedJobs) {
-                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
-                        Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                            completedJob.NamespaceName,
-                            accessToken.UserId,
-                            completedJob.JobName,
-                            "JobResult"
-                        ),
-                        Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            "0"
-                        )
-                    );
-                    var future = Namespace(
-                        completedJob.NamespaceName
-                    ).AccessToken(
-                        accessToken
-                    ).Job(
-                        completedJob.JobName
-                    ).JobResult().ModelFuture();
-                    yield return future;
-                    if (future.Error != null)
+                foreach (var completedJob in copiedCompletedJobs)
+                {
+                    if (completedJob == null) continue;
                     {
-                        self.OnError(future.Error);
-                        yield break;
+                        var future = Namespace(
+                            completedJob.NamespaceName
+                        ).AccessToken(
+                            accessToken
+                        ).Job(
+                            completedJob.JobName
+                        ).JobResult().ModelNoCacheFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                                yield break;
+                            }
+                        }
+                    }
+                    {
+                        var autoRun = new AutoJobQueueAccessTokenDomain(
+                            _gs2,
+                            accessToken,
+                            completedJob.NamespaceName,
+                            completedJob.JobName
+                        );
+                        var future = autoRun.WaitFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
+                        }
                     }
                 }
                 self.OnComplete(null);
@@ -939,38 +946,40 @@ namespace Gs2.Gs2JobQueue.Domain
         )
         {
             RunNotification[] copiedCompletedJobs;
-            await _semaphore.WaitAsync();
-            try {
+            lock (_completedJobs)
+            {
                 if (_completedJobs.Count == 0) {
                     return;
                 }
                 copiedCompletedJobs = new RunNotification[_completedJobs.Count];
-                _completedJobs.CopyTo(copiedCompletedJobs);
-                _completedJobs.Clear();
-            }
-            finally {
-                _semaphore.Release();
+                _completedJobs.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedJobs);
+                foreach (var copiedCompletedJob in copiedCompletedJobs) {
+                    _completedJobs.Remove(copiedCompletedJob);
+                }
             }
             foreach (var completedJob in copiedCompletedJobs)
             {
-                _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
-                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                        completedJob.NamespaceName,
-                        accessToken.UserId,
-                        completedJob.JobName,
-                        "JobResult"
-                    ),
-                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        "0"
-                    )
-                );
-                await Namespace(
-                    completedJob.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Job(
+                if (completedJob == null) continue;
+                var autoRun = new AutoJobQueueAccessTokenDomain(
+                    _gs2,
+                    accessToken,
+                    completedJob.NamespaceName,
                     completedJob.JobName
-                ).JobResult().ModelAsync();
+                );
+                try
+                {
+                    await Namespace(
+                        completedJob.NamespaceName
+                    ).AccessToken(
+                        accessToken
+                    ).Job(
+                        completedJob.JobName
+                    ).JobResult().ModelNoCacheAsync();
+                    await autoRun.WaitAsync();
+                }
+                catch (NotFoundException)
+                {
+                }
             }
         }
 #endif
@@ -983,45 +992,55 @@ namespace Gs2.Gs2JobQueue.Domain
             RunNotification[] copiedCompletedJobs;
             IEnumerator Impl(Gs2Future self)
             {
-                while (!_semaphore.Wait(0)) {
-                    yield return null;
-                }
-                try {
+                lock (_completedJobs)
+                {
                     if (_completedJobs.Count == 0) {
                         yield break;
                     }
                     copiedCompletedJobs = new RunNotification[_completedJobs.Count];
-                    _completedJobs.CopyTo(copiedCompletedJobs);
-                    _completedJobs.Clear();
-                }
-                finally {
-                    _semaphore.Release();
+                    _completedJobs.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedJobs);
+                    foreach (var copiedCompletedJob in copiedCompletedJobs) {
+                        _completedJobs.Remove(copiedCompletedJob);
+                    }
                 }
                 foreach (var completedJob in copiedCompletedJobs)
                 {
-                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
-                        Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                            completedJob.NamespaceName,
-                            userId,
-                            completedJob.JobName,
-                            "JobResult"
-                        ),
-                        Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            "0"
-                        )
-                    );
-                    var future = Namespace(
-                        completedJob.NamespaceName
-                    ).User(
-                        userId
-                    ).Job(
-                        completedJob.JobName
-                    ).JobResult().ModelFuture();
-                    yield return future;
-                    if (future.Error != null)
+                    if (completedJob == null) continue;
                     {
-                        self.OnError(future.Error);
-                        yield break;
+                        var future = Namespace(
+                            completedJob.NamespaceName
+                        ).User(
+                            userId
+                        ).Job(
+                            completedJob.JobName
+                        ).JobResult().ModelNoCacheFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                                yield break;
+                            }
+                        }
+                    }
+                    {
+                        var autoRun = new AutoJobQueueDomain(
+                            _gs2,
+                            userId,
+                            completedJob.NamespaceName,
+                            completedJob.JobName
+                        );
+                        var future = autoRun.WaitFuture();
+                        yield return future;
+                        if (future.Error != null) {
+                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                            }
+                            else {
+                                self.OnError(future.Error);
+                            }
+                            yield break;
+                        }
                     }
                 }
             }
@@ -1040,38 +1059,40 @@ namespace Gs2.Gs2JobQueue.Domain
         )
         {
             RunNotification[] copiedCompletedJobs;
-            await _semaphore.WaitAsync();
-            try {
+            lock (_completedJobs)
+            {
                 if (_completedJobs.Count == 0) {
                     return;
                 }
                 copiedCompletedJobs = new RunNotification[_completedJobs.Count];
-                _completedJobs.CopyTo(copiedCompletedJobs);
-                _completedJobs.Clear();
-            }
-            finally {
-                _semaphore.Release();
+                _completedJobs.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedJobs);
+                foreach (var copiedCompletedJob in copiedCompletedJobs) {
+                    _completedJobs.Remove(copiedCompletedJob);
+                }
             }
             foreach (var completedJob in copiedCompletedJobs)
             {
-                _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
-                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                        completedJob.NamespaceName,
-                        userId,
-                        completedJob.JobName,
-                        "JobResult"
-                    ),
-                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        "0"
-                    )
-                );
-                await Namespace(
-                    completedJob.NamespaceName
-                ).User(
-                    userId
-                ).Job(
+                if (completedJob == null) continue;
+                var autoRun = new AutoJobQueueDomain(
+                    _gs2,
+                    userId,
+                    completedJob.NamespaceName,
                     completedJob.JobName
-                ).JobResult().ModelAsync();
+                );
+                try
+                {
+                    await Namespace(
+                        completedJob.NamespaceName
+                    ).User(
+                        userId
+                    ).Job(
+                        completedJob.JobName
+                    ).JobResult().ModelNoCacheAsync();
+                    await autoRun.WaitAsync();
+                }
+                catch (NotFoundException)
+                {
+                }
             }
         }
 #endif

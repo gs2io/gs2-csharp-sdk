@@ -26,8 +26,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
@@ -45,7 +47,7 @@ namespace Gs2.Core.Domain
 {
     public partial class AutoTransactionAccessTokenDomain : TransactionAccessTokenDomain
     {
-
+        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _transactionId;
 
         public AutoTransactionAccessTokenDomain(
@@ -63,29 +65,46 @@ namespace Gs2.Core.Domain
         private TransactionAccessTokenDomain HandleResult(
             Gs2Distributor.Model.StampSheetResult result
         ) {
+            var skipCallback = false;
+            lock (_handled) {
+                if (_handled.ContainsKey(this._transactionId)) {
+                    _handled = _handled
+                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
+                        .ToDictionary(pair => pair.Key, pair => pair.Value);
+                    skipCallback = true;
+                }
+                else {
+                    _handled.Add(this._transactionId, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
+                }
+            }
+            
             if (result.TaskRequests != null) {
                 for (var i = 0; i < result.TaskRequests.Length; i++) {
                     var stampTask = result.TaskRequests[i];
                     if (i < result.TaskResults.Length) {
-                        Gs2.TransactionConfiguration.StampTaskEventHandler.Invoke(
-                            Gs2.Cache,
-                            this._transactionId + "[" + i + "]",
-                            stampTask.Action,
-                            stampTask.Request,
-                            result.TaskResults[i]
-                        );
+                        if (!skipCallback) {
+                            Gs2.TransactionConfiguration.StampTaskEventHandler.Invoke(
+                                Gs2.Cache,
+                                this._transactionId + "[" + i + "]",
+                                stampTask.Action,
+                                stampTask.Request,
+                                result.TaskResults[i]
+                            );
+                        }
                     }
                 }
             }
 
             if (result.SheetResult != null) {
-                Gs2.TransactionConfiguration.StampSheetEventHandler.Invoke(
-                    Gs2.Cache,
-                    this._transactionId,
-                    result.SheetRequest.Action,
-                    result.SheetRequest.Request,
-                    result.SheetResult
-                );
+                if (!skipCallback) {
+                    Gs2.TransactionConfiguration.StampSheetEventHandler.Invoke(
+                        Gs2.Cache,
+                        this._transactionId,
+                        result.SheetRequest.Action,
+                        result.SheetRequest.Request,
+                        result.SheetResult
+                    );
+                }
 
                 var nextTransactions = new List<TransactionAccessTokenDomain>();
                 if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
@@ -125,7 +144,12 @@ namespace Gs2.Core.Domain
             bool all = false
         ) {
             IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
+                var begin = DateTime.Now;
                 RETRY:
+                if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
+                    self.OnError(new UnknownException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked."));
+                    yield break;
+                }
                 var future = new Gs2Distributor.Domain.Gs2Distributor(
                     Gs2
                 ).Namespace(
@@ -181,7 +205,11 @@ namespace Gs2.Core.Domain
     #endif
             bool all = false
         ) {
+            var begin = DateTime.Now;
             RETRY:
+            if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
+                throw new TimeoutException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked.");
+            }
             var result = await new Gs2Distributor.Domain.Gs2Distributor(
                 Gs2
             ).Namespace(

@@ -26,8 +26,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Gs2JobQueue.Request;
@@ -46,18 +48,22 @@ namespace Gs2.Core.Domain
 {
     public partial class AutoJobQueueAccessTokenDomain : TransactionAccessTokenDomain
     {
-        private readonly string _jobId;
+        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
+        private readonly string _namespaceName;
+        private readonly string _jobName;
 
         public AutoJobQueueAccessTokenDomain(
             Gs2 gs2,
             AccessToken accessToken,
-            string jobId
+            string namespaceName,
+            string jobName
         ): base(
             gs2,
             accessToken,
             null
         ) {
-            this._jobId = jobId;
+            this._namespaceName = namespaceName;
+            this._jobName = jobName;
         }
 
         private TransactionAccessTokenDomain HandleResult(
@@ -65,10 +71,25 @@ namespace Gs2.Core.Domain
             JobResult result,
             JobResultBody resultBody
         ) {
-            Gs2.UpdateCacheFromJobResult(
-                job,
-                resultBody
-            );
+            var skipCallback = false;
+            lock (_handled) {
+                if (_handled.ContainsKey(this._jobName)) {
+                    _handled = _handled
+                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
+                        .ToDictionary(pair => pair.Key, pair => pair.Value);
+                    skipCallback = true;
+                }
+                else {
+                    _handled.Add(this._jobName, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
+                }
+            }
+            
+            if (!skipCallback) {
+                Gs2.UpdateCacheFromJobResult(
+                    job,
+                    resultBody
+                );
+            }
             
             var nextTransactions = new List<TransactionAccessTokenDomain>();
             if (result.ScriptId.EndsWith("push_by_user_id")) {
@@ -107,16 +128,20 @@ namespace Gs2.Core.Domain
             bool all = false
         ) {
             IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
+                var begin = DateTime.Now;
                 RETRY:
-            
+                if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
+                    self.OnError(new UnknownException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked."));
+                    yield break;
+                }
                 var future = new Gs2JobQueue.Domain.Gs2JobQueue(
                     Gs2
                 ).Namespace(
-                    Job.GetNamespaceNameFromGrn(this._jobId)
+                    this._namespaceName
                 ).AccessToken(
                     AccessToken
                 ).Job(
-                    Job.GetJobNameFromGrn(this._jobId)
+                    this._jobName
                 ).JobResult().ModelFuture();
                 yield return future;
                 if (future.Error != null) {
@@ -127,7 +152,7 @@ namespace Gs2.Core.Domain
                 if (result == null) {
                     yield return new WaitForSeconds(0.01f);
                     
-                    var future2 = Gs2.DispatchFuture(AccessToken);
+                    var future2 = Gs2.JobQueue.DispatchFuture(AccessToken);
                     yield return future2;
                     if (future2.Error != null) {
                         self.OnError(future2.Error);
@@ -178,16 +203,19 @@ namespace Gs2.Core.Domain
     #endif
             bool all = false
         ) {
+            var begin = DateTime.Now;
             RETRY:
-            
+            if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
+                throw new TimeoutException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked.");
+            }
             var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
                 Gs2
             ).Namespace(
-                Job.GetNamespaceNameFromGrn(this._jobId)
+                this._namespaceName
             ).AccessToken(
                 AccessToken
             ).Job(
-                Job.GetJobNameFromGrn(this._jobId)
+                this._jobName
             ).JobResult().ModelAsync();
             if (result == null) {
 #if UNITY_2017_1_OR_NEWER
@@ -195,7 +223,7 @@ namespace Gs2.Core.Domain
 #else
                 await Task.Delay(TimeSpan.FromMilliseconds(10));
 #endif
-                await Gs2.DispatchAsync(AccessToken);
+                await Gs2.JobQueue.DispatchAsync(AccessToken);
                 goto RETRY;
             }
 

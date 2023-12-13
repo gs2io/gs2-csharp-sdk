@@ -58,7 +58,8 @@ namespace Gs2.Core.Domain
                     result.Items.Select(v => new AutoJobQueueAccessTokenDomain(
                         gs2,
                         accessToken,
-                        v.JobId
+                        Job.GetNamespaceNameFromGrn(v.JobId),
+                        Job.GetJobNameFromGrn(v.JobId)
                     )).ToList<TransactionAccessTokenDomain>()
                 );
             }
@@ -90,7 +91,8 @@ namespace Gs2.Core.Domain
                     result.Items.Select(v => new AutoJobQueueDomain(
                         gs2,
                         userId,
-                        v.JobId
+                        Job.GetNamespaceNameFromGrn(v.JobId),
+                        Job.GetJobNameFromGrn(v.JobId)
                     )).ToList<TransactionDomain>()
                 );
             }
