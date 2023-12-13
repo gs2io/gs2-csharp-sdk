@@ -2532,11 +2532,6 @@ namespace Gs2.Gs2StateMachine
                     jsonWriter.WritePropertyName("args");
                     jsonWriter.Write(request.Args);
                 }
-                if (request.EnableSpeculativeExecution != null)
-                {
-                    jsonWriter.WritePropertyName("enableSpeculativeExecution");
-                    jsonWriter.Write(request.EnableSpeculativeExecution);
-                }
                 if (request.Ttl != null)
                 {
                     jsonWriter.WritePropertyName("ttl");

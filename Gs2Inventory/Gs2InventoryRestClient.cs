@@ -11634,7 +11634,7 @@ namespace Gs2.Gs2Inventory
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "inventory")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/stamp/item/verify";
+                    + "/stamp/item/reference/verify";
 
                 var sessionRequest = Factory.Post(url);
 
