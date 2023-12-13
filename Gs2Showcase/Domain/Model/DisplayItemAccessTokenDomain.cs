@@ -342,7 +342,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         );
                     }
                 }
-                var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+                var stampSheet = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
                     result.AutoRunStampSheet ?? false,
@@ -419,7 +419,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     );
                 }
             }
-            var stampSheet = new Gs2.Core.Domain.TransactionAccessTokenDomain(
+            var stampSheet = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
                 result.AutoRunStampSheet ?? false,

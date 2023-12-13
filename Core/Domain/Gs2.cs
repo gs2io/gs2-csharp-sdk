@@ -356,9 +356,14 @@ namespace Gs2.Core.Domain
         {
             IEnumerator Impl(Gs2Future self)
             {
-                while (true)
+                if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
                 {
-                    var future = this._jobQueueDomain.RunByUserIdFuture(
+                    _webSocketSession?.Ping();
+                    _lastPingAt = DateTime.Now;
+                }
+                
+                {
+                    var future = this.Distributor.DispatchByUserIdFuture(
                         userId
                     );
                     yield return future;
@@ -367,8 +372,29 @@ namespace Gs2.Core.Domain
                         self.OnError(future.Error);
                         yield break;
                     }
-                    if (future.Result)
+                }
+                {
+                    var future = this.JobQueue.DispatchByUserIdFuture(
+                        userId
+                    );
+                    yield return future;
+                    if (future.Error != null)
                     {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                }
+                while (true)
+                {
+                    var future = this._jobQueueDomain.RunByUserIdFuture(
+                        userId
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
+                    if (future.Result) {
                         break;
                     }
                 }
@@ -387,22 +413,22 @@ namespace Gs2.Core.Domain
             AccessToken accessToken
         )
         {
+            if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
+            {
+                _webSocketSession?.Ping();
+                _lastPingAt = DateTime.Now;
+            }
+
+            await this.Distributor.DispatchAsync(
+                accessToken
+            );
+
+            await this.JobQueue.DispatchAsync(
+                accessToken
+            );
+
             while (true)
             {
-                if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
-                {
-                    _webSocketSession?.Ping();
-                    _lastPingAt = DateTime.Now;
-                }
-
-                await this.Distributor.DispatchAsync(
-                    accessToken
-                );
-
-                await this.JobQueue.DispatchAsync(
-                    accessToken
-                );
-
                 if (await this._jobQueueDomain.RunAsync(
                         accessToken
                     ))
@@ -420,11 +446,25 @@ namespace Gs2.Core.Domain
             string userId
         )
         {
+            if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
+            {
+                _webSocketSession?.Ping();
+                _lastPingAt = DateTime.Now;
+            }
+
+            await this.Distributor.DispatchByUserIdAsync(
+                userId
+            );
+
+            await this.JobQueue.DispatchByUserIdAsync(
+                userId
+            );
+
             while (true)
             {
                 if (await this._jobQueueDomain.RunByUserIdAsync(
-                    userId
-                ))
+                        userId
+                    ))
                 {
                     break;
                 }

@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
  * Reserved.
@@ -25,8 +26,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Gs2Auth.Model;
+using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
@@ -43,149 +47,58 @@ namespace Gs2.Core.Domain
     public partial class TransactionDomain
     {
 
-        private readonly Gs2 _gs2;
-        private readonly string _userId;
-        public bool AutoRunStampSheet;
-        public string TransactionId;
-        public string StampSheet;
-        public string StampSheetEncryptionKey;
+        protected readonly Gs2 Gs2;
+        protected readonly string UserId;
+        protected List<TransactionDomain> Actions;
 
         public TransactionDomain(
             Gs2 gs2,
             string userId,
-            bool autoRunStampSheet,
-            string transactionId,
-            string stampSheet,
-            string stampSheetEncryptionKey
+            List<TransactionDomain> actions
         ) {
-            this._gs2 = gs2;
-            this._userId = userId;
-            this.AutoRunStampSheet = autoRunStampSheet;
-            this.TransactionId = transactionId;
-            this.StampSheet = stampSheet;
-            this.StampSheetEncryptionKey = stampSheetEncryptionKey;
+            this.Gs2 = gs2;
+            this.UserId = userId;
+            this.Actions = actions;
         }
-        
+
 #if UNITY_2017_1_OR_NEWER
-        public IFuture<TransactionDomain> WaitFuture(
+        public virtual IFuture<TransactionDomain> WaitFuture(
             bool all = false
         ) {
             IEnumerator Impl(IFuture<TransactionDomain> self) {
-                if (this.AutoRunStampSheet) {
-                    while (true) {
-                        var future = new Gs2Distributor.Domain.Gs2Distributor(
-                            this._gs2
-                        ).Namespace(
-                            this._gs2.TransactionConfiguration.NamespaceName
-                        ).User(
-                            this._userId
-                        ).StampSheetResult(
-                            this.TransactionId
-                        ).ModelFuture();
-                        
-                        yield return future;
-                        if (future.Error != null) {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-
-                        if (future.Result == null) {
-                            yield return new WaitForSeconds(0.1f);
-                                    
-                            var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
-                            yield return dispatchFuture;
-                            if (dispatchFuture.Error != null) {
-                                self.OnError(dispatchFuture.Error);
-                                yield break;
-                            }
-                            continue;
-                        }
-                        var result = future.Result;
-
-                        if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
-                        {
-                            var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
-                            if (all)
-                            {
-                                foreach (var job in result2.Items) {
-                                    var future3 = new JobQueueJobDomain(
-                                        this._gs2,
-                                        this._userId,
-                                        true,
-                                        job.JobId
-                                    ).WaitFuture(all);
-                                    yield return future3;
-                                    if (future3.Error != null) {
-                                        self.OnError(future3.Error);
-                                        yield break;
-                                    }
-                                    
-                                    var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
-                                    yield return dispatchFuture;
-                                    if (dispatchFuture.Error != null) {
-                                        self.OnError(dispatchFuture.Error);
-                                        yield break;
-                                    }
-                                }
-                            }
-                        }
-
-                        var resultJson = JsonMapper.ToObject(result.SheetResult);
-                        if (resultJson["transactionId"] != null) {
-                            var next = new TransactionDomain(
-                                this._gs2,
-                                this._userId,
-                                resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
-                                !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
-                                !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
-                                !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                            );
-                            if (all || !next.AutoRunStampSheet) {
-                                while (next != null) {
-                                    var future2 = next.WaitFuture(all);
-                                    yield return future2;
-                                    if (future2.Error != null) {
-                                        self.OnError(future2.Error);
-                                        yield break;
-                                    }
-                                    next = future2.Result;
-                                    
-                                    var dispatchFuture = this._gs2.DispatchByUserIdFuture(this._userId);
-                                    yield return dispatchFuture;
-                                    if (dispatchFuture.Error != null) {
-                                        self.OnError(dispatchFuture.Error);
-                                        yield break;
-                                    }
-                                }
-                            }
-                        }
-
-                        self.OnComplete(null);
-                        break;
-                    }
-                } 
-                else {
-                    var stampSheet = new StampSheetDomain(
-                        this._gs2,
-                        this.StampSheet.ToString(),
-                        this.StampSheetEncryptionKey.ToString()
-                    );
-                    var future4 = stampSheet.RunFuture();
-                    yield return future4;
-                    if (future4.Error != null) {
-                        self.OnError(new TransactionException(stampSheet, future4.Error));
-                        yield break;
-                    }
-                    
-                    var dispatchFuture = this._gs2.Distributor.DispatchByUserIdFuture(this._userId);
-                    yield return dispatchFuture;
-                    if (dispatchFuture.Error != null) {
-                        self.OnError(dispatchFuture.Error);
-                        yield break;
-                    }
-
-                    self.OnComplete(this);
+                if (this.Actions.Count == 0) {
+                    self.OnComplete(null);
+                    yield break;
                 }
+                var nextActions = new List<TransactionDomain>();
+                foreach (var action in this.Actions) {
+                    var innerFuture = action.WaitFuture();
+                    yield return innerFuture;
+                    if (innerFuture.Error != null) {
+                        self.OnError(innerFuture.Error);
+                        yield break;
+                    }
+                    var innerNext = innerFuture.Result;
+                    if (innerNext != null) {
+                        nextActions.Add(innerNext);
+                    }
+                }
+                var next = new TransactionDomain(
+                    this.Gs2,
+                    this.UserId,
+                    nextActions
+                );
+                if (!all) {
+                    self.OnComplete(next);
+                    yield break;
+                }
+                var nextFuture = next.WaitFuture(true);
+                yield return nextFuture;
+                if (nextFuture.Error != null) {
+                    self.OnError(nextFuture.Error);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<TransactionDomain>(Impl);
         }
@@ -194,86 +107,32 @@ namespace Gs2.Core.Domain
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
 
     #if UNITY_2017_1_OR_NEWER
-        public async UniTask<TransactionDomain> WaitAsync(
+        public virtual async UniTask<TransactionDomain> WaitAsync(
     #else
-        public async Task<TransactionDomain> WaitAsync(
+        public virtual async Task<TransactionDomain> WaitAsync(
     #endif
             bool all = false
         ) {
-            if (this.AutoRunStampSheet) {
-                while (true) {
-                    var result = await new Gs2Distributor.Domain.Gs2Distributor(
-                        this._gs2
-                    ).Namespace(
-                        this._gs2.TransactionConfiguration.NamespaceName
-                    ).User(
-                        this._userId
-                    ).StampSheetResult(
-                        this.TransactionId
-                    ).ModelAsync();
-                    if (result == null) {
-#if UNITY_2017_1_OR_NEWER
-                        await UniTask.Delay(TimeSpan.FromMilliseconds(100));
-#else
-                        await Task.Delay(TimeSpan.FromMilliseconds(100));
-#endif
-                        await this._gs2.DispatchByUserIdAsync(this._userId);
-                        continue;
-                    }
-
-                    if (result.SheetRequest.Action == "Gs2JobQueue:PushByUserId")
-                    {
-                        var result2 = PushByUserIdResult.FromJson(JsonMapper.ToObject(result.SheetResult));
-                        if (all)
-                        {
-                            foreach (var job in result2.Items) {
-                                await new JobQueueJobDomain(
-                                    this._gs2,
-                                    this._userId,
-                                    true,
-                                    job.JobId
-                                ).WaitAsync(all);
-                                await this._gs2.DispatchByUserIdAsync(this._userId);
-                            }
-                        }
-                    }
-
-                    var resultJson = JsonMapper.ToObject(result.SheetResult);
-                    if (resultJson.ContainsKey("transactionId") && !string.IsNullOrEmpty(resultJson["transactionId"]?.ToString())) {
-                        var next = new TransactionDomain(
-                            this._gs2,
-                            this._userId,
-                            resultJson.ContainsKey("autoRunStampSheet") && (resultJson["autoRunStampSheet"] ?? false).ToString().ToLower() == "true",
-                            !resultJson.ContainsKey("transactionId") ? null : resultJson["transactionId"]?.ToString(),
-                            !resultJson.ContainsKey("stampSheet") ? null : resultJson["stampSheet"]?.ToString(),
-                            !resultJson.ContainsKey("stampSheetEncryptionKeyId") ? null : resultJson["stampSheetEncryptionKeyId"]?.ToString()
-                        );
-                        if (all || !next.AutoRunStampSheet) {
-                            while (next != null) {
-                                next = await next.WaitAsync(all);
-                                await this._gs2.DispatchByUserIdAsync(this._userId);
-                            }
-                        }
-                    }
-
-                    break;
-                }
+            if (this.Actions.Count == 0) {
                 return null;
             }
-            else {
-                var stampSheet = new StampSheetDomain(
-                    this._gs2,
-                    this.StampSheet.ToString(),
-                    this.StampSheetEncryptionKey.ToString()
-                );
-                try {
-                    await stampSheet.RunAsync();
-                    await this._gs2.Distributor.DispatchByUserIdAsync(this._userId);
-                } catch (Gs2Exception e) {
-                    throw new TransactionException(stampSheet, e);
+            var nextActions = new List<TransactionDomain>();
+            foreach (var action in this.Actions) {
+                var innerNext = await action.WaitAsync();
+                if (innerNext != null) {
+                    nextActions.Add(innerNext);
                 }
-                return this;
             }
+            var next = new TransactionDomain(
+                this.Gs2,
+                this.UserId,
+                nextActions
+            );
+            if (!all) {
+                return next;
+            }
+            await next.WaitAsync(true);
+            return null;
         }
 #endif
     }

@@ -253,7 +253,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         );
                     }
                 }
-                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
@@ -262,7 +262,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture(true);
+                    var future2 = transaction.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -270,7 +270,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         yield break;
                     }
                 }
-                self.OnComplete(stampSheet);
+                self.OnComplete(transaction);
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
@@ -312,7 +312,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     );
                 }
             }
-            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
@@ -321,9 +321,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 result.StampSheetEncryptionKeyId
             );
             if (result.StampSheet != null) {
-                await stampSheet.WaitAsync();
+                await transaction.WaitAsync(true);
             }
-            return stampSheet;
+            return transaction;
         }
         #endif
 
@@ -477,7 +477,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         );
                     }
                 }
-                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
@@ -486,7 +486,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture(true);
+                    var future2 = transaction.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -494,7 +494,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         yield break;
                     }
                 }
-                self.OnComplete(stampSheet);
+                self.OnComplete(transaction);
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
@@ -536,7 +536,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     );
                 }
             }
-            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
@@ -545,9 +545,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 result.StampSheetEncryptionKeyId
             );
             if (result.StampSheet != null) {
-                await stampSheet.WaitAsync();
+                await transaction.WaitAsync(true);
             }
-            return stampSheet;
+            return transaction;
         }
         #endif
 
@@ -722,7 +722,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         );
                     }
                 }
-                var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
                     result.AutoRunStampSheet ?? false,
@@ -731,7 +731,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     result.StampSheetEncryptionKeyId
                 );
                 if (result.StampSheet != null) {
-                    var future2 = stampSheet.WaitFuture(true);
+                    var future2 = transaction.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -739,7 +739,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                         yield break;
                     }
                 }
-                self.OnComplete(stampSheet);
+                self.OnComplete(transaction);
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
         }
@@ -781,7 +781,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     );
                 }
             }
-            var stampSheet = new Gs2.Core.Domain.TransactionDomain(
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
                 result.AutoRunStampSheet ?? false,
@@ -790,9 +790,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 result.StampSheetEncryptionKeyId
             );
             if (result.StampSheet != null) {
-                await stampSheet.WaitAsync();
+                await transaction.WaitAsync(true);
             }
-            return stampSheet;
+            return transaction;
         }
         #endif
 

@@ -709,21 +709,21 @@ namespace Gs2.Gs2Lottery.Domain
                         var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result));
                         
 
-                        var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            "DrawnPrize"
+                    var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        requestModel.NamespaceName,
+                        "DrawnPrize"
+                    );
+                    foreach (var item in resultModel.Items) {
+                        _gs2.Cache.Put(
+                            parentKey,
+                            Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
+                                _drawPrizeIndex++
+                            ),
+                            item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
-                        foreach (var item in resultModel.Items) {
-                            _gs2.Cache.Put(
-                                parentKey,
-                                Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
-                                    _drawPrizeIndex++
-                                ),
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        _gs2.Cache.SetListCached<DrawnPrize>(parentKey);
+                    }
+                    _gs2.Cache.SetListCached<DrawnPrize>(parentKey);
 
                         DrawByUserIdComplete?.Invoke(
                             transactionId,
@@ -752,6 +752,7 @@ namespace Gs2.Gs2Lottery.Domain
                 case "draw_by_user_id": {
                     var requestModel = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = DrawByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
 
                     var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                         requestModel.NamespaceName,

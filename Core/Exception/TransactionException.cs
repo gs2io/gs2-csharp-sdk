@@ -27,14 +27,14 @@ namespace Gs2.Core.Exception
 {
     public class TransactionException : Gs2Exception
     {
-        private StampSheetDomain _stampSheet;
+        private TransactionAccessTokenDomain _transaction;
         private bool _isWorthRetry;
 
         public TransactionException(
-            StampSheetDomain stampSheet,
+            TransactionAccessTokenDomain transaction,
             Gs2Exception exception
         ): base(exception.errors) {
-            this._stampSheet = stampSheet;
+            this._transaction = transaction;
             this._isWorthRetry = exception is InternalServerErrorException ||
                 exception is QuotaLimitExceededException ||
                 exception is ServiceUnavailableException ||
@@ -52,7 +52,7 @@ namespace Gs2.Core.Exception
         public Gs2Future Retry() {
             IEnumerator Impl(Gs2Future self)
             {
-                var future = this._stampSheet.RunFuture();
+                var future = this._transaction.WaitFuture();
                 yield return future;
                 if (future.Error != null)
                 {
@@ -70,7 +70,7 @@ namespace Gs2.Core.Exception
                 {
                     try
                     {
-                        await this._stampSheet.RunAsync();
+                        await this._transaction.WaitAsync();
                     }
                     catch (Gs2Exception e)
                     {
@@ -82,7 +82,7 @@ namespace Gs2.Core.Exception
         }
         
         public async Task RetryAsync() {
-            await this._stampSheet.RunAsync();
+            await this._transaction.WaitAsync();
         }
 #endif
 #endif

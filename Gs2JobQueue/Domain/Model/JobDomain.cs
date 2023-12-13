@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -39,6 +41,7 @@ using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Gs2JobQueue.Model;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,6 +70,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private readonly String _parentKey;
         public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
+        public JobResultBody Result { get; set; }
         public bool? NeedRetry { get; set; }
         public string NamespaceName => _namespaceName;
         public string UserId => _userId;

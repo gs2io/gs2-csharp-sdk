@@ -895,56 +895,34 @@ namespace Gs2.Gs2JobQueue.Domain
                 finally {
                     _semaphore.Release();
                 }
-                foreach (var completedJob in copiedCompletedJobs)
-                {
-                    var client = new Gs2JobQueueRestClient(
-                        _gs2.RestSession
+                foreach (var completedJob in copiedCompletedJobs) {
+                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
+                        Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                            completedJob.NamespaceName,
+                            accessToken.UserId,
+                            completedJob.JobName,
+                            "JobResult"
+                        ),
+                        Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                            "0"
+                        )
                     );
-                    var future = client.GetJobResultFuture(
-                        new GetJobResultRequest()
-                            .WithNamespaceName(completedJob.NamespaceName)
-                            .WithJobName(completedJob.JobName)
-                            .WithAccessToken(accessToken.Token)
-                    );
+                    var future = Namespace(
+                        completedJob.NamespaceName
+                    ).AccessToken(
+                        accessToken
+                    ).Job(
+                        completedJob.JobName
+                    ).JobResult().ModelFuture();
                     yield return future;
                     if (future.Error != null)
                     {
                         self.OnError(future.Error);
                         yield break;
                     }
-                    var result = future.Result;
-                    if (result != null)
-                    {
-                        this._gs2.Cache.Put(
-                            global::Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                                completedJob.NamespaceName,
-                                accessToken.UserId,
-                                Job.GetJobNameFromGrn(result.Item.JobId),
-                                "JobResult"
-                            ),
-                            global::Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                                result.Item.TryNumber?.ToString()
-                            ),
-                            result.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * global::Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        _gs2.UpdateCacheFromJobResult(
-                            new Job
-                            {
-                                ScriptId = result?.Item.ScriptId,
-                                Args = result?.Item.Args,
-                            },
-                            new JobResultBody
-                            {
-                                TryNumber = result?.Item.TryNumber,
-                                StatusCode = result?.Item.StatusCode,
-                                Result = result?.Item.Result,
-                                TryAt = result?.Item.TryAt
-                            }
-                        );
-                    }
                 }
+                self.OnComplete(null);
+                yield return null;
             }
 
             return new Gs2InlineFuture(Impl);
@@ -975,53 +953,125 @@ namespace Gs2.Gs2JobQueue.Domain
             }
             foreach (var completedJob in copiedCompletedJobs)
             {
-                var client = new Gs2JobQueueRestClient(
-                    _gs2.RestSession
+                _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
+                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                        completedJob.NamespaceName,
+                        accessToken.UserId,
+                        completedJob.JobName,
+                        "JobResult"
+                    ),
+                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                        "0"
+                    )
                 );
-                GetJobResultResult result = null;
-                try
-                {
-                    result = await client.GetJobResultAsync(
-                        new GetJobResultRequest()
-                            .WithNamespaceName(completedJob.NamespaceName)
-                            .WithJobName(completedJob.JobName)
-                            .WithAccessToken(accessToken.Token)
-                    );
+                await Namespace(
+                    completedJob.NamespaceName
+                ).AccessToken(
+                    accessToken
+                ).Job(
+                    completedJob.JobName
+                ).JobResult().ModelAsync();
+            }
+        }
+#endif
+        
+#if UNITY_2017_1_OR_NEWER
+        public Gs2Future DispatchByUserIdFuture(
+            string userId
+        )
+        {
+            RunNotification[] copiedCompletedJobs;
+            IEnumerator Impl(Gs2Future self)
+            {
+                while (!_semaphore.Wait(0)) {
+                    yield return null;
                 }
-                catch (NotFoundException)
-                {
+                try {
+                    if (_completedJobs.Count == 0) {
+                        yield break;
+                    }
+                    copiedCompletedJobs = new RunNotification[_completedJobs.Count];
+                    _completedJobs.CopyTo(copiedCompletedJobs);
+                    _completedJobs.Clear();
                 }
-                if (result != null)
+                finally {
+                    _semaphore.Release();
+                }
+                foreach (var completedJob in copiedCompletedJobs)
                 {
-                    this._gs2.Cache.Put(
-                        global::Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
+                        Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
                             completedJob.NamespaceName,
-                            accessToken.UserId,
-                            Job.GetJobNameFromGrn(result.Item.JobId),
+                            userId,
+                            completedJob.JobName,
                             "JobResult"
                         ),
-                        global::Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            result.Item.TryNumber?.ToString()
-                        ),
-                        result.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * global::Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                            "0"
+                        )
                     );
-
-                    _gs2.UpdateCacheFromJobResult(
-                        new Job
-                        {
-                            ScriptId = result?.Item.ScriptId,
-                            Args = result?.Item.Args,
-                        },
-                        new JobResultBody
-                        {
-                            TryNumber = result?.Item.TryNumber,
-                            StatusCode = result?.Item.StatusCode,
-                            Result = result?.Item.Result,
-                            TryAt = result?.Item.TryAt
-                        }
-                    );
+                    var future = Namespace(
+                        completedJob.NamespaceName
+                    ).User(
+                        userId
+                    ).Job(
+                        completedJob.JobName
+                    ).JobResult().ModelFuture();
+                    yield return future;
+                    if (future.Error != null)
+                    {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
                 }
+            }
+
+            return new Gs2InlineFuture(Impl);
+        }
+#endif
+        
+#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+        public async UniTask DispatchByUserIdAsync(
+    #else
+        public async Task DispatchByUserIdAsync(
+    #endif
+            string userId
+        )
+        {
+            RunNotification[] copiedCompletedJobs;
+            await _semaphore.WaitAsync();
+            try {
+                if (_completedJobs.Count == 0) {
+                    return;
+                }
+                copiedCompletedJobs = new RunNotification[_completedJobs.Count];
+                _completedJobs.CopyTo(copiedCompletedJobs);
+                _completedJobs.Clear();
+            }
+            finally {
+                _semaphore.Release();
+            }
+            foreach (var completedJob in copiedCompletedJobs)
+            {
+                _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
+                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
+                        completedJob.NamespaceName,
+                        userId,
+                        completedJob.JobName,
+                        "JobResult"
+                    ),
+                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
+                        "0"
+                    )
+                );
+                await Namespace(
+                    completedJob.NamespaceName
+                ).User(
+                    userId
+                ).Job(
+                    completedJob.JobName
+                ).JobResult().ModelAsync();
             }
         }
 #endif
