@@ -66,7 +66,6 @@ namespace Gs2.Gs2Script.Domain.Model
         public string Status { get; set; }
         public int? Code { get; set; }
         public string Result { get; set; }
-        public string Transaction { get; set; }
         public int? ExecuteTime { get; set; }
         public int? Charged { get; set; }
         public string[] Output { get; set; }
@@ -870,7 +869,6 @@ namespace Gs2.Gs2Script.Domain.Model
                 var domain = this;
                 this.Code = domain.Code = result?.Code;
                 this.Result = domain.Result = result?.Result;
-                this.Transaction = domain.Transaction = result?.Transaction;
                 this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
                 this.Charged = domain.Charged = result?.Charged;
                 this.Output = domain.Output = result?.Output;
@@ -901,7 +899,6 @@ namespace Gs2.Gs2Script.Domain.Model
                 var domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
-            this.Transaction = domain.Transaction = result?.Transaction;
             this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;
@@ -944,7 +941,6 @@ namespace Gs2.Gs2Script.Domain.Model
                 var domain = this;
                 this.Code = domain.Code = result?.Code;
                 this.Result = domain.Result = result?.Result;
-                this.Transaction = domain.Transaction = result?.Transaction;
                 this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
                 this.Charged = domain.Charged = result?.Charged;
                 this.Output = domain.Output = result?.Output;
@@ -975,7 +971,6 @@ namespace Gs2.Gs2Script.Domain.Model
                 var domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
-            this.Transaction = domain.Transaction = result?.Transaction;
             this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;
