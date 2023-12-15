@@ -122,7 +122,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -134,7 +133,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -170,7 +169,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -182,7 +180,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -218,7 +216,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -230,7 +227,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                         var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -267,7 +264,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -279,7 +275,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -361,7 +357,7 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "entry")
+                            if (e.errors.Length == 0 || e.errors[0].component != "entry")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -392,41 +388,52 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public async Task<Gs2.Gs2Dictionary.Model.Entry> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.Entry>(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                    this.EntryName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
                     _parentKey,
                     Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                         this.EntryName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetEntryRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetEntryRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                                     this.EntryName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.Entry>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.Entry>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors[0].component != "entry")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "entry")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.Entry>(
                         _parentKey,
                         Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                             this.EntryName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 
@@ -460,7 +467,17 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
                     this.EntryName.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -474,6 +491,40 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Dictionary.Model.Entry> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Dictionary.Model.Entry> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Dictionary.Model.Entry> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

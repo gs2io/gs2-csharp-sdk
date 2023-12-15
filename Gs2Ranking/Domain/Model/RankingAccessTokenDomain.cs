@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -98,7 +99,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Ranking> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -120,7 +120,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "ranking")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "ranking")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -132,37 +132,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
-                GetRankingResult result = null;
-                try {
-                    result = await this._client.GetRankingAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        request.CategoryName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "ranking")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -176,7 +148,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                             resultModel.Item.UserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -188,45 +160,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.Ranking>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Ranking.Model.Ranking> GetAsync(
+            #else
         private async Task<Gs2.Gs2Ranking.Model.Ranking> GetAsync(
+            #endif
             GetRankingRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.GetRankingFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
-                        request.CategoryName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.Ranking>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "ranking")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -247,16 +190,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "ranking")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "ranking")
                 {
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -270,7 +211,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     var key = Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                         resultModel.Item.UserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -289,7 +230,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -304,20 +244,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
-                PutScoreResult result = null;
-                    result = await this._client.PutScoreAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -334,7 +263,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             resultModel.Item.ScorerUserId.ToString(),
                             resultModel.Item.UniqueId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -355,26 +284,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain> PutScoreAsync(
+            #else
         public async Task<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain> PutScoreAsync(
+            #endif
             PutScoreRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithCategoryName(this.CategoryName);
-            var future = this._client.PutScoreFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -383,11 +302,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 result = await this._client.PutScoreAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -404,7 +321,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         resultModel.Item.ScorerUserId.ToString(),
                         resultModel.Item.UniqueId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -426,18 +343,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain> PutScoreAsync(
-            PutScoreRequest request
-        ) {
-            var future = PutScoreFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to PutScoreFuture.")]
         public IFuture<Gs2.Gs2Ranking.Domain.Model.ScoreAccessTokenDomain> PutScore(
             PutScoreRequest request
@@ -511,7 +416,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "ranking")
+                            if (e.errors.Length == 0 || e.errors[0].component != "ranking")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -534,8 +439,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.Ranking>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Ranking.Model.Ranking> ModelAsync(
+            #else
         public async Task<Gs2.Gs2Ranking.Model.Ranking> ModelAsync(
+            #endif
             string scorerUserId
         ) {
             var parentKey = string.Join(
@@ -568,7 +478,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
 
-                    if (e.errors[0].component != "ranking")
+                    if (e.errors.Length == 0 || e.errors[0].component != "ranking")
                     {
                         throw;
                     }
@@ -586,18 +496,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Ranking.Model.Ranking> ModelAsync(
-            string scorerUserId
-        )
-        {
-            var future = ModelFuture(scorerUserId);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Ranking.Model.Ranking> Model(
             string scorerUserId
@@ -634,7 +532,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 Gs2.Gs2Ranking.Domain.Model.RankingDomain.CreateCacheKey(
                     userId
                 ),
-                callback
+                callback,
+                () => { }
             );
         }
 

@@ -26,8 +26,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor;
 using Gs2.Gs2Distributor.Request;
@@ -47,6 +49,7 @@ namespace Gs2.Core.Domain
 {
     public partial class ManualTransactionDomain : TransactionDomain
     {
+        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _transactionId;
         private readonly string _stampSheet;
         private readonly string _stampSheetEncryptionKeyId;
@@ -71,6 +74,19 @@ namespace Gs2.Core.Domain
             string action,
             JsonData resultJson
         ) {
+            var skipCallback = false;
+            lock (_handled) {
+                if (_handled.ContainsKey(this._transactionId)) {
+                    _handled = _handled
+                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
+                        .ToDictionary(pair => pair.Key, pair => pair.Value);
+                    skipCallback = true;
+                }
+                else {
+                    _handled.Add(this._transactionId, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
+                }
+            }
+
             var nextTransactions = new List<TransactionDomain>();
             if (action == "Gs2JobQueue:PushByUserId")
             {

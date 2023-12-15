@@ -150,9 +150,7 @@ namespace Gs2.Core.Domain
                     self.OnError(new UnknownException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked."));
                     yield break;
                 }
-                var future = new Gs2Distributor.Domain.Gs2Distributor(
-                    Gs2
-                ).Namespace(
+                var future = Gs2.Distributor.Namespace(
                     Gs2.TransactionConfiguration.NamespaceName
                 ).AccessToken(
                     AccessToken

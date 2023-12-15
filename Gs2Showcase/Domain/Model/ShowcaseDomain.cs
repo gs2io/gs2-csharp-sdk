@@ -29,7 +29,6 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
-
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -163,7 +162,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "showcase")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "showcase")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -178,7 +177,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -190,14 +188,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                         foreach (var displayItem in resultModel.Item.DisplayItems) {
-                            cache.Put(
+                            _gs2.Cache.Put(
                                 Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
                                     this.NamespaceName.ToString(),
                                     this.UserId.ToString(),
@@ -211,7 +209,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
-                        cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
+                        _gs2.Cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
                             Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
                                 this.NamespaceName.ToString(),
                                 this.UserId.ToString(),
@@ -255,7 +253,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "showcase")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "showcase")
                 {
                     throw;
                 }
@@ -263,7 +261,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -275,14 +272,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                     foreach (var displayItem in resultModel.Item.DisplayItems) {
-                        cache.Put(
+                        _gs2.Cache.Put(
                             Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
                                 this.NamespaceName.ToString(),
                                 this.UserId.ToString(),
@@ -296,7 +293,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
-                    cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
+                    _gs2.Cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
                         Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
                             this.NamespaceName.ToString(),
                             this.UserId.ToString(),
@@ -344,7 +341,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "showcase")
+                            if (e.errors.Length == 0 || e.errors[0].component != "showcase")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -375,41 +372,52 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.Showcase> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.Showcase>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                    this.ShowcaseName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                     _parentKey,
                     Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                         this.ShowcaseName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetShowcaseByUserIdRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetShowcaseByUserIdRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                                     this.ShowcaseName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors[0].component != "showcase")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "showcase")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.Showcase>(
                         _parentKey,
                         Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                             this.ShowcaseName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 
@@ -443,7 +451,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
                     this.ShowcaseName.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -457,6 +475,40 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Showcase.Model.Showcase> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Showcase.Model.Showcase> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Showcase.Model.Showcase> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

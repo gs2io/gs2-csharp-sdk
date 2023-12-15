@@ -67,9 +67,8 @@ namespace Gs2.Core.Domain
         }
 
         private TransactionDomain HandleResult(
-            Job job,
-            JobResult result,
-            JobResultBody resultBody
+            Gs2JobQueue.Model.Job job,
+            Gs2JobQueue.Model.JobResultBody result
         ) {
             var skipCallback = false;
             lock (_handled) {
@@ -87,12 +86,12 @@ namespace Gs2.Core.Domain
             if (!skipCallback) {
                 Gs2.UpdateCacheFromJobResult(
                     job,
-                    resultBody
+                    result
                 );
             }
             
             var nextTransactions = new List<TransactionDomain>();
-            if (result.ScriptId.EndsWith("push_by_user_id")) {
+            if (job.ScriptId.EndsWith("push_by_user_id")) {
                 nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                     Gs2,
                     UserId,
@@ -111,7 +110,7 @@ namespace Gs2.Core.Domain
                     resultJson.ContainsKey("stampSheetEncryptionKeyId") ? resultJson["stampSheetEncryptionKeyId"]?.ToString() : null
                 ));
             }
-
+            
             if (nextTransactions.Count > 0) {
                 return new TransactionDomain(
                     Gs2,
@@ -119,7 +118,6 @@ namespace Gs2.Core.Domain
                     nextTransactions
                 );
             }
-
             return null;
         }
 
@@ -134,9 +132,7 @@ namespace Gs2.Core.Domain
                     self.OnError(new UnknownException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked."));
                     yield break;
                 }
-                var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                    Gs2
-                ).Namespace(
+                var future = Gs2.JobQueue.Namespace(
                     this._namespaceName
                 ).User(
                     UserId
@@ -170,7 +166,6 @@ namespace Gs2.Core.Domain
                         ScriptId = result.ScriptId,
                         Args = result.Args,
                     },
-                    result,
                     new JobResultBody {
                         TryNumber = result.TryNumber,
                         StatusCode = result.StatusCode,
@@ -235,7 +230,6 @@ namespace Gs2.Core.Domain
                     ScriptId = result.ScriptId,
                     Args = result.Args,
                 },
-                result,
                 new JobResultBody {
                     TryNumber = result.TryNumber,
                     StatusCode = result.StatusCode,

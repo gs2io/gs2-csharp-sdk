@@ -73,7 +73,8 @@ namespace Gs2.Core.Domain
                     result.Items.Select(v => new ManualJobQueueAccessTokenDomain(
                         gs2,
                         accessToken,
-                        v.JobId
+                        Job.GetNamespaceNameFromGrn(v.JobId),
+                        Job.GetJobNameFromGrn(v.JobId)
                     )).ToList<TransactionAccessTokenDomain>()
                 );
             }
@@ -106,7 +107,8 @@ namespace Gs2.Core.Domain
                     result.Items.Select(v => new ManualJobQueueDomain(
                         gs2,
                         userId,
-                        v.JobId
+                        Job.GetNamespaceNameFromGrn(v.JobId),
+                        Job.GetJobNameFromGrn(v.JobId)
                     )).ToList<TransactionDomain>()
                 );
             }

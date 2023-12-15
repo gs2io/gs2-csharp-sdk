@@ -321,7 +321,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -334,7 +333,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         );
                         var key = Gs2.Gs2Showcase.Domain.Model.SalesItemDomain.CreateCacheKey(
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -342,18 +341,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         );
                     }
                 }
-                var stampSheet = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
                     result.AutoRunStampSheet ?? false,
                     result.TransactionId,
                     result.StampSheet,
                     result.StampSheetEncryptionKeyId
-
                 );
-                if (result?.StampSheet != null)
-                {
-                    var future2 = stampSheet.WaitFuture();
+                if (result.StampSheet != null) {
+                    var future2 = transaction.WaitFuture(true);
                     yield return future2;
                     if (future2.Error != null)
                     {
@@ -361,8 +358,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                         yield break;
                     }
                 }
-
-            self.OnComplete(stampSheet);
+                self.OnComplete(transaction);
             }
             return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
         }
@@ -398,7 +394,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -411,7 +406,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     );
                     var key = Gs2.Gs2Showcase.Domain.Model.SalesItemDomain.CreateCacheKey(
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -419,21 +414,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
                     );
                 }
             }
-            var stampSheet = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
                 result.AutoRunStampSheet ?? false,
                 result.TransactionId,
                 result.StampSheet,
                 result.StampSheetEncryptionKeyId
-
             );
-            if (result?.StampSheet != null)
-            {
-                await stampSheet.WaitAsync();
+            if (result.StampSheet != null) {
+                await transaction.WaitAsync(true);
             }
-
-            return stampSheet;
+            return transaction;
         }
         #endif
 
@@ -544,7 +536,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
                     this.DisplayItemId.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -558,6 +560,40 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Showcase.Model.DisplayItem> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Showcase.Model.DisplayItem> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Showcase.Model.DisplayItem> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

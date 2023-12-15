@@ -223,7 +223,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -234,7 +233,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             resultModel.Item.UserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -268,7 +267,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -279,7 +277,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         resultModel.Item.UserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -325,7 +323,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -336,7 +333,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             this.UserId
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -370,7 +367,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -381,7 +377,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         resultModel.Item.UserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -427,7 +423,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -438,7 +433,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             resultModel.Item.UserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -472,7 +467,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -483,7 +477,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         resultModel.Item.UserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -529,7 +523,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -540,7 +533,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             resultModel.Item.UserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -574,7 +567,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -585,7 +577,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         resultModel.Item.UserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -635,7 +627,7 @@ namespace Gs2.Gs2Account.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "account")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "account")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -650,7 +642,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -661,7 +652,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             this.UserId
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -702,7 +693,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "account")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "account")
                 {
                     throw;
                 }
@@ -710,7 +701,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -721,7 +711,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         this.UserId
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -760,7 +750,7 @@ namespace Gs2.Gs2Account.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "account")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "account")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -775,7 +765,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -786,7 +775,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             resultModel.Item.UserId.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -824,7 +813,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "account")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "account")
                 {
                     throw;
                 }
@@ -832,7 +821,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -843,7 +831,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         resultModel.Item.UserId.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Account.Model.Account>(parentKey, key);
                 }
             }
                 var domain = this;
@@ -884,7 +872,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -895,7 +882,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             this.UserId
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -932,7 +919,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -943,7 +929,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         this.UserId
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -996,7 +982,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1008,7 +993,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                             resultModel.Item.Type.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
                     }
                 }
                 var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
@@ -1045,7 +1030,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1057,7 +1041,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
                         resultModel.Item.Type.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Account.Model.TakeOver>(parentKey, key);
                 }
             }
                 var domain = new Gs2.Gs2Account.Domain.Model.TakeOverDomain(
@@ -1106,7 +1090,7 @@ namespace Gs2.Gs2Account.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "dataOwner")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "dataOwner")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -1121,7 +1105,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -1132,7 +1115,7 @@ namespace Gs2.Gs2Account.Domain.Model
                         );
                         var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                         );
-                        cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
                     }
                 }
                 var domain = new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
@@ -1173,7 +1156,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "dataOwner")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "dataOwner")
                 {
                     throw;
                 }
@@ -1181,7 +1164,6 @@ namespace Gs2.Gs2Account.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -1192,7 +1174,7 @@ namespace Gs2.Gs2Account.Domain.Model
                     );
                     var key = Gs2.Gs2Account.Domain.Model.DataOwnerDomain.CreateCacheKey(
                     );
-                    cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Account.Model.DataOwner>(parentKey, key);
                 }
             }
                 var domain = new Gs2.Gs2Account.Domain.Model.DataOwnerDomain(
@@ -1248,7 +1230,7 @@ namespace Gs2.Gs2Account.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "account")
+                            if (e.errors.Length == 0 || e.errors[0].component != "account")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -1271,59 +1253,65 @@ namespace Gs2.Gs2Account.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.Account>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Account.Model.Account> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Account.Model.Account> ModelAsync()
+            #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.Account>(
+                _parentKey,
+                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                    this.UserId?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
                     _parentKey,
                     Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                         this.UserId?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetAccountRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetAccountRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                                     this.UserId?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Account.Model.Account>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Account.Model.Account>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors[0].component != "account")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "account")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
                         _parentKey,
                         Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                             this.UserId?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Account.Model.Account> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Account.Model.Account> Model()
         {
@@ -1352,7 +1340,17 @@ namespace Gs2.Gs2Account.Domain.Model
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
                     this.UserId.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -1366,6 +1364,40 @@ namespace Gs2.Gs2Account.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Account.Model.Account> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.Account> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.Account> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

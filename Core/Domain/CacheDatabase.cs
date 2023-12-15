@@ -9,7 +9,7 @@ namespace Gs2.Core.Domain
     public class CacheDatabase
     {
         private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>> _cache = new Dictionary<Type, Dictionary<string, Dictionary<string, Tuple<object, long>>>>();
-        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Dictionary<ulong, object>>>> _cacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<string, Dictionary<ulong, object>>>>();
+        private readonly Dictionary<Type, Dictionary<string, Dictionary<string, Dictionary<ulong, Tuple<object, Action>>>>> _cacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<string, Dictionary<ulong, Tuple<object, Action>>>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCached = new Dictionary<Type, HashSet<string>>();
         private readonly Dictionary<Type, Dictionary<string, Dictionary<ulong, object>>> _listCacheUpdateCallback = new Dictionary<Type, Dictionary<string, Dictionary<ulong, object>>>();
         private readonly Dictionary<Type, HashSet<string>> _listCacheUpdateRequired = new Dictionary<Type, HashSet<string>>();
@@ -20,10 +20,19 @@ namespace Gs2.Core.Domain
         {
             this._cache.Clear();
             this._listCached.Clear();
-            this._cacheUpdateCallback.Clear();
             this._listCacheContexts.Clear();
-            this._listCacheUpdateCallback.Clear();
             this._listCacheUpdateRequired.Clear();
+            foreach (var pair in this._cacheUpdateCallback) {
+                var callbacksContainers = pair.Value;
+                foreach (var callbacksContainer in callbacksContainers) {
+                    var callbacks = callbacksContainer.Value;
+                    foreach (var callback in callbacks) {
+                        foreach (var c in callback.Value) {
+                            c.Value.Item2.Invoke();
+                        }
+                    }
+                }
+            }
         }
 
         public void SetListCached<TKind>(string parentKey, object listCacheContext = null)
@@ -72,7 +81,7 @@ namespace Gs2.Core.Domain
             var exists = parent.ContainsKey(key);
             parent[key] = new Tuple<object, long>(obj, ttl);
             foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key)) {
-                (callback.Value as Action<TKind>)?.Invoke(obj);
+                (callback.Value.Item1 as Action<TKind>)?.Invoke(obj);
             }
             if (this._listCached.Get(typeof(TKind))?.Contains(parentKey) == true) {
                 if (!exists) {
@@ -93,9 +102,9 @@ namespace Gs2.Core.Domain
 
         private static ulong _callbackId = 1;
 
-        public ulong Subscribe<TKind>(string parentKey, string key, Action<TKind> subscribe)
+        public ulong Subscribe<TKind>(string parentKey, string key, Action<TKind> subscribe, Action reFetch)
         {
-            this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Add(_callbackId, subscribe);
+            this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Add(_callbackId, new Tuple<object, Action>(subscribe, reFetch));
             return _callbackId++;
         }
 

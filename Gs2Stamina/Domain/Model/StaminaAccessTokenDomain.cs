@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -99,7 +100,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.Stamina> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -121,7 +121,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stamina")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stamina")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -133,37 +133,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     }
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithStaminaName(this.StaminaName);
-                GetStaminaResult result = null;
-                try {
-                    result = await this._client.GetStaminaAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                        request.StaminaName.ToString()
-                        );
-                    this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "stamina")
-                    {
-                        throw;
-                    }
-                }
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -175,7 +147,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -190,7 +162,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -202,45 +174,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.Stamina>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        private async UniTask<Gs2.Gs2Stamina.Model.Stamina> GetAsync(
+            #else
         private async Task<Gs2.Gs2Stamina.Model.Stamina> GetAsync(
+            #endif
             GetStaminaRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithStaminaName(this.StaminaName);
-            var future = this._client.GetStaminaFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                        request.StaminaName.ToString()
-                    );
-                    this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (future.Error.Errors[0].Component != "stamina")
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                else {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -261,16 +204,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stamina")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stamina")
                 {
                     throw;
                 }
             }
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -282,7 +223,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         resultModel.Item.StaminaName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -297,7 +238,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                         resultModel.StaminaModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.StaminaModel,
@@ -316,7 +257,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -331,20 +271,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithStaminaName(this.StaminaName);
-                ConsumeStaminaResult result = null;
-                    result = await this._client.ConsumeStaminaAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -356,7 +285,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -371,7 +300,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -385,26 +314,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> ConsumeAsync(
+            #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> ConsumeAsync(
+            #endif
             ConsumeStaminaRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithStaminaName(this.StaminaName);
-            var future = this._client.ConsumeStaminaFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -413,11 +332,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 result = await this._client.ConsumeStaminaAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -429,7 +346,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         resultModel.Item.StaminaName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -444,7 +361,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                         resultModel.StaminaModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.StaminaModel,
@@ -459,18 +376,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> ConsumeAsync(
-            ConsumeStaminaRequest request
-        ) {
-            var future = ConsumeFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to ConsumeFuture.")]
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> Consume(
             ConsumeStaminaRequest request
@@ -486,7 +391,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -501,20 +405,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithStaminaName(this.StaminaName);
-                SetMaxValueByStatusResult result = null;
-                    result = await this._client.SetMaxValueByStatusAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -526,7 +419,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -541,7 +434,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -555,26 +448,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetMaxValueByStatusAsync(
+            #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetMaxValueByStatusAsync(
+            #endif
             SetMaxValueByStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithStaminaName(this.StaminaName);
-            var future = this._client.SetMaxValueByStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -583,11 +466,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 result = await this._client.SetMaxValueByStatusAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -599,7 +480,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         resultModel.Item.StaminaName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -614,7 +495,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                         resultModel.StaminaModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.StaminaModel,
@@ -629,18 +510,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetMaxValueByStatusAsync(
-            SetMaxValueByStatusRequest request
-        ) {
-            var future = SetMaxValueByStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SetMaxValueByStatusFuture.")]
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetMaxValueByStatus(
             SetMaxValueByStatusRequest request
@@ -656,7 +525,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -671,20 +539,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithStaminaName(this.StaminaName);
-                SetRecoverIntervalByStatusResult result = null;
-                    result = await this._client.SetRecoverIntervalByStatusAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -696,7 +553,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -711,7 +568,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -725,26 +582,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverIntervalByStatusAsync(
+            #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverIntervalByStatusAsync(
+            #endif
             SetRecoverIntervalByStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithStaminaName(this.StaminaName);
-            var future = this._client.SetRecoverIntervalByStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -753,11 +600,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 result = await this._client.SetRecoverIntervalByStatusAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -769,7 +614,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         resultModel.Item.StaminaName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -784,7 +629,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                         resultModel.StaminaModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.StaminaModel,
@@ -799,18 +644,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverIntervalByStatusAsync(
-            SetRecoverIntervalByStatusRequest request
-        ) {
-            var future = SetRecoverIntervalByStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SetRecoverIntervalByStatusFuture.")]
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverIntervalByStatus(
             SetRecoverIntervalByStatusRequest request
@@ -826,7 +659,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
@@ -841,20 +673,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithStaminaName(this.StaminaName);
-                SetRecoverValueByStatusResult result = null;
-                    result = await this._client.SetRecoverValueByStatusAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -866,7 +687,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             resultModel.Item.StaminaName.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -881,7 +702,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                             resultModel.StaminaModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.StaminaModel,
@@ -895,26 +716,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverValueByStatusAsync(
+            #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverValueByStatusAsync(
+            #endif
             SetRecoverValueByStatusRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithStaminaName(this.StaminaName);
-            var future = this._client.SetRecoverValueByStatusFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
@@ -923,11 +734,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 result = await this._client.SetRecoverValueByStatusAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -939,7 +748,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         resultModel.Item.StaminaName.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -954,7 +763,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                     var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
                         resultModel.StaminaModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.StaminaModel,
@@ -969,18 +778,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverValueByStatusAsync(
-            SetRecoverValueByStatusRequest request
-        ) {
-            var future = SetRecoverValueByStatusFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SetRecoverValueByStatusFuture.")]
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaAccessTokenDomain> SetRecoverValueByStatus(
             SetRecoverValueByStatusRequest request
@@ -1046,7 +843,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "stamina")
+                            if (e.errors.Length == 0 || e.errors[0].component != "stamina")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -1065,7 +862,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         )
                     );
                 }
-                
+
                 if (value != null && value.NextRecoverAt.HasValue && value.NextRecoverAt.Value > 0) {
                     if (value.NextRecoverAt < UnixTime.ToUnixTime(DateTime.Now)) {
                         if (value.Value < value.MaxValue) {
@@ -1077,77 +874,83 @@ namespace Gs2.Gs2Stamina.Domain.Model
                         }
                     }
                 }
-
+                
                 self.OnComplete(value);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.Stamina>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Stamina.Model.Stamina> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Stamina.Model.Stamina> ModelAsync()
+            #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.Stamina>(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                    this.StaminaName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
                     _parentKey,
                     Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                         this.StaminaName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetStaminaRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetStaminaRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                                     this.StaminaName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
+                            _parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors[0].component != "stamina")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "stamina")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.Stamina>(
                         _parentKey,
                         Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                             this.StaminaName?.ToString()
                         )
                     );
-            }
+                }
 
-            if (value != null && value.NextRecoverAt.HasValue && value.NextRecoverAt.Value > 0) {
-                if (value.NextRecoverAt < UnixTime.ToUnixTime(DateTime.Now)) {
-                    if (value.Value < value.MaxValue) {
-                        value.Value += value.RecoverValue;
-                        value.NextRecoverAt += value.RecoverIntervalMinutes * 60 * 1000;
-                    }
-                    else {
-                        value.NextRecoverAt = 0;
+                if (value != null && value.NextRecoverAt.HasValue && value.NextRecoverAt.Value > 0) {
+                    if (value.NextRecoverAt < UnixTime.ToUnixTime(DateTime.Now)) {
+                        if (value.Value < value.MaxValue) {
+                            value.Value += value.RecoverValue;
+                            value.NextRecoverAt += value.RecoverIntervalMinutes * 60 * 1000;
+                        }
+                        else {
+                            value.NextRecoverAt = 0;
+                        }
                     }
                 }
+                
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-
-            return value;
+        # endif
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Stamina.Model.Stamina> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Stamina.Model.Stamina> Model()
         {
@@ -1176,7 +979,17 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
                     this.StaminaName.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -1190,6 +1003,40 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

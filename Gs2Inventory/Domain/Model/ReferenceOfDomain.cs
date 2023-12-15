@@ -174,7 +174,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "referenceOf")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "referenceOf")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -189,7 +189,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.ItemSet != null) {
@@ -203,7 +202,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             resultModel.ItemSet.ItemName.ToString(),
                             resultModel.ItemSet.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.ItemSet,
@@ -219,7 +218,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                             resultModel.ItemModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.ItemModel,
@@ -264,7 +263,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "referenceOf")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "referenceOf")
                 {
                     throw;
                 }
@@ -272,7 +271,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.ItemSet != null) {
@@ -286,7 +284,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         resultModel.ItemSet.ItemName.ToString(),
                         resultModel.ItemSet.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.ItemSet,
@@ -302,7 +300,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                         resultModel.ItemModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.ItemModel,
@@ -341,7 +339,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.ItemSet != null) {
@@ -355,7 +352,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             resultModel.ItemSet.ItemName.ToString(),
                             resultModel.ItemSet.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.ItemSet,
@@ -371,7 +368,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                             resultModel.ItemModel.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.ItemModel,
@@ -420,7 +417,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.ItemSet != null) {
@@ -434,7 +430,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         resultModel.ItemSet.ItemName.ToString(),
                         resultModel.ItemSet.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.ItemSet,
@@ -450,7 +446,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                         resultModel.ItemModel.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.ItemModel,
@@ -515,7 +511,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "referenceOf")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "referenceOf")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -530,7 +526,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.ItemSet != null) {
@@ -544,7 +539,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             resultModel.ItemSet.ItemName.ToString(),
                             resultModel.ItemSet.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(parentKey, key);
                     }
                     if (resultModel.ItemModel != null) {
                         var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
@@ -555,7 +550,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                             resultModel.ItemModel.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(parentKey, key);
                     }
                     if (resultModel.Inventory != null) {
                         var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -566,7 +561,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                             resultModel.Inventory.InventoryName.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
                     }
                 }
                 var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[result?.Item.Length ?? 0];
@@ -619,7 +614,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "referenceOf")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "referenceOf")
                 {
                     throw;
                 }
@@ -627,7 +622,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.ItemSet != null) {
@@ -641,7 +635,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         resultModel.ItemSet.ItemName.ToString(),
                         resultModel.ItemSet.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(parentKey, key);
                 }
                 if (resultModel.ItemModel != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
@@ -652,7 +646,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
                         resultModel.ItemModel.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.ItemModel>(parentKey, key);
                 }
                 if (resultModel.Inventory != null) {
                     var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -663,7 +657,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
                         resultModel.Inventory.InventoryName.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(parentKey, key);
                 }
             }
             var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[result?.Item.Length ?? 0];
@@ -751,7 +745,8 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return await ModelAsync();
         }
         #endif
-        
+
+
         public ulong Subscribe(Action<string> callback)
         {
             return this._gs2.Cache.Subscribe(
@@ -759,7 +754,17 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
                     this.ReferenceOf.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -773,6 +778,40 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<string> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<string> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<string> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

@@ -335,7 +335,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stack")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stack")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -350,7 +350,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -388,7 +387,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stack")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stack")
                 {
                     throw;
                 }
@@ -396,7 +395,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -441,7 +439,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stack")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stack")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -456,7 +454,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -468,7 +465,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -508,7 +505,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stack")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stack")
                 {
                     throw;
                 }
@@ -516,7 +513,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -528,7 +524,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -562,7 +558,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -574,7 +569,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -607,7 +602,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -619,7 +613,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -664,7 +658,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                 }
@@ -692,7 +685,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
             }
@@ -732,7 +724,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -744,7 +735,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -777,7 +768,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -789,7 +779,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -838,7 +828,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stack")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stack")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -853,7 +843,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -865,7 +854,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -902,7 +891,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stack")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stack")
                 {
                     throw;
                 }
@@ -910,7 +899,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -922,7 +910,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                 }
             }
                 var domain = this;
@@ -962,7 +950,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -974,7 +961,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -1007,7 +994,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1019,7 +1005,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -1068,7 +1054,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stack")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stack")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -1083,7 +1069,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1095,7 +1080,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -1132,7 +1117,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stack")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stack")
                 {
                     throw;
                 }
@@ -1140,7 +1125,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1152,7 +1136,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                 }
             }
                 var domain = this;
@@ -1196,7 +1180,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
 
-                        if (future.Error.Errors[0].Component != "stack")
+                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "stack")
                         {
                             self.OnError(future.Error);
                             yield break;
@@ -1211,7 +1195,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     {
@@ -1223,7 +1206,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             resultModel.Item.Name.ToString()
                         );
-                        cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                        _gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                     }
                 }
                 var domain = this;
@@ -1260,7 +1243,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                 );
 
-                if (e.Errors[0].Component != "stack")
+                if (e.Errors.Length == 0 || e.Errors[0].Component != "stack")
                 {
                     throw;
                 }
@@ -1268,7 +1251,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 {
@@ -1280,7 +1262,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                     var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         resultModel.Item.Name.ToString()
                     );
-                    cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
+                    _gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(parentKey, key);
                 }
             }
                 var domain = this;
@@ -1337,7 +1319,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
 
-                            if (e.errors[0].component != "stack")
+                            if (e.errors.Length == 0 || e.errors[0].component != "stack")
                             {
                                 self.OnError(future.Error);
                                 yield break;
@@ -1360,64 +1342,70 @@ namespace Gs2.Gs2Deploy.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
         }
-        #else
+        #endif
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
+            #else
         public async Task<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
+            #endif
         {
             var parentKey = string.Join(
                 ":",
                 "deploy",
                 "Stack"
             );
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Stack>(
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Deploy.Model.Stack>(
+                _parentKey,
+                Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    this.StackName?.ToString()
+                )).LockAsync())
+            {
+        # endif
+                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Stack>(
                     parentKey,
                     Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                         this.StackName?.ToString()
                     )
                 );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetStackRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                if (!find) {
+                    try {
+                        await this.GetAsync(
+                            new GetStackRequest()
+                        );
+                    } catch (Gs2.Core.Exception.NotFoundException e) {
+                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                                     this.StackName?.ToString()
                                 );
-                    this._gs2.Cache.Put<Gs2.Gs2Deploy.Model.Stack>(
-                        parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
+                        this._gs2.Cache.Put<Gs2.Gs2Deploy.Model.Stack>(
+                            parentKey,
+                            key,
+                            null,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
 
-                    if (e.errors[0].component != "stack")
-                    {
-                        throw;
+                        if (e.errors.Length == 0 || e.errors[0].component != "stack")
+                        {
+                            throw;
+                        }
                     }
-                }
-                (value, _) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Stack>(
+                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Deploy.Model.Stack>(
                         parentKey,
                         Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                             this.StackName?.ToString()
                         )
                     );
+                }
+                return value;
+        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-            return value;
+        # endif
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
-        {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Deploy.Model.Stack> Model()
         {
@@ -1446,7 +1434,17 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
                     this.StackName.ToString()
                 ),
-                callback
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
             );
         }
 
@@ -1460,6 +1458,40 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callbackId
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Deploy.Model.Stack> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Stack> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Stack> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

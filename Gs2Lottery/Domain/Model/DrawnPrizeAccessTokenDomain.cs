@@ -164,7 +164,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain.CreateCacheKey(
                     this.Index
                 ),
-                callback
+                callback,
+                () => { }
             );
         }
 

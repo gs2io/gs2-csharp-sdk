@@ -26,8 +26,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Model;
 using Gs2.Gs2JobQueue.Request;
@@ -46,28 +48,54 @@ namespace Gs2.Core.Domain
 {
     public partial class ManualJobQueueAccessTokenDomain : TransactionAccessTokenDomain
     {
-        private readonly string _jobId;
+        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
+        private readonly string _namespaceName;
+        private readonly string _jobName;
 
         public ManualJobQueueAccessTokenDomain(
             Gs2 gs2,
             AccessToken accessToken,
-            string jobId
+            string namespaceName,
+            string jobName
         ): base(
             gs2,
             accessToken,
             null
         ) {
-            this._jobId = jobId;
+            this._namespaceName = namespaceName;
+            this._jobName = jobName;
         }
 
         private TransactionAccessTokenDomain HandleResult(
             Gs2JobQueue.Model.Job job,
             Gs2JobQueue.Model.JobResultBody result
         ) {
+            var skipCallback = false;
+            lock (_handled) {
+                if (_handled.ContainsKey(this._jobName)) {
+                    _handled = _handled
+                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
+                        .ToDictionary(pair => pair.Key, pair => pair.Value);
+                    skipCallback = true;
+                }
+                else {
+                    _handled.Add(this._jobName, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
+                }
+            }
+            
+            if (!skipCallback) {
+                Gs2.UpdateCacheFromJobResult(
+                    job,
+                    new JobResultBody {
+                        TryNumber = result.TryNumber,
+                        StatusCode = result.StatusCode,
+                        Result = result.Result,
+                    }
+                );
+            }
             
             var nextTransactions = new List<TransactionAccessTokenDomain>();
-            if (job.ScriptId.EndsWith("push_by_user_id"))
-            {
+            if (job.ScriptId.EndsWith("push_by_user_id")) {
                 nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                     Gs2,
                     AccessToken,
@@ -103,10 +131,8 @@ namespace Gs2.Core.Domain
         ) {
             IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
                 RETRY:
-                var future = new Gs2JobQueue.Domain.Gs2JobQueue(
-                    Gs2
-                ).Namespace(
-                    Job.GetNamespaceNameFromGrn(this._jobId)
+                var future = Gs2.JobQueue.Namespace(
+                    this._namespaceName
                 ).AccessToken(
                     AccessToken
                 ).RunFuture(
@@ -133,7 +159,7 @@ namespace Gs2.Core.Domain
                     self.OnComplete(null);
                     yield break;
                 }
-                if (job.JobId != this._jobId) {
+                if (job.Name != this._jobName) {
                     HandleResult(job, result.Result);
                     goto RETRY;
                 }
@@ -169,7 +195,7 @@ namespace Gs2.Core.Domain
             var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
                 Gs2
             ).Namespace(
-                Job.GetNamespaceNameFromGrn(this._jobId)
+                this._namespaceName
             ).AccessToken(
                 AccessToken
             ).RunAsync(
@@ -182,7 +208,7 @@ namespace Gs2.Core.Domain
             if (job == null) {
                 return null;
             }
-            if (job.JobId != this._jobId) {
+            if (job.Name != this._jobName) {
                 HandleResult(job, result.Result);
                 goto RETRY;
             }
