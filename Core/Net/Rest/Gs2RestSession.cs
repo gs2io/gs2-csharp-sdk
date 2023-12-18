@@ -83,28 +83,32 @@ namespace Gs2.Core.Net
                     this._result.Clear();
                     this._inflightRequest.Clear();
                     this.State = State.Opening;
-                    var task = new RestOpenTask(
-                        this,
+                    if (Credential is ProjectTokenGs2Credential) {
+                        OwnerId = Credential.ClientId;
+                    } else {
+                        var task = new RestOpenTask(
+                            this,
 #if UNITY_2017_1_OR_NEWER
-                        new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
+                            new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
 #else
-                    new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                        new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 #endif
-                        new LoginRequest {
-                            ClientId = Credential.ClientId,
-                            ClientSecret = Credential.ClientSecret,
+                            new LoginRequest {
+                                ClientId = Credential.ClientId,
+                                ClientSecret = Credential.ClientSecret,
+                            }
+                        );
+                        yield return task;
+
+                        if (task.Error != null) {
+                            this.State = State.Closed;
+                            result.OnError(task.Error);
+                            yield break;
                         }
-                    );
-                    yield return task;
 
-                    if (task.Error != null) {
-                        this.State = State.Closed;
-                        result.OnError(task.Error);
-                        yield break;
+                        Credential.ProjectToken = task.Result.AccessToken;
+                        OwnerId = task.Result.OwnerId;
                     }
-
-                    Credential.ProjectToken = task.Result.AccessToken;
-                    OwnerId = task.Result.OwnerId;
                     this.State = State.Available;
 
                     result.OnComplete(new OpenResult());
