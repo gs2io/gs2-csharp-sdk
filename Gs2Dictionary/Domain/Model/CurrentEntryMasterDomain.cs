@@ -638,6 +638,15 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.CurrentEntryMaster>(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.CurrentEntryMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Dictionary.Model.CurrentEntryMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

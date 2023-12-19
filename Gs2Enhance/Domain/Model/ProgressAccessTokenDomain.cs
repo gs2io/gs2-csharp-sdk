@@ -754,6 +754,15 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Enhance.Model.Progress>(
+                _parentKey,
+                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Enhance.Model.Progress> callback)
         {
             return this._gs2.Cache.Subscribe(

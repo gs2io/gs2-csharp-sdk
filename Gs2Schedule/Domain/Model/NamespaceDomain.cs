@@ -910,6 +910,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Schedule.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Schedule.Model.Namespace> callback)
         {
             return this._gs2.Cache.Subscribe(

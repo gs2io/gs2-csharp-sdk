@@ -638,6 +638,15 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Idle.Model.CurrentCategoryMaster>(
+                _parentKey,
+                Gs2.Gs2Idle.Domain.Model.CurrentCategoryMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Idle.Model.CurrentCategoryMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

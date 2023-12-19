@@ -599,6 +599,16 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Formation.Model.MoldModelMaster>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain.CreateCacheKey(
+                    this.MoldModelName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.MoldModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

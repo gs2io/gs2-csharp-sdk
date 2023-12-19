@@ -438,6 +438,19 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Matchmaking.Model.Ballot>(
+                _parentKey,
+                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
+                    this.RatingName.ToString(),
+                    this.GatheringName.ToString(),
+                    this.NumberOfPlayer.ToString(),
+                    this.KeyId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Ballot> callback)
         {
             return this._gs2.Cache.Subscribe(

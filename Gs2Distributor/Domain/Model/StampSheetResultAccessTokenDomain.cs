@@ -473,6 +473,16 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.StampSheetResult> callback)
         {
             return this._gs2.Cache.Subscribe(

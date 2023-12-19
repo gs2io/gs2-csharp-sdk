@@ -599,6 +599,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                _parentKey,
+                Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
+                    this.EntryName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

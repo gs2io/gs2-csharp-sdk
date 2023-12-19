@@ -501,6 +501,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Identifier.Model.Identifier>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
+                    this.ClientId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.Identifier> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -715,6 +715,16 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2StateMachine.Model.Status>(
+                _parentKey,
+                Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
+                    this.StatusName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2StateMachine.Model.Status> callback)
         {
             return this._gs2.Cache.Subscribe(

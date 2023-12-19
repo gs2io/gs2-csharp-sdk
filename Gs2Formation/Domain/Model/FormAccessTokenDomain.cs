@@ -1120,6 +1120,16 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Formation.Model.Form>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.FormDomain.CreateCacheKey(
+                    this.Index.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.Form> callback)
         {
             return this._gs2.Cache.Subscribe(

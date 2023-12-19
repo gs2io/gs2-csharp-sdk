@@ -507,6 +507,17 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
+                    this.ParameterName.ToString(),
+                    this.PropertyId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.RarityParameterStatus> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -373,6 +373,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.BalanceParameterModelDomain.CreateCacheKey(
+                    this.ParameterName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.BalanceParameterModel> callback)
         {
             return this._gs2.Cache.Subscribe(

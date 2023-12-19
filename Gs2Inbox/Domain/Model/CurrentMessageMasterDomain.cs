@@ -638,6 +638,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inbox.Model.CurrentMessageMaster>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.CurrentMessageMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.CurrentMessageMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

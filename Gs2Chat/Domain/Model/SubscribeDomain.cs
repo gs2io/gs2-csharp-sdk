@@ -722,6 +722,16 @@ namespace Gs2.Gs2Chat.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Chat.Model.Subscribe>(
+                _parentKey,
+                Gs2.Gs2Chat.Domain.Model.SubscribeDomain.CreateCacheKey(
+                    this.RoomName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Chat.Model.Subscribe> callback)
         {
             return this._gs2.Cache.Subscribe(

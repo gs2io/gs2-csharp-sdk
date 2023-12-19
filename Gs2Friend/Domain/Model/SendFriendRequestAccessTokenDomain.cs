@@ -519,6 +519,16 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Friend.Model.FriendRequest>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain.CreateCacheKey(
+                    this.TargetUserId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
         {
             return this._gs2.Cache.Subscribe(

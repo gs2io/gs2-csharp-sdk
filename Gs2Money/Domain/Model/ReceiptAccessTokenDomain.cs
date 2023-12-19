@@ -185,6 +185,16 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Money.Model.Receipt>(
+                _parentKey,
+                Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
+                    this.TransactionId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Money.Model.Receipt> callback)
         {
             return this._gs2.Cache.Subscribe(

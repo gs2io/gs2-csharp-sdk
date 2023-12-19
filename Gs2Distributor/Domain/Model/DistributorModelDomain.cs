@@ -373,6 +373,16 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Distributor.Model.DistributorModel>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.DistributorModelDomain.CreateCacheKey(
+                    this.DistributorName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.DistributorModel> callback)
         {
             return this._gs2.Cache.Subscribe(

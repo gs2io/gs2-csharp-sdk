@@ -373,6 +373,16 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Stamina.Model.StaminaModel>(
+                _parentKey,
+                Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
+                    this.StaminaName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Stamina.Model.StaminaModel> callback)
         {
             return this._gs2.Cache.Subscribe(

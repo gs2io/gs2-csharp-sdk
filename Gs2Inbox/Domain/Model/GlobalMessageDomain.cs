@@ -373,6 +373,16 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inbox.Model.GlobalMessage>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.GlobalMessageDomain.CreateCacheKey(
+                    this.GlobalMessageName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.GlobalMessage> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -638,6 +638,15 @@ namespace Gs2.Gs2Distributor.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Distributor.Model.CurrentDistributorMaster>(
+                _parentKey,
+                Gs2.Gs2Distributor.Domain.Model.CurrentDistributorMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.CurrentDistributorMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -599,6 +599,16 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain.CreateCacheKey(
+                    this.CounterName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Mission.Model.CounterModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

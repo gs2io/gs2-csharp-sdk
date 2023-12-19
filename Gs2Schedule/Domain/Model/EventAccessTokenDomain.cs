@@ -380,6 +380,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Schedule.Model.Event>(
+                _parentKey,
+                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
+                    this.EventName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Schedule.Model.Event> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -599,6 +599,16 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2LoginReward.Model.BonusModelMaster>(
+                _parentKey,
+                Gs2.Gs2LoginReward.Domain.Model.BonusModelMasterDomain.CreateCacheKey(
+                    this.BonusModelName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2LoginReward.Model.BonusModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

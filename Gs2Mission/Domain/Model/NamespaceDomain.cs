@@ -1217,6 +1217,16 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Mission.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Mission.Model.Namespace> callback)
         {
             return this._gs2.Cache.Subscribe(

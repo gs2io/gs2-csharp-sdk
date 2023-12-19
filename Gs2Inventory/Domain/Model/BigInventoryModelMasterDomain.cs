@@ -784,6 +784,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -384,6 +384,16 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2News.Model.Output>(
+                _parentKey,
+                Gs2.Gs2News.Domain.Model.OutputDomain.CreateCacheKey(
+                    this.OutputName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2News.Model.Output> callback)
         {
             return this._gs2.Cache.Subscribe(

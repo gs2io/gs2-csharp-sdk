@@ -373,6 +373,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Event>(
+                _parentKey,
+                Gs2.Gs2Deploy.Domain.Model.EventDomain.CreateCacheKey(
+                    this.EventName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Deploy.Model.Event> callback)
         {
             return this._gs2.Cache.Subscribe(

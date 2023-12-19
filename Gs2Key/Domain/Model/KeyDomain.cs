@@ -740,6 +740,16 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Key.Model.Key>(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
+                    this.KeyName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Key.Model.Key> callback)
         {
             return this._gs2.Cache.Subscribe(

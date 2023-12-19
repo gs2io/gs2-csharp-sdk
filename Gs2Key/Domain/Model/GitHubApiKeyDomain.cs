@@ -600,6 +600,16 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Key.Model.GitHubApiKey>(
+                _parentKey,
+                Gs2.Gs2Key.Domain.Model.GitHubApiKeyDomain.CreateCacheKey(
+                    this.ApiKeyName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Key.Model.GitHubApiKey> callback)
         {
             return this._gs2.Cache.Subscribe(

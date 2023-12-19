@@ -373,6 +373,16 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Version.Model.VersionModel>(
+                _parentKey,
+                Gs2.Gs2Version.Domain.Model.VersionModelDomain.CreateCacheKey(
+                    this.VersionName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Version.Model.VersionModel> callback)
         {
             return this._gs2.Cache.Subscribe(

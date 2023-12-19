@@ -977,6 +977,16 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Version.Model.Namespace>(
+                _parentKey,
+                Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheKey(
+                    this.NamespaceName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Version.Model.Namespace> callback)
         {
             return this._gs2.Cache.Subscribe(

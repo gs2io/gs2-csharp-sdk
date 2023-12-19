@@ -181,6 +181,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 #endif
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
+                    this.PrizeId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.Probability> callback)
         {
             return this._gs2.Cache.Subscribe(

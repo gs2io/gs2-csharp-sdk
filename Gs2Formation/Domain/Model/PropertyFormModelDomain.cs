@@ -373,6 +373,16 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
+                    this.PropertyFormModelName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.PropertyFormModel> callback)
         {
             return this._gs2.Cache.Subscribe(

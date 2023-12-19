@@ -829,6 +829,17 @@ namespace Gs2.Gs2Limit.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Limit.Model.Counter>(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.CounterDomain.CreateCacheKey(
+                    this.LimitName.ToString(),
+                    this.CounterName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Limit.Model.Counter> callback)
         {
             return this._gs2.Cache.Subscribe(

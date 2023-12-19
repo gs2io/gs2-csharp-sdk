@@ -850,6 +850,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Identifier.Model.User>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
+                    this.UserName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.User> callback)
         {
             return this._gs2.Cache.Subscribe(

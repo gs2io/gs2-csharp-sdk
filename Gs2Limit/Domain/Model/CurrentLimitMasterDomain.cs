@@ -638,6 +638,15 @@ namespace Gs2.Gs2Limit.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Limit.Model.CurrentLimitMaster>(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.CurrentLimitMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Limit.Model.CurrentLimitMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

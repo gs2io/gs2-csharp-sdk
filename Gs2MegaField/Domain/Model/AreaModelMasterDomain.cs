@@ -784,6 +784,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2MegaField.Model.AreaModelMaster>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain.CreateCacheKey(
+                    this.AreaModelName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.AreaModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

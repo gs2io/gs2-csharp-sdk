@@ -638,6 +638,15 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Version.Model.CurrentVersionMaster>(
+                _parentKey,
+                Gs2.Gs2Version.Domain.Model.CurrentVersionMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Version.Model.CurrentVersionMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

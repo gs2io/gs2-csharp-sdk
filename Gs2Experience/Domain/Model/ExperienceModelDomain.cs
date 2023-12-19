@@ -373,6 +373,16 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Experience.Model.ExperienceModel>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ExperienceModelDomain.CreateCacheKey(
+                    this.ExperienceName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Experience.Model.ExperienceModel> callback)
         {
             return this._gs2.Cache.Subscribe(

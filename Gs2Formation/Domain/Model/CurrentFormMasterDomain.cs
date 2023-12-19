@@ -638,6 +638,15 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Formation.Model.CurrentFormMaster>(
+                _parentKey,
+                Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.CurrentFormMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

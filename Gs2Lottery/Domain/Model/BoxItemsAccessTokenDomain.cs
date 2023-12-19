@@ -481,6 +481,16 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
+                _parentKey,
+                Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                    this.PrizeTableName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.BoxItems> callback)
         {
             return this._gs2.Cache.Subscribe(

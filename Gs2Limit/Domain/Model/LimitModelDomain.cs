@@ -373,6 +373,16 @@ namespace Gs2.Gs2Limit.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Limit.Model.LimitModel>(
+                _parentKey,
+                Gs2.Gs2Limit.Domain.Model.LimitModelDomain.CreateCacheKey(
+                    this.LimitName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Limit.Model.LimitModel> callback)
         {
             return this._gs2.Cache.Subscribe(

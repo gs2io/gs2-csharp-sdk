@@ -469,6 +469,17 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2MegaField.Model.Spatial>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.SpatialDomain.CreateCacheKey(
+                    this.AreaModelName.ToString(),
+                    this.LayerModelName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.Spatial> callback)
         {
             return this._gs2.Cache.Subscribe(

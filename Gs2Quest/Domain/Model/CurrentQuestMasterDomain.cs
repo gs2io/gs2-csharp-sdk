@@ -638,6 +638,15 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Quest.Model.CurrentQuestMaster>(
+                _parentKey,
+                Gs2.Gs2Quest.Domain.Model.CurrentQuestMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Quest.Model.CurrentQuestMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -186,6 +186,15 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Showcase.Model.SalesItemGroup>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.SalesItemGroupDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.SalesItemGroup> callback)
         {
             return this._gs2.Cache.Subscribe(

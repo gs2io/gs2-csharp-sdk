@@ -638,6 +638,15 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Ranking.Model.CurrentRankingMaster>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.CurrentRankingMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.CurrentRankingMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

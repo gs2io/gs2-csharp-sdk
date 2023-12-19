@@ -512,6 +512,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2SerialKey.Model.SerialKey>(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
+                    this.SerialKeyCode.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.SerialKey> callback)
         {
             return this._gs2.Cache.Subscribe(

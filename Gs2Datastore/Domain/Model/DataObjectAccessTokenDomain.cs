@@ -916,6 +916,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Datastore.Model.DataObject>(
+                _parentKey,
+                Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheKey(
+                    this.DataObjectName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Datastore.Model.DataObject> callback)
         {
             return this._gs2.Cache.Subscribe(

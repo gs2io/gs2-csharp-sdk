@@ -384,6 +384,16 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2MegaField.Model.LayerModel>(
+                _parentKey,
+                Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
+                    this.LayerModelName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.LayerModel> callback)
         {
             return this._gs2.Cache.Subscribe(

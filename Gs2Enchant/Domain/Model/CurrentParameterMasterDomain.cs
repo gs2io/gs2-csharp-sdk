@@ -638,6 +638,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Enchant.Model.CurrentParameterMaster>(
+                _parentKey,
+                Gs2.Gs2Enchant.Domain.Model.CurrentParameterMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.CurrentParameterMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

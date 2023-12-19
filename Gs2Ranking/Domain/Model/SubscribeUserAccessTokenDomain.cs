@@ -534,6 +534,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Ranking.Model.SubscribeUser>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain.CreateCacheKey(
+                    this.CategoryName.ToString(),
+                    this.TargetUserId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.SubscribeUser> callback)
         {
             return this._gs2.Cache.Subscribe(

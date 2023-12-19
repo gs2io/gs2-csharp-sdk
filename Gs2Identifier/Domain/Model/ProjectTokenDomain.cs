@@ -341,6 +341,15 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Identifier.Model.ProjectToken>(
+                _parentKey,
+                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.ProjectToken> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -588,6 +588,16 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Friend.Model.FriendUser>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.FriendUserDomain.CreateCacheKey(
+                    this.TargetUserId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FriendUser> callback)
         {
             return this._gs2.Cache.Subscribe(

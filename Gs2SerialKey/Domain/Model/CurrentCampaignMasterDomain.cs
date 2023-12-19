@@ -638,6 +638,15 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster>(
+                _parentKey,
+                Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

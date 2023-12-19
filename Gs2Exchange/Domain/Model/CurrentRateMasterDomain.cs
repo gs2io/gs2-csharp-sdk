@@ -638,6 +638,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Exchange.Model.CurrentRateMaster>(
+                _parentKey,
+                Gs2.Gs2Exchange.Domain.Model.CurrentRateMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Exchange.Model.CurrentRateMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

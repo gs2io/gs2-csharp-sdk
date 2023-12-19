@@ -599,6 +599,16 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Idle.Model.CategoryModelMaster>(
+                _parentKey,
+                Gs2.Gs2Idle.Domain.Model.CategoryModelMasterDomain.CreateCacheKey(
+                    this.CategoryName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Idle.Model.CategoryModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

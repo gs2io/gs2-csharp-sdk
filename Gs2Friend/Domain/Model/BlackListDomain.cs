@@ -407,6 +407,15 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Friend.Model.BlackList>(
+                _parentKey,
+                Gs2.Gs2Friend.Domain.Model.BlackListDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Friend.Model.BlackList> callback)
         {
             return this._gs2.Cache.Subscribe(

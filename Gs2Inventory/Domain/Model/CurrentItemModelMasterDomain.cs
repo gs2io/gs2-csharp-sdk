@@ -638,6 +638,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.CurrentItemModelMaster>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.CurrentItemModelMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.CurrentItemModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

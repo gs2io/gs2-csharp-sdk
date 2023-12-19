@@ -185,6 +185,16 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
+                _parentKey,
+                Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
+                    this.DeadLetterJobName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2JobQueue.Model.DeadLetterJob> callback)
         {
             return this._gs2.Cache.Subscribe(

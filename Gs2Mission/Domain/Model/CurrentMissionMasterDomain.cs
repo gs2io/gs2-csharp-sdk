@@ -638,6 +638,15 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Mission.Model.CurrentMissionMaster>(
+                _parentKey,
+                Gs2.Gs2Mission.Domain.Model.CurrentMissionMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Mission.Model.CurrentMissionMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

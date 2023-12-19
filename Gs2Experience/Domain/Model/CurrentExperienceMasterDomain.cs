@@ -638,6 +638,15 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Experience.Model.CurrentExperienceMaster>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.CurrentExperienceMasterDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Experience.Model.CurrentExperienceMaster> callback)
         {
             return this._gs2.Cache.Subscribe(

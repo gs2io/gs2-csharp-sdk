@@ -585,6 +585,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Received>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.ReceivedDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.Received> callback)
         {
             return this._gs2.Cache.Subscribe(

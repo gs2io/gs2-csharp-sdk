@@ -529,6 +529,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Showcase.Namespace(
+                NamespaceName
+            ).AccessToken(
+                AccessToken
+            ).Showcase(
+                ShowcaseName
+            ).Invalidate();
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.DisplayItem> callback)
         {
             return this._gs2.Cache.Subscribe(

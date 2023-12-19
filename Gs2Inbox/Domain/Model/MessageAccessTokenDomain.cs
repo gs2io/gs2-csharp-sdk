@@ -800,6 +800,16 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Message>(
+                _parentKey,
+                Gs2.Gs2Inbox.Domain.Model.MessageDomain.CreateCacheKey(
+                    this.MessageName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inbox.Model.Message> callback)
         {
             return this._gs2.Cache.Subscribe(

@@ -163,6 +163,15 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Experience.Model.Threshold>(
+                _parentKey,
+                Gs2.Gs2Experience.Domain.Model.ThresholdDomain.CreateCacheKey(
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Experience.Model.Threshold> callback)
         {
             return this._gs2.Cache.Subscribe(

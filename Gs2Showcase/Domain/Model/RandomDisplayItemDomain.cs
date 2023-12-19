@@ -529,6 +529,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
+                _parentKey,
+                Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
+                    this.DisplayItemName.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.RandomDisplayItem> callback)
         {
             return this._gs2.Cache.Subscribe(

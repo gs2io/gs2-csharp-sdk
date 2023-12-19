@@ -441,6 +441,18 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Ranking.Model.Score>(
+                _parentKey,
+                Gs2.Gs2Ranking.Domain.Model.ScoreDomain.CreateCacheKey(
+                    this.CategoryName.ToString(),
+                    this.ScorerUserId.ToString(),
+                    this.UniqueId.ToString()
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.Score> callback)
         {
             return this._gs2.Cache.Subscribe(
