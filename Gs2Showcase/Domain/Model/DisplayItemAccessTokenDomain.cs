@@ -542,34 +542,29 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.DisplayItem> callback)
         {
-            return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                    this.DisplayItemId.ToString()
-                ),
-                callback,
-                () =>
+            return this._gs2.Showcase.Namespace(
+                NamespaceName
+            ).AccessToken(
+                AccessToken
+            ).Showcase(
+                ShowcaseName
+            ).Subscribe(
+                item =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
-            #else
-                    ModelAsync();
-            #endif
-        #endif
+                    callback.Invoke(item.DisplayItems.FirstOrDefault(v => v.DisplayItemId == DisplayItemId));
                 }
             );
         }
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.DisplayItem>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                    this.DisplayItemId.ToString()
-                ),
-                callbackId
-            );
+            this._gs2.Showcase.Namespace(
+                NamespaceName
+            ).AccessToken(
+                AccessToken
+            ).Showcase(
+                ShowcaseName
+            ).Unsubscribe(callbackId);
         }
 
         #if UNITY_2017_1_OR_NEWER
