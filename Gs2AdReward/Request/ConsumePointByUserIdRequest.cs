@@ -100,7 +100,6 @@ namespace Gs2.Gs2AdReward.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
-            key += Point + ":";
             return key;
         }
 
@@ -108,7 +107,7 @@ namespace Gs2.Gs2AdReward.Request
             return new ConsumePointByUserIdRequest {
                 NamespaceName = NamespaceName,
                 UserId = UserId,
-                Point = Point,
+                Point = Point * x,
             };
         }
 
@@ -120,13 +119,10 @@ namespace Gs2.Gs2AdReward.Request
             if (UserId != y.UserId) {
                 throw new ArithmeticException("mismatch parameter values ConsumePointByUserIdRequest::userId");
             }
-            if (Point != y.Point) {
-                throw new ArithmeticException("mismatch parameter values ConsumePointByUserIdRequest::point");
-            }
             return new ConsumePointByUserIdRequest {
                 NamespaceName = NamespaceName,
                 UserId = UserId,
-                Point = Point,
+                Point = Point + y.Point,
             };
         }
     }

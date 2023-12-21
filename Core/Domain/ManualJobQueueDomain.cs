@@ -70,6 +70,10 @@ namespace Gs2.Core.Domain
             Gs2JobQueue.Model.Job job,
             Gs2JobQueue.Model.JobResultBody result
         ) {
+            if (result.StatusCode / 100 != 2) {
+                throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 0);
+            }
+
             var skipCallback = false;
             lock (_handled) {
                 if (_handled.ContainsKey(this._jobName)) {

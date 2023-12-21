@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Gs2.Core.Exception;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
 #endif
@@ -486,13 +487,7 @@ namespace Gs2.Core.Domain
             }
             if (result.StartsWith("{\"message\":\""))
             {
-                // error
-#if UNITY_2017_1_OR_NEWER
-                Debug.LogError(result);
-#else
-                Debug.WriteLine(result);
-#endif
-                return;
+                throw Gs2Exception.ExtractError(result, 999);
             }
 
             if (action.Contains(":"))
@@ -641,13 +636,7 @@ namespace Gs2.Core.Domain
         {
             if (result != null && result.StartsWith("{\"message\":\""))
             {
-                // error
-#if UNITY_2017_1_OR_NEWER
-                Debug.LogError(result);
-#else
-                Debug.WriteLine(result);
-#endif
-                return;
+                throw Gs2Exception.ExtractError(result, 999);
             }
 
             if (action.Contains(":"))
