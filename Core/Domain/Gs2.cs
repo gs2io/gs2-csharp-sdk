@@ -52,6 +52,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Formation.Domain.Gs2Formation Formation;
         public readonly Gs2Friend.Domain.Gs2Friend Friend;
         public readonly Gs2Gateway.Domain.Gs2Gateway Gateway;
+        public readonly Gs2Grade.Domain.Gs2Grade Grade;
         public readonly Gs2Identifier.Domain.Gs2Identifier Identifier;
         public readonly Gs2Idle.Domain.Gs2Idle Idle;
         public readonly Gs2Inbox.Domain.Gs2Inbox Inbox;
@@ -111,6 +112,7 @@ namespace Gs2.Core.Domain
             this.Formation = new Gs2Formation.Domain.Gs2Formation(this);
             this.Friend = new Gs2Friend.Domain.Gs2Friend(this);
             this.Gateway = new Gs2Gateway.Domain.Gs2Gateway(this);
+            this.Grade = new Gs2Grade.Domain.Gs2Grade(this);
             this.Identifier = new Gs2Identifier.Domain.Gs2Identifier(this);
             this.Idle = new Gs2Idle.Domain.Gs2Idle(this);
             this.Inbox = new Gs2Inbox.Domain.Gs2Inbox(this);
@@ -193,6 +195,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Gateway":
                                 this.Gateway.HandleNotification(this._cache, method, message.payload);
+                                break;
+                            case "Gs2Grade":
+                                this.Grade.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2Identifier":
                                 this.Identifier.HandleNotification(this._cache, method, message.payload);
@@ -541,6 +546,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Gateway":
                         this.Gateway.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
+                    case "Gs2Grade":
+                        this.Grade.UpdateCacheFromStampSheet(transactionId, method, request, result);
+                        break;
                     case "Gs2Identifier":
                         this.Identifier.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
@@ -689,6 +697,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Gateway":
                         this.Gateway.UpdateCacheFromStampTask(taskId, method, request, result);
+                        break;
+                    case "Gs2Grade":
+                        this.Grade.UpdateCacheFromStampTask(taskId, method, request, result);
                         break;
                     case "Gs2Identifier":
                         this.Identifier.UpdateCacheFromStampTask(taskId, method, request, result);
@@ -843,6 +854,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "gateway":
                                 this.Gateway.UpdateCacheFromJobResult(method, job, result);
+                                break;
+                            case "grade":
+                                this.Grade.UpdateCacheFromJobResult(method, job, result);
                                 break;
                             case "identifier":
                                 this.Identifier.UpdateCacheFromJobResult(method, job, result);

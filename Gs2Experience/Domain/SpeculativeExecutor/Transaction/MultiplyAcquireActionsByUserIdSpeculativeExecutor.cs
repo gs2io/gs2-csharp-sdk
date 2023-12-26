@@ -34,6 +34,7 @@ using System.Reflection;
 using System.Numerics;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
@@ -77,8 +78,8 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
 
                 var future2 = domain.Experience.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                     request.ExperienceName,
                     request.PropertyId
@@ -92,7 +93,16 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
 
                 Gs2Future<Func<object>> future3;
                 var rate = model.AcquireActionRates.FirstOrDefault(v => v.Name == request.RateName);
-                if (rate.Mode == "double") {
+                
+                if (rate == null) {
+                    throw new NotFoundException(new RequestError[] {
+                        new RequestError(
+                            "rateName",
+                            "experience.experienceModel.acquireActionRates.error.notFound"
+                        )
+                    });
+                }
+                else if (rate.Mode == "double") {
                     future3 = new Core.SpeculativeExecutor.SpeculativeExecutor(
                         Array.Empty<ConsumeAction>(),
                         request.AcquireActions,
@@ -151,8 +161,8 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
 
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
                 request.ExperienceName,
                 request.PropertyId
@@ -160,7 +170,15 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
 
             Func<object> commit;
             var rate = model.AcquireActionRates.FirstOrDefault(v => v.Name == request.RateName);
-            if (rate.Mode == "double") {
+            if (rate == null) {
+                throw new NotFoundException(new RequestError[] {
+                    new RequestError(
+                        "rateName",
+                        "experience.experienceModel.acquireActionRates.error.notFound"
+                    )
+                });
+            }
+            else if (rate.Mode == "double") {
                 commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
                     Array.Empty<ConsumeAction>(),
                     request.AcquireActions,

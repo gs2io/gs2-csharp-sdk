@@ -1623,6 +1623,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                    this.ItemName.ToString(),
+                    this.ItemSetName.ToString()
+                )
+            );
+            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.ItemSet>(
+                this._nullParentKey,
+                Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                    this.ItemName.ToString(),
+                    null
+                )
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.ItemSet> callback)
         {
             if (string.IsNullOrEmpty(this.ItemSetName)) {

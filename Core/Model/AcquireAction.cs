@@ -149,7 +149,7 @@ namespace Gs2.Core.Model
             }
             return new AcquireAction()
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
-                .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString());
+                .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].IsObject ? data["request"].ToJson() : data["request"].ToString());
         }
 
         public JsonData ToJson()
