@@ -686,6 +686,12 @@ namespace Gs2.Gs2Enhance.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, UnleashByUserIdRequest, UnleashByUserIdResult> UnleashByUserIdComplete = new UnityEvent<string, UnleashByUserIdRequest, UnleashByUserIdResult>();
+    #else
+        public static Action<string, UnleashByUserIdRequest, UnleashByUserIdResult> UnleashByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, CreateProgressByUserIdRequest, CreateProgressByUserIdResult> CreateProgressByUserIdComplete = new UnityEvent<string, CreateProgressByUserIdRequest, CreateProgressByUserIdResult>();
     #else
         public static Action<string, CreateProgressByUserIdRequest, CreateProgressByUserIdResult> CreateProgressByUserIdComplete;
@@ -719,6 +725,33 @@ namespace Gs2.Gs2Enhance.Domain
                         }
 
                         DirectEnhanceByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "UnleashByUserId": {
+                        var requestModel = UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = UnleashByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        if (resultModel.Item != null) {
+                            var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName,
+                                "UnleashRateModel"
+                            );
+                            var key = Gs2.Gs2Enhance.Domain.Model.UnleashRateModelDomain.CreateCacheKey(
+                                resultModel.Item.Name.ToString()
+                            );
+                            _gs2.Cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+
+                        UnleashByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -820,6 +853,33 @@ namespace Gs2.Gs2Enhance.Domain
                     }
 
                     DirectEnhanceByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "unleash_by_user_id": {
+                    var requestModel = UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = UnleashByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName,
+                            "UnleashRateModel"
+                        );
+                        var key = Gs2.Gs2Enhance.Domain.Model.UnleashRateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+
+                    UnleashByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

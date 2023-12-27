@@ -40,6 +40,8 @@ namespace Gs2.Gs2Enhance.Model
             switch (action.Action) {
                 case "Gs2Enhance:DirectEnhanceByUserId":
                     return DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Enhance:UnleashByUserId":
+                    return UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Enhance:CreateProgressByUserId":
                     return CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

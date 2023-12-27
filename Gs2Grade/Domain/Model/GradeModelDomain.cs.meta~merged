@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<< HEAD
+guid: 205604984a1b27e8bbad3185181a4024
+=======
+guid: 3a3f705b98acc44b09b7390b6cef4f2e
+>>>>>>> 47e5b4270f (GS2-Grade の Unity 向けのユニットテストを追加)
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -91,6 +91,140 @@ namespace Gs2.Gs2Enhance.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.UnleashRateModel> UnleashRateModels(
+        )
+        {
+            return new DescribeUnleashRateModelsIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.UnleashRateModel> UnleashRateModelsAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.UnleashRateModel> UnleashRateModels(
+            #endif
+        #else
+        public DescribeUnleashRateModelsIterator UnleashRateModelsAsync(
+        #endif
+        )
+        {
+            return new DescribeUnleashRateModelsIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public ulong SubscribeUnleashRateModels(Action callback)
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enhance.Model.UnleashRateModel>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "UnleashRateModel"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeUnleashRateModels(ulong callbackId)
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.UnleashRateModel>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "UnleashRateModel"
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Enhance.Domain.Model.UnleashRateModelDomain UnleashRateModel(
+            string rateName
+        ) {
+            return new Gs2.Gs2Enhance.Domain.Model.UnleashRateModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                rateName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.UnleashRateModelMaster> UnleashRateModelMasters(
+        )
+        {
+            return new DescribeUnleashRateModelMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Enhance.Model.UnleashRateModelMaster> UnleashRateModelMastersAsync(
+            #else
+        public Gs2Iterator<Gs2.Gs2Enhance.Model.UnleashRateModelMaster> UnleashRateModelMasters(
+            #endif
+        #else
+        public DescribeUnleashRateModelMastersIterator UnleashRateModelMastersAsync(
+        #endif
+        )
+        {
+            return new DescribeUnleashRateModelMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        #else
+            );
+        #endif
+        }
+
+        public ulong SubscribeUnleashRateModelMasters(Action callback)
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enhance.Model.UnleashRateModelMaster>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "UnleashRateModelMaster"
+                ),
+                callback
+            );
+        }
+
+        public void UnsubscribeUnleashRateModelMasters(ulong callbackId)
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.UnleashRateModelMaster>(
+                Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                    this.NamespaceName,
+                    "UnleashRateModelMaster"
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain UnleashRateModelMaster(
+            string rateName
+        ) {
+            return new Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                rateName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Enhance.Model.RateModel> RateModels(
         )
         {
@@ -721,6 +855,112 @@ namespace Gs2.Gs2Enhance.Domain.Model
             DeleteNamespaceRequest request
         ) {
             return DeleteFuture(request);
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> CreateUnleashRateModelMasterFuture(
+            CreateUnleashRateModelMasterRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> self)
+            {
+                request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = this._client.CreateUnleashRateModelMasterFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "UnleashRateModelMaster"
+                        );
+                        var key = Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var domain = new Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain(
+                    this._gs2,
+                    request.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> CreateUnleashRateModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> CreateUnleashRateModelMasterAsync(
+            #endif
+            CreateUnleashRateModelMasterRequest request
+        ) {
+            request
+                .WithNamespaceName(this.NamespaceName);
+            CreateUnleashRateModelMasterResult result = null;
+                result = await this._client.CreateUnleashRateModelMasterAsync(
+                    request
+                );
+
+            var requestModel = request;
+            var resultModel = result;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "UnleashRateModelMaster"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+                var domain = new Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain(
+                    this._gs2,
+                    request.NamespaceName,
+                    result?.Item?.Name
+                );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        [Obsolete("The name has been changed to CreateUnleashRateModelMasterFuture.")]
+        public IFuture<Gs2.Gs2Enhance.Domain.Model.UnleashRateModelMasterDomain> CreateUnleashRateModelMaster(
+            CreateUnleashRateModelMasterRequest request
+        ) {
+            return CreateUnleashRateModelMasterFuture(request);
         }
         #endif
 

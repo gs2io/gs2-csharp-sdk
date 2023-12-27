@@ -2452,6 +2452,835 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
+        public class DescribeUnleashRateModelsTask : Gs2RestSessionTask<DescribeUnleashRateModelsRequest, DescribeUnleashRateModelsResult>
+        {
+            public DescribeUnleashRateModelsTask(IGs2Session session, RestSessionRequestFactory factory, DescribeUnleashRateModelsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeUnleashRateModelsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/unleash/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeUnleashRateModels(
+                Request.DescribeUnleashRateModelsRequest request,
+                UnityAction<AsyncResult<Result.DescribeUnleashRateModelsResult>> callback
+        )
+		{
+			var task = new DescribeUnleashRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeUnleashRateModelsResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeUnleashRateModelsResult> DescribeUnleashRateModelsFuture(
+                Request.DescribeUnleashRateModelsRequest request
+        )
+		{
+			return new DescribeUnleashRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeUnleashRateModelsResult> DescribeUnleashRateModelsAsync(
+                Request.DescribeUnleashRateModelsRequest request
+        )
+		{
+            AsyncResult<Result.DescribeUnleashRateModelsResult> result = null;
+			await DescribeUnleashRateModels(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeUnleashRateModelsTask DescribeUnleashRateModelsAsync(
+                Request.DescribeUnleashRateModelsRequest request
+        )
+		{
+			return new DescribeUnleashRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeUnleashRateModelsResult> DescribeUnleashRateModelsAsync(
+                Request.DescribeUnleashRateModelsRequest request
+        )
+		{
+			var task = new DescribeUnleashRateModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetUnleashRateModelTask : Gs2RestSessionTask<GetUnleashRateModelRequest, GetUnleashRateModelResult>
+        {
+            public GetUnleashRateModelTask(IGs2Session session, RestSessionRequestFactory factory, GetUnleashRateModelRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetUnleashRateModelRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/unleash/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetUnleashRateModel(
+                Request.GetUnleashRateModelRequest request,
+                UnityAction<AsyncResult<Result.GetUnleashRateModelResult>> callback
+        )
+		{
+			var task = new GetUnleashRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetUnleashRateModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetUnleashRateModelResult> GetUnleashRateModelFuture(
+                Request.GetUnleashRateModelRequest request
+        )
+		{
+			return new GetUnleashRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUnleashRateModelResult> GetUnleashRateModelAsync(
+                Request.GetUnleashRateModelRequest request
+        )
+		{
+            AsyncResult<Result.GetUnleashRateModelResult> result = null;
+			await GetUnleashRateModel(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetUnleashRateModelTask GetUnleashRateModelAsync(
+                Request.GetUnleashRateModelRequest request
+        )
+		{
+			return new GetUnleashRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetUnleashRateModelResult> GetUnleashRateModelAsync(
+                Request.GetUnleashRateModelRequest request
+        )
+		{
+			var task = new GetUnleashRateModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeUnleashRateModelMastersTask : Gs2RestSessionTask<DescribeUnleashRateModelMastersRequest, DescribeUnleashRateModelMastersResult>
+        {
+            public DescribeUnleashRateModelMastersTask(IGs2Session session, RestSessionRequestFactory factory, DescribeUnleashRateModelMastersRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeUnleashRateModelMastersRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/unleash/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeUnleashRateModelMasters(
+                Request.DescribeUnleashRateModelMastersRequest request,
+                UnityAction<AsyncResult<Result.DescribeUnleashRateModelMastersResult>> callback
+        )
+		{
+			var task = new DescribeUnleashRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeUnleashRateModelMastersResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeUnleashRateModelMastersResult> DescribeUnleashRateModelMastersFuture(
+                Request.DescribeUnleashRateModelMastersRequest request
+        )
+		{
+			return new DescribeUnleashRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeUnleashRateModelMastersResult> DescribeUnleashRateModelMastersAsync(
+                Request.DescribeUnleashRateModelMastersRequest request
+        )
+		{
+            AsyncResult<Result.DescribeUnleashRateModelMastersResult> result = null;
+			await DescribeUnleashRateModelMasters(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeUnleashRateModelMastersTask DescribeUnleashRateModelMastersAsync(
+                Request.DescribeUnleashRateModelMastersRequest request
+        )
+		{
+			return new DescribeUnleashRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeUnleashRateModelMastersResult> DescribeUnleashRateModelMastersAsync(
+                Request.DescribeUnleashRateModelMastersRequest request
+        )
+		{
+			var task = new DescribeUnleashRateModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateUnleashRateModelMasterTask : Gs2RestSessionTask<CreateUnleashRateModelMasterRequest, CreateUnleashRateModelMasterResult>
+        {
+            public CreateUnleashRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, CreateUnleashRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CreateUnleashRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/unleash/model";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name);
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.TargetInventoryModelId != null)
+                {
+                    jsonWriter.WritePropertyName("targetInventoryModelId");
+                    jsonWriter.Write(request.TargetInventoryModelId);
+                }
+                if (request.GradeModelId != null)
+                {
+                    jsonWriter.WritePropertyName("gradeModelId");
+                    jsonWriter.Write(request.GradeModelId);
+                }
+                if (request.GradeEntries != null)
+                {
+                    jsonWriter.WritePropertyName("gradeEntries");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GradeEntries)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateUnleashRateModelMaster(
+                Request.CreateUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new CreateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateUnleashRateModelMasterResult> CreateUnleashRateModelMasterFuture(
+                Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+			return new CreateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateUnleashRateModelMasterResult> CreateUnleashRateModelMasterAsync(
+                Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.CreateUnleashRateModelMasterResult> result = null;
+			await CreateUnleashRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public CreateUnleashRateModelMasterTask CreateUnleashRateModelMasterAsync(
+                Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+			return new CreateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateUnleashRateModelMasterResult> CreateUnleashRateModelMasterAsync(
+                Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+			var task = new CreateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetUnleashRateModelMasterTask : Gs2RestSessionTask<GetUnleashRateModelMasterRequest, GetUnleashRateModelMasterResult>
+        {
+            public GetUnleashRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, GetUnleashRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetUnleashRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/unleash/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetUnleashRateModelMaster(
+                Request.GetUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new GetUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetUnleashRateModelMasterResult> GetUnleashRateModelMasterFuture(
+                Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+			return new GetUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUnleashRateModelMasterResult> GetUnleashRateModelMasterAsync(
+                Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.GetUnleashRateModelMasterResult> result = null;
+			await GetUnleashRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public GetUnleashRateModelMasterTask GetUnleashRateModelMasterAsync(
+                Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+			return new GetUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetUnleashRateModelMasterResult> GetUnleashRateModelMasterAsync(
+                Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+			var task = new GetUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateUnleashRateModelMasterTask : Gs2RestSessionTask<UpdateUnleashRateModelMasterRequest, UpdateUnleashRateModelMasterResult>
+        {
+            public UpdateUnleashRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateUnleashRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UpdateUnleashRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/unleash/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description);
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata);
+                }
+                if (request.TargetInventoryModelId != null)
+                {
+                    jsonWriter.WritePropertyName("targetInventoryModelId");
+                    jsonWriter.Write(request.TargetInventoryModelId);
+                }
+                if (request.GradeModelId != null)
+                {
+                    jsonWriter.WritePropertyName("gradeModelId");
+                    jsonWriter.Write(request.GradeModelId);
+                }
+                if (request.GradeEntries != null)
+                {
+                    jsonWriter.WritePropertyName("gradeEntries");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GradeEntries)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateUnleashRateModelMaster(
+                Request.UpdateUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateUnleashRateModelMasterResult> UpdateUnleashRateModelMasterFuture(
+                Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+			return new UpdateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateUnleashRateModelMasterResult> UpdateUnleashRateModelMasterAsync(
+                Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.UpdateUnleashRateModelMasterResult> result = null;
+			await UpdateUnleashRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UpdateUnleashRateModelMasterTask UpdateUnleashRateModelMasterAsync(
+                Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+			return new UpdateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateUnleashRateModelMasterResult> UpdateUnleashRateModelMasterAsync(
+                Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+			var task = new UpdateUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteUnleashRateModelMasterTask : Gs2RestSessionTask<DeleteUnleashRateModelMasterRequest, DeleteUnleashRateModelMasterResult>
+        {
+            public DeleteUnleashRateModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, DeleteUnleashRateModelMasterRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DeleteUnleashRateModelMasterRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/master/unleash/model/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteUnleashRateModelMaster(
+                Request.DeleteUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteUnleashRateModelMasterResult> DeleteUnleashRateModelMasterFuture(
+                Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+			return new DeleteUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteUnleashRateModelMasterResult> DeleteUnleashRateModelMasterAsync(
+                Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+            AsyncResult<Result.DeleteUnleashRateModelMasterResult> result = null;
+			await DeleteUnleashRateModelMaster(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DeleteUnleashRateModelMasterTask DeleteUnleashRateModelMasterAsync(
+                Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+			return new DeleteUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteUnleashRateModelMasterResult> DeleteUnleashRateModelMasterAsync(
+                Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+			var task = new DeleteUnleashRateModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DirectEnhanceTask : Gs2RestSessionTask<DirectEnhanceRequest, DirectEnhanceResult>
         {
             public DirectEnhanceTask(IGs2Session session, RestSessionRequestFactory factory, DirectEnhanceRequest request) : base(session, factory, request)
@@ -2867,6 +3696,430 @@ namespace Gs2.Gs2Enhance
         )
 		{
 			var task = new DirectEnhanceByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnleashTask : Gs2RestSessionTask<UnleashRequest, UnleashResult>
+        {
+            public UnleashTask(IGs2Session session, RestSessionRequestFactory factory, UnleashRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnleashRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/unleash/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.TargetItemSetId != null)
+                {
+                    jsonWriter.WritePropertyName("targetItemSetId");
+                    jsonWriter.Write(request.TargetItemSetId);
+                }
+                if (request.Materials != null)
+                {
+                    jsonWriter.WritePropertyName("materials");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Materials)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator Unleash(
+                Request.UnleashRequest request,
+                UnityAction<AsyncResult<Result.UnleashResult>> callback
+        )
+		{
+			var task = new UnleashTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnleashResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnleashResult> UnleashFuture(
+                Request.UnleashRequest request
+        )
+		{
+			return new UnleashTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnleashResult> UnleashAsync(
+                Request.UnleashRequest request
+        )
+		{
+            AsyncResult<Result.UnleashResult> result = null;
+			await Unleash(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnleashTask UnleashAsync(
+                Request.UnleashRequest request
+        )
+		{
+			return new UnleashTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnleashResult> UnleashAsync(
+                Request.UnleashRequest request
+        )
+		{
+			var task = new UnleashTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnleashByUserIdTask : Gs2RestSessionTask<UnleashByUserIdRequest, UnleashByUserIdResult>
+        {
+            public UnleashByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, UnleashByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnleashByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/unleash/{rateName}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{rateName}", !string.IsNullOrEmpty(request.RateName) ? request.RateName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.TargetItemSetId != null)
+                {
+                    jsonWriter.WritePropertyName("targetItemSetId");
+                    jsonWriter.Write(request.TargetItemSetId);
+                }
+                if (request.Materials != null)
+                {
+                    jsonWriter.WritePropertyName("materials");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Materials)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnleashByUserId(
+                Request.UnleashByUserIdRequest request,
+                UnityAction<AsyncResult<Result.UnleashByUserIdResult>> callback
+        )
+		{
+			var task = new UnleashByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnleashByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnleashByUserIdResult> UnleashByUserIdFuture(
+                Request.UnleashByUserIdRequest request
+        )
+		{
+			return new UnleashByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnleashByUserIdResult> UnleashByUserIdAsync(
+                Request.UnleashByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.UnleashByUserIdResult> result = null;
+			await UnleashByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnleashByUserIdTask UnleashByUserIdAsync(
+                Request.UnleashByUserIdRequest request
+        )
+		{
+			return new UnleashByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnleashByUserIdResult> UnleashByUserIdAsync(
+                Request.UnleashByUserIdRequest request
+        )
+		{
+			var task = new UnleashByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UnleashByStampSheetTask : Gs2RestSessionTask<UnleashByStampSheetRequest, UnleashByStampSheetResult>
+        {
+            public UnleashByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, UnleashByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(UnleashByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enhance")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/unleash";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UnleashByStampSheet(
+                Request.UnleashByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.UnleashByStampSheetResult>> callback
+        )
+		{
+			var task = new UnleashByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UnleashByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UnleashByStampSheetResult> UnleashByStampSheetFuture(
+                Request.UnleashByStampSheetRequest request
+        )
+		{
+			return new UnleashByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UnleashByStampSheetResult> UnleashByStampSheetAsync(
+                Request.UnleashByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.UnleashByStampSheetResult> result = null;
+			await UnleashByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public UnleashByStampSheetTask UnleashByStampSheetAsync(
+                Request.UnleashByStampSheetRequest request
+        )
+		{
+			return new UnleashByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UnleashByStampSheetResult> UnleashByStampSheetAsync(
+                Request.UnleashByStampSheetRequest request
+        )
+		{
+			var task = new UnleashByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

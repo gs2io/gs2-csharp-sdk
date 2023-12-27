@@ -1809,6 +1809,606 @@ namespace Gs2.Gs2Enhance
 #endif
 
 
+        public class GetUnleashRateModelTask : Gs2WebSocketSessionTask<Request.GetUnleashRateModelRequest, Result.GetUnleashRateModelResult>
+        {
+	        public GetUnleashRateModelTask(IGs2Session session, Request.GetUnleashRateModelRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetUnleashRateModelRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.RateName != null)
+                {
+                    jsonWriter.WritePropertyName("rateName");
+                    jsonWriter.Write(request.RateName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enhance",
+                    "unleashRateModel",
+                    "getUnleashRateModel",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetUnleashRateModel(
+                Request.GetUnleashRateModelRequest request,
+                UnityAction<AsyncResult<Result.GetUnleashRateModelResult>> callback
+        )
+		{
+			var task = new GetUnleashRateModelTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetUnleashRateModelResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetUnleashRateModelResult> GetUnleashRateModelFuture(
+                Request.GetUnleashRateModelRequest request
+        )
+		{
+			return new GetUnleashRateModelTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUnleashRateModelResult> GetUnleashRateModelAsync(
+            Request.GetUnleashRateModelRequest request
+        )
+		{
+		    var task = new GetUnleashRateModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetUnleashRateModelTask GetUnleashRateModelAsync(
+                Request.GetUnleashRateModelRequest request
+        )
+		{
+			return new GetUnleashRateModelTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetUnleashRateModelResult> GetUnleashRateModelAsync(
+            Request.GetUnleashRateModelRequest request
+        )
+		{
+		    var task = new GetUnleashRateModelTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class CreateUnleashRateModelMasterTask : Gs2WebSocketSessionTask<Request.CreateUnleashRateModelMasterRequest, Result.CreateUnleashRateModelMasterResult>
+        {
+	        public CreateUnleashRateModelMasterTask(IGs2Session session, Request.CreateUnleashRateModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CreateUnleashRateModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.Name != null)
+                {
+                    jsonWriter.WritePropertyName("name");
+                    jsonWriter.Write(request.Name.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.TargetInventoryModelId != null)
+                {
+                    jsonWriter.WritePropertyName("targetInventoryModelId");
+                    jsonWriter.Write(request.TargetInventoryModelId.ToString());
+                }
+                if (request.GradeModelId != null)
+                {
+                    jsonWriter.WritePropertyName("gradeModelId");
+                    jsonWriter.Write(request.GradeModelId.ToString());
+                }
+                if (request.GradeEntries != null)
+                {
+                    jsonWriter.WritePropertyName("gradeEntries");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GradeEntries)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enhance",
+                    "unleashRateModelMaster",
+                    "createUnleashRateModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CreateUnleashRateModelMaster(
+                Request.CreateUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.CreateUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new CreateUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.CreateUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.CreateUnleashRateModelMasterResult> CreateUnleashRateModelMasterFuture(
+                Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+			return new CreateUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.CreateUnleashRateModelMasterResult> CreateUnleashRateModelMasterAsync(
+            Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new CreateUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public CreateUnleashRateModelMasterTask CreateUnleashRateModelMasterAsync(
+                Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+			return new CreateUnleashRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.CreateUnleashRateModelMasterResult> CreateUnleashRateModelMasterAsync(
+            Request.CreateUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new CreateUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class GetUnleashRateModelMasterTask : Gs2WebSocketSessionTask<Request.GetUnleashRateModelMasterRequest, Result.GetUnleashRateModelMasterResult>
+        {
+	        public GetUnleashRateModelMasterTask(IGs2Session session, Request.GetUnleashRateModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.GetUnleashRateModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.RateName != null)
+                {
+                    jsonWriter.WritePropertyName("rateName");
+                    jsonWriter.Write(request.RateName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enhance",
+                    "unleashRateModelMaster",
+                    "getUnleashRateModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetUnleashRateModelMaster(
+                Request.GetUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.GetUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new GetUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.GetUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.GetUnleashRateModelMasterResult> GetUnleashRateModelMasterFuture(
+                Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+			return new GetUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.GetUnleashRateModelMasterResult> GetUnleashRateModelMasterAsync(
+            Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new GetUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public GetUnleashRateModelMasterTask GetUnleashRateModelMasterAsync(
+                Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+			return new GetUnleashRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.GetUnleashRateModelMasterResult> GetUnleashRateModelMasterAsync(
+            Request.GetUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new GetUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class UpdateUnleashRateModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateUnleashRateModelMasterRequest, Result.UpdateUnleashRateModelMasterResult>
+        {
+	        public UpdateUnleashRateModelMasterTask(IGs2Session session, Request.UpdateUnleashRateModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.UpdateUnleashRateModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.RateName != null)
+                {
+                    jsonWriter.WritePropertyName("rateName");
+                    jsonWriter.Write(request.RateName.ToString());
+                }
+                if (request.Description != null)
+                {
+                    jsonWriter.WritePropertyName("description");
+                    jsonWriter.Write(request.Description.ToString());
+                }
+                if (request.Metadata != null)
+                {
+                    jsonWriter.WritePropertyName("metadata");
+                    jsonWriter.Write(request.Metadata.ToString());
+                }
+                if (request.TargetInventoryModelId != null)
+                {
+                    jsonWriter.WritePropertyName("targetInventoryModelId");
+                    jsonWriter.Write(request.TargetInventoryModelId.ToString());
+                }
+                if (request.GradeModelId != null)
+                {
+                    jsonWriter.WritePropertyName("gradeModelId");
+                    jsonWriter.Write(request.GradeModelId.ToString());
+                }
+                if (request.GradeEntries != null)
+                {
+                    jsonWriter.WritePropertyName("gradeEntries");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GradeEntries)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enhance",
+                    "unleashRateModelMaster",
+                    "updateUnleashRateModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator UpdateUnleashRateModelMaster(
+                Request.UpdateUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.UpdateUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new UpdateUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.UpdateUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.UpdateUnleashRateModelMasterResult> UpdateUnleashRateModelMasterFuture(
+                Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+			return new UpdateUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.UpdateUnleashRateModelMasterResult> UpdateUnleashRateModelMasterAsync(
+            Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new UpdateUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public UpdateUnleashRateModelMasterTask UpdateUnleashRateModelMasterAsync(
+                Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+			return new UpdateUnleashRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.UpdateUnleashRateModelMasterResult> UpdateUnleashRateModelMasterAsync(
+            Request.UpdateUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new UpdateUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DeleteUnleashRateModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteUnleashRateModelMasterRequest, Result.DeleteUnleashRateModelMasterResult>
+        {
+	        public DeleteUnleashRateModelMasterTask(IGs2Session session, Request.DeleteUnleashRateModelMasterRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.DeleteUnleashRateModelMasterRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.RateName != null)
+                {
+                    jsonWriter.WritePropertyName("rateName");
+                    jsonWriter.Write(request.RateName.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enhance",
+                    "unleashRateModelMaster",
+                    "deleteUnleashRateModelMaster",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DeleteUnleashRateModelMaster(
+                Request.DeleteUnleashRateModelMasterRequest request,
+                UnityAction<AsyncResult<Result.DeleteUnleashRateModelMasterResult>> callback
+        )
+		{
+			var task = new DeleteUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DeleteUnleashRateModelMasterResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DeleteUnleashRateModelMasterResult> DeleteUnleashRateModelMasterFuture(
+                Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+			return new DeleteUnleashRateModelMasterTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DeleteUnleashRateModelMasterResult> DeleteUnleashRateModelMasterAsync(
+            Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new DeleteUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public DeleteUnleashRateModelMasterTask DeleteUnleashRateModelMasterAsync(
+                Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+			return new DeleteUnleashRateModelMasterTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DeleteUnleashRateModelMasterResult> DeleteUnleashRateModelMasterAsync(
+            Request.DeleteUnleashRateModelMasterRequest request
+        )
+		{
+		    var task = new DeleteUnleashRateModelMasterTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class CreateProgressByUserIdTask : Gs2WebSocketSessionTask<Request.CreateProgressByUserIdRequest, Result.CreateProgressByUserIdResult>
         {
 	        public CreateProgressByUserIdTask(IGs2Session session, Request.CreateProgressByUserIdRequest request) : base(session, request)

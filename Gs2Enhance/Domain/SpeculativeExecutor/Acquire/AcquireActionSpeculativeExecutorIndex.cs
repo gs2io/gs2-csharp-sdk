@@ -73,6 +73,22 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (UnleashByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = UnleashByUserIdSpeculativeExecutor.Rate(request, rate);
+                    var future = UnleashByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                     request = CreateProgressByUserIdSpeculativeExecutor.Rate(request, rate);
@@ -115,6 +131,15 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
                 var request = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 request = DirectEnhanceByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DirectEnhanceByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (UnleashByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = UnleashByUserIdSpeculativeExecutor.Rate(request, rate);
+                return await UnleashByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

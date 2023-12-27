@@ -238,6 +238,130 @@ namespace Gs2.Gs2Enhance.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Core.Domain.TransactionDomain> UnleashFuture(
+            UnleashByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
+            {
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var future = this._client.UnleashByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            "UnleashRateModel"
+                        );
+                        var key = Gs2.Gs2Enhance.Domain.Model.UnleashRateModelDomain.CreateCacheKey(
+                            resultModel.Item.Name.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                    this._gs2,
+                    this.UserId,
+                    result.AutoRunStampSheet ?? false,
+                    result.TransactionId,
+                    result.StampSheet,
+                    result.StampSheetEncryptionKeyId
+                );
+                if (result.StampSheet != null) {
+                    var future2 = transaction.WaitFuture(true);
+                    yield return future2;
+                    if (future2.Error != null)
+                    {
+                        self.OnError(future2.Error);
+                        yield break;
+                    }
+                }
+                self.OnComplete(transaction);
+            }
+            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Core.Domain.TransactionDomain> UnleashAsync(
+            #else
+        public async Task<Gs2.Core.Domain.TransactionDomain> UnleashAsync(
+            #endif
+            UnleashByUserIdRequest request
+        ) {
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            UnleashByUserIdResult result = null;
+                result = await this._client.UnleashByUserIdAsync(
+                    request
+                );
+
+            var requestModel = request;
+            var resultModel = result;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        "UnleashRateModel"
+                    );
+                    var key = Gs2.Gs2Enhance.Domain.Model.UnleashRateModelDomain.CreateCacheKey(
+                        resultModel.Item.Name.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+            }
+            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
+                this._gs2,
+                this.UserId,
+                result.AutoRunStampSheet ?? false,
+                result.TransactionId,
+                result.StampSheet,
+                result.StampSheetEncryptionKeyId
+            );
+            if (result.StampSheet != null) {
+                await transaction.WaitAsync(true);
+            }
+            return transaction;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        [Obsolete("The name has been changed to UnleashFuture.")]
+        public IFuture<Gs2.Core.Domain.TransactionDomain> Unleash(
+            UnleashByUserIdRequest request
+        ) {
+            return UnleashFuture(request);
+        }
+        #endif
+
     }
 
     public partial class EnhanceDomain {
