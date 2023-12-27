@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -725,6 +727,23 @@ namespace Gs2.Gs2Grade.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+                        if (resultModel.ExperienceStatus != null) {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                resultModel.ExperienceNamespaceName,
+                                requestModel.UserId,
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.ExperienceStatus.ExperienceName.ToString(),
+                                resultModel.ExperienceStatus.PropertyId.ToString()
+                            );
+                            _gs2.Cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.ExperienceStatus,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
 
                         AddGradeByUserIdComplete?.Invoke(
                             transactionId,
@@ -751,6 +770,23 @@ namespace Gs2.Gs2Grade.Domain
                                 parentKey,
                                 key,
                                 resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                        if (resultModel.ExperienceStatus != null) {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                resultModel.ExperienceNamespaceName,
+                                requestModel.UserId,
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.ExperienceStatus.ExperienceName.ToString(),
+                                resultModel.ExperienceStatus.PropertyId.ToString()
+                            );
+                            _gs2.Cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.ExperienceStatus,
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
@@ -823,6 +859,23 @@ namespace Gs2.Gs2Grade.Domain
                                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                             );
                         }
+                        if (resultModel.ExperienceStatus != null) {
+                            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                                resultModel.ExperienceNamespaceName,
+                                requestModel.UserId,
+                                "Status"
+                            );
+                            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                                resultModel.ExperienceStatus.ExperienceName.ToString(),
+                                resultModel.ExperienceStatus.PropertyId.ToString()
+                            );
+                            _gs2.Cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.ExperienceStatus,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
 
                         SubGradeByUserIdComplete?.Invoke(
                             taskId,
@@ -885,6 +938,23 @@ namespace Gs2.Gs2Grade.Domain
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
+                    if (resultModel.ExperienceStatus != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            resultModel.ExperienceNamespaceName,
+                            requestModel.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.ExperienceStatus.ExperienceName.ToString(),
+                            resultModel.ExperienceStatus.PropertyId.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ExperienceStatus,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
 
                     AddGradeByUserIdComplete?.Invoke(
                         job.JobId,
@@ -911,6 +981,23 @@ namespace Gs2.Gs2Grade.Domain
                             parentKey,
                             key,
                             resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.ExperienceStatus != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            resultModel.ExperienceNamespaceName,
+                            requestModel.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.ExperienceStatus.ExperienceName.ToString(),
+                            resultModel.ExperienceStatus.PropertyId.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ExperienceStatus,
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }

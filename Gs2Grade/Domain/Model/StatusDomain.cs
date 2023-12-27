@@ -69,6 +69,7 @@ namespace Gs2.Gs2Grade.Domain.Model
         private readonly string _propertyId;
 
         private readonly String _parentKey;
+        public string ExperienceNamespaceName { get; set; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
         public string NamespaceName => _namespaceName;
@@ -311,8 +312,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
+                    if (resultModel.ExperienceStatus != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            resultModel.ExperienceNamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.ExperienceStatus.ExperienceName.ToString(),
+                            resultModel.ExperienceStatus.PropertyId.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ExperienceStatus,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
                 var domain = this;
+                domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
                 self.OnComplete(domain);
             }
@@ -359,8 +378,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
+                if (resultModel.ExperienceStatus != null) {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        resultModel.ExperienceNamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.ExperienceStatus.ExperienceName.ToString(),
+                        resultModel.ExperienceStatus.PropertyId.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.ExperienceStatus,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
                 var domain = this;
+            domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
         }
@@ -419,8 +456,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
+                    if (resultModel.ExperienceStatus != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            resultModel.ExperienceNamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.ExperienceStatus.ExperienceName.ToString(),
+                            resultModel.ExperienceStatus.PropertyId.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ExperienceStatus,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
                 var domain = this;
+                domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
                 self.OnComplete(domain);
             }
@@ -467,8 +522,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
+                if (resultModel.ExperienceStatus != null) {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        resultModel.ExperienceNamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.ExperienceStatus.ExperienceName.ToString(),
+                        resultModel.ExperienceStatus.PropertyId.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.ExperienceStatus,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
                 var domain = this;
+            domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
         }
@@ -527,8 +600,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
+                    if (resultModel.ExperienceStatus != null) {
+                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                            resultModel.ExperienceNamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.ExperienceStatus.ExperienceName.ToString(),
+                            resultModel.ExperienceStatus.PropertyId.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ExperienceStatus,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
                 var domain = this;
+                domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
                 self.OnComplete(domain);
             }
@@ -575,8 +666,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
+                if (resultModel.ExperienceStatus != null) {
+                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
+                        resultModel.ExperienceNamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.ExperienceStatus.ExperienceName.ToString(),
+                        resultModel.ExperienceStatus.PropertyId.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.ExperienceStatus,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
                 var domain = this;
+            domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
         }
@@ -635,36 +744,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                             UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
-                    {
-                        var future2 = this._gs2.Grade.Namespace(
-                            this.NamespaceName
-                        ).GradeModel(
-                            this.GradeName
-                        ).ModelFuture();
-                        yield return future2;
-                        if (future2.Error != null)
-                        {
-                            self.OnError(future2.Error);
-                            yield break;
-                        }
-                        var grade = future2.Result;
-                    
+                    if (resultModel.ExperienceStatus != null) {
                         var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            ExperienceModel.GetNamespaceNameFromGrn(grade.ExperienceModelId),
+                            resultModel.ExperienceNamespaceName,
                             this.UserId,
                             "Status"
                         );
                         var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            ExperienceModel.GetExperienceNameFromGrn(grade.ExperienceModelId),
-                            resultModel.Item.PropertyId.ToString()
+                            resultModel.ExperienceStatus.ExperienceName.ToString(),
+                            resultModel.ExperienceStatus.PropertyId.ToString()
                         );
-                        _gs2.Cache.Delete<Gs2.Gs2Experience.Model.Status>(
+                        _gs2.Cache.Put(
                             parentKey,
-                            key
+                            key,
+                            resultModel.ExperienceStatus,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                         );
                     }
                 }
                 var domain = this;
+                domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
                 self.OnComplete(domain);
             }
@@ -711,29 +810,26 @@ namespace Gs2.Gs2Grade.Domain.Model
                         UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
-                {
-                    var grade = await this._gs2.Grade.Namespace(
-                        this.NamespaceName
-                    ).GradeModel(
-                        this.GradeName
-                    ).ModelAsync();
-                    
+                if (resultModel.ExperienceStatus != null) {
                     var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                        ExperienceModel.GetNamespaceNameFromGrn(grade.ExperienceModelId),
+                        resultModel.ExperienceNamespaceName,
                         this.UserId,
                         "Status"
                     );
                     var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        ExperienceModel.GetExperienceNameFromGrn(grade.ExperienceModelId),
-                        resultModel.Item.PropertyId.ToString()
+                        resultModel.ExperienceStatus.ExperienceName.ToString(),
+                        resultModel.ExperienceStatus.PropertyId.ToString()
                     );
-                    _gs2.Cache.Delete<Gs2.Gs2Experience.Model.Status>(
+                    _gs2.Cache.Put(
                         parentKey,
-                        key
+                        key,
+                        resultModel.ExperienceStatus,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
             }
                 var domain = this;
+            domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
         }

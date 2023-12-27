@@ -35,6 +35,8 @@ namespace Gs2.Gs2Grade.Result
 	{
         public Gs2.Gs2Grade.Model.Status Item { set; get; }
         public string NewContextStack { set; get; }
+        public string ExperienceNamespaceName { set; get; }
+        public Gs2.Gs2Experience.Model.Status ExperienceStatus { set; get; }
 
         public SubGradeByStampTaskResult WithItem(Gs2.Gs2Grade.Model.Status item) {
             this.Item = item;
@@ -43,6 +45,16 @@ namespace Gs2.Gs2Grade.Result
 
         public SubGradeByStampTaskResult WithNewContextStack(string newContextStack) {
             this.NewContextStack = newContextStack;
+            return this;
+        }
+
+        public SubGradeByStampTaskResult WithExperienceNamespaceName(string experienceNamespaceName) {
+            this.ExperienceNamespaceName = experienceNamespaceName;
+            return this;
+        }
+
+        public SubGradeByStampTaskResult WithExperienceStatus(Gs2.Gs2Experience.Model.Status experienceStatus) {
+            this.ExperienceStatus = experienceStatus;
             return this;
         }
 
@@ -56,7 +68,9 @@ namespace Gs2.Gs2Grade.Result
             }
             return new SubGradeByStampTaskResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["item"]))
-                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString());
+                .WithNewContextStack(!data.Keys.Contains("newContextStack") || data["newContextStack"] == null ? null : data["newContextStack"].ToString())
+                .WithExperienceNamespaceName(!data.Keys.Contains("experienceNamespaceName") || data["experienceNamespaceName"] == null ? null : data["experienceNamespaceName"].ToString())
+                .WithExperienceStatus(!data.Keys.Contains("experienceStatus") || data["experienceStatus"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["experienceStatus"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +78,8 @@ namespace Gs2.Gs2Grade.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["newContextStack"] = NewContextStack,
+                ["experienceNamespaceName"] = ExperienceNamespaceName,
+                ["experienceStatus"] = ExperienceStatus?.ToJson(),
             };
         }
 
@@ -76,6 +92,13 @@ namespace Gs2.Gs2Grade.Result
             if (NewContextStack != null) {
                 writer.WritePropertyName("newContextStack");
                 writer.Write(NewContextStack.ToString());
+            }
+            if (ExperienceNamespaceName != null) {
+                writer.WritePropertyName("experienceNamespaceName");
+                writer.Write(ExperienceNamespaceName.ToString());
+            }
+            if (ExperienceStatus != null) {
+                ExperienceStatus.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }

@@ -35,6 +35,8 @@ namespace Gs2.Gs2Grade.Result
 	{
         public Gs2.Gs2Grade.Model.Status Item { set; get; }
         public Gs2.Gs2Grade.Model.Status Old { set; get; }
+        public string ExperienceNamespaceName { set; get; }
+        public Gs2.Gs2Experience.Model.Status ExperienceStatus { set; get; }
 
         public SetGradeByUserIdResult WithItem(Gs2.Gs2Grade.Model.Status item) {
             this.Item = item;
@@ -43,6 +45,16 @@ namespace Gs2.Gs2Grade.Result
 
         public SetGradeByUserIdResult WithOld(Gs2.Gs2Grade.Model.Status old) {
             this.Old = old;
+            return this;
+        }
+
+        public SetGradeByUserIdResult WithExperienceNamespaceName(string experienceNamespaceName) {
+            this.ExperienceNamespaceName = experienceNamespaceName;
+            return this;
+        }
+
+        public SetGradeByUserIdResult WithExperienceStatus(Gs2.Gs2Experience.Model.Status experienceStatus) {
+            this.ExperienceStatus = experienceStatus;
             return this;
         }
 
@@ -56,7 +68,9 @@ namespace Gs2.Gs2Grade.Result
             }
             return new SetGradeByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["item"]))
-                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["old"]));
+                .WithOld(!data.Keys.Contains("old") || data["old"] == null ? null : Gs2.Gs2Grade.Model.Status.FromJson(data["old"]))
+                .WithExperienceNamespaceName(!data.Keys.Contains("experienceNamespaceName") || data["experienceNamespaceName"] == null ? null : data["experienceNamespaceName"].ToString())
+                .WithExperienceStatus(!data.Keys.Contains("experienceStatus") || data["experienceStatus"] == null ? null : Gs2.Gs2Experience.Model.Status.FromJson(data["experienceStatus"]));
         }
 
         public JsonData ToJson()
@@ -64,6 +78,8 @@ namespace Gs2.Gs2Grade.Result
             return new JsonData {
                 ["item"] = Item?.ToJson(),
                 ["old"] = Old?.ToJson(),
+                ["experienceNamespaceName"] = ExperienceNamespaceName,
+                ["experienceStatus"] = ExperienceStatus?.ToJson(),
             };
         }
 
@@ -75,6 +91,13 @@ namespace Gs2.Gs2Grade.Result
             }
             if (Old != null) {
                 Old.WriteJson(writer);
+            }
+            if (ExperienceNamespaceName != null) {
+                writer.WritePropertyName("experienceNamespaceName");
+                writer.Write(ExperienceNamespaceName.ToString());
+            }
+            if (ExperienceStatus != null) {
+                ExperienceStatus.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }
