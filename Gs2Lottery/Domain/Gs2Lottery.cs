@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -685,6 +687,12 @@ namespace Gs2.Gs2Lottery.Domain
         public static Action<string, DrawByUserIdRequest, DrawByUserIdResult> DrawByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, ResetBoxByUserIdRequest, ResetBoxByUserIdResult> ResetBoxByUserIdComplete = new UnityEvent<string, ResetBoxByUserIdRequest, ResetBoxByUserIdResult>();
+    #else
+        public static Action<string, ResetBoxByUserIdRequest, ResetBoxByUserIdResult> ResetBoxByUserIdComplete;
+    #endif
+
         private static int _drawPrizeIndex;
         public void ClearDrawnResult(
                 string namespaceName
@@ -732,6 +740,35 @@ namespace Gs2.Gs2Lottery.Domain
                         );
                         break;
                     }
+                    case "ResetBoxByUserId": {
+                        var requestModel = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = ResetBoxByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        
+                        {
+                            var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                                requestModel.NamespaceName?.ToString(),
+                                requestModel.UserId.ToString(),
+                                "BoxItems"
+                            );
+                            var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                                requestModel.PrizeTableName
+                            );
+                            _gs2.Cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
+                                parentKey,
+                                key
+                            );
+                            _gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.BoxItems>(
+                                parentKey
+                            );
+                        }
+
+                        ResetBoxByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
                 }
         }
 
@@ -771,6 +808,35 @@ namespace Gs2.Gs2Lottery.Domain
                     _gs2.Cache.SetListCached<DrawnPrize>(parentKey);
 
                     DrawByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "reset_box_by_user_id": {
+                    var requestModel = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = ResetBoxByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+                    
+                    {
+                        var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                            requestModel.NamespaceName?.ToString(),
+                            requestModel.UserId.ToString(),
+                            "BoxItems"
+                        );
+                        var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                            requestModel.PrizeTableName
+                        );
+                        _gs2.Cache.Delete<Gs2.Gs2Lottery.Model.BoxItems>(
+                            parentKey,
+                            key
+                        );
+                        _gs2.Cache.ClearListCache<Gs2.Gs2Lottery.Model.BoxItems>(
+                            parentKey
+                        );
+                    }
+
+                    ResetBoxByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

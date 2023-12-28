@@ -105,15 +105,29 @@ namespace Gs2.Gs2Lottery.Request
         }
 
         protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply ResetBoxByUserIdRequest");
-            }
-            return this;
+            return new ResetBoxByUserIdRequest {
+                NamespaceName = NamespaceName,
+                PrizeTableName = PrizeTableName,
+                UserId = UserId,
+            };
         }
 
         protected override Gs2Request DoAdd(Gs2Request x) {
             var y = (ResetBoxByUserIdRequest)x;
-            return this;
+            if (NamespaceName != y.NamespaceName) {
+                throw new ArithmeticException("mismatch parameter values ResetBoxByUserIdRequest::namespaceName");
+            }
+            if (PrizeTableName != y.PrizeTableName) {
+                throw new ArithmeticException("mismatch parameter values ResetBoxByUserIdRequest::prizeTableName");
+            }
+            if (UserId != y.UserId) {
+                throw new ArithmeticException("mismatch parameter values ResetBoxByUserIdRequest::userId");
+            }
+            return new ResetBoxByUserIdRequest {
+                NamespaceName = NamespaceName,
+                PrizeTableName = PrizeTableName,
+                UserId = UserId,
+            };
         }
     }
 }

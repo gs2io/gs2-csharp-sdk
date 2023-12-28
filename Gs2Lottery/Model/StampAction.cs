@@ -38,6 +38,8 @@ namespace Gs2.Gs2Lottery.Model
             switch (action.Action) {
                 case "Gs2Lottery:DrawByUserId":
                     return DrawByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Lottery:ResetBoxByUserId":
+                    return ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

@@ -2234,5 +2234,113 @@ namespace Gs2.Gs2Lottery
 			return await task.Invoke();
         }
 #endif
+
+
+        public class ResetByStampSheetTask : Gs2WebSocketSessionTask<Request.ResetByStampSheetRequest, Result.ResetByStampSheetResult>
+        {
+	        public ResetByStampSheetTask(IGs2Session session, Request.ResetByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ResetByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "lottery",
+                    "boxItems",
+                    "resetByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ResetByStampSheet(
+                Request.ResetByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.ResetByStampSheetResult>> callback
+        )
+		{
+			var task = new ResetByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.ResetByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.ResetByStampSheetResult> ResetByStampSheetFuture(
+                Request.ResetByStampSheetRequest request
+        )
+		{
+			return new ResetByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.ResetByStampSheetResult> ResetByStampSheetAsync(
+            Request.ResetByStampSheetRequest request
+        )
+		{
+		    var task = new ResetByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public ResetByStampSheetTask ResetByStampSheetAsync(
+                Request.ResetByStampSheetRequest request
+        )
+		{
+			return new ResetByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.ResetByStampSheetResult> ResetByStampSheetAsync(
+            Request.ResetByStampSheetRequest request
+        )
+		{
+		    var task = new ResetByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
 	}
 }

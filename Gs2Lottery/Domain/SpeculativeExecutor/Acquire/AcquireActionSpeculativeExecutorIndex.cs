@@ -73,6 +73,22 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (ResetBoxByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = ResetBoxByUserIdSpeculativeExecutor.Rate(request, rate);
+                    var future = ResetBoxByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -99,6 +115,15 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
                 var request = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 request = DrawByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await DrawByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (ResetBoxByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = ResetBoxByUserIdSpeculativeExecutor.Rate(request, rate);
+                return await ResetBoxByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request
