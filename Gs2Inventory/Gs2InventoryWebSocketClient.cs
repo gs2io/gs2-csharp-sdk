@@ -5412,6 +5412,149 @@ namespace Gs2.Gs2Inventory
 #endif
 
 
+        public class AcquireItemSetWithGradeByUserIdTask : Gs2WebSocketSessionTask<Request.AcquireItemSetWithGradeByUserIdRequest, Result.AcquireItemSetWithGradeByUserIdResult>
+        {
+	        public AcquireItemSetWithGradeByUserIdTask(IGs2Session session, Request.AcquireItemSetWithGradeByUserIdRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AcquireItemSetWithGradeByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.InventoryName != null)
+                {
+                    jsonWriter.WritePropertyName("inventoryName");
+                    jsonWriter.Write(request.InventoryName.ToString());
+                }
+                if (request.ItemName != null)
+                {
+                    jsonWriter.WritePropertyName("itemName");
+                    jsonWriter.Write(request.ItemName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.GradeModelId != null)
+                {
+                    jsonWriter.WritePropertyName("gradeModelId");
+                    jsonWriter.Write(request.GradeModelId.ToString());
+                }
+                if (request.GradeValue != null)
+                {
+                    jsonWriter.WritePropertyName("gradeValue");
+                    jsonWriter.Write(request.GradeValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "itemSet",
+                    "acquireItemSetWithGradeByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
+                    base.OnError(new Exception.ConflictException(error));
+                }
+                else {
+                    base.OnError(error);
+                }
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireItemSetWithGradeByUserId(
+                Request.AcquireItemSetWithGradeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.AcquireItemSetWithGradeByUserIdResult>> callback
+        )
+		{
+			var task = new AcquireItemSetWithGradeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireItemSetWithGradeByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdFuture(
+                Request.AcquireItemSetWithGradeByUserIdRequest request
+        )
+		{
+			return new AcquireItemSetWithGradeByUserIdTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdAsync(
+            Request.AcquireItemSetWithGradeByUserIdRequest request
+        )
+		{
+		    var task = new AcquireItemSetWithGradeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AcquireItemSetWithGradeByUserIdTask AcquireItemSetWithGradeByUserIdAsync(
+                Request.AcquireItemSetWithGradeByUserIdRequest request
+        )
+		{
+			return new AcquireItemSetWithGradeByUserIdTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdAsync(
+            Request.AcquireItemSetWithGradeByUserIdRequest request
+        )
+		{
+		    var task = new AcquireItemSetWithGradeByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class VerifyItemSetTask : Gs2WebSocketSessionTask<Request.VerifyItemSetRequest, Result.VerifyItemSetResult>
         {
 	        public VerifyItemSetTask(IGs2Session session, Request.VerifyItemSetRequest request) : base(session, request)
@@ -5685,6 +5828,114 @@ namespace Gs2.Gs2Inventory
         )
 		{
 		    var task = new VerifyItemSetByUserIdTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class AcquireItemSetWithGradeByStampSheetTask : Gs2WebSocketSessionTask<Request.AcquireItemSetWithGradeByStampSheetRequest, Result.AcquireItemSetWithGradeByStampSheetResult>
+        {
+	        public AcquireItemSetWithGradeByStampSheetTask(IGs2Session session, Request.AcquireItemSetWithGradeByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.AcquireItemSetWithGradeByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "inventory",
+                    "itemSet",
+                    "acquireItemSetWithGradeByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator AcquireItemSetWithGradeByStampSheet(
+                Request.AcquireItemSetWithGradeByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.AcquireItemSetWithGradeByStampSheetResult>> callback
+        )
+		{
+			var task = new AcquireItemSetWithGradeByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.AcquireItemSetWithGradeByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetFuture(
+                Request.AcquireItemSetWithGradeByStampSheetRequest request
+        )
+		{
+			return new AcquireItemSetWithGradeByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetAsync(
+            Request.AcquireItemSetWithGradeByStampSheetRequest request
+        )
+		{
+		    var task = new AcquireItemSetWithGradeByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public AcquireItemSetWithGradeByStampSheetTask AcquireItemSetWithGradeByStampSheetAsync(
+                Request.AcquireItemSetWithGradeByStampSheetRequest request
+        )
+		{
+			return new AcquireItemSetWithGradeByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetAsync(
+            Request.AcquireItemSetWithGradeByStampSheetRequest request
+        )
+		{
+		    var task = new AcquireItemSetWithGradeByStampSheetTask(
 		        Gs2WebSocketSession,
 		        request
             );

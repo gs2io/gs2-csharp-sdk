@@ -58,6 +58,8 @@ namespace Gs2.Gs2Inventory.Model
                     return SetCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:AcquireItemSetByUserId":
                     return AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Inventory:AcquireItemSetWithGradeByUserId":
+                    return AcquireItemSetWithGradeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:AddReferenceOfByUserId":
                     return AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Inventory:DeleteReferenceOfByUserId":

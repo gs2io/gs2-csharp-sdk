@@ -105,6 +105,22 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (AcquireItemSetWithGradeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = AcquireItemSetWithGradeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    request = AcquireItemSetWithGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                    var future = AcquireItemSetWithGradeByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 if (AddReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                     request = AddReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
@@ -245,6 +261,15 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 var request = AcquireItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 request = AcquireItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
                 return await AcquireItemSetByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (AcquireItemSetWithGradeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = AcquireItemSetWithGradeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                request = AcquireItemSetWithGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                return await AcquireItemSetWithGradeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request
