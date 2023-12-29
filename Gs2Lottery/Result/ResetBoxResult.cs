@@ -33,6 +33,12 @@ namespace Gs2.Gs2Lottery.Result
 	[System.Serializable]
 	public class ResetBoxResult : IResult
 	{
+        public Gs2.Gs2Lottery.Model.BoxItems Item { set; get; }
+
+        public ResetBoxResult WithItem(Gs2.Gs2Lottery.Model.BoxItems item) {
+            this.Item = item;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -42,18 +48,23 @@ namespace Gs2.Gs2Lottery.Result
             if (data == null) {
                 return null;
             }
-            return new ResetBoxResult();
+            return new ResetBoxResult()
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Lottery.Model.BoxItems.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["item"] = Item?.ToJson(),
             };
         }
 
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (Item != null) {
+                Item.WriteJson(writer);
+            }
             writer.WriteObjectEnd();
         }
     }

@@ -273,6 +273,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var resultModel = result;
                 if (resultModel != null) {
                     
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "BoxItems"
+                        );
+                        var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                            resultModel.Item.PrizeTableName.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                     {
                         var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                             this.NamespaceName?.ToString(),
@@ -292,6 +308,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     }
                 }
                 var domain = this;
+
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain>(Impl);
@@ -319,6 +336,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var resultModel = result;
             if (resultModel != null) {
                 
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "BoxItems"
+                    );
+                    var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                        resultModel.Item.PrizeTableName.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
                 {
                     var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                         this.NamespaceName?.ToString(),
@@ -338,6 +371,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 }
             }
                 var domain = this;
+
             return domain;
         }
         #endif
