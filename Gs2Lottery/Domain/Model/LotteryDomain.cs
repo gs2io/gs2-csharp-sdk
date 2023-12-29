@@ -137,6 +137,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 var resultModel = result;
                 if (resultModel != null) {
                     
+                    if (resultModel.BoxItems != null) {
+                        var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "BoxItems"
+                        );
+                        var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                            resultModel.BoxItems.PrizeTableName.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.BoxItems,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
                 }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
@@ -181,6 +197,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
             var resultModel = result;
             if (resultModel != null) {
                 
+                if (resultModel.BoxItems != null) {
+                    var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "BoxItems"
+                    );
+                    var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
+                        resultModel.BoxItems.PrizeTableName.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.BoxItems,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
             }
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,

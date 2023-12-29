@@ -34,6 +34,7 @@ namespace Gs2.Gs2Lottery.Result
 	public class DrawByUserIdResult : IResult
 	{
         public Gs2.Gs2Lottery.Model.DrawnPrize[] Items { set; get; }
+        public Gs2.Gs2Lottery.Model.BoxItems BoxItems { set; get; }
         public string TransactionId { set; get; }
         public string StampSheet { set; get; }
         public string StampSheetEncryptionKeyId { set; get; }
@@ -41,6 +42,11 @@ namespace Gs2.Gs2Lottery.Result
 
         public DrawByUserIdResult WithItems(Gs2.Gs2Lottery.Model.DrawnPrize[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public DrawByUserIdResult WithBoxItems(Gs2.Gs2Lottery.Model.BoxItems boxItems) {
+            this.BoxItems = boxItems;
             return this;
         }
 
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Lottery.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Lottery.Model.DrawnPrize[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(v);
                 }).ToArray())
+                .WithBoxItems(!data.Keys.Contains("boxItems") || data["boxItems"] == null ? null : Gs2.Gs2Lottery.Model.BoxItems.FromJson(data["boxItems"]))
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
@@ -95,6 +102,7 @@ namespace Gs2.Gs2Lottery.Result
             }
             return new JsonData {
                 ["items"] = itemsJsonData,
+                ["boxItems"] = BoxItems?.ToJson(),
                 ["transactionId"] = TransactionId,
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
@@ -115,6 +123,9 @@ namespace Gs2.Gs2Lottery.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (BoxItems != null) {
+                BoxItems.WriteJson(writer);
             }
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
