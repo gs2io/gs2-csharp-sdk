@@ -38,7 +38,7 @@ namespace Gs2.Gs2Formation.Request
          public string MoldModelName { set; get; }
          public int? Index { set; get; }
          public Gs2.Core.Model.AcquireAction AcquireAction { set; get; }
-         public Gs2.Gs2Formation.Model.AcquireActionConfig[] Config { set; get; }
+         public Gs2.Gs2Formation.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
         public AcquireActionsToFormPropertiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -60,7 +60,7 @@ namespace Gs2.Gs2Formation.Request
             this.AcquireAction = acquireAction;
             return this;
         }
-        public AcquireActionsToFormPropertiesRequest WithConfig(Gs2.Gs2Formation.Model.AcquireActionConfig[] config) {
+        public AcquireActionsToFormPropertiesRequest WithConfig(Gs2.Gs2Formation.Model.Config[] config) {
             this.Config = config;
             return this;
         }
@@ -84,8 +84,8 @@ namespace Gs2.Gs2Formation.Request
                 .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
                 .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)(data["index"].ToString().Contains(".") ? (int)double.Parse(data["index"].ToString()) : int.Parse(data["index"].ToString())))
                 .WithAcquireAction(!data.Keys.Contains("acquireAction") || data["acquireAction"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["acquireAction"]))
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Formation.Model.AcquireActionConfig[]{} : data["config"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Formation.Model.AcquireActionConfig.FromJson(v);
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Formation.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Formation.Model.Config.FromJson(v);
                 }).ToArray());
         }
 
