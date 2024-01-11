@@ -37,6 +37,7 @@ namespace Gs2.Gs2Money.Model
         public int? Paid { set; get; }
         public int? Free { set; get; }
         public Gs2.Gs2Money.Model.WalletDetail[] Detail { set; get; }
+        public bool? ShareFree { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
@@ -62,6 +63,10 @@ namespace Gs2.Gs2Money.Model
         }
         public Wallet WithDetail(Gs2.Gs2Money.Model.WalletDetail[] detail) {
             this.Detail = detail;
+            return this;
+        }
+        public Wallet WithShareFree(bool? shareFree) {
+            this.ShareFree = shareFree;
             return this;
         }
         public Wallet WithCreatedAt(long? createdAt) {
@@ -179,6 +184,7 @@ namespace Gs2.Gs2Money.Model
                 .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null || !data["detail"].IsArray ? new Gs2.Gs2Money.Model.WalletDetail[]{} : data["detail"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money.Model.WalletDetail.FromJson(v);
                 }).ToArray())
+                .WithShareFree(!data.Keys.Contains("shareFree") || data["shareFree"] == null ? null : (bool?)bool.Parse(data["shareFree"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -202,6 +208,7 @@ namespace Gs2.Gs2Money.Model
                 ["paid"] = Paid,
                 ["free"] = Free,
                 ["detail"] = detailJsonData,
+                ["shareFree"] = ShareFree,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -241,6 +248,10 @@ namespace Gs2.Gs2Money.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (ShareFree != null) {
+                writer.WritePropertyName("shareFree");
+                writer.Write(bool.Parse(ShareFree.ToString()));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -312,6 +323,14 @@ namespace Gs2.Gs2Money.Model
                 {
                     diff += Detail[i].CompareTo(other.Detail[i]);
                 }
+            }
+            if (ShareFree == null && ShareFree == other.ShareFree)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ShareFree == other.ShareFree ? 0 : 1;
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
