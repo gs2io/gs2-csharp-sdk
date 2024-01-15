@@ -38,6 +38,8 @@ namespace Gs2.Gs2Inventory.Request
          public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
          public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
          public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemAcquireScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemConsumeScript { set; get; }
          public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +61,14 @@ namespace Gs2.Gs2Inventory.Request
             this.ConsumeScript = consumeScript;
             return this;
         }
+        public UpdateNamespaceRequest WithSimpleItemAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting simpleItemAcquireScript) {
+            this.SimpleItemAcquireScript = simpleItemAcquireScript;
+            return this;
+        }
+        public UpdateNamespaceRequest WithSimpleItemConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting simpleItemConsumeScript) {
+            this.SimpleItemConsumeScript = simpleItemConsumeScript;
+            return this;
+        }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -78,6 +88,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithAcquireScript(!data.Keys.Contains("acquireScript") || data["acquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["acquireScript"]))
                 .WithOverflowScript(!data.Keys.Contains("overflowScript") || data["overflowScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["overflowScript"]))
                 .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
+                .WithSimpleItemAcquireScript(!data.Keys.Contains("simpleItemAcquireScript") || data["simpleItemAcquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemAcquireScript"]))
+                .WithSimpleItemConsumeScript(!data.Keys.Contains("simpleItemConsumeScript") || data["simpleItemConsumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemConsumeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inventory.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -89,6 +101,8 @@ namespace Gs2.Gs2Inventory.Request
                 ["acquireScript"] = AcquireScript?.ToJson(),
                 ["overflowScript"] = OverflowScript?.ToJson(),
                 ["consumeScript"] = ConsumeScript?.ToJson(),
+                ["simpleItemAcquireScript"] = SimpleItemAcquireScript?.ToJson(),
+                ["simpleItemConsumeScript"] = SimpleItemConsumeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -113,6 +127,12 @@ namespace Gs2.Gs2Inventory.Request
             if (ConsumeScript != null) {
                 ConsumeScript.WriteJson(writer);
             }
+            if (SimpleItemAcquireScript != null) {
+                SimpleItemAcquireScript.WriteJson(writer);
+            }
+            if (SimpleItemConsumeScript != null) {
+                SimpleItemConsumeScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -126,6 +146,8 @@ namespace Gs2.Gs2Inventory.Request
             key += AcquireScript + ":";
             key += OverflowScript + ":";
             key += ConsumeScript + ":";
+            key += SimpleItemAcquireScript + ":";
+            key += SimpleItemConsumeScript + ":";
             key += LogSetting + ":";
             return key;
         }

@@ -37,6 +37,8 @@ namespace Gs2.Gs2Inventory.Model
         public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemAcquireScript { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemConsumeScript { set; get; }
         public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -63,6 +65,14 @@ namespace Gs2.Gs2Inventory.Model
         }
         public Namespace WithConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting consumeScript) {
             this.ConsumeScript = consumeScript;
+            return this;
+        }
+        public Namespace WithSimpleItemAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting simpleItemAcquireScript) {
+            this.SimpleItemAcquireScript = simpleItemAcquireScript;
+            return this;
+        }
+        public Namespace WithSimpleItemConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting simpleItemConsumeScript) {
+            this.SimpleItemConsumeScript = simpleItemConsumeScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
@@ -148,6 +158,8 @@ namespace Gs2.Gs2Inventory.Model
                 .WithAcquireScript(!data.Keys.Contains("acquireScript") || data["acquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["acquireScript"]))
                 .WithOverflowScript(!data.Keys.Contains("overflowScript") || data["overflowScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["overflowScript"]))
                 .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
+                .WithSimpleItemAcquireScript(!data.Keys.Contains("simpleItemAcquireScript") || data["simpleItemAcquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemAcquireScript"]))
+                .WithSimpleItemConsumeScript(!data.Keys.Contains("simpleItemConsumeScript") || data["simpleItemConsumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemConsumeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inventory.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -163,6 +175,8 @@ namespace Gs2.Gs2Inventory.Model
                 ["acquireScript"] = AcquireScript?.ToJson(),
                 ["overflowScript"] = OverflowScript?.ToJson(),
                 ["consumeScript"] = ConsumeScript?.ToJson(),
+                ["simpleItemAcquireScript"] = SimpleItemAcquireScript?.ToJson(),
+                ["simpleItemConsumeScript"] = SimpleItemConsumeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -196,6 +210,14 @@ namespace Gs2.Gs2Inventory.Model
             if (ConsumeScript != null) {
                 writer.WritePropertyName("consumeScript");
                 ConsumeScript.WriteJson(writer);
+            }
+            if (SimpleItemAcquireScript != null) {
+                writer.WritePropertyName("simpleItemAcquireScript");
+                SimpleItemAcquireScript.WriteJson(writer);
+            }
+            if (SimpleItemConsumeScript != null) {
+                writer.WritePropertyName("simpleItemConsumeScript");
+                SimpleItemConsumeScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -267,6 +289,22 @@ namespace Gs2.Gs2Inventory.Model
             else
             {
                 diff += ConsumeScript.CompareTo(other.ConsumeScript);
+            }
+            if (SimpleItemAcquireScript == null && SimpleItemAcquireScript == other.SimpleItemAcquireScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SimpleItemAcquireScript.CompareTo(other.SimpleItemAcquireScript);
+            }
+            if (SimpleItemConsumeScript == null && SimpleItemConsumeScript == other.SimpleItemConsumeScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += SimpleItemConsumeScript.CompareTo(other.SimpleItemConsumeScript);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {

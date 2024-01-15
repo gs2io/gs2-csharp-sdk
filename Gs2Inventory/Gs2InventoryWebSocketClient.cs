@@ -87,6 +87,16 @@ namespace Gs2.Gs2Inventory
                     jsonWriter.WritePropertyName("consumeScript");
                     request.ConsumeScript.WriteJson(jsonWriter);
                 }
+                if (request.SimpleItemAcquireScript != null)
+                {
+                    jsonWriter.WritePropertyName("simpleItemAcquireScript");
+                    request.SimpleItemAcquireScript.WriteJson(jsonWriter);
+                }
+                if (request.SimpleItemConsumeScript != null)
+                {
+                    jsonWriter.WritePropertyName("simpleItemConsumeScript");
+                    request.SimpleItemConsumeScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -317,6 +327,16 @@ namespace Gs2.Gs2Inventory
                 {
                     jsonWriter.WritePropertyName("consumeScript");
                     request.ConsumeScript.WriteJson(jsonWriter);
+                }
+                if (request.SimpleItemAcquireScript != null)
+                {
+                    jsonWriter.WritePropertyName("simpleItemAcquireScript");
+                    request.SimpleItemAcquireScript.WriteJson(jsonWriter);
+                }
+                if (request.SimpleItemConsumeScript != null)
+                {
+                    jsonWriter.WritePropertyName("simpleItemConsumeScript");
+                    request.SimpleItemConsumeScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
