@@ -31,8 +31,13 @@ namespace Gs2.Gs2Script.Model
 #endif
 	public class Transaction : IComparable
 	{
+        public string TransactionId { set; get; }
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public Transaction WithTransactionId(string transactionId) {
+            this.TransactionId = transactionId;
+            return this;
+        }
         public Transaction WithConsumeActions(Gs2.Core.Model.ConsumeAction[] consumeActions) {
             this.ConsumeActions = consumeActions;
             return this;
@@ -51,6 +56,7 @@ namespace Gs2.Gs2Script.Model
                 return null;
             }
             return new Transaction()
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithConsumeActions(!data.Keys.Contains("consumeActions") || data["consumeActions"] == null || !data["consumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["consumeActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
@@ -80,6 +86,7 @@ namespace Gs2.Gs2Script.Model
                 }
             }
             return new JsonData {
+                ["transactionId"] = TransactionId,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
             };
@@ -88,6 +95,10 @@ namespace Gs2.Gs2Script.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (TransactionId != null) {
+                writer.WritePropertyName("transactionId");
+                writer.Write(TransactionId.ToString());
+            }
             if (ConsumeActions != null) {
                 writer.WritePropertyName("consumeActions");
                 writer.WriteArrayStart();
@@ -117,6 +128,14 @@ namespace Gs2.Gs2Script.Model
         {
             var other = obj as Transaction;
             var diff = 0;
+            if (TransactionId == null && TransactionId == other.TransactionId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionId.CompareTo(other.TransactionId);
+            }
             if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
             {
                 // null and null
