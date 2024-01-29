@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -255,7 +256,9 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCompletedQuestLists(Action callback)
+        public ulong SubscribeCompletedQuestLists(
+            Action<Gs2.Gs2Quest.Model.CompletedQuestList[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -267,7 +270,24 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
-        public void UnsubscribeCompletedQuestLists(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCompletedQuestListsWithInitialCallAsync(
+            Action<Gs2.Gs2Quest.Model.CompletedQuestList[]> callback
+        )
+        {
+            var items = await CompletedQuestListsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCompletedQuestLists(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCompletedQuestLists(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.CompletedQuestList>(
                 Gs2.Gs2Quest.Domain.Model.UserDomain.CreateCacheParentKey(

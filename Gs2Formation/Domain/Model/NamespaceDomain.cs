@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMoldModels(Action callback)
+        public ulong SubscribeMoldModels(
+            Action<Gs2.Gs2Formation.Model.MoldModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModel>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribeMoldModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMoldModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.MoldModel[]> callback
+        )
+        {
+            var items = await MoldModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMoldModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMoldModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModel>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -192,7 +212,9 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribePropertyFormModels(Action callback)
+        public ulong SubscribePropertyFormModels(
+            Action<Gs2.Gs2Formation.Model.PropertyFormModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModel>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -203,7 +225,24 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribePropertyFormModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePropertyFormModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.PropertyFormModel[]> callback
+        )
+        {
+            var items = await PropertyFormModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribePropertyFormModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePropertyFormModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModel>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -279,7 +318,9 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribePropertyFormModelMasters(Action callback)
+        public ulong SubscribePropertyFormModelMasters(
+            Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -290,7 +331,24 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribePropertyFormModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePropertyFormModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback
+        )
+        {
+            var items = await PropertyFormModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribePropertyFormModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePropertyFormModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribeFormModelMasters(Action callback)
+        public ulong SubscribeFormModelMasters(
+            Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribeFormModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeFormModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback
+        )
+        {
+            var items = await FormModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeFormModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeFormModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -413,7 +490,9 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMoldModelMasters(Action callback)
+        public ulong SubscribeMoldModelMasters(
+            Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -424,7 +503,24 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribeMoldModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMoldModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback
+        )
+        {
+            var items = await MoldModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMoldModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMoldModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
                 Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(

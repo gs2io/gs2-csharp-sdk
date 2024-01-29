@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Version.Domain.Model
         #endif
         }
 
-        public ulong SubscribeAcceptVersions(Action callback)
+        public ulong SubscribeAcceptVersions(
+            Action<Gs2.Gs2Version.Model.AcceptVersion[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -137,7 +140,24 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
-        public void UnsubscribeAcceptVersions(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeAcceptVersionsWithInitialCallAsync(
+            Action<Gs2.Gs2Version.Model.AcceptVersion[]> callback
+        )
+        {
+            var items = await AcceptVersionsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeAcceptVersions(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeAcceptVersions(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
                 Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(

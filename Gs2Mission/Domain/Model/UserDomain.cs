@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -122,7 +123,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCounters(Action callback)
+        public ulong SubscribeCounters(
+            Action<Gs2.Gs2Mission.Model.Counter[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Counter>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -134,7 +137,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
         }
 
-        public void UnsubscribeCounters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountersWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.Counter[]> callback
+        )
+        {
+            var items = await CountersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCounters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCounters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Counter>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -194,7 +214,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCompletes(Action callback)
+        public ulong SubscribeCompletes(
+            Action<Gs2.Gs2Mission.Model.Complete[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Complete>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -206,7 +228,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
         }
 
-        public void UnsubscribeCompletes(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCompletesWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.Complete[]> callback
+        )
+        {
+            var items = await CompletesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCompletes(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCompletes(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Complete>(
                 Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(

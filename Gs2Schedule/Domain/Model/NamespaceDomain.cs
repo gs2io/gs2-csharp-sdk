@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -145,7 +146,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
         }
 
-        public ulong SubscribeEventMasters(Action callback)
+        public ulong SubscribeEventMasters(
+            Action<Gs2.Gs2Schedule.Model.EventMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.EventMaster>(
                 Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -156,7 +159,24 @@ namespace Gs2.Gs2Schedule.Domain.Model
             );
         }
 
-        public void UnsubscribeEventMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeEventMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Schedule.Model.EventMaster[]> callback
+        )
+        {
+            var items = await EventMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeEventMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeEventMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.EventMaster>(
                 Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(

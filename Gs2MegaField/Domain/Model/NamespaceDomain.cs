@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -122,7 +123,9 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         }
 
-        public ulong SubscribeAreaModels(Action callback)
+        public ulong SubscribeAreaModels(
+            Action<Gs2.Gs2MegaField.Model.AreaModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2MegaField.Model.AreaModel>(
                 Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -133,7 +136,24 @@ namespace Gs2.Gs2MegaField.Domain.Model
             );
         }
 
-        public void UnsubscribeAreaModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeAreaModelsWithInitialCallAsync(
+            Action<Gs2.Gs2MegaField.Model.AreaModel[]> callback
+        )
+        {
+            var items = await AreaModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeAreaModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeAreaModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2MegaField.Model.AreaModel>(
                 Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -209,7 +229,9 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #endif
         }
 
-        public ulong SubscribeAreaModelMasters(Action callback)
+        public ulong SubscribeAreaModelMasters(
+            Action<Gs2.Gs2MegaField.Model.AreaModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2MegaField.Model.AreaModelMaster>(
                 Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -220,7 +242,24 @@ namespace Gs2.Gs2MegaField.Domain.Model
             );
         }
 
-        public void UnsubscribeAreaModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeAreaModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2MegaField.Model.AreaModelMaster[]> callback
+        )
+        {
+            var items = await AreaModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeAreaModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeAreaModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2MegaField.Model.AreaModelMaster>(
                 Gs2.Gs2MegaField.Domain.Model.NamespaceDomain.CreateCacheParentKey(

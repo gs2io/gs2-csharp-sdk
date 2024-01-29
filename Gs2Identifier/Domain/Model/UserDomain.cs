@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -114,7 +115,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
         }
 
-        public ulong SubscribeIdentifiers(Action callback)
+        public ulong SubscribeIdentifiers(
+            Action<Gs2.Gs2Identifier.Model.Identifier[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.Identifier>(
                 Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -125,7 +128,24 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
         }
 
-        public void UnsubscribeIdentifiers(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeIdentifiersWithInitialCallAsync(
+            Action<Gs2.Gs2Identifier.Model.Identifier[]> callback
+        )
+        {
+            var items = await IdentifiersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeIdentifiers(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeIdentifiers(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
                 Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -181,7 +201,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
         }
 
-        public ulong SubscribePasswords(Action callback)
+        public ulong SubscribePasswords(
+            Action<Gs2.Gs2Identifier.Model.Password[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.Password>(
                 Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -192,7 +214,24 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
         }
 
-        public void UnsubscribePasswords(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePasswordsWithInitialCallAsync(
+            Action<Gs2.Gs2Identifier.Model.Password[]> callback
+        )
+        {
+            var items = await PasswordsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribePasswords(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePasswords(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Password>(
                 Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(

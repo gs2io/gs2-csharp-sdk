@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -122,7 +123,9 @@ namespace Gs2.Gs2Lock.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMutexes(Action callback)
+        public ulong SubscribeMutexes(
+            Action<Gs2.Gs2Lock.Model.Mutex[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lock.Model.Mutex>(
                 Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -134,7 +137,24 @@ namespace Gs2.Gs2Lock.Domain.Model
             );
         }
 
-        public void UnsubscribeMutexes(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMutexesWithInitialCallAsync(
+            Action<Gs2.Gs2Lock.Model.Mutex[]> callback
+        )
+        {
+            var items = await MutexesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMutexes(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMutexes(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lock.Model.Mutex>(
                 Gs2.Gs2Lock.Domain.Model.UserDomain.CreateCacheParentKey(

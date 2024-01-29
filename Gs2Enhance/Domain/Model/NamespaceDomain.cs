@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
         }
 
-        public ulong SubscribeUnleashRateModels(Action callback)
+        public ulong SubscribeUnleashRateModels(
+            Action<Gs2.Gs2Enhance.Model.UnleashRateModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enhance.Model.UnleashRateModel>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Enhance.Domain.Model
             );
         }
 
-        public void UnsubscribeUnleashRateModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeUnleashRateModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Enhance.Model.UnleashRateModel[]> callback
+        )
+        {
+            var items = await UnleashRateModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeUnleashRateModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeUnleashRateModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.UnleashRateModel>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -192,7 +212,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
         }
 
-        public ulong SubscribeUnleashRateModelMasters(Action callback)
+        public ulong SubscribeUnleashRateModelMasters(
+            Action<Gs2.Gs2Enhance.Model.UnleashRateModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enhance.Model.UnleashRateModelMaster>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -203,7 +225,24 @@ namespace Gs2.Gs2Enhance.Domain.Model
             );
         }
 
-        public void UnsubscribeUnleashRateModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeUnleashRateModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Enhance.Model.UnleashRateModelMaster[]> callback
+        )
+        {
+            var items = await UnleashRateModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeUnleashRateModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeUnleashRateModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.UnleashRateModelMaster>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -259,7 +298,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRateModels(Action callback)
+        public ulong SubscribeRateModels(
+            Action<Gs2.Gs2Enhance.Model.RateModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enhance.Model.RateModel>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -270,7 +311,24 @@ namespace Gs2.Gs2Enhance.Domain.Model
             );
         }
 
-        public void UnsubscribeRateModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRateModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Enhance.Model.RateModel[]> callback
+        )
+        {
+            var items = await RateModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRateModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRateModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.RateModel>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRateModelMasters(Action callback)
+        public ulong SubscribeRateModelMasters(
+            Action<Gs2.Gs2Enhance.Model.RateModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Enhance.Domain.Model
             );
         }
 
-        public void UnsubscribeRateModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRateModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Enhance.Model.RateModelMaster[]> callback
+        )
+        {
+            var items = await RateModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRateModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRateModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
                 Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(

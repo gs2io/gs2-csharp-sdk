@@ -48,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -133,8 +134,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         public ulong SubscribeItemSets(
-            Action callback,
-            string itemSetName
+            Action<Gs2.Gs2Inventory.Model.ItemSet[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet>(
@@ -148,9 +148,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeItemSetsWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.ItemSet[]> callback
+        )
+        {
+            var items = await ItemSetsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeItemSets(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
         public void UnsubscribeItemSets(
-            ulong callbackId,
-            string itemSetName
+            ulong callbackId
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.ItemSet>(
@@ -159,32 +173,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     this.InventoryName,
                     "ItemSet"
-                ),
-                callbackId
-            );
-        }
-
-        public ulong SubscribeItemSets(Action callback)
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
-                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    this.InventoryName,
-                    "ItemSet:Null"
-                ),
-                callback
-            );
-        }
-
-        public void UnsubscribeItemSets(ulong callbackId)
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.ItemSet[]>(
-                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    this.InventoryName,
-                    "ItemSet:Null"
                 ),
                 callbackId
             );
@@ -812,6 +800,242 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetDomain> AcquireItemSetWithGradeFuture(
+            AcquireItemSetWithGradeByUserIdRequest request
+        ) {
+
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetDomain> self)
+            {
+                request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName);
+                var future = this._client.AcquireItemSetWithGradeByUserIdFuture(
+                    request
+                );
+                yield return future;
+                if (future.Error != null)
+                {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+
+                var requestModel = request;
+                var resultModel = result;
+                if (resultModel != null) {
+                    
+                    if (resultModel.Item != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.InventoryName,
+                            "ItemSet"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                            resultModel.Item.ItemName.ToString(),
+                            resultModel.Item.Name.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.Status != null) {
+                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Status"
+                        );
+                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
+                            resultModel.Status.GradeName.ToString(),
+                            resultModel.Status.PropertyId.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Status,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.ItemModel != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.InventoryName,
+                            "ItemModel"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                            resultModel.ItemModel.Name.ToString()
+                        );
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.ItemModel,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                    if (resultModel.Inventory != null) {
+                        var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            "Inventory"
+                        );
+                        var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                            resultModel.Inventory.InventoryName.ToString()
+                        );
+                        var (item, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                            parentKey,
+                            key
+                        );
+                        if (item == null || item.Revision < resultModel.Inventory.Revision)
+                        {
+                            _gs2.Cache.Put(
+                                parentKey,
+                                key,
+                                resultModel.Item,
+                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                            );
+                        }
+                    }
+                }
+                var domain = new Gs2.Gs2Inventory.Domain.Model.ItemSetDomain(
+                    this._gs2,
+                    request.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.InventoryName,
+                    result?.Item?.ItemName,
+                    result?.Item?.Name
+                );
+                domain.OverflowCount = result?.OverflowCount;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ItemSetDomain> AcquireItemSetWithGradeAsync(
+            #else
+        public async Task<Gs2.Gs2Inventory.Domain.Model.ItemSetDomain> AcquireItemSetWithGradeAsync(
+            #endif
+            AcquireItemSetWithGradeByUserIdRequest request
+        ) {
+            request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithInventoryName(this.InventoryName);
+            AcquireItemSetWithGradeByUserIdResult result = null;
+                result = await this._client.AcquireItemSetWithGradeByUserIdAsync(
+                    request
+                );
+
+            var requestModel = request;
+            var resultModel = result;
+            if (resultModel != null) {
+                
+                if (resultModel.Item != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        this.InventoryName,
+                        "ItemSet"
+                    );
+                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
+                        resultModel.Item.ItemName.ToString(),
+                        resultModel.Item.Name.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Item,
+                        resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                if (resultModel.Status != null) {
+                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Status"
+                    );
+                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
+                        resultModel.Status.GradeName.ToString(),
+                        resultModel.Status.PropertyId.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.Status,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                if (resultModel.ItemModel != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryModelDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.InventoryName,
+                        "ItemModel"
+                    );
+                    var key = Gs2.Gs2Inventory.Domain.Model.ItemModelDomain.CreateCacheKey(
+                        resultModel.ItemModel.Name.ToString()
+                    );
+                    _gs2.Cache.Put(
+                        parentKey,
+                        key,
+                        resultModel.ItemModel,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    );
+                }
+                if (resultModel.Inventory != null) {
+                    var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        "Inventory"
+                    );
+                    var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                        resultModel.Inventory.InventoryName.ToString()
+                    );
+                    var (item, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.Inventory>(
+                        parentKey,
+                        key
+                    );
+                    if (item == null || item.Revision < resultModel.Inventory.Revision)
+                    {
+                        _gs2.Cache.Put(
+                            parentKey,
+                            key,
+                            resultModel.Item,
+                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                        );
+                    }
+                }
+            }
+                var domain = new Gs2.Gs2Inventory.Domain.Model.ItemSetDomain(
+                    this._gs2,
+                    request.NamespaceName,
+                    result?.Item?.UserId,
+                    result?.Item?.InventoryName,
+                    result?.Item?.ItemName,
+                    result?.Item?.Name
+                );
+            domain.OverflowCount = result?.OverflowCount;
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        [Obsolete("The name has been changed to AcquireItemSetWithGradeFuture.")]
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetDomain> AcquireItemSetWithGrade(
+            AcquireItemSetWithGradeByUserIdRequest request
+        ) {
+            return AcquireItemSetWithGradeFuture(request);
+        }
+        #endif
+
     }
 
     public partial class InventoryDomain {
@@ -948,6 +1172,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
+
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.Inventory>(
+                _parentKey,
+                Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
+                    this.InventoryName.ToString()
+                )
+            );
+        }
 
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.Inventory> callback)
         {

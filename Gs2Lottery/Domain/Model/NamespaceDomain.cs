@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -145,7 +146,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
-        public ulong SubscribePrizeTables(Action callback)
+        public ulong SubscribePrizeTables(
+            Action<Gs2.Gs2Lottery.Model.PrizeTable[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeTable>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -156,7 +159,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        public void UnsubscribePrizeTables(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePrizeTablesWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.PrizeTable[]> callback
+        )
+        {
+            var items = await PrizeTablesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribePrizeTables(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePrizeTables(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeTable>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
-        public ulong SubscribeLotteryModels(Action callback)
+        public ulong SubscribeLotteryModels(
+            Action<Gs2.Gs2Lottery.Model.LotteryModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.LotteryModel>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        public void UnsubscribeLotteryModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeLotteryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.LotteryModel[]> callback
+        )
+        {
+            var items = await LotteryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeLotteryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeLotteryModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.LotteryModel>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -279,7 +318,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
-        public ulong SubscribePrizeTableMasters(Action callback)
+        public ulong SubscribePrizeTableMasters(
+            Action<Gs2.Gs2Lottery.Model.PrizeTableMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -290,7 +331,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        public void UnsubscribePrizeTableMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePrizeTableMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.PrizeTableMaster[]> callback
+        )
+        {
+            var items = await PrizeTableMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribePrizeTableMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePrizeTableMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
-        public ulong SubscribeLotteryModelMasters(Action callback)
+        public ulong SubscribeLotteryModelMasters(
+            Action<Gs2.Gs2Lottery.Model.LotteryModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        public void UnsubscribeLotteryModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeLotteryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.LotteryModelMaster[]> callback
+        )
+        {
+            var items = await LotteryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeLotteryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeLotteryModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(

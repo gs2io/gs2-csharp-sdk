@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -286,7 +287,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSimpleItems(Action callback)
+        public ulong SubscribeSimpleItems(
+            Action<Gs2.Gs2Inventory.Model.SimpleItem[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleItem>(
                 Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
@@ -299,7 +302,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeSimpleItems(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSimpleItemsWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.SimpleItem[]> callback
+        )
+        {
+            var items = await SimpleItemsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSimpleItems(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSimpleItems(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleItem>(
                 Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(

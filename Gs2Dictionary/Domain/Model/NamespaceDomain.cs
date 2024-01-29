@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
         }
 
-        public ulong SubscribeEntryModels(Action callback)
+        public ulong SubscribeEntryModels(
+            Action<Gs2.Gs2Dictionary.Model.EntryModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.EntryModel>(
                 Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
         }
 
-        public void UnsubscribeEntryModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeEntryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Dictionary.Model.EntryModel[]> callback
+        )
+        {
+            var items = await EntryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeEntryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeEntryModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.EntryModel>(
                 Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         #endif
         }
 
-        public ulong SubscribeEntryModelMasters(Action callback)
+        public ulong SubscribeEntryModelMasters(
+            Action<Gs2.Gs2Dictionary.Model.EntryModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                 Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
         }
 
-        public void UnsubscribeEntryModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeEntryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Dictionary.Model.EntryModelMaster[]> callback
+        )
+        {
+            var items = await EntryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeEntryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeEntryModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
                 Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(

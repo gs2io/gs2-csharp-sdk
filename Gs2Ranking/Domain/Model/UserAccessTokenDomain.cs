@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -47,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -95,7 +97,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain> self)
             {
-                #if UNITY_2017_1_OR_NEWER
                 request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token);
@@ -109,19 +110,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                SubscribeResult result = null;
-                    result = await this._client.SubscribeAsync(
-                        request
-                    );
-                #endif
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -134,7 +125,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             resultModel.Item.CategoryName.ToString(),
                             resultModel.Item.TargetUserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -154,25 +145,16 @@ namespace Gs2.Gs2Ranking.Domain.Model
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain>(Impl);
         }
-        #else
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain> SubscribeAsync(
+            #else
         public async Task<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain> SubscribeAsync(
+            #endif
             SubscribeRequest request
         ) {
-            #if UNITY_2017_1_OR_NEWER
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            var future = this._client.SubscribeFuture(
-                request
-            );
-            yield return future;
-            if (future.Error != null)
-            {
-                self.OnError(future.Error);
-                yield break;
-            }
-            var result = future.Result;
-            #else
             request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token);
@@ -180,11 +162,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 result = await this._client.SubscribeAsync(
                     request
                 );
-            #endif
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -197,7 +177,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                         resultModel.Item.CategoryName.ToString(),
                         resultModel.Item.TargetUserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -218,18 +198,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain> SubscribeAsync(
-            SubscribeRequest request
-        ) {
-            var future = SubscribeFuture(request);
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
-            }
-            return future.Result;
-        }
-            #endif
         [Obsolete("The name has been changed to SubscribeFuture.")]
         public IFuture<Gs2.Gs2Ranking.Domain.Model.SubscribeUserAccessTokenDomain> Subscribe(
             SubscribeRequest request
@@ -290,25 +258,49 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSubscribeUsers(Action callback)
+        public ulong SubscribeSubscribeUsers(
+            Action<Gs2.Gs2Ranking.Model.SubscribeUser[]> callback,
+            string categoryName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    "SubscribeUser"
+                    "SubscribeUser:" + categoryName
                 ),
                 callback
             );
         }
 
-        public void UnsubscribeSubscribeUsers(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSubscribeUsersWithInitialCallAsync(
+            Action<Gs2.Gs2Ranking.Model.SubscribeUser[]> callback,
+            string categoryName
+        )
+        {
+            var items = await SubscribeUsersAsync(
+                categoryName
+            ).ToArrayAsync();
+            var callbackId = SubscribeSubscribeUsers(
+                callback,
+                categoryName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSubscribeUsers(
+            ulong callbackId,
+            string categoryName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.SubscribeUser>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    "SubscribeUser"
+                    "SubscribeUser:" + categoryName
                 ),
                 callbackId
             );
@@ -372,7 +364,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRankings(Action callback)
+        public ulong SubscribeRankings(
+            Action<Gs2.Gs2Ranking.Model.Ranking[]> callback,
+            string categoryName,
+            string additionalScopeName = null
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.Ranking>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -384,7 +380,32 @@ namespace Gs2.Gs2Ranking.Domain.Model
             );
         }
 
-        public void UnsubscribeRankings(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRankingsWithInitialCallAsync(
+            Action<Gs2.Gs2Ranking.Model.Ranking[]> callback,
+            string categoryName,
+            string additionalScopeName = null
+        )
+        {
+            var items = await RankingsAsync(
+                categoryName,
+                additionalScopeName
+            ).ToArrayAsync();
+            var callbackId = SubscribeRankings(
+                callback,
+                categoryName,
+                additionalScopeName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRankings(
+            ulong callbackId,
+            string categoryName,
+            string additionalScopeName = null
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Ranking>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -452,25 +473,54 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeScores(Action callback)
+        public ulong SubscribeScores(
+            Action<Gs2.Gs2Ranking.Model.Score[]> callback,
+            string categoryName,
+            string scorerUserId
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Ranking.Model.Score>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    "Score"
+                    "Score:" + categoryName + ":" + scorerUserId
                 ),
                 callback
             );
         }
 
-        public void UnsubscribeScores(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeScoresWithInitialCallAsync(
+            Action<Gs2.Gs2Ranking.Model.Score[]> callback,
+            string categoryName,
+            string scorerUserId
+        )
+        {
+            var items = await ScoresAsync(
+                categoryName,
+                scorerUserId
+            ).ToArrayAsync();
+            var callbackId = SubscribeScores(
+                callback,
+                categoryName,
+                scorerUserId
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeScores(
+            ulong callbackId,
+            string categoryName,
+            string scorerUserId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Ranking.Model.Score>(
                 Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    "Score"
+                    "Score:" + categoryName + ":" + scorerUserId
                 ),
                 callbackId
             );

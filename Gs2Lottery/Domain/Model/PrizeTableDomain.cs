@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -122,7 +123,9 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
-        public ulong SubscribePrizeLimits(Action callback)
+        public ulong SubscribePrizeLimits(
+            Action<Gs2.Gs2Lottery.Model.PrizeLimit[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
                 Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(
@@ -134,7 +137,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
         }
 
-        public void UnsubscribePrizeLimits(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePrizeLimitsWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.PrizeLimit[]> callback
+        )
+        {
+            var items = await PrizeLimitsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribePrizeLimits(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePrizeLimits(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.PrizeLimit>(
                 Gs2.Gs2Lottery.Domain.Model.PrizeTableDomain.CreateCacheParentKey(

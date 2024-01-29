@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -126,7 +127,9 @@ namespace Gs2.Gs2Account.Domain.Model
         #endif
         }
 
-        public ulong SubscribeTakeOvers(Action callback)
+        public ulong SubscribeTakeOvers(
+            Action<Gs2.Gs2Account.Model.TakeOver[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
@@ -138,7 +141,24 @@ namespace Gs2.Gs2Account.Domain.Model
             );
         }
 
-        public void UnsubscribeTakeOvers(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeTakeOversWithInitialCallAsync(
+            Action<Gs2.Gs2Account.Model.TakeOver[]> callback
+        )
+        {
+            var items = await TakeOversAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeTakeOvers(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeTakeOvers(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
                 Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(

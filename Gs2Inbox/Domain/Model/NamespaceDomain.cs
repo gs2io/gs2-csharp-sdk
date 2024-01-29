@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -145,7 +146,9 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
         }
 
-        public ulong SubscribeGlobalMessages(Action callback)
+        public ulong SubscribeGlobalMessages(
+            Action<Gs2.Gs2Inbox.Model.GlobalMessage[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inbox.Model.GlobalMessage>(
                 Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -156,7 +159,24 @@ namespace Gs2.Gs2Inbox.Domain.Model
             );
         }
 
-        public void UnsubscribeGlobalMessages(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGlobalMessagesWithInitialCallAsync(
+            Action<Gs2.Gs2Inbox.Model.GlobalMessage[]> callback
+        )
+        {
+            var items = await GlobalMessagesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeGlobalMessages(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGlobalMessages(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.GlobalMessage>(
                 Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
         }
 
-        public ulong SubscribeGlobalMessageMasters(Action callback)
+        public ulong SubscribeGlobalMessageMasters(
+            Action<Gs2.Gs2Inbox.Model.GlobalMessageMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
                 Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Inbox.Domain.Model
             );
         }
 
-        public void UnsubscribeGlobalMessageMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGlobalMessageMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Inbox.Model.GlobalMessageMaster[]> callback
+        )
+        {
+            var items = await GlobalMessageMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeGlobalMessageMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGlobalMessageMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
                 Gs2.Gs2Inbox.Domain.Model.NamespaceDomain.CreateCacheParentKey(

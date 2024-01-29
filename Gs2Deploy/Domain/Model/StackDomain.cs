@@ -48,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -116,7 +117,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
         #endif
         }
 
-        public ulong SubscribeResources(Action callback)
+        public ulong SubscribeResources(Action<Gs2.Gs2Deploy.Model.Resource[]> callback)
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Resource>(
                 Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
@@ -126,6 +127,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeResourcesWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Resource[]> callback)
+        {
+            var items = await ResourcesAsync().ToArrayAsync();
+            var callbackId = SubscribeResources(callback);
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
 
         public void UnsubscribeResources(ulong callbackId)
         {
@@ -183,7 +194,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
         #endif
         }
 
-        public ulong SubscribeEvents(Action callback)
+        public ulong SubscribeEvents(Action<Gs2.Gs2Deploy.Model.Event[]> callback)
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Event>(
                 Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
@@ -193,6 +204,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeEventsWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Event[]> callback)
+        {
+            var items = await EventsAsync().ToArrayAsync();
+            var callbackId = SubscribeEvents(callback);
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
 
         public void UnsubscribeEvents(ulong callbackId)
         {
@@ -250,7 +271,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
         #endif
         }
 
-        public ulong SubscribeOutputs(Action callback)
+        public ulong SubscribeOutputs(Action<Gs2.Gs2Deploy.Model.Output[]> callback)
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Output>(
                 Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheParentKey(
@@ -260,6 +281,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeOutputsWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Output[]> callback)
+        {
+            var items = await OutputsAsync().ToArrayAsync();
+            var callbackId = SubscribeOutputs(callback);
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
 
         public void UnsubscribeOutputs(ulong callbackId)
         {
@@ -1426,6 +1457,16 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
         #endif
 
+
+        public void Invalidate()
+        {
+            this._gs2.Cache.Delete<Gs2.Gs2Deploy.Model.Stack>(
+                _parentKey,
+                Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
+                    this.StackName.ToString()
+                )
+            );
+        }
 
         public ulong Subscribe(Action<Gs2.Gs2Deploy.Model.Stack> callback)
         {

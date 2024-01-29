@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -140,7 +141,15 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeAccessLog(Action callback)
+        public ulong SubscribeAccessLog(
+            string service,
+            string method,
+            string userId,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.AccessLog[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -151,7 +160,48 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeAccessLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeAccessLogWithInitialCallAsync(
+            string service,
+            string method,
+            string userId,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.AccessLog[]> callback
+        )
+        {
+            var items = await AccessLogAsync(
+                service,
+                method,
+                userId,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeAccessLog(
+                service,
+                method,
+                userId,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeAccessLog(
+            string service,
+            string method,
+            string userId,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -221,7 +271,15 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCountAccessLog(Action callback)
+        public ulong SubscribeCountAccessLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.AccessLogCount[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -232,7 +290,48 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeCountAccessLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountAccessLogWithInitialCallAsync(
+            bool? service,
+            bool? method,
+            bool? userId,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.AccessLogCount[]> callback
+        )
+        {
+            var items = await CountAccessLogAsync(
+                service,
+                method,
+                userId,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeCountAccessLog(
+                service,
+                method,
+                userId,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCountAccessLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.AccessLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -314,7 +413,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeExecuteStampSheetLog(Action callback)
+        public ulong SubscribeExecuteStampSheetLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampSheetLog[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -325,7 +433,52 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeExecuteStampSheetLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeExecuteStampSheetLogWithInitialCallAsync(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampSheetLog[]> callback
+        )
+        {
+            var items = await ExecuteStampSheetLogAsync(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeExecuteStampSheetLog(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeExecuteStampSheetLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -399,7 +552,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCountExecuteStampSheetLog(Action callback)
+        public ulong SubscribeCountExecuteStampSheetLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -410,7 +572,52 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeCountExecuteStampSheetLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountExecuteStampSheetLogWithInitialCallAsync(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount[]> callback
+        )
+        {
+            var items = await CountExecuteStampSheetLogAsync(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeCountExecuteStampSheetLog(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCountExecuteStampSheetLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -492,7 +699,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeExecuteStampTaskLog(Action callback)
+        public ulong SubscribeExecuteStampTaskLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampTaskLog[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -503,7 +719,52 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeExecuteStampTaskLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeExecuteStampTaskLogWithInitialCallAsync(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampTaskLog[]> callback
+        )
+        {
+            var items = await ExecuteStampTaskLogAsync(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeExecuteStampTaskLog(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeExecuteStampTaskLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -577,7 +838,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCountExecuteStampTaskLog(Action callback)
+        public ulong SubscribeCountExecuteStampTaskLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -588,7 +858,52 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeCountExecuteStampTaskLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountExecuteStampTaskLogWithInitialCallAsync(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[]> callback
+        )
+        {
+            var items = await CountExecuteStampTaskLogAsync(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeCountExecuteStampTaskLog(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCountExecuteStampTaskLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -670,7 +985,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeIssueStampSheetLog(Action callback)
+        public ulong SubscribeIssueStampSheetLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.IssueStampSheetLog[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -681,7 +1005,52 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeIssueStampSheetLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeIssueStampSheetLogWithInitialCallAsync(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.IssueStampSheetLog[]> callback
+        )
+        {
+            var items = await IssueStampSheetLogAsync(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeIssueStampSheetLog(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeIssueStampSheetLog(
+            string service,
+            string method,
+            string userId,
+            string action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -755,7 +1124,16 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCountIssueStampSheetLog(Action callback)
+        public ulong SubscribeCountIssueStampSheetLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.IssueStampSheetLogCount[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -766,7 +1144,52 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeCountIssueStampSheetLog(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountIssueStampSheetLogWithInitialCallAsync(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            Action<Gs2.Gs2Log.Model.IssueStampSheetLogCount[]> callback
+        )
+        {
+            var items = await CountIssueStampSheetLogAsync(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeCountIssueStampSheetLog(
+                service,
+                method,
+                userId,
+                action,
+                begin,
+                end,
+                longTerm,
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCountIssueStampSheetLog(
+            bool? service,
+            bool? method,
+            bool? userId,
+            bool? action,
+            long? begin,
+            long? end,
+            bool? longTerm,
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLogCount>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -828,7 +1251,9 @@ namespace Gs2.Gs2Log.Domain.Model
         #endif
         }
 
-        public ulong SubscribeInsights(Action callback)
+        public ulong SubscribeInsights(
+            Action<Gs2.Gs2Log.Model.Insight[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.Insight>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -839,7 +1264,24 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        public void UnsubscribeInsights(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeInsightsWithInitialCallAsync(
+            Action<Gs2.Gs2Log.Model.Insight[]> callback
+        )
+        {
+            var items = await InsightsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeInsights(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeInsights(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.Insight>(
                 Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(

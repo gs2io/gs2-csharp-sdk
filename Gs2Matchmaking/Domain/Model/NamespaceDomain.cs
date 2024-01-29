@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -145,7 +146,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRatingModels(Action callback)
+        public ulong SubscribeRatingModels(
+            Action<Gs2.Gs2Matchmaking.Model.RatingModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.RatingModel>(
                 Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -156,7 +159,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public void UnsubscribeRatingModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRatingModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.RatingModel[]> callback
+        )
+        {
+            var items = await RatingModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRatingModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRatingModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.RatingModel>(
                 Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -224,7 +244,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRatingModelMasters(Action callback)
+        public ulong SubscribeRatingModelMasters(
+            Action<Gs2.Gs2Matchmaking.Model.RatingModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                 Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -235,7 +257,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public void UnsubscribeRatingModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRatingModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.RatingModelMaster[]> callback
+        )
+        {
+            var items = await RatingModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRatingModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRatingModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.RatingModelMaster>(
                 Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(

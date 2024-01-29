@@ -53,6 +53,7 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
     #endif
 #else
 using System.Threading;
@@ -656,7 +657,9 @@ namespace Gs2.Gs2Lottery.Domain
         #endif
         }
 
-        public ulong SubscribeNamespaces(Action callback)
+        public ulong SubscribeNamespaces(
+            Action<Gs2.Gs2Lottery.Model.Namespace[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.Namespace>(
                 "lottery:Namespace",
@@ -664,7 +667,24 @@ namespace Gs2.Gs2Lottery.Domain
             );
         }
 
-        public void UnsubscribeNamespaces(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeNamespacesWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.Namespace[]> callback
+        )
+        {
+            var items = await NamespacesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeNamespaces(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeNamespaces(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.Namespace>(
                 "lottery:Namespace",
@@ -735,7 +755,7 @@ namespace Gs2.Gs2Lottery.Domain
                         {
                             var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
                                 requestModel.NamespaceName,
-                        "DrawnPrize"
+                                "DrawnPrize"
                             );
                             foreach (var item in resultModel.Items) {
                                 _gs2.Cache.Put(

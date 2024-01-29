@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -124,7 +125,9 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMolds(Action callback)
+        public ulong SubscribeMolds(
+            Action<Gs2.Gs2Formation.Model.Mold[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.Mold>(
                 Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribeMolds(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMoldsWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.Mold[]> callback
+        )
+        {
+            var items = await MoldsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMolds(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMolds(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.Mold>(
                 Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -200,7 +220,10 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
         }
 
-        public ulong SubscribePropertyForms(Action callback)
+        public ulong SubscribePropertyForms(
+            Action<Gs2.Gs2Formation.Model.PropertyForm[]> callback,
+            string propertyFormModelName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
                 Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -212,7 +235,28 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public void UnsubscribePropertyForms(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribePropertyFormsWithInitialCallAsync(
+            Action<Gs2.Gs2Formation.Model.PropertyForm[]> callback,
+            string propertyFormModelName
+        )
+        {
+            var items = await PropertyFormsAsync(
+                propertyFormModelName
+            ).ToArrayAsync();
+            var callbackId = SubscribePropertyForms(
+                callback,
+                propertyFormModelName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribePropertyForms(
+            ulong callbackId,
+            string propertyFormModelName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
                 Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(

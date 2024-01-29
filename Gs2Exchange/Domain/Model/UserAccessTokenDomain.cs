@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -139,7 +140,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
         }
 
-        public ulong SubscribeAwaits(Action callback)
+        public ulong SubscribeAwaits(
+            Action<Gs2.Gs2Exchange.Model.Await[]> callback,
+            string rateName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.Await>(
                 Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -151,7 +155,28 @@ namespace Gs2.Gs2Exchange.Domain.Model
             );
         }
 
-        public void UnsubscribeAwaits(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeAwaitsWithInitialCallAsync(
+            Action<Gs2.Gs2Exchange.Model.Await[]> callback,
+            string rateName
+        )
+        {
+            var items = await AwaitsAsync(
+                rateName
+            ).ToArrayAsync();
+            var callbackId = SubscribeAwaits(
+                callback,
+                rateName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeAwaits(
+            ulong callbackId,
+            string rateName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.Await>(
                 Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(

@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -114,7 +115,9 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
         }
 
-        public ulong SubscribeKeys(Action callback)
+        public ulong SubscribeKeys(
+            Action<Gs2.Gs2Key.Model.Key[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Key.Model.Key>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -125,7 +128,24 @@ namespace Gs2.Gs2Key.Domain.Model
             );
         }
 
-        public void UnsubscribeKeys(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeKeysWithInitialCallAsync(
+            Action<Gs2.Gs2Key.Model.Key[]> callback
+        )
+        {
+            var items = await KeysAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeKeys(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeKeys(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Key.Model.Key>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -181,7 +201,9 @@ namespace Gs2.Gs2Key.Domain.Model
         #endif
         }
 
-        public ulong SubscribeGitHubApiKeys(Action callback)
+        public ulong SubscribeGitHubApiKeys(
+            Action<Gs2.Gs2Key.Model.GitHubApiKey[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -192,7 +214,24 @@ namespace Gs2.Gs2Key.Domain.Model
             );
         }
 
-        public void UnsubscribeGitHubApiKeys(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGitHubApiKeysWithInitialCallAsync(
+            Action<Gs2.Gs2Key.Model.GitHubApiKey[]> callback
+        )
+        {
+            var items = await GitHubApiKeysAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeGitHubApiKeys(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGitHubApiKeys(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Key.Model.GitHubApiKey>(
                 Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(

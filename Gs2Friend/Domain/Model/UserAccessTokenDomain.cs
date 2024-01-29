@@ -48,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -111,7 +112,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
                 var requestModel = request;
                 var resultModel = result;
-                var cache = this._gs2.Cache;
                 if (resultModel != null) {
                     
                     if (resultModel.Item != null) {
@@ -123,7 +123,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                             resultModel.Item.TargetUserId.ToString()
                         );
-                        cache.Put(
+                        _gs2.Cache.Put(
                             parentKey,
                             key,
                             resultModel.Item,
@@ -163,7 +163,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             var requestModel = request;
             var resultModel = result;
-            var cache = this._gs2.Cache;
             if (resultModel != null) {
                 
                 if (resultModel.Item != null) {
@@ -175,7 +174,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
                         resultModel.Item.TargetUserId.ToString()
                     );
-                    cache.Put(
+                    _gs2.Cache.Put(
                         parentKey,
                         key,
                         resultModel.Item,
@@ -259,7 +258,9 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBlackLists(Action callback)
+        public ulong SubscribeBlackLists(
+            Action<string[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<string>(
                 "friend:UserId",
@@ -267,7 +268,24 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
-        public void UnsubscribeBlackLists(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBlackListsWithInitialCallAsync(
+            Action<string[]> callback
+        )
+        {
+            var items = await BlackListsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBlackLists(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBlackLists(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<string>(
                 "friend:UserId",
@@ -326,7 +344,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         public ulong SubscribeFollows(
-            Action callback,
+            Action<Gs2.Gs2Friend.Model.FollowUser[]> callback,
             bool? withProfile
         )
         {
@@ -339,6 +357,24 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeFollowsWithInitialCallAsync(
+            Action<Gs2.Gs2Friend.Model.FollowUser[]> callback,
+            bool? withProfile
+        )
+        {
+            var items = await FollowsAsync(
+                withProfile
+            ).ToArrayAsync();
+            var callbackId = SubscribeFollows(
+                callback,
+                withProfile
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
 
         public void UnsubscribeFollows(
             ulong callbackId,
@@ -410,7 +446,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         public ulong SubscribeFriends(
-            Action callback,
+            Action<Gs2.Gs2Friend.Model.FriendUser[]> callback,
             bool? withProfile
         )
         {
@@ -424,6 +460,24 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeFriendsWithInitialCallAsync(
+            Action<Gs2.Gs2Friend.Model.FriendUser[]> callback,
+            bool? withProfile
+        )
+        {
+            var items = await FriendsAsync(
+                withProfile
+            ).ToArrayAsync();
+            var callbackId = SubscribeFriends(
+                callback,
+                withProfile
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
 
         public void UnsubscribeFriends(
             ulong callbackId,
@@ -489,7 +543,9 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSendRequests(Action callback)
+        public ulong SubscribeSendRequests(
+            Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -501,7 +557,24 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
-        public void UnsubscribeSendRequests(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSendRequestsWithInitialCallAsync(
+            Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
+        )
+        {
+            var items = await SendRequestsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSendRequests(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSendRequests(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -561,7 +634,9 @@ namespace Gs2.Gs2Friend.Domain.Model
         #endif
         }
 
-        public ulong SubscribeReceiveRequests(Action callback)
+        public ulong SubscribeReceiveRequests(
+            Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -573,7 +648,24 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
-        public void UnsubscribeReceiveRequests(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeReceiveRequestsWithInitialCallAsync(
+            Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
+        )
+        {
+            var items = await ReceiveRequestsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeReceiveRequests(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeReceiveRequests(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
                 Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(

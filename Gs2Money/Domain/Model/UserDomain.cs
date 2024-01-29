@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -123,7 +124,9 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
         }
 
-        public ulong SubscribeWallets(Action callback)
+        public ulong SubscribeWallets(
+            Action<Gs2.Gs2Money.Model.Wallet[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money.Model.Wallet>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -135,7 +138,24 @@ namespace Gs2.Gs2Money.Domain.Model
             );
         }
 
-        public void UnsubscribeWallets(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeWalletsWithInitialCallAsync(
+            Action<Gs2.Gs2Money.Model.Wallet[]> callback
+        )
+        {
+            var items = await WalletsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeWallets(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeWallets(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money.Model.Wallet>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -207,7 +227,12 @@ namespace Gs2.Gs2Money.Domain.Model
         #endif
         }
 
-        public ulong SubscribeReceipts(Action callback)
+        public ulong SubscribeReceipts(
+            Action<Gs2.Gs2Money.Model.Receipt[]> callback,
+            int? slot,
+            long? begin,
+            long? end
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Money.Model.Receipt>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -219,7 +244,36 @@ namespace Gs2.Gs2Money.Domain.Model
             );
         }
 
-        public void UnsubscribeReceipts(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeReceiptsWithInitialCallAsync(
+            Action<Gs2.Gs2Money.Model.Receipt[]> callback,
+            int? slot,
+            long? begin,
+            long? end
+        )
+        {
+            var items = await ReceiptsAsync(
+                slot,
+                begin,
+                end
+            ).ToArrayAsync();
+            var callbackId = SubscribeReceipts(
+                callback,
+                slot,
+                begin,
+                end
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeReceipts(
+            ulong callbackId,
+            int? slot,
+            long? begin,
+            long? end
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Money.Model.Receipt>(
                 Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(

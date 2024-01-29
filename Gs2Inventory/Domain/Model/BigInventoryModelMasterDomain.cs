@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -122,7 +123,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBigItemModelMasters(Action callback)
+        public ulong SubscribeBigItemModelMasters(
+            Action<Gs2.Gs2Inventory.Model.BigItemModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheParentKey(
@@ -134,7 +137,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeBigItemModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBigItemModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.BigItemModelMaster[]> callback
+        )
+        {
+            var items = await BigItemModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBigItemModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBigItemModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain.CreateCacheParentKey(

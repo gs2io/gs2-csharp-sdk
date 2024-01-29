@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCategoryModels(Action callback)
+        public ulong SubscribeCategoryModels(
+            Action<Gs2.Gs2Idle.Model.CategoryModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Idle.Model.CategoryModel>(
                 Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Idle.Domain.Model
             );
         }
 
-        public void UnsubscribeCategoryModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCategoryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Idle.Model.CategoryModel[]> callback
+        )
+        {
+            var items = await CategoryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCategoryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCategoryModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Idle.Model.CategoryModel>(
                 Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Idle.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCategoryModelMasters(Action callback)
+        public ulong SubscribeCategoryModelMasters(
+            Action<Gs2.Gs2Idle.Model.CategoryModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Idle.Model.CategoryModelMaster>(
                 Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Idle.Domain.Model
             );
         }
 
-        public void UnsubscribeCategoryModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCategoryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Idle.Model.CategoryModelMaster[]> callback
+        )
+        {
+            var items = await CategoryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCategoryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCategoryModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Idle.Model.CategoryModelMaster>(
                 Gs2.Gs2Idle.Domain.Model.NamespaceDomain.CreateCacheParentKey(

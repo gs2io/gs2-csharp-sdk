@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
         }
 
-        public ulong SubscribeQuestGroupModels(Action callback)
+        public ulong SubscribeQuestGroupModels(
+            Action<Gs2.Gs2Quest.Model.QuestGroupModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.QuestGroupModel>(
                 Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
-        public void UnsubscribeQuestGroupModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeQuestGroupModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Quest.Model.QuestGroupModel[]> callback
+        )
+        {
+            var items = await QuestGroupModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeQuestGroupModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeQuestGroupModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.QuestGroupModel>(
                 Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Quest.Domain.Model
         #endif
         }
 
-        public ulong SubscribeQuestGroupModelMasters(Action callback)
+        public ulong SubscribeQuestGroupModelMasters(
+            Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
                 Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
         }
 
-        public void UnsubscribeQuestGroupModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeQuestGroupModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster[]> callback
+        )
+        {
+            var items = await QuestGroupModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeQuestGroupModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeQuestGroupModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
                 Gs2.Gs2Quest.Domain.Model.NamespaceDomain.CreateCacheParentKey(

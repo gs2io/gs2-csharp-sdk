@@ -32,7 +32,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
@@ -54,6 +53,7 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
     #endif
 #else
 using System.Threading;
@@ -659,7 +659,9 @@ namespace Gs2.Gs2JobQueue.Domain
         #endif
         }
 
-        public ulong SubscribeNamespaces(Action callback)
+        public ulong SubscribeNamespaces(
+            Action<Gs2.Gs2JobQueue.Model.Namespace[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2JobQueue.Model.Namespace>(
                 "jobQueue:Namespace",
@@ -667,7 +669,24 @@ namespace Gs2.Gs2JobQueue.Domain
             );
         }
 
-        public void UnsubscribeNamespaces(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeNamespacesWithInitialCallAsync(
+            Action<Gs2.Gs2JobQueue.Model.Namespace[]> callback
+        )
+        {
+            var items = await NamespacesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeNamespaces(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeNamespaces(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.Namespace>(
                 "jobQueue:Namespace",

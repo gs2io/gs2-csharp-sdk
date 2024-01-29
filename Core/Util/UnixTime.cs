@@ -48,4 +48,35 @@ namespace Gs2.Core.Util
 			return UnixEpoch.AddMilliseconds(unixTime);
 		}
 	}
+	
+	public static class UnixTimeExt
+	{
+		// unix epochをDateTimeで表した定数
+		public static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		/// <summary>
+		/// DateTimeをUNIX時間に変換するメソッド
+		/// </summary>
+		/// <param name="dateTime"></param>
+		/// <returns></returns>
+		public static long ToUnixTime(this DateTime dateTime)
+		{
+			// 時刻をUTCに変換
+			dateTime = dateTime.ToUniversalTime();
+
+			// unix epochからの経過秒数を求める
+			return (long)dateTime.Subtract(UnixEpoch).TotalMilliseconds;
+		}
+
+		/// <summary>
+		/// UNIX時間からDateTimeに変換するメソッド
+		/// </summary>
+		/// <param name="unixTime"></param>
+		/// <returns></returns>
+		public static DateTime ToDateTime(this long unixTime)
+		{
+			// unix epochからunixTime秒だけ経過した時刻を求める
+			return UnixEpoch.AddMilliseconds(unixTime);
+		}
+	}
 }

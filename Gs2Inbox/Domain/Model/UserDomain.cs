@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -126,7 +127,10 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMessages(Action callback)
+        public ulong SubscribeMessages(
+            Action<Gs2.Gs2Inbox.Model.Message[]> callback,
+            bool? isRead
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inbox.Model.Message>(
                 Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -138,7 +142,28 @@ namespace Gs2.Gs2Inbox.Domain.Model
             );
         }
 
-        public void UnsubscribeMessages(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMessagesWithInitialCallAsync(
+            Action<Gs2.Gs2Inbox.Model.Message[]> callback,
+            bool? isRead
+        )
+        {
+            var items = await MessagesAsync(
+                isRead
+            ).ToArrayAsync();
+            var callbackId = SubscribeMessages(
+                callback,
+                isRead
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMessages(
+            ulong callbackId,
+            bool? isRead
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inbox.Model.Message>(
                 Gs2.Gs2Inbox.Domain.Model.UserDomain.CreateCacheParentKey(

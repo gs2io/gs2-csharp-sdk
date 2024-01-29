@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMissionGroupModels(Action callback)
+        public ulong SubscribeMissionGroupModels(
+            Action<Gs2.Gs2Mission.Model.MissionGroupModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionGroupModel>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
         }
 
-        public void UnsubscribeMissionGroupModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMissionGroupModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.MissionGroupModel[]> callback
+        )
+        {
+            var items = await MissionGroupModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMissionGroupModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMissionGroupModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionGroupModel>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -192,7 +212,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCounterModels(Action callback)
+        public ulong SubscribeCounterModels(
+            Action<Gs2.Gs2Mission.Model.CounterModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.CounterModel>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -203,7 +225,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
         }
 
-        public void UnsubscribeCounterModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCounterModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.CounterModel[]> callback
+        )
+        {
+            var items = await CounterModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCounterModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCounterModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.CounterModel>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -279,7 +318,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMissionGroupModelMasters(Action callback)
+        public ulong SubscribeMissionGroupModelMasters(
+            Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -290,7 +331,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
         }
 
-        public void UnsubscribeMissionGroupModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMissionGroupModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster[]> callback
+        )
+        {
+            var items = await MissionGroupModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMissionGroupModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMissionGroupModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCounterModelMasters(Action callback)
+        public ulong SubscribeCounterModelMasters(
+            Action<Gs2.Gs2Mission.Model.CounterModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
         }
 
-        public void UnsubscribeCounterModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCounterModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.CounterModelMaster[]> callback
+        )
+        {
+            var items = await CounterModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCounterModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCounterModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
                 Gs2.Gs2Mission.Domain.Model.NamespaceDomain.CreateCacheParentKey(

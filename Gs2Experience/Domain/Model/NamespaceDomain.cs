@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
         }
 
-        public ulong SubscribeExperienceModels(Action callback)
+        public ulong SubscribeExperienceModels(
+            Action<Gs2.Gs2Experience.Model.ExperienceModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Experience.Model.ExperienceModel>(
                 Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Experience.Domain.Model
             );
         }
 
-        public void UnsubscribeExperienceModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeExperienceModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Experience.Model.ExperienceModel[]> callback
+        )
+        {
+            var items = await ExperienceModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeExperienceModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeExperienceModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ExperienceModel>(
                 Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
         }
 
-        public ulong SubscribeThresholdMasters(Action callback)
+        public ulong SubscribeThresholdMasters(
+            Action<Gs2.Gs2Experience.Model.ThresholdMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
                 Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Experience.Domain.Model
             );
         }
 
-        public void UnsubscribeThresholdMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeThresholdMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Experience.Model.ThresholdMaster[]> callback
+        )
+        {
+            var items = await ThresholdMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeThresholdMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeThresholdMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ThresholdMaster>(
                 Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -279,7 +318,9 @@ namespace Gs2.Gs2Experience.Domain.Model
         #endif
         }
 
-        public ulong SubscribeExperienceModelMasters(Action callback)
+        public ulong SubscribeExperienceModelMasters(
+            Action<Gs2.Gs2Experience.Model.ExperienceModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
                 Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -290,7 +331,24 @@ namespace Gs2.Gs2Experience.Domain.Model
             );
         }
 
-        public void UnsubscribeExperienceModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeExperienceModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Experience.Model.ExperienceModelMaster[]> callback
+        )
+        {
+            var items = await ExperienceModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeExperienceModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeExperienceModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Experience.Model.ExperienceModelMaster>(
                 Gs2.Gs2Experience.Domain.Model.NamespaceDomain.CreateCacheParentKey(

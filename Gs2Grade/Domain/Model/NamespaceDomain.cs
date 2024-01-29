@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
         }
 
-        public ulong SubscribeGradeModels(Action callback)
+        public ulong SubscribeGradeModels(
+            Action<Gs2.Gs2Grade.Model.GradeModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Grade.Model.GradeModel>(
                 Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Grade.Domain.Model
             );
         }
 
-        public void UnsubscribeGradeModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGradeModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Grade.Model.GradeModel[]> callback
+        )
+        {
+            var items = await GradeModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeGradeModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGradeModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Grade.Model.GradeModel>(
                 Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -192,7 +212,9 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
         }
 
-        public ulong SubscribeGradeModelMasters(Action callback)
+        public ulong SubscribeGradeModelMasters(
+            Action<Gs2.Gs2Grade.Model.GradeModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Grade.Model.GradeModelMaster>(
                 Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -203,7 +225,24 @@ namespace Gs2.Gs2Grade.Domain.Model
             );
         }
 
-        public void UnsubscribeGradeModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGradeModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Grade.Model.GradeModelMaster[]> callback
+        )
+        {
+            var items = await GradeModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeGradeModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGradeModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Grade.Model.GradeModelMaster>(
                 Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(

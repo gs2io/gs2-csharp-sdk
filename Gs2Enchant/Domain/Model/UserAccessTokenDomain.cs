@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -127,7 +128,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBalanceParameterStatuses(Action callback)
+        public ulong SubscribeBalanceParameterStatuses(
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterStatus[]> callback,
+            string parameterName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -139,7 +143,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
             );
         }
 
-        public void UnsubscribeBalanceParameterStatuses(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBalanceParameterStatusesWithInitialCallAsync(
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterStatus[]> callback,
+            string parameterName
+        )
+        {
+            var items = await BalanceParameterStatusesAsync(
+                parameterName
+            ).ToArrayAsync();
+            var callbackId = SubscribeBalanceParameterStatuses(
+                callback,
+                parameterName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBalanceParameterStatuses(
+            ulong callbackId,
+            string parameterName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -205,7 +230,10 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRarityParameterStatuses(Action callback)
+        public ulong SubscribeRarityParameterStatuses(
+            Action<Gs2.Gs2Enchant.Model.RarityParameterStatus[]> callback,
+            string parameterName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -217,7 +245,28 @@ namespace Gs2.Gs2Enchant.Domain.Model
             );
         }
 
-        public void UnsubscribeRarityParameterStatuses(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRarityParameterStatusesWithInitialCallAsync(
+            Action<Gs2.Gs2Enchant.Model.RarityParameterStatus[]> callback,
+            string parameterName
+        )
+        {
+            var items = await RarityParameterStatusesAsync(
+                parameterName
+            ).ToArrayAsync();
+            var callbackId = SubscribeRarityParameterStatuses(
+                callback,
+                parameterName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRarityParameterStatuses(
+            ulong callbackId,
+            string parameterName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
                 Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(

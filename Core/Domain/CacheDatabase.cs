@@ -44,7 +44,7 @@ namespace Gs2.Core.Domain
                 this._listCacheContexts.Ensure(typeof(TKind))[parentKey] = listCacheContext;
             }
             foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                (callback.Value as Action)?.Invoke();
+                (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
             }
         }
 
@@ -86,7 +86,7 @@ namespace Gs2.Core.Domain
             if (this._listCached.Get(typeof(TKind))?.Contains(parentKey) == true) {
                 if (!exists) {
                     foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                        (callback.Value as Action)?.Invoke();
+                        (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
                     }
                 }
             }
@@ -96,7 +96,7 @@ namespace Gs2.Core.Domain
         {
             this._cache.Get(typeof(TKind))?.Get(parentKey)?.Remove(key);
             foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                (callback.Value as Action)?.Invoke();
+                (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
             }
         }
 
@@ -113,7 +113,7 @@ namespace Gs2.Core.Domain
             this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Remove(callbackId);
         }
 
-        public ulong ListSubscribe<TKind>(string parentKey, Action subscribe)
+        public ulong ListSubscribe<TKind>(string parentKey, Action<TKind[]> subscribe)
         {
             this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Add(_callbackId, subscribe);
             return _callbackId++;

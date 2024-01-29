@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -122,7 +123,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
         }
 
-        public ulong SubscribeTriggers(Action callback)
+        public ulong SubscribeTriggers(
+            Action<Gs2.Gs2Schedule.Model.Trigger[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -134,7 +137,24 @@ namespace Gs2.Gs2Schedule.Domain.Model
             );
         }
 
-        public void UnsubscribeTriggers(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeTriggersWithInitialCallAsync(
+            Action<Gs2.Gs2Schedule.Model.Trigger[]> callback
+        )
+        {
+            var items = await TriggersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeTriggers(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeTriggers(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
                 Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -194,7 +214,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
         }
 
-        public ulong SubscribeEvents(Action callback)
+        public ulong SubscribeEvents(
+            Action<Gs2.Gs2Schedule.Model.Event[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Event>(
                 Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -206,7 +228,24 @@ namespace Gs2.Gs2Schedule.Domain.Model
             );
         }
 
-        public void UnsubscribeEvents(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeEventsWithInitialCallAsync(
+            Action<Gs2.Gs2Schedule.Model.Event[]> callback
+        )
+        {
+            var items = await EventsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeEvents(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeEvents(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Event>(
                 Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(

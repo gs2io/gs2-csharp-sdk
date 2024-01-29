@@ -93,7 +93,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #endif
         }
 
-        public ulong SubscribeDrawnPrizes(Action callback)
+        public ulong SubscribeDrawnPrizes(Action<Gs2.Gs2Lottery.Model.DrawnPrize[]> callback)
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.DrawnPrize>(
                 Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(

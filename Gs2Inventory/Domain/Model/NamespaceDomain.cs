@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeInventoryModels(Action callback)
+        public ulong SubscribeInventoryModels(
+            Action<Gs2.Gs2Inventory.Model.InventoryModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.InventoryModel>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeInventoryModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeInventoryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.InventoryModel[]> callback
+        )
+        {
+            var items = await InventoryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeInventoryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeInventoryModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.InventoryModel>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSimpleInventoryModelMasters(Action callback)
+        public ulong SubscribeSimpleInventoryModelMasters(
+            Action<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeSimpleInventoryModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSimpleInventoryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster[]> callback
+        )
+        {
+            var items = await SimpleInventoryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSimpleInventoryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSimpleInventoryModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -279,7 +318,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSimpleInventoryModels(Action callback)
+        public ulong SubscribeSimpleInventoryModels(
+            Action<Gs2.Gs2Inventory.Model.SimpleInventoryModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModel>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -290,7 +331,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeSimpleInventoryModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSimpleInventoryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.SimpleInventoryModel[]> callback
+        )
+        {
+            var items = await SimpleInventoryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSimpleInventoryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSimpleInventoryModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleInventoryModel>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBigInventoryModelMasters(Action callback)
+        public ulong SubscribeBigInventoryModelMasters(
+            Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeBigInventoryModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBigInventoryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]> callback
+        )
+        {
+            var items = await BigInventoryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBigInventoryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBigInventoryModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -413,7 +490,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBigInventoryModels(Action callback)
+        public ulong SubscribeBigInventoryModels(
+            Action<Gs2.Gs2Inventory.Model.BigInventoryModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigInventoryModel>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -424,7 +503,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeBigInventoryModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBigInventoryModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.BigInventoryModel[]> callback
+        )
+        {
+            var items = await BigInventoryModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBigInventoryModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBigInventoryModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModel>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -480,7 +576,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
         }
 
-        public ulong SubscribeInventoryModelMasters(Action callback)
+        public ulong SubscribeInventoryModelMasters(
+            Action<Gs2.Gs2Inventory.Model.InventoryModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -491,7 +589,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
 
-        public void UnsubscribeInventoryModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeInventoryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.InventoryModelMaster[]> callback
+        )
+        {
+            var items = await InventoryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeInventoryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeInventoryModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
                 Gs2.Gs2Inventory.Domain.Model.NamespaceDomain.CreateCacheParentKey(

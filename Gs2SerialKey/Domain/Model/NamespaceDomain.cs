@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCampaignModels(Action callback)
+        public ulong SubscribeCampaignModels(
+            Action<Gs2.Gs2SerialKey.Model.CampaignModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SerialKey.Model.CampaignModel>(
                 Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
         }
 
-        public void UnsubscribeCampaignModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCampaignModelsWithInitialCallAsync(
+            Action<Gs2.Gs2SerialKey.Model.CampaignModel[]> callback
+        )
+        {
+            var items = await CampaignModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCampaignModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCampaignModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.CampaignModel>(
                 Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCampaignModelMasters(Action callback)
+        public ulong SubscribeCampaignModelMasters(
+            Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                 Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
         }
 
-        public void UnsubscribeCampaignModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCampaignModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2SerialKey.Model.CampaignModelMaster[]> callback
+        )
+        {
+            var items = await CampaignModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCampaignModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCampaignModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.CampaignModelMaster>(
                 Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(

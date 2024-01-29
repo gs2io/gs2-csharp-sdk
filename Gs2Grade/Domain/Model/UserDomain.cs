@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -129,7 +130,10 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
         }
 
-        public ulong SubscribeStatuses(Action callback)
+        public ulong SubscribeStatuses(
+            Action<Gs2.Gs2Grade.Model.Status[]> callback,
+            string gradeName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Grade.Model.Status>(
                 Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -141,7 +145,28 @@ namespace Gs2.Gs2Grade.Domain.Model
             );
         }
 
-        public void UnsubscribeStatuses(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStatusesWithInitialCallAsync(
+            Action<Gs2.Gs2Grade.Model.Status[]> callback,
+            string gradeName
+        )
+        {
+            var items = await StatusesAsync(
+                gradeName
+            ).ToArrayAsync();
+            var callbackId = SubscribeStatuses(
+                callback,
+                gradeName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStatuses(
+            ulong callbackId,
+            string gradeName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Grade.Model.Status>(
                 Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(

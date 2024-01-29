@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBalanceParameterModels(Action callback)
+        public ulong SubscribeBalanceParameterModels(
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Enchant.Domain.Model
             );
         }
 
-        public void UnsubscribeBalanceParameterModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBalanceParameterModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterModel[]> callback
+        )
+        {
+            var items = await BalanceParameterModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBalanceParameterModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBalanceParameterModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -192,7 +212,9 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
-        public ulong SubscribeBalanceParameterModelMasters(Action callback)
+        public ulong SubscribeBalanceParameterModelMasters(
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -203,7 +225,24 @@ namespace Gs2.Gs2Enchant.Domain.Model
             );
         }
 
-        public void UnsubscribeBalanceParameterModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBalanceParameterModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster[]> callback
+        )
+        {
+            var items = await BalanceParameterModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBalanceParameterModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBalanceParameterModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.BalanceParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -259,7 +298,9 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRarityParameterModels(Action callback)
+        public ulong SubscribeRarityParameterModels(
+            Action<Gs2.Gs2Enchant.Model.RarityParameterModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -270,7 +311,24 @@ namespace Gs2.Gs2Enchant.Domain.Model
             );
         }
 
-        public void UnsubscribeRarityParameterModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRarityParameterModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Enchant.Model.RarityParameterModel[]> callback
+        )
+        {
+            var items = await RarityParameterModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRarityParameterModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRarityParameterModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModel>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -326,7 +384,9 @@ namespace Gs2.Gs2Enchant.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRarityParameterModelMasters(Action callback)
+        public ulong SubscribeRarityParameterModelMasters(
+            Action<Gs2.Gs2Enchant.Model.RarityParameterModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -337,7 +397,24 @@ namespace Gs2.Gs2Enchant.Domain.Model
             );
         }
 
-        public void UnsubscribeRarityParameterModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRarityParameterModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Enchant.Model.RarityParameterModelMaster[]> callback
+        )
+        {
+            var items = await RarityParameterModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRarityParameterModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRarityParameterModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.RarityParameterModelMaster>(
                 Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheParentKey(

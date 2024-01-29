@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
         }
 
-        public ulong SubscribeNodeModels(Action callback)
+        public ulong SubscribeNodeModels(
+            Action<Gs2.Gs2SkillTree.Model.NodeModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SkillTree.Model.NodeModel>(
                 Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             );
         }
 
-        public void UnsubscribeNodeModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeNodeModelsWithInitialCallAsync(
+            Action<Gs2.Gs2SkillTree.Model.NodeModel[]> callback
+        )
+        {
+            var items = await NodeModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeNodeModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeNodeModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.NodeModel>(
                 Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
         }
 
-        public ulong SubscribeNodeModelMasters(Action callback)
+        public ulong SubscribeNodeModelMasters(
+            Action<Gs2.Gs2SkillTree.Model.NodeModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
                 Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             );
         }
 
-        public void UnsubscribeNodeModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeNodeModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2SkillTree.Model.NodeModelMaster[]> callback
+        )
+        {
+            var items = await NodeModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeNodeModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeNodeModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.NodeModelMaster>(
                 Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheParentKey(

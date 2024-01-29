@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -125,7 +126,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
-        public ulong SubscribeStaminaModels(Action callback)
+        public ulong SubscribeStaminaModels(
+            Action<Gs2.Gs2Stamina.Model.StaminaModel[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.StaminaModel>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -136,7 +139,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             );
         }
 
-        public void UnsubscribeStaminaModels(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStaminaModelsWithInitialCallAsync(
+            Action<Gs2.Gs2Stamina.Model.StaminaModel[]> callback
+        )
+        {
+            var items = await StaminaModelsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeStaminaModels(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStaminaModels(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.StaminaModel>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -212,7 +232,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRecoverIntervalTableMasters(Action callback)
+        public ulong SubscribeRecoverIntervalTableMasters(
+            Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -223,7 +245,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             );
         }
 
-        public void UnsubscribeRecoverIntervalTableMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRecoverIntervalTableMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster[]> callback
+        )
+        {
+            var items = await RecoverIntervalTableMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRecoverIntervalTableMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRecoverIntervalTableMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.RecoverIntervalTableMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -279,7 +318,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
-        public ulong SubscribeMaxStaminaTableMasters(Action callback)
+        public ulong SubscribeMaxStaminaTableMasters(
+            Action<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -290,7 +331,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             );
         }
 
-        public void UnsubscribeMaxStaminaTableMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeMaxStaminaTableMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster[]> callback
+        )
+        {
+            var items = await MaxStaminaTableMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeMaxStaminaTableMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeMaxStaminaTableMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRecoverValueTableMasters(Action callback)
+        public ulong SubscribeRecoverValueTableMasters(
+            Action<Gs2.Gs2Stamina.Model.RecoverValueTableMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             );
         }
 
-        public void UnsubscribeRecoverValueTableMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRecoverValueTableMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Stamina.Model.RecoverValueTableMaster[]> callback
+        )
+        {
+            var items = await RecoverValueTableMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRecoverValueTableMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRecoverValueTableMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -413,7 +490,9 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #endif
         }
 
-        public ulong SubscribeStaminaModelMasters(Action callback)
+        public ulong SubscribeStaminaModelMasters(
+            Action<Gs2.Gs2Stamina.Model.StaminaModelMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -424,7 +503,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
             );
         }
 
-        public void UnsubscribeStaminaModelMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStaminaModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Stamina.Model.StaminaModelMaster[]> callback
+        )
+        {
+            var items = await StaminaModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeStaminaModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStaminaModelMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Stamina.Model.StaminaModelMaster>(
                 Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(

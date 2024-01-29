@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -121,7 +122,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeGatherings(Action callback)
+        public ulong SubscribeGatherings(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -133,7 +136,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public void UnsubscribeGatherings(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeGatheringsWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback
+        )
+        {
+            var items = await GatheringsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeGatherings(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeGatherings(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -184,7 +204,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeDoMatchmakingByPlayer(Action callback)
+        public ulong SubscribeDoMatchmakingByPlayer(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback,
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 "matchmaking",
@@ -192,7 +215,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public void UnsubscribeDoMatchmakingByPlayer(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeDoMatchmakingByPlayerWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback,
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
+        {
+            var items = await DoMatchmakingByPlayerAsync(
+                player
+            ).ToArrayAsync();
+            var callbackId = SubscribeDoMatchmakingByPlayer(
+                callback,
+                player
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeDoMatchmakingByPlayer(
+            ulong callbackId,
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 "matchmaking",
@@ -241,7 +285,10 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeDoMatchmaking(Action callback)
+        public ulong SubscribeDoMatchmaking(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback,
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 "matchmaking",
@@ -249,7 +296,28 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public void UnsubscribeDoMatchmaking(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeDoMatchmakingWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.Gathering[]> callback,
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
+        {
+            var items = await DoMatchmakingAsync(
+                player
+            ).ToArrayAsync();
+            var callbackId = SubscribeDoMatchmaking(
+                callback,
+                player
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeDoMatchmaking(
+            ulong callbackId,
+            Gs2.Gs2Matchmaking.Model.Player player
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
                 "matchmaking",
@@ -322,7 +390,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRatings(Action callback)
+        public ulong SubscribeRatings(
+            Action<Gs2.Gs2Matchmaking.Model.Rating[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -334,7 +404,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             );
         }
 
-        public void UnsubscribeRatings(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRatingsWithInitialCallAsync(
+            Action<Gs2.Gs2Matchmaking.Model.Rating[]> callback
+        )
+        {
+            var items = await RatingsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRatings(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRatings(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Matchmaking.Model.Rating>(
                 Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(

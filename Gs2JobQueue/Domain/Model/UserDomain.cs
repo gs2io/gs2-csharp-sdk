@@ -48,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -126,7 +127,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #endif
         }
 
-        public ulong SubscribeJobs(Action callback)
+        public ulong SubscribeJobs(
+            Action<Gs2.Gs2JobQueue.Model.Job[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2JobQueue.Model.Job>(
                 Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -138,7 +141,24 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
-        public void UnsubscribeJobs(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeJobsWithInitialCallAsync(
+            Action<Gs2.Gs2JobQueue.Model.Job[]> callback
+        )
+        {
+            var items = await JobsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeJobs(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeJobs(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.Job>(
                 Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -198,7 +218,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #endif
         }
 
-        public ulong SubscribeDeadLetterJobs(Action callback)
+        public ulong SubscribeDeadLetterJobs(
+            Action<Gs2.Gs2JobQueue.Model.DeadLetterJob[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
                 Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -210,7 +232,24 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
-        public void UnsubscribeDeadLetterJobs(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeDeadLetterJobsWithInitialCallAsync(
+            Action<Gs2.Gs2JobQueue.Model.DeadLetterJob[]> callback
+        )
+        {
+            var items = await DeadLetterJobsAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeDeadLetterJobs(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeDeadLetterJobs(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
                 Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(

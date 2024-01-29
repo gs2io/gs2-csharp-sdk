@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -126,7 +127,10 @@ namespace Gs2.Gs2Limit.Domain.Model
         #endif
         }
 
-        public ulong SubscribeCounters(Action callback)
+        public ulong SubscribeCounters(
+            Action<Gs2.Gs2Limit.Model.Counter[]> callback,
+            string limitName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Limit.Model.Counter>(
                 Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -138,7 +142,28 @@ namespace Gs2.Gs2Limit.Domain.Model
             );
         }
 
-        public void UnsubscribeCounters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountersWithInitialCallAsync(
+            Action<Gs2.Gs2Limit.Model.Counter[]> callback,
+            string limitName
+        )
+        {
+            var items = await CountersAsync(
+                limitName
+            ).ToArrayAsync();
+            var callbackId = SubscribeCounters(
+                callback,
+                limitName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCounters(
+            ulong callbackId,
+            string limitName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Limit.Model.Counter>(
                 Gs2.Gs2Limit.Domain.Model.UserDomain.CreateCacheParentKey(

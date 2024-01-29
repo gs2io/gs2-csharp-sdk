@@ -51,6 +51,7 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
     #endif
 #else
 using System.Threading;
@@ -309,7 +310,9 @@ namespace Gs2.Gs2Identifier.Domain
         #endif
         }
 
-        public ulong SubscribeUsers(Action callback)
+        public ulong SubscribeUsers(
+            Action<Gs2.Gs2Identifier.Model.User[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.User>(
                 "identifier:User",
@@ -317,7 +320,24 @@ namespace Gs2.Gs2Identifier.Domain
             );
         }
 
-        public void UnsubscribeUsers(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeUsersWithInitialCallAsync(
+            Action<Gs2.Gs2Identifier.Model.User[]> callback
+        )
+        {
+            var items = await UsersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeUsers(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeUsers(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.User>(
                 "identifier:User",
@@ -367,7 +387,9 @@ namespace Gs2.Gs2Identifier.Domain
         #endif
         }
 
-        public ulong SubscribeSecurityPolicies(Action callback)
+        public ulong SubscribeSecurityPolicies(
+            Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
@@ -375,7 +397,24 @@ namespace Gs2.Gs2Identifier.Domain
             );
         }
 
-        public void UnsubscribeSecurityPolicies(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSecurityPoliciesWithInitialCallAsync(
+            Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
+        )
+        {
+            var items = await SecurityPoliciesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSecurityPolicies(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSecurityPolicies(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
@@ -416,7 +455,9 @@ namespace Gs2.Gs2Identifier.Domain
         #endif
         }
 
-        public ulong SubscribeCommonSecurityPolicies(Action callback)
+        public ulong SubscribeCommonSecurityPolicies(
+            Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",
@@ -424,7 +465,24 @@ namespace Gs2.Gs2Identifier.Domain
             );
         }
 
-        public void UnsubscribeCommonSecurityPolicies(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCommonSecurityPoliciesWithInitialCallAsync(
+            Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
+        )
+        {
+            var items = await CommonSecurityPoliciesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCommonSecurityPolicies(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCommonSecurityPolicies(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.SecurityPolicy>(
                 "identifier:SecurityPolicy",

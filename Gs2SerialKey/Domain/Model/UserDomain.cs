@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -129,7 +130,11 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSerialKeys(Action callback)
+        public ulong SubscribeSerialKeys(
+            Action<Gs2.Gs2SerialKey.Model.SerialKey[]> callback,
+            string campaignModelName,
+            string issueJobName
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
@@ -141,7 +146,32 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
         }
 
-        public void UnsubscribeSerialKeys(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSerialKeysWithInitialCallAsync(
+            Action<Gs2.Gs2SerialKey.Model.SerialKey[]> callback,
+            string campaignModelName,
+            string issueJobName
+        )
+        {
+            var items = await SerialKeysAsync(
+                campaignModelName,
+                issueJobName
+            ).ToArrayAsync();
+            var callbackId = SubscribeSerialKeys(
+                callback,
+                campaignModelName,
+                issueJobName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSerialKeys(
+            ulong callbackId,
+            string campaignModelName,
+            string issueJobName
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
                 Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(

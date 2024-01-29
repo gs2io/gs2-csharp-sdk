@@ -26,6 +26,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -47,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -136,30 +138,43 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 
         public ulong SubscribeBoxes(
-            Action callback,
-            string prizeTableName
+            Action<Gs2.Gs2Lottery.Model.BoxItems[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    "BoxItems:" + prizeTableName
+                    "BoxItems"
                 ),
                 callback
             );
         }
 
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBoxesWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.BoxItems[]> callback
+        )
+        {
+            var items = await BoxesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBoxes(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
         public void UnsubscribeBoxes(
-            ulong callbackId,
-            string prizeTableName
+            ulong callbackId
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.BoxItems>(
                 Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    "BoxItems:" + prizeTableName
+                    "BoxItems"
                 ),
                 callbackId
             );
@@ -218,7 +233,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 
         public ulong SubscribeProbabilities(
-            Action callback,
+            Action<Gs2.Gs2Lottery.Model.Probability[]> callback,
             string lotteryName
         )
         {
@@ -231,6 +246,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 callback
             );
         }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeProbabilitiesWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.Probability[]> callback,
+            string lotteryName
+        )
+        {
+            var items = await ProbabilitiesAsync(
+                lotteryName
+            ).ToArrayAsync();
+            var callbackId = SubscribeProbabilities(
+                callback,
+                lotteryName
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
 
         public void UnsubscribeProbabilities(
             ulong callbackId,

@@ -46,6 +46,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -117,7 +118,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
-        public ulong SubscribeRandomShowcaseMasters(Action callback)
+        public ulong SubscribeRandomShowcaseMasters(
+            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -128,7 +131,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
         }
 
-        public void UnsubscribeRandomShowcaseMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRandomShowcaseMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
+        )
+        {
+            var items = await RandomShowcaseMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRandomShowcaseMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRandomShowcaseMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -184,7 +204,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSalesItemMasters(Action callback)
+        public ulong SubscribeSalesItemMasters(
+            Action<Gs2.Gs2Showcase.Model.SalesItemMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -195,7 +217,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
         }
 
-        public void UnsubscribeSalesItemMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSalesItemMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Showcase.Model.SalesItemMaster[]> callback
+        )
+        {
+            var items = await SalesItemMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSalesItemMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSalesItemMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -251,7 +290,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
-        public ulong SubscribeSalesItemGroupMasters(Action callback)
+        public ulong SubscribeSalesItemGroupMasters(
+            Action<Gs2.Gs2Showcase.Model.SalesItemGroupMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -262,7 +303,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
         }
 
-        public void UnsubscribeSalesItemGroupMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSalesItemGroupMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Showcase.Model.SalesItemGroupMaster[]> callback
+        )
+        {
+            var items = await SalesItemGroupMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeSalesItemGroupMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeSalesItemGroupMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.SalesItemGroupMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -346,7 +404,9 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
         }
 
-        public ulong SubscribeShowcaseMasters(Action callback)
+        public ulong SubscribeShowcaseMasters(
+            Action<Gs2.Gs2Showcase.Model.ShowcaseMaster[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
@@ -357,7 +417,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
         }
 
-        public void UnsubscribeShowcaseMasters(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeShowcaseMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Showcase.Model.ShowcaseMaster[]> callback
+        )
+        {
+            var items = await ShowcaseMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeShowcaseMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeShowcaseMasters(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
                 Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(

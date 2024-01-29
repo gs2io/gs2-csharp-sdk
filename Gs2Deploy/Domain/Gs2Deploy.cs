@@ -51,6 +51,7 @@ using UnityEngine.Scripting;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
     #endif
 #else
 using System.Threading;
@@ -371,7 +372,9 @@ namespace Gs2.Gs2Deploy.Domain
         #endif
         }
 
-        public ulong SubscribeStacks(Action callback)
+        public ulong SubscribeStacks(
+            Action<Gs2.Gs2Deploy.Model.Stack[]> callback
+        )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Stack>(
                 "deploy:Stack",
@@ -379,7 +382,24 @@ namespace Gs2.Gs2Deploy.Domain
             );
         }
 
-        public void UnsubscribeStacks(ulong callbackId)
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStacksWithInitialCallAsync(
+            Action<Gs2.Gs2Deploy.Model.Stack[]> callback
+        )
+        {
+            var items = await StacksAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeStacks(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStacks(
+            ulong callbackId
+        )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Deploy.Model.Stack>(
                 "deploy:Stack",
