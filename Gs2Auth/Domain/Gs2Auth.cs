@@ -63,8 +63,6 @@ namespace Gs2.Gs2Auth.Domain
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AuthRestClient _client;
 
-        private readonly String _parentKey;
-
         public Gs2Auth(
             Gs2.Core.Domain.Gs2 gs2
         ) {
@@ -72,7 +70,6 @@ namespace Gs2.Gs2Auth.Domain
             this._client = new Gs2AuthRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "auth";
         }
 
         public Gs2.Gs2Auth.Domain.Model.AccessTokenDomain AccessToken(

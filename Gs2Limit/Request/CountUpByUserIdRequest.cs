@@ -138,43 +138,5 @@ namespace Gs2.Gs2Limit.Request
             key += MaxValue + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new CountUpByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LimitName = LimitName,
-                CounterName = CounterName,
-                UserId = UserId,
-                CountUpValue = CountUpValue * x,
-                MaxValue = MaxValue,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CountUpByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::namespaceName");
-            }
-            if (LimitName != y.LimitName) {
-                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::limitName");
-            }
-            if (CounterName != y.CounterName) {
-                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::counterName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::userId");
-            }
-            if (MaxValue != y.MaxValue) {
-                throw new ArithmeticException("mismatch parameter values CountUpByUserIdRequest::maxValue");
-            }
-            return new CountUpByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LimitName = LimitName,
-                CounterName = CounterName,
-                UserId = UserId,
-                CountUpValue = CountUpValue + y.CountUpValue,
-                MaxValue = MaxValue,
-            };
-        }
     }
 }

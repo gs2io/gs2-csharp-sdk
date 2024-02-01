@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Money.Model.Transaction;
 using Gs2.Gs2Money.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (WithdrawByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = WithdrawByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = WithdrawByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                 }
                 if (RecordReceiptSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = RecordReceiptSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = RecordReceiptSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -113,7 +114,7 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (WithdrawByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = WithdrawByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await WithdrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -122,7 +123,7 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             }
             if (RecordReceiptSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = RecordReceiptSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await RecordReceiptSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

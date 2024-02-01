@@ -137,5 +137,66 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                switch (ResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("scopedValue", "mission.scopedValue.resetType.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.value.error.invalid"),
+                    });
+                }
+                if (Value > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.value.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NextResetAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.nextResetAt.error.invalid"),
+                    });
+                }
+                if (NextResetAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.nextResetAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scopedValue", "mission.scopedValue.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ScopedValue {
+                ResetType = ResetType,
+                Value = Value,
+                NextResetAt = NextResetAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

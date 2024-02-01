@@ -138,43 +138,5 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemSetName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new ConsumeItemSetByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ConsumeCount = ConsumeCount * x,
-                ItemSetName = ItemSetName,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ConsumeItemSetByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::inventoryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::userId");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::itemName");
-            }
-            if (ItemSetName != y.ItemSetName) {
-                throw new ArithmeticException("mismatch parameter values ConsumeItemSetByUserIdRequest::itemSetName");
-            }
-            return new ConsumeItemSetByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ConsumeCount = ConsumeCount + y.ConsumeCount,
-                ItemSetName = ItemSetName,
-            };
-        }
     }
 }

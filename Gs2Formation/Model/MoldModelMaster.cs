@@ -319,5 +319,118 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MoldModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.moldModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InitialMaxCapacity < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.initialMaxCapacity.error.invalid"),
+                    });
+                }
+                if (InitialMaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.initialMaxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxCapacity < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.maxCapacity.error.invalid"),
+                    });
+                }
+                if (MaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.maxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (FormModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.formModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModelMaster", "formation.moldModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MoldModelMaster {
+                MoldModelId = MoldModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                InitialMaxCapacity = InitialMaxCapacity,
+                MaxCapacity = MaxCapacity,
+                FormModelName = FormModelName,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

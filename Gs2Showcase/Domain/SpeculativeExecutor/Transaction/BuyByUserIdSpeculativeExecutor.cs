@@ -76,8 +76,8 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
                 var item = future.Result;
 
                 var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                    item.SalesItem.ConsumeActions,
-                    item.SalesItem.AcquireActions,
+                    item?.SalesItem?.ConsumeActions,
+                    item?.SalesItem?.AcquireActions,
                     request.Quantity ?? 1.0
                 ).ExecuteFuture(
                     domain,
@@ -123,8 +123,8 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
             ).ModelAsync();
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item.SalesItem.ConsumeActions,
-                item.SalesItem.AcquireActions,
+                item?.SalesItem?.ConsumeActions,
+                item?.SalesItem?.AcquireActions,
                 request.Quantity ?? 1.0
             ).ExecuteAsync(
                 domain,

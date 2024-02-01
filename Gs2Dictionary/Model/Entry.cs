@@ -222,5 +222,50 @@ namespace Gs2.Gs2Dictionary.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (EntryId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entry", "dictionary.entry.entryId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entry", "dictionary.entry.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entry", "dictionary.entry.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquiredAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entry", "dictionary.entry.acquiredAt.error.invalid"),
+                    });
+                }
+                if (AcquiredAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entry", "dictionary.entry.acquiredAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Entry {
+                EntryId = EntryId,
+                UserId = UserId,
+                Name = Name,
+                AcquiredAt = AcquiredAt,
+            };
+        }
     }
 }

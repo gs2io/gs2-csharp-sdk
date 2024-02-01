@@ -320,5 +320,105 @@ namespace Gs2.Gs2Stamina.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MaxStaminaTableId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.maxStaminaTableId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExperienceModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.experienceModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Values.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.values.error.tooFew"),
+                    });
+                }
+                if (Values.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.values.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTableMaster", "stamina.maxStaminaTableMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MaxStaminaTableMaster {
+                MaxStaminaTableId = MaxStaminaTableId,
+                Name = Name,
+                Metadata = Metadata,
+                Description = Description,
+                ExperienceModelId = ExperienceModelId,
+                Values = Values.Clone() as int[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

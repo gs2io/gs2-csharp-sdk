@@ -30,18 +30,22 @@
 using System;
 using System.Numerics;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Dictionary.Model;
 using Gs2.Gs2Dictionary.Request;
+using Gs2.Gs2Dictionary.Model.Cache;
+using Gs2.Gs2Dictionary.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
     #endif
 #else
 using System.Threading.Tasks;
@@ -55,31 +59,6 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             return "Gs2Dictionary:VerifyEntryByUserId";
         }
 
-        public static Gs2.Gs2Dictionary.Model.Entry Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            VerifyEntryByUserIdRequest request,
-            Gs2.Gs2Dictionary.Model.Entry item
-        ) {
-            switch (request.VerifyType) {
-                case "havent":
-                    if (item != null) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "have":
-                    if (item == null) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-            }
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -87,40 +66,40 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             VerifyEntryByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var future = domain.Dictionary.Namespace(
+                var it = domain.Dictionary.Namespace(
                     request.NamespaceName
                 ).AccessToken(
                     accessToken
-                ).Entry(
-                    request.EntryModelName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-
-                if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
-                    yield break;
+                ).Entries();
+                var items = new List<Entry>();
+                while (it.HasNext()) {
+                    yield return it;
+                    if (it.Error != null) {
+                        result.OnError(it.Error);
+                        yield break;
+                    }
+                    items.Add(it.Current);
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    var items_ = items.ToArray().SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        foreach (var item in items_) {
+                            item.PutCache(
+                                domain.Cache,
+                                request.NamespaceName,
+                                accessToken.UserId,
+                                item.Name
+                            );
+                        }
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
                 yield return null;
             }
 
@@ -138,18 +117,13 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyEntryByUserIdRequest request
         ) {
-            var item = await domain.Dictionary.Namespace(
+            var items = await domain.Dictionary.Namespace(
                 request.NamespaceName
             ).AccessToken(
                 accessToken
-            ).Entry(
-                request.EntryModelName
-            ).ModelAsync();
+            ).EntriesAsync().ToListAsync();
 
-            if (item == null) {
-                return () => null;
-            }
-            item = Transform(domain, accessToken, request, item);
+            var items_ = items.ToArray().SpeculativeExecution(request);
 
             return () =>
             {
@@ -157,19 +131,5 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             };
         }
 #endif
-
-        public static VerifyEntryByUserIdRequest Rate(
-            VerifyEntryByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static VerifyEntryByUserIdRequest Rate(
-            VerifyEntryByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

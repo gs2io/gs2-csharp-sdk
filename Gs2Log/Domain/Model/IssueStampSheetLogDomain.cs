@@ -24,6 +24,7 @@
 // ReSharper disable NotAccessedField.Local
 
 #pragma warning disable 1998
+#pragma warning disable CS0169, CS0168
 
 using System;
 using System.Linq;
@@ -31,19 +32,23 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Log.Domain.Iterator;
+using Gs2.Gs2Log.Model.Cache;
 using Gs2.Gs2Log.Request;
 using Gs2.Gs2Log.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -58,10 +63,7 @@ namespace Gs2.Gs2Log.Domain.Model
     public partial class IssueStampSheetLogDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
-        private readonly string _namespaceName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
+        public string NamespaceName { get; }
 
         public IssueStampSheetLogDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -69,63 +71,154 @@ namespace Gs2.Gs2Log.Domain.Model
         ) {
             this._gs2 = gs2;
             this._client = new Gs2LogRestClient(
-                this._gs2.RestSession
+                gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._parentKey = Gs2.Gs2Log.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                "IssueStampSheetLog"
-            );
+            this.NamespaceName = namespaceName;
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "log",
-                namespaceName ?? "null",
-                childType
-            );
-        }
+    }
 
-        public static string CreateCacheKey(
-        )
+    public partial class IssueStampSheetLogDomain {
+
+    }
+
+    public partial class IssueStampSheetLogDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Log.Model.IssueStampSheetLog> ModelFuture()
         {
-            return "Singleton";
+            IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.IssueStampSheetLog> self)
+            {
+                var (value, find) = (null as Gs2.Gs2Log.Model.IssueStampSheetLog).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Log.Model.IssueStampSheetLog>(Impl);
         }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Log.Model.IssueStampSheetLog> ModelAsync()
+            #else
+        public async Task<Gs2.Gs2Log.Model.IssueStampSheetLog> ModelAsync()
+            #endif
+        {
+            var (value, find) = (null as Gs2.Gs2Log.Model.IssueStampSheetLog).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName
+            );
+            if (find) {
+                return value;
+            }
+            return null;
+        }
+        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public async UniTask<Gs2.Gs2Log.Model.IssueStampSheetLog> Model() {
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async UniTask<Gs2.Gs2Log.Model.IssueStampSheetLog> Model()
+        {
+            return await ModelAsync();
+        }
             #else
-        public IFuture<Gs2.Gs2Log.Model.IssueStampSheetLog> Model() {
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Log.Model.IssueStampSheetLog> Model()
+        {
+            return ModelFuture();
+        }
             #endif
         #else
-        public async Task<Gs2.Gs2Log.Model.IssueStampSheetLog> Model() {
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.IssueStampSheetLog> self)
-            {
-        #endif
-            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Log.Model.IssueStampSheetLog>(
-                _parentKey,
-                Gs2.Gs2Log.Domain.Model.IssueStampSheetLogDomain.CreateCacheKey(
-                )
-            );
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            self.OnComplete(value);
-            yield return null;
-        #else
-            return value;
-        #endif
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Model.IssueStampSheetLog>(Impl);
-        #endif
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public async Task<Gs2.Gs2Log.Model.IssueStampSheetLog> Model()
+        {
+            return await ModelAsync();
         }
+        #endif
+
+
+        public void Invalidate()
+        {
+            (null as Gs2.Gs2Log.Model.IssueStampSheetLog).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName
+            );
+        }
+
+        public ulong Subscribe(Action<Gs2.Gs2Log.Model.IssueStampSheetLog> callback)
+        {
+            return this._gs2.Cache.Subscribe(
+                (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheKey(
+                ),
+                callback,
+                () =>
+                {
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
+                }
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Log.Model.IssueStampSheetLog>(
+                (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Log.Model.IssueStampSheetLog).CacheKey(
+                ),
+                callbackId
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Log.Model.IssueStampSheetLog> callback)
+        {
+            IEnumerator Impl(IFuture<ulong> self)
+            {
+                var future = ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+                var callbackId = Subscribe(callback);
+                callback.Invoke(item);
+                self.OnComplete(callbackId);
+            }
+            return new Gs2InlineFuture<ulong>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Log.Model.IssueStampSheetLog> callback)
+            #else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Log.Model.IssueStampSheetLog> callback)
+            #endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+        #endif
 
     }
 }

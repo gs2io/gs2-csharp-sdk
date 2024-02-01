@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Matchmaking.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,12 +68,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2MatchmakingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly Gs2.Gs2Matchmaking.Model.Player _player;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public Gs2.Gs2Matchmaking.Model.Player Player => _player;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public Gs2.Gs2Matchmaking.Model.Player Player { get; }
         private string _matchmakingContextToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -89,9 +87,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._player = player;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.Player = player;
             this._matchmakingContextToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Matchmaking.Model.Gathering[]{};
@@ -117,9 +115,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             var r = await this._client.DoMatchmakingByUserIdAsync(
             #endif
                 new Gs2.Gs2Matchmaking.Request.DoMatchmakingByUserIdRequest()
-                    .WithNamespaceName(this._namespaceName)
-                    .WithUserId(this._userId)
-                    .WithPlayer(this._player)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithPlayer(this.Player)
                     .WithMatchmakingContextToken(this._matchmakingContextToken)
             );
             #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
@@ -137,10 +135,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             this._matchmakingContextToken = r.MatchmakingContextToken;
             this._last = this._matchmakingContextToken == null;
             this._cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Gathering>(
-                Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "Singleton",
-                    "Gathering"
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    NamespaceName,
+                    UserId
                 )
             );
         }
@@ -175,7 +172,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Matchmaking.Model.Gathering ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -238,7 +235,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Matchmaking.Model.Gathering ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

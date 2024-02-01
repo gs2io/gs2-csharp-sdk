@@ -322,5 +322,110 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MissionGroupId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.missionGroupId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Tasks.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.tasks.error.tooMany"),
+                    });
+                }
+            }
+            {
+                switch (ResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("missionGroupModel", "mission.missionGroupModel.resetType.error.invalid"),
+                        });
+                }
+            }
+            if (ResetType == "monthly") {
+                if (ResetDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.resetDayOfMonth.error.invalid"),
+                    });
+                }
+                if (ResetDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.resetDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "weekly") {
+                switch (ResetDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("missionGroupModel", "mission.missionGroupModel.resetDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((ResetType =="monthly" || ResetType == "weekly" || ResetType == "daily")) {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.resetHour.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CompleteNotificationNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModel", "mission.missionGroupModel.completeNotificationNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MissionGroupModel {
+                MissionGroupId = MissionGroupId,
+                Name = Name,
+                Metadata = Metadata,
+                Tasks = Tasks.Clone() as Gs2.Gs2Mission.Model.MissionTaskModel[],
+                ResetType = ResetType,
+                ResetDayOfMonth = ResetDayOfMonth,
+                ResetDayOfWeek = ResetDayOfWeek,
+                ResetHour = ResetHour,
+                CompleteNotificationNamespaceId = CompleteNotificationNamespaceId,
+            };
+        }
     }
 }

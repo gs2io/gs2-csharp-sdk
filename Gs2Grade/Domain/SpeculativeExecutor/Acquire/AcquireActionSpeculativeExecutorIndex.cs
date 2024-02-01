@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Grade.Model.Transaction;
 using Gs2.Gs2Grade.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AddGradeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AddGradeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = AddGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = AddGradeByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 }
                 if (ApplyRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = ApplyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = ApplyRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ApplyRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -91,7 +92,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 }
                 if (MultiplyAcquireActionsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = MultiplyAcquireActionsByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -129,7 +130,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AddGradeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AddGradeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = AddGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await AddGradeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -138,7 +139,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             }
             if (ApplyRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ApplyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = ApplyRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ApplyRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -147,7 +148,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             }
             if (MultiplyAcquireActionsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = MultiplyAcquireActionsByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

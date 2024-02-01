@@ -317,5 +317,115 @@ namespace Gs2.Gs2Idle.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StatusId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.statusId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CategoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.categoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RandomSeed < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.randomSeed.error.invalid"),
+                    });
+                }
+                if (RandomSeed > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.randomSeed.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (IdleMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.idleMinutes.error.invalid"),
+                    });
+                }
+                if (IdleMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.idleMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaximumIdleMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.maximumIdleMinutes.error.invalid"),
+                    });
+                }
+                if (MaximumIdleMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.maximumIdleMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "idle.status.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Status {
+                StatusId = StatusId,
+                CategoryName = CategoryName,
+                UserId = UserId,
+                RandomSeed = RandomSeed,
+                IdleMinutes = IdleMinutes,
+                MaximumIdleMinutes = MaximumIdleMinutes,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

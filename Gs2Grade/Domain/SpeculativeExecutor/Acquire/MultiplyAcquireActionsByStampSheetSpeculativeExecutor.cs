@@ -35,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Grade.Request;
+using Gs2.Gs2Grade.Model.Cache;
+using Gs2.Gs2Grade.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -106,19 +108,5 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             };
         }
 #endif
-
-        public static MultiplyAcquireActionsByUserIdRequest Rate(
-            MultiplyAcquireActionsByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static MultiplyAcquireActionsByUserIdRequest Rate(
-            MultiplyAcquireActionsByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

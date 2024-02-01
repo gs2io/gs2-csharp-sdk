@@ -454,5 +454,112 @@ namespace Gs2.Gs2Friend.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "friend.namespace.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Namespace {
+                NamespaceId = NamespaceId,
+                Name = Name,
+                Description = Description,
+                FollowScript = FollowScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                UnfollowScript = UnfollowScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                SendRequestScript = SendRequestScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                CancelRequestScript = CancelRequestScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                AcceptRequestScript = AcceptRequestScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                RejectRequestScript = RejectRequestScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                DeleteFriendScript = DeleteFriendScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                UpdateProfileScript = UpdateProfileScript.Clone() as Gs2.Gs2Friend.Model.ScriptSetting,
+                FollowNotification = FollowNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
+                ReceiveRequestNotification = ReceiveRequestNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
+                AcceptRequestNotification = AcceptRequestNotification.Clone() as Gs2.Gs2Friend.Model.NotificationSetting,
+                LogSetting = LogSetting.Clone() as Gs2.Gs2Friend.Model.LogSetting,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

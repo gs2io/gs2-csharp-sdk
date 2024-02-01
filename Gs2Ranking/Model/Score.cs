@@ -332,5 +332,87 @@ namespace Gs2.Gs2Ranking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ScoreId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.scoreId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CategoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.categoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UniqueId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.uniqueId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ScorerUserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.scorerUserId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.score.error.invalid"),
+                    });
+                }
+                if (Value > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.score.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("score", "ranking.score.createdAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Score {
+                ScoreId = ScoreId,
+                CategoryName = CategoryName,
+                UserId = UserId,
+                UniqueId = UniqueId,
+                ScorerUserId = ScorerUserId,
+                Value = Value,
+                Metadata = Metadata,
+                CreatedAt = CreatedAt,
+            };
+        }
     }
 }

@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Exchange.Model.Transaction;
 using Gs2.Gs2Exchange.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteAwaitByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DeleteAwaitByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DeleteAwaitByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteAwaitByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DeleteAwaitByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DeleteAwaitByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

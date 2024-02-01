@@ -114,33 +114,5 @@ namespace Gs2.Gs2Exchange.Request
             key += RateName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new CreateAwaitByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                RateName = RateName,
-                Count = Count * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateAwaitByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values CreateAwaitByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values CreateAwaitByUserIdRequest::userId");
-            }
-            if (RateName != y.RateName) {
-                throw new ArithmeticException("mismatch parameter values CreateAwaitByUserIdRequest::rateName");
-            }
-            return new CreateAwaitByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                RateName = RateName,
-                Count = Count + y.Count,
-            };
-        }
     }
 }

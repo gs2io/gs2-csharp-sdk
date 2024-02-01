@@ -150,5 +150,29 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentParameterMaster", "enchant.currentParameterMaster.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Settings.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentParameterMaster", "enchant.currentParameterMaster.settings.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CurrentParameterMaster {
+                NamespaceId = NamespaceId,
+                Settings = Settings,
+            };
+        }
     }
 }

@@ -322,5 +322,100 @@ namespace Gs2.Gs2Chat.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RoomId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.roomId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Password.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.password.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (WhiteListUserIds.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.whiteListUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "chat.room.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Room {
+                RoomId = RoomId,
+                Name = Name,
+                UserId = UserId,
+                Metadata = Metadata,
+                Password = Password,
+                WhiteListUserIds = WhiteListUserIds.Clone() as string[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

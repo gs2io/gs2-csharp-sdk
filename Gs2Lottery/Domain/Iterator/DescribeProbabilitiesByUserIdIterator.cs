@@ -40,6 +40,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Lottery.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -69,12 +70,9 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2LotteryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _lotteryName;
-        private readonly string _userId;
-        public string NamespaceName => _namespaceName;
-        public string LotteryName => _lotteryName;
-        public string UserId => _userId;
+        public string NamespaceName { get; }
+        public string LotteryName { get; }
+        public string UserId { get; }
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Lottery.Model.Probability[] _result;
@@ -90,9 +88,9 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._lotteryName = lotteryName;
-            this._userId = userId;
+            this.NamespaceName = namespaceName;
+            this.LotteryName = lotteryName;
+            this.UserId = userId;
             this._last = false;
             this._result = new Gs2.Gs2Lottery.Model.Probability[]{};
 
@@ -110,14 +108,14 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Probability"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Lottery.Model.Probability>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Lottery.Model.Probability>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                        NamespaceName,
+                        UserId,
+                        this.LotteryName
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -131,9 +129,9 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 var r = await this._client.DescribeProbabilitiesByUserIdAsync(
                 #endif
                     new Gs2.Gs2Lottery.Request.DescribeProbabilitiesByUserIdRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithLotteryName(this._lotteryName)
-                        .WithUserId(this._userId)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithLotteryName(this.LotteryName)
+                        .WithUserId(this.UserId)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -144,22 +142,26 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .ToArray();
                 this._last = true;
-                foreach (var item in this._result) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                                this._lotteryName
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                foreach (var item in r.Items) {
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        UserId,
+                        this.LotteryName,
+                        item.Prize.PrizeId
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Lottery.Model.Probability>(
-                            parentKey
+                        (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                            NamespaceName,
+                            UserId,
+                            this.LotteryName
+                        )
                     );
                 }
             }
@@ -195,7 +197,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Lottery.Model.Probability ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -258,7 +260,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Lottery.Model.Probability ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

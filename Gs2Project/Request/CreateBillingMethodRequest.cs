@@ -33,32 +33,27 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateBillingMethodRequest : Gs2Request<CreateBillingMethodRequest>
 	{
-        public string AccountToken { set; get; }
-        public string Description { set; get; }
-        public string MethodType { set; get; }
-        public string CardCustomerId { set; get; }
-        public string PartnerId { set; get; }
-
+         public string AccountToken { set; get; }
+         public string Description { set; get; }
+         public string MethodType { set; get; }
+         public string CardCustomerId { set; get; }
+         public string PartnerId { set; get; }
         public CreateBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public CreateBillingMethodRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public CreateBillingMethodRequest WithMethodType(string methodType) {
             this.MethodType = methodType;
             return this;
         }
-
         public CreateBillingMethodRequest WithCardCustomerId(string cardCustomerId) {
             this.CardCustomerId = cardCustomerId;
             return this;
         }
-
         public CreateBillingMethodRequest WithPartnerId(string partnerId) {
             this.PartnerId = partnerId;
             return this;
@@ -125,18 +120,6 @@ namespace Gs2.Gs2Project.Request
             key += CardCustomerId + ":";
             key += PartnerId + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CreateBillingMethodRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateBillingMethodRequest)x;
-            return this;
         }
     }
 }

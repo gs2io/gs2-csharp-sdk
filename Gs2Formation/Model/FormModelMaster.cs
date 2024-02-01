@@ -303,5 +303,97 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (FormModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.formModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Slots.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.slots.error.tooFew"),
+                    });
+                }
+                if (Slots.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.slots.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModelMaster", "formation.formModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new FormModelMaster {
+                FormModelId = FormModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

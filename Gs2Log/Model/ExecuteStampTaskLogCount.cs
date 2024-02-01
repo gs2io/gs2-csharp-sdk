@@ -156,5 +156,58 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Service.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLogCount", "log.executeStampTaskLogCount.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Method.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLogCount", "log.executeStampTaskLogCount.method.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLogCount", "log.executeStampTaskLogCount.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Action.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLogCount", "log.executeStampTaskLogCount.action.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLogCount", "log.executeStampTaskLogCount.count.error.invalid"),
+                    });
+                }
+                if (Count > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLogCount", "log.executeStampTaskLogCount.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ExecuteStampTaskLogCount {
+                Service = Service,
+                Method = Method,
+                UserId = UserId,
+                Action = Action,
+                Count = Count,
+            };
+        }
     }
 }

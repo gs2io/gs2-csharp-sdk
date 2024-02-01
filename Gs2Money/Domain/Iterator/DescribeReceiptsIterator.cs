@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Money.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,16 +68,11 @@ namespace Gs2.Gs2Money.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2MoneyRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly int? _slot;
-        private readonly long? _begin;
-        private readonly long? _end;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public int? Slot => _slot;
-        public long? Begin => _begin;
-        public long? End => _end;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public int? Slot { get; }
+        public long? Begin { get; }
+        public long? End { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -89,17 +85,17 @@ namespace Gs2.Gs2Money.Domain.Iterator
             Gs2MoneyRestClient client,
             string namespaceName,
             string userId,
-            int? slot,
-            long? begin,
-            long? end
+            int? slot = null,
+            long? begin = null,
+            long? end = null
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._slot = slot;
-            this._begin = begin;
-            this._end = end;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.Slot = slot;
+            this.Begin = begin;
+            this.End = end;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Money.Model.Receipt[]{};
@@ -118,20 +114,19 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Money.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Receipt"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Money.Model.Receipt>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Money.Model.Receipt>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
+                        NamespaceName,
+                        UserId
+                    ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._slot == null || item.Slot == this._slot)
-                    .Where(item => this._begin == null || item.CreatedAt >= this._begin)
-                    .Where(item => this._end == null || item.CreatedAt <= this._end)
+                    .Where(item => this.Slot == null || item.Slot == this.Slot)
+                    .Where(item => this.Begin == null || item.CreatedAt >= this.Begin)
+                    .Where(item => this.End == null || item.CreatedAt <= this.End)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -143,10 +138,10 @@ namespace Gs2.Gs2Money.Domain.Iterator
                 var r = await this._client.DescribeReceiptsAsync(
                 #endif
                     new Gs2.Gs2Money.Request.DescribeReceiptsRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithUserId(this._userId)
-                        .WithBegin(this._begin)
-                        .WithEnd(this._end)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithUserId(this.UserId)
+                        .WithBegin(this.Begin)
+                        .WithEnd(this.End)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -160,26 +155,27 @@ namespace Gs2.Gs2Money.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this._slot == null || item.Slot == this._slot)
-                    .Where(item => this._begin == null || item.CreatedAt >= this._begin)
-                    .Where(item => this._end == null || item.CreatedAt <= this._end)
+                    .Where(item => this.Slot == null || item.Slot == this.Slot)
+                    .Where(item => this.Begin == null || item.CreatedAt >= this.Begin)
+                    .Where(item => this.End == null || item.CreatedAt <= this.End)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Money.Domain.Model.ReceiptDomain.CreateCacheKey(
-                                    item.TransactionId?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        UserId,
+                        item.TransactionId
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Money.Model.Receipt>(
-                            parentKey
+                        (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
+                            NamespaceName,
+                            UserId
+                        )
                     );
                 }
             }
@@ -215,7 +211,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Money.Model.Receipt ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -278,7 +274,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Money.Model.Receipt ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -301,5 +301,84 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InventoryId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.inventoryId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InventoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.inventoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SimpleItems.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.simpleItems.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventory", "inventory.simpleInventory.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SimpleInventory {
+                InventoryId = InventoryId,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                SimpleItems = SimpleItems.Clone() as Gs2.Gs2Inventory.Model.SimpleItem[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

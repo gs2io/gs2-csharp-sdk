@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Grade.Model.Transaction;
 using Gs2.Gs2Grade.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (SubGradeByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = SubGradeByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = SubGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = SubGradeByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 }
                 if (VerifyGradeByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyGradeByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -91,7 +92,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 }
                 if (VerifyGradeUpMaterialByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyGradeUpMaterialByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyGradeUpMaterialByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -129,7 +130,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (SubGradeByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = SubGradeByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = SubGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await SubGradeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -138,7 +139,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             }
             if (VerifyGradeByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyGradeByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyGradeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -147,7 +148,7 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             }
             if (VerifyGradeUpMaterialByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyGradeUpMaterialByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyGradeUpMaterialByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

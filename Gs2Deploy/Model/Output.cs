@@ -205,5 +205,50 @@ namespace Gs2.Gs2Deploy.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (OutputId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "deploy.output.outputId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "deploy.output.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "deploy.output.value.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "deploy.output.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "deploy.output.createdAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Output {
+                OutputId = OutputId,
+                Name = Name,
+                Value = Value,
+                CreatedAt = CreatedAt,
+            };
+        }
     }
 }

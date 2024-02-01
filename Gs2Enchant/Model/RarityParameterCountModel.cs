@@ -99,5 +99,39 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterCountModel", "enchant.rarityParameterCountModel.count.error.invalid"),
+                    });
+                }
+                if (Count > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterCountModel", "enchant.rarityParameterCountModel.count.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Weight < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterCountModel", "enchant.rarityParameterCountModel.weight.error.invalid"),
+                    });
+                }
+                if (Weight > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterCountModel", "enchant.rarityParameterCountModel.weight.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RarityParameterCountModel {
+                Count = Count,
+                Weight = Weight,
+            };
+        }
     }
 }

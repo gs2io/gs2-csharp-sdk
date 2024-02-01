@@ -126,38 +126,5 @@ namespace Gs2.Gs2Limit.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new CountDownByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LimitName = LimitName,
-                CounterName = CounterName,
-                UserId = UserId,
-                CountDownValue = CountDownValue * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CountDownByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values CountDownByUserIdRequest::namespaceName");
-            }
-            if (LimitName != y.LimitName) {
-                throw new ArithmeticException("mismatch parameter values CountDownByUserIdRequest::limitName");
-            }
-            if (CounterName != y.CounterName) {
-                throw new ArithmeticException("mismatch parameter values CountDownByUserIdRequest::counterName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values CountDownByUserIdRequest::userId");
-            }
-            return new CountDownByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LimitName = LimitName,
-                CounterName = CounterName,
-                UserId = UserId,
-                CountDownValue = CountDownValue + y.CountDownValue,
-            };
-        }
     }
 }

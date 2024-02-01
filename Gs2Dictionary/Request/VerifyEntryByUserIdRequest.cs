@@ -115,36 +115,5 @@ namespace Gs2.Gs2Dictionary.Request
             key += VerifyType + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyEntryByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                EntryModelName = EntryModelName,
-                VerifyType = VerifyType,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyEntryByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyEntryByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyEntryByUserIdRequest::userId");
-            }
-            if (EntryModelName != y.EntryModelName) {
-                throw new ArithmeticException("mismatch parameter values VerifyEntryByUserIdRequest::entryModelName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyEntryByUserIdRequest::verifyType");
-            }
-            return new VerifyEntryByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                EntryModelName = EntryModelName,
-                VerifyType = VerifyType,
-            };
-        }
     }
 }

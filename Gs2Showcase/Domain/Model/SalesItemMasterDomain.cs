@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Showcase.Domain.Iterator;
+using Gs2.Gs2Showcase.Model.Cache;
 using Gs2.Gs2Showcase.Request;
 using Gs2.Gs2Showcase.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class SalesItemMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _salesItemName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string SalesItemName => _salesItemName;
+        public string NamespaceName { get; }
+        public string SalesItemName { get; }
 
         public SalesItemMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._client = new Gs2ShowcaseRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._salesItemName = salesItemName;
-            this._parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "SalesItemMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string salesItemName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "showcase",
-                namespaceName ?? "null",
-                salesItemName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string salesItemName
-        )
-        {
-            return string.Join(
-                ":",
-                salesItemName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.SalesItemName = salesItemName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private IFuture<Gs2.Gs2Showcase.Model.SalesItemMaster> GetFuture(
             GetSalesItemMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.SalesItemMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithSalesItemName(this.SalesItemName);
-                var future = this._client.GetSalesItemMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetSalesItemMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            request.SalesItemName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "salesItemMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "SalesItemMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.SalesItemMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             GetSalesItemMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithSalesItemName(this.SalesItemName);
-            GetSalesItemMasterResult result = null;
-            try {
-                result = await this._client.GetSalesItemMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                    request.SalesItemName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "salesItemMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "SalesItemMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetSalesItemMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> UpdateFuture(
             UpdateSalesItemMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithSalesItemName(this.SalesItemName);
-                var future = this._client.UpdateSalesItemMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateSalesItemMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "SalesItemMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             UpdateSalesItemMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithSalesItemName(this.SalesItemName);
-            UpdateSalesItemMasterResult result = null;
-                result = await this._client.UpdateSalesItemMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "SalesItemMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateSalesItemMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> Update(
-            UpdateSalesItemMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> DeleteFuture(
             DeleteSalesItemMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithSalesItemName(this.SalesItemName);
-                var future = this._client.DeleteSalesItemMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteSalesItemMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            request.SalesItemName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "salesItemMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "SalesItemMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Showcase.Model.SalesItemMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             DeleteSalesItemMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithSalesItemName(this.SalesItemName);
-            DeleteSalesItemMasterResult result = null;
             try {
-                result = await this._client.DeleteSalesItemMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                    request.SalesItemName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithSalesItemName(this.SalesItemName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteSalesItemMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "salesItemMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "SalesItemMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Showcase.Model.SalesItemMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> Delete(
-            DeleteSalesItemMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.SalesItemMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                        this.SalesItemName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.SalesItemMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SalesItemName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Showcase.Model.SalesItemMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.SalesItemName,
+                    () => this.GetFuture(
+                        new GetSalesItemMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetSalesItemMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                                    this.SalesItemName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "salesItemMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            this.SalesItemName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.SalesItemMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Showcase.Model.SalesItemMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.SalesItemMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                    this.SalesItemName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                        this.SalesItemName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetSalesItemMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                                    this.SalesItemName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "salesItemMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                            this.SalesItemName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Showcase.Model.SalesItemMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.SalesItemName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Showcase.Model.SalesItemMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.SalesItemName,
+                () => this.GetAsync(
+                    new GetSalesItemMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                    this.SalesItemName.ToString()
-                )
+            (null as Gs2.Gs2Showcase.Model.SalesItemMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.SalesItemName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.SalesItemMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                    this.SalesItemName.ToString()
+                (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheKey(
+                    this.SalesItemName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.SalesItemMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain.CreateCacheKey(
-                    this.SalesItemName.ToString()
+                (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Showcase.Model.SalesItemMaster).CacheKey(
+                    this.SalesItemName
                 ),
                 callbackId
             );

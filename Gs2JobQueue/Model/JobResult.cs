@@ -315,5 +315,92 @@ namespace Gs2.Gs2JobQueue.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (JobResultId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.jobResultId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (JobId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.jobId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.scriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Args.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.args.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TryNumber < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.tryNumber.error.invalid"),
+                    });
+                }
+                if (TryNumber > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.tryNumber.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (StatusCode < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.statusCode.error.invalid"),
+                    });
+                }
+                if (StatusCode > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.statusCode.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Result.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.result.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TryAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.tryAt.error.invalid"),
+                    });
+                }
+                if (TryAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResult", "jobQueue.jobResult.tryAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new JobResult {
+                JobResultId = JobResultId,
+                JobId = JobId,
+                ScriptId = ScriptId,
+                Args = Args,
+                TryNumber = TryNumber,
+                StatusCode = StatusCode,
+                Result = Result,
+                TryAt = TryAt,
+            };
+        }
     }
 }

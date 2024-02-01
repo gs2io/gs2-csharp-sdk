@@ -137,5 +137,40 @@ namespace Gs2.Gs2Version.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Region.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("signTargetVersion", "version.signTargetVersion.region.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (NamespaceName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("signTargetVersion", "version.signTargetVersion.namespaceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (VersionName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("signTargetVersion", "version.signTargetVersion.versionName.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new SignTargetVersion {
+                Region = Region,
+                NamespaceName = NamespaceName,
+                VersionName = VersionName,
+                Version = Version.Clone() as Gs2.Gs2Version.Model.Version_,
+            };
+        }
     }
 }

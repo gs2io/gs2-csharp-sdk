@@ -157,17 +157,5 @@ namespace Gs2.Gs2Limit.Request
             key += ResetHour + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CreateLimitModelMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateLimitModelMasterRequest)x;
-            return this;
-        }
     }
 }

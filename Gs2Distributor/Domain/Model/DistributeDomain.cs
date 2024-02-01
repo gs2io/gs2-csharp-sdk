@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Distributor.Domain.Iterator;
+using Gs2.Gs2Distributor.Model.Cache;
 using Gs2.Gs2Distributor.Request;
 using Gs2.Gs2Distributor.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,15 +63,12 @@ namespace Gs2.Gs2Distributor.Domain.Model
     public partial class DistributeDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        private readonly string _namespaceName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
         public string InboxNamespaceId { get; set; }
         public string Result { get; set; }
         public string ContextStack { get; set; }
         public string[] TaskResults { get; set; }
         public string SheetResult { get; set; }
-        public string NamespaceName => _namespaceName;
 
         public DistributeDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -79,30 +78,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this._client = new Gs2DistributorRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Distribute"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "distributor",
-                namespaceName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
+            this.NamespaceName = namespaceName;
         }
 
     }

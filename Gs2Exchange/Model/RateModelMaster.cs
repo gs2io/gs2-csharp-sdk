@@ -442,5 +442,136 @@ namespace Gs2.Gs2Exchange.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RateModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.rateModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.consumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                switch (TimingType) {
+                    case "immediate":
+                    case "await":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("rateModelMaster", "exchange.rateModelMaster.timingType.error.invalid"),
+                        });
+                }
+            }
+            if (TimingType == "await") {
+                if (LockTime < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.lockTime.error.invalid"),
+                    });
+                }
+                if (LockTime > 525600) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.lockTime.error.invalid"),
+                    });
+                }
+            }
+            if (TimingType == "await") {
+            }
+            {
+                if (SkipConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.skipConsumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModelMaster", "exchange.rateModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RateModelMaster {
+                RateModelId = RateModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                TimingType = TimingType,
+                LockTime = LockTime,
+                EnableSkip = EnableSkip,
+                SkipConsumeActions = SkipConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

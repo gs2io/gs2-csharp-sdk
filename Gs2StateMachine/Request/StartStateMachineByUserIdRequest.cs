@@ -115,36 +115,5 @@ namespace Gs2.Gs2StateMachine.Request
             key += Ttl + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new StartStateMachineByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Args = Args,
-                Ttl = Ttl,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (StartStateMachineByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values StartStateMachineByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values StartStateMachineByUserIdRequest::userId");
-            }
-            if (Args != y.Args) {
-                throw new ArithmeticException("mismatch parameter values StartStateMachineByUserIdRequest::args");
-            }
-            if (Ttl != y.Ttl) {
-                throw new ArithmeticException("mismatch parameter values StartStateMachineByUserIdRequest::ttl");
-            }
-            return new StartStateMachineByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Args = Args,
-                Ttl = Ttl,
-            };
-        }
     }
 }

@@ -102,5 +102,21 @@ namespace Gs2.Gs2Idle.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionList", "idle.acquireActionList.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AcquireActionList {
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+            };
+        }
     }
 }

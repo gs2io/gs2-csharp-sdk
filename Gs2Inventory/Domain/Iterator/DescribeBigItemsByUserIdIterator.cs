@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Inventory.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,12 +68,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2InventoryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _inventoryName;
-        private readonly string _userId;
-        public string NamespaceName => _namespaceName;
-        public string InventoryName => _inventoryName;
-        public string UserId => _userId;
+        public string NamespaceName { get; }
+        public string InventoryName { get; }
+        public string UserId { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -89,9 +87,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._inventoryName = inventoryName;
-            this._userId = userId;
+            this.NamespaceName = namespaceName;
+            this.InventoryName = inventoryName;
+            this.UserId = userId;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Inventory.Model.BigItem[]{};
@@ -110,15 +108,14 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                this.InventoryName,
-                "BigItem"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Inventory.Model.BigItem>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Inventory.Model.BigItem>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
+                        NamespaceName,
+                        UserId,
+                        InventoryName
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -133,9 +130,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 var r = await this._client.DescribeBigItemsByUserIdAsync(
                 #endif
                     new Gs2.Gs2Inventory.Request.DescribeBigItemsByUserIdRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithInventoryName(this._inventoryName)
-                        .WithUserId(this._userId)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithInventoryName(this.InventoryName)
+                        .WithUserId(this.UserId)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -153,19 +150,22 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
-                                    item.ItemName?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        UserId,
+                        InventoryName,
+                        item.ItemName
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Inventory.Model.BigItem>(
-                            parentKey
+                        (null as Gs2.Gs2Inventory.Model.BigItem).CacheParentKey(
+                            NamespaceName,
+                            UserId,
+                            InventoryName
+                        )
                     );
                 }
             }
@@ -201,7 +201,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Inventory.Model.BigItem ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -264,7 +264,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Inventory.Model.BigItem ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

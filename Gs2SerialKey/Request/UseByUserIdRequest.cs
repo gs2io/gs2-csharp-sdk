@@ -103,31 +103,5 @@ namespace Gs2.Gs2SerialKey.Request
             key += Code + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new UseByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Code = Code,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UseByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values UseByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values UseByUserIdRequest::userId");
-            }
-            if (Code != y.Code) {
-                throw new ArithmeticException("mismatch parameter values UseByUserIdRequest::code");
-            }
-            return new UseByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Code = Code,
-            };
-        }
     }
 }

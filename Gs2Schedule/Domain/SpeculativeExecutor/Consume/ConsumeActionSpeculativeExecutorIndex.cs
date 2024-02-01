@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Schedule.Model.Transaction;
 using Gs2.Gs2Schedule.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteTriggerByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DeleteTriggerByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DeleteTriggerByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteTriggerByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DeleteTriggerByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DeleteTriggerByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

@@ -112,39 +112,7 @@ namespace Gs2.Gs2Stamina.Request
             key += NamespaceName + ":";
             key += StaminaName + ":";
             key += UserId + ":";
-            key += RecoverIntervalMinutes + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new SetRecoverIntervalByUserIdRequest {
-                NamespaceName = NamespaceName,
-                StaminaName = StaminaName,
-                UserId = UserId,
-                RecoverIntervalMinutes = RecoverIntervalMinutes,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SetRecoverIntervalByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::namespaceName");
-            }
-            if (StaminaName != y.StaminaName) {
-                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::staminaName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::userId");
-            }
-            if (RecoverIntervalMinutes != y.RecoverIntervalMinutes) {
-                throw new ArithmeticException("mismatch parameter values SetRecoverIntervalByUserIdRequest::recoverIntervalMinutes");
-            }
-            return new SetRecoverIntervalByUserIdRequest {
-                NamespaceName = NamespaceName,
-                StaminaName = StaminaName,
-                UserId = UserId,
-                RecoverIntervalMinutes = RecoverIntervalMinutes,
-            };
         }
     }
 }

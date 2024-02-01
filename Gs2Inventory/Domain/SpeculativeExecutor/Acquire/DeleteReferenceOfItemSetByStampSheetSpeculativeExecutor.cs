@@ -34,8 +34,11 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -52,13 +55,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Inventory:DeleteReferenceOfByUserId";
         }
-        public static Gs2.Gs2Inventory.Model.ReferenceOf Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            DeleteReferenceOfByUserIdRequest request
-        ) {
-            return null;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -67,31 +63,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             DeleteReferenceOfByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var item = Transform(domain, accessToken, request);
-
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.InventoryName,
-                    request.ItemName,
-                    request.ItemSetName,
-                    "ReferenceOf"
-                );
-                var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                    request.ReferenceOf.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Inventory.Model.ReferenceOf>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -109,45 +80,8 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteReferenceOfByUserIdRequest request
         ) {
-            var item = Transform(domain, accessToken, request);
-
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                request.InventoryName,
-                request.ItemName,
-                request.ItemSetName,
-                "ReferenceOf"
-            );
-            var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                request.ReferenceOf.ToString()
-            );
-
-            return () =>
-            {
-                domain.Cache.Put<Gs2.Gs2Inventory.Model.ReferenceOf>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                );
-                return null;
-            };
+            return () => null;
         }
 #endif
-
-        public static DeleteReferenceOfByUserIdRequest Rate(
-            DeleteReferenceOfByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static DeleteReferenceOfByUserIdRequest Rate(
-            DeleteReferenceOfByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

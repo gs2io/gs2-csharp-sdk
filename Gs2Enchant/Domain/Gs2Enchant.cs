@@ -34,6 +34,7 @@ using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Enchant.Domain.Iterator;
+using Gs2.Gs2Enchant.Model.Cache;
 using Gs2.Gs2Enchant.Domain.Model;
 using Gs2.Gs2Enchant.Request;
 using Gs2.Gs2Enchant.Result;
@@ -64,8 +65,6 @@ namespace Gs2.Gs2Enchant.Domain
     public class Gs2Enchant {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
-
-        private readonly String _parentKey;
         public string Url { get; set; }
         public string UploadToken { get; set; }
         public string UploadUrl { get; set; }
@@ -77,48 +76,25 @@ namespace Gs2.Gs2Enchant.Domain
             this._client = new Gs2EnchantRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "enchant";
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> self)
             {
-                var future = this._client.CreateNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "enchant",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Enchant.Domain.Model.NamespaceDomain(
                     this._gs2,
                     result?.Item?.Name
@@ -137,46 +113,16 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             CreateNamespaceRequest request
         ) {
-            CreateNamespaceResult result = null;
-                result = await this._client.CreateNamespaceAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "enchant",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2Enchant.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Enchant.Domain.Model.NamespaceDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateNamespaceAsync(request)
+            );
+            var domain = new Gs2.Gs2Enchant.Domain.Model.NamespaceDomain(
+                this._gs2,
+                result?.Item?.Name
+            );
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateNamespaceFuture.")]
-        public IFuture<Gs2.Gs2Enchant.Domain.Model.NamespaceDomain> CreateNamespace(
-            CreateNamespaceRequest request
-        ) {
-            return CreateNamespaceFuture(request);
         }
         #endif
 
@@ -184,25 +130,19 @@ namespace Gs2.Gs2Enchant.Domain
         public IFuture<Gs2Enchant> DumpUserDataFuture(
             DumpUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.DumpUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DumpUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -218,27 +158,13 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             DumpUserDataByUserIdRequest request
         ) {
-            DumpUserDataByUserIdResult result = null;
-                result = await this._client.DumpUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.DumpUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DumpUserDataFuture.")]
-        public IFuture<Gs2Enchant> DumpUserData(
-            DumpUserDataByUserIdRequest request
-        ) {
-            return DumpUserDataFuture(request);
         }
         #endif
 
@@ -246,25 +172,19 @@ namespace Gs2.Gs2Enchant.Domain
         public IFuture<Gs2Enchant> CheckDumpUserDataFuture(
             CheckDumpUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.CheckDumpUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckDumpUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Url = domain.Url = result?.Url;
                 self.OnComplete(domain);
@@ -281,28 +201,14 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             CheckDumpUserDataByUserIdRequest request
         ) {
-            CheckDumpUserDataByUserIdResult result = null;
-                result = await this._client.CheckDumpUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckDumpUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.Url = domain.Url = result?.Url;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckDumpUserDataFuture.")]
-        public IFuture<Gs2Enchant> CheckDumpUserData(
-            CheckDumpUserDataByUserIdRequest request
-        ) {
-            return CheckDumpUserDataFuture(request);
         }
         #endif
 
@@ -310,25 +216,19 @@ namespace Gs2.Gs2Enchant.Domain
         public IFuture<Gs2Enchant> CleanUserDataFuture(
             CleanUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.CleanUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CleanUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -344,27 +244,13 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             CleanUserDataByUserIdRequest request
         ) {
-            CleanUserDataByUserIdResult result = null;
-                result = await this._client.CleanUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CleanUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CleanUserDataFuture.")]
-        public IFuture<Gs2Enchant> CleanUserData(
-            CleanUserDataByUserIdRequest request
-        ) {
-            return CleanUserDataFuture(request);
         }
         #endif
 
@@ -372,25 +258,19 @@ namespace Gs2.Gs2Enchant.Domain
         public IFuture<Gs2Enchant> CheckCleanUserDataFuture(
             CheckCleanUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.CheckCleanUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckCleanUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -406,27 +286,13 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             CheckCleanUserDataByUserIdRequest request
         ) {
-            CheckCleanUserDataByUserIdResult result = null;
-                result = await this._client.CheckCleanUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckCleanUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckCleanUserDataFuture.")]
-        public IFuture<Gs2Enchant> CheckCleanUserData(
-            CheckCleanUserDataByUserIdRequest request
-        ) {
-            return CheckCleanUserDataFuture(request);
         }
         #endif
 
@@ -434,25 +300,19 @@ namespace Gs2.Gs2Enchant.Domain
         public IFuture<Gs2Enchant> PrepareImportUserDataFuture(
             PrepareImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.PrepareImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PrepareImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.UploadToken = domain.UploadToken = result?.UploadToken;
                 this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
@@ -470,17 +330,12 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             PrepareImportUserDataByUserIdRequest request
         ) {
-            PrepareImportUserDataByUserIdResult result = null;
-                result = await this._client.PrepareImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PrepareImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
@@ -488,37 +343,22 @@ namespace Gs2.Gs2Enchant.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PrepareImportUserDataFuture.")]
-        public IFuture<Gs2Enchant> PrepareImportUserData(
-            PrepareImportUserDataByUserIdRequest request
-        ) {
-            return PrepareImportUserDataFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2Enchant> ImportUserDataFuture(
             ImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.ImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.ImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -534,27 +374,13 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             ImportUserDataByUserIdRequest request
         ) {
-            ImportUserDataByUserIdResult result = null;
-                result = await this._client.ImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.ImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ImportUserDataFuture.")]
-        public IFuture<Gs2Enchant> ImportUserData(
-            ImportUserDataByUserIdRequest request
-        ) {
-            return ImportUserDataFuture(request);
         }
         #endif
 
@@ -562,25 +388,19 @@ namespace Gs2.Gs2Enchant.Domain
         public IFuture<Gs2Enchant> CheckImportUserDataFuture(
             CheckImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Enchant> self)
             {
-                var future = this._client.CheckImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Url = domain.Url = result?.Url;
                 self.OnComplete(domain);
@@ -597,32 +417,17 @@ namespace Gs2.Gs2Enchant.Domain
             #endif
             CheckImportUserDataByUserIdRequest request
         ) {
-            CheckImportUserDataByUserIdResult result = null;
-                result = await this._client.CheckImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.Url = domain.Url = result?.Url;
             return domain;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckImportUserDataFuture.")]
-        public IFuture<Gs2Enchant> CheckImportUserData(
-            CheckImportUserDataByUserIdRequest request
-        ) {
-            return CheckImportUserDataFuture(request);
-        }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Enchant.Model.Namespace> Namespaces(
         )
         {
@@ -631,36 +436,34 @@ namespace Gs2.Gs2Enchant.Domain
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Enchant.Model.Namespace> NamespacesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Enchant.Model.Namespace> Namespaces(
-            #endif
-        #else
         public DescribeNamespacesIterator NamespacesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2.Cache,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeNamespaces(
             Action<Gs2.Gs2Enchant.Model.Namespace[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Enchant.Model.Namespace>(
-                "enchant:Namespace",
+                (null as Gs2.Gs2Enchant.Model.Namespace).CacheParentKey(
+                ),
                 callback
             );
         }
@@ -685,7 +488,8 @@ namespace Gs2.Gs2Enchant.Domain
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Enchant.Model.Namespace>(
-                "enchant:Namespace",
+                (null as Gs2.Gs2Enchant.Model.Namespace).CacheParentKey(
+                ),
                 callbackId
             );
         }
@@ -739,24 +543,12 @@ namespace Gs2.Gs2Enchant.Domain
                     case "ReDrawBalanceParameterStatusByUserId": {
                         var requestModel = ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ReDrawBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "BalanceParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         ReDrawBalanceParameterStatusByUserIdComplete?.Invoke(
                             transactionId,
@@ -768,24 +560,12 @@ namespace Gs2.Gs2Enchant.Domain
                     case "SetBalanceParameterStatusByUserId": {
                         var requestModel = SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = SetBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "BalanceParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         SetBalanceParameterStatusByUserIdComplete?.Invoke(
                             transactionId,
@@ -797,24 +577,12 @@ namespace Gs2.Gs2Enchant.Domain
                     case "ReDrawRarityParameterStatusByUserId": {
                         var requestModel = ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = ReDrawRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         ReDrawRarityParameterStatusByUserIdComplete?.Invoke(
                             transactionId,
@@ -826,24 +594,12 @@ namespace Gs2.Gs2Enchant.Domain
                     case "AddRarityParameterStatusByUserId": {
                         var requestModel = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = AddRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         AddRarityParameterStatusByUserIdComplete?.Invoke(
                             transactionId,
@@ -855,24 +611,12 @@ namespace Gs2.Gs2Enchant.Domain
                     case "SetRarityParameterStatusByUserId": {
                         var requestModel = SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = SetRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         SetRarityParameterStatusByUserIdComplete?.Invoke(
                             transactionId,
@@ -900,24 +644,12 @@ namespace Gs2.Gs2Enchant.Domain
                     case "VerifyRarityParameterStatusByUserId": {
                         var requestModel = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = VerifyRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "RarityParameterStatus"
-                            );
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                resultModel.Item.ParameterName.ToString(),
-                                resultModel.Item.PropertyId.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         VerifyRarityParameterStatusByUserIdComplete?.Invoke(
                             taskId,
@@ -938,24 +670,12 @@ namespace Gs2.Gs2Enchant.Domain
                 case "re_draw_balance_parameter_status_by_user_id": {
                     var requestModel = ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ReDrawBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            requestModel.UserId,
-                            "BalanceParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
 
                     ReDrawBalanceParameterStatusByUserIdComplete?.Invoke(
                         job.JobId,
@@ -967,24 +687,12 @@ namespace Gs2.Gs2Enchant.Domain
                 case "set_balance_parameter_status_by_user_id": {
                     var requestModel = SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            requestModel.UserId,
-                            "BalanceParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
 
                     SetBalanceParameterStatusByUserIdComplete?.Invoke(
                         job.JobId,
@@ -996,24 +704,12 @@ namespace Gs2.Gs2Enchant.Domain
                 case "re_draw_rarity_parameter_status_by_user_id": {
                     var requestModel = ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = ReDrawRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            requestModel.UserId,
-                            "RarityParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
 
                     ReDrawRarityParameterStatusByUserIdComplete?.Invoke(
                         job.JobId,
@@ -1025,24 +721,12 @@ namespace Gs2.Gs2Enchant.Domain
                 case "add_rarity_parameter_status_by_user_id": {
                     var requestModel = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = AddRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            requestModel.UserId,
-                            "RarityParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
 
                     AddRarityParameterStatusByUserIdComplete?.Invoke(
                         job.JobId,
@@ -1054,24 +738,12 @@ namespace Gs2.Gs2Enchant.Domain
                 case "set_rarity_parameter_status_by_user_id": {
                     var requestModel = SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = SetRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            requestModel.UserId,
-                            "RarityParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
 
                     SetRarityParameterStatusByUserIdComplete?.Invoke(
                         job.JobId,

@@ -150,5 +150,29 @@ namespace Gs2.Gs2Limit.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentLimitMaster", "limit.currentLimitMaster.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Settings.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentLimitMaster", "limit.currentLimitMaster.settings.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CurrentLimitMaster {
+                NamespaceId = NamespaceId,
+                Settings = Settings,
+            };
+        }
     }
 }

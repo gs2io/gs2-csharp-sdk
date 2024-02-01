@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Inventory.Model.Transaction;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (ConsumeItemSetByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = ConsumeItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ConsumeItemSetByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -91,7 +92,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (VerifyItemSetByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyItemSetByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -107,7 +108,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (VerifyReferenceOfByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyReferenceOfByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -123,7 +124,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (ConsumeSimpleItemsByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = ConsumeSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = ConsumeSimpleItemsByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ConsumeSimpleItemsByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -139,7 +140,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (VerifySimpleItemByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifySimpleItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifySimpleItemByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -155,7 +156,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (ConsumeBigItemByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = ConsumeBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ConsumeBigItemByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -171,7 +172,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 }
                 if (VerifyBigItemByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyBigItemByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -209,7 +210,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -218,7 +219,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (ConsumeItemSetByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = ConsumeItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = ConsumeItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ConsumeItemSetByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -227,7 +228,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (VerifyItemSetByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyItemSetByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyItemSetByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -236,7 +237,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (VerifyReferenceOfByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyReferenceOfByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyReferenceOfByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -245,7 +246,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (ConsumeSimpleItemsByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = ConsumeSimpleItemsByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = ConsumeSimpleItemsByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ConsumeSimpleItemsByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -254,7 +255,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (VerifySimpleItemByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifySimpleItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifySimpleItemByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -263,7 +264,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (ConsumeBigItemByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = ConsumeBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = ConsumeBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ConsumeBigItemByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -272,7 +273,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (VerifyBigItemByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyBigItemByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyBigItemByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

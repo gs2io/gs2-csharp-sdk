@@ -39,7 +39,9 @@ using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Inventory.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Inventory.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -69,16 +71,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2InventoryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _inventoryName;
-        private readonly string _userId;
-        private readonly string _itemName;
-        private readonly string _itemSetName;
-        public string NamespaceName => _namespaceName;
-        public string InventoryName => _inventoryName;
-        public string UserId => _userId;
-        public string ItemName => _itemName;
-        public string ItemSetName => _itemSetName;
+        public string NamespaceName { get; }
+        public string InventoryName { get; }
+        public string UserId { get; }
+        public string ItemName { get; }
+        public string ItemSetName { get; }
         private bool _isCacheChecked;
         private bool _last;
         private string[] _result;
@@ -96,11 +93,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._inventoryName = inventoryName;
-            this._userId = userId;
-            this._itemName = itemName;
-            this._itemSetName = itemSetName;
+            this.NamespaceName = namespaceName;
+            this.InventoryName = inventoryName;
+            this.UserId = userId;
+            this.ItemName = itemName;
+            this.ItemSetName = itemSetName;
             this._last = false;
             this._result = new string[]{};
 
@@ -118,17 +115,16 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                this.InventoryName,
-                this.ItemName,
-                this.ItemSetName,
-                "ReferenceOf"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<string>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <string>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheParentKey(
+                        NamespaceName,
+                        UserId,
+                        InventoryName,
+                        ItemName,
+                        ItemSetName ?? default
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -142,11 +138,11 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 var r = await this._client.DescribeReferenceOfByUserIdAsync(
                 #endif
                     new Gs2.Gs2Inventory.Request.DescribeReferenceOfByUserIdRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithInventoryName(this._inventoryName)
-                        .WithUserId(this._userId)
-                        .WithItemName(this._itemName)
-                        .WithItemSetName(this._itemSetName)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithInventoryName(this.InventoryName)
+                        .WithUserId(this.UserId)
+                        .WithItemName(this.ItemName)
+                        .WithItemSetName(this.ItemSetName)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -157,20 +153,38 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .ToArray();
                 this._last = true;
-                foreach (var item in this._result) {
-                    this._cache.Put(
-                            parentKey,
-                            item,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                foreach (var item in r.Items) {
+                    var value = new ReferenceOf {
+                        Name = item,
+                    };
+                    this._cache.Put<Gs2.Gs2Inventory.Model.ReferenceOf>(
+                        (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheParentKey(
+                            NamespaceName,
+                            UserId,
+                            InventoryName,
+                            ItemName,
+                            ItemSetName ?? default
+                        ),
+                        (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheKey(
+                            value.Name
+                        ),
+                        value,
+                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
                     );
                 }
 
                 if (this._last) {
-                    this._cache.SetListCached<string>(
-                            parentKey
+                    this._cache.SetListCached<Gs2.Gs2Inventory.Model.ReferenceOf>(
+                        (null as Gs2.Gs2Inventory.Model.ReferenceOf).CacheParentKey(
+                            NamespaceName,
+                            UserId,
+                            InventoryName,
+                            ItemName,
+                            ItemSetName ?? default
+                        )
                     );
                 }
             }
@@ -206,7 +220,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        string ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -269,7 +283,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     break;
         #endif
                 }
-                string ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

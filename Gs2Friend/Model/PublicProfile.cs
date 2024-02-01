@@ -99,5 +99,29 @@ namespace Gs2.Gs2Friend.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("publicProfile", "friend.publicProfile.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("publicProfile", "friend.publicProfile.publicProfile.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new PublicProfile {
+                UserId = UserId,
+                Value = Value,
+            };
+        }
     }
 }

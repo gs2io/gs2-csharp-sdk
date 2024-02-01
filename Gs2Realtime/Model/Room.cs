@@ -322,5 +322,105 @@ namespace Gs2.Gs2Realtime.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RoomId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.roomId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (IpAddress.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.ipAddress.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Port < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.port.error.invalid"),
+                    });
+                }
+                if (Port > 65535) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.port.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (EncryptionKey.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.encryptionKey.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (NotificationUserIds.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.notificationUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("room", "realtime.room.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Room {
+                RoomId = RoomId,
+                Name = Name,
+                IpAddress = IpAddress,
+                Port = Port,
+                EncryptionKey = EncryptionKey,
+                NotificationUserIds = NotificationUserIds.Clone() as string[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

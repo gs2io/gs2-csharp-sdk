@@ -99,5 +99,19 @@ namespace Gs2.Gs2Version.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new Status {
+                VersionModel = VersionModel.Clone() as Gs2.Gs2Version.Model.VersionModel,
+                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+            };
+        }
     }
 }

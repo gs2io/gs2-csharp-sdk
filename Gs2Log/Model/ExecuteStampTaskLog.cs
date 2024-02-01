@@ -194,5 +194,74 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Timestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.timestamp.error.invalid"),
+                    });
+                }
+                if (Timestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.timestamp.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (TaskId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.taskId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Service.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Method.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.method.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Action.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.action.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Args.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampTaskLog", "log.executeStampTaskLog.args.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ExecuteStampTaskLog {
+                Timestamp = Timestamp,
+                TaskId = TaskId,
+                Service = Service,
+                Method = Method,
+                UserId = UserId,
+                Action = Action,
+                Args = Args,
+            };
+        }
     }
 }

@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Dictionary.Model.Transaction;
 using Gs2.Gs2Dictionary.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteEntriesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DeleteEntriesByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DeleteEntriesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 }
                 if (VerifyEntryByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyEntryByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyEntryByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -113,7 +114,7 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteEntriesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DeleteEntriesByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DeleteEntriesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -122,7 +123,7 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             }
             if (VerifyEntryByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyEntryByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyEntryByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

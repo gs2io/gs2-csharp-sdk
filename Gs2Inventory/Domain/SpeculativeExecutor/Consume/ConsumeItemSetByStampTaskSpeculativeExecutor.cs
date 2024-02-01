@@ -30,16 +30,15 @@
 using System;
 using System.Numerics;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -57,30 +56,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             return "Gs2Inventory:ConsumeItemSetByUserId";
         }
 
-        public static Gs2.Gs2Inventory.Model.ItemSet[] Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            ConsumeItemSetByUserIdRequest request,
-            Gs2.Gs2Inventory.Model.ItemSet[] items
-        ) {
-            var consumeCount = request.ConsumeCount;
-            foreach (var item in items.Reverse()) {
-                if (consumeCount <= item.Count) {
-                    item.Count -= consumeCount;
-                    consumeCount = 0;
-                    break;   
-                }
-                item.Count = 0;
-                consumeCount -= item.Count;
-            }
-            if (consumeCount > 0) {
-                throw new BadRequestException(new [] {
-                    new RequestError("count", "invalid"),
-                });
-            }
-            return items;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -88,7 +63,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ConsumeItemSetByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
                 ).AccessToken(
@@ -97,62 +71,38 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     request.InventoryName
                 ).ItemSet(
                     request.ItemName,
-                    string.IsNullOrEmpty(request.ItemSetName) ? null : request.ItemSetName
+                    request.ItemSetName
                 ).ModelFuture();
                 yield return future;
                 if (future.Error != null) {
                     result.OnError(future.Error);
                     yield break;
                 }
-                var items = future.Result;
+                var item = future.Result;
 
-                if (items == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                if (item == null) {
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    items = Transform(domain, accessToken, request, items);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.InventoryName,
+                            request.ItemName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                result.OnComplete(() =>
-                {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
-                        request.NamespaceName,
-                        accessToken.UserId,
-                        request.InventoryName,
-                        "ItemSet"
-                    );
-                    foreach (var item in items) {
-                        var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                            request.ItemName.ToString(),
-                            item.Name.ToString()
-                        );
-                        if (item.Count == 0) {
-                            domain.Cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
-                                parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                            );
-                        }
-                        else {
-                            domain.Cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
-                                parentKey,
-                                key,
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                            );
-                        }
-                    }
-                    return null;
-                });
                 yield return null;
             }
 
@@ -170,7 +120,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ConsumeItemSetByUserIdRequest request
         ) {
-            var items = await domain.Inventory.Namespace(
+            var item = await domain.Inventory.Namespace(
                 request.NamespaceName
             ).AccessToken(
                 accessToken
@@ -178,63 +128,26 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 request.InventoryName
             ).ItemSet(
                 request.ItemName,
-                string.IsNullOrEmpty(request.ItemSetName) ? null : request.ItemSetName
+                request.ItemSetName
             ).ModelAsync();
 
-            if (items == null) {
+            if (item == null) {
                 return () => null;
             }
-            items = Transform(domain, accessToken, request, items);
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheParentKey(
+                item.PutCache(
+                    domain.Cache,
                     request.NamespaceName,
                     accessToken.UserId,
                     request.InventoryName,
-                    "ItemSet"
+                    request.ItemName
                 );
-                foreach (var item in items) {
-                    var key = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheKey(
-                        request.ItemName.ToString(),
-                        item.Name.ToString()
-                    );
-                    if (item.Count == 0) {
-                        domain.Cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
-                            parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                        );
-                    }
-                    else {
-                        domain.Cache.Put<Gs2.Gs2Inventory.Model.ItemSet>(
-                            parentKey,
-                            key,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                        );
-                    }
-                }
                 return null;
             };
         }
 #endif
-
-        public static ConsumeItemSetByUserIdRequest Rate(
-            ConsumeItemSetByUserIdRequest request,
-            double rate
-        ) {
-            request.ConsumeCount = (long?) (request.ConsumeCount * rate);
-            return request;
-        }
-
-        public static ConsumeItemSetByUserIdRequest Rate(
-            ConsumeItemSetByUserIdRequest request,
-            BigInteger rate
-        ) {
-            request.ConsumeCount = (long?) ((request.ConsumeCount ?? 0) * rate);
-            return request;
-        }
     }
 }

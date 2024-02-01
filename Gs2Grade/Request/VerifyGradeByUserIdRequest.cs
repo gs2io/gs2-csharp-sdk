@@ -139,46 +139,5 @@ namespace Gs2.Gs2Grade.Request
             key += GradeValue + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyGradeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                GradeValue = GradeValue,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyGradeByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeByUserIdRequest::userId");
-            }
-            if (GradeName != y.GradeName) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeByUserIdRequest::gradeName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeByUserIdRequest::verifyType");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeByUserIdRequest::propertyId");
-            }
-            if (GradeValue != y.GradeValue) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeByUserIdRequest::gradeValue");
-            }
-            return new VerifyGradeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                GradeValue = GradeValue,
-            };
-        }
     }
 }

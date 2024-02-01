@@ -99,5 +99,39 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Category < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomUsed", "stateMachine.randomUsed.category.error.invalid"),
+                    });
+                }
+                if (Category > 4294967294) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomUsed", "stateMachine.randomUsed.category.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Used < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomUsed", "stateMachine.randomUsed.used.error.invalid"),
+                    });
+                }
+                if (Used > 4294967294) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomUsed", "stateMachine.randomUsed.used.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RandomUsed {
+                Category = Category,
+                Used = Used,
+            };
+        }
     }
 }

@@ -372,5 +372,136 @@ namespace Gs2.Gs2Experience.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StatusId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.statusId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExperienceName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.experienceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PropertyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.propertyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExperienceValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.experienceValue.error.invalid"),
+                    });
+                }
+                if (ExperienceValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.experienceValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RankValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.rankValue.error.invalid"),
+                    });
+                }
+                if (RankValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.rankValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RankCapValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.rankCapValue.error.invalid"),
+                    });
+                }
+                if (RankCapValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.rankCapValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NextRankUpExperienceValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.nextRankUpExperienceValue.error.invalid"),
+                    });
+                }
+                if (NextRankUpExperienceValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.nextRankUpExperienceValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "experience.status.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Status {
+                StatusId = StatusId,
+                ExperienceName = ExperienceName,
+                UserId = UserId,
+                PropertyId = PropertyId,
+                ExperienceValue = ExperienceValue,
+                RankValue = RankValue,
+                RankCapValue = RankCapValue,
+                NextRankUpExperienceValue = NextRankUpExperienceValue,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

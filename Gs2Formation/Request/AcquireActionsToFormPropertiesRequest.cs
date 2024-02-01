@@ -156,46 +156,5 @@ namespace Gs2.Gs2Formation.Request
             key += Config + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AcquireActionsToFormPropertiesRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                MoldModelName = MoldModelName,
-                Index = Index,
-                AcquireAction = AcquireAction,
-                Config = Config,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AcquireActionsToFormPropertiesRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToFormPropertiesRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToFormPropertiesRequest::userId");
-            }
-            if (MoldModelName != y.MoldModelName) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToFormPropertiesRequest::moldModelName");
-            }
-            if (Index != y.Index) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToFormPropertiesRequest::index");
-            }
-            if (AcquireAction != y.AcquireAction) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToFormPropertiesRequest::acquireAction");
-            }
-            if (Config != y.Config) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToFormPropertiesRequest::config");
-            }
-            return new AcquireActionsToFormPropertiesRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                MoldModelName = MoldModelName,
-                Index = Index,
-                AcquireAction = AcquireAction,
-                Config = Config,
-            };
-        }
     }
 }

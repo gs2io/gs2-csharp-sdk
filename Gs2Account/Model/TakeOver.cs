@@ -279,5 +279,84 @@ namespace Gs2.Gs2Account.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (TakeOverId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.takeOverId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Type < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.type.error.invalid"),
+                    });
+                }
+                if (Type > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.type.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UserIdentifier.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.userIdentifier.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Password.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.password.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new TakeOver {
+                TakeOverId = TakeOverId,
+                UserId = UserId,
+                Type = Type,
+                UserIdentifier = UserIdentifier,
+                Password = Password,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

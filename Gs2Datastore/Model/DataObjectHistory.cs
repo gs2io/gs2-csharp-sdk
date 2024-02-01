@@ -277,5 +277,76 @@ namespace Gs2.Gs2Datastore.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DataObjectHistoryId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.dataObjectHistoryId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DataObjectName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.dataObjectName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Generation.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.generation.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ContentLength < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.contentLength.error.invalid"),
+                    });
+                }
+                if (ContentLength > 10485760) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.contentLength.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObjectHistory", "datastore.dataObjectHistory.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DataObjectHistory {
+                DataObjectHistoryId = DataObjectHistoryId,
+                DataObjectName = DataObjectName,
+                Generation = Generation,
+                ContentLength = ContentLength,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

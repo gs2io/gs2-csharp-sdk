@@ -190,5 +190,63 @@ namespace Gs2.Gs2Identifier.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PasswordId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.passwordId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.userName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("password", "identifier.password.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Password {
+                PasswordId = PasswordId,
+                UserId = UserId,
+                UserName = UserName,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

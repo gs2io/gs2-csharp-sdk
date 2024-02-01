@@ -227,5 +227,50 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PropertyFormModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModel", "formation.propertyFormModel.propertyFormModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModel", "formation.propertyFormModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModel", "formation.propertyFormModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Slots.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModel", "formation.propertyFormModel.slots.error.tooFew"),
+                    });
+                }
+                if (Slots.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModel", "formation.propertyFormModel.slots.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new PropertyFormModel {
+                PropertyFormModelId = PropertyFormModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
+            };
+        }
     }
 }

@@ -39,42 +39,34 @@ namespace Gs2.Gs2Project.Model
         public string PdfUrl { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Receipt WithReceiptId(string receiptId) {
             this.ReceiptId = receiptId;
             return this;
         }
-
         public Receipt WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
-
         public Receipt WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Receipt WithDate(long? date) {
             this.Date = date;
             return this;
         }
-
         public Receipt WithAmount(string amount) {
             this.Amount = amount;
             return this;
         }
-
         public Receipt WithPdfUrl(string pdfUrl) {
             this.PdfUrl = pdfUrl;
             return this;
         }
-
         public Receipt WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Receipt WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
@@ -126,11 +118,11 @@ namespace Gs2.Gs2Project.Model
                 .WithReceiptId(!data.Keys.Contains("receiptId") || data["receiptId"] == null ? null : data["receiptId"].ToString())
                 .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithDate(!data.Keys.Contains("date") || data["date"] == null ? null : (long?)long.Parse(data["date"].ToString()))
+                .WithDate(!data.Keys.Contains("date") || data["date"] == null ? null : (long?)(data["date"].ToString().Contains(".") ? (long)double.Parse(data["date"].ToString()) : long.Parse(data["date"].ToString())))
                 .WithAmount(!data.Keys.Contains("amount") || data["amount"] == null ? null : data["amount"].ToString())
                 .WithPdfUrl(!data.Keys.Contains("pdfUrl") || data["pdfUrl"] == null ? null : data["pdfUrl"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -164,7 +156,7 @@ namespace Gs2.Gs2Project.Model
             }
             if (Date != null) {
                 writer.WritePropertyName("date");
-                writer.Write(long.Parse(Date.ToString()));
+                writer.Write((Date.ToString().Contains(".") ? (long)double.Parse(Date.ToString()) : long.Parse(Date.ToString())));
             }
             if (Amount != null) {
                 writer.WritePropertyName("amount");
@@ -176,11 +168,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -254,6 +246,98 @@ namespace Gs2.Gs2Project.Model
                 diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (ReceiptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.receiptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AccountName.Length < 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.accountName.error.tooShort"),
+                    });
+                }
+                if (AccountName.Length > 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.accountName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Date < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.date.error.invalid"),
+                    });
+                }
+                if (Date > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.date.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Amount.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.amount.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PdfUrl.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.pdfUrl.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "project.receipt.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Receipt {
+                ReceiptId = ReceiptId,
+                AccountName = AccountName,
+                Name = Name,
+                Date = Date,
+                Amount = Amount,
+                PdfUrl = PdfUrl,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
         }
     }
 }

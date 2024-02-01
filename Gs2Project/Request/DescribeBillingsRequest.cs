@@ -33,38 +33,32 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeBillingsRequest : Gs2Request<DescribeBillingsRequest>
 	{
-        public string AccountToken { set; get; }
-        public string ProjectName { set; get; }
-        public int? Year { set; get; }
-        public int? Month { set; get; }
-        public string Region { set; get; }
-        public string Service { set; get; }
-
+         public string AccountToken { set; get; }
+         public string ProjectName { set; get; }
+         public int? Year { set; get; }
+         public int? Month { set; get; }
+         public string Region { set; get; }
+         public string Service { set; get; }
         public DescribeBillingsRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public DescribeBillingsRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
-
         public DescribeBillingsRequest WithYear(int? year) {
             this.Year = year;
             return this;
         }
-
         public DescribeBillingsRequest WithMonth(int? month) {
             this.Month = month;
             return this;
         }
-
         public DescribeBillingsRequest WithRegion(string region) {
             this.Region = region;
             return this;
         }
-
         public DescribeBillingsRequest WithService(string service) {
             this.Service = service;
             return this;
@@ -81,8 +75,8 @@ namespace Gs2.Gs2Project.Request
             return new DescribeBillingsRequest()
                 .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
                 .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString());
         }
@@ -112,11 +106,11 @@ namespace Gs2.Gs2Project.Request
             }
             if (Year != null) {
                 writer.WritePropertyName("year");
-                writer.Write(int.Parse(Year.ToString()));
+                writer.Write((Year.ToString().Contains(".") ? (int)double.Parse(Year.ToString()) : int.Parse(Year.ToString())));
             }
             if (Month != null) {
                 writer.WritePropertyName("month");
-                writer.Write(int.Parse(Month.ToString()));
+                writer.Write((Month.ToString().Contains(".") ? (int)double.Parse(Month.ToString()) : int.Parse(Month.ToString())));
             }
             if (Region != null) {
                 writer.WritePropertyName("region");
@@ -138,18 +132,6 @@ namespace Gs2.Gs2Project.Request
             key += Region + ":";
             key += Service + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DescribeBillingsRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DescribeBillingsRequest)x;
-            return this;
         }
     }
 }

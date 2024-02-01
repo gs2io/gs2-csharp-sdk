@@ -246,5 +246,58 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ShowcaseId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcase", "showcase.showcase.showcaseId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcase", "showcase.showcase.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcase", "showcase.showcase.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SalesPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcase", "showcase.showcase.salesPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DisplayItems.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcase", "showcase.showcase.displayItems.error.tooFew"),
+                    });
+                }
+                if (DisplayItems.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcase", "showcase.showcase.displayItems.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Showcase {
+                ShowcaseId = ShowcaseId,
+                Name = Name,
+                Metadata = Metadata,
+                SalesPeriodEventId = SalesPeriodEventId,
+                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.DisplayItem[],
+            };
+        }
     }
 }

@@ -102,5 +102,26 @@ namespace Gs2.Gs2LoginReward.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "loginReward.reward.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "loginReward.reward.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Reward {
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+            };
+        }
     }
 }

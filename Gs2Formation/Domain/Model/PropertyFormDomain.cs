@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Formation.Domain.Iterator;
+using Gs2.Gs2Formation.Model.Cache;
 using Gs2.Gs2Formation.Request;
 using Gs2.Gs2Formation.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,20 +63,14 @@ namespace Gs2.Gs2Formation.Domain.Model
     public partial class PropertyFormDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _propertyFormModelName;
-        private readonly string _propertyId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string PropertyFormModelName { get; }
+        public string PropertyId { get; }
         public string Body { get; set; }
         public string Signature { get; set; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string PropertyFormModelName => _propertyFormModelName;
-        public string PropertyId => _propertyId;
 
         public PropertyFormDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -87,47 +83,11 @@ namespace Gs2.Gs2Formation.Domain.Model
             this._client = new Gs2FormationRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._propertyFormModelName = propertyFormModelName;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.PropertyFormModelName = propertyFormModelName;
             propertyId = propertyId?.Replace("{region}", gs2.RestSession.Region.DisplayName()).Replace("{ownerId}", gs2.RestSession.OwnerId ?? "").Replace("{userId}", UserId);
-            this._propertyId = propertyId;
-            this._parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "PropertyForm"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string propertyFormModelName,
-            string propertyId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "formation",
-                namespaceName ?? "null",
-                userId ?? "null",
-                propertyFormModelName ?? "null",
-                propertyId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string propertyFormModelName,
-            string propertyId
-        )
-        {
-            return string.Join(
-                ":",
-                propertyFormModelName ?? "null",
-                propertyId ?? "null"
-            );
+            this.PropertyId = propertyId;
         }
 
     }
@@ -138,82 +98,24 @@ namespace Gs2.Gs2Formation.Domain.Model
         private IFuture<Gs2.Gs2Formation.Model.PropertyForm> GetFuture(
             GetPropertyFormByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.PropertyForm> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.GetPropertyFormByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetPropertyFormByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            request.PropertyFormModelName.ToString(),
-                            request.PropertyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "propertyForm")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "PropertyForm"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString(),
-                            requestModel.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.PropertyFormModel != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "PropertyFormModel"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                            resultModel.PropertyFormModel.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.PropertyFormModel,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.PropertyForm>(Impl);
@@ -228,71 +130,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             GetPropertyFormByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
                 .WithPropertyId(this.PropertyId);
-            GetPropertyFormByUserIdResult result = null;
-            try {
-                result = await this._client.GetPropertyFormByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    request.PropertyFormModelName.ToString(),
-                    request.PropertyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "propertyForm")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "PropertyForm"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        requestModel.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.PropertyFormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "PropertyFormModel"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                        resultModel.PropertyFormModel.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.PropertyFormModel,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetPropertyFormByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -301,82 +148,24 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> GetWithSignatureFuture(
             GetPropertyFormWithSignatureByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.GetPropertyFormWithSignatureByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetPropertyFormWithSignatureByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            request.PropertyFormModelName.ToString(),
-                            request.PropertyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "propertyForm")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "PropertyForm"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString(),
-                            requestModel.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.PropertyFormModel != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "PropertyFormModel"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                            resultModel.PropertyFormModel.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.PropertyFormModel,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
                 domain.Body = result?.Body;
                 domain.Signature = result?.Signature;
@@ -395,72 +184,17 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             GetPropertyFormWithSignatureByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
                 .WithPropertyId(this.PropertyId);
-            GetPropertyFormWithSignatureByUserIdResult result = null;
-            try {
-                result = await this._client.GetPropertyFormWithSignatureByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    request.PropertyFormModelName.ToString(),
-                    request.PropertyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "propertyForm")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "PropertyForm"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        requestModel.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.PropertyFormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "PropertyFormModel"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                        resultModel.PropertyFormModel.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.PropertyFormModel,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetPropertyFormWithSignatureByUserIdAsync(request)
+            );
+            var domain = this;
             domain.Body = result?.Body;
             domain.Signature = result?.Signature;
 
@@ -469,74 +203,27 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to GetWithSignatureFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> GetWithSignature(
-            GetPropertyFormWithSignatureByUserIdRequest request
-        ) {
-            return GetWithSignatureFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> SetFuture(
             SetPropertyFormByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.SetPropertyFormByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SetPropertyFormByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "PropertyForm"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString(),
-                            requestModel.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.PropertyFormModel != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "PropertyFormModel"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                            resultModel.PropertyFormModel.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.PropertyFormModel,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -553,65 +240,19 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             SetPropertyFormByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
                 .WithPropertyId(this.PropertyId);
-            SetPropertyFormByUserIdResult result = null;
-                result = await this._client.SetPropertyFormByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "PropertyForm"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        requestModel.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.PropertyFormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "PropertyFormModel"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                        resultModel.PropertyFormModel.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.PropertyFormModel,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SetPropertyFormByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to SetFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> Set(
-            SetPropertyFormByUserIdRequest request
-        ) {
-            return SetFuture(request);
         }
         #endif
 
@@ -619,47 +260,24 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Core.Domain.TransactionDomain> AcquireActionsToPropertiesFuture(
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.AcquireActionsToPropertyFormPropertiesFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.AcquireActionsToPropertyFormPropertiesFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "PropertyForm"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString(),
-                            requestModel.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
@@ -691,38 +309,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithPropertyFormModelName(this.PropertyFormModelName)
                 .WithPropertyId(this.PropertyId);
-            AcquireActionsToPropertyFormPropertiesResult result = null;
-                result = await this._client.AcquireActionsToPropertyFormPropertiesAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "PropertyForm"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        requestModel.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.AcquireActionsToPropertyFormPropertiesAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
@@ -739,84 +335,29 @@ namespace Gs2.Gs2Formation.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to AcquireActionsToPropertiesFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionDomain> AcquireActionsToProperties(
-            AcquireActionsToPropertyFormPropertiesRequest request
-        ) {
-            return AcquireActionsToPropertiesFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> DeleteFuture(
             DeletePropertyFormByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithPropertyFormModelName(this.PropertyFormModelName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.DeletePropertyFormByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeletePropertyFormByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            request.PropertyFormModelName.ToString(),
-                            request.PropertyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "propertyForm")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "PropertyForm"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString(),
-                            requestModel.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
-                    }
-                    if (resultModel.PropertyFormModel != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "PropertyFormModel"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                            resultModel.PropertyFormModel.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -833,73 +374,21 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             DeletePropertyFormByUserIdRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithPropertyFormModelName(this.PropertyFormModelName)
-                .WithPropertyId(this.PropertyId);
-            DeletePropertyFormByUserIdResult result = null;
             try {
-                result = await this._client.DeletePropertyFormByUserIdAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithPropertyFormModelName(this.PropertyFormModelName)
+                    .WithPropertyId(this.PropertyId);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeletePropertyFormByUserIdAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    request.PropertyFormModelName.ToString(),
-                    request.PropertyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "propertyForm")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "PropertyForm"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString(),
-                        requestModel.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(parentKey, key);
-                }
-                if (resultModel.PropertyFormModel != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "PropertyFormModel"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelDomain.CreateCacheKey(
-                        resultModel.PropertyFormModel.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyFormModel>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormDomain> Delete(
-            DeletePropertyFormByUserIdRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -912,58 +401,38 @@ namespace Gs2.Gs2Formation.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.PropertyForm> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.PropertyForm>(
-                    _parentKey,
-                    Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        this.PropertyFormModelName?.ToString(),
-                        this.PropertyId?.ToString()
+                var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyForm).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.PropertyFormModelName,
+                    this.PropertyId
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Formation.Model.PropertyForm).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.PropertyFormModelName,
+                    this.PropertyId,
+                    () => this.GetFuture(
+                        new GetPropertyFormByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetPropertyFormByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                                    this.PropertyFormModelName?.ToString(),
-                                    this.PropertyId?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "propertyForm")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.PropertyForm>(
-                        _parentKey,
-                        Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            this.PropertyFormModelName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.PropertyForm>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Formation.Model.PropertyForm> ModelAsync()
@@ -971,56 +440,26 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.PropertyForm> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.PropertyForm>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    this.PropertyFormModelName?.ToString(),
-                    this.PropertyId?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.PropertyForm>(
-                    _parentKey,
-                    Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                        this.PropertyFormModelName?.ToString(),
-                        this.PropertyId?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetPropertyFormByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                                    this.PropertyFormModelName?.ToString(),
-                                    this.PropertyId?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.PropertyForm>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "propertyForm")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.PropertyForm>(
-                        _parentKey,
-                        Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                            this.PropertyFormModelName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Formation.Model.PropertyForm).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.PropertyFormModelName,
+                this.PropertyId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Formation.Model.PropertyForm).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.PropertyFormModelName,
+                this.PropertyId,
+                () => this.GetAsync(
+                    new GetPropertyFormByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -1049,22 +488,25 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Formation.Model.PropertyForm>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    this.PropertyFormModelName.ToString(),
-                    this.PropertyId.ToString()
-                )
+            (null as Gs2.Gs2Formation.Model.PropertyForm).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.PropertyFormModelName,
+                this.PropertyId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.PropertyForm> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    this.PropertyFormModelName.ToString(),
-                    this.PropertyId.ToString()
+                (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Formation.Model.PropertyForm).CacheKey(
+                    this.PropertyFormModelName,
+                    this.PropertyId
                 ),
                 callback,
                 () =>
@@ -1083,10 +525,13 @@ namespace Gs2.Gs2Formation.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.PropertyForm>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.PropertyFormDomain.CreateCacheKey(
-                    this.PropertyFormModelName.ToString(),
-                    this.PropertyId.ToString()
+                (null as Gs2.Gs2Formation.Model.PropertyForm).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Formation.Model.PropertyForm).CacheKey(
+                    this.PropertyFormModelName,
+                    this.PropertyId
                 ),
                 callbackId
             );

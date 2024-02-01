@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -34,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Friend.Domain.Iterator;
+using Gs2.Gs2Friend.Model.Cache;
 using Gs2.Gs2Friend.Request;
 using Gs2.Gs2Friend.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -63,14 +63,10 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,62 +77,35 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._client = new Gs2FriendRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Friend.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> SendRequestFuture(
             SendRequestRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.SendRequestFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SendRequestFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "SendFriendRequest"
-                        );
-                        var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
-                            resultModel.Item.TargetUserId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
                     this._gs2,
-                    request.NamespaceName,
-                    this._accessToken,
-                    result?.Item?.TargetUserId,
-                    "SendFriendRequest"
+                    this.NamespaceName,
+                    this.AccessToken,
+                    result?.Item?.TargetUserId
                 );
 
                 self.OnComplete(domain);
@@ -153,53 +122,22 @@ namespace Gs2.Gs2Friend.Domain.Model
             #endif
             SendRequestRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            SendRequestResult result = null;
-                result = await this._client.SendRequestAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "SendFriendRequest"
-                    );
-                    var key = Gs2.Gs2Friend.Domain.Model.FriendRequestDomain.CreateCacheKey(
-                        resultModel.Item.TargetUserId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
-                    this._gs2,
-                    request.NamespaceName,
-                    this._accessToken,
-                    result?.Item?.TargetUserId,
-                    "SendFriendRequest"
-                );
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SendRequestAsync(request)
+            );
+            var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                result?.Item?.TargetUserId
+            );
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to SendRequestFuture.")]
-        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> SendRequest(
-            SendRequestRequest request
-        ) {
-            return SendRequestFuture(request);
         }
         #endif
 
@@ -208,7 +146,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             return new Gs2.Gs2Friend.Domain.Model.ProfileAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken
+                this.AccessToken
             );
         }
 
@@ -217,11 +155,10 @@ namespace Gs2.Gs2Friend.Domain.Model
             return new Gs2.Gs2Friend.Domain.Model.PublicProfileAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken
+                this.AccessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<string> BlackLists(
         )
         {
@@ -232,14 +169,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<string> BlackListsAsync(
             #else
-        public Gs2Iterator<string> BlackLists(
-            #endif
-        #else
         public DescribeBlackListIterator BlackListsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeBlackListIterator(
@@ -247,166 +184,36 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
-        }
-
-        public ulong SubscribeBlackLists(
-            Action<string[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<string>(
-                "friend:UserId",
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeBlackListsWithInitialCallAsync(
-            Action<string[]> callback
-        )
-        {
-            var items = await BlackListsAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeBlackLists(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
         }
         #endif
-
-        public void UnsubscribeBlackLists(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<string>(
-                "friend:UserId",
-                callbackId
-            );
-        }
 
         public Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain BlackList(
         ) {
             return new Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
-            bool? withProfile
-        )
-        {
-            return new DescribeFollowsIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName,
-                this.AccessToken,
-                withProfile
+                this.AccessToken
             );
         }
 
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> FollowsAsync(
-            #else
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> Follows(
-            #endif
-        #else
-        public DescribeFollowsIterator FollowsAsync(
-        #endif
-            bool? withProfile
-        )
-        {
-            return new DescribeFollowsIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName,
-                this.AccessToken,
-                withProfile
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        #else
-            );
-        #endif
-        }
-
-        public ulong SubscribeFollows(
-            Action<Gs2.Gs2Friend.Model.FollowUser[]> callback,
-            bool? withProfile
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FollowUser>(
-                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "FollowUser:" + (withProfile == true)
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeFollowsWithInitialCallAsync(
-            Action<Gs2.Gs2Friend.Model.FollowUser[]> callback,
-            bool? withProfile
-        )
-        {
-            var items = await FollowsAsync(
-                withProfile
-            ).ToArrayAsync();
-            var callbackId = SubscribeFollows(
-                callback,
-                withProfile
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeFollows(
-            ulong callbackId,
-            bool? withProfile
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FollowUser>(
-                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    this.UserId,
-                    "FollowUser:" + (withProfile == true)
-                ),
-                callbackId
-            );
-        }
-
-        public Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain FollowUser(
-            string targetUserId,
+        public Gs2.Gs2Friend.Domain.Model.FollowAccessTokenDomain Follow(
             bool? withProfile
         ) {
-            return new Gs2.Gs2Friend.Domain.Model.FollowUserAccessTokenDomain(
+            return new Gs2.Gs2Friend.Domain.Model.FollowAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
-                targetUserId,
+                this.AccessToken,
                 withProfile
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
-            bool? withProfile
+            bool? withProfile = null
         )
         {
             return new DescribeFriendsIterator(
@@ -417,15 +224,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                 withProfile
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser> FriendsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
-            #endif
-        #else
         public DescribeFriendsIterator FriendsAsync(
-        #endif
-            bool? withProfile
+            #endif
+            bool? withProfile = null
         )
         {
             return new DescribeFriendsIterator(
@@ -434,28 +241,24 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 withProfile
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeFriends(
             Action<Gs2.Gs2Friend.Model.FriendUser[]> callback,
-            bool? withProfile
+            bool? withProfile = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendUser>(
-                Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    withProfile?.ToString() ?? "False",
-                    "FriendUser"
+                    withProfile
                 ),
                 callback
             );
@@ -464,7 +267,7 @@ namespace Gs2.Gs2Friend.Domain.Model
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeFriendsWithInitialCallAsync(
             Action<Gs2.Gs2Friend.Model.FriendUser[]> callback,
-            bool? withProfile
+            bool? withProfile = null
         )
         {
             var items = await FriendsAsync(
@@ -481,15 +284,14 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void UnsubscribeFriends(
             ulong callbackId,
-            bool? withProfile
+            bool? withProfile = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendUser>(
-                Gs2.Gs2Friend.Domain.Model.FriendDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    withProfile?.ToString() ?? "False",
-                    "FriendUser"
+                    withProfile
                 ),
                 callbackId
             );
@@ -501,12 +303,11 @@ namespace Gs2.Gs2Friend.Domain.Model
             return new Gs2.Gs2Friend.Domain.Model.FriendAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 withProfile
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
         )
         {
@@ -517,14 +318,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> SendRequestsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
-            #endif
-        #else
         public DescribeSendRequestsIterator SendRequestsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeSendRequestsIterator(
@@ -532,26 +333,22 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeSendRequests(
             Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "FriendRequest"
+                    this.UserId
                 ),
                 callback
             );
@@ -577,10 +374,9 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "FriendRequest"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -592,12 +388,11 @@ namespace Gs2.Gs2Friend.Domain.Model
             return new Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 targetUserId
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
         )
         {
@@ -608,14 +403,14 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequestsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
-            #endif
-        #else
         public DescribeReceiveRequestsIterator ReceiveRequestsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeReceiveRequestsIterator(
@@ -623,26 +418,22 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeReceiveRequests(
             Action<Gs2.Gs2Friend.Model.FriendRequest[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "FriendRequest"
+                    this.UserId
                 ),
                 callback
             );
@@ -668,10 +459,9 @@ namespace Gs2.Gs2Friend.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
-                Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "FriendRequest"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -683,33 +473,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             return new Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 fromUserId
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "friend",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
             );
         }
 

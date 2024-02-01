@@ -99,5 +99,29 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Key.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("config", "mission.config.key.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value.Length > 51200) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("config", "mission.config.value.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Config {
+                Key = Key,
+                Value = Value,
+            };
+        }
     }
 }

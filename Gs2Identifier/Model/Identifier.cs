@@ -156,5 +156,63 @@ namespace Gs2.Gs2Identifier.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ClientId.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.clientId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.userName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ClientSecret.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.clientSecret.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("identifier", "identifier.identifier.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Identifier {
+                ClientId = ClientId,
+                UserName = UserName,
+                ClientSecret = ClientSecret,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

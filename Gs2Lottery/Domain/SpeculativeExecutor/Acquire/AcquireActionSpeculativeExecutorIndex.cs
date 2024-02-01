@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Lottery.Model.Transaction;
 using Gs2.Gs2Lottery.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = DrawByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DrawByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
                 }
                 if (ResetBoxByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = ResetBoxByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ResetBoxByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -113,7 +114,7 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = DrawByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -122,7 +123,7 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             }
             if (ResetBoxByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = ResetBoxByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ResetBoxByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

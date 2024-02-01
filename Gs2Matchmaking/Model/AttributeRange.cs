@@ -118,5 +118,47 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attributeRange", "matchmaking.attributeRange.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Min < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attributeRange", "matchmaking.attributeRange.min.error.invalid"),
+                    });
+                }
+                if (Min > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attributeRange", "matchmaking.attributeRange.min.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Max < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attributeRange", "matchmaking.attributeRange.max.error.invalid"),
+                    });
+                }
+                if (Max > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attributeRange", "matchmaking.attributeRange.max.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AttributeRange {
+                Name = Name,
+                Min = Min,
+                Max = Max,
+            };
+        }
     }
 }

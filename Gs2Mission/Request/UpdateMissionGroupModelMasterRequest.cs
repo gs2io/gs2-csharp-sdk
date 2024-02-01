@@ -169,17 +169,5 @@ namespace Gs2.Gs2Mission.Request
             key += CompleteNotificationNamespaceId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UpdateMissionGroupModelMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UpdateMissionGroupModelMasterRequest)x;
-            return this;
-        }
     }
 }

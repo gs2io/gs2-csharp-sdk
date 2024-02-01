@@ -427,5 +427,90 @@ namespace Gs2.Gs2Quest.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (QuestModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.questModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Contents.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.contents.error.tooFew"),
+                    });
+                }
+                if (Contents.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.contents.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (FirstCompleteAcquireActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.firstCompleteAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.consumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (FailedAcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.failedAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (PremiseQuestNames.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModel", "quest.questModel.premiseQuestNames.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new QuestModel {
+                QuestModelId = QuestModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Contents = Contents.Clone() as Gs2.Gs2Quest.Model.Contents[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+                FirstCompleteAcquireActions = FirstCompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                FailedAcquireActions = FailedAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                PremiseQuestNames = PremiseQuestNames.Clone() as string[],
+            };
+        }
     }
 }

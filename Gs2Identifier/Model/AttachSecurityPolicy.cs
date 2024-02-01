@@ -193,5 +193,55 @@ namespace Gs2.Gs2Identifier.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UserId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attachSecurityPolicy", "identifier.attachSecurityPolicy.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SecurityPolicyIds.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attachSecurityPolicy", "identifier.attachSecurityPolicy.securityPolicyIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AttachedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attachSecurityPolicy", "identifier.attachSecurityPolicy.attachedAt.error.invalid"),
+                    });
+                }
+                if (AttachedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attachSecurityPolicy", "identifier.attachSecurityPolicy.attachedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attachSecurityPolicy", "identifier.attachSecurityPolicy.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attachSecurityPolicy", "identifier.attachSecurityPolicy.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AttachSecurityPolicy {
+                UserId = UserId,
+                SecurityPolicyIds = SecurityPolicyIds.Clone() as string[],
+                AttachedAt = AttachedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

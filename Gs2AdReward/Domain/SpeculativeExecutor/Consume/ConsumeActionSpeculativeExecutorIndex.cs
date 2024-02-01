@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2AdReward.Model.Transaction;
 using Gs2.Gs2AdReward.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (ConsumePointByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = ConsumePointByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = ConsumePointByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ConsumePointByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (ConsumePointByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = ConsumePointByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = ConsumePointByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ConsumePointByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

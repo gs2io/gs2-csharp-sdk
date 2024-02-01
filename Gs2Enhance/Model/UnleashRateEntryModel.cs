@@ -99,5 +99,39 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (GradeValue < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.gradeValue.error.invalid"),
+                    });
+                }
+                if (GradeValue > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.gradeValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NeedCount < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.needCount.error.invalid"),
+                    });
+                }
+                if (NeedCount > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.needCount.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new UnleashRateEntryModel {
+                GradeValue = GradeValue,
+                NeedCount = NeedCount,
+            };
+        }
     }
 }

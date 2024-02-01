@@ -179,5 +179,59 @@ namespace Gs2.Gs2Experience.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Mode) {
+                    case "double":
+                    case "big":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("acquireActionRate", "experience.acquireActionRate.mode.error.invalid"),
+                        });
+                }
+            }
+            if (Mode == "double") {
+                if (Rates.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.rates.error.tooFew"),
+                    });
+                }
+                if (Rates.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.rates.error.tooMany"),
+                    });
+                }
+            }
+            if (Mode == "big") {
+                if (BigRates.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.bigRates.error.tooFew"),
+                    });
+                }
+                if (BigRates.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireActionRate", "experience.acquireActionRate.bigRates.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AcquireActionRate {
+                Name = Name,
+                Mode = Mode,
+                Rates = Rates.Clone() as double[],
+                BigRates = BigRates.Clone() as string[],
+            };
+        }
     }
 }

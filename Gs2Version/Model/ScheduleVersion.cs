@@ -137,5 +137,30 @@ namespace Gs2.Gs2Version.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+                if (ScheduleEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scheduleVersion", "version.scheduleVersion.scheduleEventId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ScheduleVersion {
+                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                WarningVersion = WarningVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                ErrorVersion = ErrorVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                ScheduleEventId = ScheduleEventId,
+            };
+        }
     }
 }

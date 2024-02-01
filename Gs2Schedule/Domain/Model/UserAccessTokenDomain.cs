@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Schedule.Domain.Iterator;
+using Gs2.Gs2Schedule.Model.Cache;
 using Gs2.Gs2Schedule.Request;
 using Gs2.Gs2Schedule.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,10 @@ namespace Gs2.Gs2Schedule.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScheduleRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -79,15 +77,10 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._client = new Gs2ScheduleRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Schedule.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Schedule.Model.Trigger> Triggers(
         )
         {
@@ -98,14 +91,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Schedule.Model.Trigger> TriggersAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Schedule.Model.Trigger> Triggers(
-            #endif
-        #else
         public DescribeTriggersIterator TriggersAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeTriggersIterator(
@@ -113,26 +106,22 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeTriggers(
             Action<Gs2.Gs2Schedule.Model.Trigger[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Trigger>(
-                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Trigger"
+                    this.UserId
                 ),
                 callback
             );
@@ -158,10 +147,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Trigger>(
-                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Trigger"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -173,12 +161,11 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return new Gs2.Gs2Schedule.Domain.Model.TriggerAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 triggerName
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Schedule.Model.Event> Events(
         )
         {
@@ -189,14 +176,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Schedule.Model.Event> EventsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Schedule.Model.Event> Events(
-            #endif
-        #else
         public DescribeEventsIterator EventsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeEventsIterator(
@@ -204,26 +191,22 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeEvents(
             Action<Gs2.Gs2Schedule.Model.Event[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Event>(
-                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Event"
+                    this.UserId
                 ),
                 callback
             );
@@ -249,10 +232,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Schedule.Model.Event>(
-                Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Event"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -264,33 +246,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
             return new Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 eventName
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "schedule",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
             );
         }
 

@@ -121,5 +121,29 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PrizeId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("drawnPrize", "lottery.drawnPrize.prizeId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("drawnPrize", "lottery.drawnPrize.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DrawnPrize {
+                PrizeId = PrizeId,
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+            };
+        }
     }
 }

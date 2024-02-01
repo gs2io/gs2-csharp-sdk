@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Enhance.Domain.Iterator;
+using Gs2.Gs2Enhance.Model.Cache;
 using Gs2.Gs2Enhance.Request;
 using Gs2.Gs2Enhance.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,17 +63,13 @@ namespace Gs2.Gs2Enhance.Domain.Model
     public partial class ProgressAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnhanceRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
         public long? AcquireExperience { get; set; }
         public float? BonusRate { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public ProgressAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -82,74 +80,30 @@ namespace Gs2.Gs2Enhance.Domain.Model
             this._client = new Gs2EnhanceRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Progress"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Enhance.Model.Progress> GetFuture(
             GetProgressRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.Progress> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.GetProgressFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetProgressFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.Progress>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "progress")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Progress"
-                        );
-                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Enhance.Model.Progress>(Impl);
@@ -164,50 +118,14 @@ namespace Gs2.Gs2Enhance.Domain.Model
             #endif
             GetProgressRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            GetProgressResult result = null;
-            try {
-                result = await this._client.GetProgressAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.Progress>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "progress")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Progress"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetProgressAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -217,12 +135,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
             StartRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.StartByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -239,22 +156,17 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.StartFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.StartFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -287,9 +199,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
             StartRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.StartByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -299,16 +211,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 );
                 commit?.Invoke();
             }
-            StartResult result = null;
-                result = await this._client.StartAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.StartAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -325,25 +232,15 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to StartFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Start(
-            StartRequest request
-        ) {
-            return StartFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> EndFuture(
             EndRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.EndByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -360,37 +257,17 @@ namespace Gs2.Gs2Enhance.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.EndFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.EndFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Progress"
-                        );
-                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -423,9 +300,9 @@ namespace Gs2.Gs2Enhance.Domain.Model
             EndRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.EndByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -435,31 +312,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
                 );
                 commit?.Invoke();
             }
-            EndResult result = null;
-                result = await this._client.EndAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Progress"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.EndAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -476,68 +333,27 @@ namespace Gs2.Gs2Enhance.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to EndFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> End(
-            EndRequest request
-        ) {
-            return EndFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> DeleteFuture(
             DeleteProgressRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.DeleteProgressFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteProgressFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.Progress>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "progress")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Progress"
-                        );
-                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -554,132 +370,55 @@ namespace Gs2.Gs2Enhance.Domain.Model
             #endif
             DeleteProgressRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            DeleteProgressResult result = null;
             try {
-                result = await this._client.DeleteProgressAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteProgressAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.Progress>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "progress")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Progress"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Enhance.Model.Progress>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
         }
         #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Enhance.Domain.Model.ProgressAccessTokenDomain> Delete(
-            DeleteProgressRequest request
-        ) {
-            return DeleteFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "enhance",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Enhance.Model.Progress> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.Progress> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.Progress>(
-                    _parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                var (value, find) = (null as Gs2.Gs2Enhance.Model.Progress).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Enhance.Model.Progress).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    () => this.GetFuture(
+                        new GetProgressRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetProgressRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.Progress>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "progress")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.Progress>(
-                        _parentKey,
-                        Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Enhance.Model.Progress>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Enhance.Model.Progress> ModelAsync()
@@ -687,48 +426,22 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public async Task<Gs2.Gs2Enhance.Model.Progress> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.Progress>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.Progress>(
-                    _parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetProgressRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.Progress>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "progress")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.Progress>(
-                        _parentKey,
-                        Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Enhance.Model.Progress).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Enhance.Model.Progress).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                () => this.GetAsync(
+                    new GetProgressRequest()
+                )
+            );
         }
         #endif
 
@@ -757,18 +470,21 @@ namespace Gs2.Gs2Enhance.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Enhance.Model.Progress>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2Enhance.Model.Progress).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Enhance.Model.Progress> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                (null as Gs2.Gs2Enhance.Model.Progress).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Enhance.Model.Progress).CacheKey(
                 ),
                 callback,
                 () =>
@@ -787,8 +503,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enhance.Model.Progress>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.ProgressDomain.CreateCacheKey(
+                (null as Gs2.Gs2Enhance.Model.Progress).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Enhance.Model.Progress).CacheKey(
                 ),
                 callbackId
             );

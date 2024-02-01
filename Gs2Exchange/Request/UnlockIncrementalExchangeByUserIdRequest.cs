@@ -115,36 +115,5 @@ namespace Gs2.Gs2Exchange.Request
             key += LockTransactionId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new UnlockIncrementalExchangeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                RateName = RateName,
-                UserId = UserId,
-                LockTransactionId = LockTransactionId,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UnlockIncrementalExchangeByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values UnlockIncrementalExchangeByUserIdRequest::namespaceName");
-            }
-            if (RateName != y.RateName) {
-                throw new ArithmeticException("mismatch parameter values UnlockIncrementalExchangeByUserIdRequest::rateName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values UnlockIncrementalExchangeByUserIdRequest::userId");
-            }
-            if (LockTransactionId != y.LockTransactionId) {
-                throw new ArithmeticException("mismatch parameter values UnlockIncrementalExchangeByUserIdRequest::lockTransactionId");
-            }
-            return new UnlockIncrementalExchangeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                RateName = RateName,
-                UserId = UserId,
-                LockTransactionId = LockTransactionId,
-            };
-        }
     }
 }

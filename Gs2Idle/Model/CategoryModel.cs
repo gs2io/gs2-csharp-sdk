@@ -303,5 +303,92 @@ namespace Gs2.Gs2Idle.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CategoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.categoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RewardIntervalMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.rewardIntervalMinutes.error.invalid"),
+                    });
+                }
+                if (RewardIntervalMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.rewardIntervalMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (DefaultMaximumIdleMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.defaultMaximumIdleMinutes.error.invalid"),
+                    });
+                }
+                if (DefaultMaximumIdleMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.defaultMaximumIdleMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (IdlePeriodScheduleId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.idlePeriodScheduleId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReceivePeriodScheduleId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "idle.categoryModel.receivePeriodScheduleId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CategoryModel {
+                CategoryModelId = CategoryModelId,
+                Name = Name,
+                Metadata = Metadata,
+                RewardIntervalMinutes = RewardIntervalMinutes,
+                DefaultMaximumIdleMinutes = DefaultMaximumIdleMinutes,
+                AcquireActions = AcquireActions.Clone() as Gs2.Gs2Idle.Model.AcquireActionList[],
+                IdlePeriodScheduleId = IdlePeriodScheduleId,
+                ReceivePeriodScheduleId = ReceivePeriodScheduleId,
+            };
+        }
     }
 }

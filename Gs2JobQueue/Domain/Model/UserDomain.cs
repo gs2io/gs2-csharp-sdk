@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2JobQueue.Domain.Iterator;
+using Gs2.Gs2JobQueue.Model.Cache;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Gs2Auth.Model;
@@ -65,8 +66,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private readonly Gs2JobQueueRestClient _client;
         private readonly string _namespaceName;
         private readonly string _userId;
-
-        private readonly String _parentKey;
         public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
         public string NextPageToken { get; set; }
@@ -84,10 +83,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             this._namespaceName = namespaceName;
             this._userId = userId;
-            this._parentKey = Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -132,10 +127,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2JobQueue.Model.Job>(
-                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Job"
+                    this.UserId
                 ),
                 callback
             );
@@ -161,10 +155,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.Job>(
-                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Job"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -223,10 +216,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "DeadLetterJob"
+                    this.UserId
                 ),
                 callback
             );
@@ -252,10 +244,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "DeadLetterJob"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -272,31 +263,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "jobQueue",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
-            );
-        }
-
     }
 
     public partial class UserDomain {
@@ -305,69 +271,28 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> PushFuture(
             PushByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
-                var future = this._client.PushByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.PushByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    {
-                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Job"
-                        );
-                        foreach (var item in resultModel.Items) {
-                            var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                                item.Name.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                    }
-                }
-                var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        result.Items[i]?.UserId,
-                        result.Items[i]?.Name
-                    );
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Job"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        result.Items[i].Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        result.Items[i],
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+                var domain = result?.Items?.Select(v => new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    v?.UserId,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2JobQueue.Domain.Model.JobDomain>();
                 if (result.AutoRun != null && !result.AutoRun.Value)
                 {
                     this._gs2.JobQueueDomain.Push(
@@ -389,60 +314,20 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             #endif
             PushByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            PushByUserIdResult result = null;
-                result = await this._client.PushByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Job"
-                    );
-                    foreach (var item in resultModel.Items) {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                            item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
-            }
-                var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        result.Items[i]?.UserId,
-                        result.Items[i]?.Name
-                    );
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Job"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        result.Items[i].Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        result.Items[i],
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.PushByUserIdAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
+                this._gs2,
+                this.NamespaceName,
+                v?.UserId,
+                v?.Name
+            )).ToArray() ?? Array.Empty<Gs2.Gs2JobQueue.Domain.Model.JobDomain>();
             if (result.AutoRun != null && !result.AutoRun.Value)
             {
                 this._gs2.JobQueueDomain.Push(
@@ -455,55 +340,25 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PushFuture.")]
-        public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> Push(
-            PushByUserIdRequest request
-        ) {
-            return PushFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> RunFuture(
             RunByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
-                var future = this._client.RunByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.RunByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Job"
-                        );
-                        var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
-                    }
-                }
                 if (result?.Item != null) {
                     this._gs2.UpdateCacheFromJobResult(
                         result?.Item,
@@ -512,7 +367,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 }
                 var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
                     this._gs2,
-                    request.NamespaceName,
+                    this.NamespaceName,
                     result?.Item?.UserId,
                     result?.Item?.Name
                 );
@@ -533,58 +388,29 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             #endif
             RunByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            RunByUserIdResult result = null;
-            try {
-                result = await this._client.RunByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Job"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(parentKey, key);
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.RunByUserIdAsync(request)
+            );
             if (result?.Item != null) {
                 this._gs2.UpdateCacheFromJobResult(
                     result?.Item,
                     result?.Result
                 );
             }
-                var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
-                    this._gs2,
-                    request.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.Name
-                );
+            var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId,
+                result?.Item?.Name
+            );
             domain.IsLastJob = result?.IsLastJob;
-            domain.Result = result?.Result;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to RunFuture.")]
-        public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> Run(
-            RunByUserIdRequest request
-        ) {
-            return RunFuture(request);
         }
         #endif
 

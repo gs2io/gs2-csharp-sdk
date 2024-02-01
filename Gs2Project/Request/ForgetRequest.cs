@@ -33,14 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class ForgetRequest : Gs2Request<ForgetRequest>
 	{
-        public string Email { set; get; }
-        public string Lang { set; get; }
-
+         public string Email { set; get; }
+         public string Lang { set; get; }
         public ForgetRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
-
         public ForgetRequest WithLang(string lang) {
             this.Lang = lang;
             return this;
@@ -86,18 +84,6 @@ namespace Gs2.Gs2Project.Request
             key += Email + ":";
             key += Lang + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply ForgetRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ForgetRequest)x;
-            return this;
         }
     }
 }

@@ -258,5 +258,63 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ItemId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.itemId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ItemName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.itemName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.count.error.invalid"),
+                    });
+                }
+                if (Count > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.count.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleItem", "inventory.simpleItem.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SimpleItem {
+                ItemId = ItemId,
+                UserId = UserId,
+                ItemName = ItemName,
+                Count = Count,
+                Revision = Revision,
+            };
+        }
     }
 }

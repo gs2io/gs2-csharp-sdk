@@ -379,5 +379,144 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ShowcaseId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.showcaseId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MaximumNumberOfChoice < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.maximumNumberOfChoice.error.invalid"),
+                    });
+                }
+                if (MaximumNumberOfChoice > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.maximumNumberOfChoice.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (DisplayItems.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.displayItems.error.tooFew"),
+                    });
+                }
+                if (DisplayItems.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.displayItems.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (BaseTimestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.baseTimestamp.error.invalid"),
+                    });
+                }
+                if (BaseTimestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.baseTimestamp.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ResetIntervalHours < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.resetIntervalHours.error.invalid"),
+                    });
+                }
+                if (ResetIntervalHours > 168) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.resetIntervalHours.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (SalesPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.salesPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcaseMaster", "showcase.randomShowcaseMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RandomShowcaseMaster {
+                ShowcaseId = ShowcaseId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                MaximumNumberOfChoice = MaximumNumberOfChoice,
+                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.RandomDisplayItemModel[],
+                BaseTimestamp = BaseTimestamp,
+                ResetIntervalHours = ResetIntervalHours,
+                SalesPeriodEventId = SalesPeriodEventId,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

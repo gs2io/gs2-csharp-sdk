@@ -99,5 +99,29 @@ namespace Gs2.Gs2News.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Key.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("setCookieRequestEntry", "news.setCookieRequestEntry.key.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("setCookieRequestEntry", "news.setCookieRequestEntry.value.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SetCookieRequestEntry {
+                Key = Key,
+                Value = Value,
+            };
+        }
     }
 }

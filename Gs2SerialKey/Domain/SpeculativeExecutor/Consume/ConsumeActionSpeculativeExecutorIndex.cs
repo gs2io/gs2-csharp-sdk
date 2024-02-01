@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2SerialKey.Model.Transaction;
 using Gs2.Gs2SerialKey.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (UseByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = UseByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = UseByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = UseByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (UseByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = UseByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = UseByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await UseByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

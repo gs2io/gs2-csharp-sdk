@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Matchmaking.Domain.Iterator;
+using Gs2.Gs2Matchmaking.Model.Cache;
 using Gs2.Gs2Matchmaking.Request;
 using Gs2.Gs2Matchmaking.Result;
 using Gs2.Gs2Auth.Model;
@@ -41,6 +42,7 @@ using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Gs2Matchmaking.Model;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -48,6 +50,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -62,22 +65,12 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class BallotDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _ratingName;
-        private readonly string _gatheringName;
-        private readonly int? _numberOfPlayer;
-        private readonly string _keyId;
-
-        private readonly String _parentKey;
-        public string Body { get; set; }
-        public string Signature { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string RatingName => _ratingName;
-        public string GatheringName => _gatheringName;
-        public int? NumberOfPlayer => _numberOfPlayer;
-        public string KeyId => _keyId;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string RatingName { get; }
+        public string GatheringName { get; }
+        public int? NumberOfPlayer { get; }
+        public string KeyId { get; }
 
         public BallotDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -92,56 +85,12 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._client = new Gs2MatchmakingRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._ratingName = ratingName;
-            this._gatheringName = gatheringName;
-            this._numberOfPlayer = numberOfPlayer;
-            this._keyId = keyId;
-            this._parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Ballot"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string ratingName,
-            string gatheringName,
-            string numberOfPlayer,
-            string keyId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "matchmaking",
-                namespaceName ?? "null",
-                userId ?? "null",
-                ratingName ?? "null",
-                gatheringName ?? "null",
-                numberOfPlayer ?? "null",
-                keyId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string ratingName,
-            string gatheringName,
-            string numberOfPlayer,
-            string keyId
-        )
-        {
-            return string.Join(
-                ":",
-                ratingName ?? "null",
-                gatheringName ?? "null",
-                numberOfPlayer ?? "null",
-                keyId ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.RatingName = ratingName;
+            this.GatheringName = gatheringName;
+            this.NumberOfPlayer = numberOfPlayer;
+            this.KeyId = keyId;
         }
 
     }
@@ -149,155 +98,62 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class BallotDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        private IFuture<Gs2.Gs2Matchmaking.Domain.Model.BallotDomain> GetFuture(
+        private IFuture<Gs2.Gs2Matchmaking.Model.SignedBallot> GetFuture(
             GetBallotByUserIdRequest request
         ) {
-
-            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.BallotDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.SignedBallot> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithRatingName(this.RatingName)
                     .WithGatheringName(this.GatheringName)
                     .WithNumberOfPlayer(this.NumberOfPlayer)
                     .WithKeyId(this.KeyId);
-                var future = this._client.GetBallotByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetBallotByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                            request.RatingName.ToString(),
-                            request.GatheringName.ToString(),
-                            request.NumberOfPlayer.ToString(),
-                            request.KeyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "ballot")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Ballot"
-                        );
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                            resultModel.Item.RatingName.ToString(),
-                            resultModel.Item.GatheringName.ToString(),
-                            resultModel.Item.NumberOfPlayer.ToString(),
-                            requestModel.KeyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
-                var domain = this;
-                domain.Body = result?.Body;
-                domain.Signature = result?.Signature;
-
-                self.OnComplete(domain);
+                self.OnComplete(new SignedBallot {
+                    Body = result.Body,
+                    Signature = result.Signature
+                });
             }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Domain.Model.BallotDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.SignedBallot>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        private async UniTask<Gs2.Gs2Matchmaking.Domain.Model.BallotDomain> GetAsync(
+        private async UniTask<Gs2.Gs2Matchmaking.Model.SignedBallot> GetAsync(
             #else
-        private async Task<Gs2.Gs2Matchmaking.Domain.Model.BallotDomain> GetAsync(
+        private async Task<Gs2.Gs2Matchmaking.Model.SignedBallot> GetAsync(
             #endif
             GetBallotByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithRatingName(this.RatingName)
                 .WithGatheringName(this.GatheringName)
                 .WithNumberOfPlayer(this.NumberOfPlayer)
                 .WithKeyId(this.KeyId);
-            GetBallotByUserIdResult result = null;
-            try {
-                result = await this._client.GetBallotByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    request.RatingName.ToString(),
-                    request.GatheringName.ToString(),
-                    request.NumberOfPlayer.ToString(),
-                    request.KeyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "ballot")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Ballot"
-                    );
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                        resultModel.Item.RatingName.ToString(),
-                        resultModel.Item.GatheringName.ToString(),
-                        resultModel.Item.NumberOfPlayer.ToString(),
-                        requestModel.KeyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
-            domain.Body = result?.Body;
-            domain.Signature = result?.Signature;
-
-            return domain;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetBallotByUserIdAsync(request)
+            );
+            return new SignedBallot {
+                Body = result.Body,
+                Signature = result.Signature
+            };
         }
         #endif
 
@@ -306,139 +162,89 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class BallotDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Matchmaking.Model.Ballot> ModelFuture()
+        public IFuture<Gs2.Gs2Matchmaking.Model.SignedBallot> ModelFuture()
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Ballot> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.SignedBallot> self)
             {
-                Gs2.Gs2Matchmaking.Model.Ballot value = null;
-                var find = false;
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetBallotByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                                    this.RatingName?.ToString(),
-                                    this.GatheringName?.ToString(),
-                                    this.NumberOfPlayer?.ToString(),
-                                    this.KeyId?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "ballot")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
-                        _parentKey,
-                        Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                            this.RatingName?.ToString(),
-                            this.GatheringName?.ToString(),
-                            this.NumberOfPlayer?.ToString(),
-                            this.KeyId?.ToString()
-                        )
-                    );
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.SignedBallot).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RatingName,
+                    this.GatheringName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
                 }
-                self.OnComplete(value);
+                var future = (null as Gs2.Gs2Matchmaking.Model.SignedBallot).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.RatingName,
+                    this.GatheringName,
+                    () => this.GetFuture(
+                        new GetBallotByUserIdRequest()
+                    )
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Ballot>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.SignedBallot>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Matchmaking.Model.Ballot> ModelAsync()
+        public async UniTask<Gs2.Gs2Matchmaking.Model.SignedBallot> ModelAsync()
             #else
-        public async Task<Gs2.Gs2Matchmaking.Model.Ballot> ModelAsync()
+        public async Task<Gs2.Gs2Matchmaking.Model.SignedBallot> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Ballot>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    this.RatingName?.ToString(),
-                    this.GatheringName?.ToString(),
-                    this.NumberOfPlayer?.ToString(),
-                    this.KeyId?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                Gs2.Gs2Matchmaking.Model.Ballot value = null;
-                var find = false;
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetBallotByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                                    this.RatingName?.ToString(),
-                                    this.GatheringName?.ToString(),
-                                    this.NumberOfPlayer?.ToString(),
-                                    this.KeyId?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Ballot>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "ballot")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Ballot>(
-                        _parentKey,
-                        Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                            this.RatingName?.ToString(),
-                            this.GatheringName?.ToString(),
-                            this.NumberOfPlayer?.ToString(),
-                            this.KeyId?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.SignedBallot).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.RatingName,
+                this.GatheringName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Matchmaking.Model.SignedBallot).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.RatingName,
+                this.GatheringName,
+                () => this.GetAsync(
+                    new GetBallotByUserIdRequest()
+                )
+            );
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Matchmaking.Model.Ballot> Model()
+        public async UniTask<Gs2.Gs2Matchmaking.Model.SignedBallot> Model()
         {
             return await ModelAsync();
         }
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Matchmaking.Model.Ballot> Model()
+        public IFuture<Gs2.Gs2Matchmaking.Model.SignedBallot> Model()
         {
             return ModelFuture();
         }
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Matchmaking.Model.Ballot> Model()
+        public async Task<Gs2.Gs2Matchmaking.Model.SignedBallot> Model()
         {
             return await ModelAsync();
         }
@@ -447,26 +253,25 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Matchmaking.Model.Ballot>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    this.RatingName.ToString(),
-                    this.GatheringName.ToString(),
-                    this.NumberOfPlayer.ToString(),
-                    this.KeyId.ToString()
-                )
+            (null as Gs2.Gs2Matchmaking.Model.SignedBallot).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.RatingName,
+                this.GatheringName
             );
         }
 
-        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Ballot> callback)
+        public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.SignedBallot> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    this.RatingName.ToString(),
-                    this.GatheringName.ToString(),
-                    this.NumberOfPlayer.ToString(),
-                    this.KeyId.ToString()
+                (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheKey(
+                    this.RatingName,
+                    this.GatheringName
                 ),
                 callback,
                 () =>
@@ -484,20 +289,21 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Ballot>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.BallotDomain.CreateCacheKey(
-                    this.RatingName.ToString(),
-                    this.GatheringName.ToString(),
-                    this.NumberOfPlayer.ToString(),
-                    this.KeyId.ToString()
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.SignedBallot>(
+                (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Matchmaking.Model.SignedBallot).CacheKey(
+                    this.RatingName,
+                    this.GatheringName
                 ),
                 callbackId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Matchmaking.Model.Ballot> callback)
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Matchmaking.Model.SignedBallot> callback)
         {
             IEnumerator Impl(IFuture<ulong> self)
             {
@@ -518,9 +324,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Matchmaking.Model.Ballot> callback)
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Matchmaking.Model.SignedBallot> callback)
             #else
-        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Matchmaking.Model.Ballot> callback)
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Matchmaking.Model.SignedBallot> callback)
             #endif
         {
             var item = await ModelAsync();

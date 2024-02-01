@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Stamina.Model.Transaction;
 using Gs2.Gs2Stamina.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DecreaseMaxValueByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DecreaseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DecreaseMaxValueByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DecreaseMaxValueByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 if (ConsumeStaminaByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = ConsumeStaminaByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ConsumeStaminaByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -113,7 +114,7 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DecreaseMaxValueByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DecreaseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DecreaseMaxValueByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DecreaseMaxValueByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -122,7 +123,7 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             }
             if (ConsumeStaminaByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = ConsumeStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = ConsumeStaminaByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ConsumeStaminaByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

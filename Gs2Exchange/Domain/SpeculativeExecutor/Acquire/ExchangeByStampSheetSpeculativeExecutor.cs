@@ -35,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
+using Gs2.Gs2Exchange.Model.Cache;
+using Gs2.Gs2Exchange.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -59,23 +61,7 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             ExchangeByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
-                    domain,
-                    accessToken,
-                    request
-                );
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var commit = future.Result;
-
-                result.OnComplete(() =>
-                {
-                    commit?.Invoke();
-                    return null;
-                });
+                result.OnComplete(() => null);
                 yield return null;
             }
 
@@ -93,34 +79,8 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ExchangeByUserIdRequest request
         ) {
-            var commit = await Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
-                domain,
-                accessToken,
-                request
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
-                return null;
-            };
+            return () => null;
         }
 #endif
-
-        public static ExchangeByUserIdRequest Rate(
-            ExchangeByUserIdRequest request,
-            double rate
-        ) {
-            request.Count = (int?) (request.Count * rate);
-            return request;
-        }
-
-        public static ExchangeByUserIdRequest Rate(
-            ExchangeByUserIdRequest request,
-            BigInteger rate
-        ) {
-            request.Count = (int?) ((request.Count ?? 0) * rate);
-            return request;
-        }
     }
 }

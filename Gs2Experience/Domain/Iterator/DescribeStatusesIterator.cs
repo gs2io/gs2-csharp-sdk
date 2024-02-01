@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Experience.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,12 +68,10 @@ namespace Gs2.Gs2Experience.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2ExperienceRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _experienceName;
-        private readonly AccessToken _accessToken;
-        public string NamespaceName => _namespaceName;
-        public string ExperienceName => _experienceName;
-        public string UserId => _accessToken?.UserId;
+        public string NamespaceName { get; }
+        public string ExperienceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => AccessToken?.UserId;
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -84,14 +83,14 @@ namespace Gs2.Gs2Experience.Domain.Iterator
             CacheDatabase cache,
             Gs2ExperienceRestClient client,
             string namespaceName,
-            string experienceName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string experienceName = null
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._experienceName = experienceName;
-            this._accessToken = accessToken;
+            this.NamespaceName = namespaceName;
+            this.ExperienceName = experienceName;
+            this.AccessToken = accessToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Experience.Model.Status[]{};
@@ -110,18 +109,17 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Status"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Experience.Model.Status>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Experience.Model.Status>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
+                        NamespaceName,
+                        AccessToken?.UserId
+                    ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._experienceName == null || item.ExperienceName == this._experienceName)
+                    .Where(item => this.ExperienceName == null || item.ExperienceName == this.ExperienceName)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -133,8 +131,8 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                 var r = await this._client.DescribeStatusesAsync(
                 #endif
                     new Gs2.Gs2Experience.Request.DescribeStatusesRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -148,25 +146,26 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this._experienceName == null || item.ExperienceName == this._experienceName)
+                    .Where(item => this.ExperienceName == null || item.ExperienceName == this.ExperienceName)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                                    item.ExperienceName?.ToString(),
-                                    item.PropertyId?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        AccessToken?.UserId,
+                        item.ExperienceName,
+                        item.PropertyId
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Experience.Model.Status>(
-                            parentKey
+                        (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
+                            NamespaceName,
+                            AccessToken?.UserId
+                        )
                     );
                 }
             }
@@ -202,7 +201,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Experience.Model.Status ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -265,7 +264,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Experience.Model.Status ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Enchant.Model.Transaction;
 using Gs2.Gs2Enchant.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

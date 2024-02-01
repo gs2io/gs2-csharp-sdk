@@ -121,5 +121,34 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Seed < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomStatus", "stateMachine.randomStatus.seed.error.invalid"),
+                    });
+                }
+                if (Seed > 4294967294) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomStatus", "stateMachine.randomStatus.seed.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Used.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomStatus", "stateMachine.randomStatus.used.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RandomStatus {
+                Seed = Seed,
+                Used = Used.Clone() as Gs2.Gs2StateMachine.Model.RandomUsed[],
+            };
+        }
     }
 }

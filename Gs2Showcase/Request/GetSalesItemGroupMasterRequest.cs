@@ -85,17 +85,5 @@ namespace Gs2.Gs2Showcase.Request
             key += SalesItemGroupName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetSalesItemGroupMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetSalesItemGroupMasterRequest)x;
-            return this;
-        }
     }
 }

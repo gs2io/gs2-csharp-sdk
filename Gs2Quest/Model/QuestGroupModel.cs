@@ -246,5 +246,53 @@ namespace Gs2.Gs2Quest.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (QuestGroupModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questGroupModel", "quest.questGroupModel.questGroupModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questGroupModel", "quest.questGroupModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questGroupModel", "quest.questGroupModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Quests.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questGroupModel", "quest.questGroupModel.quests.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questGroupModel", "quest.questGroupModel.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new QuestGroupModel {
+                QuestGroupModelId = QuestGroupModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Quests = Quests.Clone() as Gs2.Gs2Quest.Model.QuestModel[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+            };
+        }
     }
 }

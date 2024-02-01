@@ -103,31 +103,5 @@ namespace Gs2.Gs2Inbox.Request
             key += MessageName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DeleteMessageByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                MessageName = MessageName,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteMessageByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DeleteMessageByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DeleteMessageByUserIdRequest::userId");
-            }
-            if (MessageName != y.MessageName) {
-                throw new ArithmeticException("mismatch parameter values DeleteMessageByUserIdRequest::messageName");
-            }
-            return new DeleteMessageByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                MessageName = MessageName,
-            };
-        }
     }
 }

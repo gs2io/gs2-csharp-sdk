@@ -241,5 +241,63 @@ namespace Gs2.Gs2News.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (OutputId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.outputId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Text.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.text.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("output", "news.output.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Output {
+                OutputId = OutputId,
+                Name = Name,
+                Text = Text,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

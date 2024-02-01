@@ -282,5 +282,71 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (VoteId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.voteId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RatingName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.ratingName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GatheringName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.gatheringName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (WrittenBallots.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.writtenBallots.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("vote", "matchmaking.vote.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Vote {
+                VoteId = VoteId,
+                RatingName = RatingName,
+                GatheringName = GatheringName,
+                WrittenBallots = WrittenBallots.Clone() as Gs2.Gs2Matchmaking.Model.WrittenBallot[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

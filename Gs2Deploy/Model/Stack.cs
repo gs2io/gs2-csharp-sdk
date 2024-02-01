@@ -264,5 +264,105 @@ namespace Gs2.Gs2Deploy.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StackId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.stackId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Template.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.template.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Status) {
+                    case "CREATE_PROCESSING":
+                    case "CREATE_COMPLETE":
+                    case "UPDATE_PROCESSING":
+                    case "UPDATE_COMPLETE":
+                    case "CLEAN_PROCESSING":
+                    case "CLEAN_COMPLETE":
+                    case "DELETE_PROCESSING":
+                    case "DELETE_COMPLETE":
+                    case "ROLLBACK_INITIALIZING":
+                    case "ROLLBACK_PROCESSING":
+                    case "ROLLBACK_COMPLETE":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("stack", "deploy.stack.status.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stack", "deploy.stack.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Stack {
+                StackId = StackId,
+                Name = Name,
+                Description = Description,
+                Template = Template,
+                Status = Status,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

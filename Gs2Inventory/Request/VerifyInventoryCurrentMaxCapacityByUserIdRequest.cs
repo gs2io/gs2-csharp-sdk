@@ -124,44 +124,7 @@ namespace Gs2.Gs2Inventory.Request
             key += UserId + ":";
             key += InventoryName + ":";
             key += VerifyType + ":";
-            key += CurrentInventoryMaxCapacity + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyInventoryCurrentMaxCapacityByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                VerifyType = VerifyType,
-                CurrentInventoryMaxCapacity = CurrentInventoryMaxCapacity,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyInventoryCurrentMaxCapacityByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyInventoryCurrentMaxCapacityByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyInventoryCurrentMaxCapacityByUserIdRequest::userId");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values VerifyInventoryCurrentMaxCapacityByUserIdRequest::inventoryName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyInventoryCurrentMaxCapacityByUserIdRequest::verifyType");
-            }
-            if (CurrentInventoryMaxCapacity != y.CurrentInventoryMaxCapacity) {
-                throw new ArithmeticException("mismatch parameter values VerifyInventoryCurrentMaxCapacityByUserIdRequest::currentInventoryMaxCapacity");
-            }
-            return new VerifyInventoryCurrentMaxCapacityByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                VerifyType = VerifyType,
-                CurrentInventoryMaxCapacity = CurrentInventoryMaxCapacity,
-            };
         }
     }
 }

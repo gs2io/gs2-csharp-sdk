@@ -219,5 +219,76 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.consumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Stock < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.stock.error.invalid"),
+                    });
+                }
+                if (Stock > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.stock.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Weight < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.weight.error.invalid"),
+                    });
+                }
+                if (Weight > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomDisplayItemModel", "showcase.randomDisplayItemModel.weight.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RandomDisplayItemModel {
+                Name = Name,
+                Metadata = Metadata,
+                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                Stock = Stock,
+                Weight = Weight,
+            };
+        }
     }
 }

@@ -126,38 +126,5 @@ namespace Gs2.Gs2Money.Request
             key += Price + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DepositByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Slot = Slot,
-                Price = Price,
-                Count = Count * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DepositByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DepositByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DepositByUserIdRequest::userId");
-            }
-            if (Slot != y.Slot) {
-                throw new ArithmeticException("mismatch parameter values DepositByUserIdRequest::slot");
-            }
-            if (Price != y.Price) {
-                throw new ArithmeticException("mismatch parameter values DepositByUserIdRequest::price");
-            }
-            return new DepositByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Slot = Slot,
-                Price = Price,
-                Count = Count + y.Count,
-            };
-        }
     }
 }

@@ -181,5 +181,45 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("player", "matchmaking.player.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Attributes.Length > 5) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("player", "matchmaking.player.attributes.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (RoleName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("player", "matchmaking.player.roleName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DenyUserIds.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("player", "matchmaking.player.denyUserIds.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Player {
+                UserId = UserId,
+                Attributes = Attributes.Clone() as Gs2.Gs2Matchmaking.Model.Attribute_[],
+                RoleName = RoleName,
+                DenyUserIds = DenyUserIds.Clone() as string[],
+            };
+        }
     }
 }

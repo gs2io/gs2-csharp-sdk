@@ -173,46 +173,5 @@ namespace Gs2.Gs2Enhance.Request
             key += Config + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new UnleashByUserIdRequest {
-                NamespaceName = NamespaceName,
-                RateName = RateName,
-                UserId = UserId,
-                TargetItemSetId = TargetItemSetId,
-                Materials = Materials,
-                Config = Config,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UnleashByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values UnleashByUserIdRequest::namespaceName");
-            }
-            if (RateName != y.RateName) {
-                throw new ArithmeticException("mismatch parameter values UnleashByUserIdRequest::rateName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values UnleashByUserIdRequest::userId");
-            }
-            if (TargetItemSetId != y.TargetItemSetId) {
-                throw new ArithmeticException("mismatch parameter values UnleashByUserIdRequest::targetItemSetId");
-            }
-            if (Materials != y.Materials) {
-                throw new ArithmeticException("mismatch parameter values UnleashByUserIdRequest::materials");
-            }
-            if (Config != y.Config) {
-                throw new ArithmeticException("mismatch parameter values UnleashByUserIdRequest::config");
-            }
-            return new UnleashByUserIdRequest {
-                NamespaceName = NamespaceName,
-                RateName = RateName,
-                UserId = UserId,
-                TargetItemSetId = TargetItemSetId,
-                Materials = Materials,
-                Config = Config,
-            };
-        }
     }
 }

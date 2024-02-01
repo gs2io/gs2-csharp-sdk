@@ -439,5 +439,157 @@ namespace Gs2.Gs2LoginReward.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (BonusModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.bonusModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Mode) {
+                    case "schedule":
+                    case "streaming":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.mode.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (PeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.periodEventId.error.tooLong"),
+                    });
+                }
+            }
+            if (PeriodEventId == "") {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.resetHour.error.invalid"),
+                    });
+                }
+            }
+            if (Mode == "streaming") {
+                switch (Repeat) {
+                    case "enabled":
+                    case "disabled":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.repeat.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Rewards.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.rewards.error.tooMany"),
+                    });
+                }
+            }
+            {
+                switch (MissedReceiveRelief) {
+                    case "enabled":
+                    case "disabled":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.missedReceiveRelief.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (MissedReceiveReliefConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.missedReceiveReliefConsumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModelMaster", "loginReward.bonusModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BonusModelMaster {
+                BonusModelId = BonusModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                Mode = Mode,
+                PeriodEventId = PeriodEventId,
+                ResetHour = ResetHour,
+                Repeat = Repeat,
+                Rewards = Rewards.Clone() as Gs2.Gs2LoginReward.Model.Reward[],
+                MissedReceiveRelief = MissedReceiveRelief,
+                MissedReceiveReliefConsumeActions = MissedReceiveReliefConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

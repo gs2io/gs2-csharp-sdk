@@ -99,5 +99,29 @@ namespace Gs2.Gs2Deploy.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("outputField", "deploy.outputField.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (FieldName.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("outputField", "deploy.outputField.fieldName.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new OutputField {
+                Name = Name,
+                FieldName = FieldName,
+            };
+        }
     }
 }

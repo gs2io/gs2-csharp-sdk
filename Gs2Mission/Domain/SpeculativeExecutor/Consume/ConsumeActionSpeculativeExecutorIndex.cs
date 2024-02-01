@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Mission.Model.Transaction;
 using Gs2.Gs2Mission.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (ReceiveByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = ReceiveByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                 }
                 if (DecreaseCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DecreaseCounterByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DecreaseCounterByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -113,7 +114,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (ReceiveByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = ReceiveByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = ReceiveByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await ReceiveByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -122,7 +123,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             }
             if (DecreaseCounterByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DecreaseCounterByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DecreaseCounterByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DecreaseCounterByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

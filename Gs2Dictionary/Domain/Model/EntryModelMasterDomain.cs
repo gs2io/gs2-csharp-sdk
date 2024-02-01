@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Dictionary.Domain.Iterator;
+using Gs2.Gs2Dictionary.Model.Cache;
 using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
     public partial class EntryModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _entryName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string EntryName => _entryName;
+        public string NamespaceName { get; }
+        public string EntryName { get; }
 
         public EntryModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._client = new Gs2DictionaryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._entryName = entryName;
-            this._parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "EntryModelMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string entryName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "dictionary",
-                namespaceName ?? "null",
-                entryName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string entryName
-        )
-        {
-            return string.Join(
-                ":",
-                entryName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.EntryName = entryName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         private IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetFuture(
             GetEntryModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithEntryName(this.EntryName);
-                var future = this._client.GetEntryModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetEntryModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            request.EntryName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "entryModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "EntryModelMaster"
-                        );
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             GetEntryModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithEntryName(this.EntryName);
-            GetEntryModelMasterResult result = null;
-            try {
-                result = await this._client.GetEntryModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                    request.EntryName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "entryModelMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "EntryModelMaster"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetEntryModelMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateFuture(
             UpdateEntryModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithEntryName(this.EntryName);
-                var future = this._client.UpdateEntryModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateEntryModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "EntryModelMaster"
-                        );
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             UpdateEntryModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithEntryName(this.EntryName);
-            UpdateEntryModelMasterResult result = null;
-                result = await this._client.UpdateEntryModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "EntryModelMaster"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateEntryModelMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> Update(
-            UpdateEntryModelMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteFuture(
             DeleteEntryModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithEntryName(this.EntryName);
-                var future = this._client.DeleteEntryModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteEntryModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            request.EntryName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "entryModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "EntryModelMaster"
-                        );
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             DeleteEntryModelMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithEntryName(this.EntryName);
-            DeleteEntryModelMasterResult result = null;
             try {
-                result = await this._client.DeleteEntryModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                    request.EntryName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithEntryName(this.EntryName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteEntryModelMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "entryModelMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "EntryModelMaster"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> Delete(
-            DeleteEntryModelMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                        this.EntryName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.EntryName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.EntryName,
+                    () => this.GetFuture(
+                        new GetEntryModelMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetEntryModelMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                                    this.EntryName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "entryModelMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            this.EntryName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public async Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                    this.EntryName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                        this.EntryName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetEntryModelMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                                    this.EntryName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "entryModelMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                            this.EntryName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.EntryName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.EntryName,
+                () => this.GetAsync(
+                    new GetEntryModelMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                    this.EntryName.ToString()
-                )
+            (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.EntryName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                    this.EntryName.ToString()
+                (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
+                    this.EntryName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain.CreateCacheKey(
-                    this.EntryName.ToString()
+                (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
+                    this.EntryName
                 ),
                 callbackId
             );

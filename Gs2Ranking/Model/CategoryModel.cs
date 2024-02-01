@@ -496,5 +496,172 @@ namespace Gs2.Gs2Ranking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CategoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.categoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MinimumValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.minimumValue.error.invalid"),
+                    });
+                }
+                if (MinimumValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.minimumValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaximumValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.maximumValue.error.invalid"),
+                    });
+                }
+                if (MaximumValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.maximumValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                switch (OrderDirection) {
+                    case "asc":
+                    case "desc":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("categoryModel", "ranking.categoryModel.orderDirection.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (Scope) {
+                    case "global":
+                    case "scoped":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("categoryModel", "ranking.categoryModel.scope.error.invalid"),
+                        });
+                }
+            }
+            if (Scope == "global") {
+            }
+            if (UniqueByUserId == true) {
+            }
+            {
+                if (CalculateFixedTimingHour < -1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.calculateFixedTimingHour.error.invalid"),
+                    });
+                }
+                if (CalculateFixedTimingHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.calculateFixedTimingHour.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CalculateFixedTimingMinute < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.calculateFixedTimingMinute.error.invalid"),
+                    });
+                }
+                if (CalculateFixedTimingMinute > 59) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.calculateFixedTimingMinute.error.invalid"),
+                    });
+                }
+            }
+            if (Scope == "global") {
+                if (CalculateIntervalMinutes < 15) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.calculateIntervalMinutes.error.invalid"),
+                    });
+                }
+                if (CalculateIntervalMinutes > 1440) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.calculateIntervalMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (AdditionalScopes.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.additionalScopes.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (EntryPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.entryPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AccessPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.accessPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (IgnoreUserIds.Length > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.ignoreUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Generation.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModel", "ranking.categoryModel.generation.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CategoryModel {
+                CategoryModelId = CategoryModelId,
+                Name = Name,
+                Metadata = Metadata,
+                MinimumValue = MinimumValue,
+                MaximumValue = MaximumValue,
+                OrderDirection = OrderDirection,
+                Scope = Scope,
+                UniqueByUserId = UniqueByUserId,
+                Sum = Sum,
+                CalculateFixedTimingHour = CalculateFixedTimingHour,
+                CalculateFixedTimingMinute = CalculateFixedTimingMinute,
+                CalculateIntervalMinutes = CalculateIntervalMinutes,
+                AdditionalScopes = AdditionalScopes.Clone() as Gs2.Gs2Ranking.Model.Scope[],
+                EntryPeriodEventId = EntryPeriodEventId,
+                AccessPeriodEventId = AccessPeriodEventId,
+                IgnoreUserIds = IgnoreUserIds.Clone() as string[],
+                Generation = Generation,
+            };
+        }
     }
 }

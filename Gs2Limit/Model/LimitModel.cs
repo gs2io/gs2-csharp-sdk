@@ -262,5 +262,94 @@ namespace Gs2.Gs2Limit.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (LimitModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.limitModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (ResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("limitModel", "limit.limitModel.resetType.error.invalid"),
+                        });
+                }
+            }
+            if (ResetType == "monthly") {
+                if (ResetDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.resetDayOfMonth.error.invalid"),
+                    });
+                }
+                if (ResetDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.resetDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "weekly") {
+                switch (ResetDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("limitModel", "limit.limitModel.resetDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((ResetType =="monthly" || ResetType == "weekly" || ResetType == "daily")) {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModel", "limit.limitModel.resetHour.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new LimitModel {
+                LimitModelId = LimitModelId,
+                Name = Name,
+                Metadata = Metadata,
+                ResetType = ResetType,
+                ResetDayOfMonth = ResetDayOfMonth,
+                ResetDayOfWeek = ResetDayOfWeek,
+                ResetHour = ResetHour,
+            };
+        }
     }
 }

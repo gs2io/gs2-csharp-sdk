@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Enchant.Domain.Iterator;
+using Gs2.Gs2Enchant.Model.Cache;
 using Gs2.Gs2Enchant.Request;
 using Gs2.Gs2Enchant.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,17 +63,11 @@ namespace Gs2.Gs2Enchant.Domain.Model
     public partial class RarityParameterStatusAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly string _parameterName;
-        private readonly string _propertyId;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public string ParameterName => _parameterName;
-        public string PropertyId => _propertyId;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string ParameterName { get; }
+        public string PropertyId { get; }
 
         public RarityParameterStatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -84,83 +80,35 @@ namespace Gs2.Gs2Enchant.Domain.Model
             this._client = new Gs2EnchantRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parameterName = parameterName;
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.ParameterName = parameterName;
             propertyId = propertyId?.Replace("{region}", gs2.RestSession.Region.DisplayName()).Replace("{ownerId}", gs2.RestSession.OwnerId ?? "").Replace("{userId}", UserId);
-            this._propertyId = propertyId;
-            this._parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "RarityParameterStatus"
-            );
+            this.PropertyId = propertyId;
         }
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus> GetFuture(
             GetRarityParameterStatusRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithParameterName(this.ParameterName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.GetRarityParameterStatusFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetRarityParameterStatusFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            request.ParameterName.ToString(),
-                            request.PropertyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "rarityParameterStatus")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "RarityParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus>(Impl);
@@ -175,56 +123,16 @@ namespace Gs2.Gs2Enchant.Domain.Model
             #endif
             GetRarityParameterStatusRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithParameterName(this.ParameterName)
                 .WithPropertyId(this.PropertyId);
-            GetRarityParameterStatusResult result = null;
-            try {
-                result = await this._client.GetRarityParameterStatusAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                    request.ParameterName.ToString(),
-                    request.PropertyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "rarityParameterStatus")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "RarityParameterStatus"
-                    );
-                    var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                        resultModel.Item.ParameterName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetRarityParameterStatusAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -233,47 +141,24 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusAccessTokenDomain> VerifyFuture(
             VerifyRarityParameterStatusRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithParameterName(this.ParameterName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.VerifyRarityParameterStatusFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyRarityParameterStatusFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "RarityParameterStatus"
-                        );
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            resultModel.Item.ParameterName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -290,141 +175,59 @@ namespace Gs2.Gs2Enchant.Domain.Model
             #endif
             VerifyRarityParameterStatusRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithParameterName(this.ParameterName)
                 .WithPropertyId(this.PropertyId);
-            VerifyRarityParameterStatusResult result = null;
-                result = await this._client.VerifyRarityParameterStatusAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enchant.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "RarityParameterStatus"
-                    );
-                    var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                        resultModel.Item.ParameterName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyRarityParameterStatusAsync(request)
+            );
+            var domain = this;
 
             return domain;
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to VerifyFuture.")]
-        public IFuture<Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusAccessTokenDomain> Verify(
-            VerifyRarityParameterStatusRequest request
-        ) {
-            return VerifyFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string parameterName,
-            string propertyId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "enchant",
-                namespaceName ?? "null",
-                userId ?? "null",
-                parameterName ?? "null",
-                propertyId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string parameterName,
-            string propertyId
-        )
-        {
-            return string.Join(
-                ":",
-                parameterName ?? "null",
-                propertyId ?? "null"
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                    _parentKey,
-                    Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                        this.ParameterName?.ToString(),
-                        this.PropertyId?.ToString()
+                var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ParameterName,
+                    this.PropertyId
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ParameterName,
+                    this.PropertyId,
+                    () => this.GetFuture(
+                        new GetRarityParameterStatusRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetRarityParameterStatusRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                    this.ParameterName?.ToString(),
-                                    this.PropertyId?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "rarityParameterStatus")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                        _parentKey,
-                        Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            this.ParameterName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Enchant.Model.RarityParameterStatus>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Enchant.Model.RarityParameterStatus> ModelAsync()
@@ -432,56 +235,26 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public async Task<Gs2.Gs2Enchant.Model.RarityParameterStatus> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                _parentKey,
-                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                    this.ParameterName?.ToString(),
-                    this.PropertyId?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                    _parentKey,
-                    Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                        this.ParameterName?.ToString(),
-                        this.PropertyId?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetRarityParameterStatusRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                                    this.ParameterName?.ToString(),
-                                    this.PropertyId?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "rarityParameterStatus")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                        _parentKey,
-                        Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                            this.ParameterName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.ParameterName,
+                this.PropertyId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.ParameterName,
+                this.PropertyId,
+                () => this.GetAsync(
+                    new GetRarityParameterStatusRequest()
+                )
+            );
         }
         #endif
 
@@ -510,22 +283,25 @@ namespace Gs2.Gs2Enchant.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                _parentKey,
-                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                    this.ParameterName.ToString(),
-                    this.PropertyId.ToString()
-                )
+            (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.ParameterName,
+                this.PropertyId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Enchant.Model.RarityParameterStatus> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                    this.ParameterName.ToString(),
-                    this.PropertyId.ToString()
+                (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheKey(
+                    this.ParameterName,
+                    this.PropertyId
                 ),
                 callback,
                 () =>
@@ -544,10 +320,13 @@ namespace Gs2.Gs2Enchant.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enchant.Model.RarityParameterStatus>(
-                _parentKey,
-                Gs2.Gs2Enchant.Domain.Model.RarityParameterStatusDomain.CreateCacheKey(
-                    this.ParameterName.ToString(),
-                    this.PropertyId.ToString()
+                (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Enchant.Model.RarityParameterStatus).CacheKey(
+                    this.ParameterName,
+                    this.PropertyId
                 ),
                 callbackId
             );

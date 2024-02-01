@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Showcase.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,12 +68,9 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2ShowcaseRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _showcaseName;
-        private readonly string _userId;
-        public string NamespaceName => _namespaceName;
-        public string ShowcaseName => _showcaseName;
-        public string UserId => _userId;
+        public string NamespaceName { get; }
+        public string ShowcaseName { get; }
+        public string UserId { get; }
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Showcase.Model.RandomDisplayItem[] _result;
@@ -88,9 +86,9 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._showcaseName = showcaseName;
-            this._userId = userId;
+            this.NamespaceName = namespaceName;
+            this.ShowcaseName = showcaseName;
+            this.UserId = userId;
             this._last = false;
             this._result = new Gs2.Gs2Showcase.Model.RandomDisplayItem[]{};
 
@@ -108,15 +106,14 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                this.ShowcaseName,
-                "RandomDisplayItem"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Showcase.Model.RandomDisplayItem>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Showcase.Model.RandomDisplayItem>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
+                        NamespaceName,
+                        UserId,
+                        ShowcaseName
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -130,9 +127,9 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                 var r = await this._client.DescribeRandomDisplayItemsByUserIdAsync(
                 #endif
                     new Gs2.Gs2Showcase.Request.DescribeRandomDisplayItemsByUserIdRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithShowcaseName(this._showcaseName)
-                        .WithUserId(this._userId)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithShowcaseName(this.ShowcaseName)
+                        .WithUserId(this.UserId)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -147,19 +144,22 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                     .ToArray();
                 this._last = true;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain.CreateCacheKey(
-                                    item.Name?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        UserId,
+                        ShowcaseName,
+                        item.Name
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Showcase.Model.RandomDisplayItem>(
-                            parentKey
+                        (null as Gs2.Gs2Showcase.Model.RandomDisplayItem).CacheParentKey(
+                            NamespaceName,
+                            UserId,
+                            ShowcaseName
+                        )
                     );
                 }
             }
@@ -195,7 +195,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Showcase.Model.RandomDisplayItem ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -258,7 +258,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Showcase.Model.RandomDisplayItem ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

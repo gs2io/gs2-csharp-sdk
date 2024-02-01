@@ -33,26 +33,22 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetProjectTokenByIdentifierRequest : Gs2Request<GetProjectTokenByIdentifierRequest>
 	{
-        public string AccountName { set; get; }
-        public string ProjectName { set; get; }
-        public string UserName { set; get; }
-        public string Password { set; get; }
-
+         public string AccountName { set; get; }
+         public string ProjectName { set; get; }
+         public string UserName { set; get; }
+         public string Password { set; get; }
         public GetProjectTokenByIdentifierRequest WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
-
         public GetProjectTokenByIdentifierRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
-
         public GetProjectTokenByIdentifierRequest WithUserName(string userName) {
             this.UserName = userName;
             return this;
         }
-
         public GetProjectTokenByIdentifierRequest WithPassword(string password) {
             this.Password = password;
             return this;
@@ -112,18 +108,6 @@ namespace Gs2.Gs2Project.Request
             key += UserName + ":";
             key += Password + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetProjectTokenByIdentifierRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetProjectTokenByIdentifierRequest)x;
-            return this;
         }
     }
 }

@@ -156,46 +156,5 @@ namespace Gs2.Gs2Inbox.Request
             key += ExpiresTimeSpan + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new SendMessageByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Metadata = Metadata,
-                ReadAcquireActions = ReadAcquireActions,
-                ExpiresAt = ExpiresAt,
-                ExpiresTimeSpan = ExpiresTimeSpan,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SendMessageByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::userId");
-            }
-            if (Metadata != y.Metadata) {
-                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::metadata");
-            }
-            if (ReadAcquireActions != y.ReadAcquireActions) {
-                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::readAcquireActions");
-            }
-            if (ExpiresAt != y.ExpiresAt) {
-                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::expiresAt");
-            }
-            if (ExpiresTimeSpan != y.ExpiresTimeSpan) {
-                throw new ArithmeticException("mismatch parameter values SendMessageByUserIdRequest::expiresTimeSpan");
-            }
-            return new SendMessageByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Metadata = Metadata,
-                ReadAcquireActions = ReadAcquireActions,
-                ExpiresAt = ExpiresAt,
-                ExpiresTimeSpan = ExpiresTimeSpan,
-            };
-        }
     }
 }

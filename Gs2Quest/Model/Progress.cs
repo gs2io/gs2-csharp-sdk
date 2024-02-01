@@ -341,5 +341,113 @@ namespace Gs2.Gs2Quest.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ProgressId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.progressId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TransactionId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.transactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (QuestModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.questModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RandomSeed < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.randomSeed.error.invalid"),
+                    });
+                }
+                if (RandomSeed > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.randomSeed.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Rewards.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.rewards.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Progress {
+                ProgressId = ProgressId,
+                UserId = UserId,
+                TransactionId = TransactionId,
+                QuestModelId = QuestModelId,
+                RandomSeed = RandomSeed,
+                Rewards = Rewards.Clone() as Gs2.Gs2Quest.Model.Reward[],
+                Metadata = Metadata,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

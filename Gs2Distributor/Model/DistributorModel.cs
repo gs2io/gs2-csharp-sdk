@@ -246,5 +246,53 @@ namespace Gs2.Gs2Distributor.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DistributorModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModel", "distributor.distributorModel.distributorModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModel", "distributor.distributorModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModel", "distributor.distributorModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InboxNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModel", "distributor.distributorModel.inboxNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (WhiteListTargetIds.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModel", "distributor.distributorModel.whiteListTargetIds.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DistributorModel {
+                DistributorModelId = DistributorModelId,
+                Name = Name,
+                Metadata = Metadata,
+                InboxNamespaceId = InboxNamespaceId,
+                WhiteListTargetIds = WhiteListTargetIds.Clone() as string[],
+            };
+        }
     }
 }

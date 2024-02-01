@@ -241,5 +241,63 @@ namespace Gs2.Gs2Account.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DataOwnerId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.dataOwnerId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataOwner", "account.dataOwner.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DataOwner {
+                DataOwnerId = DataOwnerId,
+                UserId = UserId,
+                Name = Name,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

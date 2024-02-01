@@ -34,6 +34,7 @@ using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Realtime.Domain.Iterator;
+using Gs2.Gs2Realtime.Model.Cache;
 using Gs2.Gs2Realtime.Domain.Model;
 using Gs2.Gs2Realtime.Request;
 using Gs2.Gs2Realtime.Result;
@@ -64,8 +65,6 @@ namespace Gs2.Gs2Realtime.Domain
     public class Gs2Realtime {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RealtimeRestClient _client;
-
-        private readonly String _parentKey;
         public long? Timestamp { get; set; }
 
         public Gs2Realtime(
@@ -75,48 +74,25 @@ namespace Gs2.Gs2Realtime.Domain
             this._client = new Gs2RealtimeRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "realtime";
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> self)
             {
-                var future = this._client.CreateNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "realtime",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Realtime.Domain.Model.NamespaceDomain(
                     this._gs2,
                     result?.Item?.Name
@@ -135,50 +111,19 @@ namespace Gs2.Gs2Realtime.Domain
             #endif
             CreateNamespaceRequest request
         ) {
-            CreateNamespaceResult result = null;
-                result = await this._client.CreateNamespaceAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "realtime",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2Realtime.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Realtime.Domain.Model.NamespaceDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateNamespaceAsync(request)
+            );
+            var domain = new Gs2.Gs2Realtime.Domain.Model.NamespaceDomain(
+                this._gs2,
+                result?.Item?.Name
+            );
             return domain;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateNamespaceFuture.")]
-        public IFuture<Gs2.Gs2Realtime.Domain.Model.NamespaceDomain> CreateNamespace(
-            CreateNamespaceRequest request
-        ) {
-            return CreateNamespaceFuture(request);
-        }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Realtime.Model.Namespace> Namespaces(
         )
         {
@@ -187,36 +132,34 @@ namespace Gs2.Gs2Realtime.Domain
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Realtime.Model.Namespace> NamespacesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Realtime.Model.Namespace> Namespaces(
-            #endif
-        #else
         public DescribeNamespacesIterator NamespacesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2.Cache,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeNamespaces(
             Action<Gs2.Gs2Realtime.Model.Namespace[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Realtime.Model.Namespace>(
-                "realtime:Namespace",
+                (null as Gs2.Gs2Realtime.Model.Namespace).CacheParentKey(
+                ),
                 callback
             );
         }
@@ -241,7 +184,8 @@ namespace Gs2.Gs2Realtime.Domain
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Realtime.Model.Namespace>(
-                "realtime:Namespace",
+                (null as Gs2.Gs2Realtime.Model.Namespace).CacheParentKey(
+                ),
                 callbackId
             );
         }

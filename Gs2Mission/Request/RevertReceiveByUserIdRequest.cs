@@ -115,36 +115,5 @@ namespace Gs2.Gs2Mission.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new RevertReceiveByUserIdRequest {
-                NamespaceName = NamespaceName,
-                MissionGroupName = MissionGroupName,
-                MissionTaskName = MissionTaskName,
-                UserId = UserId,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (RevertReceiveByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values RevertReceiveByUserIdRequest::namespaceName");
-            }
-            if (MissionGroupName != y.MissionGroupName) {
-                throw new ArithmeticException("mismatch parameter values RevertReceiveByUserIdRequest::missionGroupName");
-            }
-            if (MissionTaskName != y.MissionTaskName) {
-                throw new ArithmeticException("mismatch parameter values RevertReceiveByUserIdRequest::missionTaskName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values RevertReceiveByUserIdRequest::userId");
-            }
-            return new RevertReceiveByUserIdRequest {
-                NamespaceName = NamespaceName,
-                MissionGroupName = MissionGroupName,
-                MissionTaskName = MissionTaskName,
-                UserId = UserId,
-            };
-        }
     }
 }

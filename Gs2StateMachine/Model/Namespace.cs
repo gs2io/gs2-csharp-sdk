@@ -359,5 +359,116 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (SupportSpeculativeExecution) {
+                    case "enable":
+                    case "disable":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("namespace", "stateMachine.namespace.supportSpeculativeExecution.error.invalid"),
+                        });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+                if (LowestStateMachineVersion < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.lowestStateMachineVersion.error.invalid"),
+                    });
+                }
+                if (LowestStateMachineVersion > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.lowestStateMachineVersion.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "stateMachine.namespace.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Namespace {
+                NamespaceId = NamespaceId,
+                Name = Name,
+                Description = Description,
+                SupportSpeculativeExecution = SupportSpeculativeExecution,
+                TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2StateMachine.Model.TransactionSetting,
+                StartScript = StartScript.Clone() as Gs2.Gs2StateMachine.Model.ScriptSetting,
+                PassScript = PassScript.Clone() as Gs2.Gs2StateMachine.Model.ScriptSetting,
+                ErrorScript = ErrorScript.Clone() as Gs2.Gs2StateMachine.Model.ScriptSetting,
+                LowestStateMachineVersion = LowestStateMachineVersion,
+                LogSetting = LogSetting.Clone() as Gs2.Gs2StateMachine.Model.LogSetting,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

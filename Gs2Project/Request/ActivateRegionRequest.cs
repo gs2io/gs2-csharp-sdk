@@ -33,20 +33,17 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class ActivateRegionRequest : Gs2Request<ActivateRegionRequest>
 	{
-        public string AccountToken { set; get; }
-        public string ProjectName { set; get; }
-        public string RegionName { set; get; }
-
+         public string AccountToken { set; get; }
+         public string ProjectName { set; get; }
+         public string RegionName { set; get; }
         public ActivateRegionRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public ActivateRegionRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
-
         public ActivateRegionRequest WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;
@@ -99,18 +96,6 @@ namespace Gs2.Gs2Project.Request
             key += ProjectName + ":";
             key += RegionName + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply ActivateRegionRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ActivateRegionRequest)x;
-            return this;
         }
     }
 }

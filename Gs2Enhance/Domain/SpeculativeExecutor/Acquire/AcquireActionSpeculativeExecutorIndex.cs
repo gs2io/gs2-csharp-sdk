@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Enhance.Model.Transaction;
 using Gs2.Gs2Enhance.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DirectEnhanceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = DirectEnhanceByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DirectEnhanceByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
                 }
                 if (UnleashByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = UnleashByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = UnleashByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -91,7 +92,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
                 }
                 if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = CreateProgressByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = CreateProgressByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -129,7 +130,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DirectEnhanceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DirectEnhanceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = DirectEnhanceByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DirectEnhanceByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -138,7 +139,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             }
             if (UnleashByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = UnleashByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = UnleashByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await UnleashByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -147,7 +148,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             }
             if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = CreateProgressByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await CreateProgressByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

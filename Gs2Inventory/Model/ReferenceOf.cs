@@ -218,5 +218,29 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ReferenceOfId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("referenceOf", "inventory.referenceOf.referenceOfId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("referenceOf", "inventory.referenceOf.name.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ReferenceOf {
+                ReferenceOfId = ReferenceOfId,
+                Name = Name,
+            };
+        }
     }
 }

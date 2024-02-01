@@ -143,59 +143,12 @@ namespace Gs2.Gs2Enchant.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += ParameterName + ":";
             key += UserId + ":";
             key += PropertyId + ":";
             key += VerifyType + ":";
             key += ParameterValueName + ":";
             key += ParameterCount + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyRarityParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                ParameterName = ParameterName,
-                UserId = UserId,
-                PropertyId = PropertyId,
-                VerifyType = VerifyType,
-                ParameterValueName = ParameterValueName,
-                ParameterCount = ParameterCount,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyRarityParameterStatusByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::namespaceName");
-            }
-            if (ParameterName != y.ParameterName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::parameterName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::userId");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::propertyId");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::verifyType");
-            }
-            if (ParameterValueName != y.ParameterValueName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::parameterValueName");
-            }
-            if (ParameterCount != y.ParameterCount) {
-                throw new ArithmeticException("mismatch parameter values VerifyRarityParameterStatusByUserIdRequest::parameterCount");
-            }
-            return new VerifyRarityParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                ParameterName = ParameterName,
-                UserId = UserId,
-                PropertyId = PropertyId,
-                VerifyType = VerifyType,
-                ParameterValueName = ParameterValueName,
-                ParameterCount = ParameterCount,
-            };
         }
     }
 }

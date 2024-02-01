@@ -142,44 +142,7 @@ namespace Gs2.Gs2Enchant.Request
             key += UserId + ":";
             key += ParameterName + ":";
             key += PropertyId + ":";
-            key += ParameterValues + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new SetBalanceParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ParameterName = ParameterName,
-                PropertyId = PropertyId,
-                ParameterValues = ParameterValues,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SetBalanceParameterStatusByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values SetBalanceParameterStatusByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values SetBalanceParameterStatusByUserIdRequest::userId");
-            }
-            if (ParameterName != y.ParameterName) {
-                throw new ArithmeticException("mismatch parameter values SetBalanceParameterStatusByUserIdRequest::parameterName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values SetBalanceParameterStatusByUserIdRequest::propertyId");
-            }
-            if (ParameterValues != y.ParameterValues) {
-                throw new ArithmeticException("mismatch parameter values SetBalanceParameterStatusByUserIdRequest::parameterValues");
-            }
-            return new SetBalanceParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ParameterName = ParameterName,
-                PropertyId = PropertyId,
-                ParameterValues = ParameterValues,
-            };
         }
     }
 }

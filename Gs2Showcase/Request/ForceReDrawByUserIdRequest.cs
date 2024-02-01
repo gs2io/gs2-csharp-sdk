@@ -103,31 +103,5 @@ namespace Gs2.Gs2Showcase.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new ForceReDrawByUserIdRequest {
-                NamespaceName = NamespaceName,
-                ShowcaseName = ShowcaseName,
-                UserId = UserId,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ForceReDrawByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values ForceReDrawByUserIdRequest::namespaceName");
-            }
-            if (ShowcaseName != y.ShowcaseName) {
-                throw new ArithmeticException("mismatch parameter values ForceReDrawByUserIdRequest::showcaseName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values ForceReDrawByUserIdRequest::userId");
-            }
-            return new ForceReDrawByUserIdRequest {
-                NamespaceName = NamespaceName,
-                ShowcaseName = ShowcaseName,
-                UserId = UserId,
-            };
-        }
     }
 }

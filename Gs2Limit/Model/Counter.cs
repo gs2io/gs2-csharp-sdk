@@ -334,5 +334,110 @@ namespace Gs2.Gs2Limit.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CounterId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.counterId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (LimitName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.limitName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.count.error.invalid"),
+                    });
+                }
+                if (Count > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.count.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NextResetAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.nextResetAt.error.invalid"),
+                    });
+                }
+                if (NextResetAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.nextResetAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counter", "limit.counter.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Counter {
+                CounterId = CounterId,
+                LimitName = LimitName,
+                Name = Name,
+                UserId = UserId,
+                Count = Count,
+                NextResetAt = NextResetAt,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

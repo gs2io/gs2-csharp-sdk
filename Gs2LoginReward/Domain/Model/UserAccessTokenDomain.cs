@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2LoginReward.Domain.Iterator;
+using Gs2.Gs2LoginReward.Model.Cache;
 using Gs2.Gs2LoginReward.Request;
 using Gs2.Gs2LoginReward.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -79,12 +77,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             this._client = new Gs2LoginRewardRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2LoginReward.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         public Gs2.Gs2LoginReward.Domain.Model.BonusAccessTokenDomain Bonus(
@@ -92,11 +86,10 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             return new Gs2.Gs2LoginReward.Domain.Model.BonusAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken
+                this.AccessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2LoginReward.Model.ReceiveStatus> ReceiveStatuses(
         )
         {
@@ -107,14 +100,14 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2LoginReward.Model.ReceiveStatus> ReceiveStatusesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2LoginReward.Model.ReceiveStatus> ReceiveStatuses(
-            #endif
-        #else
         public DescribeReceiveStatusesIterator ReceiveStatusesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeReceiveStatusesIterator(
@@ -122,26 +115,22 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeReceiveStatuses(
             Action<Gs2.Gs2LoginReward.Model.ReceiveStatus[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
-                Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "ReceiveStatus"
+                    this.UserId
                 ),
                 callback
             );
@@ -167,10 +156,9 @@ namespace Gs2.Gs2LoginReward.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2LoginReward.Model.ReceiveStatus>(
-                Gs2.Gs2LoginReward.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2LoginReward.Model.ReceiveStatus).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "ReceiveStatus"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -182,33 +170,8 @@ namespace Gs2.Gs2LoginReward.Domain.Model
             return new Gs2.Gs2LoginReward.Domain.Model.ReceiveStatusAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 bonusModelName
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "loginReward",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
             );
         }
 

@@ -35,12 +35,12 @@ using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Inventory.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -59,31 +59,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             return "Gs2Inventory:ConsumeSimpleItemsByUserId";
         }
 
-        public static List<Gs2.Gs2Inventory.Model.SimpleItem> Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            ConsumeSimpleItemsByUserIdRequest request,
-            List<Gs2.Gs2Inventory.Model.SimpleItem> items
-        ) {
-            foreach (var consumeCount in request.ConsumeCounts) {
-                var item = items.FirstOrDefault(v => v.ItemName == consumeCount.ItemName);
-                if (item == null) {
-                    throw new BadRequestException(new[] {
-                        new RequestError("count", "invalid")
-                    });
-                }
-                item.Count -= consumeCount.Count;
-                if (item.Count < 0) {
-                    throw new BadRequestException(new [] {
-                        new RequestError("count", "invalid")
-                    });
-                }
-                items = items.Where(v => v.ItemName != consumeCount.ItemName).Concat(new []{ item }).ToList();
-            }
-            items.Sort((v1, v2) => string.Compare(v1.ItemName, v2.ItemName, StringComparison.Ordinal));
-            return items;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -91,14 +66,14 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ConsumeSimpleItemsByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var it = domain.Inventory.Namespace(
                     request.NamespaceName
                 ).AccessToken(
                     accessToken
                 ).SimpleInventory(
                     request.InventoryName
-                ).SimpleItems();
+                ).SimpleItems(
+                );
                 var items = new List<Gs2.Gs2Inventory.Model.SimpleItem>();
                 while (it.HasNext()) {
                     yield return it.Next();
@@ -111,39 +86,18 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     }
                 }
 
-                if (items == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
-                    yield break;
-                }
-                try {
-                    items = Transform(domain, accessToken, request, items);
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
+                var items_ = items.Where(v => request.ConsumeCounts.Select(v => v.ItemName).Contains(v.ItemName)).ToArray();
+                items_ = items_.SpeculativeExecution(request);
 
                 result.OnComplete(() =>
                 {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
-                        request.NamespaceName,
-                        accessToken.UserId,
-                        request.InventoryName,
-                        "SimpleItem"
-                    );
-                    foreach (var consumeCount in request.ConsumeCounts) {
-                        var item = items.First(v => v.ItemName == consumeCount.ItemName);
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                            item.ItemName.ToString()
-                        );
-                        domain.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
-                            parentKey,
-                            key,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                    foreach (var item in items_) {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.InventoryName,
+                            item.ItemName
                         );
                     }
                     return null;
@@ -165,62 +119,49 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ConsumeSimpleItemsByUserIdRequest request
         ) {
+    #if UNITY_2017_1_OR_NEWER
             var items = await domain.Inventory.Namespace(
                 request.NamespaceName
             ).AccessToken(
                 accessToken
             ).SimpleInventory(
                 request.InventoryName
-            ).SimpleItemsAsync().ToListAsync();
-
-            if (items == null) {
-                return () => null;
+            ).SimpleItemsAsync(
+            ).ToArrayAsync();
+    #else
+            var it = domain.Inventory.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).SimpleInventory(
+                request.InventoryName
+            ).SimpleItemsAsync(
+            );
+            var collection = new List<Gs2.Gs2Inventory.Model.SimpleItem>();
+            await foreach (var item in it)
+            {
+                collection.Add(item);
             }
-            items = Transform(domain, accessToken, request, items);
+            var items = collection.ToArray();
+    #endif
+
+            items = items.Where(v => request.ConsumeCounts.Select(v => v.ItemName).Contains(v.ItemName)).ToArray();
+            items = items.SpeculativeExecution(request);
 
             return () =>
             {
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.InventoryName,
-                    "SimpleItem"
-                );
-                foreach (var consumeCount in request.ConsumeCounts) {
-                    var item = items.First(v => v.ItemName == consumeCount.ItemName);
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                        item.ItemName.ToString()
-                    );
-                    domain.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItem>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                foreach (var item in items) {
+                    item.PutCache(
+                        domain.Cache,
+                        request.NamespaceName,
+                        accessToken.UserId,
+                        request.InventoryName,
+                        item.ItemName
                     );
                 }
                 return null;
             };
         }
 #endif
-
-        public static ConsumeSimpleItemsByUserIdRequest Rate(
-            ConsumeSimpleItemsByUserIdRequest request,
-            double rate
-        ) {
-            foreach (var t in request.ConsumeCounts) {
-                t.Count = (long?) (t.Count * rate);
-            }
-            return request;
-        }
-
-        public static ConsumeSimpleItemsByUserIdRequest Rate(
-            ConsumeSimpleItemsByUserIdRequest request,
-            BigInteger rate
-        ) {
-            foreach (var t in request.ConsumeCounts) {
-                t.Count = (long?) (t.Count * rate);
-            }
-            return request;
-        }
     }
 }

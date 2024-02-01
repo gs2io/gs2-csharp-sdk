@@ -156,46 +156,5 @@ namespace Gs2.Gs2Formation.Request
             key += Config + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AcquireActionsToPropertyFormPropertiesRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                PropertyFormModelName = PropertyFormModelName,
-                PropertyId = PropertyId,
-                AcquireAction = AcquireAction,
-                Config = Config,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AcquireActionsToPropertyFormPropertiesRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::userId");
-            }
-            if (PropertyFormModelName != y.PropertyFormModelName) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::propertyFormModelName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::propertyId");
-            }
-            if (AcquireAction != y.AcquireAction) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::acquireAction");
-            }
-            if (Config != y.Config) {
-                throw new ArithmeticException("mismatch parameter values AcquireActionsToPropertyFormPropertiesRequest::config");
-            }
-            return new AcquireActionsToPropertyFormPropertiesRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                PropertyFormModelName = PropertyFormModelName,
-                PropertyId = PropertyId,
-                AcquireAction = AcquireAction,
-                Config = Config,
-            };
-        }
     }
 }

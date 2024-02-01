@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Lottery.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,8 +68,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2LotteryRestClient _client;
-        private readonly string _namespaceName;
-        public string NamespaceName => _namespaceName;
+        public string NamespaceName { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -83,7 +83,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
+            this.NamespaceName = namespaceName;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Lottery.Model.DrawnPrize[]{};
@@ -102,13 +102,12 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "DrawnPrize"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Lottery.Model.DrawnPrize>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Lottery.Model.DrawnPrize>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
+                        NamespaceName
+                    ),
                     out var list
             )) {
                 this._result = list

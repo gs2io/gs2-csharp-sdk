@@ -150,5 +150,29 @@ namespace Gs2.Gs2Version.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentVersionMaster", "version.currentVersionMaster.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Settings.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentVersionMaster", "version.currentVersionMaster.settings.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CurrentVersionMaster {
+                NamespaceId = NamespaceId,
+                Settings = Settings,
+            };
+        }
     }
 }

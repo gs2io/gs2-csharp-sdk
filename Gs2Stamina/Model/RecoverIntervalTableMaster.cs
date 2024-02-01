@@ -320,5 +320,105 @@ namespace Gs2.Gs2Stamina.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RecoverIntervalTableId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.recoverIntervalTableId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExperienceModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.experienceModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Values.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.values.error.tooFew"),
+                    });
+                }
+                if (Values.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.values.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("recoverIntervalTableMaster", "stamina.recoverIntervalTableMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RecoverIntervalTableMaster {
+                RecoverIntervalTableId = RecoverIntervalTableId,
+                Name = Name,
+                Metadata = Metadata,
+                Description = Description,
+                ExperienceModelId = ExperienceModelId,
+                Values = Values.Clone() as int[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

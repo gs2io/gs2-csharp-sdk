@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Version.Domain.Iterator;
+using Gs2.Gs2Version.Model.Cache;
 using Gs2.Gs2Version.Request;
 using Gs2.Gs2Version.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,18 +63,14 @@ namespace Gs2.Gs2Version.Domain.Model
     public partial class CheckerAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2VersionRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string ProjectToken { get; set; }
         public Gs2.Gs2Version.Model.Status[] Warnings { get; set; }
         public Gs2.Gs2Version.Model.Status[] Errors { get; set; }
         public string Body { get; set; }
         public string Signature { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public CheckerAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -83,41 +81,30 @@ namespace Gs2.Gs2Version.Domain.Model
             this._client = new Gs2VersionRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Checker"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Version.Domain.Model.CheckerAccessTokenDomain> CheckVersionFuture(
             CheckVersionRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.CheckerAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.CheckVersionFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CheckVersionFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
                 this.Warnings = domain.Warnings = result?.Warnings;
@@ -136,56 +123,21 @@ namespace Gs2.Gs2Version.Domain.Model
             #endif
             CheckVersionRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            CheckVersionResult result = null;
-                result = await this._client.CheckVersionAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CheckVersionAsync(request)
+            );
+            var domain = this;
             this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
             this.Warnings = domain.Warnings = result?.Warnings;
             this.Errors = domain.Errors = result?.Errors;
             return domain;
         }
         #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckVersionFuture.")]
-        public IFuture<Gs2.Gs2Version.Domain.Model.CheckerAccessTokenDomain> CheckVersion(
-            CheckVersionRequest request
-        ) {
-            return CheckVersionFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "version",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
 
     }
 }

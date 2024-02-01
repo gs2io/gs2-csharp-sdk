@@ -33,32 +33,27 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class UpdateAccountRequest : Gs2Request<UpdateAccountRequest>
 	{
-        public string Email { set; get; }
-        public string FullName { set; get; }
-        public string CompanyName { set; get; }
-        public string Password { set; get; }
-        public string AccountToken { set; get; }
-
+         public string Email { set; get; }
+         public string FullName { set; get; }
+         public string CompanyName { set; get; }
+         public string Password { set; get; }
+         public string AccountToken { set; get; }
         public UpdateAccountRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
-
         public UpdateAccountRequest WithFullName(string fullName) {
             this.FullName = fullName;
             return this;
         }
-
         public UpdateAccountRequest WithCompanyName(string companyName) {
             this.CompanyName = companyName;
             return this;
         }
-
         public UpdateAccountRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public UpdateAccountRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
@@ -125,18 +120,6 @@ namespace Gs2.Gs2Project.Request
             key += Password + ":";
             key += AccountToken + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UpdateAccountRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UpdateAccountRequest)x;
-            return this;
         }
     }
 }

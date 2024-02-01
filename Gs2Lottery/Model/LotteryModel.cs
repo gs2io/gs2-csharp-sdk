@@ -262,5 +262,77 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (LotteryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lotteryModel", "lottery.lotteryModel.lotteryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lotteryModel", "lottery.lotteryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lotteryModel", "lottery.lotteryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Mode) {
+                    case "normal":
+                    case "box":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("lotteryModel", "lottery.lotteryModel.mode.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (Method) {
+                    case "prize_table":
+                    case "script":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("lotteryModel", "lottery.lotteryModel.method.error.invalid"),
+                        });
+                }
+            }
+            if (Method == "prize_table") {
+                if (PrizeTableName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lotteryModel", "lottery.lotteryModel.prizeTableName.error.tooLong"),
+                    });
+                }
+            }
+            if (Method == "script") {
+                if (ChoicePrizeTableScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lotteryModel", "lottery.lotteryModel.choicePrizeTableScriptId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new LotteryModel {
+                LotteryModelId = LotteryModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Mode = Mode,
+                Method = Method,
+                PrizeTableName = PrizeTableName,
+                ChoicePrizeTableScriptId = ChoicePrizeTableScriptId,
+            };
+        }
     }
 }

@@ -109,17 +109,5 @@ namespace Gs2.Gs2Limit.Request
             key += CounterName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetCounterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetCounterRequest)x;
-            return this;
-        }
     }
 }

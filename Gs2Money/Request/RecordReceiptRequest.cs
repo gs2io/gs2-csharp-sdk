@@ -115,36 +115,5 @@ namespace Gs2.Gs2Money.Request
             key += Receipt + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new RecordReceiptRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ContentsId = ContentsId,
-                Receipt = Receipt,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (RecordReceiptRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::userId");
-            }
-            if (ContentsId != y.ContentsId) {
-                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::contentsId");
-            }
-            if (Receipt != y.Receipt) {
-                throw new ArithmeticException("mismatch parameter values RecordReceiptRequest::receipt");
-            }
-            return new RecordReceiptRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ContentsId = ContentsId,
-                Receipt = Receipt,
-            };
-        }
     }
 }

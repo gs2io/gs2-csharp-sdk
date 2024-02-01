@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -37,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Stamina.Request;
+using Gs2.Gs2Stamina.Model.Cache;
+using Gs2.Gs2Stamina.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,24 +53,6 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Stamina:RecoverStaminaByUserId";
         }
-        public static Gs2.Gs2Stamina.Model.Stamina Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            RecoverStaminaByUserIdRequest request,
-            Gs2.Gs2Stamina.Model.StaminaModel model,
-            Gs2.Gs2Stamina.Model.Stamina item
-        ) {
-            item.Value += request.RecoverValue;
-            if (item.Value > item.MaxValue) {
-                item.OverflowValue = item.Value - item.MaxValue;
-
-                if (item.Value > model.MaxCapacity) {
-                    item.OverflowValue = model.MaxCapacity - item.Value;
-                    item.Value = model.MaxCapacity;
-                }
-            }
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -81,7 +63,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var future = domain.Stamina.Namespace(
                     request.NamespaceName
-                ).StaminaModel(
+                ).AccessToken(
+                    accessToken
+                ).Stamina(
                     request.StaminaName
                 ).ModelFuture();
                 yield return future;
@@ -89,59 +73,30 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                     result.OnError(future.Error);
                     yield break;
                 }
-                var model = future.Result;
-
-                if (model == null) {
-                    result.OnComplete(() => null);
-                    yield break;
-                }
-
-                var future2 = domain.Stamina.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Stamina(
-                    request.StaminaName
-                ).ModelFuture();
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
-                    yield break;
-                }
-                var item = future2.Result;
+                var item = future.Result;
 
                 if (item == null) {
                     result.OnComplete(() => null);
                     yield break;
                 }
-
                 try {
-                    item = Transform(domain, accessToken, request, model, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.StaminaName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-                
-                var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Stamina"
-                );
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                    request.StaminaName.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -159,16 +114,6 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             AccessToken accessToken,
             RecoverStaminaByUserIdRequest request
         ) {
-            var model = await domain.Stamina.Namespace(
-                request.NamespaceName
-            ).StaminaModel(
-                request.StaminaName
-            ).ModelAsync();
-
-            if (model == null) {
-                return () => null;
-            }
-
             var item = await domain.Stamina.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -180,45 +125,19 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-
-            item = Transform(domain, accessToken, request, model, item);
-
-            var parentKey = Gs2.Gs2Stamina.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Stamina"
-            );
-            var key = Gs2.Gs2Stamina.Domain.Model.StaminaDomain.CreateCacheKey(
-                request.StaminaName.ToString()
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Stamina.Model.Stamina>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.StaminaName
                 );
                 return null;
             };
         }
 #endif
-
-        public static RecoverStaminaByUserIdRequest Rate(
-            RecoverStaminaByUserIdRequest request,
-            double rate
-        ) {
-            request.RecoverValue = (int?) (request.RecoverValue * rate);
-            return request;
-        }
-
-        public static RecoverStaminaByUserIdRequest Rate(
-            RecoverStaminaByUserIdRequest request,
-            BigInteger rate
-        ) {
-            request.RecoverValue = (int?) ((request.RecoverValue ?? 0) * rate);
-            return request;
-        }
     }
 }

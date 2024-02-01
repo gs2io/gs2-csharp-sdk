@@ -319,5 +319,118 @@ namespace Gs2.Gs2SerialKey.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (SerialKeyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.serialKeyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CampaignModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.campaignModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Code.Length > 48) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.code.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Status) {
+                    case "ACTIVE":
+                    case "USED":
+                    case "INACTIVE":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("serialKey", "serialKey.serialKey.status.error.invalid"),
+                        });
+                }
+            }
+            if (Status == "USED") {
+                if (UsedUserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.usedUserId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UsedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.usedAt.error.invalid"),
+                    });
+                }
+                if (UsedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.usedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("serialKey", "serialKey.serialKey.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SerialKey {
+                SerialKeyId = SerialKeyId,
+                CampaignModelName = CampaignModelName,
+                Code = Code,
+                Metadata = Metadata,
+                Status = Status,
+                UsedUserId = UsedUserId,
+                CreatedAt = CreatedAt,
+                UsedAt = UsedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

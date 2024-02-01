@@ -55,7 +55,7 @@ namespace Gs2.Gs2Project.Result
                 return null;
             }
             return new DescribeDumpProgressesResult()
-                .WithItems(!data.Keys.Contains("items") || data["items"] == null ? new Gs2.Gs2Project.Model.DumpProgress[]{} : data["items"].Cast<JsonData>().Select(v => {
+                .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Gs2Project.Model.DumpProgress[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Project.Model.DumpProgress.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString());
@@ -64,7 +64,7 @@ namespace Gs2.Gs2Project.Result
         public JsonData ToJson()
         {
             JsonData itemsJsonData = null;
-            if (Items != null)
+            if (Items != null && Items.Length > 0)
             {
                 itemsJsonData = new JsonData();
                 foreach (var item in Items)
@@ -81,14 +81,17 @@ namespace Gs2.Gs2Project.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            writer.WriteArrayStart();
-            foreach (var item in Items)
-            {
-                if (item != null) {
-                    item.WriteJson(writer);
+            if (Items != null) {
+                writer.WritePropertyName("items");
+                writer.WriteArrayStart();
+                foreach (var item in Items)
+                {
+                    if (item != null) {
+                        item.WriteJson(writer);
+                    }
                 }
+                writer.WriteArrayEnd();
             }
-            writer.WriteArrayEnd();
             if (NextPageToken != null) {
                 writer.WritePropertyName("nextPageToken");
                 writer.Write(NextPageToken.ToString());

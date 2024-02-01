@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Matchmaking.Domain.Iterator;
+using Gs2.Gs2Matchmaking.Model.Cache;
 using Gs2.Gs2Matchmaking.Request;
 using Gs2.Gs2Matchmaking.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class VoteDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _ratingName;
-        private readonly string _gatheringName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string RatingName => _ratingName;
-        public string GatheringName => _gatheringName;
+        public string NamespaceName { get; }
+        public string RatingName { get; }
+        public string GatheringName { get; }
 
         public VoteDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,42 +77,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._client = new Gs2MatchmakingRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._ratingName = ratingName;
-            this._gatheringName = gatheringName;
-            this._parentKey = Gs2.Gs2Matchmaking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Vote"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string ratingName,
-            string gatheringName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "matchmaking",
-                namespaceName ?? "null",
-                ratingName ?? "null",
-                gatheringName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string ratingName,
-            string gatheringName
-        )
-        {
-            return string.Join(
-                ":",
-                ratingName ?? "null",
-                gatheringName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.RatingName = ratingName;
+            this.GatheringName = gatheringName;
         }
 
     }
@@ -126,29 +90,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> CommitFuture(
             CommitVoteRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithRatingName(this.RatingName)
                     .WithGatheringName(this.GatheringName);
-                var future = this._client.CommitVoteFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CommitVoteFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -164,31 +122,17 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             #endif
             CommitVoteRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithRatingName(this.RatingName)
                 .WithGatheringName(this.GatheringName);
-            CommitVoteResult result = null;
-                result = await this._client.CommitVoteAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CommitVoteAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CommitFuture.")]
-        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.VoteDomain> Commit(
-            CommitVoteRequest request
-        ) {
-            return CommitFuture(request);
         }
         #endif
 
@@ -201,19 +145,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Vote> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
-                    _parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                        this.RatingName?.ToString(),
-                        this.GatheringName?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Vote).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RatingName,
+                    this.GatheringName
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Vote>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Matchmaking.Model.Vote> ModelAsync()
@@ -221,26 +168,16 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.Vote> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Vote>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                    this.RatingName?.ToString(),
-                    this.GatheringName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Vote>(
-                    _parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                        this.RatingName?.ToString(),
-                        this.GatheringName?.ToString()
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Vote).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.RatingName,
+                this.GatheringName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -269,22 +206,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Matchmaking.Model.Vote>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                    this.RatingName.ToString(),
-                    this.GatheringName.ToString()
-                )
+            (null as Gs2.Gs2Matchmaking.Model.Vote).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.RatingName,
+                this.GatheringName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Vote> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                    this.RatingName.ToString(),
-                    this.GatheringName.ToString()
+                (null as Gs2.Gs2Matchmaking.Model.Vote).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Matchmaking.Model.Vote).CacheKey(
+                    this.RatingName,
+                    this.GatheringName
                 ),
                 callback,
                 () =>
@@ -303,10 +241,12 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Vote>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.VoteDomain.CreateCacheKey(
-                    this.RatingName.ToString(),
-                    this.GatheringName.ToString()
+                (null as Gs2.Gs2Matchmaking.Model.Vote).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Matchmaking.Model.Vote).CacheKey(
+                    this.RatingName,
+                    this.GatheringName
                 ),
                 callbackId
             );

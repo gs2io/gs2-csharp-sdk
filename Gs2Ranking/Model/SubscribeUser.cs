@@ -239,5 +239,45 @@ namespace Gs2.Gs2Ranking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (SubscribeUserId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeUser", "ranking.subscribeUser.subscribeUserId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CategoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeUser", "ranking.subscribeUser.categoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeUser", "ranking.subscribeUser.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TargetUserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribeUser", "ranking.subscribeUser.targetUserId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SubscribeUser {
+                SubscribeUserId = SubscribeUserId,
+                CategoryName = CategoryName,
+                UserId = UserId,
+                TargetUserId = TargetUserId,
+            };
+        }
     }
 }

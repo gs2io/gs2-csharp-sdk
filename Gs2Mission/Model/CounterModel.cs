@@ -246,5 +246,58 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CounterId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModel", "mission.counterModel.counterId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModel", "mission.counterModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModel", "mission.counterModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Scopes.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModel", "mission.counterModel.scopes.error.tooFew"),
+                    });
+                }
+                if (Scopes.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModel", "mission.counterModel.scopes.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModel", "mission.counterModel.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CounterModel {
+                CounterId = CounterId,
+                Name = Name,
+                Metadata = Metadata,
+                Scopes = Scopes.Clone() as Gs2.Gs2Mission.Model.CounterScopeModel[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+            };
+        }
     }
 }

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
@@ -337,6 +339,102 @@ namespace Gs2.Gs2Stamina.Model
                 diff += RecoverValueTable.CompareTo(other.RecoverValueTable);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (StaminaModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.staminaModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RecoverIntervalMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.recoverIntervalMinutes.error.invalid"),
+                    });
+                }
+                if (RecoverIntervalMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.recoverIntervalMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RecoverValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.recoverValue.error.invalid"),
+                    });
+                }
+                if (RecoverValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.recoverValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (InitialCapacity < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.initialCapacity.error.invalid"),
+                    });
+                }
+                if (InitialCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.initialCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+            if (IsOverflow ?? false) {
+                if (MaxCapacity < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.maxCapacity.error.invalid"),
+                    });
+                }
+                if (MaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("staminaModel", "stamina.staminaModel.maxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new StaminaModel {
+                StaminaModelId = StaminaModelId,
+                Name = Name,
+                Metadata = Metadata,
+                RecoverIntervalMinutes = RecoverIntervalMinutes,
+                RecoverValue = RecoverValue,
+                InitialCapacity = InitialCapacity,
+                IsOverflow = IsOverflow,
+                MaxCapacity = MaxCapacity,
+                MaxStaminaTable = MaxStaminaTable.Clone() as Gs2.Gs2Stamina.Model.MaxStaminaTable,
+                RecoverIntervalTable = RecoverIntervalTable.Clone() as Gs2.Gs2Stamina.Model.RecoverIntervalTable,
+                RecoverValueTable = RecoverValueTable.Clone() as Gs2.Gs2Stamina.Model.RecoverValueTable,
+            };
         }
     }
 }

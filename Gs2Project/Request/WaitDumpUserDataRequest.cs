@@ -33,21 +33,18 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class WaitDumpUserDataRequest : Gs2Request<WaitDumpUserDataRequest>
 	{
-        public string TransactionId { set; get; }
-        public string UserId { set; get; }
-        public string MicroserviceName { set; get; }
+         public string TransactionId { set; get; }
+         public string UserId { set; get; }
+         public string MicroserviceName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public WaitDumpUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public WaitDumpUserDataRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public WaitDumpUserDataRequest WithMicroserviceName(string microserviceName) {
             this.MicroserviceName = microserviceName;
             return this;
@@ -105,18 +102,6 @@ namespace Gs2.Gs2Project.Request
             key += UserId + ":";
             key += MicroserviceName + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply WaitDumpUserDataRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (WaitDumpUserDataRequest)x;
-            return this;
         }
     }
 }

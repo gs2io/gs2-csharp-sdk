@@ -227,5 +227,50 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventoryModel", "inventory.bigInventoryModel.inventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventoryModel", "inventory.bigInventoryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventoryModel", "inventory.bigInventoryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (BigItemModels.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventoryModel", "inventory.bigInventoryModel.bigItemModels.error.tooFew"),
+                    });
+                }
+                if (BigItemModels.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventoryModel", "inventory.bigInventoryModel.bigItemModels.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BigInventoryModel {
+                InventoryModelId = InventoryModelId,
+                Name = Name,
+                Metadata = Metadata,
+                BigItemModels = BigItemModels.Clone() as Gs2.Gs2Inventory.Model.BigItemModel[],
+            };
+        }
     }
 }

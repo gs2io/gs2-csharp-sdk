@@ -103,31 +103,5 @@ namespace Gs2.Gs2Lottery.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new ResetBoxByUserIdRequest {
-                NamespaceName = NamespaceName,
-                PrizeTableName = PrizeTableName,
-                UserId = UserId,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ResetBoxByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values ResetBoxByUserIdRequest::namespaceName");
-            }
-            if (PrizeTableName != y.PrizeTableName) {
-                throw new ArithmeticException("mismatch parameter values ResetBoxByUserIdRequest::prizeTableName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values ResetBoxByUserIdRequest::userId");
-            }
-            return new ResetBoxByUserIdRequest {
-                NamespaceName = NamespaceName,
-                PrizeTableName = PrizeTableName,
-                UserId = UserId,
-            };
-        }
     }
 }

@@ -385,5 +385,118 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (GatheringId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.gatheringId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AttributeRanges.Length > 5) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.attributeRanges.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CapacityOfRoles.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.capacityOfRoles.error.tooFew"),
+                    });
+                }
+                if (CapacityOfRoles.Length > 5) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.capacityOfRoles.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AllowUserIds.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.allowUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExpiresAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.expiresAt.error.invalid"),
+                    });
+                }
+                if (ExpiresAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gathering", "matchmaking.gathering.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Gathering {
+                GatheringId = GatheringId,
+                Name = Name,
+                AttributeRanges = AttributeRanges.Clone() as Gs2.Gs2Matchmaking.Model.AttributeRange[],
+                CapacityOfRoles = CapacityOfRoles.Clone() as Gs2.Gs2Matchmaking.Model.CapacityOfRole[],
+                AllowUserIds = AllowUserIds.Clone() as string[],
+                Metadata = Metadata,
+                ExpiresAt = ExpiresAt,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

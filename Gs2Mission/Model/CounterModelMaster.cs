@@ -322,5 +322,105 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CounterId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.counterId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Scopes.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.scopes.error.tooFew"),
+                    });
+                }
+                if (Scopes.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.scopes.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterModelMaster", "mission.counterModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CounterModelMaster {
+                CounterId = CounterId,
+                Name = Name,
+                Metadata = Metadata,
+                Description = Description,
+                Scopes = Scopes.Clone() as Gs2.Gs2Mission.Model.CounterScopeModel[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

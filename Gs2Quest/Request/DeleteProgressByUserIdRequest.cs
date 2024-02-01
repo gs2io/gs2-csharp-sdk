@@ -91,26 +91,5 @@ namespace Gs2.Gs2Quest.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DeleteProgressByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteProgressByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DeleteProgressByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DeleteProgressByUserIdRequest::userId");
-            }
-            return new DeleteProgressByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-            };
-        }
     }
 }

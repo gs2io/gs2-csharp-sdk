@@ -137,5 +137,33 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+            }
+            {
+                if (DistributorNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("transactionSetting", "enchant.transactionSetting.distributorNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (QueueNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("transactionSetting", "enchant.transactionSetting.queueNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new TransactionSetting {
+                EnableAutoRun = EnableAutoRun,
+                DistributorNamespaceId = DistributorNamespaceId,
+                KeyId = KeyId,
+                QueueNamespaceId = QueueNamespaceId,
+            };
+        }
     }
 }

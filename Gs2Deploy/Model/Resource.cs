@@ -382,5 +382,111 @@ namespace Gs2.Gs2Deploy.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ResourceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.resourceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Type.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.type.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Request.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.request.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Response.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.response.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (RollbackContext) {
+                    case "create":
+                    case "update":
+                    case "delete":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("resource", "deploy.resource.rollbackContext.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (RollbackRequest.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.rollbackRequest.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RollbackAfter.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.rollbackAfter.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (OutputFields.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.outputFields.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (WorkId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.workId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("resource", "deploy.resource.createdAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Resource {
+                ResourceId = ResourceId,
+                Type = Type,
+                Name = Name,
+                Request = Request,
+                Response = Response,
+                RollbackContext = RollbackContext,
+                RollbackRequest = RollbackRequest,
+                RollbackAfter = RollbackAfter.Clone() as string[],
+                OutputFields = OutputFields.Clone() as Gs2.Gs2Deploy.Model.OutputField[],
+                WorkId = WorkId,
+                CreatedAt = CreatedAt,
+            };
+        }
     }
 }

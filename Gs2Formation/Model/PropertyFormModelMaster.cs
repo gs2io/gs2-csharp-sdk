@@ -303,5 +303,97 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PropertyFormModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.propertyFormModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Slots.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.slots.error.tooFew"),
+                    });
+                }
+                if (Slots.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.slots.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("propertyFormModelMaster", "formation.propertyFormModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new PropertyFormModelMaster {
+                PropertyFormModelId = PropertyFormModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

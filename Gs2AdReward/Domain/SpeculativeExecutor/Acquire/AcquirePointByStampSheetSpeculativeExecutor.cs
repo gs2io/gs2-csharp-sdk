@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -37,11 +35,13 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2AdReward.Request;
+using Gs2.Gs2AdReward.Model.Cache;
+using Gs2.Gs2AdReward.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-#endif
+    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -52,15 +52,6 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2AdReward:AcquirePointByUserId";
-        }
-        public static Gs2.Gs2AdReward.Model.Point Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            AcquirePointByUserIdRequest request,
-            Gs2.Gs2AdReward.Model.Point item
-        ) {
-            item.Value += 1;
-            return item;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -84,38 +75,26 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Point"
-                );
-                var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2AdReward.Model.Point>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -143,41 +122,18 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Point"
-            );
-            var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2AdReward.Model.Point>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId
                 );
                 return null;
             };
         }
 #endif
-
-        public static AcquirePointByUserIdRequest Rate(
-            AcquirePointByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static AcquirePointByUserIdRequest Rate(
-            AcquirePointByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

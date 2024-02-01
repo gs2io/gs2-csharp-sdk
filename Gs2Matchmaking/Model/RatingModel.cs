@@ -224,5 +224,63 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RatingModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.ratingModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InitialValue < 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.initialValue.error.invalid"),
+                    });
+                }
+                if (InitialValue > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.initialValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Volatility < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.volatility.error.invalid"),
+                    });
+                }
+                if (Volatility > 20000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModel", "matchmaking.ratingModel.volatility.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RatingModel {
+                RatingModelId = RatingModelId,
+                Name = Name,
+                Metadata = Metadata,
+                InitialValue = InitialValue,
+                Volatility = Volatility,
+            };
+        }
     }
 }

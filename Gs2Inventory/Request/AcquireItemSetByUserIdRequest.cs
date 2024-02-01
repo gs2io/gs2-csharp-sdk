@@ -162,53 +162,5 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemSetName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AcquireItemSetByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                UserId = UserId,
-                AcquireCount = AcquireCount * x,
-                ExpiresAt = ExpiresAt,
-                CreateNewItemSet = CreateNewItemSet,
-                ItemSetName = ItemSetName,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AcquireItemSetByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::inventoryName");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::itemName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::userId");
-            }
-            if (ExpiresAt != y.ExpiresAt) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::expiresAt");
-            }
-            if (CreateNewItemSet != y.CreateNewItemSet) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::createNewItemSet");
-            }
-            if (ItemSetName != y.ItemSetName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetByUserIdRequest::itemSetName");
-            }
-            return new AcquireItemSetByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                UserId = UserId,
-                AcquireCount = AcquireCount + y.AcquireCount,
-                ExpiresAt = ExpiresAt,
-                CreateNewItemSet = CreateNewItemSet,
-                ItemSetName = ItemSetName,
-            };
-        }
     }
 }

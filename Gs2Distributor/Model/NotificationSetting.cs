@@ -118,5 +118,32 @@ namespace Gs2.Gs2Distributor.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (GatewayNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("notificationSetting", "distributor.notificationSetting.gatewayNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (Sound.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("notificationSetting", "distributor.notificationSetting.sound.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new NotificationSetting {
+                GatewayNamespaceId = GatewayNamespaceId,
+                EnableTransferMobileNotification = EnableTransferMobileNotification,
+                Sound = Sound,
+            };
+        }
     }
 }

@@ -287,5 +287,76 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RarityParameterModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.rarityParameterModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MaximumParameterCount < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.maximumParameterCount.error.invalid"),
+                    });
+                }
+                if (MaximumParameterCount > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.maximumParameterCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ParameterCounts.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.parameterCounts.error.tooFew"),
+                    });
+                }
+                if (ParameterCounts.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.parameterCounts.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Parameters.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.parameters.error.tooFew"),
+                    });
+                }
+                if (Parameters.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterModel", "enchant.rarityParameterModel.parameters.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RarityParameterModel {
+                RarityParameterModelId = RarityParameterModelId,
+                Name = Name,
+                Metadata = Metadata,
+                MaximumParameterCount = MaximumParameterCount,
+                ParameterCounts = ParameterCounts.Clone() as Gs2.Gs2Enchant.Model.RarityParameterCountModel[],
+                Parameters = Parameters.Clone() as Gs2.Gs2Enchant.Model.RarityParameterValueModel[],
+            };
+        }
     }
 }

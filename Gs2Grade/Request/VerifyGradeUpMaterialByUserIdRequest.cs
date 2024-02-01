@@ -139,46 +139,5 @@ namespace Gs2.Gs2Grade.Request
             key += MaterialPropertyId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyGradeUpMaterialByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                MaterialPropertyId = MaterialPropertyId,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyGradeUpMaterialByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeUpMaterialByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeUpMaterialByUserIdRequest::userId");
-            }
-            if (GradeName != y.GradeName) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeUpMaterialByUserIdRequest::gradeName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeUpMaterialByUserIdRequest::verifyType");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeUpMaterialByUserIdRequest::propertyId");
-            }
-            if (MaterialPropertyId != y.MaterialPropertyId) {
-                throw new ArithmeticException("mismatch parameter values VerifyGradeUpMaterialByUserIdRequest::materialPropertyId");
-            }
-            return new VerifyGradeUpMaterialByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                MaterialPropertyId = MaterialPropertyId,
-            };
-        }
     }
 }

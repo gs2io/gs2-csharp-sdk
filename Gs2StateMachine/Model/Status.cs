@@ -456,5 +456,150 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StatusId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.statusId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (StateMachineVersion < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.stateMachineVersion.error.invalid"),
+                    });
+                }
+                if (StateMachineVersion > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.stateMachineVersion.error.invalid"),
+                    });
+                }
+            }
+            {
+                switch (EnableSpeculativeExecution) {
+                    case "enable":
+                    case "disable":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("status", "stateMachine.status.enableSpeculativeExecution.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (StateMachineDefinition.Length > 16777216) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.stateMachineDefinition.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (Stacks.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.stacks.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Variables.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.variables.error.tooMany"),
+                    });
+                }
+            }
+            {
+                switch (Value) {
+                    case "Running":
+                    case "Wait":
+                    case "Pass":
+                    case "Error":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("status", "stateMachine.status.status.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (LastError.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.lastError.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TransitionCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.transitionCount.error.invalid"),
+                    });
+                }
+                if (TransitionCount > 2147483645) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.transitionCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "stateMachine.status.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Status {
+                StatusId = StatusId,
+                UserId = UserId,
+                Name = Name,
+                StateMachineVersion = StateMachineVersion,
+                EnableSpeculativeExecution = EnableSpeculativeExecution,
+                StateMachineDefinition = StateMachineDefinition,
+                RandomStatus = RandomStatus.Clone() as Gs2.Gs2StateMachine.Model.RandomStatus,
+                Stacks = Stacks.Clone() as Gs2.Gs2StateMachine.Model.StackEntry[],
+                Variables = Variables.Clone() as Gs2.Gs2StateMachine.Model.Variable[],
+                Value = Value,
+                LastError = LastError,
+                TransitionCount = TransitionCount,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

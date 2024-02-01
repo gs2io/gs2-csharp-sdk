@@ -37,32 +37,26 @@ namespace Gs2.Gs2Project.Model
         public string Message { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
-
         public ImportErrorLog WithDumpProgressId(string dumpProgressId) {
             this.DumpProgressId = dumpProgressId;
             return this;
         }
-
         public ImportErrorLog WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public ImportErrorLog WithMicroserviceName(string microserviceName) {
             this.MicroserviceName = microserviceName;
             return this;
         }
-
         public ImportErrorLog WithMessage(string message) {
             this.Message = message;
             return this;
         }
-
         public ImportErrorLog WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public ImportErrorLog WithRevision(long? revision) {
             this.Revision = revision;
             return this;
@@ -149,8 +143,8 @@ namespace Gs2.Gs2Project.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMicroserviceName(!data.Keys.Contains("microserviceName") || data["microserviceName"] == null ? null : data["microserviceName"].ToString())
                 .WithMessage(!data.Keys.Contains("message") || data["message"] == null ? null : data["message"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)long.Parse(data["revision"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -186,11 +180,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
-                writer.Write(long.Parse(Revision.ToString()));
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -248,6 +242,72 @@ namespace Gs2.Gs2Project.Model
                 diff += (int)(Revision - other.Revision);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (DumpProgressId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.dumpProgressId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MicroserviceName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.microserviceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Message.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.message.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("importErrorLog", "project.importErrorLog.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ImportErrorLog {
+                DumpProgressId = DumpProgressId,
+                Name = Name,
+                MicroserviceName = MicroserviceName,
+                Message = Message,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
         }
     }
 }

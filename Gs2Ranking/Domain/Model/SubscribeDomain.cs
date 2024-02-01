@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Ranking.Domain.Iterator;
+using Gs2.Gs2Ranking.Model.Cache;
 using Gs2.Gs2Ranking.Request;
 using Gs2.Gs2Ranking.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,60 +63,26 @@ namespace Gs2.Gs2Ranking.Domain.Model
     public partial class SubscribeDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _categoryName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string CategoryName => _categoryName;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string CategoryName { get; }
+        public string AdditionalScopeName { get; }
 
         public SubscribeDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
-            string categoryName
+            string categoryName,
+            string additionalScopeName
         ) {
             this._gs2 = gs2;
             this._client = new Gs2RankingRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._categoryName = categoryName;
-            this._parentKey = Gs2.Gs2Ranking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Subscribe"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string categoryName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "ranking",
-                namespaceName ?? "null",
-                userId ?? "null",
-                categoryName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string categoryName
-        )
-        {
-            return string.Join(
-                ":",
-                categoryName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.CategoryName = categoryName;
+            this.AdditionalScopeName = additionalScopeName;
         }
 
     }
@@ -130,18 +98,23 @@ namespace Gs2.Gs2Ranking.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Subscribe> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
-                    _parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2Ranking.Model.Subscribe).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.Subscribe>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Ranking.Model.Subscribe> ModelAsync()
@@ -149,24 +122,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public async Task<Gs2.Gs2Ranking.Model.Subscribe> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.Subscribe>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.Subscribe>(
-                    _parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2Ranking.Model.Subscribe).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.CategoryName,
+                this.AdditionalScopeName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -195,20 +161,25 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Ranking.Model.Subscribe>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.CategoryName.ToString()
-                )
+            (null as Gs2.Gs2Ranking.Model.Subscribe).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.CategoryName,
+                this.AdditionalScopeName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.Subscribe> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.CategoryName.ToString()
+                (null as Gs2.Gs2Ranking.Model.Subscribe).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName
+                ),
+                (null as Gs2.Gs2Ranking.Model.Subscribe).CacheKey(
                 ),
                 callback,
                 () =>
@@ -227,9 +198,13 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking.Model.Subscribe>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.SubscribeDomain.CreateCacheKey(
-                    this.CategoryName.ToString()
+                (null as Gs2.Gs2Ranking.Model.Subscribe).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.CategoryName,
+                    this.AdditionalScopeName
+                ),
+                (null as Gs2.Gs2Ranking.Model.Subscribe).CacheKey(
                 ),
                 callbackId
             );

@@ -34,6 +34,7 @@ using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Deploy.Domain.Iterator;
+using Gs2.Gs2Deploy.Model.Cache;
 using Gs2.Gs2Deploy.Domain.Model;
 using Gs2.Gs2Deploy.Request;
 using Gs2.Gs2Deploy.Result;
@@ -65,8 +66,6 @@ namespace Gs2.Gs2Deploy.Domain
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DeployRestClient _client;
 
-        private readonly String _parentKey;
-
         public Gs2Deploy(
             Gs2.Core.Domain.Gs2 gs2
         ) {
@@ -74,48 +73,25 @@ namespace Gs2.Gs2Deploy.Domain
             this._client = new Gs2DeployRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "deploy";
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFuture(
             CreateStackRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
-                var future = this._client.CreateStackFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateStackFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "deploy",
-                            "Stack"
-                        );
-                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
                     this._gs2,
                     result?.Item?.Name
@@ -134,46 +110,16 @@ namespace Gs2.Gs2Deploy.Domain
             #endif
             CreateStackRequest request
         ) {
-            CreateStackResult result = null;
-                result = await this._client.CreateStackAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateStackAsync(request)
+            );
+            var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+                this._gs2,
+                result?.Item?.Name
+            );
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateStackFuture.")]
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStack(
-            CreateStackRequest request
-        ) {
-            return CreateStackFuture(request);
         }
         #endif
 
@@ -181,41 +127,19 @@ namespace Gs2.Gs2Deploy.Domain
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubFuture(
             CreateStackFromGitHubRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
             {
-                var future = this._client.CreateStackFromGitHubFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateStackFromGitHubFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "deploy",
-                            "Stack"
-                        );
-                        var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
                     this._gs2,
                     result?.Item?.Name
@@ -234,46 +158,16 @@ namespace Gs2.Gs2Deploy.Domain
             #endif
             CreateStackFromGitHubRequest request
         ) {
-            CreateStackFromGitHubResult result = null;
-                result = await this._client.CreateStackFromGitHubAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "deploy",
-                        "Stack"
-                    );
-                    var key = Gs2.Gs2Deploy.Domain.Model.StackDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateStackFromGitHubAsync(request)
+            );
+            var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
+                this._gs2,
+                result?.Item?.Name
+            );
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateStackFromGitHubFuture.")]
-        public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHub(
-            CreateStackFromGitHubRequest request
-        ) {
-            return CreateStackFromGitHubFuture(request);
         }
         #endif
 
@@ -281,25 +175,19 @@ namespace Gs2.Gs2Deploy.Domain
         public IFuture<Gs2Deploy> ValidateFuture(
             ValidateRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Deploy> self)
             {
-                var future = this._client.ValidateFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.ValidateFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -315,31 +203,16 @@ namespace Gs2.Gs2Deploy.Domain
             #endif
             ValidateRequest request
         ) {
-            ValidateResult result = null;
-                result = await this._client.ValidateAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.ValidateAsync(request)
+            );
+            var domain = this;
             return domain;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ValidateFuture.")]
-        public IFuture<Gs2Deploy> Validate(
-            ValidateRequest request
-        ) {
-            return ValidateFuture(request);
-        }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Deploy.Model.Stack> Stacks(
         )
         {
@@ -348,36 +221,34 @@ namespace Gs2.Gs2Deploy.Domain
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Stack> StacksAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Deploy.Model.Stack> Stacks(
-            #endif
-        #else
         public DescribeStacksIterator StacksAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeStacksIterator(
                 this._gs2.Cache,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeStacks(
             Action<Gs2.Gs2Deploy.Model.Stack[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Deploy.Model.Stack>(
-                "deploy:Stack",
+                (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
+                ),
                 callback
             );
         }
@@ -402,7 +273,8 @@ namespace Gs2.Gs2Deploy.Domain
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Deploy.Model.Stack>(
-                "deploy:Stack",
+                (null as Gs2.Gs2Deploy.Model.Stack).CacheParentKey(
+                ),
                 callbackId
             );
         }

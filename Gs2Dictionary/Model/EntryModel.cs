@@ -186,5 +186,37 @@ namespace Gs2.Gs2Dictionary.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (EntryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entryModel", "dictionary.entryModel.entryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entryModel", "dictionary.entryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("entryModel", "dictionary.entryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new EntryModel {
+                EntryModelId = EntryModelId,
+                Name = Name,
+                Metadata = Metadata,
+            };
+        }
     }
 }

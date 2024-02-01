@@ -194,5 +194,89 @@ namespace Gs2.Gs2Ranking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Rank < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.rank.error.invalid"),
+                    });
+                }
+                if (Rank > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.rank.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Index < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.index.error.invalid"),
+                    });
+                }
+                if (Index > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.index.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CategoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.categoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Score < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.score.error.invalid"),
+                    });
+                }
+                if (Score > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.score.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ranking", "ranking.ranking.createdAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Ranking {
+                Rank = Rank,
+                Index = Index,
+                CategoryName = CategoryName,
+                UserId = UserId,
+                Score = Score,
+                Metadata = Metadata,
+                CreatedAt = CreatedAt,
+            };
+        }
     }
 }

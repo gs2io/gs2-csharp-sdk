@@ -33,50 +33,42 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class UpdateProjectRequest : Gs2Request<UpdateProjectRequest>
 	{
-        public string AccountToken { set; get; }
-        public string ProjectName { set; get; }
-        public string Description { set; get; }
-        public string Plan { set; get; }
-        public string BillingMethodName { set; get; }
-        public string EnableEventBridge { set; get; }
-        public string EventBridgeAwsAccountId { set; get; }
-        public string EventBridgeAwsRegion { set; get; }
-
+         public string AccountToken { set; get; }
+         public string ProjectName { set; get; }
+         public string Description { set; get; }
+         public string Plan { set; get; }
+         public string BillingMethodName { set; get; }
+         public string EnableEventBridge { set; get; }
+         public string EventBridgeAwsAccountId { set; get; }
+         public string EventBridgeAwsRegion { set; get; }
         public UpdateProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public UpdateProjectRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
-
         public UpdateProjectRequest WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public UpdateProjectRequest WithPlan(string plan) {
             this.Plan = plan;
             return this;
         }
-
         public UpdateProjectRequest WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
         }
-
         public UpdateProjectRequest WithEnableEventBridge(string enableEventBridge) {
             this.EnableEventBridge = enableEventBridge;
             return this;
         }
-
         public UpdateProjectRequest WithEventBridgeAwsAccountId(string eventBridgeAwsAccountId) {
             this.EventBridgeAwsAccountId = eventBridgeAwsAccountId;
             return this;
         }
-
         public UpdateProjectRequest WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
             this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;
@@ -164,18 +156,6 @@ namespace Gs2.Gs2Project.Request
             key += EventBridgeAwsAccountId + ":";
             key += EventBridgeAwsRegion + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UpdateProjectRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UpdateProjectRequest)x;
-            return this;
         }
     }
 }

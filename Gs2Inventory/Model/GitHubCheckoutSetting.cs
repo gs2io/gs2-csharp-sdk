@@ -194,5 +194,74 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ApiKeyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.apiKeyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RepositoryName.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.repositoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SourcePath.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.sourcePath.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (ReferenceType) {
+                    case "commit_hash":
+                    case "branch":
+                    case "tag":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.referenceType.error.invalid"),
+                        });
+                }
+            }
+            if (ReferenceType == "commit_hash") {
+                if (CommitHash.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.commitHash.error.tooLong"),
+                    });
+                }
+            }
+            if (ReferenceType == "branch") {
+                if (BranchName.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.branchName.error.tooLong"),
+                    });
+                }
+            }
+            if (ReferenceType == "tag") {
+                if (TagName.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubCheckoutSetting", "inventory.gitHubCheckoutSetting.tagName.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new GitHubCheckoutSetting {
+                ApiKeyId = ApiKeyId,
+                RepositoryName = RepositoryName,
+                SourcePath = SourcePath,
+                ReferenceType = ReferenceType,
+                CommitHash = CommitHash,
+                BranchName = BranchName,
+                TagName = TagName,
+            };
+        }
     }
 }

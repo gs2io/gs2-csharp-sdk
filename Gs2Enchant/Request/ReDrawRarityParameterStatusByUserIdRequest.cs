@@ -143,41 +143,5 @@ namespace Gs2.Gs2Enchant.Request
             key += FixedParameterNames + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new ReDrawRarityParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ParameterName = ParameterName,
-                PropertyId = PropertyId,
-                FixedParameterNames = FixedParameterNames,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ReDrawRarityParameterStatusByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values ReDrawRarityParameterStatusByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values ReDrawRarityParameterStatusByUserIdRequest::userId");
-            }
-            if (ParameterName != y.ParameterName) {
-                throw new ArithmeticException("mismatch parameter values ReDrawRarityParameterStatusByUserIdRequest::parameterName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values ReDrawRarityParameterStatusByUserIdRequest::propertyId");
-            }
-            if (FixedParameterNames != y.FixedParameterNames) {
-                throw new ArithmeticException("mismatch parameter values ReDrawRarityParameterStatusByUserIdRequest::fixedParameterNames");
-            }
-            return new ReDrawRarityParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ParameterName = ParameterName,
-                PropertyId = PropertyId,
-                FixedParameterNames = FixedParameterNames,
-            };
-        }
     }
 }

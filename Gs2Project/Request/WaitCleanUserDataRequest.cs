@@ -33,21 +33,18 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class WaitCleanUserDataRequest : Gs2Request<WaitCleanUserDataRequest>
 	{
-        public string TransactionId { set; get; }
-        public string UserId { set; get; }
-        public string MicroserviceName { set; get; }
+         public string TransactionId { set; get; }
+         public string UserId { set; get; }
+         public string MicroserviceName { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public WaitCleanUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public WaitCleanUserDataRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public WaitCleanUserDataRequest WithMicroserviceName(string microserviceName) {
             this.MicroserviceName = microserviceName;
             return this;
@@ -105,18 +102,6 @@ namespace Gs2.Gs2Project.Request
             key += UserId + ":";
             key += MicroserviceName + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply WaitCleanUserDataRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (WaitCleanUserDataRequest)x;
-            return this;
         }
     }
 }

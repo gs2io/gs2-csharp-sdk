@@ -157,46 +157,5 @@ namespace Gs2.Gs2Grade.Request
             key += AcquireActions + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new MultiplyAcquireActionsByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                PropertyId = PropertyId,
-                RateName = RateName,
-                AcquireActions = AcquireActions,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (MultiplyAcquireActionsByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values MultiplyAcquireActionsByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values MultiplyAcquireActionsByUserIdRequest::userId");
-            }
-            if (GradeName != y.GradeName) {
-                throw new ArithmeticException("mismatch parameter values MultiplyAcquireActionsByUserIdRequest::gradeName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values MultiplyAcquireActionsByUserIdRequest::propertyId");
-            }
-            if (RateName != y.RateName) {
-                throw new ArithmeticException("mismatch parameter values MultiplyAcquireActionsByUserIdRequest::rateName");
-            }
-            if (AcquireActions != y.AcquireActions) {
-                throw new ArithmeticException("mismatch parameter values MultiplyAcquireActionsByUserIdRequest::acquireActions");
-            }
-            return new MultiplyAcquireActionsByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                PropertyId = PropertyId,
-                RateName = RateName,
-                AcquireActions = AcquireActions,
-            };
-        }
     }
 }

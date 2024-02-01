@@ -339,5 +339,96 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MissionTaskId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.missionTaskId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CounterName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.counterName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (TargetResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("missionTaskModel", "mission.missionTaskModel.targetResetType.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (TargetValue < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.targetValue.error.invalid"),
+                    });
+                }
+                if (TargetValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.targetValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CompleteAcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.completeAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PremiseMissionTaskName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModel", "mission.missionTaskModel.premiseMissionTaskName.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MissionTaskModel {
+                MissionTaskId = MissionTaskId,
+                Name = Name,
+                Metadata = Metadata,
+                CounterName = CounterName,
+                TargetResetType = TargetResetType,
+                TargetValue = TargetValue,
+                CompleteAcquireActions = CompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+                PremiseMissionTaskName = PremiseMissionTaskName,
+            };
+        }
     }
 }

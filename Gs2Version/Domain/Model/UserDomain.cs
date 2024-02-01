@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Version.Domain.Iterator;
+using Gs2.Gs2Version.Model.Cache;
 using Gs2.Gs2Version.Request;
 using Gs2.Gs2Version.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,15 +63,11 @@ namespace Gs2.Gs2Version.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2VersionRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,15 +78,10 @@ namespace Gs2.Gs2Version.Domain.Model
             this._client = new Gs2VersionRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._parentKey = Gs2.Gs2Version.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
         )
         {
@@ -99,14 +92,14 @@ namespace Gs2.Gs2Version.Domain.Model
                 this.UserId
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersionsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Version.Model.AcceptVersion> AcceptVersions(
-            #endif
-        #else
         public DescribeAcceptVersionsByUserIdIterator AcceptVersionsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeAcceptVersionsByUserIdIterator(
@@ -114,26 +107,22 @@ namespace Gs2.Gs2Version.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeAcceptVersions(
             Action<Gs2.Gs2Version.Model.AcceptVersion[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
-                Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "AcceptVersion"
+                    this.UserId
                 ),
                 callback
             );
@@ -159,10 +148,9 @@ namespace Gs2.Gs2Version.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Version.Model.AcceptVersion>(
-                Gs2.Gs2Version.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "AcceptVersion"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -188,31 +176,6 @@ namespace Gs2.Gs2Version.Domain.Model
             );
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "version",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
-            );
-        }
-
     }
 
     public partial class UserDomain {
@@ -221,27 +184,21 @@ namespace Gs2.Gs2Version.Domain.Model
         public IFuture<Gs2.Gs2Version.Domain.Model.UserDomain> CalculateSignatureFuture(
             CalculateSignatureRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.UserDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.CalculateSignatureFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CalculateSignatureFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Body = domain.Body = result?.Body;
                 this.Signature = domain.Signature = result?.Signature;
@@ -259,31 +216,17 @@ namespace Gs2.Gs2Version.Domain.Model
             #endif
             CalculateSignatureRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            CalculateSignatureResult result = null;
-                result = await this._client.CalculateSignatureAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CalculateSignatureAsync(request)
+            );
+            var domain = this;
             this.Body = domain.Body = result?.Body;
             this.Signature = domain.Signature = result?.Signature;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CalculateSignatureFuture.")]
-        public IFuture<Gs2.Gs2Version.Domain.Model.UserDomain> CalculateSignature(
-            CalculateSignatureRequest request
-        ) {
-            return CalculateSignatureFuture(request);
         }
         #endif
 

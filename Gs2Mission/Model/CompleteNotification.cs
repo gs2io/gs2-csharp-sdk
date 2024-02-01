@@ -22,6 +22,7 @@ namespace Gs2.Gs2Mission.Model
 	{
         public string NamespaceName { set; get; }
         public string GroupName { set; get; }
+        public string UserId { set; get; }
         public string TaskName { set; get; }
         public CompleteNotification WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -29,6 +30,10 @@ namespace Gs2.Gs2Mission.Model
         }
         public CompleteNotification WithGroupName(string groupName) {
             this.GroupName = groupName;
+            return this;
+        }
+        public CompleteNotification WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
         public CompleteNotification WithTaskName(string taskName) {
@@ -47,6 +52,7 @@ namespace Gs2.Gs2Mission.Model
             return new CompleteNotification()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithGroupName(!data.Keys.Contains("groupName") || data["groupName"] == null ? null : data["groupName"].ToString())
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTaskName(!data.Keys.Contains("taskName") || data["taskName"] == null ? null : data["taskName"].ToString());
         }
     }

@@ -279,5 +279,84 @@ namespace Gs2.Gs2Exchange.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (AwaitId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.awaitId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RateName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.rateName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.count.error.invalid"),
+                    });
+                }
+                if (Count > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.count.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ExchangedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.exchangedAt.error.invalid"),
+                    });
+                }
+                if (ExchangedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.exchangedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Await {
+                AwaitId = AwaitId,
+                UserId = UserId,
+                RateName = RateName,
+                Name = Name,
+                Count = Count,
+                ExchangedAt = ExchangedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

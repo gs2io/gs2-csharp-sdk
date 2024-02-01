@@ -33,8 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class VerifyRequest : Gs2Request<VerifyRequest>
 	{
-        public string VerifyToken { set; get; }
-
+         public string VerifyToken { set; get; }
         public VerifyRequest WithVerifyToken(string verifyToken) {
             this.VerifyToken = verifyToken;
             return this;
@@ -73,18 +72,6 @@ namespace Gs2.Gs2Project.Request
             var key = "";
             key += VerifyToken + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply VerifyRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyRequest)x;
-            return this;
         }
     }
 }

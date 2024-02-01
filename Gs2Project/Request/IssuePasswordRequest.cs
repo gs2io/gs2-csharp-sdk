@@ -33,8 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class IssuePasswordRequest : Gs2Request<IssuePasswordRequest>
 	{
-        public string IssuePasswordToken { set; get; }
-
+         public string IssuePasswordToken { set; get; }
         public IssuePasswordRequest WithIssuePasswordToken(string issuePasswordToken) {
             this.IssuePasswordToken = issuePasswordToken;
             return this;
@@ -73,18 +72,6 @@ namespace Gs2.Gs2Project.Request
             var key = "";
             key += IssuePasswordToken + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply IssuePasswordRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (IssuePasswordRequest)x;
-            return this;
         }
     }
 }

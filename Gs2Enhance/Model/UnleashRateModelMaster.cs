@@ -341,5 +341,113 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UnleashRateModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.unleashRateModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TargetInventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.targetInventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GradeModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.gradeModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GradeEntries.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.gradeEntries.error.tooFew"),
+                    });
+                }
+                if (GradeEntries.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.gradeEntries.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new UnleashRateModelMaster {
+                UnleashRateModelId = UnleashRateModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                TargetInventoryModelId = TargetInventoryModelId,
+                GradeModelId = GradeModelId,
+                GradeEntries = GradeEntries.Clone() as Gs2.Gs2Enhance.Model.UnleashRateEntryModel[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

@@ -118,5 +118,42 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Event.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("emitEvent", "stateMachine.emitEvent.event.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Parameters.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("emitEvent", "stateMachine.emitEvent.parameters.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Timestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("emitEvent", "stateMachine.emitEvent.timestamp.error.invalid"),
+                    });
+                }
+                if (Timestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("emitEvent", "stateMachine.emitEvent.timestamp.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new EmitEvent {
+                Event = Event,
+                Parameters = Parameters,
+                Timestamp = Timestamp,
+            };
+        }
     }
 }

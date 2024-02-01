@@ -262,5 +262,89 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StateMachineId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.stateMachineId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MainStateMachineName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.mainStateMachineName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Payload.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.payload.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Version < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.version.error.invalid"),
+                    });
+                }
+                if (Version > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.version.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineMaster", "stateMachine.stateMachineMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new StateMachineMaster {
+                StateMachineId = StateMachineId,
+                MainStateMachineName = MainStateMachineName,
+                Payload = Payload,
+                Version = Version,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

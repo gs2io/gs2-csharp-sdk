@@ -114,33 +114,5 @@ namespace Gs2.Gs2Inventory.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AddCapacityByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                AddCapacityValue = AddCapacityValue * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AddCapacityByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AddCapacityByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values AddCapacityByUserIdRequest::inventoryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AddCapacityByUserIdRequest::userId");
-            }
-            return new AddCapacityByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                AddCapacityValue = AddCapacityValue + y.AddCapacityValue,
-            };
-        }
     }
 }

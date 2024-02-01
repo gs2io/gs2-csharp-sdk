@@ -303,5 +303,87 @@ namespace Gs2.Gs2Account.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (AccountId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.accountId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Password.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.password.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TimeOffset < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.timeOffset.error.invalid"),
+                    });
+                }
+                if (TimeOffset > 315360000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.timeOffset.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (BanStatuses.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.banStatuses.error.tooMany"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Account {
+                AccountId = AccountId,
+                UserId = UserId,
+                Password = Password,
+                TimeOffset = TimeOffset,
+                BanStatuses = BanStatuses.Clone() as Gs2.Gs2Account.Model.BanStatus[],
+                Banned = Banned,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

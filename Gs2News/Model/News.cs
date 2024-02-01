@@ -175,5 +175,66 @@ namespace Gs2.Gs2News.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Section.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.section.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Content.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.content.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Title.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.title.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ScheduleEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.scheduleEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Timestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.timestamp.error.invalid"),
+                    });
+                }
+                if (Timestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.timestamp.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (FrontMatter.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("news", "news.news.frontMatter.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new News {
+                Section = Section,
+                Content = Content,
+                Title = Title,
+                ScheduleEventId = ScheduleEventId,
+                Timestamp = Timestamp,
+                FrontMatter = FrontMatter,
+            };
+        }
     }
 }

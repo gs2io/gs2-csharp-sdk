@@ -377,5 +377,126 @@ namespace Gs2.Gs2Datastore.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DataObjectId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.dataObjectId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Scope) {
+                    case "public":
+                    case "protected":
+                    case "private":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("dataObject", "datastore.dataObject.scope.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (AllowUserIds.Length > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.allowUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                switch (Status) {
+                    case "ACTIVE":
+                    case "UPLOADING":
+                    case "DELETED":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("dataObject", "datastore.dataObject.status.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Generation.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.generation.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PreviousGeneration.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.previousGeneration.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("dataObject", "datastore.dataObject.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DataObject {
+                DataObjectId = DataObjectId,
+                Name = Name,
+                UserId = UserId,
+                Scope = Scope,
+                AllowUserIds = AllowUserIds.Clone() as string[],
+                Status = Status,
+                Generation = Generation,
+                PreviousGeneration = PreviousGeneration,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

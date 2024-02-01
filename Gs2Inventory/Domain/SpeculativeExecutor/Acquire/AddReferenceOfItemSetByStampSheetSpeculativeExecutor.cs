@@ -34,9 +34,11 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Inventory.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,16 +55,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Inventory:AddReferenceOfByUserId";
         }
-        public static Gs2.Gs2Inventory.Model.ReferenceOf Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            AddReferenceOfByUserIdRequest request,
-            string item
-        ) {
-            return new ReferenceOf {
-                Name = item
-            };
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -71,31 +63,47 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AddReferenceOfByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var item = Transform(domain, accessToken, request, request.ReferenceOf);
-
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.InventoryName,
+                var future = domain.Inventory.Namespace(
+                    request.NamespaceName
+                ).AccessToken(
+                    accessToken
+                ).Inventory(
+                    request.InventoryName
+                ).ItemSet(
                     request.ItemName,
-                    request.ItemSetName,
-                    "ReferenceOf"
-                );
-                var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                    request.ReferenceOf.ToString()
-                );
+                    request.ItemSetName
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
 
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Inventory.Model.ReferenceOf>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
+                if (item == null || item.Length == 0) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
+                try {
+                    var item_ = item[0].SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item_.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.InventoryName,
+                            request.ItemName,
+                            request.ItemSetName
+                        );
+                        return null;
+                    });
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
                 yield return null;
             }
 
@@ -113,45 +121,35 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             AddReferenceOfByUserIdRequest request
         ) {
-            var item = Transform(domain, accessToken, request, request.ReferenceOf);
-
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.ItemSetDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                request.InventoryName,
+            var item = await domain.Inventory.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).Inventory(
+                request.InventoryName
+            ).ItemSet(
                 request.ItemName,
-                request.ItemSetName,
-                "ReferenceOf"
-            );
-            var key = Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain.CreateCacheKey(
-                request.ReferenceOf.ToString()
-            );
+                request.ItemSetName
+            ).ModelAsync();
+
+            if (item == null || item.Length == 0) {
+                return () => null;
+            }
+            var item_ = item[0].SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Inventory.Model.ReferenceOf>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item_.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.InventoryName,
+                    request.ItemName,
+                    request.ItemSetName
                 );
                 return null;
             };
         }
 #endif
-
-        public static AddReferenceOfByUserIdRequest Rate(
-            AddReferenceOfByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static AddReferenceOfByUserIdRequest Rate(
-            AddReferenceOfByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

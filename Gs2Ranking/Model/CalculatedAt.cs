@@ -99,5 +99,34 @@ namespace Gs2.Gs2Ranking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CategoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("calculatedAt", "ranking.calculatedAt.categoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("calculatedAt", "ranking.calculatedAt.calculatedAt.error.invalid"),
+                    });
+                }
+                if (Value > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("calculatedAt", "ranking.calculatedAt.calculatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CalculatedAt {
+                CategoryName = CategoryName,
+                Value = Value,
+            };
+        }
     }
 }

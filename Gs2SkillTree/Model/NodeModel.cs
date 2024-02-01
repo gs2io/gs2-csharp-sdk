@@ -328,5 +328,79 @@ namespace Gs2.Gs2SkillTree.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NodeModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.nodeModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReleaseConsumeActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.releaseConsumeActions.error.tooFew"),
+                    });
+                }
+                if (ReleaseConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.releaseConsumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ReturnAcquireActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.returnAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (RestrainReturnRate < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.restrainReturnRate.error.invalid"),
+                    });
+                }
+                if (RestrainReturnRate > 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.restrainReturnRate.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (PremiseNodeNames.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModel", "skillTree.nodeModel.premiseNodeNames.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new NodeModel {
+                NodeModelId = NodeModelId,
+                Name = Name,
+                Metadata = Metadata,
+                ReleaseConsumeActions = ReleaseConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                ReturnAcquireActions = ReturnAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                RestrainReturnRate = RestrainReturnRate,
+                PremiseNodeNames = PremiseNodeNames.Clone() as string[],
+            };
+        }
     }
 }

@@ -115,17 +115,5 @@ namespace Gs2.Gs2Ranking.Request
             key += TargetUserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UnsubscribeByUserIdRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UnsubscribeByUserIdRequest)x;
-            return this;
-        }
     }
 }

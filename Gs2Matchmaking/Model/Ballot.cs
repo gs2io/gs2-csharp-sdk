@@ -137,5 +137,50 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ballot", "matchmaking.ballot.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RatingName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ballot", "matchmaking.ballot.ratingName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GatheringName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ballot", "matchmaking.ballot.gatheringName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (NumberOfPlayer < 2) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ballot", "matchmaking.ballot.numberOfPlayer.error.invalid"),
+                    });
+                }
+                if (NumberOfPlayer > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ballot", "matchmaking.ballot.numberOfPlayer.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Ballot {
+                UserId = UserId,
+                RatingName = RatingName,
+                GatheringName = GatheringName,
+                NumberOfPlayer = NumberOfPlayer,
+            };
+        }
     }
 }

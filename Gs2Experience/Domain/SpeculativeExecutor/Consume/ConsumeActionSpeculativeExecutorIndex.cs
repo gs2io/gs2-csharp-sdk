@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Experience.Model.Transaction;
 using Gs2.Gs2Experience.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (SubExperienceByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = SubExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = SubExperienceByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = SubExperienceByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -75,7 +76,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 if (SubRankCapByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = SubRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = SubRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = SubRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -91,7 +92,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 if (VerifyRankByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyRankByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyRankByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -107,7 +108,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 }
                 if (VerifyRankCapByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = VerifyRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = VerifyRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -145,7 +146,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (SubExperienceByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = SubExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = SubExperienceByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await SubExperienceByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -154,7 +155,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             }
             if (SubRankCapByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = SubRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = SubRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await SubRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -163,7 +164,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             }
             if (VerifyRankByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyRankByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyRankByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -172,7 +173,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             }
             if (VerifyRankCapByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = VerifyRankCapByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await VerifyRankCapByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

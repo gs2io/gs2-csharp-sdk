@@ -118,5 +118,52 @@ namespace Gs2.Gs2MegaField.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (X < -1048574) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("position", "megaField.position.x.error.invalid"),
+                    });
+                }
+                if (X > 1048574) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("position", "megaField.position.x.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Y < -1048574) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("position", "megaField.position.y.error.invalid"),
+                    });
+                }
+                if (Y > 1048574) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("position", "megaField.position.y.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Z < -1048574) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("position", "megaField.position.z.error.invalid"),
+                    });
+                }
+                if (Z > 1048574) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("position", "megaField.position.z.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Position {
+                X = X,
+                Y = Y,
+                Z = Z,
+            };
+        }
     }
 }

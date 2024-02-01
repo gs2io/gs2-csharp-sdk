@@ -115,36 +115,5 @@ namespace Gs2.Gs2LoginReward.Request
             key += StepNumber + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new UnmarkReceivedByUserIdRequest {
-                NamespaceName = NamespaceName,
-                BonusModelName = BonusModelName,
-                UserId = UserId,
-                StepNumber = StepNumber,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UnmarkReceivedByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values UnmarkReceivedByUserIdRequest::namespaceName");
-            }
-            if (BonusModelName != y.BonusModelName) {
-                throw new ArithmeticException("mismatch parameter values UnmarkReceivedByUserIdRequest::bonusModelName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values UnmarkReceivedByUserIdRequest::userId");
-            }
-            if (StepNumber != y.StepNumber) {
-                throw new ArithmeticException("mismatch parameter values UnmarkReceivedByUserIdRequest::stepNumber");
-            }
-            return new UnmarkReceivedByUserIdRequest {
-                NamespaceName = NamespaceName,
-                BonusModelName = BonusModelName,
-                UserId = UserId,
-                StepNumber = StepNumber,
-            };
-        }
     }
 }

@@ -118,5 +118,52 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Days < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("timeSpan", "matchmaking.timeSpan.days.error.invalid"),
+                    });
+                }
+                if (Days > 365) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("timeSpan", "matchmaking.timeSpan.days.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Hours < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("timeSpan", "matchmaking.timeSpan.hours.error.invalid"),
+                    });
+                }
+                if (Hours > 24) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("timeSpan", "matchmaking.timeSpan.hours.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Minutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("timeSpan", "matchmaking.timeSpan.minutes.error.invalid"),
+                    });
+                }
+                if (Minutes > 60) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("timeSpan", "matchmaking.timeSpan.minutes.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new TimeSpan_ {
+                Days = Days,
+                Hours = Hours,
+                Minutes = Minutes,
+            };
+        }
     }
 }

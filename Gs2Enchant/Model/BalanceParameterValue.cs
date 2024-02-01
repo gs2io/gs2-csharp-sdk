@@ -99,5 +99,34 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterValue", "enchant.balanceParameterValue.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterValue", "enchant.balanceParameterValue.value.error.invalid"),
+                    });
+                }
+                if (Value > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterValue", "enchant.balanceParameterValue.value.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BalanceParameterValue {
+                Name = Name,
+                Value = Value,
+            };
+        }
     }
 }

@@ -260,5 +260,66 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ItemModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.itemModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (StackingLimit < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.stackingLimit.error.invalid"),
+                    });
+                }
+                if (StackingLimit > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.stackingLimit.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (SortValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.sortValue.error.invalid"),
+                    });
+                }
+                if (SortValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModel", "inventory.itemModel.sortValue.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ItemModel {
+                ItemModelId = ItemModelId,
+                Name = Name,
+                Metadata = Metadata,
+                StackingLimit = StackingLimit,
+                AllowMultipleStacks = AllowMultipleStacks,
+                SortValue = SortValue,
+            };
+        }
     }
 }

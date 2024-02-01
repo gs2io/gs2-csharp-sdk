@@ -156,5 +156,58 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotWithSignature", "formation.slotWithSignature.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (PropertyType) {
+                    case "gs2_inventory":
+                    case "gs2_simple_inventory":
+                    case "gs2_dictionary":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("slotWithSignature", "formation.slotWithSignature.propertyType.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Body.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotWithSignature", "formation.slotWithSignature.body.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Signature.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotWithSignature", "formation.slotWithSignature.signature.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotWithSignature", "formation.slotWithSignature.metadata.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SlotWithSignature {
+                Name = Name,
+                PropertyType = PropertyType,
+                Body = Body,
+                Signature = Signature,
+                Metadata = Metadata,
+            };
+        }
     }
 }

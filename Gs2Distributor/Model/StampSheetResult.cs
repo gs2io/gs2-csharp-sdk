@@ -380,5 +380,108 @@ namespace Gs2.Gs2Distributor.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StampSheetResultId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.stampSheetResultId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TransactionId.Length < 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.transactionId.error.tooShort"),
+                    });
+                }
+                if (TransactionId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.transactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TaskRequests.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.taskRequests.error.tooMany"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (TaskResults.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResults.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (SheetResult.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.sheetResult.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (NextTransactionId.Length < 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.nextTransactionId.error.tooShort"),
+                    });
+                }
+                if (NextTransactionId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.nextTransactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new StampSheetResult {
+                StampSheetResultId = StampSheetResultId,
+                UserId = UserId,
+                TransactionId = TransactionId,
+                TaskRequests = TaskRequests.Clone() as Gs2.Core.Model.ConsumeAction[],
+                SheetRequest = SheetRequest.Clone() as Gs2.Core.Model.AcquireAction,
+                TaskResults = TaskResults.Clone() as string[],
+                SheetResult = SheetResult,
+                NextTransactionId = NextTransactionId,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

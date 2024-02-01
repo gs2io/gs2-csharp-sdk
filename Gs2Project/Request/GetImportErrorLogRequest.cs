@@ -33,14 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetImportErrorLogRequest : Gs2Request<GetImportErrorLogRequest>
 	{
-        public string TransactionId { set; get; }
-        public string ErrorLogName { set; get; }
-
+         public string TransactionId { set; get; }
+         public string ErrorLogName { set; get; }
         public GetImportErrorLogRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
         }
-
         public GetImportErrorLogRequest WithErrorLogName(string errorLogName) {
             this.ErrorLogName = errorLogName;
             return this;
@@ -86,18 +84,6 @@ namespace Gs2.Gs2Project.Request
             key += TransactionId + ":";
             key += ErrorLogName + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetImportErrorLogRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetImportErrorLogRequest)x;
-            return this;
         }
     }
 }

@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Ranking.Domain.Iterator;
+using Gs2.Gs2Ranking.Model.Cache;
 using Gs2.Gs2Ranking.Request;
 using Gs2.Gs2Ranking.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
     public partial class CategoryModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _categoryName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string CategoryName => _categoryName;
+        public string NamespaceName { get; }
+        public string CategoryName { get; }
 
         public CategoryModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._client = new Gs2RankingRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._categoryName = categoryName;
-            this._parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "CategoryModel"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string categoryName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "ranking",
-                namespaceName ?? "null",
-                categoryName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string categoryName
-        )
-        {
-            return string.Join(
-                ":",
-                categoryName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.CategoryName = categoryName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Ranking.Domain.Model
         private IFuture<Gs2.Gs2Ranking.Model.CategoryModel> GetFuture(
             GetCategoryModelRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.CategoryModel> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithCategoryName(this.CategoryName);
-                var future = this._client.GetCategoryModelFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetCategoryModelFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                            request.CategoryName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.CategoryModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "categoryModel")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "CategoryModel"
-                        );
-                        var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.CategoryModel>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
             #endif
             GetCategoryModelRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithCategoryName(this.CategoryName);
-            GetCategoryModelResult result = null;
-            try {
-                result = await this._client.GetCategoryModelAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                    request.CategoryName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.CategoryModel>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "categoryModel")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Ranking.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CategoryModel"
-                    );
-                    var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetCategoryModelAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -246,55 +138,34 @@ namespace Gs2.Gs2Ranking.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.CategoryModel> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CategoryModel>(
-                    _parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Ranking.Model.CategoryModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CategoryName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Ranking.Model.CategoryModel).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.CategoryName,
+                    () => this.GetFuture(
+                        new GetCategoryModelRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetCategoryModelRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                                    this.CategoryName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.CategoryModel>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "categoryModel")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CategoryModel>(
-                        _parentKey,
-                        Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                            this.CategoryName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.CategoryModel>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Ranking.Model.CategoryModel> ModelAsync()
@@ -302,52 +173,22 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public async Task<Gs2.Gs2Ranking.Model.CategoryModel> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.CategoryModel>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                    this.CategoryName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CategoryModel>(
-                    _parentKey,
-                    Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                        this.CategoryName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetCategoryModelRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                                    this.CategoryName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Ranking.Model.CategoryModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "categoryModel")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Ranking.Model.CategoryModel>(
-                        _parentKey,
-                        Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                            this.CategoryName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Ranking.Model.CategoryModel).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.CategoryName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Ranking.Model.CategoryModel).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.CategoryName,
+                () => this.GetAsync(
+                    new GetCategoryModelRequest()
+                )
+            );
         }
         #endif
 
@@ -376,20 +217,21 @@ namespace Gs2.Gs2Ranking.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Ranking.Model.CategoryModel>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                    this.CategoryName.ToString()
-                )
+            (null as Gs2.Gs2Ranking.Model.CategoryModel).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.CategoryName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Ranking.Model.CategoryModel> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                    this.CategoryName.ToString()
+                (null as Gs2.Gs2Ranking.Model.CategoryModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Ranking.Model.CategoryModel).CacheKey(
+                    this.CategoryName
                 ),
                 callback,
                 () =>
@@ -408,9 +250,11 @@ namespace Gs2.Gs2Ranking.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking.Model.CategoryModel>(
-                _parentKey,
-                Gs2.Gs2Ranking.Domain.Model.CategoryModelDomain.CreateCacheKey(
-                    this.CategoryName.ToString()
+                (null as Gs2.Gs2Ranking.Model.CategoryModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Ranking.Model.CategoryModel).CacheKey(
+                    this.CategoryName
                 ),
                 callbackId
             );

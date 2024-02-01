@@ -358,5 +358,108 @@ namespace Gs2.Gs2Inbox.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MessageId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.messageId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 4096) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (ReadAcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.readAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ReceivedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.receivedAt.error.invalid"),
+                    });
+                }
+                if (ReceivedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.receivedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ReadAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.readAt.error.invalid"),
+                    });
+                }
+                if (ReadAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.readAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ExpiresAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.expiresAt.error.invalid"),
+                    });
+                }
+                if (ExpiresAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "inbox.message.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Message {
+                MessageId = MessageId,
+                Name = Name,
+                UserId = UserId,
+                Metadata = Metadata,
+                IsRead = IsRead,
+                ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ReceivedAt = ReceivedAt,
+                ReadAt = ReadAt,
+                ExpiresAt = ExpiresAt,
+                Revision = Revision,
+            };
+        }
     }
 }

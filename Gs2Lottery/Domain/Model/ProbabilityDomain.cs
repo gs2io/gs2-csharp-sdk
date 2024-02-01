@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Lottery.Domain.Iterator;
+using Gs2.Gs2Lottery.Model.Cache;
 using Gs2.Gs2Lottery.Request;
 using Gs2.Gs2Lottery.Result;
 using Gs2.Gs2Auth.Model;
@@ -42,11 +43,13 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
+using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -61,16 +64,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
     public partial class ProbabilityDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _lotteryName;
-        private readonly string _prizeId;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string LotteryName => _lotteryName;
-        public string PrizeId => _prizeId;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string LotteryName { get; }
+        public string PrizeId { get; }
 
         public ProbabilityDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,111 +78,109 @@ namespace Gs2.Gs2Lottery.Domain.Model
         ) {
             this._gs2 = gs2;
             this._client = new Gs2LotteryRestClient(
-                this._gs2.RestSession
+                gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._lotteryName = lotteryName;
-            this._prizeId = prizeId;
-            this._parentKey = CreateCacheParentKey(
-                this._namespaceName != null ? this._namespaceName.ToString() : null,
-                this._userId != null ? this._userId.ToString() : null,
-                this._lotteryName?.ToString(),
-                "Probability"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.LotteryName = lotteryName;
+            this.PrizeId = prizeId;
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string lotteryName,
-            string childType
-        )
+    }
+
+    public partial class ProbabilityDomain {
+
+    }
+
+    public partial class ProbabilityDomain {
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Lottery.Model.Probability> ModelFuture()
         {
-            return string.Join(
-                ":",
-                "lottery",
-                namespaceName ?? "null",
-                userId ?? "null",
-                lotteryName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string prizeId
-        )
-        {
-            return string.Join(
-                ":",
-                prizeId ?? "null"
-            );
-        }
-
-#if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Lottery.Model.Probability> ModelFuture() {
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.Probability> self)
             {
-                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Lottery.Model.Probability>(
-                    _parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                        this._prizeId
-                    )
+                var (value, find) = (null as Gs2.Gs2Lottery.Model.Probability).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LotteryName,
+                    this.PrizeId
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.Probability>(Impl);
         }
+        #endif
 
-    #if GS2_ENABLE_UNITASK
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Lottery.Model.Probability> ModelAsync()
+            #else
+        public async Task<Gs2.Gs2Lottery.Model.Probability> ModelAsync()
+            #endif
         {
-            var future = ModelFuture();
-            await future;
-            if (future.Error != null) {
-                throw future.Error;
+            var (value, find) = (null as Gs2.Gs2Lottery.Model.Probability).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.LotteryName,
+                this.PrizeId
+            );
+            if (find) {
+                return value;
             }
-            return future.Result;
+            return null;
         }
+        #endif
 
+        #if UNITY_2017_1_OR_NEWER
+            #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
         public async UniTask<Gs2.Gs2Lottery.Model.Probability> Model()
         {
             return await ModelAsync();
         }
-    #else
+            #else
         [Obsolete("The name has been changed to ModelFuture.")]
         public IFuture<Gs2.Gs2Lottery.Model.Probability> Model()
         {
             return ModelFuture();
         }
-    #endif
-#else
-        public async Task<Gs2.Gs2Lottery.Model.Probability> ModelAsync()
-        {
-            var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Lottery.Model.Probability>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                    this._prizeId
-                )
-            );
-            return value;
-        }
-
+            #endif
+        #else
         [Obsolete("The name has been changed to ModelAsync.")]
         public async Task<Gs2.Gs2Lottery.Model.Probability> Model()
         {
             return await ModelAsync();
         }
-#endif
+        #endif
+
+
+        public void Invalidate()
+        {
+            (null as Gs2.Gs2Lottery.Model.Probability).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.LotteryName,
+                this.PrizeId
+            );
+        }
 
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.Probability> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                    this.PrizeId.ToString()
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LotteryName
+                ),
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheKey(
+                    this.PrizeId
                 ),
                 callback,
                 () =>
@@ -204,15 +199,19 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.Probability>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.ProbabilityDomain.CreateCacheKey(
-                    this.PrizeId.ToString()
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LotteryName
+                ),
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheKey(
+                    this.PrizeId
                 ),
                 callbackId
             );
         }
 
-#if UNITY_2017_1_OR_NEWER
+        #if UNITY_2017_1_OR_NEWER
         public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Lottery.Model.Probability> callback)
         {
             IEnumerator Impl(IFuture<ulong> self)
@@ -230,21 +229,21 @@ namespace Gs2.Gs2Lottery.Domain.Model
             }
             return new Gs2InlineFuture<ulong>(Impl);
         }
-#endif
+        #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-#if UNITY_2017_1_OR_NEWER
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Lottery.Model.Probability> callback)
-#else
+            #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Lottery.Model.Probability> callback)
-#endif
+            #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-#endif
+        #endif
 
     }
 }

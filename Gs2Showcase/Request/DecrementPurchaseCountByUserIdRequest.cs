@@ -124,44 +124,7 @@ namespace Gs2.Gs2Showcase.Request
             key += ShowcaseName + ":";
             key += DisplayItemName + ":";
             key += UserId + ":";
-            key += Count + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DecrementPurchaseCountByUserIdRequest {
-                NamespaceName = NamespaceName,
-                ShowcaseName = ShowcaseName,
-                DisplayItemName = DisplayItemName,
-                UserId = UserId,
-                Count = Count,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DecrementPurchaseCountByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DecrementPurchaseCountByUserIdRequest::namespaceName");
-            }
-            if (ShowcaseName != y.ShowcaseName) {
-                throw new ArithmeticException("mismatch parameter values DecrementPurchaseCountByUserIdRequest::showcaseName");
-            }
-            if (DisplayItemName != y.DisplayItemName) {
-                throw new ArithmeticException("mismatch parameter values DecrementPurchaseCountByUserIdRequest::displayItemName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DecrementPurchaseCountByUserIdRequest::userId");
-            }
-            if (Count != y.Count) {
-                throw new ArithmeticException("mismatch parameter values DecrementPurchaseCountByUserIdRequest::count");
-            }
-            return new DecrementPurchaseCountByUserIdRequest {
-                NamespaceName = NamespaceName,
-                ShowcaseName = ShowcaseName,
-                DisplayItemName = DisplayItemName,
-                UserId = UserId,
-                Count = Count,
-            };
         }
     }
 }

@@ -103,17 +103,5 @@ namespace Gs2.Gs2Friend.Request
             key += TargetUserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UnregisterBlackListByUserIdRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UnregisterBlackListByUserIdRequest)x;
-            return this;
-        }
     }
 }

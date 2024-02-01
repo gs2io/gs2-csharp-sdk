@@ -260,5 +260,76 @@ namespace Gs2.Gs2MegaField.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (LayerId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.layerId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AreaModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.areaModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (LayerModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.layerModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (NumberOfMinEntries < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.numberOfMinEntries.error.invalid"),
+                    });
+                }
+                if (NumberOfMinEntries > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.numberOfMinEntries.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NumberOfMaxEntries < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.numberOfMaxEntries.error.invalid"),
+                    });
+                }
+                if (NumberOfMaxEntries > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.numberOfMaxEntries.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("layer", "megaField.layer.createdAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Layer {
+                LayerId = LayerId,
+                AreaModelName = AreaModelName,
+                LayerModelName = LayerModelName,
+                NumberOfMinEntries = NumberOfMinEntries,
+                NumberOfMaxEntries = NumberOfMaxEntries,
+                CreatedAt = CreatedAt,
+            };
+        }
     }
 }

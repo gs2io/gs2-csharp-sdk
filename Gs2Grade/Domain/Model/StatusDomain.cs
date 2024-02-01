@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -34,14 +32,15 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Grade.Domain.Iterator;
+using Gs2.Gs2Grade.Model.Cache;
 using Gs2.Gs2Grade.Request;
 using Gs2.Gs2Grade.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
-using Gs2.Gs2Experience.Model;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -49,6 +48,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -63,19 +63,13 @@ namespace Gs2.Gs2Grade.Domain.Model
     public partial class StatusDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _gradeName;
-        private readonly string _propertyId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string GradeName { get; }
+        public string PropertyId { get; }
         public string ExperienceNamespaceName { get; set; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string GradeName => _gradeName;
-        public string PropertyId => _propertyId;
 
         public StatusDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -88,47 +82,11 @@ namespace Gs2.Gs2Grade.Domain.Model
             this._client = new Gs2GradeRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._gradeName = gradeName;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.GradeName = gradeName;
             propertyId = propertyId?.Replace("{region}", gs2.RestSession.Region.DisplayName()).Replace("{ownerId}", gs2.RestSession.OwnerId ?? "").Replace("{userId}", UserId);
-            this._propertyId = propertyId;
-            this._parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Status"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string gradeName,
-            string propertyId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "grade",
-                namespaceName ?? "null",
-                userId ?? "null",
-                gradeName ?? "null",
-                propertyId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string gradeName,
-            string propertyId
-        )
-        {
-            return string.Join(
-                ":",
-                gradeName ?? "null",
-                propertyId ?? "null"
-            );
+            this.PropertyId = propertyId;
         }
 
     }
@@ -139,67 +97,24 @@ namespace Gs2.Gs2Grade.Domain.Model
         private IFuture<Gs2.Gs2Grade.Model.Status> GetFuture(
             GetStatusByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.Status> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.GetStatusByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetStatusByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            request.GradeName.ToString(),
-                            request.PropertyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.GradeName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Grade.Model.Status>(Impl);
@@ -214,56 +129,16 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             GetStatusByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            GetStatusByUserIdResult result = null;
-            try {
-                result = await this._client.GetStatusByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.GradeName.ToString(),
-                    request.PropertyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.GradeName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetStatusByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -272,64 +147,24 @@ namespace Gs2.Gs2Grade.Domain.Model
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> AddGradeFuture(
             AddGradeByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.AddGradeByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.AddGradeByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.GradeName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.ExperienceStatus != null) {
-                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            resultModel.ExperienceNamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.ExperienceStatus.ExperienceName.ToString(),
-                            resultModel.ExperienceStatus.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.ExperienceStatus,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
                 domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
@@ -347,56 +182,17 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             AddGradeByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            AddGradeByUserIdResult result = null;
-                result = await this._client.AddGradeByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.GradeName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.ExperienceStatus != null) {
-                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                        resultModel.ExperienceNamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.ExperienceStatus.ExperienceName.ToString(),
-                        resultModel.ExperienceStatus.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.ExperienceStatus,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.AddGradeByUserIdAsync(request)
+            );
+            var domain = this;
             domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
@@ -404,76 +200,27 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to AddGradeFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> AddGrade(
-            AddGradeByUserIdRequest request
-        ) {
-            return AddGradeFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> SubGradeFuture(
             SubGradeByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.SubGradeByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SubGradeByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.GradeName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.ExperienceStatus != null) {
-                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            resultModel.ExperienceNamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.ExperienceStatus.ExperienceName.ToString(),
-                            resultModel.ExperienceStatus.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.ExperienceStatus,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
                 domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
@@ -491,56 +238,17 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             SubGradeByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            SubGradeByUserIdResult result = null;
-                result = await this._client.SubGradeByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.GradeName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.ExperienceStatus != null) {
-                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                        resultModel.ExperienceNamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.ExperienceStatus.ExperienceName.ToString(),
-                        resultModel.ExperienceStatus.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.ExperienceStatus,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SubGradeByUserIdAsync(request)
+            );
+            var domain = this;
             domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
@@ -548,76 +256,27 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to SubGradeFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> SubGrade(
-            SubGradeByUserIdRequest request
-        ) {
-            return SubGradeFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> SetGradeFuture(
             SetGradeByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.SetGradeByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SetGradeByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.GradeName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.ExperienceStatus != null) {
-                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            resultModel.ExperienceNamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.ExperienceStatus.ExperienceName.ToString(),
-                            resultModel.ExperienceStatus.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.ExperienceStatus,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
                 domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
@@ -635,56 +294,17 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             SetGradeByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            SetGradeByUserIdResult result = null;
-                result = await this._client.SetGradeByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.GradeName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.ExperienceStatus != null) {
-                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                        resultModel.ExperienceNamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.ExperienceStatus.ExperienceName.ToString(),
-                        resultModel.ExperienceStatus.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.ExperienceStatus,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SetGradeByUserIdAsync(request)
+            );
+            var domain = this;
             domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
@@ -692,76 +312,27 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to SetGradeFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> SetGrade(
-            SetGradeByUserIdRequest request
-        ) {
-            return SetGradeFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> ApplyRankCapFuture(
             ApplyRankCapByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.ApplyRankCapByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ApplyRankCapByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.GradeName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.ExperienceStatus != null) {
-                        var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                            resultModel.ExperienceNamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.ExperienceStatus.ExperienceName.ToString(),
-                            resultModel.ExperienceStatus.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.ExperienceStatus,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
                 domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
@@ -779,56 +350,17 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             ApplyRankCapByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            ApplyRankCapByUserIdResult result = null;
-                result = await this._client.ApplyRankCapByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.GradeName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.ExperienceStatus != null) {
-                    var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                        resultModel.ExperienceNamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.ExperienceStatus.ExperienceName.ToString(),
-                        resultModel.ExperienceStatus.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.ExperienceStatus,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ApplyRankCapByUserIdAsync(request)
+            );
+            var domain = this;
             domain.ExperienceNamespaceName = result?.ExperienceNamespaceName;
 
             return domain;
@@ -836,74 +368,29 @@ namespace Gs2.Gs2Grade.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ApplyRankCapFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> ApplyRankCap(
-            ApplyRankCapByUserIdRequest request
-        ) {
-            return ApplyRankCapFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> DeleteFuture(
             DeleteStatusByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.DeleteStatusByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteStatusByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            request.GradeName.ToString(),
-                            request.PropertyId.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.GradeName.ToString(),
-                            resultModel.Item.PropertyId.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Grade.Model.Status>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -920,63 +407,21 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             DeleteStatusByUserIdRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithGradeName(this.GradeName)
-                .WithPropertyId(this.PropertyId);
-            DeleteStatusByUserIdResult result = null;
             try {
-                result = await this._client.DeleteStatusByUserIdAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithGradeName(this.GradeName)
+                    .WithPropertyId(this.PropertyId);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteStatusByUserIdAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.GradeName.ToString(),
-                    request.PropertyId.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.GradeName.ToString(),
-                        resultModel.Item.PropertyId.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Grade.Model.Status>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> Delete(
-            DeleteStatusByUserIdRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -984,30 +429,24 @@ namespace Gs2.Gs2Grade.Domain.Model
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> VerifyGradeFuture(
             VerifyGradeByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.VerifyGradeByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyGradeByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -1023,32 +462,18 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             VerifyGradeByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            VerifyGradeByUserIdResult result = null;
-                result = await this._client.VerifyGradeByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyGradeByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to VerifyGradeFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> VerifyGrade(
-            VerifyGradeByUserIdRequest request
-        ) {
-            return VerifyGradeFuture(request);
         }
         #endif
 
@@ -1056,30 +481,24 @@ namespace Gs2.Gs2Grade.Domain.Model
         public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> VerifyGradeUpMaterialFuture(
             VerifyGradeUpMaterialByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.VerifyGradeUpMaterialByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyGradeUpMaterialByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -1095,32 +514,18 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             VerifyGradeUpMaterialByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            VerifyGradeUpMaterialByUserIdResult result = null;
-                result = await this._client.VerifyGradeUpMaterialByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyGradeUpMaterialByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to VerifyGradeUpMaterialFuture.")]
-        public IFuture<Gs2.Gs2Grade.Domain.Model.StatusDomain> VerifyGradeUpMaterial(
-            VerifyGradeUpMaterialByUserIdRequest request
-        ) {
-            return VerifyGradeUpMaterialFuture(request);
         }
         #endif
 
@@ -1128,30 +533,24 @@ namespace Gs2.Gs2Grade.Domain.Model
         public IFuture<Gs2.Core.Domain.TransactionDomain> MultiplyAcquireActionsFuture(
             MultiplyAcquireActionsByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGradeName(this.GradeName)
                     .WithPropertyId(this.PropertyId);
-                var future = this._client.MultiplyAcquireActionsByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.MultiplyAcquireActionsByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
@@ -1183,21 +582,16 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             MultiplyAcquireActionsByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGradeName(this.GradeName)
                 .WithPropertyId(this.PropertyId);
-            MultiplyAcquireActionsByUserIdResult result = null;
-                result = await this._client.MultiplyAcquireActionsByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.MultiplyAcquireActionsByUserIdAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
@@ -1213,15 +607,6 @@ namespace Gs2.Gs2Grade.Domain.Model
         }
         #endif
 
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to MultiplyAcquireActionsFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionDomain> MultiplyAcquireActions(
-            MultiplyAcquireActionsByUserIdRequest request
-        ) {
-            return MultiplyAcquireActionsFuture(request);
-        }
-        #endif
-
     }
 
     public partial class StatusDomain {
@@ -1231,58 +616,38 @@ namespace Gs2.Gs2Grade.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.Status> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        this.GradeName?.ToString(),
-                        this.PropertyId?.ToString()
+                var (value, find) = (null as Gs2.Gs2Grade.Model.Status).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GradeName,
+                    this.PropertyId
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Grade.Model.Status).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GradeName,
+                    this.PropertyId,
+                    () => this.GetFuture(
+                        new GetStatusByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetStatusByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                                    this.GradeName?.ToString(),
-                                    this.PropertyId?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "status")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            this.GradeName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Grade.Model.Status>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Grade.Model.Status> ModelAsync()
@@ -1290,56 +655,26 @@ namespace Gs2.Gs2Grade.Domain.Model
         public async Task<Gs2.Gs2Grade.Model.Status> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.Status>(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.GradeName?.ToString(),
-                    this.PropertyId?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                        this.GradeName?.ToString(),
-                        this.PropertyId?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetStatusByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                                    this.GradeName?.ToString(),
-                                    this.PropertyId?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "status")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                            this.GradeName?.ToString(),
-                            this.PropertyId?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Grade.Model.Status).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.GradeName,
+                this.PropertyId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Grade.Model.Status).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.GradeName,
+                this.PropertyId,
+                () => this.GetAsync(
+                    new GetStatusByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -1368,22 +703,25 @@ namespace Gs2.Gs2Grade.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Grade.Model.Status>(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.GradeName.ToString(),
-                    this.PropertyId.ToString()
-                )
+            (null as Gs2.Gs2Grade.Model.Status).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.GradeName,
+                this.PropertyId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Grade.Model.Status> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.GradeName.ToString(),
-                    this.PropertyId.ToString()
+                (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Grade.Model.Status).CacheKey(
+                    this.GradeName,
+                    this.PropertyId
                 ),
                 callback,
                 () =>
@@ -1402,10 +740,13 @@ namespace Gs2.Gs2Grade.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Grade.Model.Status>(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.GradeName.ToString(),
-                    this.PropertyId.ToString()
+                (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Grade.Model.Status).CacheKey(
+                    this.GradeName,
+                    this.PropertyId
                 ),
                 callbackId
             );

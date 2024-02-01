@@ -137,5 +137,55 @@ namespace Gs2.Gs2Auth.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Token.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.token.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Expire < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.expire.error.invalid"),
+                    });
+                }
+                if (Expire > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.expire.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (TimeOffset < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.timeOffset.error.invalid"),
+                    });
+                }
+                if (TimeOffset > 31536000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessToken", "auth.accessToken.timeOffset.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AccessToken {
+                Token = Token,
+                UserId = UserId,
+                Expire = Expire,
+                TimeOffset = TimeOffset,
+            };
+        }
     }
 }

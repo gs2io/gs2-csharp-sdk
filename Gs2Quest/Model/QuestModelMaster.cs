@@ -522,5 +522,145 @@ namespace Gs2.Gs2Quest.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (QuestModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.questModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (QuestGroupName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.questGroupName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Contents.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.contents.error.tooFew"),
+                    });
+                }
+                if (Contents.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.contents.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (FirstCompleteAcquireActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.firstCompleteAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.consumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (FailedAcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.failedAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (PremiseQuestNames.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.premiseQuestNames.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("questModelMaster", "quest.questModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new QuestModelMaster {
+                QuestModelId = QuestModelId,
+                QuestGroupName = QuestGroupName,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                Contents = Contents.Clone() as Gs2.Gs2Quest.Model.Contents[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+                FirstCompleteAcquireActions = FirstCompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                FailedAcquireActions = FailedAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                PremiseQuestNames = PremiseQuestNames.Clone() as string[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

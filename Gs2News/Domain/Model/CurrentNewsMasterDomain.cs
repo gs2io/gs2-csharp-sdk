@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2News.Domain.Iterator;
+using Gs2.Gs2News.Model.Cache;
 using Gs2.Gs2News.Request;
 using Gs2.Gs2News.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,9 @@ namespace Gs2.Gs2News.Domain.Model
     public partial class CurrentNewsMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
-        private readonly string _namespaceName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
         public string UploadToken { get; set; }
         public string TemplateUploadUrl { get; set; }
-        public string NamespaceName => _namespaceName;
 
         public CurrentNewsMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -76,30 +75,7 @@ namespace Gs2.Gs2News.Domain.Model
             this._client = new Gs2NewsRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._parentKey = Gs2.Gs2News.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "CurrentNewsMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "news",
-                namespaceName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
+            this.NamespaceName = namespaceName;
         }
 
     }
@@ -110,27 +86,21 @@ namespace Gs2.Gs2News.Domain.Model
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFuture(
             PrepareUpdateCurrentNewsMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.PrepareUpdateCurrentNewsMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PrepareUpdateCurrentNewsMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.UploadToken = domain.UploadToken = result?.UploadToken;
                 this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
@@ -148,19 +118,14 @@ namespace Gs2.Gs2News.Domain.Model
             #endif
             PrepareUpdateCurrentNewsMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            PrepareUpdateCurrentNewsMasterResult result = null;
-                result = await this._client.PrepareUpdateCurrentNewsMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PrepareUpdateCurrentNewsMasterAsync(request)
+            );
+            var domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
             return domain;
@@ -168,39 +133,24 @@ namespace Gs2.Gs2News.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PrepareUpdateFuture.")]
-        public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdate(
-            PrepareUpdateCurrentNewsMasterRequest request
-        ) {
-            return PrepareUpdateFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateFuture(
             UpdateCurrentNewsMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.UpdateCurrentNewsMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateCurrentNewsMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -216,29 +166,15 @@ namespace Gs2.Gs2News.Domain.Model
             #endif
             UpdateCurrentNewsMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            UpdateCurrentNewsMasterResult result = null;
-                result = await this._client.UpdateCurrentNewsMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateCurrentNewsMasterAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> Update(
-            UpdateCurrentNewsMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -246,27 +182,21 @@ namespace Gs2.Gs2News.Domain.Model
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubFuture(
             PrepareUpdateCurrentNewsMasterFromGitHubRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.UploadToken = domain.UploadToken = result?.UploadToken;
                 self.OnComplete(domain);
@@ -283,30 +213,16 @@ namespace Gs2.Gs2News.Domain.Model
             #endif
             PrepareUpdateCurrentNewsMasterFromGitHubRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            PrepareUpdateCurrentNewsMasterFromGitHubResult result = null;
-                result = await this._client.PrepareUpdateCurrentNewsMasterFromGitHubAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PrepareUpdateCurrentNewsMasterFromGitHubAsync(request)
+            );
+            var domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PrepareUpdateFromGitHubFuture.")]
-        public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHub(
-            PrepareUpdateCurrentNewsMasterFromGitHubRequest request
-        ) {
-            return PrepareUpdateFromGitHubFuture(request);
         }
         #endif
 

@@ -118,5 +118,37 @@ namespace Gs2.Gs2Friend.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("friendUser", "friend.friendUser.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PublicProfile.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("friendUser", "friend.friendUser.publicProfile.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (FriendProfile.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("friendUser", "friend.friendUser.friendProfile.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new FriendUser {
+                UserId = UserId,
+                PublicProfile = PublicProfile,
+                FriendProfile = FriendProfile,
+            };
+        }
     }
 }

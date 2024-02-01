@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2SerialKey.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,12 +68,9 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2SerialKeyRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _campaignModelName;
-        private readonly string _issueJobName;
-        public string NamespaceName => _namespaceName;
-        public string CampaignModelName => _campaignModelName;
-        public string IssueJobName => _issueJobName;
+        public string NamespaceName { get; }
+        public string CampaignModelName { get; }
+        public string IssueJobName { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -85,13 +83,13 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
             Gs2SerialKeyRestClient client,
             string namespaceName,
             string campaignModelName,
-            string issueJobName
+            string issueJobName = null
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._campaignModelName = campaignModelName;
-            this._issueJobName = issueJobName;
+            this.NamespaceName = namespaceName;
+            this.CampaignModelName = campaignModelName;
+            this.IssueJobName = issueJobName;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2SerialKey.Model.SerialKey[]{};
@@ -110,18 +108,17 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Singleton",
-                "SerialKey"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2SerialKey.Model.SerialKey>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2SerialKey.Model.SerialKey>
             (
-                    parentKey,
+                    (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
+                        NamespaceName,
+                        default
+                    ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._campaignModelName == null || item.CampaignModelName == this._campaignModelName)
+                    .Where(item => this.CampaignModelName == null || item.CampaignModelName == this.CampaignModelName)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -133,9 +130,9 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 var r = await this._client.DescribeSerialKeysAsync(
                 #endif
                     new Gs2.Gs2SerialKey.Request.DescribeSerialKeysRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithCampaignModelName(this._campaignModelName)
-                        .WithIssueJobName(this._issueJobName)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithCampaignModelName(this.CampaignModelName)
+                        .WithIssueJobName(this.IssueJobName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -149,24 +146,25 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                 var r = future.Result;
                 #endif
                 this._result = r.Items
-                    .Where(item => this._campaignModelName == null || item.CampaignModelName == this._campaignModelName)
+                    .Where(item => this.CampaignModelName == null || item.CampaignModelName == this.CampaignModelName)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                                    item.Code?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        default,
+                        item.Code
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2SerialKey.Model.SerialKey>(
-                            parentKey
+                        (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
+                            NamespaceName,
+                            default
+                        )
                     );
                 }
             }
@@ -202,7 +200,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2SerialKey.Model.SerialKey ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -265,7 +263,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2SerialKey.Model.SerialKey ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

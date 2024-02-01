@@ -181,5 +181,50 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RoleName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("capacityOfRole", "matchmaking.capacityOfRole.roleName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RoleAliases.Length > 9) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("capacityOfRole", "matchmaking.capacityOfRole.roleAliases.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Capacity < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("capacityOfRole", "matchmaking.capacityOfRole.capacity.error.invalid"),
+                    });
+                }
+                if (Capacity > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("capacityOfRole", "matchmaking.capacityOfRole.capacity.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Participants.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("capacityOfRole", "matchmaking.capacityOfRole.participants.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CapacityOfRole {
+                RoleName = RoleName,
+                RoleAliases = RoleAliases.Clone() as string[],
+                Capacity = Capacity,
+                Participants = Participants.Clone() as Gs2.Gs2Matchmaking.Model.Player[],
+            };
+        }
     }
 }

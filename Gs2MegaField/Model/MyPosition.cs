@@ -118,5 +118,32 @@ namespace Gs2.Gs2MegaField.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+            }
+            {
+            }
+            {
+                if (R < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("myPosition", "megaField.myPosition.r.error.invalid"),
+                    });
+                }
+                if (R > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("myPosition", "megaField.myPosition.r.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MyPosition {
+                Position = Position.Clone() as Gs2.Gs2MegaField.Model.Position,
+                Vector = Vector.Clone() as Gs2.Gs2MegaField.Model.Vector,
+                R = R,
+            };
+        }
     }
 }

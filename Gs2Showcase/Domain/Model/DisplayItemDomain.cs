@@ -34,12 +34,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Showcase.Domain.Iterator;
+using Gs2.Gs2Showcase.Model.Cache;
 using Gs2.Gs2Showcase.Request;
 using Gs2.Gs2Showcase.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -48,6 +50,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -62,18 +65,12 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class DisplayItemDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _showcaseName;
-        private readonly string _displayItemId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string ShowcaseName { get; }
+        public string DisplayItemId { get; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string ShowcaseName => _showcaseName;
-        public string DisplayItemId => _displayItemId;
 
         public DisplayItemDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -86,45 +83,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._client = new Gs2ShowcaseRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._showcaseName = showcaseName;
-            this._displayItemId = displayItemId;
-            this._parentKey = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                this.ShowcaseName,
-                "DisplayItem"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string showcaseName,
-            string displayItemId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "showcase",
-                namespaceName ?? "null",
-                userId ?? "null",
-                showcaseName ?? "null",
-                displayItemId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string displayItemId
-        )
-        {
-            return string.Join(
-                ":",
-                displayItemId ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.ShowcaseName = showcaseName;
+            this.DisplayItemId = displayItemId;
         }
 
     }
@@ -132,253 +94,27 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class DisplayItemDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        private IFuture<Gs2.Gs2Showcase.Model.Showcase> GetFuture(
-            GetShowcaseByUserIdRequest request
-        ) {
-
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.Showcase> self)
-            {
-                #if UNITY_2017_1_OR_NEWER
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = this._client.GetShowcaseByUserIdFuture(
-                    request
-                );
-                yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                            request.ShowcaseName.ToString()
-                        );
-                        _gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors[0].Component != "showcase")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                #else
-                request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName);
-                GetShowcaseByUserIdResult result = null;
-                try {
-                    result = await this._client.GetShowcaseByUserIdAsync(
-                        request
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        request.ShowcaseName.ToString()
-                        );
-                    _gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.Errors[0].Component != "showcase")
-                    {
-                        throw;
-                    }
-                }
-                #endif
-
-                var requestModel = request;
-                var resultModel = result;
-                var cache = _gs2.Cache;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Showcase"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                        foreach (var displayItem in resultModel.Item.DisplayItems) {
-                            cache.Put(
-                                Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
-                                    this.NamespaceName.ToString(),
-                                    this.UserId.ToString(),
-                                    resultModel.Item.Name.ToString(),
-                                    "DisplayItem"
-                                ),
-                                Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                                    displayItem.DisplayItemId.ToString()
-                                ),
-                                displayItem,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                        cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
-                            Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
-                                this.NamespaceName.ToString(),
-                                this.UserId.ToString(),
-                                resultModel.Item.Name.ToString(),
-                                "DisplayItem"
-                            )
-                        );
-                    }
-                }
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.Showcase>(Impl);
-        }
-        #endif
-        
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        private async UniTask<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
-            #else
-        private async Task<Gs2.Gs2Showcase.Model.Showcase> GetAsync(
-            #endif
-            GetShowcaseByUserIdRequest request
-        ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithShowcaseName(this.ShowcaseName);
-            GetShowcaseByUserIdResult result = null;
-            try {
-                result = await this._client.GetShowcaseByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                    request.ShowcaseName.ToString()
-                    );
-                _gs2.Cache.Put<Gs2.Gs2Showcase.Model.Showcase>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors[0].Component != "showcase")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            var cache = _gs2.Cache;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Showcase"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                    foreach (var displayItem in resultModel.Item.DisplayItems) {
-                        cache.Put(
-                            Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
-                                this.NamespaceName.ToString(),
-                                this.UserId.ToString(),
-                                resultModel.Item.Name.ToString(),
-                                "DisplayItem"
-                            ),
-                            Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheKey(
-                                displayItem.DisplayItemId.ToString()
-                            ),
-                            displayItem,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    cache.SetListCached<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain.CreateCacheParentKey(
-                            this.NamespaceName.ToString(),
-                            this.UserId.ToString(),
-                            resultModel.Item.Name.ToString(),
-                            "DisplayItem"
-                        )
-                    );
-                }
-            }
-            return result?.Item;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionDomain> BuyFuture(
             BuyByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithShowcaseName(this.ShowcaseName)
                     .WithDisplayItemId(this.DisplayItemId);
-                var future = this._client.BuyByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.BuyByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            this.ShowcaseName,
-                            this.DisplayItemId,
-                            "SalesItem"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.SalesItemDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
@@ -410,38 +146,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             BuyByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithShowcaseName(this.ShowcaseName)
                 .WithDisplayItemId(this.DisplayItemId);
-            BuyByUserIdResult result = null;
-                result = await this._client.BuyByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.ShowcaseName,
-                        this.DisplayItemId,
-                        "SalesItem"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.SalesItemDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.BuyByUserIdAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
@@ -457,15 +171,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #endif
 
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to BuyFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionDomain> Buy(
-            BuyByUserIdRequest request
-        ) {
-            return BuyFuture(request);
-        }
-        #endif
-
     }
 
     public partial class DisplayItemDomain {
@@ -475,54 +180,36 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.DisplayItem> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                        this.DisplayItemId?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.DisplayItem).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName,
+                    this.DisplayItemId
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetShowcaseByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            _gs2.Cache.Put<Gs2.Gs2Showcase.Model.DisplayItem>(
-                                _parentKey,
-                                Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                                    this.DisplayItemId?.ToString()
-                                ),
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors[0].component != "showcase")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        )
-                    );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
                 }
-                self.OnComplete(value);
+                var future = this._gs2.Showcase.Namespace(
+                    this.NamespaceName
+                ).User(
+                    this.UserId
+                ).Showcase(
+                    this.ShowcaseName
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var showcase = future.Result;
+                self.OnComplete(showcase.DisplayItems.FirstOrDefault(v => v.DisplayItemId == this.DisplayItemId));
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.DisplayItem>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
@@ -530,40 +217,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.DisplayItem> ModelAsync()
             #endif
         {
-            var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                        this.DisplayItemId?.ToString()
-                    )
-                );
-            if (!find) {
-                try {
-                    await this.GetAsync(
-                        new GetShowcaseByUserIdRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    _gs2.Cache.Put<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        ),
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.errors[0].component != "showcase")
-                    {
-                        throw;
-                    }
-                }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.DisplayItem>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.DisplayItemDomain.CreateCacheKey(
-                            this.DisplayItemId?.ToString()
-                        )
-                    );
+            var (value, find) = (null as Gs2.Gs2Showcase.Model.DisplayItem).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.ShowcaseName,
+                this.DisplayItemId
+            );
+            if (find) {
+                return value;
             }
-            return value;
+            var showcase = await this._gs2.Showcase.Namespace(
+                this.NamespaceName
+            ).User(
+                this.UserId
+            ).Showcase(
+                this.ShowcaseName
+            ).ModelAsync();
+            return showcase.DisplayItems.FirstOrDefault(v => v.DisplayItemId == this.DisplayItemId);
         }
         #endif
 
@@ -592,40 +263,53 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Showcase.Namespace(
-                NamespaceName
-            ).User(
-                UserId
-            ).Showcase(
-                ShowcaseName
-            ).Invalidate();
+            (null as Gs2.Gs2Showcase.Model.DisplayItem).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.ShowcaseName,
+                this.DisplayItemId
+            );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.DisplayItem> callback)
         {
-            return this._gs2.Showcase.Namespace(
-                NamespaceName
-            ).User(
-                UserId
-            ).Showcase(
-                ShowcaseName
-            ).Subscribe(
-                item =>
+            return this._gs2.Cache.Subscribe(
+                (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName
+                ),
+                (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheKey(
+                    this.DisplayItemId
+                ),
+                callback,
+                () =>
                 {
-                    callback.Invoke(item.DisplayItems.FirstOrDefault(v => v.DisplayItemId == DisplayItemId));
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+                    ModelAsync().Forget();
+            #else
+                    ModelAsync();
+            #endif
+        #endif
                 }
             );
         }
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Showcase.Namespace(
-                NamespaceName
-            ).User(
-                UserId
-            ).Showcase(
-                ShowcaseName
-            ).Unsubscribe(callbackId);
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.DisplayItem>(
+                (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.ShowcaseName
+                ),
+                (null as Gs2.Gs2Showcase.Model.DisplayItem).CacheKey(
+                    this.DisplayItemId
+                ),
+                callbackId
+            );
         }
 
         #if UNITY_2017_1_OR_NEWER

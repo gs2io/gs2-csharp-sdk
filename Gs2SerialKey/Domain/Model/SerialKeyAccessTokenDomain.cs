@@ -34,12 +34,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2SerialKey.Domain.Iterator;
+using Gs2.Gs2SerialKey.Model.Cache;
 using Gs2.Gs2SerialKey.Request;
 using Gs2.Gs2SerialKey.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -48,6 +50,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -62,16 +65,11 @@ namespace Gs2.Gs2SerialKey.Domain.Model
     public partial class SerialKeyAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SerialKeyRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly string _serialKeyCode;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string SerialKeyCode { get; }
         public string Url { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public string SerialKeyCode => _serialKeyCode;
 
         public SerialKeyAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -83,74 +81,32 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this._client = new Gs2SerialKeyRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._serialKeyCode = serialKeyCode;
-            this._parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "SerialKey"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.SerialKeyCode = serialKeyCode;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> UseFuture(
             UseRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
-                    .WithCode(SerialKeyCode);
-                var future = this._client.UseFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithCode(this.SerialKeyCode);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.UseFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "SerialKey"
-                        );
-                        var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                            resultModel.Item.Code.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                    if (resultModel.CampaignModel != null) {
-                        var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "CampaignModel"
-                        );
-                        var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
-                            resultModel.CampaignModel.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.CampaignModel,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -167,110 +123,42 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             #endif
             UseRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
-                .WithCode(SerialKeyCode);
-            UseResult result = null;
-                result = await this._client.UseAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "SerialKey"
-                    );
-                    var key = Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                        resultModel.Item.Code.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-                if (resultModel.CampaignModel != null) {
-                    var parentKey = Gs2.Gs2SerialKey.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CampaignModel"
-                    );
-                    var key = Gs2.Gs2SerialKey.Domain.Model.CampaignModelDomain.CreateCacheKey(
-                        resultModel.CampaignModel.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.CampaignModel,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithCode(this.SerialKeyCode);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.UseAsync(request)
+            );
+            var domain = this;
 
             return domain;
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UseFuture.")]
-        public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> Use(
-            UseRequest request
-        ) {
-            return UseFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string serialKeyCode,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "serialKey",
-                namespaceName ?? "null",
-                userId ?? "null",
-                serialKeyCode ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string serialKeyCode
-        )
-        {
-            return string.Join(
-                ":",
-                serialKeyCode ?? "null"
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Model.SerialKey> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.SerialKey> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2SerialKey.Model.SerialKey>(
-                    _parentKey,
-                    Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                        this.SerialKeyCode?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2SerialKey.Model.SerialKey).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.SerialKeyCode
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.SerialKey>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2SerialKey.Model.SerialKey> ModelAsync()
@@ -278,24 +166,16 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public async Task<Gs2.Gs2SerialKey.Model.SerialKey> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.SerialKey>(
-                _parentKey,
-                Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                    this.SerialKeyCode?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2SerialKey.Model.SerialKey>(
-                    _parentKey,
-                    Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                        this.SerialKeyCode?.ToString()
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2SerialKey.Model.SerialKey).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.SerialKeyCode
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -322,12 +202,25 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #endif
 
 
+        public void Invalidate()
+        {
+            (null as Gs2.Gs2SerialKey.Model.SerialKey).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.SerialKeyCode
+            );
+        }
+
         public ulong Subscribe(Action<Gs2.Gs2SerialKey.Model.SerialKey> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                    this.SerialKeyCode.ToString()
+                (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheKey(
+                    this.SerialKeyCode
                 ),
                 callback,
                 () =>
@@ -346,9 +239,12 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SerialKey.Model.SerialKey>(
-                _parentKey,
-                Gs2.Gs2SerialKey.Domain.Model.SerialKeyDomain.CreateCacheKey(
-                    this.SerialKeyCode.ToString()
+                (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheKey(
+                    this.SerialKeyCode
                 ),
                 callbackId
             );

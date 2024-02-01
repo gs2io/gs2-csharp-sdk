@@ -298,5 +298,92 @@ namespace Gs2.Gs2Chat.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MessageId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.messageId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RoomName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.roomName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Category < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.category.error.invalid"),
+                    });
+                }
+                if (Category > 2147483645) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.category.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("message", "chat.message.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Message {
+                MessageId = MessageId,
+                RoomName = RoomName,
+                Name = Name,
+                UserId = UserId,
+                Category = Category,
+                Metadata = Metadata,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

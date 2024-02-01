@@ -33,20 +33,17 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class UpdateBillingMethodRequest : Gs2Request<UpdateBillingMethodRequest>
 	{
-        public string AccountToken { set; get; }
-        public string BillingMethodName { set; get; }
-        public string Description { set; get; }
-
+         public string AccountToken { set; get; }
+         public string BillingMethodName { set; get; }
+         public string Description { set; get; }
         public UpdateBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public UpdateBillingMethodRequest WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
         }
-
         public UpdateBillingMethodRequest WithDescription(string description) {
             this.Description = description;
             return this;
@@ -99,18 +96,6 @@ namespace Gs2.Gs2Project.Request
             key += BillingMethodName + ":";
             key += Description + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UpdateBillingMethodRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UpdateBillingMethodRequest)x;
-            return this;
         }
     }
 }

@@ -99,5 +99,39 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Rate < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusRate", "enhance.bonusRate.rate.error.invalid"),
+                    });
+                }
+                if (Rate > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusRate", "enhance.bonusRate.rate.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Weight < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusRate", "enhance.bonusRate.weight.error.invalid"),
+                    });
+                }
+                if (Weight > 2147483645) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusRate", "enhance.bonusRate.weight.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BonusRate {
+                Rate = Rate,
+                Weight = Weight,
+            };
+        }
     }
 }

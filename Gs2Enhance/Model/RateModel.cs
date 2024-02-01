@@ -363,5 +363,93 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RateModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.rateModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TargetInventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.targetInventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquireExperienceSuffix.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.acquireExperienceSuffix.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MaterialInventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.materialInventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquireExperienceHierarchy.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.acquireExperienceHierarchy.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ExperienceModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.experienceModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (BonusRates.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rateModel", "enhance.rateModel.bonusRates.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RateModel {
+                RateModelId = RateModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                TargetInventoryModelId = TargetInventoryModelId,
+                AcquireExperienceSuffix = AcquireExperienceSuffix,
+                MaterialInventoryModelId = MaterialInventoryModelId,
+                AcquireExperienceHierarchy = AcquireExperienceHierarchy.Clone() as string[],
+                ExperienceModelId = ExperienceModelId,
+                BonusRates = BonusRates.Clone() as Gs2.Gs2Enhance.Model.BonusRate[],
+            };
+        }
     }
 }

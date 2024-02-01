@@ -379,5 +379,139 @@ namespace Gs2.Gs2Idle.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CategoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.categoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RewardIntervalMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.rewardIntervalMinutes.error.invalid"),
+                    });
+                }
+                if (RewardIntervalMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.rewardIntervalMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (DefaultMaximumIdleMinutes < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.defaultMaximumIdleMinutes.error.invalid"),
+                    });
+                }
+                if (DefaultMaximumIdleMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.defaultMaximumIdleMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (IdlePeriodScheduleId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.idlePeriodScheduleId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReceivePeriodScheduleId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.receivePeriodScheduleId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("categoryModelMaster", "idle.categoryModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CategoryModelMaster {
+                CategoryModelId = CategoryModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                RewardIntervalMinutes = RewardIntervalMinutes,
+                DefaultMaximumIdleMinutes = DefaultMaximumIdleMinutes,
+                AcquireActions = AcquireActions.Clone() as Gs2.Gs2Idle.Model.AcquireActionList[],
+                IdlePeriodScheduleId = IdlePeriodScheduleId,
+                ReceivePeriodScheduleId = ReceivePeriodScheduleId,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

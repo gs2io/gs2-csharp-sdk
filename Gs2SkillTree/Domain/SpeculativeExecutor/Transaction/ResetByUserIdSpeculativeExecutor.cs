@@ -34,6 +34,7 @@ using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2SkillTree.Model.Cache;
 using Gs2.Gs2SkillTree.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -73,21 +74,12 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    request.UserId,
-                    "Status"
-                );
-                var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                );
-
                 result.OnComplete(() =>
                 {
-                    domain.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                        parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                    item.DeleteCache(
+                        domain.Cache,
+                        request.NamespaceName,
+                        accessToken.UserId
                     );
                     return null;
                 });
@@ -115,21 +107,12 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
             ).Status(
             ).ModelAsync();
 
-            var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                request.UserId,
-                "Status"
-            );
-            var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-            );
-
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                    parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.DeleteCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId
                 );
                 return null;
             };

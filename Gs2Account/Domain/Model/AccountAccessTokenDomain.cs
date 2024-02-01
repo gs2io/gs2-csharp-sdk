@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -32,12 +34,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Account.Domain.Iterator;
+using Gs2.Gs2Account.Model.Cache;
 using Gs2.Gs2Account.Request;
 using Gs2.Gs2Account.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,17 +65,13 @@ namespace Gs2.Gs2Account.Domain.Model
     public partial class AccountAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; }
         public string Body { get; set; }
         public string Signature { get; set; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public AccountAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -82,12 +82,8 @@ namespace Gs2.Gs2Account.Domain.Model
             this._client = new Gs2AccountRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Account.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Account"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -132,10 +128,9 @@ namespace Gs2.Gs2Account.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Account.Model.TakeOver>(
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "TakeOver"
+                    this.UserId
                 ),
                 callback
             );
@@ -161,10 +156,9 @@ namespace Gs2.Gs2Account.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Account.Model.TakeOver>(
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "TakeOver"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -176,42 +170,18 @@ namespace Gs2.Gs2Account.Domain.Model
             return new Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 type
             );
         }
 
         public Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain DataOwner(
+            string dataOwnerName
         ) {
             return new Gs2.Gs2Account.Domain.Model.DataOwnerAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "account",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
+                this.AccessToken
             );
         }
 
@@ -220,18 +190,21 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.Account> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
-                    _parentKey,
-                    Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        this.UserId?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.Account>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Account.Model.Account> ModelAsync()
@@ -239,24 +212,15 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.Account> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.Account>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    this.UserId?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.Account>(
-                    _parentKey,
-                    Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                        this.UserId?.ToString()
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2Account.Model.Account).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -285,20 +249,21 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Account.Model.Account>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    this.UserId.ToString()
-                )
+            (null as Gs2.Gs2Account.Model.Account).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Account.Model.Account> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    this.UserId.ToString()
+                (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Account.Model.Account).CacheKey(
+                    this.UserId
                 ),
                 callback,
                 () =>
@@ -317,9 +282,11 @@ namespace Gs2.Gs2Account.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.Account>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheKey(
-                    this.UserId.ToString()
+                (null as Gs2.Gs2Account.Model.Account).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Account.Model.Account).CacheKey(
+                    this.UserId
                 ),
                 callbackId
             );

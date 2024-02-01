@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Showcase.Domain.Iterator;
+using Gs2.Gs2Showcase.Model.Cache;
 using Gs2.Gs2Showcase.Request;
 using Gs2.Gs2Showcase.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class RandomShowcaseMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _showcaseName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string ShowcaseName => _showcaseName;
+        public string NamespaceName { get; }
+        public string ShowcaseName { get; }
 
         public RandomShowcaseMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._client = new Gs2ShowcaseRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._showcaseName = showcaseName;
-            this._parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "RandomShowcaseMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string showcaseName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "showcase",
-                namespaceName ?? "null",
-                showcaseName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string showcaseName
-        )
-        {
-            return string.Join(
-                ":",
-                showcaseName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.ShowcaseName = showcaseName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private IFuture<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> GetFuture(
             GetRandomShowcaseMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithShowcaseName(this.ShowcaseName);
-                var future = this._client.GetRandomShowcaseMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetRandomShowcaseMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            request.ShowcaseName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "randomShowcaseMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RandomShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             GetRandomShowcaseMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithShowcaseName(this.ShowcaseName);
-            GetRandomShowcaseMasterResult result = null;
-            try {
-                result = await this._client.GetRandomShowcaseMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                    request.ShowcaseName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "randomShowcaseMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RandomShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetRandomShowcaseMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> UpdateFuture(
             UpdateRandomShowcaseMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithShowcaseName(this.ShowcaseName);
-                var future = this._client.UpdateRandomShowcaseMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateRandomShowcaseMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RandomShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             UpdateRandomShowcaseMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithShowcaseName(this.ShowcaseName);
-            UpdateRandomShowcaseMasterResult result = null;
-                result = await this._client.UpdateRandomShowcaseMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RandomShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateRandomShowcaseMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> Update(
-            UpdateRandomShowcaseMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> DeleteFuture(
             DeleteRandomShowcaseMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithShowcaseName(this.ShowcaseName);
-                var future = this._client.DeleteRandomShowcaseMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteRandomShowcaseMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            request.ShowcaseName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "randomShowcaseMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RandomShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             DeleteRandomShowcaseMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithShowcaseName(this.ShowcaseName);
-            DeleteRandomShowcaseMasterResult result = null;
             try {
-                result = await this._client.DeleteRandomShowcaseMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                    request.ShowcaseName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithShowcaseName(this.ShowcaseName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteRandomShowcaseMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "randomShowcaseMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RandomShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> Delete(
-            DeleteRandomShowcaseMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                        this.ShowcaseName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ShowcaseName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ShowcaseName,
+                    () => this.GetFuture(
+                        new GetRandomShowcaseMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetRandomShowcaseMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                                    this.ShowcaseName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "randomShowcaseMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            this.ShowcaseName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                    this.ShowcaseName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                        this.ShowcaseName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetRandomShowcaseMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                                    this.ShowcaseName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "randomShowcaseMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                            this.ShowcaseName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.ShowcaseName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.ShowcaseName,
+                () => this.GetAsync(
+                    new GetRandomShowcaseMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                    this.ShowcaseName.ToString()
-                )
+            (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.ShowcaseName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                    this.ShowcaseName.ToString()
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheKey(
+                    this.ShowcaseName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain.CreateCacheKey(
-                    this.ShowcaseName.ToString()
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheKey(
+                    this.ShowcaseName
                 ),
                 callbackId
             );

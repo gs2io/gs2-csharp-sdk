@@ -150,5 +150,29 @@ namespace Gs2.Gs2Experience.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentExperienceMaster", "experience.currentExperienceMaster.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Settings.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("currentExperienceMaster", "experience.currentExperienceMaster.settings.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CurrentExperienceMaster {
+                NamespaceId = NamespaceId,
+                Settings = Settings,
+            };
+        }
     }
 }

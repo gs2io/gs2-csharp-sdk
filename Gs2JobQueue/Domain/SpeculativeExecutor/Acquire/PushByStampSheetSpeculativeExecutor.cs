@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -37,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
+using Gs2.Gs2JobQueue.Model.Cache;
+using Gs2.Gs2JobQueue.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,19 +53,6 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2JobQueue:PushByUserId";
         }
-        public static Gs2.Gs2JobQueue.Model.Job Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            PushByUserIdRequest request,
-            Gs2.Gs2JobQueue.Model.Job item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -74,14 +61,6 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             PushByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                try {
-                    Transform(domain, accessToken, request, null);
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-
                 result.OnComplete(() => null);
                 yield return null;
             }
@@ -100,24 +79,8 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             AccessToken accessToken,
             PushByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
-
             return () => null;
         }
 #endif
-
-        public static PushByUserIdRequest Rate(
-            PushByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static PushByUserIdRequest Rate(
-            PushByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

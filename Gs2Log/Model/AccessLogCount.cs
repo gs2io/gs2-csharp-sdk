@@ -137,5 +137,50 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Service.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLogCount", "log.accessLogCount.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Method.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLogCount", "log.accessLogCount.method.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLogCount", "log.accessLogCount.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLogCount", "log.accessLogCount.count.error.invalid"),
+                    });
+                }
+                if (Count > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLogCount", "log.accessLogCount.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AccessLogCount {
+                Service = Service,
+                Method = Method,
+                UserId = UserId,
+                Count = Count,
+            };
+        }
     }
 }

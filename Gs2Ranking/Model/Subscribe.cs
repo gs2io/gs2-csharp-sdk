@@ -323,5 +323,79 @@ namespace Gs2.Gs2Ranking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (SubscribeId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.subscribeId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CategoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.categoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TargetUserIds.Length > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.targetUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (SubscribedUserIds.Length > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.subscribedUserIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("subscribe", "ranking.subscribe.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Subscribe {
+                SubscribeId = SubscribeId,
+                CategoryName = CategoryName,
+                UserId = UserId,
+                TargetUserIds = TargetUserIds.Clone() as string[],
+                SubscribedUserIds = SubscribedUserIds.Clone() as string[],
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

@@ -137,5 +137,50 @@ namespace Gs2.Gs2Quest.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Action.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "quest.reward.action.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Request.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "quest.reward.request.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ItemId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "quest.reward.itemId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "quest.reward.value.error.invalid"),
+                    });
+                }
+                if (Value > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("reward", "quest.reward.value.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Reward {
+                Action = Action,
+                Request = Request,
+                ItemId = ItemId,
+                Value = Value,
+            };
+        }
     }
 }

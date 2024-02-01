@@ -34,6 +34,7 @@ using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2Friend.Domain.Iterator;
+using Gs2.Gs2Friend.Model.Cache;
 using Gs2.Gs2Friend.Domain.Model;
 using Gs2.Gs2Friend.Request;
 using Gs2.Gs2Friend.Result;
@@ -64,8 +65,6 @@ namespace Gs2.Gs2Friend.Domain
     public class Gs2Friend {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-
-        private readonly String _parentKey;
         public string Url { get; set; }
         public string UploadToken { get; set; }
         public string UploadUrl { get; set; }
@@ -77,48 +76,25 @@ namespace Gs2.Gs2Friend.Domain
             this._client = new Gs2FriendRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "friend";
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Friend.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.NamespaceDomain> self)
             {
-                var future = this._client.CreateNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "friend",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2Friend.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Friend.Domain.Model.NamespaceDomain(
                     this._gs2,
                     result?.Item?.Name
@@ -137,46 +113,16 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             CreateNamespaceRequest request
         ) {
-            CreateNamespaceResult result = null;
-                result = await this._client.CreateNamespaceAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "friend",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2Friend.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Friend.Domain.Model.NamespaceDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateNamespaceAsync(request)
+            );
+            var domain = new Gs2.Gs2Friend.Domain.Model.NamespaceDomain(
+                this._gs2,
+                result?.Item?.Name
+            );
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateNamespaceFuture.")]
-        public IFuture<Gs2.Gs2Friend.Domain.Model.NamespaceDomain> CreateNamespace(
-            CreateNamespaceRequest request
-        ) {
-            return CreateNamespaceFuture(request);
         }
         #endif
 
@@ -184,25 +130,19 @@ namespace Gs2.Gs2Friend.Domain
         public IFuture<Gs2Friend> DumpUserDataFuture(
             DumpUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.DumpUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DumpUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -218,27 +158,13 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             DumpUserDataByUserIdRequest request
         ) {
-            DumpUserDataByUserIdResult result = null;
-                result = await this._client.DumpUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.DumpUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DumpUserDataFuture.")]
-        public IFuture<Gs2Friend> DumpUserData(
-            DumpUserDataByUserIdRequest request
-        ) {
-            return DumpUserDataFuture(request);
         }
         #endif
 
@@ -246,25 +172,19 @@ namespace Gs2.Gs2Friend.Domain
         public IFuture<Gs2Friend> CheckDumpUserDataFuture(
             CheckDumpUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.CheckDumpUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckDumpUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Url = domain.Url = result?.Url;
                 self.OnComplete(domain);
@@ -281,28 +201,14 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             CheckDumpUserDataByUserIdRequest request
         ) {
-            CheckDumpUserDataByUserIdResult result = null;
-                result = await this._client.CheckDumpUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckDumpUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.Url = domain.Url = result?.Url;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckDumpUserDataFuture.")]
-        public IFuture<Gs2Friend> CheckDumpUserData(
-            CheckDumpUserDataByUserIdRequest request
-        ) {
-            return CheckDumpUserDataFuture(request);
         }
         #endif
 
@@ -310,25 +216,19 @@ namespace Gs2.Gs2Friend.Domain
         public IFuture<Gs2Friend> CleanUserDataFuture(
             CleanUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.CleanUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CleanUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -344,27 +244,13 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             CleanUserDataByUserIdRequest request
         ) {
-            CleanUserDataByUserIdResult result = null;
-                result = await this._client.CleanUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CleanUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CleanUserDataFuture.")]
-        public IFuture<Gs2Friend> CleanUserData(
-            CleanUserDataByUserIdRequest request
-        ) {
-            return CleanUserDataFuture(request);
         }
         #endif
 
@@ -372,25 +258,19 @@ namespace Gs2.Gs2Friend.Domain
         public IFuture<Gs2Friend> CheckCleanUserDataFuture(
             CheckCleanUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.CheckCleanUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckCleanUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -406,27 +286,13 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             CheckCleanUserDataByUserIdRequest request
         ) {
-            CheckCleanUserDataByUserIdResult result = null;
-                result = await this._client.CheckCleanUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckCleanUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckCleanUserDataFuture.")]
-        public IFuture<Gs2Friend> CheckCleanUserData(
-            CheckCleanUserDataByUserIdRequest request
-        ) {
-            return CheckCleanUserDataFuture(request);
         }
         #endif
 
@@ -434,25 +300,19 @@ namespace Gs2.Gs2Friend.Domain
         public IFuture<Gs2Friend> PrepareImportUserDataFuture(
             PrepareImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.PrepareImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PrepareImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.UploadToken = domain.UploadToken = result?.UploadToken;
                 this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
@@ -470,17 +330,12 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             PrepareImportUserDataByUserIdRequest request
         ) {
-            PrepareImportUserDataByUserIdResult result = null;
-                result = await this._client.PrepareImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PrepareImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
@@ -488,37 +343,22 @@ namespace Gs2.Gs2Friend.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PrepareImportUserDataFuture.")]
-        public IFuture<Gs2Friend> PrepareImportUserData(
-            PrepareImportUserDataByUserIdRequest request
-        ) {
-            return PrepareImportUserDataFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2Friend> ImportUserDataFuture(
             ImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.ImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.ImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -534,27 +374,13 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             ImportUserDataByUserIdRequest request
         ) {
-            ImportUserDataByUserIdResult result = null;
-                result = await this._client.ImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.ImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ImportUserDataFuture.")]
-        public IFuture<Gs2Friend> ImportUserData(
-            ImportUserDataByUserIdRequest request
-        ) {
-            return ImportUserDataFuture(request);
         }
         #endif
 
@@ -562,25 +388,19 @@ namespace Gs2.Gs2Friend.Domain
         public IFuture<Gs2Friend> CheckImportUserDataFuture(
             CheckImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2Friend> self)
             {
-                var future = this._client.CheckImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Url = domain.Url = result?.Url;
                 self.OnComplete(domain);
@@ -597,32 +417,17 @@ namespace Gs2.Gs2Friend.Domain
             #endif
             CheckImportUserDataByUserIdRequest request
         ) {
-            CheckImportUserDataByUserIdResult result = null;
-                result = await this._client.CheckImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.Url = domain.Url = result?.Url;
             return domain;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckImportUserDataFuture.")]
-        public IFuture<Gs2Friend> CheckImportUserData(
-            CheckImportUserDataByUserIdRequest request
-        ) {
-            return CheckImportUserDataFuture(request);
-        }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Friend.Model.Namespace> Namespaces(
         )
         {
@@ -631,64 +436,26 @@ namespace Gs2.Gs2Friend.Domain
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.Namespace> NamespacesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Friend.Model.Namespace> Namespaces(
-            #endif
-        #else
         public DescribeNamespacesIterator NamespacesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2.Cache,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
-        }
-
-        public ulong SubscribeNamespaces(
-            Action<Gs2.Gs2Friend.Model.Namespace[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.Namespace>(
-                "friend:Namespace",
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeNamespacesWithInitialCallAsync(
-            Action<Gs2.Gs2Friend.Model.Namespace[]> callback
-        )
-        {
-            var items = await NamespacesAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeNamespaces(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
         }
         #endif
-
-        public void UnsubscribeNamespaces(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.Namespace>(
-                "friend:Namespace",
-                callbackId
-            );
-        }
 
         public Gs2.Gs2Friend.Domain.Model.NamespaceDomain Namespace(
             string namespaceName

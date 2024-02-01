@@ -143,5 +143,29 @@ namespace Gs2.Gs2News.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Contents.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("view", "news.view.contents.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (RemoveContents.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("view", "news.view.removeContents.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new View {
+                Contents = Contents.Clone() as Gs2.Gs2News.Model.Content[],
+                RemoveContents = RemoveContents.Clone() as Gs2.Gs2News.Model.Content[],
+            };
+        }
     }
 }

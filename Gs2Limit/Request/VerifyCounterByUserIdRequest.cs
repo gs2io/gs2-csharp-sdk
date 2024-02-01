@@ -139,46 +139,5 @@ namespace Gs2.Gs2Limit.Request
             key += Count + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyCounterByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                LimitName = LimitName,
-                CounterName = CounterName,
-                VerifyType = VerifyType,
-                Count = Count,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyCounterByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyCounterByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyCounterByUserIdRequest::userId");
-            }
-            if (LimitName != y.LimitName) {
-                throw new ArithmeticException("mismatch parameter values VerifyCounterByUserIdRequest::limitName");
-            }
-            if (CounterName != y.CounterName) {
-                throw new ArithmeticException("mismatch parameter values VerifyCounterByUserIdRequest::counterName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyCounterByUserIdRequest::verifyType");
-            }
-            if (Count != y.Count) {
-                throw new ArithmeticException("mismatch parameter values VerifyCounterByUserIdRequest::count");
-            }
-            return new VerifyCounterByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                LimitName = LimitName,
-                CounterName = CounterName,
-                VerifyType = VerifyType,
-                Count = Count,
-            };
-        }
     }
 }

@@ -36,8 +36,9 @@ using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Experience.Model;
 using Gs2.Gs2Experience.Request;
+using Gs2.Gs2Experience.Model.Cache;
+using Gs2.Gs2Experience.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,19 +54,6 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Experience:AddExperienceByUserId";
-        }
-        public static Gs2.Gs2Experience.Model.Status Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            AddExperienceByUserIdRequest request,
-            Gs2.Gs2Experience.Model.ExperienceModel model,
-            Gs2.Gs2Experience.Model.Status item
-        ) {
-            item.ExperienceValue += request.ExperienceValue;
-            item.RankValue = model.Rank(item);
-            item.NextRankUpExperienceValue = model.NextRankExperienceValue(item);
-
-            return item;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -112,33 +100,24 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, model, item);
+                    item = item.SpeculativeExecution(request, model);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.ExperienceName,
+                            request.PropertyId
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Status"
-                );
-                var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.ExperienceName.ToString(),
-                    request.PropertyId.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Experience.Model.Status>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -162,10 +141,6 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 request.ExperienceName
             ).ModelAsync();
 
-            if (model == null) {
-                return () => null;
-            }
-
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -178,46 +153,20 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-
-            item = Transform(domain, accessToken, request, model, item);
-
-            var parentKey = Gs2.Gs2Experience.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Status"
-            );
-            var key = Gs2.Gs2Experience.Domain.Model.StatusDomain.CreateCacheKey(
-                request.ExperienceName.ToString(),
-                request.PropertyId.ToString()
-            );
+            item = item.SpeculativeExecution(request, model);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Experience.Model.Status>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.ExperienceName,
+                    request.PropertyId
                 );
                 return null;
             };
         }
 #endif
-
-        public static AddExperienceByUserIdRequest Rate(
-            AddExperienceByUserIdRequest request,
-            double rate
-        ) {
-            request.ExperienceValue = (long?) (request.ExperienceValue * rate);
-            return request;
-        }
-
-        public static AddExperienceByUserIdRequest Rate(
-            AddExperienceByUserIdRequest request,
-            BigInteger rate
-        ) {
-            request.ExperienceValue = (long?) ((request.ExperienceValue ?? 0) * rate);
-            return request;
-        }
     }
 }

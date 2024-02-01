@@ -227,5 +227,50 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventoryModel", "inventory.simpleInventoryModel.inventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventoryModel", "inventory.simpleInventoryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventoryModel", "inventory.simpleInventoryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SimpleItemModels.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventoryModel", "inventory.simpleInventoryModel.simpleItemModels.error.tooFew"),
+                    });
+                }
+                if (SimpleItemModels.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("simpleInventoryModel", "inventory.simpleInventoryModel.simpleItemModels.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SimpleInventoryModel {
+                InventoryModelId = InventoryModelId,
+                Name = Name,
+                Metadata = Metadata,
+                SimpleItemModels = SimpleItemModels.Clone() as Gs2.Gs2Inventory.Model.SimpleItemModel[],
+            };
+        }
     }
 }

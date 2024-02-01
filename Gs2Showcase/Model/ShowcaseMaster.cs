@@ -322,5 +322,105 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ShowcaseId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.showcaseId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SalesPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.salesPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DisplayItems.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.displayItems.error.tooFew"),
+                    });
+                }
+                if (DisplayItems.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.displayItems.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("showcaseMaster", "showcase.showcaseMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ShowcaseMaster {
+                ShowcaseId = ShowcaseId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                SalesPeriodEventId = SalesPeriodEventId,
+                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.DisplayItemMaster[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

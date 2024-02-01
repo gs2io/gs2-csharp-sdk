@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Identifier.Domain.Iterator;
+using Gs2.Gs2Identifier.Model.Cache;
 using Gs2.Gs2Identifier.Request;
 using Gs2.Gs2Identifier.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,8 +63,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
     public partial class ProjectTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
-
-        private readonly String _parentKey;
         public string AccessToken { get; set; }
         public string TokenType { get; set; }
         public int? ExpiresIn { get; set; }
@@ -75,24 +75,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this._client = new Gs2IdentifierRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "identifier:ProjectToken";
-        }
-
-        public static string CreateCacheParentKey(
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "identifier",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
         }
 
     }
@@ -103,25 +85,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginFuture(
             LoginRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> self)
             {
-                var future = this._client.LoginFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.LoginFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.AccessToken = domain.AccessToken = result?.AccessToken;
                 this.TokenType = domain.TokenType = result?.TokenType;
@@ -141,17 +117,12 @@ namespace Gs2.Gs2Identifier.Domain.Model
             #endif
             LoginRequest request
         ) {
-            LoginResult result = null;
-                result = await this._client.LoginAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.LoginAsync(request)
+            );
+            var domain = this;
             this.AccessToken = domain.AccessToken = result?.AccessToken;
             this.TokenType = domain.TokenType = result?.TokenType;
             this.ExpiresIn = domain.ExpiresIn = result?.ExpiresIn;
@@ -161,52 +132,22 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to LoginFuture.")]
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> Login(
-            LoginRequest request
-        ) {
-            return LoginFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUserFuture(
             LoginByUserRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> self)
             {
-                var future = this._client.LoginByUserFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.LoginByUserFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "identifier",
-                            "ProjectToken"
-                        );
-                        var key = Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -223,43 +164,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
             #endif
             LoginByUserRequest request
         ) {
-            LoginByUserResult result = null;
-                result = await this._client.LoginByUserAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "ProjectToken"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.LoginByUserAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to LoginByUserFuture.")]
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain> LoginByUser(
-            LoginByUserRequest request
-        ) {
-            return LoginByUserFuture(request);
         }
         #endif
 
@@ -272,22 +184,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.ProjectToken> self)
             {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "ProjectToken"
+                var (value, find) = (null as Gs2.Gs2Identifier.Model.ProjectToken).GetCache(
+                    this._gs2.Cache
                 );
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.ProjectToken>(
-                    parentKey,
-                    Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                    )
-                );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.ProjectToken>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Identifier.Model.ProjectToken> ModelAsync()
@@ -295,27 +204,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public async Task<Gs2.Gs2Identifier.Model.ProjectToken> ModelAsync()
             #endif
         {
-            var parentKey = string.Join(
-                ":",
-                "identifier",
-                "ProjectToken"
+            var (value, find) = (null as Gs2.Gs2Identifier.Model.ProjectToken).GetCache(
+                this._gs2.Cache
             );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.ProjectToken>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.ProjectToken>(
-                    parentKey,
-                    Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                    )
-                );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -344,18 +239,17 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Identifier.Model.ProjectToken>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2Identifier.Model.ProjectToken).DeleteCache(
+                this._gs2.Cache
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.ProjectToken> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheParentKey(
+                ),
+                (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheKey(
                 ),
                 callback,
                 () =>
@@ -374,8 +268,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.ProjectToken>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.ProjectTokenDomain.CreateCacheKey(
+                (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheParentKey(
+                ),
+                (null as Gs2.Gs2Identifier.Model.ProjectToken).CacheKey(
                 ),
                 callbackId
             );

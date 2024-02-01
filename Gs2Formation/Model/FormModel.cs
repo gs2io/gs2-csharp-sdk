@@ -227,5 +227,50 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (FormModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModel", "formation.formModel.formModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModel", "formation.formModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModel", "formation.formModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Slots.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModel", "formation.formModel.slots.error.tooFew"),
+                    });
+                }
+                if (Slots.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("formModel", "formation.formModel.slots.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new FormModel {
+                FormModelId = FormModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Slots = Slots.Clone() as Gs2.Gs2Formation.Model.SlotModel[],
+            };
+        }
     }
 }

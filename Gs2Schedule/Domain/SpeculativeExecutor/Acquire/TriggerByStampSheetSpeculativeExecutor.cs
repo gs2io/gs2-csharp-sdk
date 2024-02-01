@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- * 
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -37,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Schedule.Request;
+using Gs2.Gs2Schedule.Model.Cache;
+using Gs2.Gs2Schedule.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,19 +53,6 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Schedule:TriggerByUserId";
         }
-        public static Gs2.Gs2Schedule.Model.Trigger Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            TriggerByUserIdRequest request,
-            Gs2.Gs2Schedule.Model.Trigger item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -74,18 +61,42 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             TriggerByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
+                var future = domain.Schedule.Namespace(
+                    request.NamespaceName
+                ).AccessToken(
+                    accessToken
+                ).Trigger(
+                    request.TriggerName
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
+
+                if (item == null) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, null);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.TriggerName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
                 yield return null;
             }
 
@@ -103,27 +114,30 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             AccessToken accessToken,
             TriggerByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
+            var item = await domain.Schedule.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).Trigger(
+                request.TriggerName
+            ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.TriggerName
+                );
                 return null;
             };
         }
 #endif
-
-        public static TriggerByUserIdRequest Rate(
-            TriggerByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static TriggerByUserIdRequest Rate(
-            TriggerByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

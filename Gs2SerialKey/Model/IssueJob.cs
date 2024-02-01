@@ -298,5 +298,101 @@ namespace Gs2.Gs2SerialKey.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (IssueJobId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.issueJobId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (IssuedCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.issuedCount.error.invalid"),
+                    });
+                }
+                if (IssuedCount > 1000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.issuedCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (IssueRequestCount < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.issueRequestCount.error.invalid"),
+                    });
+                }
+                if (IssueRequestCount > 100000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.issueRequestCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                switch (Status) {
+                    case "PROCESSING":
+                    case "COMPLETE":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("issueJob", "serialKey.issueJob.status.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueJob", "serialKey.issueJob.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new IssueJob {
+                IssueJobId = IssueJobId,
+                Name = Name,
+                Metadata = Metadata,
+                IssuedCount = IssuedCount,
+                IssueRequestCount = IssueRequestCount,
+                Status = Status,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

@@ -181,5 +181,50 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItem", "showcase.salesItem.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItem", "showcase.salesItem.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItem", "showcase.salesItem.consumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItem", "showcase.salesItem.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItem", "showcase.salesItem.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SalesItem {
+                Name = Name,
+                Metadata = Metadata,
+                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+            };
+        }
     }
 }

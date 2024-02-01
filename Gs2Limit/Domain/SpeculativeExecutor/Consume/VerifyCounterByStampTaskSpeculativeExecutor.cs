@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -33,11 +31,12 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Limit.Request;
+using Gs2.Gs2Limit.Model.Cache;
+using Gs2.Gs2Limit.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -55,59 +54,6 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             return "Gs2Limit:VerifyCounterByUserId";
         }
 
-        public static Gs2.Gs2Limit.Model.Counter Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            VerifyCounterByUserIdRequest request,
-            Gs2.Gs2Limit.Model.Counter item
-        ) {
-            switch (request.VerifyType) {
-                case "less":
-                    if (item.Count < request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "lessEqual":
-                    if (item.Count <= request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greater":
-                    if (item.Count > request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greaterEqual":
-                    if (item.Count >= request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "equal":
-                    if (item.Count == request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "notEqual":
-                    if (item.Count != request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-            }
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -115,7 +61,6 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             VerifyCounterByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Limit.Namespace(
                     request.NamespaceName
                 ).AccessToken(
@@ -132,24 +77,28 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.LimitName,
+                            request.CounterName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
                 yield return null;
             }
 
@@ -179,7 +128,7 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
@@ -187,19 +136,5 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             };
         }
 #endif
-
-        public static VerifyCounterByUserIdRequest Rate(
-            VerifyCounterByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static VerifyCounterByUserIdRequest Rate(
-            VerifyCounterByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

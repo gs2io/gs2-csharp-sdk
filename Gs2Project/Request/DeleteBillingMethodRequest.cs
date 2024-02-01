@@ -33,14 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DeleteBillingMethodRequest : Gs2Request<DeleteBillingMethodRequest>
 	{
-        public string AccountToken { set; get; }
-        public string BillingMethodName { set; get; }
-
+         public string AccountToken { set; get; }
+         public string BillingMethodName { set; get; }
         public DeleteBillingMethodRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public DeleteBillingMethodRequest WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
@@ -86,18 +84,6 @@ namespace Gs2.Gs2Project.Request
             key += AccountToken + ":";
             key += BillingMethodName + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DeleteBillingMethodRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteBillingMethodRequest)x;
-            return this;
         }
     }
 }

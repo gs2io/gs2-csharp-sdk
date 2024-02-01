@@ -144,38 +144,5 @@ namespace Gs2.Gs2Exchange.Request
             key += Config + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new ExchangeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                RateName = RateName,
-                UserId = UserId,
-                Count = Count * x,
-                Config = Config,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ExchangeByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values ExchangeByUserIdRequest::namespaceName");
-            }
-            if (RateName != y.RateName) {
-                throw new ArithmeticException("mismatch parameter values ExchangeByUserIdRequest::rateName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values ExchangeByUserIdRequest::userId");
-            }
-            if (Config != y.Config) {
-                throw new ArithmeticException("mismatch parameter values ExchangeByUserIdRequest::config");
-            }
-            return new ExchangeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                RateName = RateName,
-                UserId = UserId,
-                Count = Count + y.Count,
-                Config = Config,
-            };
-        }
     }
 }

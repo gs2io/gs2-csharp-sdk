@@ -119,31 +119,5 @@ namespace Gs2.Gs2Dictionary.Request
             key += EntryModelNames + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DeleteEntriesByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                EntryModelNames = EntryModelNames,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteEntriesByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DeleteEntriesByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DeleteEntriesByUserIdRequest::userId");
-            }
-            if (EntryModelNames != y.EntryModelNames) {
-                throw new ArithmeticException("mismatch parameter values DeleteEntriesByUserIdRequest::entryModelNames");
-            }
-            return new DeleteEntriesByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                EntryModelNames = EntryModelNames,
-            };
-        }
     }
 }

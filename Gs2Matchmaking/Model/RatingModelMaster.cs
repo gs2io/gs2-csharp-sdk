@@ -300,5 +300,110 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RatingModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.ratingModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InitialValue < 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.initialValue.error.invalid"),
+                    });
+                }
+                if (InitialValue > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.initialValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Volatility < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.volatility.error.invalid"),
+                    });
+                }
+                if (Volatility > 20000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.volatility.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("ratingModelMaster", "matchmaking.ratingModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RatingModelMaster {
+                RatingModelId = RatingModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Description = Description,
+                InitialValue = InitialValue,
+                Volatility = Volatility,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

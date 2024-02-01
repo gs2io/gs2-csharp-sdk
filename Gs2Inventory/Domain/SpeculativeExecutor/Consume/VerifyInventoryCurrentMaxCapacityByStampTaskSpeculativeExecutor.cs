@@ -185,19 +185,5 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
-
-        public static VerifyInventoryCurrentMaxCapacityByUserIdRequest Rate(
-            VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static VerifyInventoryCurrentMaxCapacityByUserIdRequest Rate(
-            VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

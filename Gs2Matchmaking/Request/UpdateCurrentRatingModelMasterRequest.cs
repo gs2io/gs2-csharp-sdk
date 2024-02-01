@@ -85,17 +85,5 @@ namespace Gs2.Gs2Matchmaking.Request
             key += Settings + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UpdateCurrentRatingModelMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UpdateCurrentRatingModelMasterRequest)x;
-            return this;
-        }
     }
 }

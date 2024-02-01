@@ -99,5 +99,29 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+            }
+            {
+                if (Rate < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("probability", "lottery.probability.rate.error.invalid"),
+                    });
+                }
+                if (Rate > 1.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("probability", "lottery.probability.rate.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Probability {
+                Prize = Prize.Clone() as Gs2.Gs2Lottery.Model.DrawnPrize,
+                Rate = Rate,
+            };
+        }
     }
 }

@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Enhance.Domain.Iterator;
+using Gs2.Gs2Enhance.Model.Cache;
 using Gs2.Gs2Enhance.Request;
 using Gs2.Gs2Enhance.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
     public partial class RateModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnhanceRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _rateName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string RateName => _rateName;
+        public string NamespaceName { get; }
+        public string RateName { get; }
 
         public RateModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Enhance.Domain.Model
             this._client = new Gs2EnhanceRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._rateName = rateName;
-            this._parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "RateModelMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string rateName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "enhance",
-                namespaceName ?? "null",
-                rateName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string rateName
-        )
-        {
-            return string.Join(
-                ":",
-                rateName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.RateName = rateName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Enhance.Domain.Model
         private IFuture<Gs2.Gs2Enhance.Model.RateModelMaster> GetFuture(
             GetRateModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.RateModelMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
-                var future = this._client.GetRateModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetRateModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            request.RateName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "rateModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RateModelMaster"
-                        );
-                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Enhance.Model.RateModelMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Enhance.Domain.Model
             #endif
             GetRateModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithRateName(this.RateName);
-            GetRateModelMasterResult result = null;
-            try {
-                result = await this._client.GetRateModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                    request.RateName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "rateModelMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RateModelMaster"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetRateModelMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> UpdateFuture(
             UpdateRateModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
-                var future = this._client.UpdateRateModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateRateModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RateModelMaster"
-                        );
-                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Enhance.Domain.Model
             #endif
             UpdateRateModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithRateName(this.RateName);
-            UpdateRateModelMasterResult result = null;
-                result = await this._client.UpdateRateModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RateModelMaster"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateRateModelMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> Update(
-            UpdateRateModelMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> DeleteFuture(
             DeleteRateModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithRateName(this.RateName);
-                var future = this._client.DeleteRateModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteRateModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            request.RateName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "rateModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RateModelMaster"
-                        );
-                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Enhance.Model.RateModelMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Enhance.Domain.Model
             #endif
             DeleteRateModelMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithRateName(this.RateName);
-            DeleteRateModelMasterResult result = null;
             try {
-                result = await this._client.DeleteRateModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                    request.RateName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithRateName(this.RateName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteRateModelMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "rateModelMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Enhance.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RateModelMaster"
-                    );
-                    var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Enhance.Model.RateModelMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain> Delete(
-            DeleteRateModelMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Enhance.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Enhance.Model.RateModelMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                        this.RateName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Enhance.Model.RateModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Enhance.Model.RateModelMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.RateName,
+                    () => this.GetFuture(
+                        new GetRateModelMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetRateModelMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                                    this.RateName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "rateModelMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            this.RateName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Enhance.Model.RateModelMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Enhance.Model.RateModelMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public async Task<Gs2.Gs2Enhance.Model.RateModelMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                    this.RateName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                        this.RateName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetRateModelMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                                    this.RateName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "rateModelMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                            this.RateName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Enhance.Model.RateModelMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.RateName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Enhance.Model.RateModelMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.RateName,
+                () => this.GetAsync(
+                    new GetRateModelMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Enhance.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                    this.RateName.ToString()
-                )
+            (null as Gs2.Gs2Enhance.Model.RateModelMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.RateName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Enhance.Model.RateModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                    this.RateName.ToString()
+                (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheKey(
+                    this.RateName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                _parentKey,
-                Gs2.Gs2Enhance.Domain.Model.RateModelMasterDomain.CreateCacheKey(
-                    this.RateName.ToString()
+                (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheKey(
+                    this.RateName
                 ),
                 callbackId
             );

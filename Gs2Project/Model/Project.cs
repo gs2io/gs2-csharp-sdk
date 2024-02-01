@@ -44,67 +44,54 @@ namespace Gs2.Gs2Project.Model
         public string EventBridgeAwsRegion { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Project WithProjectId(string projectId) {
             this.ProjectId = projectId;
             return this;
         }
-
         public Project WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
-
         public Project WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Project WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public Project WithPlan(string plan) {
             this.Plan = plan;
             return this;
         }
-
         public Project WithRegions(Gs2.Gs2Project.Model.Gs2Region[] regions) {
             this.Regions = regions;
             return this;
         }
-
         public Project WithBillingMethodName(string billingMethodName) {
             this.BillingMethodName = billingMethodName;
             return this;
         }
-
         public Project WithEnableEventBridge(string enableEventBridge) {
             this.EnableEventBridge = enableEventBridge;
             return this;
         }
-
         public Project WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
-
         public Project WithEventBridgeAwsAccountId(string eventBridgeAwsAccountId) {
             this.EventBridgeAwsAccountId = eventBridgeAwsAccountId;
             return this;
         }
-
         public Project WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
             this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;
         }
-
         public Project WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Project WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
@@ -158,7 +145,7 @@ namespace Gs2.Gs2Project.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithPlan(!data.Keys.Contains("plan") || data["plan"] == null ? null : data["plan"].ToString())
-                .WithRegions(!data.Keys.Contains("regions") || data["regions"] == null ? new Gs2.Gs2Project.Model.Gs2Region[]{} : data["regions"].Cast<JsonData>().Select(v => {
+                .WithRegions(!data.Keys.Contains("regions") || data["regions"] == null || !data["regions"].IsArray ? new Gs2.Gs2Project.Model.Gs2Region[]{} : data["regions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Project.Model.Gs2Region.FromJson(v);
                 }).ToArray())
                 .WithBillingMethodName(!data.Keys.Contains("billingMethodName") || data["billingMethodName"] == null ? null : data["billingMethodName"].ToString())
@@ -166,14 +153,14 @@ namespace Gs2.Gs2Project.Model
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
                 .WithEventBridgeAwsAccountId(!data.Keys.Contains("eventBridgeAwsAccountId") || data["eventBridgeAwsAccountId"] == null ? null : data["eventBridgeAwsAccountId"].ToString())
                 .WithEventBridgeAwsRegion(!data.Keys.Contains("eventBridgeAwsRegion") || data["eventBridgeAwsRegion"] == null ? null : data["eventBridgeAwsRegion"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
         }
 
         public JsonData ToJson()
         {
             JsonData regionsJsonData = null;
-            if (Regions != null)
+            if (Regions != null && Regions.Length > 0)
             {
                 regionsJsonData = new JsonData();
                 foreach (var region in Regions)
@@ -254,11 +241,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -376,6 +363,149 @@ namespace Gs2.Gs2Project.Model
                 diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (ProjectId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.projectId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AccountName.Length < 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.accountName.error.tooShort"),
+                    });
+                }
+                if (AccountName.Length > 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.accountName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Plan) {
+                    case "free":
+                    case "unlimited":
+                    case "fixed":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("project", "project.project.plan.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Regions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.regions.error.tooMany"),
+                    });
+                }
+            }
+            if ((Plan =="fixed" || Plan == "unlimited")) {
+                if (BillingMethodName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.billingMethodName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (EnableEventBridge) {
+                    case "enable":
+                    case "disable":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("project", "project.project.enableEventBridge.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (Currency) {
+                    case "USD":
+                    case "JPY":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("project", "project.project.currency.error.invalid"),
+                        });
+                }
+            }
+            if (EnableEventBridge == "enable") {
+                if (EventBridgeAwsAccountId.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.eventBridgeAwsAccountId.error.tooLong"),
+                    });
+                }
+            }
+            if (EnableEventBridge == "enable") {
+                switch (EventBridgeAwsRegion) {
+                    case "us-east-1":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("project", "project.project.eventBridgeAwsRegion.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("project", "project.project.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Project {
+                ProjectId = ProjectId,
+                AccountName = AccountName,
+                Name = Name,
+                Description = Description,
+                Plan = Plan,
+                Regions = Regions.Clone() as Gs2.Gs2Project.Model.Gs2Region[],
+                BillingMethodName = BillingMethodName,
+                EnableEventBridge = EnableEventBridge,
+                Currency = Currency,
+                EventBridgeAwsAccountId = EventBridgeAwsAccountId,
+                EventBridgeAwsRegion = EventBridgeAwsRegion,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
         }
     }
 }

@@ -393,5 +393,167 @@ namespace Gs2.Gs2Stamina.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StaminaId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.staminaId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (StaminaName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.staminaName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.value.error.invalid"),
+                    });
+                }
+                if (Value > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.value.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxValue < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.maxValue.error.invalid"),
+                    });
+                }
+                if (MaxValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.maxValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RecoverIntervalMinutes < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.recoverIntervalMinutes.error.invalid"),
+                    });
+                }
+                if (RecoverIntervalMinutes > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.recoverIntervalMinutes.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RecoverValue < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.recoverValue.error.invalid"),
+                    });
+                }
+                if (RecoverValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.recoverValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (OverflowValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.overflowValue.error.invalid"),
+                    });
+                }
+                if (OverflowValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.overflowValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NextRecoverAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.nextRecoverAt.error.invalid"),
+                    });
+                }
+                if (NextRecoverAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.nextRecoverAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (LastRecoveredAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.lastRecoveredAt.error.invalid"),
+                    });
+                }
+                if (LastRecoveredAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.lastRecoveredAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stamina", "stamina.stamina.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Stamina {
+                StaminaId = StaminaId,
+                StaminaName = StaminaName,
+                UserId = UserId,
+                Value = Value,
+                MaxValue = MaxValue,
+                RecoverIntervalMinutes = RecoverIntervalMinutes,
+                RecoverValue = RecoverValue,
+                OverflowValue = OverflowValue,
+                NextRecoverAt = NextRecoverAt,
+                LastRecoveredAt = LastRecoveredAt,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

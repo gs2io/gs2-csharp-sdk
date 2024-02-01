@@ -303,5 +303,87 @@ namespace Gs2.Gs2Inbox.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (GlobalMessageId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.globalMessageId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 4096) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReadAcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.readAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ExpiresAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.expiresAt.error.invalid"),
+                    });
+                }
+                if (ExpiresAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessageMaster", "inbox.globalMessageMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new GlobalMessageMaster {
+                GlobalMessageId = GlobalMessageId,
+                Name = Name,
+                Metadata = Metadata,
+                ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ExpiresTimeSpan = ExpiresTimeSpan.Clone() as Gs2.Gs2Inbox.Model.TimeSpan_,
+                CreatedAt = CreatedAt,
+                ExpiresAt = ExpiresAt,
+                Revision = Revision,
+            };
+        }
     }
 }

@@ -205,5 +205,40 @@ namespace Gs2.Gs2SerialKey.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CampaignId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("campaignModel", "serialKey.campaignModel.campaignId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("campaignModel", "serialKey.campaignModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("campaignModel", "serialKey.campaignModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new CampaignModel {
+                CampaignId = CampaignId,
+                Name = Name,
+                Metadata = Metadata,
+                EnableCampaignCode = EnableCampaignCode,
+            };
+        }
     }
 }

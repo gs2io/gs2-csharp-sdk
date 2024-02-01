@@ -114,33 +114,5 @@ namespace Gs2.Gs2Formation.Request
             key += MoldModelName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AddMoldCapacityByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                MoldModelName = MoldModelName,
-                Capacity = Capacity * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AddMoldCapacityByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AddMoldCapacityByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AddMoldCapacityByUserIdRequest::userId");
-            }
-            if (MoldModelName != y.MoldModelName) {
-                throw new ArithmeticException("mismatch parameter values AddMoldCapacityByUserIdRequest::moldModelName");
-            }
-            return new AddMoldCapacityByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                MoldModelName = MoldModelName,
-                Capacity = Capacity + y.Capacity,
-            };
-        }
     }
 }

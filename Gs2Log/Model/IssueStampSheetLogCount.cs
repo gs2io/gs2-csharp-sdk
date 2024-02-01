@@ -156,5 +156,58 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Service.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueStampSheetLogCount", "log.issueStampSheetLogCount.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Method.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueStampSheetLogCount", "log.issueStampSheetLogCount.method.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueStampSheetLogCount", "log.issueStampSheetLogCount.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Action.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueStampSheetLogCount", "log.issueStampSheetLogCount.action.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueStampSheetLogCount", "log.issueStampSheetLogCount.count.error.invalid"),
+                    });
+                }
+                if (Count > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issueStampSheetLogCount", "log.issueStampSheetLogCount.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new IssueStampSheetLogCount {
+                Service = Service,
+                Method = Method,
+                UserId = UserId,
+                Action = Action,
+                Count = Count,
+            };
+        }
     }
 }

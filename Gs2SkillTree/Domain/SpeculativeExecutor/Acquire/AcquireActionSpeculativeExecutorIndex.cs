@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2SkillTree.Model.Transaction;
 using Gs2.Gs2SkillTree.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (MarkReleaseByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = MarkReleaseByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = MarkReleaseByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = MarkReleaseByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (MarkReleaseByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = MarkReleaseByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = MarkReleaseByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await MarkReleaseByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

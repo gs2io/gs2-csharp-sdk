@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Chat.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,14 +68,11 @@ namespace Gs2.Gs2Chat.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2ChatRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _roomName;
-        private readonly string _password;
-        private readonly AccessToken _accessToken;
-        public string NamespaceName => _namespaceName;
-        public string RoomName => _roomName;
-        public string Password => _password;
-        public string UserId => _accessToken?.UserId;
+        public string NamespaceName { get; }
+        public string RoomName { get; }
+        public string Password { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => AccessToken?.UserId;
         private long? _startAt;
         private bool _isCacheChecked;
         private bool _last;
@@ -87,15 +85,15 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             Gs2ChatRestClient client,
             string namespaceName,
             string roomName,
-            string password,
-            AccessToken accessToken
+            string password = null,
+            AccessToken accessToken = null
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._roomName = roomName;
-            this._password = password;
-            this._accessToken = accessToken;
+            this.NamespaceName = namespaceName;
+            this.RoomName = roomName;
+            this.Password = password;
+            this.AccessToken = accessToken;
             this._startAt = null;
             this._last = false;
             this._result = new Gs2.Gs2Chat.Model.Message[]{};
@@ -114,15 +112,14 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Singleton",
-                this.RoomName,
-                "Message"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Chat.Model.Message>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Chat.Model.Message>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                        NamespaceName,
+                        AccessToken?.UserId,
+                        RoomName
+                    ),
                     out var list,
                     out var listCacheContext
             )) {
@@ -136,7 +133,13 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._startAt = (long)listCacheContext;
                     this._result = list.Where(message => message.CreatedAt < this._startAt).ToArray();
                     this._last = false;
-                    this._cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(parentKey);
+                    this._cache.ClearListCache<Gs2.Gs2Chat.Model.Message>(
+                        (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                            NamespaceName,
+                            AccessToken?.UserId,
+                            RoomName
+                        )
+                    );
                 }
             } else {
 
@@ -146,10 +149,10 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                 var r = await this._client.DescribeMessagesAsync(
                 #endif
                     new Gs2.Gs2Chat.Request.DescribeMessagesRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithRoomName(this._roomName)
-                        .WithPassword(this._password)
-                        .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithRoomName(this.RoomName)
+                        .WithPassword(this.Password)
+                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
                         .WithStartAt(this._startAt)
                         .WithLimit(this.fetchSize)
                 );
@@ -170,20 +173,23 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     this._last = true;
                 }
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Chat.Domain.Model.MessageDomain.CreateCacheKey(
-                                    item.Name?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        AccessToken?.UserId,
+                        RoomName,
+                        item.Name
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Chat.Model.Message>(
-                            parentKey,
-                            this._startAt
+                        (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                            NamespaceName,
+                            AccessToken?.UserId,
+                            RoomName
+                        ),
+                        this._startAt
                     );
                 }
             }
@@ -219,7 +225,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Chat.Model.Message ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -282,7 +288,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Chat.Model.Message ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

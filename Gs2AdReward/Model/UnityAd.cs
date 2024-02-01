@@ -102,5 +102,21 @@ namespace Gs2.Gs2AdReward.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Keys.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unityAd", "adReward.unityAd.keys.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new UnityAd {
+                Keys = Keys.Clone() as string[],
+            };
+        }
     }
 }

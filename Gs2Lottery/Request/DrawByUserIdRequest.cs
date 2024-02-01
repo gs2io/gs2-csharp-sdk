@@ -144,38 +144,5 @@ namespace Gs2.Gs2Lottery.Request
             key += Config + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DrawByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LotteryName = LotteryName,
-                UserId = UserId,
-                Count = Count * x,
-                Config = Config,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DrawByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DrawByUserIdRequest::namespaceName");
-            }
-            if (LotteryName != y.LotteryName) {
-                throw new ArithmeticException("mismatch parameter values DrawByUserIdRequest::lotteryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DrawByUserIdRequest::userId");
-            }
-            if (Config != y.Config) {
-                throw new ArithmeticException("mismatch parameter values DrawByUserIdRequest::config");
-            }
-            return new DrawByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LotteryName = LotteryName,
-                UserId = UserId,
-                Count = Count + y.Count,
-                Config = Config,
-            };
-        }
     }
 }

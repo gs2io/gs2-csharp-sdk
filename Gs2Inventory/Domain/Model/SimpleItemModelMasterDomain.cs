@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Inventory.Domain.Iterator;
+using Gs2.Gs2Inventory.Model.Cache;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Gs2Inventory.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class SimpleItemModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _inventoryName;
-        private readonly string _itemName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string InventoryName => _inventoryName;
-        public string ItemName => _itemName;
+        public string NamespaceName { get; }
+        public string InventoryName { get; }
+        public string ItemName { get; }
 
         public SimpleItemModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,41 +77,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._client = new Gs2InventoryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._inventoryName = inventoryName;
-            this._itemName = itemName;
-            this._parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.InventoryName,
-                "SimpleItemModelMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string inventoryName,
-            string itemName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "inventory",
-                namespaceName ?? "null",
-                inventoryName ?? "null",
-                itemName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string itemName
-        )
-        {
-            return string.Join(
-                ":",
-                itemName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.InventoryName = inventoryName;
+            this.ItemName = itemName;
         }
 
     }
@@ -125,64 +90,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
         private IFuture<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> GetFuture(
             GetSimpleItemModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
-                var future = this._client.GetSimpleItemModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetSimpleItemModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            request.ItemName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "simpleItemModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.InventoryName,
-                            "SimpleItemModelMaster"
-                        );
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(Impl);
@@ -197,53 +121,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             #endif
             GetSimpleItemModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);
-            GetSimpleItemModelMasterResult result = null;
-            try {
-                result = await this._client.GetSimpleItemModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                    request.ItemName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "simpleItemModelMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.InventoryName,
-                        "SimpleItemModelMaster"
-                    );
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetSimpleItemModelMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -252,45 +138,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> UpdateFuture(
             UpdateSimpleItemModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
-                var future = this._client.UpdateSimpleItemModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateSimpleItemModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.InventoryName,
-                            "SimpleItemModelMaster"
-                        );
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -307,48 +171,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             #endif
             UpdateSimpleItemModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithInventoryName(this.InventoryName)
                 .WithItemName(this.ItemName);
-            UpdateSimpleItemModelMasterResult result = null;
-                result = await this._client.UpdateSimpleItemModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.InventoryName,
-                        "SimpleItemModelMaster"
-                    );
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateSimpleItemModelMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> Update(
-            UpdateSimpleItemModelMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -356,59 +190,25 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> DeleteFuture(
             DeleteSimpleItemModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithInventoryName(this.InventoryName)
                     .WithItemName(this.ItemName);
-                var future = this._client.DeleteSimpleItemModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteSimpleItemModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            request.ItemName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "simpleItemModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.InventoryName,
-                            "SimpleItemModelMaster"
-                        );
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -425,60 +225,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
             #endif
             DeleteSimpleItemModelMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithInventoryName(this.InventoryName)
-                .WithItemName(this.ItemName);
-            DeleteSimpleItemModelMasterResult result = null;
             try {
-                result = await this._client.DeleteSimpleItemModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                    request.ItemName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteSimpleItemModelMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "simpleItemModelMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryModelMasterDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.InventoryName,
-                        "SimpleItemModelMaster"
-                    );
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain> Delete(
-            DeleteSimpleItemModelMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -491,55 +251,36 @@ namespace Gs2.Gs2Inventory.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                        this.ItemName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.InventoryName,
+                    this.ItemName,
+                    () => this.GetFuture(
+                        new GetSimpleItemModelMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetSimpleItemModelMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                                    this.ItemName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "simpleItemModelMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            this.ItemName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> ModelAsync()
@@ -547,52 +288,24 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                    this.ItemName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                        this.ItemName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetSimpleItemModelMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                                    this.ItemName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "simpleItemModelMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                            this.ItemName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.InventoryName,
+                this.ItemName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.InventoryName,
+                this.ItemName,
+                () => this.GetAsync(
+                    new GetSimpleItemModelMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -621,20 +334,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                    this.ItemName.ToString()
-                )
+            (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.InventoryName,
+                this.ItemName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.SimpleItemModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                    this.ItemName.ToString()
+                (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName
+                ),
+                (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).CacheKey(
+                    this.ItemName
                 ),
                 callback,
                 () =>
@@ -653,9 +369,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Inventory.Model.SimpleItemModelMaster>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleItemModelMasterDomain.CreateCacheKey(
-                    this.ItemName.ToString()
+                (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).CacheParentKey(
+                    this.NamespaceName,
+                    this.InventoryName
+                ),
+                (null as Gs2.Gs2Inventory.Model.SimpleItemModelMaster).CacheKey(
+                    this.ItemName
                 ),
                 callbackId
             );

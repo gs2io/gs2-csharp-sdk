@@ -397,5 +397,158 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Type) {
+                    case "gs2":
+                    case "bigquery":
+                    case "firehose":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("namespace", "log.namespace.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type == "bigquery") {
+                if (GcpCredentialJson.Length > 5120) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.gcpCredentialJson.error.tooLong"),
+                    });
+                }
+            }
+            if (Type == "bigquery") {
+                if (BigQueryDatasetName.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.bigQueryDatasetName.error.tooLong"),
+                    });
+                }
+            }
+            if ((Type =="gs2" || Type == "bigquery")) {
+                if (LogExpireDays < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.logExpireDays.error.invalid"),
+                    });
+                }
+                if (LogExpireDays > 3650) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.logExpireDays.error.invalid"),
+                    });
+                }
+            }
+            if (Type == "firehose") {
+                if (AwsRegion.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.awsRegion.error.tooLong"),
+                    });
+                }
+            }
+            if (Type == "firehose") {
+                if (AwsAccessKeyId.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.awsAccessKeyId.error.tooLong"),
+                    });
+                }
+            }
+            if (Type == "firehose") {
+                if (AwsSecretAccessKey.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.awsSecretAccessKey.error.tooLong"),
+                    });
+                }
+            }
+            if (Type == "firehose") {
+                if (FirehoseStreamName.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.firehoseStreamName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Status.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.status.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "log.namespace.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Namespace {
+                NamespaceId = NamespaceId,
+                Name = Name,
+                Description = Description,
+                Type = Type,
+                GcpCredentialJson = GcpCredentialJson,
+                BigQueryDatasetName = BigQueryDatasetName,
+                LogExpireDays = LogExpireDays,
+                AwsRegion = AwsRegion,
+                AwsAccessKeyId = AwsAccessKeyId,
+                AwsSecretAccessKey = AwsSecretAccessKey,
+                FirehoseStreamName = FirehoseStreamName,
+                Status = Status,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

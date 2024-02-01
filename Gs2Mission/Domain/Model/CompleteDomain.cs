@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Mission.Domain.Iterator;
+using Gs2.Gs2Mission.Model.Cache;
 using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,16 +63,11 @@ namespace Gs2.Gs2Mission.Domain.Model
     public partial class CompleteDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _missionGroupName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string MissionGroupName { get; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string MissionGroupName => _missionGroupName;
 
         public CompleteDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -82,41 +79,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._client = new Gs2MissionRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._missionGroupName = missionGroupName;
-            this._parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Complete"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string missionGroupName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "mission",
-                namespaceName ?? "null",
-                userId ?? "null",
-                missionGroupName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string missionGroupName
-        )
-        {
-            return string.Join(
-                ":",
-                missionGroupName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.MissionGroupName = missionGroupName;
         }
 
     }
@@ -127,29 +92,23 @@ namespace Gs2.Gs2Mission.Domain.Model
         public IFuture<Gs2.Core.Domain.TransactionDomain> CompleteFuture(
             CompleteByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
-                var future = this._client.CompleteByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CompleteByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.UserId,
@@ -181,20 +140,15 @@ namespace Gs2.Gs2Mission.Domain.Model
             #endif
             CompleteByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
-            CompleteByUserIdResult result = null;
-                result = await this._client.CompleteByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CompleteByUserIdAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.UserId,
@@ -211,57 +165,26 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CompleteFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionDomain> Complete(
-            CompleteByUserIdRequest request
-        ) {
-            return CompleteFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> ReceiveFuture(
             ReceiveByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
-                var future = this._client.ReceiveByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ReceiveByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Complete"
-                        );
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            resultModel.Item.MissionGroupName.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -278,48 +201,18 @@ namespace Gs2.Gs2Mission.Domain.Model
             #endif
             ReceiveByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
-            ReceiveByUserIdResult result = null;
-                result = await this._client.ReceiveByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Complete"
-                    );
-                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        resultModel.Item.MissionGroupName.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ReceiveByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ReceiveFuture.")]
-        public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> Receive(
-            ReceiveByUserIdRequest request
-        ) {
-            return ReceiveFuture(request);
         }
         #endif
 
@@ -327,45 +220,23 @@ namespace Gs2.Gs2Mission.Domain.Model
         public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> RevertReceiveFuture(
             RevertReceiveByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
-                var future = this._client.RevertReceiveByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.RevertReceiveByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Complete"
-                        );
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            resultModel.Item.MissionGroupName.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -382,48 +253,18 @@ namespace Gs2.Gs2Mission.Domain.Model
             #endif
             RevertReceiveByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
-            RevertReceiveByUserIdResult result = null;
-                result = await this._client.RevertReceiveByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Complete"
-                    );
-                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        resultModel.Item.MissionGroupName.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.RevertReceiveByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to RevertReceiveFuture.")]
-        public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> RevertReceive(
-            RevertReceiveByUserIdRequest request
-        ) {
-            return RevertReceiveFuture(request);
         }
         #endif
 
@@ -431,64 +272,23 @@ namespace Gs2.Gs2Mission.Domain.Model
         private IFuture<Gs2.Gs2Mission.Model.Complete> GetFuture(
             GetCompleteByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Complete> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
-                var future = this._client.GetCompleteByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetCompleteByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            request.MissionGroupName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "complete")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Complete"
-                        );
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            resultModel.Item.MissionGroupName.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Complete>(Impl);
@@ -503,53 +303,15 @@ namespace Gs2.Gs2Mission.Domain.Model
             #endif
             GetCompleteByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithMissionGroupName(this.MissionGroupName);
-            GetCompleteByUserIdResult result = null;
-            try {
-                result = await this._client.GetCompleteByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    request.MissionGroupName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "complete")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Complete"
-                    );
-                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        resultModel.Item.MissionGroupName.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        resultModel.Item.NextResetAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetCompleteByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -558,59 +320,25 @@ namespace Gs2.Gs2Mission.Domain.Model
         public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> DeleteFuture(
             DeleteCompleteByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithMissionGroupName(this.MissionGroupName);
-                var future = this._client.DeleteCompleteByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteCompleteByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            request.MissionGroupName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "complete")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Complete"
-                        );
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            resultModel.Item.MissionGroupName.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Complete>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -627,60 +355,20 @@ namespace Gs2.Gs2Mission.Domain.Model
             #endif
             DeleteCompleteByUserIdRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithMissionGroupName(this.MissionGroupName);
-            DeleteCompleteByUserIdResult result = null;
             try {
-                result = await this._client.DeleteCompleteByUserIdAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithMissionGroupName(this.MissionGroupName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteCompleteByUserIdAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    request.MissionGroupName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "complete")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Complete"
-                    );
-                    var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        resultModel.Item.MissionGroupName.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Complete>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Mission.Domain.Model.CompleteDomain> Delete(
-            DeleteCompleteByUserIdRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -693,55 +381,36 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.Complete> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                    _parentKey,
-                    Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        this.MissionGroupName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Mission.Model.Complete).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MissionGroupName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Mission.Model.Complete).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.MissionGroupName,
+                    () => this.GetFuture(
+                        new GetCompleteByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetCompleteByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                                    this.MissionGroupName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "complete")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                        _parentKey,
-                        Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            this.MissionGroupName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Mission.Model.Complete>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Mission.Model.Complete> ModelAsync()
@@ -749,52 +418,24 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.Complete> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Complete>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    this.MissionGroupName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                    _parentKey,
-                    Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                        this.MissionGroupName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetCompleteByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                                    this.MissionGroupName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Mission.Model.Complete>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "complete")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.Complete>(
-                        _parentKey,
-                        Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                            this.MissionGroupName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Mission.Model.Complete).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.MissionGroupName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Mission.Model.Complete).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.MissionGroupName,
+                () => this.GetAsync(
+                    new GetCompleteByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -823,20 +464,23 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Mission.Model.Complete>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    this.MissionGroupName.ToString()
-                )
+            (null as Gs2.Gs2Mission.Model.Complete).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.MissionGroupName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Mission.Model.Complete> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    this.MissionGroupName.ToString()
+                (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Mission.Model.Complete).CacheKey(
+                    this.MissionGroupName
                 ),
                 callback,
                 () =>
@@ -855,9 +499,12 @@ namespace Gs2.Gs2Mission.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.Complete>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.CompleteDomain.CreateCacheKey(
-                    this.MissionGroupName.ToString()
+                (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Mission.Model.Complete).CacheKey(
+                    this.MissionGroupName
                 ),
                 callbackId
             );

@@ -393,5 +393,157 @@ namespace Gs2.Gs2Money.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ReceiptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.receiptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TransactionId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.transactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PurchaseToken.Length > 4096) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.purchaseToken.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Type) {
+                    case "purchase":
+                    case "deposit":
+                    case "withdraw":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("receipt", "money.receipt.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type != "purchase") {
+                if (Slot < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.slot.error.invalid"),
+                    });
+                }
+                if (Slot > 100000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.slot.error.invalid"),
+                    });
+                }
+            }
+            if (Type != "purchase") {
+                if (Price < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.price.error.invalid"),
+                    });
+                }
+                if (Price > 100000.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.price.error.invalid"),
+                    });
+                }
+            }
+            if (Type != "purchase") {
+                if (Paid < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.paid.error.invalid"),
+                    });
+                }
+                if (Paid > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.paid.error.invalid"),
+                    });
+                }
+            }
+            if (Type != "purchase") {
+                if (Free < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.free.error.invalid"),
+                    });
+                }
+                if (Free > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.free.error.invalid"),
+                    });
+                }
+            }
+            if (Type != "purchase") {
+                if (Total < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.total.error.invalid"),
+                    });
+                }
+                if (Total > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.total.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ContentsId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.contentsId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receipt", "money.receipt.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Receipt {
+                ReceiptId = ReceiptId,
+                TransactionId = TransactionId,
+                PurchaseToken = PurchaseToken,
+                UserId = UserId,
+                Type = Type,
+                Slot = Slot,
+                Price = Price,
+                Paid = Paid,
+                Free = Free,
+                Total = Total,
+                ContentsId = ContentsId,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

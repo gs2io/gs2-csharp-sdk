@@ -139,46 +139,5 @@ namespace Gs2.Gs2Inventory.Request
             key += ReferenceOf + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AddReferenceOfByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ItemSetName = ItemSetName,
-                ReferenceOf = ReferenceOf,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AddReferenceOfByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::inventoryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::userId");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::itemName");
-            }
-            if (ItemSetName != y.ItemSetName) {
-                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::itemSetName");
-            }
-            if (ReferenceOf != y.ReferenceOf) {
-                throw new ArithmeticException("mismatch parameter values AddReferenceOfByUserIdRequest::referenceOf");
-            }
-            return new AddReferenceOfByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ItemSetName = ItemSetName,
-                ReferenceOf = ReferenceOf,
-            };
-        }
     }
 }

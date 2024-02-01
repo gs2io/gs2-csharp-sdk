@@ -473,5 +473,155 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                switch (CreateGatheringTriggerType) {
+                    case "none":
+                    case "gs2_realtime":
+                    case "gs2_script":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("namespace", "matchmaking.namespace.createGatheringTriggerType.error.invalid"),
+                        });
+                }
+            }
+            if (CreateGatheringTriggerType == "gs2_realtime") {
+                if (CreateGatheringTriggerRealtimeNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.createGatheringTriggerRealtimeNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            if (CreateGatheringTriggerType == "gs2_script") {
+                if (CreateGatheringTriggerScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.createGatheringTriggerScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (CompleteMatchmakingTriggerType) {
+                    case "none":
+                    case "gs2_realtime":
+                    case "gs2_script":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("namespace", "matchmaking.namespace.completeMatchmakingTriggerType.error.invalid"),
+                        });
+                }
+            }
+            if (CompleteMatchmakingTriggerType == "gs2_realtime") {
+                if (CompleteMatchmakingTriggerRealtimeNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.completeMatchmakingTriggerRealtimeNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            if (CompleteMatchmakingTriggerType == "gs2_script") {
+                if (CompleteMatchmakingTriggerScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.completeMatchmakingTriggerScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "matchmaking.namespace.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Namespace {
+                NamespaceId = NamespaceId,
+                Name = Name,
+                Description = Description,
+                EnableRating = EnableRating,
+                CreateGatheringTriggerType = CreateGatheringTriggerType,
+                CreateGatheringTriggerRealtimeNamespaceId = CreateGatheringTriggerRealtimeNamespaceId,
+                CreateGatheringTriggerScriptId = CreateGatheringTriggerScriptId,
+                CompleteMatchmakingTriggerType = CompleteMatchmakingTriggerType,
+                CompleteMatchmakingTriggerRealtimeNamespaceId = CompleteMatchmakingTriggerRealtimeNamespaceId,
+                CompleteMatchmakingTriggerScriptId = CompleteMatchmakingTriggerScriptId,
+                ChangeRatingScript = ChangeRatingScript.Clone() as Gs2.Gs2Matchmaking.Model.ScriptSetting,
+                JoinNotification = JoinNotification.Clone() as Gs2.Gs2Matchmaking.Model.NotificationSetting,
+                LeaveNotification = LeaveNotification.Clone() as Gs2.Gs2Matchmaking.Model.NotificationSetting,
+                CompleteNotification = CompleteNotification.Clone() as Gs2.Gs2Matchmaking.Model.NotificationSetting,
+                ChangeRatingNotification = ChangeRatingNotification.Clone() as Gs2.Gs2Matchmaking.Model.NotificationSetting,
+                LogSetting = LogSetting.Clone() as Gs2.Gs2Matchmaking.Model.LogSetting,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

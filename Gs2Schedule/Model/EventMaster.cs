@@ -471,5 +471,230 @@ namespace Gs2.Gs2Schedule.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (EventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.eventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (ScheduleType) {
+                    case "absolute":
+                    case "relative":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("eventMaster", "schedule.eventMaster.scheduleType.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (RepeatType) {
+                    case "always":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("eventMaster", "schedule.eventMaster.repeatType.error.invalid"),
+                        });
+                }
+            }
+            if (ScheduleType == "absolute") {
+                if (AbsoluteBegin < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.absoluteBegin.error.invalid"),
+                    });
+                }
+                if (AbsoluteBegin > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.absoluteBegin.error.invalid"),
+                    });
+                }
+            }
+            if (ScheduleType == "absolute") {
+                if (AbsoluteEnd < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.absoluteEnd.error.invalid"),
+                    });
+                }
+                if (AbsoluteEnd > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.absoluteEnd.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "monthly") {
+                if (RepeatBeginDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatBeginDayOfMonth.error.invalid"),
+                    });
+                }
+                if (RepeatBeginDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatBeginDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "monthly") {
+                if (RepeatEndDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatEndDayOfMonth.error.invalid"),
+                    });
+                }
+                if (RepeatEndDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatEndDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "weekly") {
+                switch (RepeatBeginDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("eventMaster", "schedule.eventMaster.repeatBeginDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if (RepeatType == "weekly") {
+                switch (RepeatEndDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("eventMaster", "schedule.eventMaster.repeatEndDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((RepeatType =="daily" || RepeatType == "weekly" || RepeatType == "monthly")) {
+                if (RepeatBeginHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatBeginHour.error.invalid"),
+                    });
+                }
+                if (RepeatBeginHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatBeginHour.error.invalid"),
+                    });
+                }
+            }
+            if ((RepeatType =="daily" || RepeatType == "weekly" || RepeatType == "monthly")) {
+                if (RepeatEndHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatEndHour.error.invalid"),
+                    });
+                }
+                if (RepeatEndHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.repeatEndHour.error.invalid"),
+                    });
+                }
+            }
+            if (ScheduleType == "relative") {
+                if (RelativeTriggerName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.relativeTriggerName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("eventMaster", "schedule.eventMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new EventMaster {
+                EventId = EventId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                ScheduleType = ScheduleType,
+                RepeatType = RepeatType,
+                AbsoluteBegin = AbsoluteBegin,
+                AbsoluteEnd = AbsoluteEnd,
+                RepeatBeginDayOfMonth = RepeatBeginDayOfMonth,
+                RepeatEndDayOfMonth = RepeatEndDayOfMonth,
+                RepeatBeginDayOfWeek = RepeatBeginDayOfWeek,
+                RepeatEndDayOfWeek = RepeatEndDayOfWeek,
+                RepeatBeginHour = RepeatBeginHour,
+                RepeatEndHour = RepeatEndHour,
+                RelativeTriggerName = RelativeTriggerName,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

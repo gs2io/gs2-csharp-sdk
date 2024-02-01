@@ -282,5 +282,71 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InventoryId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.inventoryId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InventoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.inventoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (BigItems.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.bigItems.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bigInventory", "inventory.bigInventory.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BigInventory {
+                InventoryId = InventoryId,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                BigItems = BigItems.Clone() as Gs2.Gs2Inventory.Model.BigItem[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

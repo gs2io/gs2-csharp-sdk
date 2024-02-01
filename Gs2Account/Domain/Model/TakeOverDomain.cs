@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Account.Domain.Iterator;
+using Gs2.Gs2Account.Model.Cache;
 using Gs2.Gs2Account.Request;
 using Gs2.Gs2Account.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,15 +63,10 @@ namespace Gs2.Gs2Account.Domain.Model
     public partial class TakeOverDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly int? _type;
-        private readonly string _userIdentifier;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public int? Type => _type;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public int? Type { get; }
+        public string UserIdentifier { get; }
 
         public TakeOverDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,41 +78,9 @@ namespace Gs2.Gs2Account.Domain.Model
             this._client = new Gs2AccountRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._type = type;
-            this._parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "TakeOver"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string type,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "account",
-                namespaceName ?? "null",
-                userId ?? "null",
-                type ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string type
-        )
-        {
-            return string.Join(
-                ":",
-                type ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.Type = type;
         }
 
     }
@@ -126,45 +91,23 @@ namespace Gs2.Gs2Account.Domain.Model
         public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> CreateFuture(
             CreateTakeOverByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithType(this.Type);
-                var future = this._client.CreateTakeOverByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CreateTakeOverByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "TakeOver"
-                        );
-                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                            resultModel.Item.Type.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -181,48 +124,18 @@ namespace Gs2.Gs2Account.Domain.Model
             #endif
             CreateTakeOverByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithType(this.Type);
-            CreateTakeOverByUserIdResult result = null;
-                result = await this._client.CreateTakeOverByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "TakeOver"
-                    );
-                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                        resultModel.Item.Type.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CreateTakeOverByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateFuture.")]
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> Create(
-            CreateTakeOverByUserIdRequest request
-        ) {
-            return CreateFuture(request);
         }
         #endif
 
@@ -230,49 +143,23 @@ namespace Gs2.Gs2Account.Domain.Model
         private IFuture<Gs2.Gs2Account.Model.TakeOver> GetFuture(
             GetTakeOverByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOver> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithType(this.Type);
-                var future = this._client.GetTakeOverByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetTakeOverByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "TakeOver"
-                        );
-                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                            resultModel.Item.Type.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
@@ -287,39 +174,15 @@ namespace Gs2.Gs2Account.Domain.Model
             #endif
             GetTakeOverByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithType(this.Type);
-            GetTakeOverByUserIdResult result = null;
-            try {
-                result = await this._client.GetTakeOverByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "TakeOver"
-                    );
-                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                        resultModel.Item.Type.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetTakeOverByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -328,45 +191,23 @@ namespace Gs2.Gs2Account.Domain.Model
         public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> UpdateFuture(
             UpdateTakeOverByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithType(this.Type);
-                var future = this._client.UpdateTakeOverByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.UpdateTakeOverByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "TakeOver"
-                        );
-                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                            resultModel.Item.Type.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -383,48 +224,18 @@ namespace Gs2.Gs2Account.Domain.Model
             #endif
             UpdateTakeOverByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithType(this.Type);
-            UpdateTakeOverByUserIdResult result = null;
-                result = await this._client.UpdateTakeOverByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Account.Domain.Model.AccountDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "TakeOver"
-                    );
-                    var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                        resultModel.Item.Type.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.UpdateTakeOverByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverDomain> Update(
-            UpdateTakeOverByUserIdRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -437,55 +248,36 @@ namespace Gs2.Gs2Account.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.TakeOver> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                    _parentKey,
-                    Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                        this.Type?.ToString()
+                var (value, find) = (null as Gs2.Gs2Account.Model.TakeOver).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Type ?? default
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Account.Model.TakeOver).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.Type ?? default,
+                    () => this.GetFuture(
+                        new GetTakeOverByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetTakeOverByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                                    this.Type?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Account.Model.TakeOver>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "takeOver")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                        _parentKey,
-                        Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                            this.Type?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Account.Model.TakeOver>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
@@ -493,52 +285,24 @@ namespace Gs2.Gs2Account.Domain.Model
         public async Task<Gs2.Gs2Account.Model.TakeOver> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOver>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    this.Type?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                    _parentKey,
-                    Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                        this.Type?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetTakeOverByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                                    this.Type?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Account.Model.TakeOver>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "takeOver")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Account.Model.TakeOver>(
-                        _parentKey,
-                        Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                            this.Type?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Account.Model.TakeOver).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.Type ?? default
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Account.Model.TakeOver).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.Type ?? default,
+                () => this.GetAsync(
+                    new GetTakeOverByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -567,20 +331,23 @@ namespace Gs2.Gs2Account.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Account.Model.TakeOver>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    this.Type.ToString()
-                )
+            (null as Gs2.Gs2Account.Model.TakeOver).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.Type ?? default
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Account.Model.TakeOver> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    this.Type.ToString()
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
+                    this.Type ?? default
                 ),
                 callback,
                 () =>
@@ -599,9 +366,12 @@ namespace Gs2.Gs2Account.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Account.Model.TakeOver>(
-                _parentKey,
-                Gs2.Gs2Account.Domain.Model.TakeOverDomain.CreateCacheKey(
-                    this.Type.ToString()
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Account.Model.TakeOver).CacheKey(
+                    this.Type ?? default
                 ),
                 callbackId
             );

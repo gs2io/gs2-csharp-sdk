@@ -338,5 +338,141 @@ namespace Gs2.Gs2Limit.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (LimitModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.limitModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (ResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("limitModelMaster", "limit.limitModelMaster.resetType.error.invalid"),
+                        });
+                }
+            }
+            if (ResetType == "monthly") {
+                if (ResetDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.resetDayOfMonth.error.invalid"),
+                    });
+                }
+                if (ResetDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.resetDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "weekly") {
+                switch (ResetDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("limitModelMaster", "limit.limitModelMaster.resetDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((ResetType =="monthly" || ResetType == "weekly" || ResetType == "daily")) {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.resetHour.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("limitModelMaster", "limit.limitModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new LimitModelMaster {
+                LimitModelId = LimitModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                ResetType = ResetType,
+                ResetDayOfMonth = ResetDayOfMonth,
+                ResetDayOfWeek = ResetDayOfWeek,
+                ResetHour = ResetHour,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

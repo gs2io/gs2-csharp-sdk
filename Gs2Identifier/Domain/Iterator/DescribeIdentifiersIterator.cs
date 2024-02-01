@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Identifier.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,8 +68,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2IdentifierRestClient _client;
-        private readonly string _userName;
-        public string UserName => _userName;
+        public string UserName { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -83,7 +83,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._userName = userName;
+            this.UserName = userName;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Identifier.Model.Identifier[]{};
@@ -102,13 +102,12 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.UserName,
-                "Identifier"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Identifier.Model.Identifier>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Identifier.Model.Identifier>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                        UserName
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -123,7 +122,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 var r = await this._client.DescribeIdentifiersAsync(
                 #endif
                     new Gs2.Gs2Identifier.Request.DescribeIdentifiersRequest()
-                        .WithUserName(this._userName)
+                        .WithUserName(this.UserName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -141,19 +140,18 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                                    item.ClientId?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        UserName,
+                        item.ClientId
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Identifier.Model.Identifier>(
-                            parentKey
+                        (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                            UserName
+                        )
                     );
                 }
             }
@@ -189,7 +187,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Identifier.Model.Identifier ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -252,7 +250,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Identifier.Model.Identifier ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

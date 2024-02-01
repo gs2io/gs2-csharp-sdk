@@ -139,46 +139,5 @@ namespace Gs2.Gs2Inventory.Request
             key += ReferenceOf + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DeleteReferenceOfByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ItemSetName = ItemSetName,
-                ReferenceOf = ReferenceOf,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteReferenceOfByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DeleteReferenceOfByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values DeleteReferenceOfByUserIdRequest::inventoryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DeleteReferenceOfByUserIdRequest::userId");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values DeleteReferenceOfByUserIdRequest::itemName");
-            }
-            if (ItemSetName != y.ItemSetName) {
-                throw new ArithmeticException("mismatch parameter values DeleteReferenceOfByUserIdRequest::itemSetName");
-            }
-            if (ReferenceOf != y.ReferenceOf) {
-                throw new ArithmeticException("mismatch parameter values DeleteReferenceOfByUserIdRequest::referenceOf");
-            }
-            return new DeleteReferenceOfByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ItemSetName = ItemSetName,
-                ReferenceOf = ReferenceOf,
-            };
-        }
     }
 }

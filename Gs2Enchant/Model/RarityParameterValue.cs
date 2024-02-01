@@ -118,5 +118,42 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValue", "enchant.rarityParameterValue.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ResourceName.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValue", "enchant.rarityParameterValue.resourceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ResourceValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValue", "enchant.rarityParameterValue.resourceValue.error.invalid"),
+                    });
+                }
+                if (ResourceValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValue", "enchant.rarityParameterValue.resourceValue.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RarityParameterValue {
+                Name = Name,
+                ResourceName = ResourceName,
+                ResourceValue = ResourceValue,
+            };
+        }
     }
 }

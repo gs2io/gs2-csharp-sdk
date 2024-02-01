@@ -359,5 +359,107 @@ namespace Gs2.Gs2Experience.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (RankCapScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.rankCapScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
+            }
+            {
+                if (OverflowExperienceScript.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.overflowExperienceScript.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("namespace", "experience.namespace.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Namespace {
+                NamespaceId = NamespaceId,
+                Name = Name,
+                Description = Description,
+                TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2Experience.Model.TransactionSetting,
+                RankCapScriptId = RankCapScriptId,
+                ChangeExperienceScript = ChangeExperienceScript.Clone() as Gs2.Gs2Experience.Model.ScriptSetting,
+                ChangeRankScript = ChangeRankScript.Clone() as Gs2.Gs2Experience.Model.ScriptSetting,
+                ChangeRankCapScript = ChangeRankCapScript.Clone() as Gs2.Gs2Experience.Model.ScriptSetting,
+                OverflowExperienceScript = OverflowExperienceScript,
+                LogSetting = LogSetting.Clone() as Gs2.Gs2Experience.Model.LogSetting,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

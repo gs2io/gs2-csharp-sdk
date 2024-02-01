@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Script.Domain.Iterator;
+using Gs2.Gs2Script.Model.Cache;
 using Gs2.Gs2Script.Request;
 using Gs2.Gs2Script.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,17 +63,13 @@ namespace Gs2.Gs2Script.Domain.Model
     public partial class ScriptDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScriptRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _scriptName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string ScriptName { get; }
         public int? Code { get; set; }
         public string Result { get; set; }
         public int? ExecuteTime { get; set; }
         public int? Charged { get; set; }
         public string[] Output { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string ScriptName => _scriptName;
 
         public ScriptDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -82,37 +80,8 @@ namespace Gs2.Gs2Script.Domain.Model
             this._client = new Gs2ScriptRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._scriptName = scriptName;
-            this._parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Script"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string scriptName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "script",
-                namespaceName ?? "null",
-                scriptName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string scriptName
-        )
-        {
-            return string.Join(
-                ":",
-                scriptName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.ScriptName = scriptName;
         }
 
     }
@@ -123,62 +92,22 @@ namespace Gs2.Gs2Script.Domain.Model
         private IFuture<Gs2.Gs2Script.Model.Script> GetFuture(
             GetScriptRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Script> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
-                var future = this._client.GetScriptFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetScriptFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            request.ScriptName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "script")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Script"
-                        );
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Model.Script>(Impl);
@@ -193,51 +122,14 @@ namespace Gs2.Gs2Script.Domain.Model
             #endif
             GetScriptRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
-            GetScriptResult result = null;
-            try {
-                result = await this._client.GetScriptAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    request.ScriptName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "script")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Script"
-                    );
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetScriptAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -246,43 +138,22 @@ namespace Gs2.Gs2Script.Domain.Model
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFuture(
             UpdateScriptRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
-                var future = this._client.UpdateScriptFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateScriptFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Script"
-                        );
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -299,46 +170,17 @@ namespace Gs2.Gs2Script.Domain.Model
             #endif
             UpdateScriptRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
-            UpdateScriptResult result = null;
-                result = await this._client.UpdateScriptAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Script"
-                    );
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateScriptAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> Update(
-            UpdateScriptRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -346,43 +188,22 @@ namespace Gs2.Gs2Script.Domain.Model
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFromGitHubFuture(
             UpdateScriptFromGitHubRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
-                var future = this._client.UpdateScriptFromGitHubFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateScriptFromGitHubFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Script"
-                        );
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -399,46 +220,17 @@ namespace Gs2.Gs2Script.Domain.Model
             #endif
             UpdateScriptFromGitHubRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithScriptName(this.ScriptName);
-            UpdateScriptFromGitHubResult result = null;
-                result = await this._client.UpdateScriptFromGitHubAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Script"
-                    );
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateScriptFromGitHubAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
-        public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> UpdateFromGitHub(
-            UpdateScriptFromGitHubRequest request
-        ) {
-            return UpdateFromGitHubFuture(request);
         }
         #endif
 
@@ -446,57 +238,24 @@ namespace Gs2.Gs2Script.Domain.Model
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> DeleteFuture(
             DeleteScriptRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithScriptName(this.ScriptName);
-                var future = this._client.DeleteScriptFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteScriptFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            request.ScriptName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "script")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Script"
-                        );
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Script.Model.Script>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -513,58 +272,19 @@ namespace Gs2.Gs2Script.Domain.Model
             #endif
             DeleteScriptRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithScriptName(this.ScriptName);
-            DeleteScriptResult result = null;
             try {
-                result = await this._client.DeleteScriptAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    request.ScriptName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithScriptName(this.ScriptName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteScriptAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "script")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Script.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Script"
-                    );
-                    var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Script.Model.Script>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> Delete(
-            DeleteScriptRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -577,55 +297,34 @@ namespace Gs2.Gs2Script.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Script> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
-                    _parentKey,
-                    Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        this.ScriptName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Script.Model.Script).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ScriptName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Script.Model.Script).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.ScriptName,
+                    () => this.GetFuture(
+                        new GetScriptRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetScriptRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                                    this.ScriptName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "script")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            this.ScriptName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Script.Model.Script>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Script.Model.Script> ModelAsync()
@@ -633,52 +332,22 @@ namespace Gs2.Gs2Script.Domain.Model
         public async Task<Gs2.Gs2Script.Model.Script> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Script>(
-                _parentKey,
-                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    this.ScriptName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
-                    _parentKey,
-                    Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                        this.ScriptName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetScriptRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                                    this.ScriptName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Script.Model.Script>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "script")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Script.Model.Script>(
-                        _parentKey,
-                        Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                            this.ScriptName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Script.Model.Script).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.ScriptName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Script.Model.Script).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.ScriptName,
+                () => this.GetAsync(
+                    new GetScriptRequest()
+                )
+            );
         }
         #endif
 
@@ -707,20 +376,21 @@ namespace Gs2.Gs2Script.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Script.Model.Script>(
-                _parentKey,
-                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    this.ScriptName.ToString()
-                )
+            (null as Gs2.Gs2Script.Model.Script).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.ScriptName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Script.Model.Script> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    this.ScriptName.ToString()
+                (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Script.Model.Script).CacheKey(
+                    this.ScriptName
                 ),
                 callback,
                 () =>
@@ -739,9 +409,11 @@ namespace Gs2.Gs2Script.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Script.Model.Script>(
-                _parentKey,
-                Gs2.Gs2Script.Domain.Model.ScriptDomain.CreateCacheKey(
-                    this.ScriptName.ToString()
+                (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Script.Model.Script).CacheKey(
+                    this.ScriptName
                 ),
                 callbackId
             );

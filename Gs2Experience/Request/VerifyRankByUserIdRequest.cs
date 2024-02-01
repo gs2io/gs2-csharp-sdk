@@ -139,46 +139,5 @@ namespace Gs2.Gs2Experience.Request
             key += RankValue + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyRankByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ExperienceName = ExperienceName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                RankValue = RankValue,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyRankByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankByUserIdRequest::userId");
-            }
-            if (ExperienceName != y.ExperienceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankByUserIdRequest::experienceName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankByUserIdRequest::verifyType");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankByUserIdRequest::propertyId");
-            }
-            if (RankValue != y.RankValue) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankByUserIdRequest::rankValue");
-            }
-            return new VerifyRankByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ExperienceName = ExperienceName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                RankValue = RankValue,
-            };
-        }
     }
 }

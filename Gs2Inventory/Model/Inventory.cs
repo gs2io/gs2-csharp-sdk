@@ -298,5 +298,102 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InventoryId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.inventoryId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InventoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.inventoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CurrentInventoryCapacityUsage < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.currentInventoryCapacityUsage.error.invalid"),
+                    });
+                }
+                if (CurrentInventoryCapacityUsage > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.currentInventoryCapacityUsage.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CurrentInventoryMaxCapacity < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.currentInventoryMaxCapacity.error.invalid"),
+                    });
+                }
+                if (CurrentInventoryMaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.currentInventoryMaxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventory", "inventory.inventory.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Inventory {
+                InventoryId = InventoryId,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                CurrentInventoryCapacityUsage = CurrentInventoryCapacityUsage,
+                CurrentInventoryMaxCapacity = CurrentInventoryMaxCapacity,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

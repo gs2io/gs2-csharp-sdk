@@ -322,5 +322,100 @@ namespace Gs2.Gs2Distributor.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DistributorModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.distributorModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InboxNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.inboxNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (WhiteListTargetIds.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.whiteListTargetIds.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributorModelMaster", "distributor.distributorModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DistributorModelMaster {
+                DistributorModelId = DistributorModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                InboxNamespaceId = InboxNamespaceId,
+                WhiteListTargetIds = WhiteListTargetIds.Clone() as string[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

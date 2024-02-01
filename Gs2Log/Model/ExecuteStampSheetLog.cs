@@ -194,5 +194,74 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Timestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.timestamp.error.invalid"),
+                    });
+                }
+                if (Timestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.timestamp.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (TransactionId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.transactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Service.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Method.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.method.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Action.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.action.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Args.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("executeStampSheetLog", "log.executeStampSheetLog.args.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ExecuteStampSheetLog {
+                Timestamp = Timestamp,
+                TransactionId = TransactionId,
+                Service = Service,
+                Method = Method,
+                UserId = UserId,
+                Action = Action,
+                Args = Args,
+            };
+        }
     }
 }

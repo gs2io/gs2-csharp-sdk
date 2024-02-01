@@ -436,5 +436,163 @@ namespace Gs2.Gs2Exchange.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (IncrementalRateModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.incrementalRateModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                switch (CalculateType) {
+                    case "linear":
+                    case "power":
+                    case "gs2_script":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.calculateType.error.invalid"),
+                        });
+                }
+            }
+            if (CalculateType == "linear") {
+                if (BaseValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.baseValue.error.invalid"),
+                    });
+                }
+                if (BaseValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.baseValue.error.invalid"),
+                    });
+                }
+            }
+            if ((CalculateType =="linear" || CalculateType == "power")) {
+                if (CoefficientValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.coefficientValue.error.invalid"),
+                    });
+                }
+                if (CoefficientValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.coefficientValue.error.invalid"),
+                    });
+                }
+            }
+            if (CalculateType == "gs2_script") {
+                if (CalculateScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.calculateScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExchangeCountId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.exchangeCountId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MaximumExchangeCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.maximumExchangeCount.error.invalid"),
+                    });
+                }
+                if (MaximumExchangeCount > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.maximumExchangeCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("incrementalRateModelMaster", "exchange.incrementalRateModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new IncrementalRateModelMaster {
+                IncrementalRateModelId = IncrementalRateModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                ConsumeAction = ConsumeAction.Clone() as Gs2.Core.Model.ConsumeAction,
+                CalculateType = CalculateType,
+                BaseValue = BaseValue,
+                CoefficientValue = CoefficientValue,
+                CalculateScriptId = CalculateScriptId,
+                ExchangeCountId = ExchangeCountId,
+                MaximumExchangeCount = MaximumExchangeCount,
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

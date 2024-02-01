@@ -145,41 +145,5 @@ namespace Gs2.Gs2Quest.Request
             key += Config + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new CreateProgressByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                QuestModelId = QuestModelId,
-                Force = Force,
-                Config = Config,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateProgressByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::userId");
-            }
-            if (QuestModelId != y.QuestModelId) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::questModelId");
-            }
-            if (Force != y.Force) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::force");
-            }
-            if (Config != y.Config) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::config");
-            }
-            return new CreateProgressByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                QuestModelId = QuestModelId,
-                Force = Force,
-                Config = Config,
-            };
-        }
     }
 }

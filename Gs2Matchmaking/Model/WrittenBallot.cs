@@ -121,5 +121,24 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+            }
+            {
+                if (GameResults.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("writtenBallot", "matchmaking.writtenBallot.gameResults.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new WrittenBallot {
+                Ballot = Ballot.Clone() as Gs2.Gs2Matchmaking.Model.Ballot,
+                GameResults = GameResults.Clone() as Gs2.Gs2Matchmaking.Model.GameResult[],
+            };
+        }
     }
 }

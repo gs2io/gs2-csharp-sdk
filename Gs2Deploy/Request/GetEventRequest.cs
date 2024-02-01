@@ -85,17 +85,5 @@ namespace Gs2.Gs2Deploy.Request
             key += EventName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetEventRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetEventRequest)x;
-            return this;
-        }
     }
 }

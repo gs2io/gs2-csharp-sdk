@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -34,8 +32,11 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -51,15 +52,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Inventory:SetCapacityByUserId";
-        }
-        public static Gs2.Gs2Inventory.Model.Inventory Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            SetCapacityByUserIdRequest request,
-            Gs2.Gs2Inventory.Model.Inventory item
-        ) {
-            item.CurrentInventoryMaxCapacity = request.NewCapacityValue;
-            return item;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -84,33 +76,27 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
-                item = Transform(domain, accessToken, request, item);
+                try {
+                    item = item.SpeculativeExecution(request);
 
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Inventory"
-                );
-                var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
-                    request.InventoryName.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Inventory.Model.Inventory>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.InventoryName
+                        );
+                        return null;
+                    });
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
+                    yield break;
+                }
                 yield return null;
             }
 
@@ -139,42 +125,19 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Inventory"
-            );
-            var key = Gs2.Gs2Inventory.Domain.Model.InventoryDomain.CreateCacheKey(
-                request.InventoryName.ToString()
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Inventory.Model.Inventory>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.InventoryName
                 );
                 return null;
             };
         }
 #endif
-
-        public static SetCapacityByUserIdRequest Rate(
-            SetCapacityByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static SetCapacityByUserIdRequest Rate(
-            SetCapacityByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

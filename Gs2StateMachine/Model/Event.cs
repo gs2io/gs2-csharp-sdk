@@ -118,5 +118,31 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                switch (EventType) {
+                    case "change_state":
+                    case "emit":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("event", "stateMachine.event.eventType.error.invalid"),
+                        });
+                }
+            }
+            if (EventType == "change_state") {
+            }
+            if (EventType == "emit") {
+            }
+        }
+
+        public object Clone() {
+            return new Event {
+                EventType = EventType,
+                ChangeStateEvent = ChangeStateEvent.Clone() as Gs2.Gs2StateMachine.Model.ChangeStateEvent,
+                EmitEvent = EmitEvent.Clone() as Gs2.Gs2StateMachine.Model.EmitEvent,
+            };
+        }
     }
 }

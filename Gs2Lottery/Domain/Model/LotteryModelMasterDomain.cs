@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Lottery.Domain.Iterator;
+using Gs2.Gs2Lottery.Model.Cache;
 using Gs2.Gs2Lottery.Request;
 using Gs2.Gs2Lottery.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
     public partial class LotteryModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _lotteryName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string LotteryName => _lotteryName;
+        public string NamespaceName { get; }
+        public string LotteryName { get; }
 
         public LotteryModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
             this._client = new Gs2LotteryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._lotteryName = lotteryName;
-            this._parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "LotteryModelMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string lotteryName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "lottery",
-                namespaceName ?? "null",
-                lotteryName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string lotteryName
-        )
-        {
-            return string.Join(
-                ":",
-                lotteryName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.LotteryName = lotteryName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
         private IFuture<Gs2.Gs2Lottery.Model.LotteryModelMaster> GetFuture(
             GetLotteryModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.LotteryModelMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithLotteryName(this.LotteryName);
-                var future = this._client.GetLotteryModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetLotteryModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            request.LotteryName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "lotteryModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "LotteryModelMaster"
-                        );
-                        var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.LotteryModelMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #endif
             GetLotteryModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithLotteryName(this.LotteryName);
-            GetLotteryModelMasterResult result = null;
-            try {
-                result = await this._client.GetLotteryModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                    request.LotteryName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "lotteryModelMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "LotteryModelMaster"
-                    );
-                    var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetLotteryModelMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain> UpdateFuture(
             UpdateLotteryModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithLotteryName(this.LotteryName);
-                var future = this._client.UpdateLotteryModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateLotteryModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "LotteryModelMaster"
-                        );
-                        var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #endif
             UpdateLotteryModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithLotteryName(this.LotteryName);
-            UpdateLotteryModelMasterResult result = null;
-                result = await this._client.UpdateLotteryModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "LotteryModelMaster"
-                    );
-                    var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateLotteryModelMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain> Update(
-            UpdateLotteryModelMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain> DeleteFuture(
             DeleteLotteryModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithLotteryName(this.LotteryName);
-                var future = this._client.DeleteLotteryModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteLotteryModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            request.LotteryName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "lotteryModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "LotteryModelMaster"
-                        );
-                        var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Lottery.Model.LotteryModelMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #endif
             DeleteLotteryModelMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithLotteryName(this.LotteryName);
-            DeleteLotteryModelMasterResult result = null;
             try {
-                result = await this._client.DeleteLotteryModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                    request.LotteryName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithLotteryName(this.LotteryName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteLotteryModelMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "lotteryModelMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Lottery.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "LotteryModelMaster"
-                    );
-                    var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Lottery.Model.LotteryModelMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain> Delete(
-            DeleteLotteryModelMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Lottery.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.LotteryModelMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                        this.LotteryName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.LotteryName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.LotteryName,
+                    () => this.GetFuture(
+                        new GetLotteryModelMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetLotteryModelMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                                    this.LotteryName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "lotteryModelMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            this.LotteryName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.LotteryModelMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Lottery.Model.LotteryModelMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public async Task<Gs2.Gs2Lottery.Model.LotteryModelMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                    this.LotteryName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                        this.LotteryName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetLotteryModelMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                                    this.LotteryName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "lotteryModelMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                            this.LotteryName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.LotteryName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.LotteryName,
+                () => this.GetAsync(
+                    new GetLotteryModelMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Lottery.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                    this.LotteryName.ToString()
-                )
+            (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.LotteryName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Lottery.Model.LotteryModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                    this.LotteryName.ToString()
+                (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheKey(
+                    this.LotteryName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Lottery.Model.LotteryModelMaster>(
-                _parentKey,
-                Gs2.Gs2Lottery.Domain.Model.LotteryModelMasterDomain.CreateCacheKey(
-                    this.LotteryName.ToString()
+                (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Lottery.Model.LotteryModelMaster).CacheKey(
+                    this.LotteryName
                 ),
                 callbackId
             );

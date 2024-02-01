@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Showcase.Domain.Iterator;
+using Gs2.Gs2Showcase.Model.Cache;
 using Gs2.Gs2Showcase.Request;
 using Gs2.Gs2Showcase.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,10 +63,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class CurrentShowcaseMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
-        private readonly string _namespaceName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
+        public string NamespaceName { get; }
 
         public CurrentShowcaseMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -74,30 +73,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this._client = new Gs2ShowcaseRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "CurrentShowcaseMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "showcase",
-                namespaceName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
+            this.NamespaceName = namespaceName;
         }
 
     }
@@ -108,41 +84,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> ExportMasterFuture(
             ExportMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.ExportMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.ExportMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "CurrentShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -159,44 +115,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             ExportMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            ExportMasterResult result = null;
-                result = await this._client.ExportMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.ExportMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ExportMasterFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> ExportMaster(
-            ExportMasterRequest request
-        ) {
-            return ExportMasterFuture(request);
         }
         #endif
 
@@ -204,59 +132,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
         private IFuture<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster> GetFuture(
             GetCurrentShowcaseMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.GetCurrentShowcaseMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetCurrentShowcaseMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "currentShowcaseMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "CurrentShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(Impl);
@@ -271,48 +161,13 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             GetCurrentShowcaseMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            GetCurrentShowcaseMasterResult result = null;
-            try {
-                result = await this._client.GetCurrentShowcaseMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "currentShowcaseMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetCurrentShowcaseMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -321,41 +176,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> UpdateFuture(
             UpdateCurrentShowcaseMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.UpdateCurrentShowcaseMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateCurrentShowcaseMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "CurrentShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -372,44 +207,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             UpdateCurrentShowcaseMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            UpdateCurrentShowcaseMasterResult result = null;
-                result = await this._client.UpdateCurrentShowcaseMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateCurrentShowcaseMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> Update(
-            UpdateCurrentShowcaseMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -417,41 +224,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> UpdateFromGitHubFuture(
             UpdateCurrentShowcaseMasterFromGitHubRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.UpdateCurrentShowcaseMasterFromGitHubFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateCurrentShowcaseMasterFromGitHubFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "CurrentShowcaseMaster"
-                        );
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -468,44 +255,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #endif
             UpdateCurrentShowcaseMasterFromGitHubRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            UpdateCurrentShowcaseMasterFromGitHubResult result = null;
-                result = await this._client.UpdateCurrentShowcaseMasterFromGitHubAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Showcase.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "CurrentShowcaseMaster"
-                    );
-                    var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateCurrentShowcaseMasterFromGitHubAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFromGitHubFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain> UpdateFromGitHub(
-            UpdateCurrentShowcaseMasterFromGitHubRequest request
-        ) {
-            return UpdateFromGitHubFuture(request);
         }
         #endif
 
@@ -518,52 +277,32 @@ namespace Gs2.Gs2Showcase.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
+                var (value, find) = (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetFuture(
+                        new GetCurrentShowcaseMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetCurrentShowcaseMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "currentShowcaseMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster> ModelAsync()
@@ -571,48 +310,20 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public async Task<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                    _parentKey,
-                    Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetCurrentShowcaseMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "currentShowcaseMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                        _parentKey,
-                        Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                () => this.GetAsync(
+                    new GetCurrentShowcaseMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -641,18 +352,19 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
+                (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).CacheKey(
                 ),
                 callback,
                 () =>
@@ -671,8 +383,10 @@ namespace Gs2.Gs2Showcase.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Showcase.Model.CurrentShowcaseMaster>(
-                _parentKey,
-                Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain.CreateCacheKey(
+                (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Showcase.Model.CurrentShowcaseMaster).CacheKey(
                 ),
                 callbackId
             );

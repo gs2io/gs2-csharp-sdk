@@ -103,17 +103,5 @@ namespace Gs2.Gs2Inbox.Request
             key += MessageName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply OpenMessageRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (OpenMessageRequest)x;
-            return this;
-        }
     }
 }

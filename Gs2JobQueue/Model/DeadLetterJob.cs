@@ -320,5 +320,87 @@ namespace Gs2.Gs2JobQueue.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DeadLetterJobId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.deadLetterJobId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.scriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Args.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.args.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Result.Length > 101) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.result.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("deadLetterJob", "jobQueue.deadLetterJob.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DeadLetterJob {
+                DeadLetterJobId = DeadLetterJobId,
+                Name = Name,
+                UserId = UserId,
+                ScriptId = ScriptId,
+                Args = Args,
+                Result = Result.Clone() as Gs2.Gs2JobQueue.Model.JobResultBody[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

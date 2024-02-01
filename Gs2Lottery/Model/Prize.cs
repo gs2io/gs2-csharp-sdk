@@ -216,5 +216,88 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PrizeId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.prizeId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Type) {
+                    case "action":
+                    case "prize_table":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("prize", "lottery.prize.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type == "action") {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (DrawnLimit < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.drawnLimit.error.invalid"),
+                    });
+                }
+                if (DrawnLimit > 100000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.drawnLimit.error.invalid"),
+                    });
+                }
+            }
+            if (Type == "action" && DrawnLimit > 0) {
+                if (LimitFailOverPrizeId.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.limitFailOverPrizeId.error.tooLong"),
+                    });
+                }
+            }
+            if (Type == "prize_table") {
+                if (PrizeTableName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.prizeTableName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Weight < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.weight.error.invalid"),
+                    });
+                }
+                if (Weight > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prize", "lottery.prize.weight.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Prize {
+                PrizeId = PrizeId,
+                Type = Type,
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                DrawnLimit = DrawnLimit,
+                LimitFailOverPrizeId = LimitFailOverPrizeId,
+                PrizeTableName = PrizeTableName,
+                Weight = Weight,
+            };
+        }
     }
 }

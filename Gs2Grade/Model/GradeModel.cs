@@ -328,5 +328,74 @@ namespace Gs2.Gs2Grade.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (GradeModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.gradeModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DefaultGrades.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.defaultGrades.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ExperienceModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.experienceModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GradeEntries.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.gradeEntries.error.tooFew"),
+                    });
+                }
+                if (GradeEntries.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.gradeEntries.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AcquireActionRates.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeModel", "grade.gradeModel.acquireActionRates.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new GradeModel {
+                GradeModelId = GradeModelId,
+                Name = Name,
+                Metadata = Metadata,
+                DefaultGrades = DefaultGrades.Clone() as Gs2.Gs2Grade.Model.DefaultGradeModel[],
+                ExperienceModelId = ExperienceModelId,
+                GradeEntries = GradeEntries.Clone() as Gs2.Gs2Grade.Model.GradeEntryModel[],
+                AcquireActionRates = AcquireActionRates.Clone() as Gs2.Gs2Grade.Model.AcquireActionRate[],
+            };
+        }
     }
 }

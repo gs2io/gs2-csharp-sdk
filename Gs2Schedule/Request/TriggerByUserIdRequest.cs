@@ -127,41 +127,5 @@ namespace Gs2.Gs2Schedule.Request
             key += Ttl + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new TriggerByUserIdRequest {
-                NamespaceName = NamespaceName,
-                TriggerName = TriggerName,
-                UserId = UserId,
-                TriggerStrategy = TriggerStrategy,
-                Ttl = Ttl,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (TriggerByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values TriggerByUserIdRequest::namespaceName");
-            }
-            if (TriggerName != y.TriggerName) {
-                throw new ArithmeticException("mismatch parameter values TriggerByUserIdRequest::triggerName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values TriggerByUserIdRequest::userId");
-            }
-            if (TriggerStrategy != y.TriggerStrategy) {
-                throw new ArithmeticException("mismatch parameter values TriggerByUserIdRequest::triggerStrategy");
-            }
-            if (Ttl != y.Ttl) {
-                throw new ArithmeticException("mismatch parameter values TriggerByUserIdRequest::ttl");
-            }
-            return new TriggerByUserIdRequest {
-                NamespaceName = NamespaceName,
-                TriggerName = TriggerName,
-                UserId = UserId,
-                TriggerStrategy = TriggerStrategy,
-                Ttl = Ttl,
-            };
-        }
     }
 }

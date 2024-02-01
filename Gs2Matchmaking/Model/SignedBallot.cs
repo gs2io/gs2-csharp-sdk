@@ -99,5 +99,29 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Body.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("signedBallot", "matchmaking.signedBallot.body.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Signature.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("signedBallot", "matchmaking.signedBallot.signature.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SignedBallot {
+                Body = Body,
+                Signature = Signature,
+            };
+        }
     }
 }

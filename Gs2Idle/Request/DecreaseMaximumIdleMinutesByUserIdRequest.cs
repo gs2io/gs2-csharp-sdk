@@ -114,33 +114,5 @@ namespace Gs2.Gs2Idle.Request
             key += CategoryName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DecreaseMaximumIdleMinutesByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                CategoryName = CategoryName,
-                DecreaseMinutes = DecreaseMinutes * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DecreaseMaximumIdleMinutesByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DecreaseMaximumIdleMinutesByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DecreaseMaximumIdleMinutesByUserIdRequest::userId");
-            }
-            if (CategoryName != y.CategoryName) {
-                throw new ArithmeticException("mismatch parameter values DecreaseMaximumIdleMinutesByUserIdRequest::categoryName");
-            }
-            return new DecreaseMaximumIdleMinutesByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                CategoryName = CategoryName,
-                DecreaseMinutes = DecreaseMinutes + y.DecreaseMinutes,
-            };
-        }
     }
 }

@@ -355,5 +355,121 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ItemModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.itemModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InventoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.inventoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (StackingLimit < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.stackingLimit.error.invalid"),
+                    });
+                }
+                if (StackingLimit > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.stackingLimit.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (SortValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.sortValue.error.invalid"),
+                    });
+                }
+                if (SortValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.sortValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemModelMaster", "inventory.itemModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ItemModelMaster {
+                ItemModelId = ItemModelId,
+                InventoryName = InventoryName,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                StackingLimit = StackingLimit,
+                AllowMultipleStacks = AllowMultipleStacks,
+                SortValue = SortValue,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

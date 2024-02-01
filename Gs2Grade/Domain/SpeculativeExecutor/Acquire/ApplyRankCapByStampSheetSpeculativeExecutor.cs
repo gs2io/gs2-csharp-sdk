@@ -35,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Grade.Request;
+using Gs2.Gs2Grade.Model.Cache;
+using Gs2.Gs2Grade.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -51,20 +53,6 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Grade:ApplyRankCapByUserId";
         }
-        public static Gs2.Gs2Grade.Model.Status Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            ApplyRankCapByUserIdRequest request,
-            Gs2.Gs2Grade.Model.Status item
-        ) {
-            // TODO: Speculative execution not supported
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -75,8 +63,8 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var future = domain.Grade.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).Status(
                     request.GradeName,
                     request.PropertyId
@@ -89,40 +77,28 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.GradeName,
+                            request.PropertyId
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Status"
-                );
-                var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.GradeName.ToString(),
-                    request.PropertyId.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -142,8 +118,8 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Grade.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).Status(
                 request.GradeName,
                 request.PropertyId
@@ -152,43 +128,20 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Status"
-            );
-            var key = Gs2.Gs2Grade.Domain.Model.StatusDomain.CreateCacheKey(
-                request.GradeName.ToString(),
-                request.PropertyId.ToString()
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Grade.Model.Status>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.GradeName,
+                    request.PropertyId
                 );
                 return null;
             };
         }
 #endif
-
-        public static ApplyRankCapByUserIdRequest Rate(
-            ApplyRankCapByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static ApplyRankCapByUserIdRequest Rate(
-            ApplyRankCapByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

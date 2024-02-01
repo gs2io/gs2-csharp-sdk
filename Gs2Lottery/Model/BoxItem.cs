@@ -159,5 +159,55 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PrizeId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("boxItem", "lottery.boxItem.prizeId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("boxItem", "lottery.boxItem.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Remaining < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("boxItem", "lottery.boxItem.remaining.error.invalid"),
+                    });
+                }
+                if (Remaining > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("boxItem", "lottery.boxItem.remaining.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Initial < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("boxItem", "lottery.boxItem.initial.error.invalid"),
+                    });
+                }
+                if (Initial > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("boxItem", "lottery.boxItem.initial.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BoxItem {
+                PrizeId = PrizeId,
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                Remaining = Remaining,
+                Initial = Initial,
+            };
+        }
     }
 }

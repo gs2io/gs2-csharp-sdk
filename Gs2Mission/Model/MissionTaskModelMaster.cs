@@ -415,5 +415,143 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MissionTaskId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.missionTaskId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CounterName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.counterName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (TargetResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.targetResetType.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (TargetValue < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.targetValue.error.invalid"),
+                    });
+                }
+                if (TargetValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.targetValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CompleteAcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.completeAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PremiseMissionTaskName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.premiseMissionTaskName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionTaskModelMaster", "mission.missionTaskModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MissionTaskModelMaster {
+                MissionTaskId = MissionTaskId,
+                Name = Name,
+                Metadata = Metadata,
+                Description = Description,
+                CounterName = CounterName,
+                TargetResetType = TargetResetType,
+                TargetValue = TargetValue,
+                CompleteAcquireActions = CompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ChallengePeriodEventId = ChallengePeriodEventId,
+                PremiseMissionTaskName = PremiseMissionTaskName,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

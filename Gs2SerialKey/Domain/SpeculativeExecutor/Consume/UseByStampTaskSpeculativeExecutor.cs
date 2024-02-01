@@ -37,6 +37,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2SerialKey.Request;
+using Gs2.Gs2SerialKey.Model.Cache;
+using Gs2.Gs2SerialKey.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -54,20 +56,6 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             return "Gs2SerialKey:UseByUserId";
         }
 
-        public static Gs2.Gs2SerialKey.Model.SerialKey Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            UseByUserIdRequest request,
-            Gs2.Gs2SerialKey.Model.SerialKey item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -75,19 +63,42 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             UseByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
+                var future = domain.SerialKey.Namespace(
+                    request.NamespaceName
+                ).AccessToken(
+                    accessToken
+                ).SerialKey(
+                    request.Code
+                ).ModelFuture();
+                yield return future;
+                if (future.Error != null) {
+                    result.OnError(future.Error);
+                    yield break;
+                }
+                var item = future.Result;
 
+                if (item == null) {
+                    result.OnComplete(() => null);
+                    yield break;
+                }
                 try {
-                    Transform(domain, accessToken, request, null);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.Code
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
                 yield return null;
             }
 
@@ -105,27 +116,30 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             AccessToken accessToken,
             UseByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
+            var item = await domain.SerialKey.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).SerialKey(
+                request.Code
+            ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.Code
+                );
                 return null;
             };
         }
 #endif
-
-        public static UseByUserIdRequest Rate(
-            UseByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static UseByUserIdRequest Rate(
-            UseByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

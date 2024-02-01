@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -32,12 +34,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Dictionary.Domain.Iterator;
+using Gs2.Gs2Dictionary.Model.Cache;
 using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,13 +65,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -78,12 +78,8 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             this._client = new Gs2DictionaryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._parentKey = Gs2.Gs2Dictionary.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
         }
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -128,10 +124,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Dictionary.Model.Entry>(
-                Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Entry"
+                    this.UserId
                 ),
                 callback
             );
@@ -157,10 +152,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Dictionary.Model.Entry>(
-                Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Dictionary.Model.Entry).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Entry"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -177,31 +171,6 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "dictionary",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
-            );
-        }
-
     }
 
     public partial class UserDomain {
@@ -210,69 +179,28 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> AddEntriesFuture(
             AddEntriesByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
-                var future = this._client.AddEntriesByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.AddEntriesByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    {
-                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Entry"
-                        );
-                        foreach (var item in resultModel.Items) {
-                            var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                                item.Name.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                    }
-                }
-                var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        result.Items[i]?.UserId,
-                        result.Items[i]?.Name
-                    );
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Entry"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                        result.Items[i].Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        result.Items[i],
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    v?.UserId,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryDomain>();
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]>(Impl);
@@ -287,70 +215,21 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             AddEntriesByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            AddEntriesByUserIdResult result = null;
-                result = await this._client.AddEntriesByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Entry"
-                    );
-                    foreach (var item in resultModel.Items) {
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                            item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
-            }
-                var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        result.Items[i]?.UserId,
-                        result.Items[i]?.Name
-                    );
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Entry"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                        result.Items[i].Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        result.Items[i],
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.AddEntriesByUserIdAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
+                this._gs2,
+                this.NamespaceName,
+                v?.UserId,
+                v?.Name
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryDomain>();
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to AddEntriesFuture.")]
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> AddEntries(
-            AddEntriesByUserIdRequest request
-        ) {
-            return AddEntriesFuture(request);
         }
         #endif
 
@@ -358,43 +237,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> ResetFuture(
             ResetByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
-                var future = this._client.ResetByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ResetByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    var parentKey = CreateCacheParentKey(
-                        requestModel.NamespaceName.ToString(),
-                        requestModel.UserId.ToString(),
-                        "Entry"
-                    );
-                    foreach (Gs2.Gs2Dictionary.Model.Entry item in _gs2.Cache.List<Gs2.Gs2Dictionary.Model.Entry>(
-                        parentKey
-                    )) {
-                        _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                                parentKey,
-                                Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                                    item?.Name?.ToString()
-                                )
-                            );
-                    }
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -410,45 +268,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             ResetByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            ResetByUserIdResult result = null;
-                result = await this._client.ResetByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                var parentKey = CreateCacheParentKey(
-                    requestModel.NamespaceName.ToString(),
-                    requestModel.UserId.ToString(),
-                    "Entry"
-                );
-                foreach (Gs2.Gs2Dictionary.Model.Entry item in _gs2.Cache.List<Gs2.Gs2Dictionary.Model.Entry>(
-                    parentKey
-                )) {
-                    _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                            parentKey,
-                            Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                                item?.Name?.ToString()
-                            )
-                        );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ResetByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ResetFuture.")]
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> Reset(
-            ResetByUserIdRequest request
-        ) {
-            return ResetFuture(request);
         }
         #endif
 
@@ -456,28 +285,22 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryFuture(
             VerifyEntryByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
-                var future = this._client.VerifyEntryByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyEntryByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -493,30 +316,16 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             VerifyEntryByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
-            VerifyEntryByUserIdResult result = null;
-                result = await this._client.VerifyEntryByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyEntryByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to VerifyEntryFuture.")]
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntry(
-            VerifyEntryByUserIdRequest request
-        ) {
-            return VerifyEntryFuture(request);
         }
         #endif
 
@@ -524,57 +333,30 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> DeleteEntriesFuture(
             DeleteEntriesByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId);
-                var future = this._client.DeleteEntriesByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteEntriesByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    {
-                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Entry"
-                        );
-                        foreach (var item in resultModel.Items) {
-                            var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                                item.Name.ToString()
-                            );
-                            _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                                parentKey,
-                                key
-                            );
-                        }
-                    }
-                }
-                var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        result.Items[i]?.UserId,
-                        result.Items[i]?.Name
-                    );
-                }
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    v?.UserId,
+                    v?.Name
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryDomain>();
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]>(Impl);
@@ -589,57 +371,28 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             #endif
             DeleteEntriesByUserIdRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
-            DeleteEntriesByUserIdResult result = null;
+            Gs2.Gs2Dictionary.Model.Entry[] items = null;
             try {
-                result = await this._client.DeleteEntriesByUserIdAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteEntriesByUserIdAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
+                items = result?.Items;
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Entry"
-                    );
-                    foreach (var item in resultModel.Items) {
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                            item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Dictionary.Model.Entry>(
-                            parentKey,
-                            key
-                        );
-                    }
-                }
+            catch (NotFoundException e) {
+                
             }
-                var domain = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        result.Items[i]?.UserId,
-                        result.Items[i]?.Name
-                    );
-                }
+            var domain = items?.Select(v => new Gs2.Gs2Dictionary.Domain.Model.EntryDomain(
+                this._gs2,
+                this.NamespaceName,
+                v?.UserId,
+                v?.Name
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Dictionary.Domain.Model.EntryDomain>();
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteEntriesFuture.")]
-        public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryDomain[]> DeleteEntries(
-            DeleteEntriesByUserIdRequest request
-        ) {
-            return DeleteEntriesFuture(request);
         }
         #endif
 

@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2JobQueue.Domain.Iterator;
+using Gs2.Gs2JobQueue.Model.Cache;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Gs2Auth.Model;
@@ -49,6 +50,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -67,8 +69,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private AccessToken _accessToken;
         public AccessToken AccessToken => _accessToken;
         private readonly string _jobName;
-
-        private readonly String _parentKey;
         public bool? AutoRun { get; set; }
         public bool? IsLastJob { get; set; }
         public JobResultBody Result { get; set; }
@@ -90,11 +90,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._namespaceName = namespaceName;
             this._accessToken = accessToken;
             this._jobName = jobName;
-            this._parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Job"
-            );
         }
 
         public Gs2.Gs2JobQueue.Domain.Model.JobResultAccessTokenDomain JobResult(
@@ -109,50 +104,27 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string jobName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "jobQueue",
-                namespaceName ?? "null",
-                userId ?? "null",
-                jobName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string jobName
-        )
-        {
-            return string.Join(
-                ":",
-                jobName ?? "null"
-            );
-        }
-
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Model.Job> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.Job> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.Job>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        this.JobName?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2JobQueue.Model.Job).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.Job>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
@@ -160,24 +132,16 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public async Task<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.Job>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    this.JobName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.Job>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                        this.JobName?.ToString()
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2JobQueue.Model.Job).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.JobName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -206,20 +170,23 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.Job>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    this.JobName.ToString()
-                )
+            (null as Gs2.Gs2JobQueue.Model.Job).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.JobName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2JobQueue.Model.Job> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    this.JobName.ToString()
+                (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
+                    this.JobName
                 ),
                 callback,
                 () =>
@@ -238,9 +205,12 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2JobQueue.Model.Job>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheKey(
-                    this.JobName.ToString()
+                (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
+                    this.JobName
                 ),
                 callbackId
             );

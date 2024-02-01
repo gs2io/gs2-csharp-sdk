@@ -33,8 +33,7 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class GetCleanProgressRequest : Gs2Request<GetCleanProgressRequest>
 	{
-        public string TransactionId { set; get; }
-
+         public string TransactionId { set; get; }
         public GetCleanProgressRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
             return this;
@@ -73,18 +72,6 @@ namespace Gs2.Gs2Project.Request
             var key = "";
             key += TransactionId + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetCleanProgressRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetCleanProgressRequest)x;
-            return this;
         }
     }
 }

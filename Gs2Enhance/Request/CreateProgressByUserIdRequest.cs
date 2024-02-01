@@ -157,46 +157,5 @@ namespace Gs2.Gs2Enhance.Request
             key += Force + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new CreateProgressByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                RateName = RateName,
-                TargetItemSetId = TargetItemSetId,
-                Materials = Materials,
-                Force = Force,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateProgressByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::userId");
-            }
-            if (RateName != y.RateName) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::rateName");
-            }
-            if (TargetItemSetId != y.TargetItemSetId) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::targetItemSetId");
-            }
-            if (Materials != y.Materials) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::materials");
-            }
-            if (Force != y.Force) {
-                throw new ArithmeticException("mismatch parameter values CreateProgressByUserIdRequest::force");
-            }
-            return new CreateProgressByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                RateName = RateName,
-                TargetItemSetId = TargetItemSetId,
-                Materials = Materials,
-                Force = Force,
-            };
-        }
     }
 }

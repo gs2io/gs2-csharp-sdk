@@ -337,5 +337,92 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RarityParameterStatusId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.rarityParameterStatusId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ParameterName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.parameterName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PropertyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.propertyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ParameterValues.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.parameterValues.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterStatus", "enchant.rarityParameterStatus.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RarityParameterStatus {
+                RarityParameterStatusId = RarityParameterStatusId,
+                UserId = UserId,
+                ParameterName = ParameterName,
+                PropertyId = PropertyId,
+                ParameterValues = ParameterValues.Clone() as Gs2.Gs2Enchant.Model.RarityParameterValue[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

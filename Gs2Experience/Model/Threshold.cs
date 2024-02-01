@@ -119,5 +119,34 @@ namespace Gs2.Gs2Experience.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("threshold", "experience.threshold.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Values.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("threshold", "experience.threshold.values.error.tooFew"),
+                    });
+                }
+                if (Values.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("threshold", "experience.threshold.values.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Threshold {
+                Metadata = Metadata,
+                Values = Values.Clone() as long[],
+            };
+        }
     }
 }

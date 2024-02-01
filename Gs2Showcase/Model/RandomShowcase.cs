@@ -303,5 +303,97 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RandomShowcaseId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.randomShowcaseId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MaximumNumberOfChoice < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.maximumNumberOfChoice.error.invalid"),
+                    });
+                }
+                if (MaximumNumberOfChoice > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.maximumNumberOfChoice.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (DisplayItems.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.displayItems.error.tooFew"),
+                    });
+                }
+                if (DisplayItems.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.displayItems.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (BaseTimestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.baseTimestamp.error.invalid"),
+                    });
+                }
+                if (BaseTimestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.baseTimestamp.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ResetIntervalHours < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.resetIntervalHours.error.invalid"),
+                    });
+                }
+                if (ResetIntervalHours > 168) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.resetIntervalHours.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (SalesPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("randomShowcase", "showcase.randomShowcase.salesPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RandomShowcase {
+                RandomShowcaseId = RandomShowcaseId,
+                Name = Name,
+                Metadata = Metadata,
+                MaximumNumberOfChoice = MaximumNumberOfChoice,
+                DisplayItems = DisplayItems.Clone() as Gs2.Gs2Showcase.Model.RandomDisplayItemModel[],
+                BaseTimestamp = BaseTimestamp,
+                ResetIntervalHours = ResetIntervalHours,
+                SalesPeriodEventId = SalesPeriodEventId,
+            };
+        }
     }
 }

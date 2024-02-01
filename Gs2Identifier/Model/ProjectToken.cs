@@ -80,5 +80,21 @@ namespace Gs2.Gs2Identifier.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Token.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("projectToken", "identifier.projectToken.token.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ProjectToken {
+                Token = Token,
+            };
+        }
     }
 }

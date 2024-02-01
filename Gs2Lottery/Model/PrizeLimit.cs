@@ -260,5 +260,81 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PrizeLimitId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.prizeLimitId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PrizeId.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.prizeId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DrawnCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.drawnCount.error.invalid"),
+                    });
+                }
+                if (DrawnCount > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.drawnCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeLimit", "lottery.prizeLimit.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new PrizeLimit {
+                PrizeLimitId = PrizeLimitId,
+                PrizeId = PrizeId,
+                DrawnCount = DrawnCount,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

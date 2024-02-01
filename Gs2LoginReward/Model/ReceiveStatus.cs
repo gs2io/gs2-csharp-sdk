@@ -318,5 +318,97 @@ namespace Gs2.Gs2LoginReward.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ReceiveStatusId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.receiveStatusId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (BonusModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.bonusModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReceivedSteps.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.receivedSteps.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (LastReceivedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.lastReceivedAt.error.invalid"),
+                    });
+                }
+                if (LastReceivedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.lastReceivedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("receiveStatus", "loginReward.receiveStatus.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ReceiveStatus {
+                ReceiveStatusId = ReceiveStatusId,
+                BonusModelName = BonusModelName,
+                UserId = UserId,
+                ReceivedSteps = ReceivedSteps.Clone() as bool[],
+                LastReceivedAt = LastReceivedAt,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2StateMachine.Domain.Iterator;
+using Gs2.Gs2StateMachine.Model.Cache;
 using Gs2.Gs2StateMachine.Request;
 using Gs2.Gs2StateMachine.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2StateMachine.Domain.Model
     public partial class StatusDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StateMachineRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _statusName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string StatusName => _statusName;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string StatusName { get; }
 
         public StatusDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,41 +77,9 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             this._client = new Gs2StateMachineRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._statusName = statusName;
-            this._parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Status"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string statusName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "stateMachine",
-                namespaceName ?? "null",
-                userId ?? "null",
-                statusName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string statusName
-        )
-        {
-            return string.Join(
-                ":",
-                statusName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.StatusName = statusName;
         }
 
     }
@@ -125,64 +90,23 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         private IFuture<Gs2.Gs2StateMachine.Model.Status> GetFuture(
             GetStatusByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Model.Status> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithStatusName(this.StatusName);
-                var future = this._client.GetStatusByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetStatusByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            request.StatusName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2StateMachine.Model.Status>(Impl);
@@ -197,53 +121,15 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             #endif
             GetStatusByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithStatusName(this.StatusName);
-            GetStatusByUserIdResult result = null;
-            try {
-                result = await this._client.GetStatusByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.StatusName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetStatusByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -252,45 +138,23 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> EmitFuture(
             EmitByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithStatusName(this.StatusName);
-                var future = this._client.EmitByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.EmitByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -307,48 +171,18 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             #endif
             EmitByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithStatusName(this.StatusName);
-            EmitByUserIdResult result = null;
-                result = await this._client.EmitByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.EmitByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to EmitFuture.")]
-        public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> Emit(
-            EmitByUserIdRequest request
-        ) {
-            return EmitFuture(request);
         }
         #endif
 
@@ -356,45 +190,23 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> ReportFuture(
             ReportByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithStatusName(this.StatusName);
-                var future = this._client.ReportByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ReportByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -411,48 +223,18 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             #endif
             ReportByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithStatusName(this.StatusName);
-            ReportByUserIdResult result = null;
-                result = await this._client.ReportByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ReportByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ReportFuture.")]
-        public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> Report(
-            ReportByUserIdRequest request
-        ) {
-            return ReportFuture(request);
         }
         #endif
 
@@ -460,59 +242,25 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> DeleteFuture(
             DeleteStatusByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithStatusName(this.StatusName);
-                var future = this._client.DeleteStatusByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteStatusByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            request.StatusName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2StateMachine.Model.Status>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -529,60 +277,20 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             #endif
             DeleteStatusByUserIdRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithStatusName(this.StatusName);
-            DeleteStatusByUserIdResult result = null;
             try {
-                result = await this._client.DeleteStatusByUserIdAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithStatusName(this.StatusName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteStatusByUserIdAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.StatusName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2StateMachine.Model.Status>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> Delete(
-            DeleteStatusByUserIdRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -590,59 +298,23 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> ExitStateMachineFuture(
             ExitStateMachineByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithStatusName(this.StatusName);
-                var future = this._client.ExitStateMachineByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ExitStateMachineByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            request.StatusName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2StateMachine.Model.Status>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -659,60 +331,18 @@ namespace Gs2.Gs2StateMachine.Domain.Model
             #endif
             ExitStateMachineByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithStatusName(this.StatusName);
-            ExitStateMachineByUserIdResult result = null;
-            try {
-                result = await this._client.ExitStateMachineByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    request.StatusName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2StateMachine.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2StateMachine.Model.Status>(parentKey, key);
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ExitStateMachineByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ExitStateMachineFuture.")]
-        public IFuture<Gs2.Gs2StateMachine.Domain.Model.StatusDomain> ExitStateMachine(
-            ExitStateMachineByUserIdRequest request
-        ) {
-            return ExitStateMachineFuture(request);
         }
         #endif
 
@@ -725,55 +355,36 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2StateMachine.Model.Status> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2StateMachine.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        this.StatusName?.ToString()
+                var (value, find) = (null as Gs2.Gs2StateMachine.Model.Status).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.StatusName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2StateMachine.Model.Status).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.StatusName,
+                    () => this.GetFuture(
+                        new GetStatusByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetStatusByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                                    this.StatusName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "status")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2StateMachine.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            this.StatusName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2StateMachine.Model.Status>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2StateMachine.Model.Status> ModelAsync()
@@ -781,52 +392,24 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public async Task<Gs2.Gs2StateMachine.Model.Status> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2StateMachine.Model.Status>(
-                _parentKey,
-                Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.StatusName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2StateMachine.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                        this.StatusName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetStatusByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                                    this.StatusName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2StateMachine.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "status")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2StateMachine.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                            this.StatusName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2StateMachine.Model.Status).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.StatusName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2StateMachine.Model.Status).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.StatusName,
+                () => this.GetAsync(
+                    new GetStatusByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -855,20 +438,23 @@ namespace Gs2.Gs2StateMachine.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2StateMachine.Model.Status>(
-                _parentKey,
-                Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.StatusName.ToString()
-                )
+            (null as Gs2.Gs2StateMachine.Model.Status).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.StatusName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2StateMachine.Model.Status> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.StatusName.ToString()
+                (null as Gs2.Gs2StateMachine.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2StateMachine.Model.Status).CacheKey(
+                    this.StatusName
                 ),
                 callback,
                 () =>
@@ -887,9 +473,12 @@ namespace Gs2.Gs2StateMachine.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2StateMachine.Model.Status>(
-                _parentKey,
-                Gs2.Gs2StateMachine.Domain.Model.StatusDomain.CreateCacheKey(
-                    this.StatusName.ToString()
+                (null as Gs2.Gs2StateMachine.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2StateMachine.Model.Status).CacheKey(
+                    this.StatusName
                 ),
                 callbackId
             );

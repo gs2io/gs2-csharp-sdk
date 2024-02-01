@@ -118,5 +118,37 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotModel", "formation.slotModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PropertyRegex.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotModel", "formation.slotModel.propertyRegex.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("slotModel", "formation.slotModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SlotModel {
+                Name = Name,
+                PropertyRegex = PropertyRegex,
+                Metadata = Metadata,
+            };
+        }
     }
 }

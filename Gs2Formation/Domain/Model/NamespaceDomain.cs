@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Formation.Domain.Iterator;
+using Gs2.Gs2Formation.Model.Cache;
 using Gs2.Gs2Formation.Request;
 using Gs2.Gs2Formation.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,15 +63,12 @@ namespace Gs2.Gs2Formation.Domain.Model
     public partial class NamespaceDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
-        private readonly string _namespaceName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
         public string Status { get; set; }
         public string Url { get; set; }
         public string UploadToken { get; set; }
         public string UploadUrl { get; set; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
 
         public NamespaceDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -79,8 +78,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             this._client = new Gs2FormationRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._parentKey = "formation:Namespace";
+            this.NamespaceName = namespaceName;
         }
 
         public Gs2.Gs2Formation.Domain.Model.CurrentFormMasterDomain CurrentFormMaster(
@@ -91,7 +89,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Formation.Model.MoldModel> MoldModels(
         )
         {
@@ -101,39 +98,35 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.MoldModel> MoldModelsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Formation.Model.MoldModel> MoldModels(
-            #endif
-        #else
         public DescribeMoldModelsIterator MoldModelsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeMoldModelsIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeMoldModels(
             Action<Gs2.Gs2Formation.Model.MoldModel[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModel>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "MoldModel"
+                (null as Gs2.Gs2Formation.Model.MoldModel).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callback
             );
@@ -159,9 +152,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModel>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "MoldModel"
+                (null as Gs2.Gs2Formation.Model.MoldModel).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callbackId
             );
@@ -177,7 +169,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModel> PropertyFormModels(
         )
         {
@@ -187,39 +178,35 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel> PropertyFormModelsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModel> PropertyFormModels(
-            #endif
-        #else
         public DescribePropertyFormModelsIterator PropertyFormModelsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribePropertyFormModelsIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribePropertyFormModels(
             Action<Gs2.Gs2Formation.Model.PropertyFormModel[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModel>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "PropertyFormModel"
+                (null as Gs2.Gs2Formation.Model.PropertyFormModel).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callback
             );
@@ -245,9 +232,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModel>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "PropertyFormModel"
+                (null as Gs2.Gs2Formation.Model.PropertyFormModel).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callbackId
             );
@@ -283,7 +269,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModelMaster> PropertyFormModelMasters(
         )
         {
@@ -293,39 +278,35 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModelMaster> PropertyFormModelMastersAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModelMaster> PropertyFormModelMasters(
-            #endif
-        #else
         public DescribePropertyFormModelMastersIterator PropertyFormModelMastersAsync(
-        #endif
+            #endif
         )
         {
             return new DescribePropertyFormModelMastersIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribePropertyFormModelMasters(
             Action<Gs2.Gs2Formation.Model.PropertyFormModelMaster[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "PropertyFormModelMaster"
+                (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callback
             );
@@ -351,9 +332,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.PropertyFormModelMaster>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "PropertyFormModelMaster"
+                (null as Gs2.Gs2Formation.Model.PropertyFormModelMaster).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callbackId
             );
@@ -369,7 +349,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Formation.Model.FormModelMaster> FormModelMasters(
         )
         {
@@ -379,39 +358,35 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.FormModelMaster> FormModelMastersAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Formation.Model.FormModelMaster> FormModelMasters(
-            #endif
-        #else
         public DescribeFormModelMastersIterator FormModelMastersAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeFormModelMastersIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeFormModelMasters(
             Action<Gs2.Gs2Formation.Model.FormModelMaster[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "FormModelMaster"
+                (null as Gs2.Gs2Formation.Model.FormModelMaster).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callback
             );
@@ -437,9 +412,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.FormModelMaster>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "FormModelMaster"
+                (null as Gs2.Gs2Formation.Model.FormModelMaster).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callbackId
             );
@@ -455,7 +429,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Formation.Model.MoldModelMaster> MoldModelMasters(
         )
         {
@@ -465,39 +438,35 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.MoldModelMaster> MoldModelMastersAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Formation.Model.MoldModelMaster> MoldModelMasters(
-            #endif
-        #else
         public DescribeMoldModelMastersIterator MoldModelMastersAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeMoldModelMastersIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeMoldModelMasters(
             Action<Gs2.Gs2Formation.Model.MoldModelMaster[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "MoldModelMaster"
+                (null as Gs2.Gs2Formation.Model.MoldModelMaster).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callback
             );
@@ -523,9 +492,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Formation.Model.MoldModelMaster>(
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                    this.NamespaceName,
-                    "MoldModelMaster"
+                (null as Gs2.Gs2Formation.Model.MoldModelMaster).CacheParentKey(
+                    this.NamespaceName
                 ),
                 callbackId
             );
@@ -541,29 +509,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
         }
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "formation",
-                namespaceName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string namespaceName
-        )
-        {
-            return string.Join(
-                ":",
-                namespaceName ?? "null"
-            );
-        }
-
     }
 
     public partial class NamespaceDomain {
@@ -572,46 +517,21 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> GetStatusFuture(
             GetNamespaceStatusRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.GetNamespaceStatusFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetNamespaceStatusFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            request.NamespaceName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "namespace")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Status = domain.Status = result?.Status;
                 self.OnComplete(domain);
@@ -628,47 +548,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             GetNamespaceStatusRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            GetNamespaceStatusResult result = null;
-            try {
-                result = await this._client.GetNamespaceStatusAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    request.NamespaceName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "namespace")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetNamespaceStatusAsync(request)
+            );
+            var domain = this;
             this.Status = domain.Status = result?.Status;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to GetStatusFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> GetStatus(
-            GetNamespaceStatusRequest request
-        ) {
-            return GetStatusFuture(request);
         }
         #endif
 
@@ -676,62 +565,21 @@ namespace Gs2.Gs2Formation.Domain.Model
         private IFuture<Gs2.Gs2Formation.Model.Namespace> GetFuture(
             GetNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Namespace> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.GetNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            request.NamespaceName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "namespace")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "formation",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Namespace>(Impl);
@@ -746,51 +594,13 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             GetNamespaceRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            GetNamespaceResult result = null;
-            try {
-                result = await this._client.GetNamespaceAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    request.NamespaceName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "namespace")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "formation",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetNamespaceAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -799,43 +609,21 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> UpdateFuture(
             UpdateNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.UpdateNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "formation",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -852,46 +640,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             UpdateNamespaceRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            UpdateNamespaceResult result = null;
-                result = await this._client.UpdateNamespaceAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "formation",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateNamespaceAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> Update(
-            UpdateNamespaceRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -899,57 +657,23 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> DeleteFuture(
             DeleteNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.DeleteNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            request.NamespaceName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "namespace")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "formation",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Formation.Model.Namespace>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -966,58 +690,18 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             DeleteNamespaceRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName);
-            DeleteNamespaceResult result = null;
             try {
-                result = await this._client.DeleteNamespaceAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    request.NamespaceName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteNamespaceAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "namespace")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "formation",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Formation.Model.Namespace>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.NamespaceDomain> Delete(
-            DeleteNamespaceRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -1025,45 +709,24 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain> CreatePropertyFormModelMasterFuture(
             CreatePropertyFormModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.CreatePropertyFormModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreatePropertyFormModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "PropertyFormModelMaster"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain(
                     this._gs2,
-                    request.NamespaceName,
+                    this.NamespaceName,
                     result?.Item?.Name
                 );
 
@@ -1081,49 +744,20 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             CreatePropertyFormModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            CreatePropertyFormModelMasterResult result = null;
-                result = await this._client.CreatePropertyFormModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "PropertyFormModelMaster"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain(
-                    this._gs2,
-                    request.NamespaceName,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreatePropertyFormModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreatePropertyFormModelMasterFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.PropertyFormModelMasterDomain> CreatePropertyFormModelMaster(
-            CreatePropertyFormModelMasterRequest request
-        ) {
-            return CreatePropertyFormModelMasterFuture(request);
         }
         #endif
 
@@ -1131,45 +765,24 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain> CreateFormModelMasterFuture(
             CreateFormModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.CreateFormModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateFormModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "FormModelMaster"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain(
                     this._gs2,
-                    request.NamespaceName,
+                    this.NamespaceName,
                     result?.Item?.Name
                 );
 
@@ -1187,49 +800,20 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             CreateFormModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            CreateFormModelMasterResult result = null;
-                result = await this._client.CreateFormModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "FormModelMaster"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain(
-                    this._gs2,
-                    request.NamespaceName,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateFormModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateFormModelMasterFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.FormModelMasterDomain> CreateFormModelMaster(
-            CreateFormModelMasterRequest request
-        ) {
-            return CreateFormModelMasterFuture(request);
         }
         #endif
 
@@ -1237,45 +821,24 @@ namespace Gs2.Gs2Formation.Domain.Model
         public IFuture<Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain> CreateMoldModelMasterFuture(
             CreateMoldModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName);
-                var future = this._client.CreateMoldModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateMoldModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "MoldModelMaster"
-                        );
-                        var key = Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain(
                     this._gs2,
-                    request.NamespaceName,
+                    this.NamespaceName,
                     result?.Item?.Name
                 );
 
@@ -1293,49 +856,20 @@ namespace Gs2.Gs2Formation.Domain.Model
             #endif
             CreateMoldModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName);
-            CreateMoldModelMasterResult result = null;
-                result = await this._client.CreateMoldModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "MoldModelMaster"
-                    );
-                    var key = Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain(
-                    this._gs2,
-                    request.NamespaceName,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateMoldModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateMoldModelMasterFuture.")]
-        public IFuture<Gs2.Gs2Formation.Domain.Model.MoldModelMasterDomain> CreateMoldModelMaster(
-            CreateMoldModelMasterRequest request
-        ) {
-            return CreateMoldModelMasterFuture(request);
         }
         #endif
 
@@ -1348,60 +882,32 @@ namespace Gs2.Gs2Formation.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Namespace> self)
             {
-                var parentKey = string.Join(
-                    ":",
-                    "formation",
-                    "Namespace"
+                var (value, find) = (null as Gs2.Gs2Formation.Model.Namespace).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName
                 );
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Namespace>(
-                    parentKey,
-                    Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        this.NamespaceName?.ToString()
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Formation.Model.Namespace).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    () => this.GetFuture(
+                        new GetNamespaceRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetNamespaceRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                    this.NamespaceName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                                parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "namespace")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Namespace>(
-                        parentKey,
-                        Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            this.NamespaceName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Namespace>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Formation.Model.Namespace> ModelAsync()
@@ -1409,57 +915,20 @@ namespace Gs2.Gs2Formation.Domain.Model
         public async Task<Gs2.Gs2Formation.Model.Namespace> ModelAsync()
             #endif
         {
-            var parentKey = string.Join(
-                ":",
-                "formation",
-                "Namespace"
+            var (value, find) = (null as Gs2.Gs2Formation.Model.Namespace).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName
             );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Namespace>(
-                    parentKey,
-                    Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        this.NamespaceName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetNamespaceRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                                    this.NamespaceName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Formation.Model.Namespace>(
-                            parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "namespace")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Formation.Model.Namespace>(
-                        parentKey,
-                        Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            this.NamespaceName?.ToString()
-                        )
-                    );
-                }
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Formation.Model.Namespace).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                () => this.GetAsync(
+                    new GetNamespaceRequest()
+                )
+            );
         }
         #endif
 
@@ -1488,20 +957,19 @@ namespace Gs2.Gs2Formation.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Formation.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName.ToString()
-                )
+            (null as Gs2.Gs2Formation.Model.Namespace).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Formation.Model.Namespace> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName.ToString()
+                (null as Gs2.Gs2Formation.Model.Namespace).CacheParentKey(
+                ),
+                (null as Gs2.Gs2Formation.Model.Namespace).CacheKey(
+                    this.NamespaceName
                 ),
                 callback,
                 () =>
@@ -1520,9 +988,10 @@ namespace Gs2.Gs2Formation.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Formation.Model.Namespace>(
-                _parentKey,
-                Gs2.Gs2Formation.Domain.Model.NamespaceDomain.CreateCacheKey(
-                    this.NamespaceName.ToString()
+                (null as Gs2.Gs2Formation.Model.Namespace).CacheParentKey(
+                ),
+                (null as Gs2.Gs2Formation.Model.Namespace).CacheKey(
+                    this.NamespaceName
                 ),
                 callbackId
             );

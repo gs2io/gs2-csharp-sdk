@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2JobQueue.Domain.Iterator;
+using Gs2.Gs2JobQueue.Model.Cache;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
     public partial class DeadLetterJobDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _deadLetterJobName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string DeadLetterJobName => _deadLetterJobName;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string DeadLetterJobName { get; }
 
         public DeadLetterJobDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,41 +77,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._client = new Gs2JobQueueRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._deadLetterJobName = deadLetterJobName;
-            this._parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "DeadLetterJob"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string deadLetterJobName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "jobQueue",
-                namespaceName ?? "null",
-                userId ?? "null",
-                deadLetterJobName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string deadLetterJobName
-        )
-        {
-            return string.Join(
-                ":",
-                deadLetterJobName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.DeadLetterJobName = deadLetterJobName;
         }
 
     }
@@ -125,64 +90,23 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         private IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> GetFuture(
             GetDeadLetterJobByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithDeadLetterJobName(this.DeadLetterJobName);
-                var future = this._client.GetDeadLetterJobByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetDeadLetterJobByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                            request.DeadLetterJobName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "deadLetterJob")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "DeadLetterJob"
-                        );
-                        var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob>(Impl);
@@ -197,53 +121,15 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             #endif
             GetDeadLetterJobByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithDeadLetterJobName(this.DeadLetterJobName);
-            GetDeadLetterJobByUserIdResult result = null;
-            try {
-                result = await this._client.GetDeadLetterJobByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    request.DeadLetterJobName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "deadLetterJob")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "DeadLetterJob"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetDeadLetterJobByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -252,59 +138,25 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain> DeleteFuture(
             DeleteDeadLetterJobByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithDeadLetterJobName(this.DeadLetterJobName);
-                var future = this._client.DeleteDeadLetterJobByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteDeadLetterJobByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                            request.DeadLetterJobName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "deadLetterJob")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "DeadLetterJob"
-                        );
-                        var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.DeadLetterJob>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -321,60 +173,20 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             #endif
             DeleteDeadLetterJobByUserIdRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithDeadLetterJobName(this.DeadLetterJobName);
-            DeleteDeadLetterJobByUserIdResult result = null;
             try {
-                result = await this._client.DeleteDeadLetterJobByUserIdAsync(
-                    request
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithDeadLetterJobName(this.DeadLetterJobName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteDeadLetterJobByUserIdAsync(request)
                 );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    request.DeadLetterJobName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "deadLetterJob")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "DeadLetterJob"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.DeadLetterJob>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain> Delete(
-            DeleteDeadLetterJobByUserIdRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -387,55 +199,36 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                        this.DeadLetterJobName?.ToString()
+                var (value, find) = (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DeadLetterJobName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DeadLetterJobName,
+                    () => this.GetFuture(
+                        new GetDeadLetterJobByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetDeadLetterJobByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                                    this.DeadLetterJobName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "deadLetterJob")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                        _parentKey,
-                        Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                            this.DeadLetterJobName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.DeadLetterJob>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2JobQueue.Model.DeadLetterJob> ModelAsync()
@@ -443,52 +236,24 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public async Task<Gs2.Gs2JobQueue.Model.DeadLetterJob> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    this.DeadLetterJobName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                        this.DeadLetterJobName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetDeadLetterJobByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                                    this.DeadLetterJobName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "deadLetterJob")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                        _parentKey,
-                        Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                            this.DeadLetterJobName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.DeadLetterJobName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.DeadLetterJobName,
+                () => this.GetAsync(
+                    new GetDeadLetterJobByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -517,20 +282,23 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    this.DeadLetterJobName.ToString()
-                )
+            (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.DeadLetterJobName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2JobQueue.Model.DeadLetterJob> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    this.DeadLetterJobName.ToString()
+                (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).CacheKey(
+                    this.DeadLetterJobName
                 ),
                 callback,
                 () =>
@@ -549,9 +317,12 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2JobQueue.Model.DeadLetterJob>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.DeadLetterJobDomain.CreateCacheKey(
-                    this.DeadLetterJobName.ToString()
+                (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2JobQueue.Model.DeadLetterJob).CacheKey(
+                    this.DeadLetterJobName
                 ),
                 callbackId
             );

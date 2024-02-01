@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Stamina.Domain.Iterator;
+using Gs2.Gs2Stamina.Model.Cache;
 using Gs2.Gs2Stamina.Request;
 using Gs2.Gs2Stamina.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
     public partial class MaxStaminaTableMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _maxStaminaTableName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string MaxStaminaTableName => _maxStaminaTableName;
+        public string NamespaceName { get; }
+        public string MaxStaminaTableName { get; }
 
         public MaxStaminaTableMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             this._client = new Gs2StaminaRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._maxStaminaTableName = maxStaminaTableName;
-            this._parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "MaxStaminaTableMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string maxStaminaTableName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "stamina",
-                namespaceName ?? "null",
-                maxStaminaTableName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string maxStaminaTableName
-        )
-        {
-            return string.Join(
-                ":",
-                maxStaminaTableName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.MaxStaminaTableName = maxStaminaTableName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Stamina.Domain.Model
         private IFuture<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> GetFuture(
             GetMaxStaminaTableMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithMaxStaminaTableName(this.MaxStaminaTableName);
-                var future = this._client.GetMaxStaminaTableMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetMaxStaminaTableMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            request.MaxStaminaTableName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "maxStaminaTableMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "MaxStaminaTableMaster"
-                        );
-                        var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #endif
             GetMaxStaminaTableMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithMaxStaminaTableName(this.MaxStaminaTableName);
-            GetMaxStaminaTableMasterResult result = null;
-            try {
-                result = await this._client.GetMaxStaminaTableMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                    request.MaxStaminaTableName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "maxStaminaTableMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "MaxStaminaTableMaster"
-                    );
-                    var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetMaxStaminaTableMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public IFuture<Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain> UpdateFuture(
             UpdateMaxStaminaTableMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithMaxStaminaTableName(this.MaxStaminaTableName);
-                var future = this._client.UpdateMaxStaminaTableMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateMaxStaminaTableMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "MaxStaminaTableMaster"
-                        );
-                        var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #endif
             UpdateMaxStaminaTableMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithMaxStaminaTableName(this.MaxStaminaTableName);
-            UpdateMaxStaminaTableMasterResult result = null;
-                result = await this._client.UpdateMaxStaminaTableMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "MaxStaminaTableMaster"
-                    );
-                    var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateMaxStaminaTableMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain> Update(
-            UpdateMaxStaminaTableMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public IFuture<Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain> DeleteFuture(
             DeleteMaxStaminaTableMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithMaxStaminaTableName(this.MaxStaminaTableName);
-                var future = this._client.DeleteMaxStaminaTableMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteMaxStaminaTableMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            request.MaxStaminaTableName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "maxStaminaTableMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "MaxStaminaTableMaster"
-                        );
-                        var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #endif
             DeleteMaxStaminaTableMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithMaxStaminaTableName(this.MaxStaminaTableName);
-            DeleteMaxStaminaTableMasterResult result = null;
             try {
-                result = await this._client.DeleteMaxStaminaTableMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                    request.MaxStaminaTableName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithMaxStaminaTableName(this.MaxStaminaTableName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteMaxStaminaTableMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "maxStaminaTableMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "MaxStaminaTableMaster"
-                    );
-                    var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain> Delete(
-            DeleteMaxStaminaTableMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                    _parentKey,
-                    Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                        this.MaxStaminaTableName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MaxStaminaTableName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MaxStaminaTableName,
+                    () => this.GetFuture(
+                        new GetMaxStaminaTableMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetMaxStaminaTableMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                                    this.MaxStaminaTableName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "maxStaminaTableMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                        _parentKey,
-                        Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            this.MaxStaminaTableName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public async Task<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                    this.MaxStaminaTableName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                    _parentKey,
-                    Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                        this.MaxStaminaTableName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetMaxStaminaTableMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                                    this.MaxStaminaTableName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "maxStaminaTableMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                        _parentKey,
-                        Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                            this.MaxStaminaTableName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.MaxStaminaTableName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.MaxStaminaTableName,
+                () => this.GetAsync(
+                    new GetMaxStaminaTableMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                    this.MaxStaminaTableName.ToString()
-                )
+            (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.MaxStaminaTableName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                    this.MaxStaminaTableName.ToString()
+                (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheKey(
+                    this.MaxStaminaTableName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.MaxStaminaTableMasterDomain.CreateCacheKey(
-                    this.MaxStaminaTableName.ToString()
+                (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheKey(
+                    this.MaxStaminaTableName
                 ),
                 callbackId
             );

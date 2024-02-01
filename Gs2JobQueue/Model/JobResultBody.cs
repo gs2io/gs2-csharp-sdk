@@ -137,5 +137,60 @@ namespace Gs2.Gs2JobQueue.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (TryNumber < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.tryNumber.error.invalid"),
+                    });
+                }
+                if (TryNumber > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.tryNumber.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (StatusCode < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.statusCode.error.invalid"),
+                    });
+                }
+                if (StatusCode > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.statusCode.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Result.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.result.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TryAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.tryAt.error.invalid"),
+                    });
+                }
+                if (TryAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobResultBody", "jobQueue.jobResultBody.tryAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new JobResultBody {
+                TryNumber = TryNumber,
+                StatusCode = StatusCode,
+                Result = Result,
+                TryAt = TryAt,
+            };
+        }
     }
 }

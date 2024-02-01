@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Quest.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,10 +68,8 @@ namespace Gs2.Gs2Quest.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2QuestRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _questGroupName;
-        public string NamespaceName => _namespaceName;
-        public string QuestGroupName => _questGroupName;
+        public string NamespaceName { get; }
+        public string QuestGroupName { get; }
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Quest.Model.QuestModel[] _result;
@@ -85,8 +84,8 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._questGroupName = questGroupName;
+            this.NamespaceName = namespaceName;
+            this.QuestGroupName = questGroupName;
             this._last = false;
             this._result = new Gs2.Gs2Quest.Model.QuestModel[]{};
 
@@ -104,14 +103,13 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Quest.Domain.Model.QuestGroupModelDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.QuestGroupName,
-                "QuestModel"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Quest.Model.QuestModel>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Quest.Model.QuestModel>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
+                        NamespaceName,
+                        QuestGroupName
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -125,8 +123,8 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                 var r = await this._client.DescribeQuestModelsAsync(
                 #endif
                     new Gs2.Gs2Quest.Request.DescribeQuestModelsRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithQuestGroupName(this._questGroupName)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithQuestGroupName(this.QuestGroupName)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -141,19 +139,20 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                     .ToArray();
                 this._last = true;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Quest.Domain.Model.QuestModelDomain.CreateCacheKey(
-                                    item.Name?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        QuestGroupName,
+                        item.Name
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Quest.Model.QuestModel>(
-                            parentKey
+                        (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
+                            NamespaceName,
+                            QuestGroupName
+                        )
                     );
                 }
             }
@@ -189,7 +188,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Quest.Model.QuestModel ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -252,7 +251,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Quest.Model.QuestModel ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

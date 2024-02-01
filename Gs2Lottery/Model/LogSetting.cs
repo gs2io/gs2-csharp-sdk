@@ -80,5 +80,21 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (LoggingNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("logSetting", "lottery.logSetting.loggingNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new LogSetting {
+                LoggingNamespaceId = LoggingNamespaceId,
+            };
+        }
     }
 }

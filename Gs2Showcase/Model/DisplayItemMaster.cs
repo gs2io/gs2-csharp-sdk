@@ -175,5 +175,70 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (DisplayItemId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("displayItemMaster", "showcase.displayItemMaster.displayItemId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Type) {
+                    case "salesItem":
+                    case "salesItemGroup":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("displayItemMaster", "showcase.displayItemMaster.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type == "salesItem") {
+                if (SalesItemName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("displayItemMaster", "showcase.displayItemMaster.salesItemName.error.tooLong"),
+                    });
+                }
+            }
+            if (Type == "salesItemGroup") {
+                if (SalesItemGroupName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("displayItemMaster", "showcase.displayItemMaster.salesItemGroupName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SalesPeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("displayItemMaster", "showcase.displayItemMaster.salesPeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("displayItemMaster", "showcase.displayItemMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("displayItemMaster", "showcase.displayItemMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DisplayItemMaster {
+                DisplayItemId = DisplayItemId,
+                Type = Type,
+                SalesItemName = SalesItemName,
+                SalesItemGroupName = SalesItemGroupName,
+                SalesPeriodEventId = SalesPeriodEventId,
+                Revision = Revision,
+            };
+        }
     }
 }

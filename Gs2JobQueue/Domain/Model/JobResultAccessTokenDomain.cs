@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2JobQueue.Domain.Iterator;
+using Gs2.Gs2JobQueue.Model.Cache;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Gs2Auth.Model;
@@ -48,6 +49,7 @@ using System.Collections;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
     #endif
 #else
@@ -67,8 +69,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public AccessToken AccessToken => _accessToken;
         private readonly string _jobName;
         private readonly int? _tryNumber;
-
-        private readonly String _parentKey;
         public string NamespaceName => _namespaceName;
         public string UserId => _accessToken.UserId;
         public string JobName => _jobName;
@@ -89,78 +89,30 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this._accessToken = accessToken;
             this._jobName = jobName;
             this._tryNumber = tryNumber;
-            this._parentKey = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                this.JobName,
-                "JobResult"
-            );
         }
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2JobQueue.Model.JobResult> GetFuture(
             GetJobResultRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this._accessToken?.Token)
                     .WithJobName(this.JobName)
                     .WithTryNumber(this.TryNumber);
-                var future = this._client.GetJobResultFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetJobResultFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            request.TryNumber.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "jobResult")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            this.JobName,
-                            "JobResult"
-                        );
-                        var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            resultModel.Item.TryNumber.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
@@ -175,142 +127,57 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             #endif
             GetJobResultRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this._accessToken?.Token)
                 .WithJobName(this.JobName)
                 .WithTryNumber(this.TryNumber);
-            GetJobResultResult result = null;
-            try {
-                result = await this._client.GetJobResultAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                    request.TryNumber.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "jobResult")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2JobQueue.Domain.Model.JobDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.JobName,
-                        "JobResult"
-                    );
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        resultModel.Item.TryNumber.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetJobResultAsync(request)
+            );
             return result?.Item;
         }
         #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string jobName,
-            string tryNumber,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "jobQueue",
-                namespaceName ?? "null",
-                userId ?? "null",
-                jobName ?? "null",
-                tryNumber ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string tryNumber
-        )
-        {
-            return string.Join(
-                ":",
-                tryNumber ?? "null"
-            );
-        }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Model.JobResult> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        this.TryNumber?.ToString()
+                var (value, find) = (null as Gs2.Gs2JobQueue.Model.JobResult).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName,
+                    this.TryNumber ?? default
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2JobQueue.Model.JobResult).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName,
+                    this.TryNumber ?? default,
+                    () => this.GetFuture(
+                        new GetJobResultRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetJobResultRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                                    this.TryNumber?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "jobResult")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
-                        _parentKey,
-                        Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            this.TryNumber?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2JobQueue.Model.JobResult> ModelAsync()
@@ -318,101 +185,55 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public async Task<Gs2.Gs2JobQueue.Model.JobResult> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.JobResult>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                    this.TryNumber?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        this.TryNumber?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetJobResultRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                                    this.TryNumber?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "jobResult")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
-                        _parentKey,
-                        Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                            this.TryNumber?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2JobQueue.Model.JobResult).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.JobName,
+                this.TryNumber ?? default
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2JobQueue.Model.JobResult).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.JobName,
+                this.TryNumber ?? default,
+                () => this.GetAsync(
+                    new GetJobResultRequest()
+                )
+            );
         }
         #endif
-
+        
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
             {
-                var future = this.GetFuture(
-                    new GetJobResultRequest()
-                );
-                yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                    {
-                        var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                                this.TryNumber?.ToString()
-                            );
-                        this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "jobResult")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        this.TryNumber?.ToString()
+                var future = (null as Gs2.Gs2JobQueue.Model.JobResult).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName,
+                    this.TryNumber ?? default,
+                    () => this.GetFuture(
+                        new GetJobResultRequest()
                     )
                 );
-                self.OnComplete(value);
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
         }
         #endif
+        
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheAsync()
@@ -420,44 +241,16 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public async Task<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.JobResult>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                    this.TryNumber?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                try {
-                    await this.GetAsync(
-                        new GetJobResultRequest()
-                    );
-                } catch (Gs2.Core.Exception.NotFoundException e) {
-                    var key = Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                                this.TryNumber?.ToString()
-                            );
-                    this._gs2.Cache.Put<Gs2.Gs2JobQueue.Model.JobResult>(
-                        _parentKey,
-                        key,
-                        null,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-
-                    if (e.errors.Length == 0 || e.errors[0].component != "jobResult")
-                    {
-                        throw;
-                    }
-                }
-                var (value, _) = _gs2.Cache.Get<Gs2.Gs2JobQueue.Model.JobResult>(
-                    _parentKey,
-                    Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                        this.TryNumber?.ToString()
-                    )
-                );
-                return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            }
-        # endif
+            return await (null as Gs2.Gs2JobQueue.Model.JobResult).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.JobName,
+                this.TryNumber ?? default,
+                () => this.GetAsync(
+                    new GetJobResultRequest()
+                )
+            );
         }
         #endif
 
@@ -486,20 +279,25 @@ namespace Gs2.Gs2JobQueue.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2JobQueue.Model.JobResult>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                    this.TryNumber.ToString()
-                )
+            (null as Gs2.Gs2JobQueue.Model.JobResult).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.JobName,
+                this.TryNumber ?? default
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2JobQueue.Model.JobResult> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                    this.TryNumber.ToString()
+                (null as Gs2.Gs2JobQueue.Model.JobResult).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName
+                ),
+                (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
+                    this.TryNumber ?? default
                 ),
                 callback,
                 () =>
@@ -518,9 +316,13 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2JobQueue.Model.JobResult>(
-                _parentKey,
-                Gs2.Gs2JobQueue.Domain.Model.JobResultDomain.CreateCacheKey(
-                    this.TryNumber.ToString()
+                (null as Gs2.Gs2JobQueue.Model.JobResult).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.JobName
+                ),
+                (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
+                    this.TryNumber ?? default
                 ),
                 callbackId
             );

@@ -99,5 +99,34 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MaterialItemSetId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("material", "enhance.material.materialItemSetId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("material", "enhance.material.count.error.invalid"),
+                    });
+                }
+                if (Count > 2147483645) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("material", "enhance.material.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Material {
+                MaterialItemSetId = MaterialItemSetId,
+                Count = Count,
+            };
+        }
     }
 }

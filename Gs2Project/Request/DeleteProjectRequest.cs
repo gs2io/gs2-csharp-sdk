@@ -33,14 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DeleteProjectRequest : Gs2Request<DeleteProjectRequest>
 	{
-        public string AccountToken { set; get; }
-        public string ProjectName { set; get; }
-
+         public string AccountToken { set; get; }
+         public string ProjectName { set; get; }
         public DeleteProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
         }
-
         public DeleteProjectRequest WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
@@ -86,18 +84,6 @@ namespace Gs2.Gs2Project.Request
             key += AccountToken + ":";
             key += ProjectName + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DeleteProjectRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteProjectRequest)x;
-            return this;
         }
     }
 }

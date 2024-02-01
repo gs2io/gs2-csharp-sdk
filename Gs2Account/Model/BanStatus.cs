@@ -118,5 +118,42 @@ namespace Gs2.Gs2Account.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("banStatus", "account.banStatus.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Reason.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("banStatus", "account.banStatus.reason.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReleaseTimestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("banStatus", "account.banStatus.releaseTimestamp.error.invalid"),
+                    });
+                }
+                if (ReleaseTimestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("banStatus", "account.banStatus.releaseTimestamp.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BanStatus {
+                Name = Name,
+                Reason = Reason,
+                ReleaseTimestamp = ReleaseTimestamp,
+            };
+        }
     }
 }

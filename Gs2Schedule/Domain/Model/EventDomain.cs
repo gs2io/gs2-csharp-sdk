@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Schedule.Domain.Iterator;
+using Gs2.Gs2Schedule.Model.Cache;
 using Gs2.Gs2Schedule.Request;
 using Gs2.Gs2Schedule.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,17 +63,12 @@ namespace Gs2.Gs2Schedule.Domain.Model
     public partial class EventDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ScheduleRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _eventName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string EventName { get; }
         public bool? InSchedule { get; set; }
         public long? ScheduleStartAt { get; set; }
         public long? ScheduleEndAt { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string EventName => _eventName;
 
         public EventDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -83,41 +80,9 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this._client = new Gs2ScheduleRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._eventName = eventName;
-            this._parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Event"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string eventName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "schedule",
-                namespaceName ?? "null",
-                userId ?? "null",
-                eventName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string eventName
-        )
-        {
-            return string.Join(
-                ":",
-                eventName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.EventName = eventName;
         }
 
     }
@@ -128,64 +93,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
         private IFuture<Gs2.Gs2Schedule.Model.Event> GetFuture(
             GetEventByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithEventName(this.EventName);
-                var future = this._client.GetEventByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetEventByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                            request.EventName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Schedule.Model.Event>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "event")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Event"
-                        );
-                        var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.Event>(Impl);
@@ -200,53 +124,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
             #endif
             GetEventByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithEventName(this.EventName);
-            GetEventByUserIdResult result = null;
-            try {
-                result = await this._client.GetEventByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                    request.EventName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Schedule.Model.Event>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "event")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Event"
-                    );
-                    var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetEventByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -260,55 +146,36 @@ namespace Gs2.Gs2Schedule.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.Event>(
-                    _parentKey,
-                    Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                        this.EventName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Schedule.Model.Event).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.EventName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Schedule.Model.Event).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.EventName,
+                    () => this.GetFuture(
+                        new GetEventByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetEventByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                                    this.EventName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Schedule.Model.Event>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "event")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.Event>(
-                        _parentKey,
-                        Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                            this.EventName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.Event>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Schedule.Model.Event> ModelAsync()
@@ -316,52 +183,24 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public async Task<Gs2.Gs2Schedule.Model.Event> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Event>(
-                _parentKey,
-                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                    this.EventName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.Event>(
-                    _parentKey,
-                    Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                        this.EventName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetEventByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                                    this.EventName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Schedule.Model.Event>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "event")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Schedule.Model.Event>(
-                        _parentKey,
-                        Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                            this.EventName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Schedule.Model.Event).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.EventName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Schedule.Model.Event).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.EventName,
+                () => this.GetAsync(
+                    new GetEventByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -390,20 +229,23 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Schedule.Model.Event>(
-                _parentKey,
-                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                    this.EventName.ToString()
-                )
+            (null as Gs2.Gs2Schedule.Model.Event).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.EventName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Schedule.Model.Event> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                    this.EventName.ToString()
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
+                    this.EventName
                 ),
                 callback,
                 () =>
@@ -422,9 +264,12 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Schedule.Model.Event>(
-                _parentKey,
-                Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                    this.EventName.ToString()
+                (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
+                    this.EventName
                 ),
                 callbackId
             );

@@ -44,67 +44,54 @@ namespace Gs2.Gs2Project.Model
         public string Currency { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Billing WithBillingId(string billingId) {
             this.BillingId = billingId;
             return this;
         }
-
         public Billing WithProjectName(string projectName) {
             this.ProjectName = projectName;
             return this;
         }
-
         public Billing WithYear(int? year) {
             this.Year = year;
             return this;
         }
-
         public Billing WithMonth(int? month) {
             this.Month = month;
             return this;
         }
-
         public Billing WithRegion(string region) {
             this.Region = region;
             return this;
         }
-
         public Billing WithService(string service) {
             this.Service = service;
             return this;
         }
-
         public Billing WithActivityType(string activityType) {
             this.ActivityType = activityType;
             return this;
         }
-
         public Billing WithUnit(double? unit) {
             this.Unit = unit;
             return this;
         }
-
         public Billing WithUnitName(string unitName) {
             this.UnitName = unitName;
             return this;
         }
-
         public Billing WithPrice(double? price) {
             this.Price = price;
             return this;
         }
-
         public Billing WithCurrency(string currency) {
             this.Currency = currency;
             return this;
         }
-
         public Billing WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Billing WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
@@ -189,8 +176,8 @@ namespace Gs2.Gs2Project.Model
             return new Billing()
                 .WithBillingId(!data.Keys.Contains("billingId") || data["billingId"] == null ? null : data["billingId"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)int.Parse(data["year"].ToString()))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)int.Parse(data["month"].ToString()))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
                 .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString())
@@ -198,8 +185,8 @@ namespace Gs2.Gs2Project.Model
                 .WithUnitName(!data.Keys.Contains("unitName") || data["unitName"] == null ? null : data["unitName"].ToString())
                 .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (double?)double.Parse(data["price"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -234,11 +221,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (Year != null) {
                 writer.WritePropertyName("year");
-                writer.Write(int.Parse(Year.ToString()));
+                writer.Write((Year.ToString().Contains(".") ? (int)double.Parse(Year.ToString()) : int.Parse(Year.ToString())));
             }
             if (Month != null) {
                 writer.WritePropertyName("month");
-                writer.Write(int.Parse(Month.ToString()));
+                writer.Write((Month.ToString().Contains(".") ? (int)double.Parse(Month.ToString()) : int.Parse(Month.ToString())));
             }
             if (Region != null) {
                 writer.WritePropertyName("region");
@@ -270,11 +257,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -388,6 +375,151 @@ namespace Gs2.Gs2Project.Model
                 diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (BillingId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.billingId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ProjectName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.projectName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Year < 2000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.year.error.invalid"),
+                    });
+                }
+                if (Year > 3000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.year.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Month < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.month.error.invalid"),
+                    });
+                }
+                if (Month > 12) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.month.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Region.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.region.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Service.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ActivityType.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.activityType.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Unit < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.unit.error.invalid"),
+                    });
+                }
+                if (Unit > 281474976710654) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.unit.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UnitName.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.unitName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Price < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.price.error.invalid"),
+                    });
+                }
+                if (Price > 281474976710654) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.price.error.invalid"),
+                    });
+                }
+            }
+            {
+                switch (Currency) {
+                    case "JPY":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("billing", "project.billing.currency.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billing", "project.billing.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Billing {
+                BillingId = BillingId,
+                ProjectName = ProjectName,
+                Year = Year,
+                Month = Month,
+                Region = Region,
+                Service = Service,
+                ActivityType = ActivityType,
+                Unit = Unit,
+                UnitName = UnitName,
+                Price = Price,
+                Currency = Currency,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
         }
     }
 }

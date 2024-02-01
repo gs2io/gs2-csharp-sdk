@@ -194,5 +194,74 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Timestamp < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.timestamp.error.invalid"),
+                    });
+                }
+                if (Timestamp > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.timestamp.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RequestId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.requestId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Service.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.service.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Method.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.method.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Request.Length > 10485760) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.request.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Result.Length > 10485760) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("accessLog", "log.accessLog.result.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AccessLog {
+                Timestamp = Timestamp,
+                RequestId = RequestId,
+                Service = Service,
+                Method = Method,
+                UserId = UserId,
+                Request = Request,
+                Result = Result,
+            };
+        }
     }
 }

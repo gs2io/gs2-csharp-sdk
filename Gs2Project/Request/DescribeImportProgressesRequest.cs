@@ -33,14 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class DescribeImportProgressesRequest : Gs2Request<DescribeImportProgressesRequest>
 	{
-        public string PageToken { set; get; }
-        public int? Limit { set; get; }
-
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
         public DescribeImportProgressesRequest WithPageToken(string pageToken) {
             this.PageToken = pageToken;
             return this;
         }
-
         public DescribeImportProgressesRequest WithLimit(int? limit) {
             this.Limit = limit;
             return this;
@@ -56,7 +54,7 @@ namespace Gs2.Gs2Project.Request
             }
             return new DescribeImportProgressesRequest()
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)int.Parse(data["limit"].ToString()));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
         public override JsonData ToJson()
@@ -76,7 +74,7 @@ namespace Gs2.Gs2Project.Request
             }
             if (Limit != null) {
                 writer.WritePropertyName("limit");
-                writer.Write(int.Parse(Limit.ToString()));
+                writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -86,18 +84,6 @@ namespace Gs2.Gs2Project.Request
             key += PageToken + ":";
             key += Limit + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DescribeImportProgressesRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DescribeImportProgressesRequest)x;
-            return this;
         }
     }
 }

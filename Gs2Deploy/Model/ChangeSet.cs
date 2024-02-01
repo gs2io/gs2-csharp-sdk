@@ -118,5 +118,42 @@ namespace Gs2.Gs2Deploy.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ResourceName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("changeSet", "deploy.changeSet.resourceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ResourceType.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("changeSet", "deploy.changeSet.resourceType.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Operation) {
+                    case "create":
+                    case "update":
+                    case "delete":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("changeSet", "deploy.changeSet.operation.error.invalid"),
+                        });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ChangeSet {
+                ResourceName = ResourceName,
+                ResourceType = ResourceType,
+                Operation = Operation,
+            };
+        }
     }
 }

@@ -118,5 +118,52 @@ namespace Gs2.Gs2Version.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Major < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("version", "version.version.major.error.invalid"),
+                    });
+                }
+                if (Major > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("version", "version.version.major.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Minor < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("version", "version.version.minor.error.invalid"),
+                    });
+                }
+                if (Minor > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("version", "version.version.minor.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Micro < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("version", "version.version.micro.error.invalid"),
+                    });
+                }
+                if (Micro > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("version", "version.version.micro.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Version_ {
+                Major = Major,
+                Minor = Minor,
+                Micro = Micro,
+            };
+        }
     }
 }

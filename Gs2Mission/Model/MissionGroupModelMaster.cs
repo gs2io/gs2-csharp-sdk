@@ -357,5 +357,149 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MissionGroupId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.missionGroupId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (ResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetType.error.invalid"),
+                        });
+                }
+            }
+            if (ResetType == "monthly") {
+                if (ResetDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetDayOfMonth.error.invalid"),
+                    });
+                }
+                if (ResetDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "weekly") {
+                switch (ResetDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((ResetType =="monthly" || ResetType == "weekly" || ResetType == "daily")) {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.resetHour.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CompleteNotificationNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.completeNotificationNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("missionGroupModelMaster", "mission.missionGroupModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MissionGroupModelMaster {
+                MissionGroupId = MissionGroupId,
+                Name = Name,
+                Metadata = Metadata,
+                Description = Description,
+                ResetType = ResetType,
+                ResetDayOfMonth = ResetDayOfMonth,
+                ResetDayOfWeek = ResetDayOfWeek,
+                ResetHour = ResetHour,
+                CompleteNotificationNamespaceId = CompleteNotificationNamespaceId,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

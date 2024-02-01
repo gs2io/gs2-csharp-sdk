@@ -25,7 +25,9 @@
 // ReSharper disable UseObjectOrCollectionInitializer
 // ReSharper disable ArrangeThisQualifier
 // ReSharper disable NotAccessedField.Local
+// ReSharper disable InconsistentNaming
 
+#pragma warning disable CS0414 // Field is assigned but its value is never used
 #pragma warning disable 1998
 
 using System;
@@ -38,6 +40,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Ranking.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,14 +70,10 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2RankingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _categoryName;
-        private readonly string _userId;
-        private readonly string _additionalScopeName;
-        public string NamespaceName => _namespaceName;
-        public string CategoryName => _categoryName;
-        public string UserId => _userId;
-        public string AdditionalScopeName => _additionalScopeName;
+        public string NamespaceName { get; }
+        public string CategoryName { get; }
+        public string UserId { get; }
+        public string AdditionalScopeName { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -87,15 +86,15 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             Gs2RankingRestClient client,
             string namespaceName,
             string categoryName,
-            string userId,
-            string additionalScopeName
+            string userId = null,
+            string additionalScopeName = null
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._categoryName = categoryName;
-            this._userId = userId;
-            this._additionalScopeName = additionalScopeName;
+            this.NamespaceName = namespaceName;
+            this.CategoryName = categoryName;
+            this.UserId = userId;
+            this.AdditionalScopeName = additionalScopeName;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Ranking.Model.Ranking[]{};
@@ -114,21 +113,18 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = string.Join(
-                ":",
-                this.NamespaceName,
-                this.UserId,
-                this.CategoryName,
-                this.AdditionalScopeName,
-                "Ranking"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Ranking.Model.Ranking>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Ranking.Model.Ranking>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
+                        NamespaceName,
+                        UserId ?? default,
+                        CategoryName,
+                        AdditionalScopeName ?? default
+                    ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this._categoryName == null || item.CategoryName == this._categoryName)
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -140,10 +136,10 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 var r = await this._client.DescribeRankingssByUserIdAsync(
                 #endif
                     new Gs2.Gs2Ranking.Request.DescribeRankingssByUserIdRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithCategoryName(this._categoryName)
-                        .WithUserId(this._userId)
-                        .WithAdditionalScopeName(this._additionalScopeName)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithCategoryName(this.CategoryName)
+                        .WithUserId(this.UserId)
+                        .WithAdditionalScopeName(this.AdditionalScopeName)
                         .WithPageToken(this._pageToken)
                         .WithLimit(this.fetchSize)
                 );
@@ -156,25 +152,30 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 }
                 var r = future.Result;
                 #endif
-                this._result = r.Items;
+                this._result = r.Items
+                    .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
-                foreach (var item in this._result) {
-                    this._cache.Put(
-                            parentKey,
-                            string.Join(
-                                ":",
-                                item.UserId?.ToString(),
-                                item.Index?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                foreach (var item in r.Items) {
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        UserId ?? default,
+                        CategoryName,
+                        AdditionalScopeName ?? default,
+                        item.UserId,
+                        item.Index
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Ranking.Model.Ranking>(
-                            parentKey
+                        (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
+                            NamespaceName,
+                            UserId ?? default,
+                            CategoryName,
+                            AdditionalScopeName ?? default
+                        )
                     );
                 }
             }
@@ -210,7 +211,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Ranking.Model.Ranking ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -273,7 +274,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Ranking.Model.Ranking ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

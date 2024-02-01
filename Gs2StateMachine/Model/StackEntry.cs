@@ -99,5 +99,29 @@ namespace Gs2.Gs2StateMachine.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (StateMachineName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stackEntry", "stateMachine.stackEntry.stateMachineName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TaskName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stackEntry", "stateMachine.stackEntry.taskName.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new StackEntry {
+                StateMachineName = StateMachineName,
+                TaskName = TaskName,
+            };
+        }
     }
 }

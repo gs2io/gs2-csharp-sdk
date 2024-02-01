@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Exchange.Domain.Iterator;
+using Gs2.Gs2Exchange.Model.Cache;
 using Gs2.Gs2Exchange.Request;
 using Gs2.Gs2Exchange.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,17 +63,13 @@ namespace Gs2.Gs2Exchange.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExchangeRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
         public long? UnlockAt { get; set; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -82,12 +80,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._client = new Gs2ExchangeRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         public Gs2.Gs2Exchange.Domain.Model.ExchangeAccessTokenDomain Exchange(
@@ -95,13 +89,12 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return new Gs2.Gs2Exchange.Domain.Model.ExchangeAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken
+                this.AccessToken
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Exchange.Model.Await> Awaits(
-            string rateName
+            string rateName = null
         )
         {
             return new DescribeAwaitsIterator(
@@ -112,15 +105,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 rateName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Exchange.Model.Await> AwaitsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Exchange.Model.Await> Awaits(
-            #endif
-        #else
         public DescribeAwaitsIterator AwaitsAsync(
-        #endif
-            string rateName
+            #endif
+            string rateName = null
         )
         {
             return new DescribeAwaitsIterator(
@@ -129,27 +122,23 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 rateName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeAwaits(
             Action<Gs2.Gs2Exchange.Model.Await[]> callback,
-            string rateName
+            string rateName = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Exchange.Model.Await>(
-                Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Await"
+                    this.UserId
                 ),
                 callback
             );
@@ -158,7 +147,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeAwaitsWithInitialCallAsync(
             Action<Gs2.Gs2Exchange.Model.Await[]> callback,
-            string rateName
+            string rateName = null
         )
         {
             var items = await AwaitsAsync(
@@ -175,14 +164,13 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
         public void UnsubscribeAwaits(
             ulong callbackId,
-            string rateName
+            string rateName = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Exchange.Model.Await>(
-                Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Exchange.Model.Await).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Await"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -194,33 +182,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return new Gs2.Gs2Exchange.Domain.Model.AwaitAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 awaitName
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "exchange",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
             );
         }
 

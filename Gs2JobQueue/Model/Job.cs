@@ -317,5 +317,105 @@ namespace Gs2.Gs2JobQueue.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (JobId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.jobId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.scriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Args.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.args.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CurrentRetryCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.currentRetryCount.error.invalid"),
+                    });
+                }
+                if (CurrentRetryCount > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.currentRetryCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxTryCount < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.maxTryCount.error.invalid"),
+                    });
+                }
+                if (MaxTryCount > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.maxTryCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("job", "jobQueue.job.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Job {
+                JobId = JobId,
+                Name = Name,
+                UserId = UserId,
+                ScriptId = ScriptId,
+                Args = Args,
+                CurrentRetryCount = CurrentRetryCount,
+                MaxTryCount = MaxTryCount,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

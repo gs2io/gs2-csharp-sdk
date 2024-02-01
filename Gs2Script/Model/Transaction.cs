@@ -162,5 +162,37 @@ namespace Gs2.Gs2Script.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (TransactionId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("transaction", "script.transaction.transactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ConsumeActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("transaction", "script.transaction.consumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("transaction", "script.transaction.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Transaction {
+                TransactionId = TransactionId,
+                ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+            };
+        }
     }
 }

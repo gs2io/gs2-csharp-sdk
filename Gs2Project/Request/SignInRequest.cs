@@ -33,14 +33,12 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class SignInRequest : Gs2Request<SignInRequest>
 	{
-        public string Email { set; get; }
-        public string Password { set; get; }
-
+         public string Email { set; get; }
+         public string Password { set; get; }
         public SignInRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
-
         public SignInRequest WithPassword(string password) {
             this.Password = password;
             return this;
@@ -86,18 +84,6 @@ namespace Gs2.Gs2Project.Request
             key += Email + ":";
             key += Password + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply SignInRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SignInRequest)x;
-            return this;
         }
     }
 }

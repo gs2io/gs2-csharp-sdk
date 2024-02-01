@@ -284,5 +284,74 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (UnleashRateModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.unleashRateModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TargetInventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.targetInventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GradeModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.gradeModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GradeEntries.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.gradeEntries.error.tooFew"),
+                    });
+                }
+                if (GradeEntries.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModel", "enhance.unleashRateModel.gradeEntries.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new UnleashRateModel {
+                UnleashRateModelId = UnleashRateModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                TargetInventoryModelId = TargetInventoryModelId,
+                GradeModelId = GradeModelId,
+                GradeEntries = GradeEntries.Clone() as Gs2.Gs2Enhance.Model.UnleashRateEntryModel[],
+            };
+        }
     }
 }

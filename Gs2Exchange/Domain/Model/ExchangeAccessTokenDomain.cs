@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Exchange.Domain.Iterator;
+using Gs2.Gs2Exchange.Model.Cache;
 using Gs2.Gs2Exchange.Request;
 using Gs2.Gs2Exchange.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,15 +63,11 @@ namespace Gs2.Gs2Exchange.Domain.Model
     public partial class ExchangeAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExchangeRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public ExchangeAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,13 +78,8 @@ namespace Gs2.Gs2Exchange.Domain.Model
             this._client = new Gs2ExchangeRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Exchange.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Exchange"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -94,12 +87,11 @@ namespace Gs2.Gs2Exchange.Domain.Model
             ExchangeRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -116,37 +108,17 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.ExchangeFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ExchangeFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "RateModel"
-                        );
-                        var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -179,9 +151,9 @@ namespace Gs2.Gs2Exchange.Domain.Model
             ExchangeRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.ExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -191,31 +163,11 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
                 commit?.Invoke();
             }
-            ExchangeResult result = null;
-                result = await this._client.ExchangeAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "RateModel"
-                    );
-                    var key = Gs2.Gs2Exchange.Domain.Model.RateModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ExchangeAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -232,25 +184,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ExchangeFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Exchange(
-            ExchangeRequest request
-        ) {
-            return ExchangeFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> IncrementalFuture(
             IncrementalExchangeRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -267,37 +209,17 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.IncrementalExchangeFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.IncrementalExchangeFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "IncrementalRateModel"
-                        );
-                        var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -330,9 +252,9 @@ namespace Gs2.Gs2Exchange.Domain.Model
             IncrementalExchangeRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.IncrementalExchangeByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -342,31 +264,11 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
                 commit?.Invoke();
             }
-            IncrementalExchangeResult result = null;
-                result = await this._client.IncrementalExchangeAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Exchange.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "IncrementalRateModel"
-                    );
-                    var key = Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.IncrementalExchangeAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -381,36 +283,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
             return transaction;
         }
         #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to IncrementalFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Incremental(
-            IncrementalExchangeRequest request
-        ) {
-            return IncrementalFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "exchange",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
 
     }
 }

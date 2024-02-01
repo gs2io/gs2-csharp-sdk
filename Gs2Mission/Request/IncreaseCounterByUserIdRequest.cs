@@ -114,33 +114,5 @@ namespace Gs2.Gs2Mission.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new IncreaseCounterByUserIdRequest {
-                NamespaceName = NamespaceName,
-                CounterName = CounterName,
-                UserId = UserId,
-                Value = Value * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (IncreaseCounterByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values IncreaseCounterByUserIdRequest::namespaceName");
-            }
-            if (CounterName != y.CounterName) {
-                throw new ArithmeticException("mismatch parameter values IncreaseCounterByUserIdRequest::counterName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values IncreaseCounterByUserIdRequest::userId");
-            }
-            return new IncreaseCounterByUserIdRequest {
-                NamespaceName = NamespaceName,
-                CounterName = CounterName,
-                UserId = UserId,
-                Value = Value + y.Value,
-            };
-        }
     }
 }

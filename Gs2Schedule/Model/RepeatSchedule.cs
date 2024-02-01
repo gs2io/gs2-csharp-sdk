@@ -156,5 +156,78 @@ namespace Gs2.Gs2Schedule.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (RepeatCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.repeatCount.error.invalid"),
+                    });
+                }
+                if (RepeatCount > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.repeatCount.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CurrentRepeatStartAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.currentRepeatStartAt.error.invalid"),
+                    });
+                }
+                if (CurrentRepeatStartAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.currentRepeatStartAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CurrentRepeatEndAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.currentRepeatEndAt.error.invalid"),
+                    });
+                }
+                if (CurrentRepeatEndAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.currentRepeatEndAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (LastRepeatEndAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.lastRepeatEndAt.error.invalid"),
+                    });
+                }
+                if (LastRepeatEndAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.lastRepeatEndAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (NextRepeatStartAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.nextRepeatStartAt.error.invalid"),
+                    });
+                }
+                if (NextRepeatStartAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("repeatSchedule", "schedule.repeatSchedule.nextRepeatStartAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RepeatSchedule {
+                RepeatCount = RepeatCount,
+                CurrentRepeatStartAt = CurrentRepeatStartAt,
+                CurrentRepeatEndAt = CurrentRepeatEndAt,
+                LastRepeatEndAt = LastRepeatEndAt,
+                NextRepeatStartAt = NextRepeatStartAt,
+            };
+        }
     }
 }

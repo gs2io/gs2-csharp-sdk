@@ -118,5 +118,47 @@ namespace Gs2.Gs2MegaField.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (LayerName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scope", "megaField.scope.layerName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (R < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scope", "megaField.scope.r.error.invalid"),
+                    });
+                }
+                if (R > 16777214) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scope", "megaField.scope.r.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Limit < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scope", "megaField.scope.limit.error.invalid"),
+                    });
+                }
+                if (Limit > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scope", "megaField.scope.limit.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Scope {
+                LayerName = LayerName,
+                R = R,
+                Limit = Limit,
+            };
+        }
     }
 }

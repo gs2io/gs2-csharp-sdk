@@ -119,31 +119,5 @@ namespace Gs2.Gs2SkillTree.Request
             key += NodeModelNames + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new MarkReleaseByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                NodeModelNames = NodeModelNames,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (MarkReleaseByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values MarkReleaseByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values MarkReleaseByUserIdRequest::userId");
-            }
-            if (NodeModelNames != y.NodeModelNames) {
-                throw new ArithmeticException("mismatch parameter values MarkReleaseByUserIdRequest::nodeModelNames");
-            }
-            return new MarkReleaseByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                NodeModelNames = NodeModelNames,
-            };
-        }
     }
 }

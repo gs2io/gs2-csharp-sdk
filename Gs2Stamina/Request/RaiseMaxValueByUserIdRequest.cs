@@ -114,33 +114,5 @@ namespace Gs2.Gs2Stamina.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new RaiseMaxValueByUserIdRequest {
-                NamespaceName = NamespaceName,
-                StaminaName = StaminaName,
-                UserId = UserId,
-                RaiseValue = RaiseValue * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (RaiseMaxValueByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values RaiseMaxValueByUserIdRequest::namespaceName");
-            }
-            if (StaminaName != y.StaminaName) {
-                throw new ArithmeticException("mismatch parameter values RaiseMaxValueByUserIdRequest::staminaName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values RaiseMaxValueByUserIdRequest::userId");
-            }
-            return new RaiseMaxValueByUserIdRequest {
-                NamespaceName = NamespaceName,
-                StaminaName = StaminaName,
-                UserId = UserId,
-                RaiseValue = RaiseValue + y.RaiseValue,
-            };
-        }
     }
 }

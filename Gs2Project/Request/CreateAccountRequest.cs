@@ -33,32 +33,27 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CreateAccountRequest : Gs2Request<CreateAccountRequest>
 	{
-        public string Email { set; get; }
-        public string FullName { set; get; }
-        public string CompanyName { set; get; }
-        public string Password { set; get; }
-        public string Lang { set; get; }
-
+         public string Email { set; get; }
+         public string FullName { set; get; }
+         public string CompanyName { set; get; }
+         public string Password { set; get; }
+         public string Lang { set; get; }
         public CreateAccountRequest WithEmail(string email) {
             this.Email = email;
             return this;
         }
-
         public CreateAccountRequest WithFullName(string fullName) {
             this.FullName = fullName;
             return this;
         }
-
         public CreateAccountRequest WithCompanyName(string companyName) {
             this.CompanyName = companyName;
             return this;
         }
-
         public CreateAccountRequest WithPassword(string password) {
             this.Password = password;
             return this;
         }
-
         public CreateAccountRequest WithLang(string lang) {
             this.Lang = lang;
             return this;
@@ -125,18 +120,6 @@ namespace Gs2.Gs2Project.Request
             key += Password + ":";
             key += Lang + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CreateAccountRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateAccountRequest)x;
-            return this;
         }
     }
 }

@@ -126,38 +126,5 @@ namespace Gs2.Gs2Enchant.Request
             key += PropertyId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AddRarityParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ParameterName = ParameterName,
-                PropertyId = PropertyId,
-                Count = Count * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AddRarityParameterStatusByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AddRarityParameterStatusByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AddRarityParameterStatusByUserIdRequest::userId");
-            }
-            if (ParameterName != y.ParameterName) {
-                throw new ArithmeticException("mismatch parameter values AddRarityParameterStatusByUserIdRequest::parameterName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values AddRarityParameterStatusByUserIdRequest::propertyId");
-            }
-            return new AddRarityParameterStatusByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ParameterName = ParameterName,
-                PropertyId = PropertyId,
-                Count = Count + y.Count,
-            };
-        }
     }
 }

@@ -37,6 +37,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Gs2Enhance.Model.Cache;
+using Gs2.Gs2Enhance.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,19 +55,6 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Enhance:CreateProgressByUserId";
         }
-        public static Gs2.Gs2Enhance.Model.Progress Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            CreateProgressByUserIdRequest request,
-            Gs2.Gs2Enhance.Model.Progress item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -74,15 +63,6 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             CreateProgressByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                try {
-                    Transform(domain, accessToken, request, null);
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-
                 result.OnComplete(() => null);
                 yield return null;
             }
@@ -101,24 +81,8 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             AccessToken accessToken,
             CreateProgressByUserIdRequest request
         ) {
-            Transform(domain, accessToken, request, null);
-
             return () => null;
         }
 #endif
-
-        public static CreateProgressByUserIdRequest Rate(
-            CreateProgressByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static CreateProgressByUserIdRequest Rate(
-            CreateProgressByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

@@ -103,31 +103,5 @@ namespace Gs2.Gs2Exchange.Request
             key += AwaitName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DeleteAwaitByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                AwaitName = AwaitName,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteAwaitByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DeleteAwaitByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DeleteAwaitByUserIdRequest::userId");
-            }
-            if (AwaitName != y.AwaitName) {
-                throw new ArithmeticException("mismatch parameter values DeleteAwaitByUserIdRequest::awaitName");
-            }
-            return new DeleteAwaitByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                AwaitName = AwaitName,
-            };
-        }
     }
 }

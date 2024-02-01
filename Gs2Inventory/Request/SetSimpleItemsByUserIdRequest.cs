@@ -133,36 +133,5 @@ namespace Gs2.Gs2Inventory.Request
             key += Counts + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new SetSimpleItemsByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                Counts = Counts,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SetSimpleItemsByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values SetSimpleItemsByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values SetSimpleItemsByUserIdRequest::inventoryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values SetSimpleItemsByUserIdRequest::userId");
-            }
-            if (Counts != y.Counts) {
-                throw new ArithmeticException("mismatch parameter values SetSimpleItemsByUserIdRequest::counts");
-            }
-            return new SetSimpleItemsByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                Counts = Counts,
-            };
-        }
     }
 }

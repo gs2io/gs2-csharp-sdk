@@ -118,5 +118,37 @@ namespace Gs2.Gs2News.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Section.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("content", "news.content.section.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("content", "news.content.content.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (FrontMatter.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("content", "news.content.frontMatter.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Content {
+                Section = Section,
+                Value = Value,
+                FrontMatter = FrontMatter,
+            };
+        }
     }
 }

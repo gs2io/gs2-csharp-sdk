@@ -341,5 +341,122 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (BalanceParameterModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.balanceParameterModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TotalValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.totalValue.error.invalid"),
+                    });
+                }
+                if (TotalValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.totalValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                switch (InitialValueStrategy) {
+                    case "average":
+                    case "lottery":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.initialValueStrategy.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Parameters.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.parameters.error.tooFew"),
+                    });
+                }
+                if (Parameters.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.parameters.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterModelMaster", "enchant.balanceParameterModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BalanceParameterModelMaster {
+                BalanceParameterModelId = BalanceParameterModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                TotalValue = TotalValue,
+                InitialValueStrategy = InitialValueStrategy,
+                Parameters = Parameters.Clone() as Gs2.Gs2Enchant.Model.BalanceParameterValueModel[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

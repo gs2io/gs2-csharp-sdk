@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Inventory.Domain.Iterator;
+using Gs2.Gs2Inventory.Model.Cache;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Gs2Inventory.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,16 +63,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class SimpleInventoryAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly string _inventoryName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string InventoryName { get; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
-        public string InventoryName => _inventoryName;
 
         public SimpleInventoryAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -82,87 +79,39 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._client = new Gs2InventoryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._inventoryName = inventoryName;
-            this._parentKey = Gs2.Gs2Inventory.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "SimpleInventory"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.InventoryName = inventoryName;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain[]> ConsumeSimpleItemsFuture(
             ConsumeSimpleItemsRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain[]> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token)
+                    .WithAccessToken(this.AccessToken?.Token)
                     .WithInventoryName(this.InventoryName);
-                var future = this._client.ConsumeSimpleItemsFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ConsumeSimpleItemsFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    {
-                        var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            this.InventoryName,
-                            "SimpleItem"
-                        );
-                        foreach (var item in resultModel.Items) {
-                            var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                                item.ItemName.ToString()
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
-                    }
-                }
-                var domain = new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        this._accessToken,
-                        request.InventoryName,
-                        result.Items[i]?.ItemName
-                    );
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        "SimpleItem"
-                    );
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                        result.Items[i].ItemName.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        result.Items[i],
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+                var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    this.AccessToken,
+                    this.InventoryName,
+                    v?.ItemName
+                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain>();
                 self.OnComplete(domain);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain[]>(Impl);
@@ -177,78 +126,26 @@ namespace Gs2.Gs2Inventory.Domain.Model
             #endif
             ConsumeSimpleItemsRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token)
+                .WithAccessToken(this.AccessToken?.Token)
                 .WithInventoryName(this.InventoryName);
-            ConsumeSimpleItemsResult result = null;
-                result = await this._client.ConsumeSimpleItemsAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                {
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        "SimpleItem"
-                    );
-                    foreach (var item in resultModel.Items) {
-                        var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                            item.ItemName.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
-            }
-                var domain = new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain[result?.Items.Length ?? 0];
-                for (int i=0; i<result?.Items.Length; i++)
-                {
-                    domain[i] = new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(
-                        this._gs2,
-                        request.NamespaceName,
-                        this._accessToken,
-                        request.InventoryName,
-                        result.Items[i]?.ItemName
-                    );
-                    var parentKey = Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        "SimpleItem"
-                    );
-                    var key = Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain.CreateCacheKey(
-                        result.Items[i].ItemName.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        result.Items[i],
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ConsumeSimpleItemsAsync(request)
+            );
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                this.InventoryName,
+                v?.ItemName
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain>();
             return domain;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ConsumeSimpleItemsFuture.")]
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain[]> ConsumeSimpleItems(
-            ConsumeSimpleItemsRequest request
-        ) {
-            return ConsumeSimpleItemsFuture(request);
-        }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleItem> SimpleItems(
         )
         {
@@ -260,14 +157,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.SimpleItem> SimpleItemsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Inventory.Model.SimpleItem> SimpleItems(
-            #endif
-        #else
         public DescribeSimpleItemsIterator SimpleItemsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeSimpleItemsIterator(
@@ -276,27 +173,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.NamespaceName,
                 this.InventoryName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeSimpleItems(
             Action<Gs2.Gs2Inventory.Model.SimpleItem[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.SimpleItem>(
-                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName,
-                    "SimpleItem"
+                    this.InventoryName
                 ),
                 callback
             );
@@ -322,11 +215,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.SimpleItem>(
-                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Inventory.Model.SimpleItem).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InventoryName,
-                    "SimpleItem"
+                    this.InventoryName
                 ),
                 callbackId
             );
@@ -338,36 +230,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
             return new Gs2.Gs2Inventory.Domain.Model.SimpleItemAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 this.InventoryName,
                 itemName
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string inventoryName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "inventory",
-                namespaceName ?? "null",
-                userId ?? "null",
-                inventoryName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string inventoryName
-        )
-        {
-            return string.Join(
-                ":",
-                inventoryName ?? "null"
             );
         }
 
@@ -376,18 +241,22 @@ namespace Gs2.Gs2Inventory.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleInventory> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleInventory>(
-                    _parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
-                        this.InventoryName?.ToString()
-                    )
+                var (value, find) = (null as Gs2.Gs2Inventory.Model.SimpleInventory).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.InventoryName
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleInventory>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Inventory.Model.SimpleInventory> ModelAsync()
@@ -395,24 +264,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public async Task<Gs2.Gs2Inventory.Model.SimpleInventory> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.SimpleInventory>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
-                    this.InventoryName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Inventory.Model.SimpleInventory>(
-                    _parentKey,
-                    Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
-                        this.InventoryName?.ToString()
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2Inventory.Model.SimpleInventory).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.InventoryName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -441,20 +302,23 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Inventory.Model.SimpleInventory>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
-                    this.InventoryName.ToString()
-                )
+            (null as Gs2.Gs2Inventory.Model.SimpleInventory).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.InventoryName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Inventory.Model.SimpleInventory> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
-                    this.InventoryName.ToString()
+                (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheKey(
+                    this.InventoryName
                 ),
                 callback,
                 () =>
@@ -473,9 +337,12 @@ namespace Gs2.Gs2Inventory.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Inventory.Model.SimpleInventory>(
-                _parentKey,
-                Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain.CreateCacheKey(
-                    this.InventoryName.ToString()
+                (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheKey(
+                    this.InventoryName
                 ),
                 callbackId
             );

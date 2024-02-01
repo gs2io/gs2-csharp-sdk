@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2SkillTree.Domain.Iterator;
+using Gs2.Gs2SkillTree.Model.Cache;
 using Gs2.Gs2SkillTree.Request;
 using Gs2.Gs2SkillTree.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,15 +63,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
     public partial class StatusAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SkillTreeRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public StatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,13 +78,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             this._client = new Gs2SkillTreeRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Status"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -94,12 +87,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             ReleaseRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -116,37 +108,17 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.ReleaseFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ReleaseFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -179,9 +151,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             ReleaseRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -191,31 +163,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 );
                 commit?.Invoke();
             }
-            ReleaseResult result = null;
-                result = await this._client.ReleaseAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ReleaseAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -232,25 +184,15 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ReleaseFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Release(
-            ReleaseRequest request
-        ) {
-            return ReleaseFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> RestrainFuture(
             RestrainRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -267,37 +209,17 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.RestrainFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.RestrainFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -330,9 +252,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             RestrainRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -342,31 +264,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 );
                 commit?.Invoke();
             }
-            RestrainResult result = null;
-                result = await this._client.RestrainAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.RestrainAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -383,73 +285,25 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to RestrainFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Restrain(
-            RestrainRequest request
-        ) {
-            return RestrainFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2SkillTree.Model.Status> GetFuture(
             GetStatusRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Model.Status> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.GetStatusFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetStatusFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "status")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2SkillTree.Model.Status>(Impl);
@@ -464,50 +318,14 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             #endif
             GetStatusRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            GetStatusResult result = null;
-            try {
-                result = await this._client.GetStatusAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "status")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetStatusAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -517,12 +335,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             ResetRequest request,
             bool speculativeExecute = true
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -539,37 +356,17 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     var commit = speculativeExecuteFuture.Result;
                     commit?.Invoke();
                 }
-                var future = this._client.ResetFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ResetFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                     this._gs2,
                     this.AccessToken,
@@ -602,9 +399,9 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             ResetRequest request,
             bool speculativeExecute = true
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -614,31 +411,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 );
                 commit?.Invoke();
             }
-            ResetResult result = null;
-                result = await this._client.ResetAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Status"
-                    );
-                    var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ResetAsync(request)
+            );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -655,86 +432,38 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ResetFuture.")]
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> Reset(
-            ResetRequest request
-        ) {
-            return ResetFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "skillTree",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SkillTree.Model.Status> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Model.Status> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                var (value, find) = (null as Gs2.Gs2SkillTree.Model.Status).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2SkillTree.Model.Status).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    () => this.GetFuture(
+                        new GetStatusRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetStatusRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "status")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2SkillTree.Model.Status>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2SkillTree.Model.Status> ModelAsync()
@@ -742,48 +471,22 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public async Task<Gs2.Gs2SkillTree.Model.Status> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.Status>(
-                _parentKey,
-                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
-                    _parentKey,
-                    Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetStatusRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2SkillTree.Model.Status>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "status")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2SkillTree.Model.Status>(
-                        _parentKey,
-                        Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2SkillTree.Model.Status).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2SkillTree.Model.Status).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                () => this.GetAsync(
+                    new GetStatusRequest()
+                )
+            );
         }
         #endif
 
@@ -812,18 +515,21 @@ namespace Gs2.Gs2SkillTree.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2SkillTree.Model.Status>(
-                _parentKey,
-                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2SkillTree.Model.Status).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2SkillTree.Model.Status> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
                 ),
                 callback,
                 () =>
@@ -842,8 +548,11 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2SkillTree.Model.Status>(
-                _parentKey,
-                Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
+                (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
                 ),
                 callbackId
             );

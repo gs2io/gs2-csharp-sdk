@@ -103,17 +103,5 @@ namespace Gs2.Gs2Matchmaking.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CancelMatchmakingByUserIdRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CancelMatchmakingByUserIdRequest)x;
-            return this;
-        }
     }
 }

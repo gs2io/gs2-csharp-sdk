@@ -102,28 +102,5 @@ namespace Gs2.Gs2AdReward.Request
             key += UserId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AcquirePointByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Point = Point * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AcquirePointByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AcquirePointByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AcquirePointByUserIdRequest::userId");
-            }
-            return new AcquirePointByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Point = Point + y.Point,
-            };
-        }
     }
 }

@@ -379,5 +379,139 @@ namespace Gs2.Gs2Experience.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ExperienceModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.experienceModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DefaultExperience < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.defaultExperience.error.invalid"),
+                    });
+                }
+                if (DefaultExperience > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.defaultExperience.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (DefaultRankCap < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.defaultRankCap.error.invalid"),
+                    });
+                }
+                if (DefaultRankCap > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.defaultRankCap.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxRankCap < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.maxRankCap.error.invalid"),
+                    });
+                }
+                if (MaxRankCap > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.maxRankCap.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (RankThresholdName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.rankThresholdName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquireActionRates.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.acquireActionRates.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("experienceModelMaster", "experience.experienceModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ExperienceModelMaster {
+                ExperienceModelId = ExperienceModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                DefaultExperience = DefaultExperience,
+                DefaultRankCap = DefaultRankCap,
+                MaxRankCap = MaxRankCap,
+                RankThresholdName = RankThresholdName,
+                AcquireActionRates = AcquireActionRates.Clone() as Gs2.Gs2Experience.Model.AcquireActionRate[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

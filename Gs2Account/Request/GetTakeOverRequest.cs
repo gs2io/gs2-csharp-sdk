@@ -97,17 +97,5 @@ namespace Gs2.Gs2Account.Request
             key += Type + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetTakeOverRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetTakeOverRequest)x;
-            return this;
-        }
     }
 }

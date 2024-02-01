@@ -303,5 +303,97 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (SalesItemGroupId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.salesItemGroupId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SalesItemNames.Length < 2) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.salesItemNames.error.tooFew"),
+                    });
+                }
+                if (SalesItemNames.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.salesItemNames.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroupMaster", "showcase.salesItemGroupMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SalesItemGroupMaster {
+                SalesItemGroupId = SalesItemGroupId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                SalesItemNames = SalesItemNames.Clone() as string[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

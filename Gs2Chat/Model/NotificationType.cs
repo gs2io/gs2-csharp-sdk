@@ -99,5 +99,29 @@ namespace Gs2.Gs2Chat.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Category < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("notificationType", "chat.notificationType.category.error.invalid"),
+                    });
+                }
+                if (Category > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("notificationType", "chat.notificationType.category.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new NotificationType {
+                Category = Category,
+                EnableTransferMobilePushNotification = EnableTransferMobilePushNotification,
+            };
+        }
     }
 }

@@ -319,5 +319,118 @@ namespace Gs2.Gs2Enhance.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ProgressId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.progressId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RateName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.rateName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PropertyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.propertyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExperienceValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.experienceValue.error.invalid"),
+                    });
+                }
+                if (ExperienceValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.experienceValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Rate < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.rate.error.invalid"),
+                    });
+                }
+                if (Rate > 100.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.rate.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "enhance.progress.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Progress {
+                ProgressId = ProgressId,
+                UserId = UserId,
+                RateName = RateName,
+                Name = Name,
+                PropertyId = PropertyId,
+                ExperienceValue = ExperienceValue,
+                Rate = Rate,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2JobQueue.Model.Transaction;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteJobByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteJobByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DeleteJobByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DeleteJobByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteJobByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteJobByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DeleteJobByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DeleteJobByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

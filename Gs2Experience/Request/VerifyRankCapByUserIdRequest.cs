@@ -139,46 +139,5 @@ namespace Gs2.Gs2Experience.Request
             key += RankCapValue + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyRankCapByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ExperienceName = ExperienceName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                RankCapValue = RankCapValue,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyRankCapByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankCapByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankCapByUserIdRequest::userId");
-            }
-            if (ExperienceName != y.ExperienceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankCapByUserIdRequest::experienceName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankCapByUserIdRequest::verifyType");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankCapByUserIdRequest::propertyId");
-            }
-            if (RankCapValue != y.RankCapValue) {
-                throw new ArithmeticException("mismatch parameter values VerifyRankCapByUserIdRequest::rankCapValue");
-            }
-            return new VerifyRankCapByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ExperienceName = ExperienceName,
-                VerifyType = VerifyType,
-                PropertyId = PropertyId,
-                RankCapValue = RankCapValue,
-            };
-        }
     }
 }

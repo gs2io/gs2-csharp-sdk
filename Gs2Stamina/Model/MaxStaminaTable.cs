@@ -157,5 +157,50 @@ namespace Gs2.Gs2Stamina.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTable", "stamina.maxStaminaTable.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTable", "stamina.maxStaminaTable.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ExperienceModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTable", "stamina.maxStaminaTable.experienceModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Values.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTable", "stamina.maxStaminaTable.values.error.tooFew"),
+                    });
+                }
+                if (Values.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("maxStaminaTable", "stamina.maxStaminaTable.values.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new MaxStaminaTable {
+                Name = Name,
+                Metadata = Metadata,
+                ExperienceModelId = ExperienceModelId,
+                Values = Values.Clone() as int[],
+            };
+        }
     }
 }

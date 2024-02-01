@@ -227,5 +227,45 @@ namespace Gs2.Gs2MegaField.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (AreaModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("areaModel", "megaField.areaModel.areaModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("areaModel", "megaField.areaModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("areaModel", "megaField.areaModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (LayerModels.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("areaModel", "megaField.areaModel.layerModels.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AreaModel {
+                AreaModelId = AreaModelId,
+                Name = Name,
+                Metadata = Metadata,
+                LayerModels = LayerModels.Clone() as Gs2.Gs2MegaField.Model.LayerModel[],
+            };
+        }
     }
 }

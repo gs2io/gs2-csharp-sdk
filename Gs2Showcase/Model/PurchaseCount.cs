@@ -99,5 +99,34 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("purchaseCount", "showcase.purchaseCount.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("purchaseCount", "showcase.purchaseCount.count.error.invalid"),
+                    });
+                }
+                if (Count > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("purchaseCount", "showcase.purchaseCount.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new PurchaseCount {
+                Name = Name,
+                Count = Count,
+            };
+        }
     }
 }

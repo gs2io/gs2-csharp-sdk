@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Gs2.Core.Control;
 using Gs2.Core.Model;
 using Gs2.Gs2Inventory.Model;
@@ -136,49 +137,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += ItemName + ":";
             key += VerifyType + ":";
-            key += Count + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyBigItemByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                VerifyType = VerifyType,
-                Count = Count,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyBigItemByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyBigItemByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyBigItemByUserIdRequest::userId");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values VerifyBigItemByUserIdRequest::inventoryName");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values VerifyBigItemByUserIdRequest::itemName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyBigItemByUserIdRequest::verifyType");
-            }
-            if (Count != y.Count) {
-                throw new ArithmeticException("mismatch parameter values VerifyBigItemByUserIdRequest::count");
-            }
-            return new VerifyBigItemByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                VerifyType = VerifyType,
-                Count = Count,
-            };
         }
     }
 }

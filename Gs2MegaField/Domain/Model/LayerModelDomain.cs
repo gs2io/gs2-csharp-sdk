@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2MegaField.Domain.Iterator;
+using Gs2.Gs2MegaField.Model.Cache;
 using Gs2.Gs2MegaField.Request;
 using Gs2.Gs2MegaField.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2MegaField.Domain.Model
     public partial class LayerModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _areaModelName;
-        private readonly string _layerModelName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string AreaModelName => _areaModelName;
-        public string LayerModelName => _layerModelName;
+        public string NamespaceName { get; }
+        public string AreaModelName { get; }
+        public string LayerModelName { get; }
 
         public LayerModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,41 +77,9 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this._client = new Gs2MegaFieldRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._areaModelName = areaModelName;
-            this._layerModelName = layerModelName;
-            this._parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.AreaModelName,
-                "LayerModel"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string areaModelName,
-            string layerModelName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "megaField",
-                namespaceName ?? "null",
-                areaModelName ?? "null",
-                layerModelName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string layerModelName
-        )
-        {
-            return string.Join(
-                ":",
-                layerModelName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.AreaModelName = areaModelName;
+            this.LayerModelName = layerModelName;
         }
 
     }
@@ -125,64 +90,23 @@ namespace Gs2.Gs2MegaField.Domain.Model
         private IFuture<Gs2.Gs2MegaField.Model.LayerModel> GetFuture(
             GetLayerModelRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.LayerModel> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithAreaModelName(this.AreaModelName)
                     .WithLayerModelName(this.LayerModelName);
-                var future = this._client.GetLayerModelFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetLayerModelFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                            request.LayerModelName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "layerModel")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.AreaModelName,
-                            "LayerModel"
-                        );
-                        var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.LayerModel>(Impl);
@@ -197,53 +121,15 @@ namespace Gs2.Gs2MegaField.Domain.Model
             #endif
             GetLayerModelRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithAreaModelName(this.AreaModelName)
                 .WithLayerModelName(this.LayerModelName);
-            GetLayerModelResult result = null;
-            try {
-                result = await this._client.GetLayerModelAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                    request.LayerModelName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "layerModel")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2MegaField.Domain.Model.AreaModelDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.AreaModelName,
-                        "LayerModel"
-                    );
-                    var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetLayerModelAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -257,55 +143,36 @@ namespace Gs2.Gs2MegaField.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.LayerModel> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
-                    _parentKey,
-                    Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                        this.LayerModelName?.ToString()
+                var (value, find) = (null as Gs2.Gs2MegaField.Model.LayerModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    this.LayerModelName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2MegaField.Model.LayerModel).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.AreaModelName,
+                    this.LayerModelName,
+                    () => this.GetFuture(
+                        new GetLayerModelRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetLayerModelRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                                    this.LayerModelName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "layerModel")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
-                        _parentKey,
-                        Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                            this.LayerModelName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.LayerModel>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2MegaField.Model.LayerModel> ModelAsync()
@@ -313,52 +180,24 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public async Task<Gs2.Gs2MegaField.Model.LayerModel> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModel>(
-                _parentKey,
-                Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                    this.LayerModelName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
-                    _parentKey,
-                    Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                        this.LayerModelName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetLayerModelRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                                    this.LayerModelName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2MegaField.Model.LayerModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "layerModel")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2MegaField.Model.LayerModel>(
-                        _parentKey,
-                        Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                            this.LayerModelName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2MegaField.Model.LayerModel).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.AreaModelName,
+                this.LayerModelName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2MegaField.Model.LayerModel).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.AreaModelName,
+                this.LayerModelName,
+                () => this.GetAsync(
+                    new GetLayerModelRequest()
+                )
+            );
         }
         #endif
 
@@ -387,20 +226,23 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2MegaField.Model.LayerModel>(
-                _parentKey,
-                Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                    this.LayerModelName.ToString()
-                )
+            (null as Gs2.Gs2MegaField.Model.LayerModel).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.AreaModelName,
+                this.LayerModelName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2MegaField.Model.LayerModel> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                    this.LayerModelName.ToString()
+                (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
+                    this.NamespaceName,
+                    this.AreaModelName
+                ),
+                (null as Gs2.Gs2MegaField.Model.LayerModel).CacheKey(
+                    this.LayerModelName
                 ),
                 callback,
                 () =>
@@ -419,9 +261,12 @@ namespace Gs2.Gs2MegaField.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2MegaField.Model.LayerModel>(
-                _parentKey,
-                Gs2.Gs2MegaField.Domain.Model.LayerModelDomain.CreateCacheKey(
-                    this.LayerModelName.ToString()
+                (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
+                    this.NamespaceName,
+                    this.AreaModelName
+                ),
+                (null as Gs2.Gs2MegaField.Model.LayerModel).CacheKey(
+                    this.LayerModelName
                 ),
                 callbackId
             );

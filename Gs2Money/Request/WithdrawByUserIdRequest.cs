@@ -126,38 +126,5 @@ namespace Gs2.Gs2Money.Request
             key += PaidOnly + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new WithdrawByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Slot = Slot,
-                Count = Count * x,
-                PaidOnly = PaidOnly,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (WithdrawByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values WithdrawByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values WithdrawByUserIdRequest::userId");
-            }
-            if (Slot != y.Slot) {
-                throw new ArithmeticException("mismatch parameter values WithdrawByUserIdRequest::slot");
-            }
-            if (PaidOnly != y.PaidOnly) {
-                throw new ArithmeticException("mismatch parameter values WithdrawByUserIdRequest::paidOnly");
-            }
-            return new WithdrawByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                Slot = Slot,
-                Count = Count + y.Count,
-                PaidOnly = PaidOnly,
-            };
-        }
     }
 }

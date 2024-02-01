@@ -139,46 +139,5 @@ namespace Gs2.Gs2Inventory.Request
             key += GradeValue + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new AcquireItemSetWithGradeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                UserId = UserId,
-                GradeModelId = GradeModelId,
-                GradeValue = GradeValue,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (AcquireItemSetWithGradeByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetWithGradeByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetWithGradeByUserIdRequest::inventoryName");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetWithGradeByUserIdRequest::itemName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetWithGradeByUserIdRequest::userId");
-            }
-            if (GradeModelId != y.GradeModelId) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetWithGradeByUserIdRequest::gradeModelId");
-            }
-            if (GradeValue != y.GradeValue) {
-                throw new ArithmeticException("mismatch parameter values AcquireItemSetWithGradeByUserIdRequest::gradeValue");
-            }
-            return new AcquireItemSetWithGradeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                UserId = UserId,
-                GradeModelId = GradeModelId,
-                GradeValue = GradeValue,
-            };
-        }
     }
 }

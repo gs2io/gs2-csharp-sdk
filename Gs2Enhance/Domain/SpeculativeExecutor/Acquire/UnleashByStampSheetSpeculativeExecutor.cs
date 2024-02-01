@@ -35,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Gs2Enhance.Model.Cache;
+using Gs2.Gs2Enhance.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -59,23 +61,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             UnleashByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = Transaction.SpeculativeExecutor.UnleashByUserIdSpeculativeExecutor.ExecuteFuture(
-                    domain,
-                    accessToken,
-                    request
-                );
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var commit = future.Result;
-
-                result.OnComplete(() =>
-                {
-                    commit?.Invoke();
-                    return null;
-                });
+                result.OnComplete(() => null);
                 yield return null;
             }
 
@@ -93,32 +79,8 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             AccessToken accessToken,
             UnleashByUserIdRequest request
         ) {
-            var commit = await Transaction.SpeculativeExecutor.UnleashByUserIdSpeculativeExecutor.ExecuteAsync(
-                domain,
-                accessToken,
-                request
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
-                return null;
-            };
+            return () => null;
         }
 #endif
-
-        public static UnleashByUserIdRequest Rate(
-            UnleashByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static UnleashByUserIdRequest Rate(
-            UnleashByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

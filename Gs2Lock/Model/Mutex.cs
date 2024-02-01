@@ -260,5 +260,71 @@ namespace Gs2.Gs2Lock.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MutexId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.mutexId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (PropertyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.propertyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TransactionId.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.transactionId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("mutex", "lock.mutex.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Mutex {
+                MutexId = MutexId,
+                UserId = UserId,
+                PropertyId = PropertyId,
+                TransactionId = TransactionId,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

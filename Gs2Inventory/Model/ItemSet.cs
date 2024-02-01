@@ -411,5 +411,126 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ItemSetId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.itemSetId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InventoryName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.inventoryName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ItemName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.itemName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.count.error.invalid"),
+                    });
+                }
+                if (Count > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.count.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ReferenceOf.Length > 24) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.referenceOf.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (SortValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.sortValue.error.invalid"),
+                    });
+                }
+                if (SortValue > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.sortValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (ExpiresAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.expiresAt.error.invalid"),
+                    });
+                }
+                if (ExpiresAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("itemSet", "inventory.itemSet.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ItemSet {
+                ItemSetId = ItemSetId,
+                Name = Name,
+                InventoryName = InventoryName,
+                UserId = UserId,
+                ItemName = ItemName,
+                Count = Count,
+                ReferenceOf = ReferenceOf.Clone() as string[],
+                SortValue = SortValue,
+                ExpiresAt = ExpiresAt,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
+        }
     }
 }

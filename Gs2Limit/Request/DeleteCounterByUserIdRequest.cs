@@ -115,36 +115,5 @@ namespace Gs2.Gs2Limit.Request
             key += CounterName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new DeleteCounterByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LimitName = LimitName,
-                UserId = UserId,
-                CounterName = CounterName,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteCounterByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::namespaceName");
-            }
-            if (LimitName != y.LimitName) {
-                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::limitName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::userId");
-            }
-            if (CounterName != y.CounterName) {
-                throw new ArithmeticException("mismatch parameter values DeleteCounterByUserIdRequest::counterName");
-            }
-            return new DeleteCounterByUserIdRequest {
-                NamespaceName = NamespaceName,
-                LimitName = LimitName,
-                UserId = UserId,
-                CounterName = CounterName,
-            };
-        }
     }
 }

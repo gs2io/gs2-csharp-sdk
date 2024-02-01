@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Datastore.Domain.Iterator;
+using Gs2.Gs2Datastore.Model.Cache;
 using Gs2.Gs2Datastore.Request;
 using Gs2.Gs2Datastore.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,16 +63,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
     public partial class DataObjectHistoryDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _dataObjectName;
-        private readonly string _generation;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string DataObjectName => _dataObjectName;
-        public string Generation => _generation;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string DataObjectName { get; }
+        public string Generation { get; }
 
         public DataObjectHistoryDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -83,45 +79,10 @@ namespace Gs2.Gs2Datastore.Domain.Model
             this._client = new Gs2DatastoreRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._dataObjectName = dataObjectName;
-            this._generation = generation;
-            this._parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                this.DataObjectName,
-                "DataObjectHistory"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string dataObjectName,
-            string generation,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "datastore",
-                namespaceName ?? "null",
-                userId ?? "null",
-                dataObjectName ?? "null",
-                generation ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string generation
-        )
-        {
-            return string.Join(
-                ":",
-                generation ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.DataObjectName = dataObjectName;
+            this.Generation = generation;
         }
 
     }
@@ -132,66 +93,24 @@ namespace Gs2.Gs2Datastore.Domain.Model
         private IFuture<Gs2.Gs2Datastore.Model.DataObjectHistory> GetFuture(
             GetDataObjectHistoryByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.DataObjectHistory> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithDataObjectName(this.DataObjectName)
                     .WithGeneration(this.Generation);
-                var future = this._client.GetDataObjectHistoryByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetDataObjectHistoryByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                            request.Generation.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "dataObjectHistory")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            this.DataObjectName,
-                            "DataObjectHistory"
-                        );
-                        var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                            resultModel.Item.Generation.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Datastore.Model.DataObjectHistory>(Impl);
@@ -206,55 +125,16 @@ namespace Gs2.Gs2Datastore.Domain.Model
             #endif
             GetDataObjectHistoryByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithDataObjectName(this.DataObjectName)
                 .WithGeneration(this.Generation);
-            GetDataObjectHistoryByUserIdResult result = null;
-            try {
-                result = await this._client.GetDataObjectHistoryByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    request.Generation.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "dataObjectHistory")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Datastore.Domain.Model.DataObjectDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.DataObjectName,
-                        "DataObjectHistory"
-                    );
-                    var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                        resultModel.Item.Generation.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetDataObjectHistoryByUserIdAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -268,55 +148,38 @@ namespace Gs2.Gs2Datastore.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Datastore.Model.DataObjectHistory> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                    _parentKey,
-                    Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                        this.Generation?.ToString()
+                var (value, find) = (null as Gs2.Gs2Datastore.Model.DataObjectHistory).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName,
+                    this.Generation
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Datastore.Model.DataObjectHistory).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName,
+                    this.Generation,
+                    () => this.GetFuture(
+                        new GetDataObjectHistoryByUserIdRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetDataObjectHistoryByUserIdRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                                    this.Generation?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "dataObjectHistory")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                        _parentKey,
-                        Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                            this.Generation?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Datastore.Model.DataObjectHistory>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Datastore.Model.DataObjectHistory> ModelAsync()
@@ -324,52 +187,26 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public async Task<Gs2.Gs2Datastore.Model.DataObjectHistory> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                _parentKey,
-                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    this.Generation?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                    _parentKey,
-                    Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                        this.Generation?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetDataObjectHistoryByUserIdRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                                    this.Generation?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "dataObjectHistory")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                        _parentKey,
-                        Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                            this.Generation?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Datastore.Model.DataObjectHistory).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.DataObjectName,
+                this.Generation
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Datastore.Model.DataObjectHistory).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.DataObjectName,
+                this.Generation,
+                () => this.GetAsync(
+                    new GetDataObjectHistoryByUserIdRequest()
+                )
+            );
         }
         #endif
 
@@ -398,20 +235,25 @@ namespace Gs2.Gs2Datastore.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                _parentKey,
-                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    this.Generation.ToString()
-                )
+            (null as Gs2.Gs2Datastore.Model.DataObjectHistory).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.DataObjectName,
+                this.Generation
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Datastore.Model.DataObjectHistory> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    this.Generation.ToString()
+                (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName
+                ),
+                (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheKey(
+                    this.Generation
                 ),
                 callback,
                 () =>
@@ -430,9 +272,13 @@ namespace Gs2.Gs2Datastore.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Datastore.Model.DataObjectHistory>(
-                _parentKey,
-                Gs2.Gs2Datastore.Domain.Model.DataObjectHistoryDomain.CreateCacheKey(
-                    this.Generation.ToString()
+                (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.DataObjectName
+                ),
+                (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheKey(
+                    this.Generation
                 ),
                 callbackId
             );

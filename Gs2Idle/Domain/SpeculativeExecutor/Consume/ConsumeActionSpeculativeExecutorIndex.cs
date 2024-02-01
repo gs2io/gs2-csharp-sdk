@@ -31,6 +31,7 @@ using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Idle.Model.Transaction;
 using Gs2.Gs2Idle.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
@@ -59,7 +60,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DecreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Rate(request, rate);
+                    request = request.Rate(rate);
                     var future = DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -97,7 +98,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DecreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Rate(request, rate);
+                request = request.Rate(rate);
                 return await DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

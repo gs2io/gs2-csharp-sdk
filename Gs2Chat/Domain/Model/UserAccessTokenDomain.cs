@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Chat.Domain.Iterator;
+using Gs2.Gs2Chat.Model.Cache;
 using Gs2.Gs2Chat.Request;
 using Gs2.Gs2Chat.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,10 @@ namespace Gs2.Gs2Chat.Domain.Model
     public partial class UserAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public UserAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -79,60 +77,34 @@ namespace Gs2.Gs2Chat.Domain.Model
             this._client = new Gs2ChatRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Chat.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomFuture(
             CreateRoomRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.CreateRoomFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CreateRoomFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Singleton",
-                            "Room"
-                        );
-                        var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
                     this._gs2,
-                    request.NamespaceName,
-                    this._accessToken,
+                    this.NamespaceName,
+                    this.AccessToken,
                     result?.Item?.Name,
                     result?.Item?.Password
                 );
@@ -151,70 +123,39 @@ namespace Gs2.Gs2Chat.Domain.Model
             #endif
             CreateRoomRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            CreateRoomResult result = null;
-                result = await this._client.CreateRoomAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Singleton",
-                        "Room"
-                    );
-                    var key = Gs2.Gs2Chat.Domain.Model.RoomDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
-                    this._gs2,
-                    request.NamespaceName,
-                    this._accessToken,
-                    result?.Item?.Name,
-                    result?.Item?.Password
-                );
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CreateRoomAsync(request)
+            );
+            var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                result?.Item?.Name,
+                result?.Item?.Password
+            );
 
             return domain;
         }
         #endif
 
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateRoomFuture.")]
-        public IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoom(
-            CreateRoomRequest request
-        ) {
-            return CreateRoomFuture(request);
-        }
-        #endif
-
         public Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain Room(
             string roomName,
-            string password
+            string password = null
         ) {
             return new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 roomName,
                 password
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
         )
         {
@@ -225,14 +166,14 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.AccessToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> Subscribes(
-            #endif
-        #else
         public DescribeSubscribesIterator SubscribesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeSubscribesIterator(
@@ -240,26 +181,22 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeSubscribes(
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Chat.Model.Subscribe>(
-                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Subscribe"
+                    this.UserId
                 ),
                 callback
             );
@@ -285,10 +222,9 @@ namespace Gs2.Gs2Chat.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Chat.Model.Subscribe>(
-                Gs2.Gs2Chat.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Subscribe"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -300,33 +236,8 @@ namespace Gs2.Gs2Chat.Domain.Model
             return new Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this._accessToken,
+                this.AccessToken,
                 roomName
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "chat",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
             );
         }
 

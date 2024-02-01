@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Identifier.Domain.Iterator;
+using Gs2.Gs2Identifier.Model.Cache;
 using Gs2.Gs2Identifier.Request;
 using Gs2.Gs2Identifier.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2IdentifierRestClient _client;
-        private readonly string _userName;
-
-        private readonly String _parentKey;
+        public string UserName { get; }
         public string ClientSecret { get; set; }
         public string NextPageToken { get; set; }
-        public string UserName => _userName;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -76,11 +75,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
             this._client = new Gs2IdentifierRestClient(
                 gs2.RestSession
             );
-            this._userName = userName;
-            this._parentKey = "identifier:User";
+            this.UserName = userName;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Identifier.Model.Identifier> Identifiers(
         )
         {
@@ -90,39 +87,35 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this.UserName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Identifier.Model.Identifier> IdentifiersAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Identifier.Model.Identifier> Identifiers(
-            #endif
-        #else
         public DescribeIdentifiersIterator IdentifiersAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeIdentifiersIterator(
                 this._gs2.Cache,
                 this._client,
                 this.UserName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeIdentifiers(
             Action<Gs2.Gs2Identifier.Model.Identifier[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.Identifier>(
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.UserName,
-                    "Identifier"
+                (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                    this.UserName
                 ),
                 callback
             );
@@ -148,9 +141,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Identifier>(
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.UserName,
-                    "Identifier"
+                (null as Gs2.Gs2Identifier.Model.Identifier).CacheParentKey(
+                    this.UserName
                 ),
                 callbackId
             );
@@ -166,7 +158,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Identifier.Model.Password> Passwords(
         )
         {
@@ -176,39 +167,35 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 this.UserName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Identifier.Model.Password> PasswordsAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Identifier.Model.Password> Passwords(
-            #endif
-        #else
         public DescribePasswordsIterator PasswordsAsync(
-        #endif
+            #endif
         )
         {
             return new DescribePasswordsIterator(
                 this._gs2.Cache,
                 this._client,
                 this.UserName
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribePasswords(
             Action<Gs2.Gs2Identifier.Model.Password[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Identifier.Model.Password>(
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.UserName,
-                    "Password"
+                (null as Gs2.Gs2Identifier.Model.Password).CacheParentKey(
+                    this.UserName
                 ),
                 callback
             );
@@ -234,9 +221,8 @@ namespace Gs2.Gs2Identifier.Domain.Model
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Identifier.Model.Password>(
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                    this.UserName,
-                    "Password"
+                (null as Gs2.Gs2Identifier.Model.Password).CacheParentKey(
+                    this.UserName
                 ),
                 callbackId
             );
@@ -258,29 +244,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
         }
 
-        public static string CreateCacheParentKey(
-            string userName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "identifier",
-                userName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userName
-        )
-        {
-            return string.Join(
-                ":",
-                userName ?? "null"
-            );
-        }
-
     }
 
     public partial class UserDomain {
@@ -289,43 +252,21 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> UpdateFuture(
             UpdateUserRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
-                request
+                request = request
                     .WithUserName(this.UserName);
-                var future = this._client.UpdateUserFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateUserFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "identifier",
-                            "User"
-                        );
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -342,46 +283,16 @@ namespace Gs2.Gs2Identifier.Domain.Model
             #endif
             UpdateUserRequest request
         ) {
-            request
+            request = request
                 .WithUserName(this.UserName);
-            UpdateUserResult result = null;
-                result = await this._client.UpdateUserAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "User"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateUserAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> Update(
-            UpdateUserRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -389,62 +300,21 @@ namespace Gs2.Gs2Identifier.Domain.Model
         private IFuture<Gs2.Gs2Identifier.Model.User> GetFuture(
             GetUserRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.User> self)
             {
-                request
+                request = request
                     .WithUserName(this.UserName);
-                var future = this._client.GetUserFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetUserFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            request.UserName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "user")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "identifier",
-                            "User"
-                        );
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.User>(Impl);
@@ -459,51 +329,13 @@ namespace Gs2.Gs2Identifier.Domain.Model
             #endif
             GetUserRequest request
         ) {
-            request
+            request = request
                 .WithUserName(this.UserName);
-            GetUserResult result = null;
-            try {
-                result = await this._client.GetUserAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    request.UserName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "user")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "User"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetUserAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -512,57 +344,23 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> DeleteFuture(
             DeleteUserRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
             {
-                request
+                request = request
                     .WithUserName(this.UserName);
-                var future = this._client.DeleteUserFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteUserFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            request.UserName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "user")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "identifier",
-                            "User"
-                        );
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -579,58 +377,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
             #endif
             DeleteUserRequest request
         ) {
-            request
-                .WithUserName(this.UserName);
-            DeleteUserResult result = null;
             try {
-                result = await this._client.DeleteUserAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    request.UserName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithUserName(this.UserName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteUserAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "user")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "identifier",
-                        "User"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Identifier.Model.User>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> Delete(
-            DeleteUserRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -638,42 +396,21 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> CreateIdentifierFuture(
             CreateIdentifierRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> self)
             {
-                request
+                request = request
                     .WithUserName(this.UserName);
-                var future = this._client.CreateIdentifierFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateIdentifierFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.UserName,
-                            "Identifier"
-                        );
-                        var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                            resultModel.Item.ClientId.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
                     this._gs2,
                     result?.Item?.UserName,
@@ -695,50 +432,21 @@ namespace Gs2.Gs2Identifier.Domain.Model
             #endif
             CreateIdentifierRequest request
         ) {
-            request
+            request = request
                 .WithUserName(this.UserName);
-            CreateIdentifierResult result = null;
-                result = await this._client.CreateIdentifierAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.UserName,
-                        "Identifier"
-                    );
-                    var key = Gs2.Gs2Identifier.Domain.Model.IdentifierDomain.CreateCacheKey(
-                        resultModel.Item.ClientId.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
-                    this._gs2,
-                    result?.Item?.UserName,
-                    result?.Item?.ClientId
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateIdentifierAsync(request)
+            );
+            var domain = new Gs2.Gs2Identifier.Domain.Model.IdentifierDomain(
+                this._gs2,
+                result?.Item?.UserName,
+                result?.Item?.ClientId
+            );
             domain.ClientSecret = result?.ClientSecret;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateIdentifierFuture.")]
-        public IFuture<Gs2.Gs2Identifier.Domain.Model.IdentifierDomain> CreateIdentifier(
-            CreateIdentifierRequest request
-        ) {
-            return CreateIdentifierFuture(request);
         }
         #endif
 
@@ -751,60 +459,32 @@ namespace Gs2.Gs2Identifier.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.User> self)
             {
-                var parentKey = string.Join(
-                    ":",
-                    "identifier",
-                    "User"
+                var (value, find) = (null as Gs2.Gs2Identifier.Model.User).GetCache(
+                    this._gs2.Cache,
+                    this.UserName
                 );
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.User>(
-                    parentKey,
-                    Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        this.UserName?.ToString()
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Identifier.Model.User).FetchFuture(
+                    this._gs2.Cache,
+                    this.UserName,
+                    () => this.GetFuture(
+                        new GetUserRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetUserRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                                    this.UserName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                                parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "user")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.User>(
-                        parentKey,
-                        Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            this.UserName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.User>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Identifier.Model.User> ModelAsync()
@@ -812,57 +492,20 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public async Task<Gs2.Gs2Identifier.Model.User> ModelAsync()
             #endif
         {
-            var parentKey = string.Join(
-                ":",
-                "identifier",
-                "User"
+            var (value, find) = (null as Gs2.Gs2Identifier.Model.User).GetCache(
+                this._gs2.Cache,
+                this.UserName
             );
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.User>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    this.UserName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.User>(
-                    parentKey,
-                    Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                        this.UserName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetUserRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                                    this.UserName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Identifier.Model.User>(
-                            parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "user")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Identifier.Model.User>(
-                        parentKey,
-                        Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                            this.UserName?.ToString()
-                        )
-                    );
-                }
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Identifier.Model.User).FetchAsync(
+                this._gs2.Cache,
+                this.UserName,
+                () => this.GetAsync(
+                    new GetUserRequest()
+                )
+            );
         }
         #endif
 
@@ -891,20 +534,19 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Identifier.Model.User>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    this.UserName.ToString()
-                )
+            (null as Gs2.Gs2Identifier.Model.User).DeleteCache(
+                this._gs2.Cache,
+                this.UserName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Identifier.Model.User> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    this.UserName.ToString()
+                (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                ),
+                (null as Gs2.Gs2Identifier.Model.User).CacheKey(
+                    this.UserName
                 ),
                 callback,
                 () =>
@@ -923,9 +565,10 @@ namespace Gs2.Gs2Identifier.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Identifier.Model.User>(
-                _parentKey,
-                Gs2.Gs2Identifier.Domain.Model.UserDomain.CreateCacheKey(
-                    this.UserName.ToString()
+                (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                ),
+                (null as Gs2.Gs2Identifier.Model.User).CacheKey(
+                    this.UserName
                 ),
                 callbackId
             );

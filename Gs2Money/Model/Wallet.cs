@@ -358,5 +358,118 @@ namespace Gs2.Gs2Money.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (WalletId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.walletId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Slot < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.slot.error.invalid"),
+                    });
+                }
+                if (Slot > 100000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.slot.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Paid < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.paid.error.invalid"),
+                    });
+                }
+                if (Paid > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.paid.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Free < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.free.error.invalid"),
+                    });
+                }
+                if (Free > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.free.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Detail.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.detail.error.tooMany"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("wallet", "money.wallet.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Wallet {
+                WalletId = WalletId,
+                UserId = UserId,
+                Slot = Slot,
+                Paid = Paid,
+                Free = Free,
+                Detail = Detail.Clone() as Gs2.Gs2Money.Model.WalletDetail[],
+                ShareFree = ShareFree,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

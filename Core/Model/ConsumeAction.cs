@@ -22,7 +22,7 @@ using UnityEngine.Scripting;
 
 namespace Gs2.Core.Model
 {
-    public class ConsumeAction : IModel
+    public class ConsumeAction : IModel, ICloneable
     {
         public string Action { set; get; }
         public string Request { set; get; }
@@ -195,6 +195,13 @@ namespace Gs2.Core.Model
                 diff += Request.CompareTo(other.Request);
             }
             return diff;
+        }
+
+        public object Clone() {
+            return new ConsumeAction {
+                Action = Action,
+                Request = Request,
+            };
         }
     }
 }

@@ -137,5 +137,70 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                switch (ResetType) {
+                    case "notReset":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("counterScopeModel", "mission.counterScopeModel.resetType.error.invalid"),
+                        });
+                }
+            }
+            if (ResetType == "monthly") {
+                if (ResetDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.resetDayOfMonth.error.invalid"),
+                    });
+                }
+                if (ResetDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.resetDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (ResetType == "weekly") {
+                switch (ResetDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("counterScopeModel", "mission.counterScopeModel.resetDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((ResetType =="monthly" || ResetType == "weekly" || ResetType == "daily")) {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("counterScopeModel", "mission.counterScopeModel.resetHour.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new CounterScopeModel {
+                ResetType = ResetType,
+                ResetDayOfMonth = ResetDayOfMonth,
+                ResetDayOfWeek = ResetDayOfWeek,
+                ResetHour = ResetHour,
+            };
+        }
     }
 }

@@ -33,15 +33,13 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class ImportUserDataRequest : Gs2Request<ImportUserDataRequest>
 	{
-        public string UserId { set; get; }
-        public string UploadToken { set; get; }
+         public string UserId { set; get; }
+         public string UploadToken { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public ImportUserDataRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
-
         public ImportUserDataRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
             return this;
@@ -92,18 +90,6 @@ namespace Gs2.Gs2Project.Request
             key += UserId + ":";
             key += UploadToken + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply ImportUserDataRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (ImportUserDataRequest)x;
-            return this;
         }
     }
 }

@@ -38,6 +38,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Schedule.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -67,10 +68,9 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2ScheduleRestClient _client;
-        private readonly string _namespaceName;
-        private readonly AccessToken _accessToken;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken?.UserId;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => AccessToken?.UserId;
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Schedule.Model.Event[] _result;
@@ -85,8 +85,8 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
             this._last = false;
             this._result = new Gs2.Gs2Schedule.Model.Event[]{};
 
@@ -104,14 +104,13 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            var parentKey = Gs2.Gs2Schedule.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Event"
-            );
-            if (!isCacheChecked && this._cache.TryGetList<Gs2.Gs2Schedule.Model.Event>
+            if (!isCacheChecked && this._cache.TryGetList
+                    <Gs2.Gs2Schedule.Model.Event>
             (
-                    parentKey,
+                    (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                        NamespaceName,
+                        AccessToken?.UserId
+                    ),
                     out var list
             )) {
                 this._result = list
@@ -125,8 +124,8 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                 var r = await this._client.DescribeEventsAsync(
                 #endif
                     new Gs2.Gs2Schedule.Request.DescribeEventsRequest()
-                        .WithNamespaceName(this._namespaceName)
-                        .WithAccessToken(this._accessToken != null ? this._accessToken.Token : null)
+                        .WithNamespaceName(this.NamespaceName)
+                        .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
                 );
                 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
                 yield return future;
@@ -141,19 +140,20 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                     .ToArray();
                 this._last = true;
                 foreach (var item in r.Items) {
-                    this._cache.Put(
-                            parentKey,
-                            Gs2.Gs2Schedule.Domain.Model.EventDomain.CreateCacheKey(
-                                    item.Name?.ToString()
-                            ),
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    item.PutCache(
+                        this._cache,
+                        NamespaceName,
+                        AccessToken?.UserId,
+                        item.Name
                     );
                 }
 
                 if (this._last) {
                     this._cache.SetListCached<Gs2.Gs2Schedule.Model.Event>(
-                            parentKey
+                        (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
+                            NamespaceName,
+                            AccessToken?.UserId
+                        )
                     );
                 }
             }
@@ -189,7 +189,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Schedule.Model.Event ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -252,7 +252,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Schedule.Model.Event ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

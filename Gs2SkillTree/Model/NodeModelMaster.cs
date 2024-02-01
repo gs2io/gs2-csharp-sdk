@@ -363,5 +363,118 @@ namespace Gs2.Gs2SkillTree.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (NodeModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.nodeModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReleaseConsumeActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.releaseConsumeActions.error.tooFew"),
+                    });
+                }
+                if (ReleaseConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.releaseConsumeActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (RestrainReturnRate < 0.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.restrainReturnRate.error.invalid"),
+                    });
+                }
+                if (RestrainReturnRate > 1.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.restrainReturnRate.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (PremiseNodeNames.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.premiseNodeNames.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("nodeModelMaster", "skillTree.nodeModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new NodeModelMaster {
+                NodeModelId = NodeModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                ReleaseConsumeActions = ReleaseConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+                RestrainReturnRate = RestrainReturnRate,
+                PremiseNodeNames = PremiseNodeNames.Clone() as string[],
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

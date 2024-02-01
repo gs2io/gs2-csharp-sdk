@@ -136,49 +136,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += ItemName + ":";
             key += VerifyType + ":";
-            key += Count + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifySimpleItemByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                VerifyType = VerifyType,
-                Count = Count,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifySimpleItemByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifySimpleItemByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifySimpleItemByUserIdRequest::userId");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values VerifySimpleItemByUserIdRequest::inventoryName");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values VerifySimpleItemByUserIdRequest::itemName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifySimpleItemByUserIdRequest::verifyType");
-            }
-            if (Count != y.Count) {
-                throw new ArithmeticException("mismatch parameter values VerifySimpleItemByUserIdRequest::count");
-            }
-            return new VerifySimpleItemByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                VerifyType = VerifyType,
-                Count = Count,
-            };
         }
     }
 }

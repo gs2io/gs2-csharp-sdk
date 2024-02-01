@@ -126,38 +126,5 @@ namespace Gs2.Gs2Experience.Request
             key += PropertyId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new SubRankCapByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ExperienceName = ExperienceName,
-                PropertyId = PropertyId,
-                RankCapValue = RankCapValue * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SubRankCapByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values SubRankCapByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values SubRankCapByUserIdRequest::userId");
-            }
-            if (ExperienceName != y.ExperienceName) {
-                throw new ArithmeticException("mismatch parameter values SubRankCapByUserIdRequest::experienceName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values SubRankCapByUserIdRequest::propertyId");
-            }
-            return new SubRankCapByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                ExperienceName = ExperienceName,
-                PropertyId = PropertyId,
-                RankCapValue = RankCapValue + y.RankCapValue,
-            };
-        }
     }
 }

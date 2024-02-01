@@ -39,42 +39,34 @@ namespace Gs2.Gs2Project.Model
         public string Status { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public Account WithAccountId(string accountId) {
             this.AccountId = accountId;
             return this;
         }
-
         public Account WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public Account WithEmail(string email) {
             this.Email = email;
             return this;
         }
-
         public Account WithFullName(string fullName) {
             this.FullName = fullName;
             return this;
         }
-
         public Account WithCompanyName(string companyName) {
             this.CompanyName = companyName;
             return this;
         }
-
         public Account WithStatus(string status) {
             this.Status = status;
             return this;
         }
-
         public Account WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public Account WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
@@ -112,8 +104,8 @@ namespace Gs2.Gs2Project.Model
                 .WithFullName(!data.Keys.Contains("fullName") || data["fullName"] == null ? null : data["fullName"].ToString())
                 .WithCompanyName(!data.Keys.Contains("companyName") || data["companyName"] == null ? null : data["companyName"].ToString())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -159,11 +151,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -237,6 +229,98 @@ namespace Gs2.Gs2Project.Model
                 diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (AccountId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.accountId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length < 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.name.error.tooShort"),
+                    });
+                }
+                if (Name.Length > 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Email.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.email.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (FullName.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.fullName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CompanyName.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.companyName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Status) {
+                    case "VERIFYING":
+                    case "ACTIVE":
+                    case "DELETED":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("account", "project.account.status.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "project.account.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Account {
+                AccountId = AccountId,
+                Name = Name,
+                Email = Email,
+                FullName = FullName,
+                CompanyName = CompanyName,
+                Status = Status,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
         }
     }
 }

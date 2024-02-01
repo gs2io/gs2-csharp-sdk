@@ -140,5 +140,42 @@ namespace Gs2.Gs2Showcase.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroup", "showcase.salesItemGroup.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroup", "showcase.salesItemGroup.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (SalesItems.Length < 2) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroup", "showcase.salesItemGroup.salesItems.error.tooFew"),
+                    });
+                }
+                if (SalesItems.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemGroup", "showcase.salesItemGroup.salesItems.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new SalesItemGroup {
+                Name = Name,
+                Metadata = Metadata,
+                SalesItems = SalesItems.Clone() as Gs2.Gs2Showcase.Model.SalesItem[],
+            };
+        }
     }
 }

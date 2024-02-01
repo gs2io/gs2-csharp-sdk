@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -30,15 +28,15 @@
 using System;
 using System.Numerics;
 using System.Collections;
-using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Mission.Model;
 using Gs2.Gs2Mission.Request;
+using Gs2.Gs2Mission.Model.Cache;
+using Gs2.Gs2Mission.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -54,22 +52,6 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Mission:IncreaseCounterByUserId";
-        }
-        public static Gs2.Gs2Mission.Model.Counter Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            IncreaseCounterByUserIdRequest request,
-            Gs2.Gs2Mission.Model.Counter item
-        ) {
-            item.Values = item.Values?.Select(v =>
-            {
-                if (v.Value != null) {
-                    v.Value += request.Value;
-                }
-                return v;
-            }).ToArray() ?? Array.Empty<ScopedValue>();
-
-            return item;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -94,39 +76,27 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.CounterName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "Counter"
-                );
-                var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                    request.CounterName.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Mission.Model.Counter>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -155,44 +125,19 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2Mission.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "Counter"
-            );
-            var key = Gs2.Gs2Mission.Domain.Model.CounterDomain.CreateCacheKey(
-                request.CounterName.ToString()
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Mission.Model.Counter>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.CounterName
                 );
                 return null;
             };
         }
 #endif
-
-        public static IncreaseCounterByUserIdRequest Rate(
-            IncreaseCounterByUserIdRequest request,
-            double rate
-        ) {
-            request.Value = (long?) (request.Value * rate);
-            return request;
-        }
-
-        public static IncreaseCounterByUserIdRequest Rate(
-            IncreaseCounterByUserIdRequest request,
-            BigInteger rate
-        ) {
-            request.Value = (long?) ((request.Value ?? 0) * rate);
-            return request;
-        }
     }
 }

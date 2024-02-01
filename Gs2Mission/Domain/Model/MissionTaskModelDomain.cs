@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Mission.Domain.Iterator;
+using Gs2.Gs2Mission.Model.Cache;
 using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2Mission.Domain.Model
     public partial class MissionTaskModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MissionRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _missionGroupName;
-        private readonly string _missionTaskName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string MissionGroupName => _missionGroupName;
-        public string MissionTaskName => _missionTaskName;
+        public string NamespaceName { get; }
+        public string MissionGroupName { get; }
+        public string MissionTaskName { get; }
 
         public MissionTaskModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,41 +77,9 @@ namespace Gs2.Gs2Mission.Domain.Model
             this._client = new Gs2MissionRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._missionGroupName = missionGroupName;
-            this._missionTaskName = missionTaskName;
-            this._parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.MissionGroupName,
-                "MissionTaskModel"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string missionGroupName,
-            string missionTaskName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "mission",
-                namespaceName ?? "null",
-                missionGroupName ?? "null",
-                missionTaskName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string missionTaskName
-        )
-        {
-            return string.Join(
-                ":",
-                missionTaskName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.MissionGroupName = missionGroupName;
+            this.MissionTaskName = missionTaskName;
         }
 
     }
@@ -125,64 +90,23 @@ namespace Gs2.Gs2Mission.Domain.Model
         private IFuture<Gs2.Gs2Mission.Model.MissionTaskModel> GetFuture(
             GetMissionTaskModelRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionTaskModel> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithMissionGroupName(this.MissionGroupName)
                     .WithMissionTaskName(this.MissionTaskName);
-                var future = this._client.GetMissionTaskModelFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetMissionTaskModelFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                            request.MissionTaskName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "missionTaskModel")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.MissionGroupName,
-                            "MissionTaskModel"
-                        );
-                        var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Mission.Model.MissionTaskModel>(Impl);
@@ -197,53 +121,15 @@ namespace Gs2.Gs2Mission.Domain.Model
             #endif
             GetMissionTaskModelRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithMissionGroupName(this.MissionGroupName)
                 .WithMissionTaskName(this.MissionTaskName);
-            GetMissionTaskModelResult result = null;
-            try {
-                result = await this._client.GetMissionTaskModelAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                    request.MissionTaskName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "missionTaskModel")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Mission.Domain.Model.MissionGroupModelDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.MissionGroupName,
-                        "MissionTaskModel"
-                    );
-                    var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetMissionTaskModelAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -257,55 +143,36 @@ namespace Gs2.Gs2Mission.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionTaskModel> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                    _parentKey,
-                    Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                        this.MissionTaskName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Mission.Model.MissionTaskModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    this.MissionTaskName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Mission.Model.MissionTaskModel).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.MissionGroupName,
+                    this.MissionTaskName,
+                    () => this.GetFuture(
+                        new GetMissionTaskModelRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetMissionTaskModelRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                                    this.MissionTaskName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "missionTaskModel")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                        _parentKey,
-                        Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                            this.MissionTaskName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Mission.Model.MissionTaskModel>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Mission.Model.MissionTaskModel> ModelAsync()
@@ -313,52 +180,24 @@ namespace Gs2.Gs2Mission.Domain.Model
         public async Task<Gs2.Gs2Mission.Model.MissionTaskModel> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                    this.MissionTaskName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                    _parentKey,
-                    Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                        this.MissionTaskName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetMissionTaskModelRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                                    this.MissionTaskName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "missionTaskModel")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                        _parentKey,
-                        Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                            this.MissionTaskName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Mission.Model.MissionTaskModel).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.MissionGroupName,
+                this.MissionTaskName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Mission.Model.MissionTaskModel).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.MissionGroupName,
+                this.MissionTaskName,
+                () => this.GetAsync(
+                    new GetMissionTaskModelRequest()
+                )
+            );
         }
         #endif
 
@@ -387,20 +226,23 @@ namespace Gs2.Gs2Mission.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                    this.MissionTaskName.ToString()
-                )
+            (null as Gs2.Gs2Mission.Model.MissionTaskModel).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.MissionGroupName,
+                this.MissionTaskName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Mission.Model.MissionTaskModel> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                    this.MissionTaskName.ToString()
+                (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheParentKey(
+                    this.NamespaceName,
+                    this.MissionGroupName
+                ),
+                (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheKey(
+                    this.MissionTaskName
                 ),
                 callback,
                 () =>
@@ -419,9 +261,12 @@ namespace Gs2.Gs2Mission.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Mission.Model.MissionTaskModel>(
-                _parentKey,
-                Gs2.Gs2Mission.Domain.Model.MissionTaskModelDomain.CreateCacheKey(
-                    this.MissionTaskName.ToString()
+                (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheParentKey(
+                    this.NamespaceName,
+                    this.MissionGroupName
+                ),
+                (null as Gs2.Gs2Mission.Model.MissionTaskModel).CacheKey(
+                    this.MissionTaskName
                 ),
                 callbackId
             );

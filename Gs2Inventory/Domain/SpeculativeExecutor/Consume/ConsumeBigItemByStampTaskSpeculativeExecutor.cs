@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,16 +26,17 @@
 #pragma warning disable 1998
 
 using System;
-using System.Collections;
 using System.Numerics;
+using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-using Gs2.Core.Exception;
-using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -55,23 +54,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             return "Gs2Inventory:ConsumeBigItemByUserId";
         }
 
-        public static Gs2.Gs2Inventory.Model.BigItem Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            ConsumeBigItemByUserIdRequest request,
-            Gs2.Gs2Inventory.Model.BigItem item
-        ) {
-            BigInteger.TryParse(item.Count, out var v1);
-            BigInteger.TryParse(request.ConsumeCount, out var v2);
-            item.Count = BigInteger.Subtract(v1, v2).ToString();
-            if (item.Count[0] == '-') {
-                throw new BadRequestException(new [] {
-                    new RequestError("count", "invalid")
-                });
-            }
-            return item;
-        }
-
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -79,7 +61,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ConsumeBigItemByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Inventory.Namespace(
                     request.NamespaceName
                 ).AccessToken(
@@ -97,40 +78,28 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.InventoryName,
+                            request.ItemName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.InventoryName,
-                    "BigItem"
-                );
-                var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
-                    request.ItemName.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Inventory.Model.BigItem>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -161,45 +130,20 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2Inventory.Domain.Model.BigInventoryDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                request.InventoryName,
-                "BigItem"
-            );
-            var key = Gs2.Gs2Inventory.Domain.Model.BigItemDomain.CreateCacheKey(
-                request.ItemName.ToString()
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Inventory.Model.BigItem>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.InventoryName,
+                    request.ItemName
                 );
                 return null;
             };
         }
 #endif
-
-        public static ConsumeBigItemByUserIdRequest Rate(
-            ConsumeBigItemByUserIdRequest request,
-            double rate
-        ) {
-            request.ConsumeCount = (BigInteger.Parse(request.ConsumeCount) * (BigInteger) rate).ToString();
-            return request;
-        }
-
-        public static ConsumeBigItemByUserIdRequest Rate(
-            ConsumeBigItemByUserIdRequest request,
-            BigInteger rate
-        ) {
-            request.ConsumeCount = (BigInteger.Parse(request.ConsumeCount) * rate).ToString();
-            return request;
-        }
     }
 }

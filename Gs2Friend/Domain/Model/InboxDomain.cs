@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Friend.Domain.Iterator;
+using Gs2.Gs2Friend.Model.Cache;
 using Gs2.Gs2Friend.Request;
 using Gs2.Gs2Friend.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class InboxDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
+        public string NamespaceName { get; }
+        public string UserId { get; }
 
         public InboxDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,34 +75,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._client = new Gs2FriendRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._parentKey = Gs2.Gs2Friend.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Inbox"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "friend",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
         }
 
     }
@@ -120,17 +92,21 @@ namespace Gs2.Gs2Friend.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.Inbox> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.Inbox>(
-                    _parentKey,
-                    Gs2.Gs2Friend.Domain.Model.InboxDomain.CreateCacheKey(
-                    )
+                var (value, find) = (null as Gs2.Gs2Friend.Model.Inbox).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Friend.Model.Inbox>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Friend.Model.Inbox> ModelAsync()
@@ -138,22 +114,15 @@ namespace Gs2.Gs2Friend.Domain.Model
         public async Task<Gs2.Gs2Friend.Model.Inbox> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.Inbox>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.InboxDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Friend.Model.Inbox>(
-                    _parentKey,
-                    Gs2.Gs2Friend.Domain.Model.InboxDomain.CreateCacheKey(
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2Friend.Model.Inbox).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -182,18 +151,21 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Friend.Model.Inbox>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.InboxDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2Friend.Model.Inbox).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Friend.Model.Inbox> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.InboxDomain.CreateCacheKey(
+                (null as Gs2.Gs2Friend.Model.Inbox).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Friend.Model.Inbox).CacheKey(
                 ),
                 callback,
                 () =>
@@ -212,8 +184,11 @@ namespace Gs2.Gs2Friend.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.Inbox>(
-                _parentKey,
-                Gs2.Gs2Friend.Domain.Model.InboxDomain.CreateCacheKey(
+                (null as Gs2.Gs2Friend.Model.Inbox).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Friend.Model.Inbox).CacheKey(
                 ),
                 callbackId
             );

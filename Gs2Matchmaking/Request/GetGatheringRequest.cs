@@ -85,17 +85,5 @@ namespace Gs2.Gs2Matchmaking.Request
             key += GatheringName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetGatheringRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetGatheringRequest)x;
-            return this;
-        }
     }
 }

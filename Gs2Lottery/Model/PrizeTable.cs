@@ -227,5 +227,50 @@ namespace Gs2.Gs2Lottery.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (PrizeTableId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeTable", "lottery.prizeTable.prizeTableId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeTable", "lottery.prizeTable.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeTable", "lottery.prizeTable.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Prizes.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeTable", "lottery.prizeTable.prizes.error.tooFew"),
+                    });
+                }
+                if (Prizes.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("prizeTable", "lottery.prizeTable.prizes.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new PrizeTable {
+                PrizeTableId = PrizeTableId,
+                Name = Name,
+                Metadata = Metadata,
+                Prizes = Prizes.Clone() as Gs2.Gs2Lottery.Model.Prize[],
+            };
+        }
     }
 }

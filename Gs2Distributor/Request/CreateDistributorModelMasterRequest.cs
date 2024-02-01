@@ -149,17 +149,5 @@ namespace Gs2.Gs2Distributor.Request
             key += WhiteListTargetIds + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CreateDistributorModelMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateDistributorModelMasterRequest)x;
-            return this;
-        }
     }
 }

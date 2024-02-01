@@ -99,5 +99,29 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterValueModel", "enchant.balanceParameterValueModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("balanceParameterValueModel", "enchant.balanceParameterValueModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BalanceParameterValueModel {
+                Name = Name,
+                Metadata = Metadata,
+            };
+        }
     }
 }

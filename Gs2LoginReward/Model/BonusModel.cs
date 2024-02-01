@@ -363,5 +363,110 @@ namespace Gs2.Gs2LoginReward.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (BonusModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.bonusModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Mode) {
+                    case "schedule":
+                    case "streaming":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("bonusModel", "loginReward.bonusModel.mode.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (PeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.periodEventId.error.tooLong"),
+                    });
+                }
+            }
+            if (PeriodEventId == "") {
+                if (ResetHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.resetHour.error.invalid"),
+                    });
+                }
+                if (ResetHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.resetHour.error.invalid"),
+                    });
+                }
+            }
+            if (Mode == "streaming") {
+                switch (Repeat) {
+                    case "enabled":
+                    case "disabled":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("bonusModel", "loginReward.bonusModel.repeat.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Rewards.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.rewards.error.tooMany"),
+                    });
+                }
+            }
+            {
+                switch (MissedReceiveRelief) {
+                    case "enabled":
+                    case "disabled":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("bonusModel", "loginReward.bonusModel.missedReceiveRelief.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (MissedReceiveReliefConsumeActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonusModel", "loginReward.bonusModel.missedReceiveReliefConsumeActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BonusModel {
+                BonusModelId = BonusModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Mode = Mode,
+                PeriodEventId = PeriodEventId,
+                ResetHour = ResetHour,
+                Repeat = Repeat,
+                Rewards = Rewards.Clone() as Gs2.Gs2LoginReward.Model.Reward[],
+                MissedReceiveRelief = MissedReceiveRelief,
+                MissedReceiveReliefConsumeActions = MissedReceiveReliefConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
+            };
+        }
     }
 }

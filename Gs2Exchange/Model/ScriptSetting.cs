@@ -137,5 +137,50 @@ namespace Gs2.Gs2Exchange.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (TriggerScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scriptSetting", "exchange.scriptSetting.triggerScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (DoneTriggerTargetType) {
+                    case "none":
+                    case "gs2_script":
+                    case "aws":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("scriptSetting", "exchange.scriptSetting.doneTriggerTargetType.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (DoneTriggerScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scriptSetting", "exchange.scriptSetting.doneTriggerScriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (DoneTriggerQueueNamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("scriptSetting", "exchange.scriptSetting.doneTriggerQueueNamespaceId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new ScriptSetting {
+                TriggerScriptId = TriggerScriptId,
+                DoneTriggerTargetType = DoneTriggerTargetType,
+                DoneTriggerScriptId = DoneTriggerScriptId,
+                DoneTriggerQueueNamespaceId = DoneTriggerQueueNamespaceId,
+            };
+        }
     }
 }

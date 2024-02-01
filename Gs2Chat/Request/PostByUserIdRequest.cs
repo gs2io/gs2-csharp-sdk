@@ -139,17 +139,5 @@ namespace Gs2.Gs2Chat.Request
             key += Password + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply PostByUserIdRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (PostByUserIdRequest)x;
-            return this;
-        }
     }
 }

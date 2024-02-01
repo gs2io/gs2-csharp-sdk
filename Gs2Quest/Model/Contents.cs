@@ -140,5 +140,42 @@ namespace Gs2.Gs2Quest.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Metadata.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("contents", "quest.contents.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CompleteAcquireActions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("contents", "quest.contents.completeAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (Weight < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("contents", "quest.contents.weight.error.invalid"),
+                    });
+                }
+                if (Weight > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("contents", "quest.contents.weight.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Contents {
+                Metadata = Metadata,
+                CompleteAcquireActions = CompleteAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                Weight = Weight,
+            };
+        }
     }
 }

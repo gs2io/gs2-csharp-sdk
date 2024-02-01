@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
@@ -359,6 +361,90 @@ namespace Gs2.Gs2Version.Model
                 diff += SignatureKeyId.CompareTo(other.SignatureKeyId);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (VersionModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModel", "version.versionModel.versionModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModel", "version.versionModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModel", "version.versionModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Scope) {
+                    case "passive":
+                    case "active":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("versionModel", "version.versionModel.scope.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (Type) {
+                    case "simple":
+                    case "schedule":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("versionModel", "version.versionModel.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type == "simple" && Scope == "active") {
+            }
+            if (Type == "simple") {
+            }
+            if (Type == "simple") {
+            }
+            {
+                if (ScheduleVersions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModel", "version.versionModel.scheduleVersions.error.tooMany"),
+                    });
+                }
+            }
+            if (Scope == "passive") {
+            }
+            if (NeedSignature ?? false) {
+                if (SignatureKeyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModel", "version.versionModel.signatureKeyId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new VersionModel {
+                VersionModelId = VersionModelId,
+                Name = Name,
+                Metadata = Metadata,
+                Scope = Scope,
+                Type = Type,
+                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                WarningVersion = WarningVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                ErrorVersion = ErrorVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                ScheduleVersions = ScheduleVersions.Clone() as Gs2.Gs2Version.Model.ScheduleVersion[],
+                NeedSignature = NeedSignature,
+                SignatureKeyId = SignatureKeyId,
+            };
         }
     }
 }

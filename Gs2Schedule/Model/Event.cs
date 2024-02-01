@@ -395,5 +395,183 @@ namespace Gs2.Gs2Schedule.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (EventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.eventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (ScheduleType) {
+                    case "absolute":
+                    case "relative":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("event", "schedule.event.scheduleType.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (RepeatType) {
+                    case "always":
+                    case "daily":
+                    case "weekly":
+                    case "monthly":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("event", "schedule.event.repeatType.error.invalid"),
+                        });
+                }
+            }
+            if (ScheduleType == "absolute") {
+                if (AbsoluteBegin < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.absoluteBegin.error.invalid"),
+                    });
+                }
+                if (AbsoluteBegin > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.absoluteBegin.error.invalid"),
+                    });
+                }
+            }
+            if (ScheduleType == "absolute") {
+                if (AbsoluteEnd < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.absoluteEnd.error.invalid"),
+                    });
+                }
+                if (AbsoluteEnd > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.absoluteEnd.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "monthly") {
+                if (RepeatBeginDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatBeginDayOfMonth.error.invalid"),
+                    });
+                }
+                if (RepeatBeginDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatBeginDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "monthly") {
+                if (RepeatEndDayOfMonth < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatEndDayOfMonth.error.invalid"),
+                    });
+                }
+                if (RepeatEndDayOfMonth > 31) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatEndDayOfMonth.error.invalid"),
+                    });
+                }
+            }
+            if (RepeatType == "weekly") {
+                switch (RepeatBeginDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("event", "schedule.event.repeatBeginDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if (RepeatType == "weekly") {
+                switch (RepeatEndDayOfWeek) {
+                    case "sunday":
+                    case "monday":
+                    case "tuesday":
+                    case "wednesday":
+                    case "thursday":
+                    case "friday":
+                    case "saturday":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("event", "schedule.event.repeatEndDayOfWeek.error.invalid"),
+                        });
+                }
+            }
+            if ((RepeatType =="daily" || RepeatType == "weekly" || RepeatType == "monthly")) {
+                if (RepeatBeginHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatBeginHour.error.invalid"),
+                    });
+                }
+                if (RepeatBeginHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatBeginHour.error.invalid"),
+                    });
+                }
+            }
+            if ((RepeatType =="daily" || RepeatType == "weekly" || RepeatType == "monthly")) {
+                if (RepeatEndHour < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatEndHour.error.invalid"),
+                    });
+                }
+                if (RepeatEndHour > 23) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.repeatEndHour.error.invalid"),
+                    });
+                }
+            }
+            if (ScheduleType == "relative") {
+                if (RelativeTriggerName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "schedule.event.relativeTriggerName.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Event {
+                EventId = EventId,
+                Name = Name,
+                Metadata = Metadata,
+                ScheduleType = ScheduleType,
+                RepeatType = RepeatType,
+                AbsoluteBegin = AbsoluteBegin,
+                AbsoluteEnd = AbsoluteEnd,
+                RepeatBeginDayOfMonth = RepeatBeginDayOfMonth,
+                RepeatEndDayOfMonth = RepeatEndDayOfMonth,
+                RepeatBeginDayOfWeek = RepeatBeginDayOfWeek,
+                RepeatEndDayOfWeek = RepeatEndDayOfWeek,
+                RepeatBeginHour = RepeatBeginHour,
+                RepeatEndHour = RepeatEndHour,
+                RelativeTriggerName = RelativeTriggerName,
+            };
+        }
     }
 }

@@ -137,5 +137,50 @@ namespace Gs2.Gs2Grade.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeEntryModel", "grade.gradeEntryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (RankCapValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeEntryModel", "grade.gradeEntryModel.rankCapValue.error.invalid"),
+                    });
+                }
+                if (RankCapValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeEntryModel", "grade.gradeEntryModel.rankCapValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (PropertyIdRegex.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeEntryModel", "grade.gradeEntryModel.propertyIdRegex.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (GradeUpPropertyIdRegex.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gradeEntryModel", "grade.gradeEntryModel.gradeUpPropertyIdRegex.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new GradeEntryModel {
+                Metadata = Metadata,
+                RankCapValue = RankCapValue,
+                PropertyIdRegex = PropertyIdRegex,
+                GradeUpPropertyIdRegex = GradeUpPropertyIdRegex,
+            };
+        }
     }
 }

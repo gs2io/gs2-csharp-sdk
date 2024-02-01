@@ -33,12 +33,10 @@ namespace Gs2.Gs2Project.Model
 	{
         public string RegionName { set; get; }
         public string Status { set; get; }
-
         public Gs2Region WithRegionName(string regionName) {
             this.RegionName = regionName;
             return this;
         }
-
         public Gs2Region WithStatus(string status) {
             this.Status = status;
             return this;
@@ -100,6 +98,42 @@ namespace Gs2.Gs2Project.Model
                 diff += Status.CompareTo(other.Status);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                switch (RegionName) {
+                    case "ap-northeast-1":
+                    case "us-east-1":
+                    case "eu-west-1":
+                    case "ap-southeast-1":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("gs2Region", "project.gs2Region.regionName.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (Status) {
+                    case "enabled":
+                    case "pending":
+                    case "suspended":
+                    case "disabled":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("gs2Region", "project.gs2Region.status.error.invalid"),
+                        });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Gs2Region {
+                RegionName = RegionName,
+                Status = Status,
+            };
         }
     }
 }

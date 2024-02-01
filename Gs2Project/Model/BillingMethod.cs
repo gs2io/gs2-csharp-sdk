@@ -42,57 +42,46 @@ namespace Gs2.Gs2Project.Model
         public string PartnerId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
-
         public BillingMethod WithBillingMethodId(string billingMethodId) {
             this.BillingMethodId = billingMethodId;
             return this;
         }
-
         public BillingMethod WithAccountName(string accountName) {
             this.AccountName = accountName;
             return this;
         }
-
         public BillingMethod WithName(string name) {
             this.Name = name;
             return this;
         }
-
         public BillingMethod WithDescription(string description) {
             this.Description = description;
             return this;
         }
-
         public BillingMethod WithMethodType(string methodType) {
             this.MethodType = methodType;
             return this;
         }
-
         public BillingMethod WithCardSignatureName(string cardSignatureName) {
             this.CardSignatureName = cardSignatureName;
             return this;
         }
-
         public BillingMethod WithCardBrand(string cardBrand) {
             this.CardBrand = cardBrand;
             return this;
         }
-
         public BillingMethod WithCardLast4(string cardLast4) {
             this.CardLast4 = cardLast4;
             return this;
         }
-
         public BillingMethod WithPartnerId(string partnerId) {
             this.PartnerId = partnerId;
             return this;
         }
-
         public BillingMethod WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
             return this;
         }
-
         public BillingMethod WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
             return this;
@@ -150,8 +139,8 @@ namespace Gs2.Gs2Project.Model
                 .WithCardBrand(!data.Keys.Contains("cardBrand") || data["cardBrand"] == null ? null : data["cardBrand"].ToString())
                 .WithCardLast4(!data.Keys.Contains("cardLast4") || data["cardLast4"] == null ? null : data["cardLast4"].ToString())
                 .WithPartnerId(!data.Keys.Contains("partnerId") || data["partnerId"] == null ? null : data["partnerId"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)long.Parse(data["createdAt"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)long.Parse(data["updatedAt"].ToString()));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
         }
 
         public JsonData ToJson()
@@ -212,11 +201,11 @@ namespace Gs2.Gs2Project.Model
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
-                writer.Write(long.Parse(CreatedAt.ToString()));
+                writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
             }
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
-                writer.Write(long.Parse(UpdatedAt.ToString()));
+                writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -314,6 +303,127 @@ namespace Gs2.Gs2Project.Model
                 diff += (int)(UpdatedAt - other.UpdatedAt);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (BillingMethodId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.billingMethodId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AccountName.Length < 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.accountName.error.tooShort"),
+                    });
+                }
+                if (AccountName.Length > 8) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.accountName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (MethodType) {
+                    case "credit_card":
+                    case "invoice":
+                    case "partner":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("billingMethod", "project.billingMethod.methodType.error.invalid"),
+                        });
+                }
+            }
+            if (MethodType == "credit_card") {
+                if (CardSignatureName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.cardSignatureName.error.tooLong"),
+                    });
+                }
+            }
+            if (MethodType == "credit_card") {
+                if (CardBrand.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.cardBrand.error.tooLong"),
+                    });
+                }
+            }
+            if (MethodType == "credit_card") {
+                if (CardLast4.Length < 4) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.cardLast4.error.tooShort"),
+                    });
+                }
+                if (CardLast4.Length > 4) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.cardLast4.error.tooLong"),
+                    });
+                }
+            }
+            if (MethodType == "partner") {
+                if (PartnerId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.partnerId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("billingMethod", "project.billingMethod.updatedAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new BillingMethod {
+                BillingMethodId = BillingMethodId,
+                AccountName = AccountName,
+                Name = Name,
+                Description = Description,
+                MethodType = MethodType,
+                CardSignatureName = CardSignatureName,
+                CardBrand = CardBrand,
+                CardLast4 = CardLast4,
+                PartnerId = PartnerId,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+            };
         }
     }
 }

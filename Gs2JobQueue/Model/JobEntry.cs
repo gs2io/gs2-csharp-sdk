@@ -118,5 +118,42 @@ namespace Gs2.Gs2JobQueue.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ScriptId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobEntry", "jobQueue.jobEntry.scriptId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Args.Length > 131072) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobEntry", "jobQueue.jobEntry.args.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MaxTryCount < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobEntry", "jobQueue.jobEntry.maxTryCount.error.invalid"),
+                    });
+                }
+                if (MaxTryCount > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("jobEntry", "jobQueue.jobEntry.maxTryCount.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new JobEntry {
+                ScriptId = ScriptId,
+                Args = Args,
+                MaxTryCount = MaxTryCount,
+            };
+        }
     }
 }

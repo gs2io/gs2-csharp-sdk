@@ -85,17 +85,5 @@ namespace Gs2.Gs2Stamina.Request
             key += RecoverIntervalTableName + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply DeleteRecoverIntervalTableMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (DeleteRecoverIntervalTableMasterRequest)x;
-            return this;
-        }
     }
 }

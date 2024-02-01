@@ -262,5 +262,96 @@ namespace Gs2.Gs2Deploy.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (EventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.eventId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ResourceName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.resourceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Type) {
+                    case "CREATE_IN_PROGRESS":
+                    case "CREATE_COMPLETE":
+                    case "CREATE_FAILED":
+                    case "UPDATE_IN_PROGRESS":
+                    case "UPDATE_COMPLETE":
+                    case "UPDATE_FAILED":
+                    case "CLEAN_IN_PROGRESS":
+                    case "CLEAN_COMPLETE":
+                    case "CLEAN_FAILED":
+                    case "DELETE_IN_PROGRESS":
+                    case "DELETE_COMPLETE":
+                    case "DELETE_FAILED":
+                    case "ROLLBACK_IN_PROGRESS":
+                    case "ROLLBACK_COMPLETE":
+                    case "ROLLBACK_FAILED":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("event", "deploy.event.type.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (Message.Length > 5242880) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.message.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (EventAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.eventAt.error.invalid"),
+                    });
+                }
+                if (EventAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.eventAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("event", "deploy.event.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Event {
+                EventId = EventId,
+                Name = Name,
+                ResourceName = ResourceName,
+                Type = Type,
+                Message = Message,
+                EventAt = EventAt,
+                Revision = Revision,
+            };
+        }
     }
 }

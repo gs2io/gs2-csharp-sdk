@@ -243,5 +243,66 @@ namespace Gs2.Gs2Formation.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (MoldModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.moldModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InitialMaxCapacity < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.initialMaxCapacity.error.invalid"),
+                    });
+                }
+                if (InitialMaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.initialMaxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxCapacity < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.maxCapacity.error.invalid"),
+                    });
+                }
+                if (MaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("moldModel", "formation.moldModel.maxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new MoldModel {
+                MoldModelId = MoldModelId,
+                Name = Name,
+                Metadata = Metadata,
+                InitialMaxCapacity = InitialMaxCapacity,
+                MaxCapacity = MaxCapacity,
+                FormModel = FormModel.Clone() as Gs2.Gs2Formation.Model.FormModel,
+            };
+        }
     }
 }

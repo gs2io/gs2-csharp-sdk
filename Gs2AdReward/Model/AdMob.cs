@@ -102,5 +102,26 @@ namespace Gs2.Gs2AdReward.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (AllowAdUnitIds.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("adMob", "adReward.adMob.allowAdUnitIds.error.tooFew"),
+                    });
+                }
+                if (AllowAdUnitIds.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("adMob", "adReward.adMob.allowAdUnitIds.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AdMob {
+                AllowAdUnitIds = AllowAdUnitIds.Clone() as string[],
+            };
+        }
     }
 }

@@ -37,6 +37,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -53,19 +55,6 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Inventory:AcquireItemSetWithGradeByUserId";
         }
-        public static Gs2.Gs2Inventory.Model.ItemSet Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            AcquireItemSetWithGradeByUserIdRequest request,
-            Gs2.Gs2Inventory.Model.ItemSet item
-        ) {
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -74,10 +63,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AcquireItemSetWithGradeByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
+                result.OnComplete(() => null);
                 yield return null;
             }
 
@@ -101,19 +87,5 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
-
-        public static AcquireItemSetWithGradeByUserIdRequest Rate(
-            AcquireItemSetWithGradeByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static AcquireItemSetWithGradeByUserIdRequest Rate(
-            AcquireItemSetWithGradeByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

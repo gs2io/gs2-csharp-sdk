@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2AdReward.Domain.Iterator;
+using Gs2.Gs2AdReward.Model.Cache;
 using Gs2.Gs2AdReward.Request;
 using Gs2.Gs2AdReward.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,13 +63,9 @@ namespace Gs2.Gs2AdReward.Domain.Model
     public partial class PointAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AdRewardRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
 
         public PointAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -78,74 +76,30 @@ namespace Gs2.Gs2AdReward.Domain.Model
             this._client = new Gs2AdRewardRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Point"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2AdReward.Model.Point> GetFuture(
             GetPointRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2AdReward.Model.Point> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.GetPointFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetPointFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2AdReward.Model.Point>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "point")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Point"
-                        );
-                        var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2AdReward.Model.Point>(Impl);
@@ -160,50 +114,14 @@ namespace Gs2.Gs2AdReward.Domain.Model
             #endif
             GetPointRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            GetPointResult result = null;
-            try {
-                result = await this._client.GetPointAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2AdReward.Model.Point>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "point")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Point"
-                    );
-                    var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetPointAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -212,43 +130,22 @@ namespace Gs2.Gs2AdReward.Domain.Model
         public IFuture<Gs2.Gs2AdReward.Domain.Model.PointAccessTokenDomain> ConsumeFuture(
             ConsumePointRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2AdReward.Domain.Model.PointAccessTokenDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.ConsumePointFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.ConsumePointFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "Point"
-                        );
-                        var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -265,121 +162,53 @@ namespace Gs2.Gs2AdReward.Domain.Model
             #endif
             ConsumePointRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            ConsumePointResult result = null;
-                result = await this._client.ConsumePointAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2AdReward.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "Point"
-                    );
-                    var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.ConsumePointAsync(request)
+            );
+            var domain = this;
 
             return domain;
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ConsumeFuture.")]
-        public IFuture<Gs2.Gs2AdReward.Domain.Model.PointAccessTokenDomain> Consume(
-            ConsumePointRequest request
-        ) {
-            return ConsumeFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "adReward",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2AdReward.Model.Point> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2AdReward.Model.Point> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2AdReward.Model.Point>(
-                    _parentKey,
-                    Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
+                var (value, find) = (null as Gs2.Gs2AdReward.Model.Point).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2AdReward.Model.Point).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    () => this.GetFuture(
+                        new GetPointRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetPointRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2AdReward.Model.Point>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "point")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2AdReward.Model.Point>(
-                        _parentKey,
-                        Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2AdReward.Model.Point>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2AdReward.Model.Point> ModelAsync()
@@ -387,48 +216,22 @@ namespace Gs2.Gs2AdReward.Domain.Model
         public async Task<Gs2.Gs2AdReward.Model.Point> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2AdReward.Model.Point>(
-                _parentKey,
-                Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2AdReward.Model.Point>(
-                    _parentKey,
-                    Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetPointRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2AdReward.Model.Point>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "point")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2AdReward.Model.Point>(
-                        _parentKey,
-                        Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2AdReward.Model.Point).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2AdReward.Model.Point).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                () => this.GetAsync(
+                    new GetPointRequest()
+                )
+            );
         }
         #endif
 
@@ -457,18 +260,21 @@ namespace Gs2.Gs2AdReward.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2AdReward.Model.Point>(
-                _parentKey,
-                Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2AdReward.Model.Point).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2AdReward.Model.Point> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
+                (null as Gs2.Gs2AdReward.Model.Point).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2AdReward.Model.Point).CacheKey(
                 ),
                 callback,
                 () =>
@@ -487,8 +293,11 @@ namespace Gs2.Gs2AdReward.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2AdReward.Model.Point>(
-                _parentKey,
-                Gs2.Gs2AdReward.Domain.Model.PointDomain.CreateCacheKey(
+                (null as Gs2.Gs2AdReward.Model.Point).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2AdReward.Model.Point).CacheKey(
                 ),
                 callbackId
             );

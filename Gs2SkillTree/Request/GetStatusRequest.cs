@@ -85,17 +85,5 @@ namespace Gs2.Gs2SkillTree.Request
             key += AccessToken + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply GetStatusRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (GetStatusRequest)x;
-            return this;
-        }
     }
 }

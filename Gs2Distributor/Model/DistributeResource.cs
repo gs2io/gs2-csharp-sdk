@@ -99,5 +99,29 @@ namespace Gs2.Gs2Distributor.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Action.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributeResource", "distributor.distributeResource.action.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Request.Length > 1048576) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("distributeResource", "distributor.distributeResource.request.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new DistributeResource {
+                Action = Action,
+                Request = Request,
+            };
+        }
     }
 }

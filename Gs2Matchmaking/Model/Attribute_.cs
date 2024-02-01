@@ -99,5 +99,34 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attribute", "matchmaking.attribute.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Value < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attribute", "matchmaking.attribute.value.error.invalid"),
+                    });
+                }
+                if (Value > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("attribute", "matchmaking.attribute.value.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Attribute_ {
+                Name = Name,
+                Value = Value,
+            };
+        }
     }
 }

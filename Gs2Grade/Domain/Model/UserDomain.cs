@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Grade.Domain.Iterator;
+using Gs2.Gs2Grade.Model.Cache;
 using Gs2.Gs2Grade.Request;
 using Gs2.Gs2Grade.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,16 +63,12 @@ namespace Gs2.Gs2Grade.Domain.Model
     public partial class UserDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string UserId { get; }
         public string ExperienceNamespaceName { get; set; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
         public string NextPageToken { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,65 +79,56 @@ namespace Gs2.Gs2Grade.Domain.Model
             this._client = new Gs2GradeRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._parentKey = Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "User"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2Grade.Model.Status> Statuses(
-            string gradeName
+            string gradeName = null
         )
         {
             return new DescribeStatusesByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                gradeName,
-                this.UserId
+                this.UserId,
+                gradeName
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Grade.Model.Status> StatusesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2Grade.Model.Status> Statuses(
-            #endif
-        #else
         public DescribeStatusesByUserIdIterator StatusesAsync(
-        #endif
-            string gradeName
+            #endif
+            string gradeName = null
         )
         {
             return new DescribeStatusesByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                gradeName,
-                this.UserId
-        #if UNITY_2017_1_OR_NEWER
+                this.UserId,
+                gradeName
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeStatuses(
             Action<Gs2.Gs2Grade.Model.Status[]> callback,
-            string gradeName
+            string gradeName = null
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Grade.Model.Status>(
-                Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Status"
+                    this.UserId
                 ),
                 callback
             );
@@ -148,7 +137,7 @@ namespace Gs2.Gs2Grade.Domain.Model
         #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStatusesWithInitialCallAsync(
             Action<Gs2.Gs2Grade.Model.Status[]> callback,
-            string gradeName
+            string gradeName = null
         )
         {
             var items = await StatusesAsync(
@@ -165,14 +154,13 @@ namespace Gs2.Gs2Grade.Domain.Model
 
         public void UnsubscribeStatuses(
             ulong callbackId,
-            string gradeName
+            string gradeName = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Grade.Model.Status>(
-                Gs2.Gs2Grade.Domain.Model.UserDomain.CreateCacheParentKey(
+                (null as Gs2.Gs2Grade.Model.Status).CacheParentKey(
                     this.NamespaceName,
-                    this.UserId,
-                    "Status"
+                    this.UserId
                 ),
                 callbackId
             );
@@ -188,31 +176,6 @@ namespace Gs2.Gs2Grade.Domain.Model
                 this.UserId,
                 gradeName,
                 propertyId
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "grade",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string userId
-        )
-        {
-            return string.Join(
-                ":",
-                userId ?? "null"
             );
         }
 

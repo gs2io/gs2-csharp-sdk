@@ -281,5 +281,93 @@ namespace Gs2.Gs2Log.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InsightId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.insightId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 36) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TaskId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.taskId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Host.Length > 256) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.host.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Password.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.password.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Status) {
+                    case "ALLOCATING":
+                    case "LAUNCHING":
+                    case "ACTIVE":
+                    case "DELETED":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("insight", "log.insight.status.error.invalid"),
+                        });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("insight", "log.insight.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Insight {
+                InsightId = InsightId,
+                Name = Name,
+                TaskId = TaskId,
+                Host = Host,
+                Password = Password,
+                Status = Status,
+                CreatedAt = CreatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

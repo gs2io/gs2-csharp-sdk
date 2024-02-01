@@ -35,6 +35,8 @@ using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Lottery.Request;
+using Gs2.Gs2Lottery.Model.Cache;
+using Gs2.Gs2Lottery.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -51,20 +53,6 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
         public static string Action() {
             return "Gs2Lottery:ResetBoxByUserId";
         }
-        public static Gs2.Gs2Lottery.Model.BoxItems Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            ResetBoxByUserIdRequest request,
-            Gs2.Gs2Lottery.Model.BoxItems item
-        ) {
-            // TODO: Speculative execution not supported
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-            return item;
-        }
 
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
@@ -75,8 +63,8 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var future = domain.Lottery.Namespace(
                     request.NamespaceName
-                ).User(
-                    request.UserId
+                ).AccessToken(
+                    accessToken
                 ).BoxItems(
                     request.PrizeTableName
                 ).ModelFuture();
@@ -88,39 +76,27 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
                 var item = future.Result;
 
                 if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
+                    result.OnComplete(() => null);
                     yield break;
                 }
                 try {
-                    item = Transform(domain, accessToken, request, item);
+                    item = item.SpeculativeExecution(request);
+
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.PrizeTableName
+                        );
+                        return null;
+                    });
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    "BoxItems"
-                );
-                var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                    request.PrizeTableName.ToString()
-                );
-
-                result.OnComplete(() =>
-                {
-                    domain.Cache.Put<Gs2.Gs2Lottery.Model.BoxItems>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                    );
-                    return null;
-                });
                 yield return null;
             }
 
@@ -140,8 +116,8 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
         ) {
             var item = await domain.Lottery.Namespace(
                 request.NamespaceName
-            ).User(
-                request.UserId
+            ).AccessToken(
+                accessToken
             ).BoxItems(
                 request.PrizeTableName
             ).ModelAsync();
@@ -149,42 +125,19 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
-
-            var parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                request.NamespaceName,
-                accessToken.UserId,
-                "BoxItems"
-            );
-            var key = Gs2.Gs2Lottery.Domain.Model.BoxItemsDomain.CreateCacheKey(
-                request.PrizeTableName.ToString()
-            );
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                domain.Cache.Put<Gs2.Gs2Lottery.Model.BoxItems>(
-                    parentKey,
-                    key,
-                    item,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.PrizeTableName
                 );
                 return null;
             };
         }
 #endif
-
-        public static ResetBoxByUserIdRequest Rate(
-            ResetBoxByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static ResetBoxByUserIdRequest Rate(
-            ResetBoxByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

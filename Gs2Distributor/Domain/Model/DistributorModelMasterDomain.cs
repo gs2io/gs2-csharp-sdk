@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Distributor.Domain.Iterator;
+using Gs2.Gs2Distributor.Model.Cache;
 using Gs2.Gs2Distributor.Request;
 using Gs2.Gs2Distributor.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
     public partial class DistributorModelMasterDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _distributorName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string DistributorName => _distributorName;
+        public string NamespaceName { get; }
+        public string DistributorName { get; }
 
         public DistributorModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this._client = new Gs2DistributorRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._distributorName = distributorName;
-            this._parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "DistributorModelMaster"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string distributorName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "distributor",
-                namespaceName ?? "null",
-                distributorName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string distributorName
-        )
-        {
-            return string.Join(
-                ":",
-                distributorName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.DistributorName = distributorName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Distributor.Domain.Model
         private IFuture<Gs2.Gs2Distributor.Model.DistributorModelMaster> GetFuture(
             GetDistributorModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.DistributorModelMaster> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithDistributorName(this.DistributorName);
-                var future = this._client.GetDistributorModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetDistributorModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            request.DistributorName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "distributorModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "DistributorModelMaster"
-                        );
-                        var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Distributor.Model.DistributorModelMaster>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Distributor.Domain.Model
             #endif
             GetDistributorModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithDistributorName(this.DistributorName);
-            GetDistributorModelMasterResult result = null;
-            try {
-                result = await this._client.GetDistributorModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                    request.DistributorName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "distributorModelMaster")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "DistributorModelMaster"
-                    );
-                    var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetDistributorModelMasterAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -241,43 +133,22 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> UpdateFuture(
             UpdateDistributorModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithDistributorName(this.DistributorName);
-                var future = this._client.UpdateDistributorModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateDistributorModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "DistributorModelMaster"
-                        );
-                        var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -294,46 +165,17 @@ namespace Gs2.Gs2Distributor.Domain.Model
             #endif
             UpdateDistributorModelMasterRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithDistributorName(this.DistributorName);
-            UpdateDistributorModelMasterResult result = null;
-                result = await this._client.UpdateDistributorModelMasterAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "DistributorModelMaster"
-                    );
-                    var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateDistributorModelMasterAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> Update(
-            UpdateDistributorModelMasterRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -341,57 +183,24 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> DeleteFuture(
             DeleteDistributorModelMasterRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithDistributorName(this.DistributorName);
-                var future = this._client.DeleteDistributorModelMasterFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteDistributorModelMasterFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            request.DistributorName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "distributorModelMaster")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "DistributorModelMaster"
-                        );
-                        var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.DistributorModelMaster>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -408,58 +217,19 @@ namespace Gs2.Gs2Distributor.Domain.Model
             #endif
             DeleteDistributorModelMasterRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithDistributorName(this.DistributorName);
-            DeleteDistributorModelMasterResult result = null;
             try {
-                result = await this._client.DeleteDistributorModelMasterAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                    request.DistributorName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithDistributorName(this.DistributorName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteDistributorModelMasterAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "distributorModelMaster")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Distributor.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "DistributorModelMaster"
-                    );
-                    var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.DistributorModelMaster>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain> Delete(
-            DeleteDistributorModelMasterRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -472,55 +242,34 @@ namespace Gs2.Gs2Distributor.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Model.DistributorModelMaster> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                        this.DistributorName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.DistributorName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.DistributorName,
+                    () => this.GetFuture(
+                        new GetDistributorModelMasterRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetDistributorModelMasterRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                                    this.DistributorName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "distributorModelMaster")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            this.DistributorName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Distributor.Model.DistributorModelMaster>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Distributor.Model.DistributorModelMaster> ModelAsync()
@@ -528,52 +277,22 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public async Task<Gs2.Gs2Distributor.Model.DistributorModelMaster> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                _parentKey,
-                Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                    this.DistributorName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                    _parentKey,
-                    Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                        this.DistributorName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetDistributorModelMasterRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                                    this.DistributorName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "distributorModelMaster")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                        _parentKey,
-                        Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                            this.DistributorName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.DistributorName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.DistributorName,
+                () => this.GetAsync(
+                    new GetDistributorModelMasterRequest()
+                )
+            );
         }
         #endif
 
@@ -602,20 +321,21 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                _parentKey,
-                Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                    this.DistributorName.ToString()
-                )
+            (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.DistributorName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Distributor.Model.DistributorModelMaster> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                    this.DistributorName.ToString()
+                (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).CacheKey(
+                    this.DistributorName
                 ),
                 callback,
                 () =>
@@ -634,9 +354,11 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Distributor.Model.DistributorModelMaster>(
-                _parentKey,
-                Gs2.Gs2Distributor.Domain.Model.DistributorModelMasterDomain.CreateCacheKey(
-                    this.DistributorName.ToString()
+                (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Distributor.Model.DistributorModelMaster).CacheKey(
+                    this.DistributorName
                 ),
                 callbackId
             );

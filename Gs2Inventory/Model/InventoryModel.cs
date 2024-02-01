@@ -284,5 +284,79 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (InventoryModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.inventoryModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (InitialCapacity < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.initialCapacity.error.invalid"),
+                    });
+                }
+                if (InitialCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.initialCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxCapacity < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.maxCapacity.error.invalid"),
+                    });
+                }
+                if (MaxCapacity > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.maxCapacity.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (ItemModels.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.itemModels.error.tooFew"),
+                    });
+                }
+                if (ItemModels.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("inventoryModel", "inventory.inventoryModel.itemModels.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new InventoryModel {
+                InventoryModelId = InventoryModelId,
+                Name = Name,
+                Metadata = Metadata,
+                InitialCapacity = InitialCapacity,
+                MaxCapacity = MaxCapacity,
+                ProtectReferencedItem = ProtectReferencedItem,
+                ItemModels = ItemModels.Clone() as Gs2.Gs2Inventory.Model.ItemModel[],
+            };
+        }
     }
 }

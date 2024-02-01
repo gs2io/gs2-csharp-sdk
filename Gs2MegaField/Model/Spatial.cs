@@ -334,5 +334,90 @@ namespace Gs2.Gs2MegaField.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (SpatialId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.spatialId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AreaModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.areaModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (LayerModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.layerModelName.error.tooLong"),
+                    });
+                }
+            }
+            {
+            }
+            {
+            }
+            {
+                if (R < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.r.error.invalid"),
+                    });
+                }
+                if (R > 10000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.r.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (LastSyncAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.lastSyncAt.error.invalid"),
+                    });
+                }
+                if (LastSyncAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.lastSyncAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("spatial", "megaField.spatial.createdAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Spatial {
+                SpatialId = SpatialId,
+                UserId = UserId,
+                AreaModelName = AreaModelName,
+                LayerModelName = LayerModelName,
+                Position = Position.Clone() as Gs2.Gs2MegaField.Model.Position,
+                Vector = Vector.Clone() as Gs2.Gs2MegaField.Model.Vector,
+                R = R,
+                LastSyncAt = LastSyncAt,
+                CreatedAt = CreatedAt,
+            };
+        }
     }
 }

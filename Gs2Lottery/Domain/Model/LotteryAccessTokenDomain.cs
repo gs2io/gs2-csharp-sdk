@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Lottery.Domain.Iterator;
+using Gs2.Gs2Lottery.Model.Cache;
 using Gs2.Gs2Lottery.Request;
 using Gs2.Gs2Lottery.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,60 +63,49 @@ namespace Gs2.Gs2Lottery.Domain.Model
     public partial class LotteryAccessTokenDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string LotteryName { get; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public LotteryAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string lotteryName
         ) {
             this._gs2 = gs2;
             this._client = new Gs2LotteryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Lottery.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "Lottery"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.LotteryName = lotteryName;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionFuture(
             PredictionRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._client.PredictionFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithLotteryName(this.LotteryName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.PredictionFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 self.OnComplete(result?.Items);
             }
             return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
@@ -129,51 +120,107 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #endif
             PredictionRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            PredictionResult result = null;
-                result = await this._client.PredictionAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithLotteryName(this.LotteryName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.PredictionAsync(request)
+            );
             return result?.Items;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PredictionFuture.")]
-        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> Prediction(
-            PredictionRequest request
-        ) {
-            return PredictionFuture(request);
+        public Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> Probabilities(
+        )
+        {
+            return new DescribeProbabilitiesIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.LotteryName,
+                this.AccessToken
+            );
         }
         #endif
 
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> ProbabilitiesAsync(
+            #else
+        public DescribeProbabilitiesIterator ProbabilitiesAsync(
+            #endif
         )
         {
-            return string.Join(
-                ":",
-                "lottery",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
+            return new DescribeProbabilitiesIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.LotteryName,
+                this.AccessToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeProbabilities(
+            Action<Gs2.Gs2Lottery.Model.Probability[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Lottery.Model.Probability>(
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LotteryName
+                ),
+                callback
             );
         }
 
-        public static string CreateCacheKey(
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeProbabilitiesWithInitialCallAsync(
+            Action<Gs2.Gs2Lottery.Model.Probability[]> callback
         )
         {
-            return "Singleton";
+            var items = await ProbabilitiesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeProbabilities(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeProbabilities(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Lottery.Model.Probability>(
+                (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.LotteryName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Lottery.Domain.Model.ProbabilityAccessTokenDomain Probability(
+            string prizeId
+        ) {
+            return new Gs2.Gs2Lottery.Domain.Model.ProbabilityAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                this.LotteryName,
+                prizeId
+            );
         }
 
     }

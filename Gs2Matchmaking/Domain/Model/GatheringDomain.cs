@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Matchmaking.Domain.Iterator;
+using Gs2.Gs2Matchmaking.Model.Cache;
 using Gs2.Gs2Matchmaking.Request;
 using Gs2.Gs2Matchmaking.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,14 +63,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
     public partial class GatheringDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _gatheringName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string GatheringName => _gatheringName;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string GatheringName { get; }
 
         public GatheringDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -80,41 +77,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             this._client = new Gs2MatchmakingRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._gatheringName = gatheringName;
-            this._parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Singleton",
-                "Gathering"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string gatheringName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "matchmaking",
-                namespaceName ?? "null",
-                userId ?? "null",
-                gatheringName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string gatheringName
-        )
-        {
-            return string.Join(
-                ":",
-                gatheringName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.GatheringName = gatheringName;
         }
 
     }
@@ -125,45 +90,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> UpdateFuture(
             UpdateGatheringByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGatheringName(this.GatheringName);
-                var future = this._client.UpdateGatheringByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.UpdateGatheringByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Singleton",
-                            "Gathering"
-                        );
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -180,48 +123,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             #endif
             UpdateGatheringByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGatheringName(this.GatheringName);
-            UpdateGatheringByUserIdResult result = null;
-                result = await this._client.UpdateGatheringByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Singleton",
-                        "Gathering"
-                    );
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.UpdateGatheringByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> Update(
-            UpdateGatheringByUserIdRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -229,63 +142,22 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         private IFuture<Gs2.Gs2Matchmaking.Model.Gathering> GetFuture(
             GetGatheringRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Gathering> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithGatheringName(this.GatheringName);
-                var future = this._client.GetGatheringFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.GetGatheringFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            request.GatheringName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Gathering>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "gathering")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Singleton",
-                            "Gathering"
-                        );
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Gathering>(Impl);
@@ -300,52 +172,14 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             #endif
             GetGatheringRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithGatheringName(this.GatheringName);
-            GetGatheringResult result = null;
-            try {
-                result = await this._client.GetGatheringAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    request.GatheringName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Gathering>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "gathering")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Singleton",
-                        "Gathering"
-                    );
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        resultModel.Item.ExpiresAt ?? UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.GetGatheringAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -354,59 +188,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> CancelMatchmakingFuture(
             CancelMatchmakingByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
                     .WithGatheringName(this.GatheringName);
-                var future = this._client.CancelMatchmakingByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.CancelMatchmakingByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            request.GatheringName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Gathering>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "gathering")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Singleton",
-                            "Gathering"
-                        );
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Matchmaking.Model.Gathering>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -423,60 +221,18 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             #endif
             CancelMatchmakingByUserIdRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
                 .WithGatheringName(this.GatheringName);
-            CancelMatchmakingByUserIdResult result = null;
-            try {
-                result = await this._client.CancelMatchmakingByUserIdAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    request.GatheringName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Gathering>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "gathering")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Matchmaking.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Singleton",
-                        "Gathering"
-                    );
-                    var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Matchmaking.Model.Gathering>(parentKey, key);
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.CancelMatchmakingByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CancelMatchmakingFuture.")]
-        public IFuture<Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain> CancelMatchmaking(
-            CancelMatchmakingByUserIdRequest request
-        ) {
-            return CancelMatchmakingFuture(request);
         }
         #endif
 
@@ -489,55 +245,36 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Matchmaking.Model.Gathering> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Gathering>(
-                    _parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                        this.GatheringName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Gathering).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GatheringName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Matchmaking.Model.Gathering).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId,
+                    this.GatheringName,
+                    () => this.GetFuture(
+                        new GetGatheringRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetGatheringRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                                    this.GatheringName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Gathering>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "gathering")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Gathering>(
-                        _parentKey,
-                        Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            this.GatheringName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Matchmaking.Model.Gathering>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Matchmaking.Model.Gathering> ModelAsync()
@@ -545,52 +282,24 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public async Task<Gs2.Gs2Matchmaking.Model.Gathering> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.Gathering>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    this.GatheringName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Gathering>(
-                    _parentKey,
-                    Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                        this.GatheringName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetGatheringRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                                    this.GatheringName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Matchmaking.Model.Gathering>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "gathering")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Matchmaking.Model.Gathering>(
-                        _parentKey,
-                        Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                            this.GatheringName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Matchmaking.Model.Gathering).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.GatheringName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Matchmaking.Model.Gathering).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.GatheringName,
+                () => this.GetAsync(
+                    new GetGatheringRequest()
+                )
+            );
         }
         #endif
 
@@ -619,20 +328,23 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Matchmaking.Model.Gathering>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    this.GatheringName.ToString()
-                )
+            (null as Gs2.Gs2Matchmaking.Model.Gathering).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.GatheringName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Matchmaking.Model.Gathering> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    this.GatheringName.ToString()
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheKey(
+                    this.GatheringName
                 ),
                 callback,
                 () =>
@@ -651,9 +363,12 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Matchmaking.Model.Gathering>(
-                _parentKey,
-                Gs2.Gs2Matchmaking.Domain.Model.GatheringDomain.CreateCacheKey(
-                    this.GatheringName.ToString()
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Matchmaking.Model.Gathering).CacheKey(
+                    this.GatheringName
                 ),
                 callbackId
             );

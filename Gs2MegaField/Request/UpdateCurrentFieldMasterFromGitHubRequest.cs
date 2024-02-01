@@ -84,17 +84,5 @@ namespace Gs2.Gs2MegaField.Request
             key += CheckoutSetting + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply UpdateCurrentFieldMasterFromGitHubRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (UpdateCurrentFieldMasterFromGitHubRequest)x;
-            return this;
-        }
     }
 }

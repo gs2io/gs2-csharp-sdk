@@ -361,5 +361,105 @@ namespace Gs2.Gs2Mission.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (CompleteId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.completeId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (MissionGroupName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.missionGroupName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CompletedMissionTaskNames.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.completedMissionTaskNames.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (ReceivedMissionTaskNames.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.receivedMissionTaskNames.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (NextResetAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.nextResetAt.error.invalid"),
+                    });
+                }
+                if (NextResetAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.nextResetAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("complete", "mission.complete.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Complete {
+                CompleteId = CompleteId,
+                UserId = UserId,
+                MissionGroupName = MissionGroupName,
+                CompletedMissionTaskNames = CompletedMissionTaskNames.Clone() as string[],
+                ReceivedMissionTaskNames = ReceivedMissionTaskNames.Clone() as string[],
+                NextResetAt = NextResetAt,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
+        }
     }
 }

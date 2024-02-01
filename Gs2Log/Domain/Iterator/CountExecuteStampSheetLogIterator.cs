@@ -40,6 +40,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
+using Gs2.Gs2Log.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -69,22 +70,14 @@ namespace Gs2.Gs2Log.Domain.Iterator
     #endif
         private readonly CacheDatabase _cache;
         private readonly Gs2LogRestClient _client;
-        private readonly string _namespaceName;
-        private readonly bool? _service;
-        private readonly bool? _method;
-        private readonly bool? _userId;
-        private readonly bool? _action;
-        private readonly long? _begin;
-        private readonly long? _end;
-        private readonly bool? _longTerm;
-        public string NamespaceName => _namespaceName;
-        public bool? Service => _service;
-        public bool? Method => _method;
-        public bool? UserId => _userId;
-        public bool? Action => _action;
-        public long? Begin => _begin;
-        public long? End => _end;
-        public bool? LongTerm => _longTerm;
+        public string NamespaceName { get; }
+        public bool? Service { get; }
+        public bool? Method { get; }
+        public bool? UserId { get; }
+        public bool? Action { get; }
+        public long? Begin { get; }
+        public long? End { get; }
+        public bool? LongTerm { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -96,24 +89,24 @@ namespace Gs2.Gs2Log.Domain.Iterator
             CacheDatabase cache,
             Gs2LogRestClient client,
             string namespaceName,
-            bool? service,
-            bool? method,
-            bool? userId,
-            bool? action,
-            long? begin,
-            long? end,
-            bool? longTerm
+            bool? service = null,
+            bool? method = null,
+            bool? userId = null,
+            bool? action = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
         ) {
             this._cache = cache;
             this._client = client;
-            this._namespaceName = namespaceName;
-            this._service = service;
-            this._method = method;
-            this._userId = userId;
-            this._action = action;
-            this._begin = begin;
-            this._end = end;
-            this._longTerm = longTerm;
+            this.NamespaceName = namespaceName;
+            this.Service = service;
+            this.Method = method;
+            this.UserId = userId;
+            this.Action = action;
+            this.Begin = begin;
+            this.End = end;
+            this.LongTerm = longTerm;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Log.Model.ExecuteStampSheetLogCount[]{};
@@ -139,14 +132,14 @@ namespace Gs2.Gs2Log.Domain.Iterator
             var r = await this._client.CountExecuteStampSheetLogAsync(
             #endif
                 new Gs2.Gs2Log.Request.CountExecuteStampSheetLogRequest()
-                    .WithNamespaceName(this._namespaceName)
-                    .WithService(this._service)
-                    .WithMethod(this._method)
-                    .WithUserId(this._userId)
-                    .WithAction(this._action)
-                    .WithBegin(this._begin)
-                    .WithEnd(this._end)
-                    .WithLongTerm(this._longTerm)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithService(this.Service)
+                    .WithMethod(this.Method)
+                    .WithUserId(this.UserId)
+                    .WithAction(this.Action)
+                    .WithBegin(this.Begin)
+                    .WithEnd(this.End)
+                    .WithLongTerm(this.LongTerm)
                     .WithPageToken(this._pageToken)
                     .WithLimit(this.fetchSize)
             );
@@ -195,7 +188,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                             Current = null;
                             return;
                         }
-                        Gs2.Gs2Log.Model.ExecuteStampSheetLogCount ret = this._result[0];
+                        var ret = this._result[0];
                         this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                         if (this._result.Length == 0 && !this._last) {
                             await this._load();
@@ -258,7 +251,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     break;
         #endif
                 }
-                Gs2.Gs2Log.Model.ExecuteStampSheetLogCount ret = this._result[0];
+                var ret = this._result[0];
                 this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                 if (this._result.Length == 0 && !this._last) {
         #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -156,5 +156,63 @@ namespace Gs2.Gs2Enchant.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Name.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 512) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ResourceName.Length > 64) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.resourceName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ResourceValue < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.resourceValue.error.invalid"),
+                    });
+                }
+                if (ResourceValue > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.resourceValue.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Weight < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.weight.error.invalid"),
+                    });
+                }
+                if (Weight > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("rarityParameterValueModel", "enchant.rarityParameterValueModel.weight.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new RarityParameterValueModel {
+                Name = Name,
+                Metadata = Metadata,
+                ResourceName = ResourceName,
+                ResourceValue = ResourceValue,
+                Weight = Weight,
+            };
+        }
     }
 }

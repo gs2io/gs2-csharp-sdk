@@ -99,5 +99,39 @@ namespace Gs2.Gs2Money.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Price < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("walletDetail", "money.walletDetail.price.error.invalid"),
+                    });
+                }
+                if (Price > 100000.0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("walletDetail", "money.walletDetail.price.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Count < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("walletDetail", "money.walletDetail.count.error.invalid"),
+                    });
+                }
+                if (Count > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("walletDetail", "money.walletDetail.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new WalletDetail {
+                Price = Price,
+                Count = Count,
+            };
+        }
     }
 }

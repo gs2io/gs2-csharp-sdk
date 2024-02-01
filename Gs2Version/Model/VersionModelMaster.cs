@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 using System;
 using System.Collections.Generic;
@@ -435,6 +437,137 @@ namespace Gs2.Gs2Version.Model
                 diff += (int)(Revision - other.Revision);
             }
             return diff;
+        }
+
+        public void Validate() {
+            {
+                if (VersionModelId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.versionModelId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Description.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.description.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 2048) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                switch (Scope) {
+                    case "passive":
+                    case "active":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("versionModelMaster", "version.versionModelMaster.scope.error.invalid"),
+                        });
+                }
+            }
+            {
+                switch (Type) {
+                    case "simple":
+                    case "schedule":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("versionModelMaster", "version.versionModelMaster.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type == "simple" && Scope == "active") {
+            }
+            if (Type == "simple") {
+            }
+            if (Type == "simple") {
+            }
+            {
+                if (ScheduleVersions.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.scheduleVersions.error.tooMany"),
+                    });
+                }
+            }
+            if (Scope == "passive") {
+            }
+            if (NeedSignature ?? false) {
+                if (SignatureKeyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.signatureKeyId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (CreatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.createdAt.error.invalid"),
+                    });
+                }
+                if (CreatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.createdAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UpdatedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+                if (UpdatedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.updatedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("versionModelMaster", "version.versionModelMaster.revision.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new VersionModelMaster {
+                VersionModelId = VersionModelId,
+                Name = Name,
+                Description = Description,
+                Metadata = Metadata,
+                Scope = Scope,
+                Type = Type,
+                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                WarningVersion = WarningVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                ErrorVersion = ErrorVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                ScheduleVersions = ScheduleVersions.Clone() as Gs2.Gs2Version.Model.ScheduleVersion[],
+                NeedSignature = NeedSignature,
+                SignatureKeyId = SignatureKeyId,
+                CreatedAt = CreatedAt,
+                UpdatedAt = UpdatedAt,
+                Revision = Revision,
+            };
         }
     }
 }

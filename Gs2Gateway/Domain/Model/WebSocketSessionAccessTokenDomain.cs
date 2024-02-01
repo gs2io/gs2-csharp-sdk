@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Gateway.Domain.Iterator;
+using Gs2.Gs2Gateway.Model.Cache;
 using Gs2.Gs2Gateway.Request;
 using Gs2.Gs2Gateway.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -62,15 +64,11 @@ namespace Gs2.Gs2Gateway.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GatewayRestClient _client;
         private readonly Gs2GatewayWebSocketClient _wsclient;
-        private readonly string _namespaceName;
-        private AccessToken _accessToken;
-        public AccessToken AccessToken => _accessToken;
-        private readonly string _connectionId;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string ConnectionId { get; }
         public string Protocol { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _accessToken.UserId;
 
         public WebSocketSessionAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -84,20 +82,14 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this._wsclient = new Gs2GatewayWebSocketClient(
                 gs2.WebSocketSession
             );
-            this._namespaceName = namespaceName;
-            this._accessToken = accessToken;
-            this._parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                this.UserId,
-                "WebSocketSession"
-            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain> SetUserIdFuture(
             SetUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain> self)
             {
                 var future2 = ModelFuture();
@@ -108,40 +100,20 @@ namespace Gs2.Gs2Gateway.Domain.Model
                     yield break;
                 }
                 var model = future2.Result;
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this._accessToken?.Token);
-                var future = this._wsclient.SetUserIdFuture(
-                    request
+                    .WithAccessToken(this.AccessToken?.Token);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._wsclient.SetUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            this.UserId,
-                            "WebSocketSession"
-                        );
-                        var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -159,86 +131,40 @@ namespace Gs2.Gs2Gateway.Domain.Model
             SetUserIdRequest request
         ) {
             var model = await ModelAsync();
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this._accessToken?.Token);
-            SetUserIdResult result = null;
-                result = await this._wsclient.SetUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Gateway.Domain.Model.UserDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        "WebSocketSession"
-                    );
-                    var key = Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._wsclient.SetUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to SetUserIdFuture.")]
-        public IFuture<Gs2.Gs2Gateway.Domain.Model.WebSocketSessionAccessTokenDomain> SetUserId(
-            SetUserIdRequest request
-        ) {
-            return SetUserIdFuture(request);
-        }
-        #endif
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string userId,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "gateway",
-                namespaceName ?? "null",
-                userId ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-        )
-        {
-            return "Singleton";
-        }
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Gateway.Model.WebSocketSession> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                    _parentKey,
-                    Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    )
+                var (value, find) = (null as Gs2.Gs2Gateway.Model.WebSocketSession).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.UserId
                 );
-                self.OnComplete(value);
-                return null;
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture<Gs2.Gs2Gateway.Model.WebSocketSession>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Gateway.Model.WebSocketSession> ModelAsync()
@@ -246,22 +172,15 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public async Task<Gs2.Gs2Gateway.Model.WebSocketSession> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                _parentKey,
-                Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                    _parentKey,
-                    Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                    )
-                );
+            var (value, find) = (null as Gs2.Gs2Gateway.Model.WebSocketSession).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return null;
         }
         #endif
 
@@ -290,18 +209,21 @@ namespace Gs2.Gs2Gateway.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                _parentKey,
-                Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
-                )
+            (null as Gs2.Gs2Gateway.Model.WebSocketSession).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Gateway.Model.WebSocketSession> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheKey(
                 ),
                 callback,
                 () =>
@@ -320,8 +242,11 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                _parentKey,
-                Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain.CreateCacheKey(
+                (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheKey(
                 ),
                 callbackId
             );

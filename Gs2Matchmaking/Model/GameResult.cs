@@ -99,5 +99,34 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (Rank < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gameResult", "matchmaking.gameResult.rank.error.invalid"),
+                    });
+                }
+                if (Rank > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gameResult", "matchmaking.gameResult.rank.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (UserId.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gameResult", "matchmaking.gameResult.userId.error.tooLong"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new GameResult {
+                Rank = Rank,
+                UserId = UserId,
+            };
+        }
     }
 }

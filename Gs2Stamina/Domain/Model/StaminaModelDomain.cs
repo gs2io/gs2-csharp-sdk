@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Stamina.Domain.Iterator;
+using Gs2.Gs2Stamina.Model.Cache;
 using Gs2.Gs2Stamina.Request;
 using Gs2.Gs2Stamina.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
     public partial class StaminaModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _staminaName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string StaminaName => _staminaName;
+        public string NamespaceName { get; }
+        public string StaminaName { get; }
 
         public StaminaModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Stamina.Domain.Model
             this._client = new Gs2StaminaRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._staminaName = staminaName;
-            this._parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "StaminaModel"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string staminaName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "stamina",
-                namespaceName ?? "null",
-                staminaName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string staminaName
-        )
-        {
-            return string.Join(
-                ":",
-                staminaName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.StaminaName = staminaName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Stamina.Domain.Model
         private IFuture<Gs2.Gs2Stamina.Model.StaminaModel> GetFuture(
             GetStaminaModelRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.StaminaModel> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithStaminaName(this.StaminaName);
-                var future = this._client.GetStaminaModelFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetStaminaModelFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                            request.StaminaName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.StaminaModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "staminaModel")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "StaminaModel"
-                        );
-                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.StaminaModel>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
             #endif
             GetStaminaModelRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithStaminaName(this.StaminaName);
-            GetStaminaModelResult result = null;
-            try {
-                result = await this._client.GetStaminaModelAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    request.StaminaName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.StaminaModel>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "staminaModel")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Stamina.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "StaminaModel"
-                    );
-                    var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetStaminaModelAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -246,55 +138,34 @@ namespace Gs2.Gs2Stamina.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.StaminaModel> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.StaminaModel>(
-                    _parentKey,
-                    Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                        this.StaminaName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Stamina.Model.StaminaModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.StaminaName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Stamina.Model.StaminaModel).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.StaminaName,
+                    () => this.GetFuture(
+                        new GetStaminaModelRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetStaminaModelRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                    this.StaminaName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.StaminaModel>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "staminaModel")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.StaminaModel>(
-                        _parentKey,
-                        Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                            this.StaminaName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.StaminaModel>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Stamina.Model.StaminaModel> ModelAsync()
@@ -302,52 +173,22 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public async Task<Gs2.Gs2Stamina.Model.StaminaModel> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.StaminaModel>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    this.StaminaName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.StaminaModel>(
-                    _parentKey,
-                    Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                        this.StaminaName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetStaminaModelRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                                    this.StaminaName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Stamina.Model.StaminaModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "staminaModel")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Stamina.Model.StaminaModel>(
-                        _parentKey,
-                        Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                            this.StaminaName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Stamina.Model.StaminaModel).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.StaminaName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Stamina.Model.StaminaModel).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.StaminaName,
+                () => this.GetAsync(
+                    new GetStaminaModelRequest()
+                )
+            );
         }
         #endif
 
@@ -376,20 +217,21 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Stamina.Model.StaminaModel>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    this.StaminaName.ToString()
-                )
+            (null as Gs2.Gs2Stamina.Model.StaminaModel).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.StaminaName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Stamina.Model.StaminaModel> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    this.StaminaName.ToString()
+                (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheKey(
+                    this.StaminaName
                 ),
                 callback,
                 () =>
@@ -408,9 +250,11 @@ namespace Gs2.Gs2Stamina.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Stamina.Model.StaminaModel>(
-                _parentKey,
-                Gs2.Gs2Stamina.Domain.Model.StaminaModelDomain.CreateCacheKey(
-                    this.StaminaName.ToString()
+                (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheKey(
+                    this.StaminaName
                 ),
                 callbackId
             );

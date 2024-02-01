@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Grade.Domain.Iterator;
+using Gs2.Gs2Grade.Model.Cache;
 using Gs2.Gs2Grade.Request;
 using Gs2.Gs2Grade.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,12 +63,8 @@ namespace Gs2.Gs2Grade.Domain.Model
     public partial class GradeModelDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _gradeName;
-
-        private readonly String _parentKey;
-        public string NamespaceName => _namespaceName;
-        public string GradeName => _gradeName;
+        public string NamespaceName { get; }
+        public string GradeName { get; }
 
         public GradeModelDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -77,37 +75,8 @@ namespace Gs2.Gs2Grade.Domain.Model
             this._client = new Gs2GradeRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._gradeName = gradeName;
-            this._parentKey = Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "GradeModel"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string gradeName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "grade",
-                namespaceName ?? "null",
-                gradeName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string gradeName
-        )
-        {
-            return string.Join(
-                ":",
-                gradeName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.GradeName = gradeName;
         }
 
     }
@@ -118,62 +87,22 @@ namespace Gs2.Gs2Grade.Domain.Model
         private IFuture<Gs2.Gs2Grade.Model.GradeModel> GetFuture(
             GetGradeModelRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.GradeModel> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithGradeName(this.GradeName);
-                var future = this._client.GetGradeModelFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetGradeModelFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                            request.GradeName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Grade.Model.GradeModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "gradeModel")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "GradeModel"
-                        );
-                        var key = Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Grade.Model.GradeModel>(Impl);
@@ -188,51 +117,14 @@ namespace Gs2.Gs2Grade.Domain.Model
             #endif
             GetGradeModelRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithGradeName(this.GradeName);
-            GetGradeModelResult result = null;
-            try {
-                result = await this._client.GetGradeModelAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                    request.GradeName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Grade.Model.GradeModel>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "gradeModel")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Grade.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "GradeModel"
-                    );
-                    var key = Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetGradeModelAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -246,55 +138,34 @@ namespace Gs2.Gs2Grade.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.GradeModel> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.GradeModel>(
-                    _parentKey,
-                    Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                        this.GradeName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Grade.Model.GradeModel).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GradeName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Grade.Model.GradeModel).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.GradeName,
+                    () => this.GetFuture(
+                        new GetGradeModelRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetGradeModelRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                                    this.GradeName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Grade.Model.GradeModel>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "gradeModel")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.GradeModel>(
-                        _parentKey,
-                        Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                            this.GradeName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Grade.Model.GradeModel>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Grade.Model.GradeModel> ModelAsync()
@@ -302,52 +173,22 @@ namespace Gs2.Gs2Grade.Domain.Model
         public async Task<Gs2.Gs2Grade.Model.GradeModel> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.GradeModel>(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                    this.GradeName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.GradeModel>(
-                    _parentKey,
-                    Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                        this.GradeName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetGradeModelRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                                    this.GradeName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Grade.Model.GradeModel>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "gradeModel")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Grade.Model.GradeModel>(
-                        _parentKey,
-                        Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                            this.GradeName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Grade.Model.GradeModel).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.GradeName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Grade.Model.GradeModel).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.GradeName,
+                () => this.GetAsync(
+                    new GetGradeModelRequest()
+                )
+            );
         }
         #endif
 
@@ -376,20 +217,21 @@ namespace Gs2.Gs2Grade.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Grade.Model.GradeModel>(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                    this.GradeName.ToString()
-                )
+            (null as Gs2.Gs2Grade.Model.GradeModel).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.GradeName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Grade.Model.GradeModel> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                    this.GradeName.ToString()
+                (null as Gs2.Gs2Grade.Model.GradeModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Grade.Model.GradeModel).CacheKey(
+                    this.GradeName
                 ),
                 callback,
                 () =>
@@ -408,9 +250,11 @@ namespace Gs2.Gs2Grade.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Grade.Model.GradeModel>(
-                _parentKey,
-                Gs2.Gs2Grade.Domain.Model.GradeModelDomain.CreateCacheKey(
-                    this.GradeName.ToString()
+                (null as Gs2.Gs2Grade.Model.GradeModel).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Grade.Model.GradeModel).CacheKey(
+                    this.GradeName
                 ),
                 callbackId
             );

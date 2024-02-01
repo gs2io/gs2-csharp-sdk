@@ -34,6 +34,7 @@ using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
 using Gs2.Gs2SkillTree.Domain.Iterator;
+using Gs2.Gs2SkillTree.Model.Cache;
 using Gs2.Gs2SkillTree.Domain.Model;
 using Gs2.Gs2SkillTree.Request;
 using Gs2.Gs2SkillTree.Result;
@@ -64,8 +65,6 @@ namespace Gs2.Gs2SkillTree.Domain
     public class Gs2SkillTree {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SkillTreeRestClient _client;
-
-        private readonly String _parentKey;
         public string Url { get; set; }
         public string UploadToken { get; set; }
         public string UploadUrl { get; set; }
@@ -77,48 +76,25 @@ namespace Gs2.Gs2SkillTree.Domain
             this._client = new Gs2SkillTreeRestClient(
                 gs2.RestSession
             );
-            this._parentKey = "skillTree";
         }
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain> self)
             {
-                var future = this._client.CreateNamespaceFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateNamespaceFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    {
-                        var parentKey = string.Join(
-                            ":",
-                            "skillTree",
-                            "Namespace"
-                        );
-                        var key = Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = new Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain(
                     this._gs2,
                     result?.Item?.Name
@@ -137,46 +113,16 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             CreateNamespaceRequest request
         ) {
-            CreateNamespaceResult result = null;
-                result = await this._client.CreateNamespaceAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                {
-                    var parentKey = string.Join(
-                        ":",
-                        "skillTree",
-                        "Namespace"
-                    );
-                    var key = Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = new Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateNamespaceAsync(request)
+            );
+            var domain = new Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain(
+                this._gs2,
+                result?.Item?.Name
+            );
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CreateNamespaceFuture.")]
-        public IFuture<Gs2.Gs2SkillTree.Domain.Model.NamespaceDomain> CreateNamespace(
-            CreateNamespaceRequest request
-        ) {
-            return CreateNamespaceFuture(request);
         }
         #endif
 
@@ -184,25 +130,19 @@ namespace Gs2.Gs2SkillTree.Domain
         public IFuture<Gs2SkillTree> DumpUserDataFuture(
             DumpUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.DumpUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DumpUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -218,27 +158,13 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             DumpUserDataByUserIdRequest request
         ) {
-            DumpUserDataByUserIdResult result = null;
-                result = await this._client.DumpUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.DumpUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DumpUserDataFuture.")]
-        public IFuture<Gs2SkillTree> DumpUserData(
-            DumpUserDataByUserIdRequest request
-        ) {
-            return DumpUserDataFuture(request);
         }
         #endif
 
@@ -246,25 +172,19 @@ namespace Gs2.Gs2SkillTree.Domain
         public IFuture<Gs2SkillTree> CheckDumpUserDataFuture(
             CheckDumpUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.CheckDumpUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckDumpUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Url = domain.Url = result?.Url;
                 self.OnComplete(domain);
@@ -281,28 +201,14 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             CheckDumpUserDataByUserIdRequest request
         ) {
-            CheckDumpUserDataByUserIdResult result = null;
-                result = await this._client.CheckDumpUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckDumpUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.Url = domain.Url = result?.Url;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckDumpUserDataFuture.")]
-        public IFuture<Gs2SkillTree> CheckDumpUserData(
-            CheckDumpUserDataByUserIdRequest request
-        ) {
-            return CheckDumpUserDataFuture(request);
         }
         #endif
 
@@ -310,25 +216,19 @@ namespace Gs2.Gs2SkillTree.Domain
         public IFuture<Gs2SkillTree> CleanUserDataFuture(
             CleanUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.CleanUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CleanUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -344,27 +244,13 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             CleanUserDataByUserIdRequest request
         ) {
-            CleanUserDataByUserIdResult result = null;
-                result = await this._client.CleanUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CleanUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CleanUserDataFuture.")]
-        public IFuture<Gs2SkillTree> CleanUserData(
-            CleanUserDataByUserIdRequest request
-        ) {
-            return CleanUserDataFuture(request);
         }
         #endif
 
@@ -372,25 +258,19 @@ namespace Gs2.Gs2SkillTree.Domain
         public IFuture<Gs2SkillTree> CheckCleanUserDataFuture(
             CheckCleanUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.CheckCleanUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckCleanUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -406,27 +286,13 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             CheckCleanUserDataByUserIdRequest request
         ) {
-            CheckCleanUserDataByUserIdResult result = null;
-                result = await this._client.CheckCleanUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckCleanUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckCleanUserDataFuture.")]
-        public IFuture<Gs2SkillTree> CheckCleanUserData(
-            CheckCleanUserDataByUserIdRequest request
-        ) {
-            return CheckCleanUserDataFuture(request);
         }
         #endif
 
@@ -434,25 +300,19 @@ namespace Gs2.Gs2SkillTree.Domain
         public IFuture<Gs2SkillTree> PrepareImportUserDataFuture(
             PrepareImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.PrepareImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.PrepareImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.UploadToken = domain.UploadToken = result?.UploadToken;
                 this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
@@ -470,17 +330,12 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             PrepareImportUserDataByUserIdRequest request
         ) {
-            PrepareImportUserDataByUserIdResult result = null;
-                result = await this._client.PrepareImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.PrepareImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
@@ -488,37 +343,22 @@ namespace Gs2.Gs2SkillTree.Domain
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to PrepareImportUserDataFuture.")]
-        public IFuture<Gs2SkillTree> PrepareImportUserData(
-            PrepareImportUserDataByUserIdRequest request
-        ) {
-            return PrepareImportUserDataFuture(request);
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2SkillTree> ImportUserDataFuture(
             ImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.ImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.ImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 self.OnComplete(domain);
             }
@@ -534,27 +374,13 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             ImportUserDataByUserIdRequest request
         ) {
-            ImportUserDataByUserIdResult result = null;
-                result = await this._client.ImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.ImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to ImportUserDataFuture.")]
-        public IFuture<Gs2SkillTree> ImportUserData(
-            ImportUserDataByUserIdRequest request
-        ) {
-            return ImportUserDataFuture(request);
         }
         #endif
 
@@ -562,25 +388,19 @@ namespace Gs2.Gs2SkillTree.Domain
         public IFuture<Gs2SkillTree> CheckImportUserDataFuture(
             CheckImportUserDataByUserIdRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2SkillTree> self)
             {
-                var future = this._client.CheckImportUserDataByUserIdFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CheckImportUserDataByUserIdFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Url = domain.Url = result?.Url;
                 self.OnComplete(domain);
@@ -597,32 +417,17 @@ namespace Gs2.Gs2SkillTree.Domain
             #endif
             CheckImportUserDataByUserIdRequest request
         ) {
-            CheckImportUserDataByUserIdResult result = null;
-                result = await this._client.CheckImportUserDataByUserIdAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CheckImportUserDataByUserIdAsync(request)
+            );
+            var domain = this;
             this.Url = domain.Url = result?.Url;
             return domain;
         }
         #endif
-
         #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to CheckImportUserDataFuture.")]
-        public IFuture<Gs2SkillTree> CheckImportUserData(
-            CheckImportUserDataByUserIdRequest request
-        ) {
-            return CheckImportUserDataFuture(request);
-        }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<Gs2.Gs2SkillTree.Model.Namespace> Namespaces(
         )
         {
@@ -631,36 +436,34 @@ namespace Gs2.Gs2SkillTree.Domain
                 this._client
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2SkillTree.Model.Namespace> NamespacesAsync(
             #else
-        public Gs2Iterator<Gs2.Gs2SkillTree.Model.Namespace> Namespaces(
-            #endif
-        #else
         public DescribeNamespacesIterator NamespacesAsync(
-        #endif
+            #endif
         )
         {
             return new DescribeNamespacesIterator(
                 this._gs2.Cache,
                 this._client
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public ulong SubscribeNamespaces(
             Action<Gs2.Gs2SkillTree.Model.Namespace[]> callback
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2SkillTree.Model.Namespace>(
-                "skillTree:Namespace",
+                (null as Gs2.Gs2SkillTree.Model.Namespace).CacheParentKey(
+                ),
                 callback
             );
         }
@@ -685,7 +488,8 @@ namespace Gs2.Gs2SkillTree.Domain
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.Namespace>(
-                "skillTree:Namespace",
+                (null as Gs2.Gs2SkillTree.Model.Namespace).CacheParentKey(
+                ),
                 callbackId
             );
         }
@@ -715,22 +519,12 @@ namespace Gs2.Gs2SkillTree.Domain
                     case "MarkReleaseByUserId": {
                         var requestModel = MarkReleaseByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = MarkReleaseByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Status"
-                            );
-                            var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         MarkReleaseByUserIdComplete?.Invoke(
                             transactionId,
@@ -758,22 +552,12 @@ namespace Gs2.Gs2SkillTree.Domain
                     case "MarkRestrainByUserId": {
                         var requestModel = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(request));
                         var resultModel = MarkRestrainByUserIdResult.FromJson(JsonMapper.ToObject(result));
-                        
-                        if (resultModel.Item != null) {
-                            var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                                requestModel.NamespaceName,
-                                requestModel.UserId,
-                                "Status"
-                            );
-                            var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                            );
-                            _gs2.Cache.Put(
-                                parentKey,
-                                key,
-                                resultModel.Item,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-                        }
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
 
                         MarkRestrainByUserIdComplete?.Invoke(
                             taskId,
@@ -794,22 +578,12 @@ namespace Gs2.Gs2SkillTree.Domain
                 case "mark_release_by_user_id": {
                     var requestModel = MarkReleaseByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
                     var resultModel = MarkReleaseByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2SkillTree.Domain.Model.UserDomain.CreateCacheParentKey(
-                            requestModel.NamespaceName,
-                            requestModel.UserId,
-                            "Status"
-                        );
-                        var key = Gs2.Gs2SkillTree.Domain.Model.StatusDomain.CreateCacheKey(
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
 
                     MarkReleaseByUserIdComplete?.Invoke(
                         job.JobId,

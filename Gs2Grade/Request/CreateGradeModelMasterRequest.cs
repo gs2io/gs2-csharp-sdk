@@ -211,17 +211,5 @@ namespace Gs2.Gs2Grade.Request
             key += AcquireActionRates + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CreateGradeModelMasterRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CreateGradeModelMasterRequest)x;
-            return this;
-        }
     }
 }

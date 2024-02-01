@@ -99,5 +99,34 @@ namespace Gs2.Gs2Inventory.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (ItemName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireCount", "inventory.acquireCount.itemName.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Count < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireCount", "inventory.acquireCount.count.error.invalid"),
+                    });
+                }
+                if (Count > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("acquireCount", "inventory.acquireCount.count.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new AcquireCount {
+                ItemName = ItemName,
+                Count = Count,
+            };
+        }
     }
 }

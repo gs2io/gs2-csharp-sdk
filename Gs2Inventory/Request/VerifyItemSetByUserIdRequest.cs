@@ -148,54 +148,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemName + ":";
             key += VerifyType + ":";
             key += ItemSetName + ":";
-            key += Count + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyItemSetByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                VerifyType = VerifyType,
-                ItemSetName = ItemSetName,
-                Count = Count,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyItemSetByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::userId");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::inventoryName");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::itemName");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::verifyType");
-            }
-            if (ItemSetName != y.ItemSetName) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::itemSetName");
-            }
-            if (Count != y.Count) {
-                throw new ArithmeticException("mismatch parameter values VerifyItemSetByUserIdRequest::count");
-            }
-            return new VerifyItemSetByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                InventoryName = InventoryName,
-                ItemName = ItemName,
-                VerifyType = VerifyType,
-                ItemSetName = ItemSetName,
-                Count = Count,
-            };
         }
     }
 }

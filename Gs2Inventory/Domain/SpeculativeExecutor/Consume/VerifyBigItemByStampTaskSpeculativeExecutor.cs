@@ -191,19 +191,5 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             };
         }
 #endif
-
-        public static VerifyBigItemByUserIdRequest Rate(
-            VerifyBigItemByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static VerifyBigItemByUserIdRequest Rate(
-            VerifyBigItemByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

@@ -31,15 +31,15 @@ using System;
 using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Dictionary.Model;
 using Gs2.Gs2Dictionary.Request;
+using Gs2.Gs2Dictionary.Model.Cache;
+using Gs2.Gs2Dictionary.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -56,24 +56,6 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Dictionary:AddEntriesByUserId";
-        }
-
-        public static List<Gs2.Gs2Dictionary.Model.Entry> Transform(
-            Gs2.Core.Domain.Gs2 domain,
-            AccessToken accessToken,
-            AddEntriesByUserIdRequest request,
-            List<Gs2.Gs2Dictionary.Model.Entry> items
-        ) {
-            foreach (var entryModelName in request.EntryModelNames) {
-                if (!items.Select(v => v.Name).ToList().Contains(entryModelName)) {
-                    items.Add(new Entry {
-                        UserId = accessToken.UserId,
-                        Name = entryModelName,
-                        AcquiredAt = UnixTime.ToUnixTime(DateTime.Now),
-                    });
-                }
-            }
-            return items;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -101,41 +83,26 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                     }
                 }
 
-                if (items == null) {
+                try {
+                    var items_ = items.ToArray().SpeculativeExecution(request);
+
                     result.OnComplete(() =>
                     {
+                        foreach (var item in items_) {
+                            item.PutCache(
+                                domain.Cache,
+                                request.NamespaceName,
+                                accessToken.UserId,
+                                item.Name
+                            );
+                        }
                         return null;
                     });
-                    yield break;
-                }
-                try {
-                    items = Transform(domain, accessToken, request, items);
                 }
                 catch (Gs2Exception e) {
                     result.OnError(e);
                     yield break;
                 }
-
-                result.OnComplete(() =>
-                {
-                    foreach (var item in items) {
-                        var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
-                            request.NamespaceName,
-                            accessToken.UserId,
-                            "Entry"
-                        );
-                        var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                            item.Name.ToString()
-                        );
-                        domain.Cache.Put<Gs2.Gs2Dictionary.Model.Entry>(
-                            parentKey,
-                            key,
-                            item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
-                        );
-                    }
-                    return null;
-                });
                 yield return null;
             }
 
@@ -159,46 +126,21 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 accessToken
             ).EntriesAsync().ToListAsync();
 
-            if (items == null) {
-                return () => null;
-            }
-            items = Transform(domain, accessToken, request, items);
+            var items_ = items.ToArray().SpeculativeExecution(request);
 
             return () =>
             {
-                foreach (var item in items) {
-                    var parentKey = Gs2.Gs2Dictionary.Domain.Model.UserDomain.CreateCacheParentKey(
+                foreach (var item in items_) {
+                    item.PutCache(
+                        domain.Cache,
                         request.NamespaceName,
                         accessToken.UserId,
-                        "Entry"
-                    );
-                    var key = Gs2.Gs2Dictionary.Domain.Model.EntryDomain.CreateCacheKey(
-                        item.Name.ToString()
-                    );
-                    domain.Cache.Put<Gs2.Gs2Dictionary.Model.Entry>(
-                        parentKey,
-                        key,
-                        item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 10
+                        item.Name
                     );
                 }
                 return null;
             };
         }
 #endif
-
-        public static AddEntriesByUserIdRequest Rate(
-            AddEntriesByUserIdRequest request,
-            double rate
-        ) {
-            return request;
-        }
-
-        public static AddEntriesByUserIdRequest Rate(
-            AddEntriesByUserIdRequest request,
-            BigInteger rate
-        ) {
-            return request;
-        }
     }
 }

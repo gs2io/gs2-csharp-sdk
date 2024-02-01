@@ -32,12 +32,14 @@ using System.Text.RegularExpressions;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
 using Gs2.Gs2Key.Domain.Iterator;
+using Gs2.Gs2Key.Model.Cache;
 using Gs2.Gs2Key.Request;
 using Gs2.Gs2Key.Result;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -61,13 +63,9 @@ namespace Gs2.Gs2Key.Domain.Model
     public partial class KeyDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2KeyRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _keyName;
-
-        private readonly String _parentKey;
+        public string NamespaceName { get; }
+        public string KeyName { get; }
         public string Data { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string KeyName => _keyName;
 
         public KeyDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -78,37 +76,8 @@ namespace Gs2.Gs2Key.Domain.Model
             this._client = new Gs2KeyRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._keyName = keyName;
-            this._parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                this.NamespaceName,
-                "Key"
-            );
-        }
-
-        public static string CreateCacheParentKey(
-            string namespaceName,
-            string keyName,
-            string childType
-        )
-        {
-            return string.Join(
-                ":",
-                "key",
-                namespaceName ?? "null",
-                keyName ?? "null",
-                childType
-            );
-        }
-
-        public static string CreateCacheKey(
-            string keyName
-        )
-        {
-            return string.Join(
-                ":",
-                keyName ?? "null"
-            );
+            this.NamespaceName = namespaceName;
+            this.KeyName = keyName;
         }
 
     }
@@ -119,43 +88,22 @@ namespace Gs2.Gs2Key.Domain.Model
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> UpdateFuture(
             UpdateKeyRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
-                var future = this._client.UpdateKeyFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.UpdateKeyFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Key"
-                        );
-                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -172,46 +120,17 @@ namespace Gs2.Gs2Key.Domain.Model
             #endif
             UpdateKeyRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
-            UpdateKeyResult result = null;
-                result = await this._client.UpdateKeyAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Key"
-                    );
-                    var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.UpdateKeyAsync(request)
+            );
+            var domain = this;
 
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to UpdateFuture.")]
-        public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> Update(
-            UpdateKeyRequest request
-        ) {
-            return UpdateFuture(request);
         }
         #endif
 
@@ -219,62 +138,22 @@ namespace Gs2.Gs2Key.Domain.Model
         private IFuture<Gs2.Gs2Key.Model.Key> GetFuture(
             GetKeyRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.Key> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
-                var future = this._client.GetKeyFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.GetKeyFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            request.KeyName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "key")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Key"
-                        );
-                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Put(
-                            parentKey,
-                            key,
-                            resultModel.Item,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-                    }
-                }
                 self.OnComplete(result?.Item);
             }
             return new Gs2InlineFuture<Gs2.Gs2Key.Model.Key>(Impl);
@@ -289,51 +168,14 @@ namespace Gs2.Gs2Key.Domain.Model
             #endif
             GetKeyRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
-            GetKeyResult result = null;
-            try {
-                result = await this._client.GetKeyAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    request.KeyName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                    _parentKey,
-                    key,
-                    null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "key")
-                {
-                    throw;
-                }
-            }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Key"
-                    );
-                    var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Put(
-                        parentKey,
-                        key,
-                        resultModel.Item,
-                        UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                    );
-                }
-            }
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.GetKeyAsync(request)
+            );
             return result?.Item;
         }
         #endif
@@ -342,57 +184,24 @@ namespace Gs2.Gs2Key.Domain.Model
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> DeleteFuture(
             DeleteKeyRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
-                var future = this._client.DeleteKeyFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DeleteKeyFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
-                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            request.KeyName.ToString()
-                        );
-                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (future.Error.Errors.Length == 0 || future.Error.Errors[0].Component != "key")
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    else {
+                if (future.Error != null) {
+                    if (!(future.Error is NotFoundException)) {
                         self.OnError(future.Error);
                         yield break;
                     }
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                    if (resultModel.Item != null) {
-                        var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                            this.NamespaceName,
-                            "Key"
-                        );
-                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            resultModel.Item.Name.ToString()
-                        );
-                        _gs2.Cache.Delete<Gs2.Gs2Key.Model.Key>(parentKey, key);
-                    }
-                }
                 var domain = this;
 
                 self.OnComplete(domain);
@@ -409,58 +218,19 @@ namespace Gs2.Gs2Key.Domain.Model
             #endif
             DeleteKeyRequest request
         ) {
-            request
-                .WithNamespaceName(this.NamespaceName)
-                .WithKeyName(this.KeyName);
-            DeleteKeyResult result = null;
             try {
-                result = await this._client.DeleteKeyAsync(
-                    request
-                );
-            } catch (Gs2.Core.Exception.NotFoundException e) {
-                var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    request.KeyName.ToString()
-                    );
-                this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                    _parentKey,
-                    key,
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithKeyName(this.KeyName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
                     null,
-                    UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+                    () => this._client.DeleteKeyAsync(request)
                 );
-
-                if (e.Errors.Length == 0 || e.Errors[0].Component != "key")
-                {
-                    throw;
-                }
             }
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-                if (resultModel.Item != null) {
-                    var parentKey = Gs2.Gs2Key.Domain.Model.NamespaceDomain.CreateCacheParentKey(
-                        this.NamespaceName,
-                        "Key"
-                    );
-                    var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        resultModel.Item.Name.ToString()
-                    );
-                    _gs2.Cache.Delete<Gs2.Gs2Key.Model.Key>(parentKey, key);
-                }
-            }
-                var domain = this;
-
+            catch (NotFoundException e) {}
+            var domain = this;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DeleteFuture.")]
-        public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> Delete(
-            DeleteKeyRequest request
-        ) {
-            return DeleteFuture(request);
         }
         #endif
 
@@ -468,28 +238,22 @@ namespace Gs2.Gs2Key.Domain.Model
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> EncryptFuture(
             EncryptRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
-                var future = this._client.EncryptFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.EncryptFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Data = domain.Data = result?.Data;
                 self.OnComplete(domain);
@@ -506,31 +270,17 @@ namespace Gs2.Gs2Key.Domain.Model
             #endif
             EncryptRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
-            EncryptResult result = null;
-                result = await this._client.EncryptAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.EncryptAsync(request)
+            );
+            var domain = this;
             this.Data = domain.Data = result?.Data;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to EncryptFuture.")]
-        public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> Encrypt(
-            EncryptRequest request
-        ) {
-            return EncryptFuture(request);
         }
         #endif
 
@@ -538,28 +288,22 @@ namespace Gs2.Gs2Key.Domain.Model
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> DecryptFuture(
             DecryptRequest request
         ) {
-
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
             {
-                request
+                request = request
                     .WithNamespaceName(this.NamespaceName)
                     .WithKeyName(this.KeyName);
-                var future = this._client.DecryptFuture(
-                    request
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.DecryptFuture(request)
                 );
                 yield return future;
-                if (future.Error != null)
-                {
+                if (future.Error != null) {
                     self.OnError(future.Error);
                     yield break;
                 }
                 var result = future.Result;
-
-                var requestModel = request;
-                var resultModel = result;
-                if (resultModel != null) {
-                    
-                }
                 var domain = this;
                 this.Data = domain.Data = result?.Data;
                 self.OnComplete(domain);
@@ -576,31 +320,17 @@ namespace Gs2.Gs2Key.Domain.Model
             #endif
             DecryptRequest request
         ) {
-            request
+            request = request
                 .WithNamespaceName(this.NamespaceName)
                 .WithKeyName(this.KeyName);
-            DecryptResult result = null;
-                result = await this._client.DecryptAsync(
-                    request
-                );
-
-            var requestModel = request;
-            var resultModel = result;
-            if (resultModel != null) {
-                
-            }
-                var domain = this;
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.DecryptAsync(request)
+            );
+            var domain = this;
             this.Data = domain.Data = result?.Data;
             return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        [Obsolete("The name has been changed to DecryptFuture.")]
-        public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> Decrypt(
-            DecryptRequest request
-        ) {
-            return DecryptFuture(request);
         }
         #endif
 
@@ -613,55 +343,34 @@ namespace Gs2.Gs2Key.Domain.Model
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.Key> self)
             {
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
-                    _parentKey,
-                    Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        this.KeyName?.ToString()
+                var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.KeyName
+                );
+                if (find) {
+                    self.OnComplete(value);
+                    yield break;
+                }
+                var future = (null as Gs2.Gs2Key.Model.Key).FetchFuture(
+                    this._gs2.Cache,
+                    this.NamespaceName,
+                    this.KeyName,
+                    () => this.GetFuture(
+                        new GetKeyRequest()
                     )
                 );
-                if (!find) {
-                    var future = this.GetFuture(
-                        new GetKeyRequest()
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        if (future.Error is Gs2.Core.Exception.NotFoundException e)
-                        {
-                            var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                                    this.KeyName?.ToString()
-                                );
-                            this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                                _parentKey,
-                                key,
-                                null,
-                                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                            );
-
-                            if (e.errors.Length == 0 || e.errors[0].component != "key")
-                            {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                        else
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
-                        _parentKey,
-                        Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            this.KeyName?.ToString()
-                        )
-                    );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
                 }
-                self.OnComplete(value);
+                self.OnComplete(future.Result);
             }
             return new Gs2InlineFuture<Gs2.Gs2Key.Model.Key>(Impl);
         }
         #endif
+
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
         public async UniTask<Gs2.Gs2Key.Model.Key> ModelAsync()
@@ -669,52 +378,22 @@ namespace Gs2.Gs2Key.Domain.Model
         public async Task<Gs2.Gs2Key.Model.Key> ModelAsync()
             #endif
         {
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.Key>(
-                _parentKey,
-                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    this.KeyName?.ToString()
-                )).LockAsync())
-            {
-        # endif
-                var (value, find) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
-                    _parentKey,
-                    Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                        this.KeyName?.ToString()
-                    )
-                );
-                if (!find) {
-                    try {
-                        await this.GetAsync(
-                            new GetKeyRequest()
-                        );
-                    } catch (Gs2.Core.Exception.NotFoundException e) {
-                        var key = Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                                    this.KeyName?.ToString()
-                                );
-                        this._gs2.Cache.Put<Gs2.Gs2Key.Model.Key>(
-                            _parentKey,
-                            key,
-                            null,
-                            UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-                        );
-
-                        if (e.errors.Length == 0 || e.errors[0].component != "key")
-                        {
-                            throw;
-                        }
-                    }
-                    (value, _) = _gs2.Cache.Get<Gs2.Gs2Key.Model.Key>(
-                        _parentKey,
-                        Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                            this.KeyName?.ToString()
-                        )
-                    );
-                }
+            var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.KeyName
+            );
+            if (find) {
                 return value;
-        #if (UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK) || !UNITY_2017_1_OR_NEWER
             }
-        # endif
+            return await (null as Gs2.Gs2Key.Model.Key).FetchAsync(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.KeyName,
+                () => this.GetAsync(
+                    new GetKeyRequest()
+                )
+            );
         }
         #endif
 
@@ -743,20 +422,21 @@ namespace Gs2.Gs2Key.Domain.Model
 
         public void Invalidate()
         {
-            this._gs2.Cache.Delete<Gs2.Gs2Key.Model.Key>(
-                _parentKey,
-                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    this.KeyName.ToString()
-                )
+            (null as Gs2.Gs2Key.Model.Key).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.KeyName
             );
         }
 
         public ulong Subscribe(Action<Gs2.Gs2Key.Model.Key> callback)
         {
             return this._gs2.Cache.Subscribe(
-                _parentKey,
-                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    this.KeyName.ToString()
+                (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Key.Model.Key).CacheKey(
+                    this.KeyName
                 ),
                 callback,
                 () =>
@@ -775,9 +455,11 @@ namespace Gs2.Gs2Key.Domain.Model
         public void Unsubscribe(ulong callbackId)
         {
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Key.Model.Key>(
-                _parentKey,
-                Gs2.Gs2Key.Domain.Model.KeyDomain.CreateCacheKey(
-                    this.KeyName.ToString()
+                (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
+                    this.NamespaceName
+                ),
+                (null as Gs2.Gs2Key.Model.Key).CacheKey(
+                    this.KeyName
                 ),
                 callbackId
             );

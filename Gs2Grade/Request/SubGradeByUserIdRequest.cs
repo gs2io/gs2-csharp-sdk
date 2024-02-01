@@ -126,38 +126,5 @@ namespace Gs2.Gs2Grade.Request
             key += PropertyId + ":";
             return key;
         }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new SubGradeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                PropertyId = PropertyId,
-                GradeValue = GradeValue * x,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (SubGradeByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values SubGradeByUserIdRequest::namespaceName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values SubGradeByUserIdRequest::userId");
-            }
-            if (GradeName != y.GradeName) {
-                throw new ArithmeticException("mismatch parameter values SubGradeByUserIdRequest::gradeName");
-            }
-            if (PropertyId != y.PropertyId) {
-                throw new ArithmeticException("mismatch parameter values SubGradeByUserIdRequest::propertyId");
-            }
-            return new SubGradeByUserIdRequest {
-                NamespaceName = NamespaceName,
-                UserId = UserId,
-                GradeName = GradeName,
-                PropertyId = PropertyId,
-                GradeValue = GradeValue + y.GradeValue,
-            };
-        }
     }
 }

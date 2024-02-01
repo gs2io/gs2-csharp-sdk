@@ -33,9 +33,8 @@ namespace Gs2.Gs2Project.Request
 	[System.Serializable]
 	public class CleanUserDataRequest : Gs2Request<CleanUserDataRequest>
 	{
-        public string UserId { set; get; }
+         public string UserId { set; get; }
         public string DuplicationAvoider { set; get; }
-
         public CleanUserDataRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -79,18 +78,6 @@ namespace Gs2.Gs2Project.Request
             var key = "";
             key += UserId + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            if (x != 1) {
-                throw new ArithmeticException("Unsupported multiply CleanUserDataRequest");
-            }
-            return this;
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (CleanUserDataRequest)x;
-            return this;
         }
     }
 }

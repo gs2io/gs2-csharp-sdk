@@ -265,5 +265,61 @@ namespace Gs2.Gs2Inbox.Model
             }
             return diff;
         }
+
+        public void Validate() {
+            {
+                if (GlobalMessageId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.globalMessageId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Name.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.name.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Metadata.Length > 4096) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.metadata.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (ReadAcquireActions.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.readAcquireActions.error.tooMany"),
+                    });
+                }
+            }
+            {
+            }
+            {
+                if (ExpiresAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.expiresAt.error.invalid"),
+                    });
+                }
+                if (ExpiresAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("globalMessage", "inbox.globalMessage.expiresAt.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new GlobalMessage {
+                GlobalMessageId = GlobalMessageId,
+                Name = Name,
+                Metadata = Metadata,
+                ReadAcquireActions = ReadAcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
+                ExpiresTimeSpan = ExpiresTimeSpan.Clone() as Gs2.Gs2Inbox.Model.TimeSpan_,
+                ExpiresAt = ExpiresAt,
+            };
+        }
     }
 }

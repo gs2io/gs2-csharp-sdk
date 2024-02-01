@@ -147,55 +147,8 @@ namespace Gs2.Gs2Inventory.Request
             key += UserId + ":";
             key += ItemName + ":";
             key += ItemSetName + ":";
-            key += ReferenceOf + ":";
             key += VerifyType + ":";
             return key;
-        }
-
-        protected override Gs2Request DoMultiple(int x) {
-            return new VerifyReferenceOfByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ItemSetName = ItemSetName,
-                ReferenceOf = ReferenceOf,
-                VerifyType = VerifyType,
-            };
-        }
-
-        protected override Gs2Request DoAdd(Gs2Request x) {
-            var y = (VerifyReferenceOfByUserIdRequest)x;
-            if (NamespaceName != y.NamespaceName) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::namespaceName");
-            }
-            if (InventoryName != y.InventoryName) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::inventoryName");
-            }
-            if (UserId != y.UserId) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::userId");
-            }
-            if (ItemName != y.ItemName) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::itemName");
-            }
-            if (ItemSetName != y.ItemSetName) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::itemSetName");
-            }
-            if (ReferenceOf != y.ReferenceOf) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::referenceOf");
-            }
-            if (VerifyType != y.VerifyType) {
-                throw new ArithmeticException("mismatch parameter values VerifyReferenceOfByUserIdRequest::verifyType");
-            }
-            return new VerifyReferenceOfByUserIdRequest {
-                NamespaceName = NamespaceName,
-                InventoryName = InventoryName,
-                UserId = UserId,
-                ItemName = ItemName,
-                ItemSetName = ItemSetName,
-                ReferenceOf = ReferenceOf,
-                VerifyType = VerifyType,
-            };
         }
     }
 }
