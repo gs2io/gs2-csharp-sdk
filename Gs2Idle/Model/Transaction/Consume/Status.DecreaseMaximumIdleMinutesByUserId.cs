@@ -46,8 +46,8 @@ namespace Gs2.Gs2Idle.Model.Transaction
             this Status self,
             DecreaseMaximumIdleMinutesByUserIdRequest request
         ) {
-            var clone = self.Clone() as Status;
-            if (clone == null) {
+            if (self.Clone() is not Status clone)
+            {
                 throw new NullReferenceException();
             }
             clone.MaximumIdleMinutes -= request.DecreaseMinutes;

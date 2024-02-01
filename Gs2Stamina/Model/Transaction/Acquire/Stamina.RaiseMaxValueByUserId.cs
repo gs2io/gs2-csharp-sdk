@@ -46,8 +46,8 @@ namespace Gs2.Gs2Stamina.Model.Transaction
             this Stamina self,
             RaiseMaxValueByUserIdRequest request
         ) {
-            var clone = self.Clone() as Stamina;
-            if (clone == null) {
+            if (self.Clone() is not Stamina clone)
+            {
                 throw new NullReferenceException();
             }
             clone.MaxValue += request.RaiseValue;

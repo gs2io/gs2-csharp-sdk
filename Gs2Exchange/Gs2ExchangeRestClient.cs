@@ -4891,6 +4891,16 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
                 }
+                if (request.Config != null)
+                {
+                    jsonWriter.WritePropertyName("config");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Config)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

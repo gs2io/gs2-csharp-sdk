@@ -46,8 +46,8 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this BalanceParameterStatus self,
             SetBalanceParameterStatusByUserIdRequest request
         ) {
-            var clone = self.Clone() as BalanceParameterStatus;
-            if (clone == null) {
+            if (self.Clone() is not BalanceParameterStatus clone)
+            {
                 throw new NullReferenceException();
             }
             clone.ParameterValues = request.ParameterValues;

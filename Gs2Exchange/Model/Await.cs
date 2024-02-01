@@ -36,6 +36,7 @@ namespace Gs2.Gs2Exchange.Model
         public string RateName { set; get; }
         public string Name { set; get; }
         public int? Count { set; get; }
+        public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public long? ExchangedAt { set; get; }
         public long? Revision { set; get; }
         public Await WithAwaitId(string awaitId) {
@@ -56,6 +57,10 @@ namespace Gs2.Gs2Exchange.Model
         }
         public Await WithCount(int? count) {
             this.Count = count;
+            return this;
+        }
+        public Await WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
         public Await WithExchangedAt(long? exchangedAt) {
@@ -166,18 +171,31 @@ namespace Gs2.Gs2Exchange.Model
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.Config.FromJson(v);
+                }).ToArray())
                 .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : (long?)(data["exchangedAt"].ToString().Contains(".") ? (long)double.Parse(data["exchangedAt"].ToString()) : long.Parse(data["exchangedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
         {
+            JsonData configJsonData = null;
+            if (Config != null && Config.Length > 0)
+            {
+                configJsonData = new JsonData();
+                foreach (var confi in Config)
+                {
+                    configJsonData.Add(confi.ToJson());
+                }
+            }
             return new JsonData {
                 ["awaitId"] = AwaitId,
                 ["userId"] = UserId,
                 ["rateName"] = RateName,
                 ["name"] = Name,
                 ["count"] = Count,
+                ["config"] = configJsonData,
                 ["exchangedAt"] = ExchangedAt,
                 ["revision"] = Revision,
             };
@@ -205,6 +223,17 @@ namespace Gs2.Gs2Exchange.Model
             if (Count != null) {
                 writer.WritePropertyName("count");
                 writer.Write((Count.ToString().Contains(".") ? (int)double.Parse(Count.ToString()) : int.Parse(Count.ToString())));
+            }
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (ExchangedAt != null) {
                 writer.WritePropertyName("exchangedAt");
@@ -260,6 +289,18 @@ namespace Gs2.Gs2Exchange.Model
             else
             {
                 diff += (int)(Count - other.Count);
+            }
+            if (Config == null && Config == other.Config)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += Config.Length - other.Config.Length;
+                for (var i = 0; i < Config.Length; i++)
+                {
+                    diff += Config[i].CompareTo(other.Config[i]);
+                }
             }
             if (ExchangedAt == null && ExchangedAt == other.ExchangedAt)
             {
@@ -322,6 +363,13 @@ namespace Gs2.Gs2Exchange.Model
                 }
             }
             {
+                if (Config.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.config.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (ExchangedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("await", "exchange.await.exchangedAt.error.invalid"),
@@ -354,6 +402,7 @@ namespace Gs2.Gs2Exchange.Model
                 RateName = RateName,
                 Name = Name,
                 Count = Count,
+                Config = Config.Clone() as Gs2.Gs2Exchange.Model.Config[],
                 ExchangedAt = ExchangedAt,
                 Revision = Revision,
             };

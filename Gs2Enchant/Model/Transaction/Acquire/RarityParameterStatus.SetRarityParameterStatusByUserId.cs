@@ -46,8 +46,8 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this RarityParameterStatus self,
             SetRarityParameterStatusByUserIdRequest request
         ) {
-            var clone = self.Clone() as RarityParameterStatus;
-            if (clone == null) {
+            if (self.Clone() is not RarityParameterStatus clone)
+            {
                 throw new NullReferenceException();
             }
             clone.ParameterValues = request.ParameterValues;

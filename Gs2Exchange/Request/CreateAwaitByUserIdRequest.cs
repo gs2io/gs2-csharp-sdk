@@ -37,6 +37,7 @@ namespace Gs2.Gs2Exchange.Request
          public string UserId { set; get; }
          public string RateName { set; get; }
          public int? Count { set; get; }
+         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
         public CreateAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Exchange.Request
         }
         public CreateAwaitByUserIdRequest WithCount(int? count) {
             this.Count = count;
+            return this;
+        }
+        public CreateAwaitByUserIdRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
+            this.Config = config;
             return this;
         }
 
@@ -72,16 +77,29 @@ namespace Gs2.Gs2Exchange.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
+                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Exchange.Model.Config.FromJson(v);
+                }).ToArray());
         }
 
         public override JsonData ToJson()
         {
+            JsonData configJsonData = null;
+            if (Config != null && Config.Length > 0)
+            {
+                configJsonData = new JsonData();
+                foreach (var confi in Config)
+                {
+                    configJsonData.Add(confi.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["rateName"] = RateName,
                 ["count"] = Count,
+                ["config"] = configJsonData,
             };
         }
 
@@ -104,6 +122,17 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("count");
                 writer.Write((Count.ToString().Contains(".") ? (int)double.Parse(Count.ToString()) : int.Parse(Count.ToString())));
             }
+            if (Config != null) {
+                writer.WritePropertyName("config");
+                writer.WriteArrayStart();
+                foreach (var confi in Config)
+                {
+                    if (confi != null) {
+                        confi.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             writer.WriteObjectEnd();
         }
 
@@ -112,6 +141,7 @@ namespace Gs2.Gs2Exchange.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += RateName + ":";
+            key += Config + ":";
             return key;
         }
     }

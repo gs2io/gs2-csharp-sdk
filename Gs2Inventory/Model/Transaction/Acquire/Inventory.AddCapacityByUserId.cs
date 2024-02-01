@@ -46,8 +46,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this Inventory self,
             AddCapacityByUserIdRequest request
         ) {
-            var clone = self.Clone() as Inventory;
-            if (clone == null)
+            if (self.Clone() is not Inventory clone)
             {
                 throw new NullReferenceException();
             }

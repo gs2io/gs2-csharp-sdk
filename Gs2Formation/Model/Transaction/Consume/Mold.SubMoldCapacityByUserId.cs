@@ -46,8 +46,8 @@ namespace Gs2.Gs2Formation.Model.Transaction
             this Mold self,
             SubMoldCapacityByUserIdRequest request
         ) {
-            var clone = self.Clone() as Mold;
-            if (clone == null) {
+            if (self.Clone() is not Mold clone)
+            {
                 throw new NullReferenceException();
             }
             clone.Capacity -= request.Capacity;
