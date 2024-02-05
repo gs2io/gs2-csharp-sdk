@@ -137,6 +137,56 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Schedule.Domain.Model.EventDomain> VerifyFuture(
+            VerifyEventByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.EventDomain> self)
+            {
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithEventName(this.EventName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyEventByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.EventDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Schedule.Domain.Model.EventDomain> VerifyAsync(
+            #else
+        public async Task<Gs2.Gs2Schedule.Domain.Model.EventDomain> VerifyAsync(
+            #endif
+            VerifyEventByUserIdRequest request
+        ) {
+            request = request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithEventName(this.EventName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyEventByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
     }
 
     public partial class EventDomain {

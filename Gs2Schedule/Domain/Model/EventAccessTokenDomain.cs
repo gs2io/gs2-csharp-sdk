@@ -135,6 +135,56 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain> VerifyFuture(
+            VerifyEventRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain> self)
+            {
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithEventName(this.EventName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.VerifyEventFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain> VerifyAsync(
+            #else
+        public async Task<Gs2.Gs2Schedule.Domain.Model.EventAccessTokenDomain> VerifyAsync(
+            #endif
+            VerifyEventRequest request
+        ) {
+            request = request
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithEventName(this.EventName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.VerifyEventAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Schedule.Model.Event> ModelFuture()
         {
             IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)

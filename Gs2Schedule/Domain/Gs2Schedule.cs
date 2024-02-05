@@ -542,6 +542,12 @@ namespace Gs2.Gs2Schedule.Domain
         public static Action<string, DeleteTriggerByUserIdRequest, DeleteTriggerByUserIdResult> DeleteTriggerByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, VerifyEventByUserIdRequest, VerifyEventByUserIdResult> VerifyEventByUserIdComplete = new UnityEvent<string, VerifyEventByUserIdRequest, VerifyEventByUserIdResult>();
+    #else
+        public static Action<string, VerifyEventByUserIdRequest, VerifyEventByUserIdResult> VerifyEventByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampTask(
                 string taskId,
                 string method,
@@ -560,6 +566,23 @@ namespace Gs2.Gs2Schedule.Domain
                         );
 
                         DeleteTriggerByUserIdComplete?.Invoke(
+                            taskId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "VerifyEventByUserId": {
+                        var requestModel = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyEventByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        VerifyEventByUserIdComplete?.Invoke(
                             taskId,
                             requestModel,
                             resultModel

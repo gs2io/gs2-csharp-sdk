@@ -74,6 +74,22 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (VerifyEventByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                    var request = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                    request = request.Rate(rate);
+                    var future = VerifyEventByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 result.OnComplete(null);
                 yield return null;
             }
@@ -100,6 +116,15 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
                 var request = DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
                 request = request.Rate(rate);
                 return await DeleteTriggerByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyEventByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
+                var request = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+                request = request.Rate(rate);
+                return await VerifyEventByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request
