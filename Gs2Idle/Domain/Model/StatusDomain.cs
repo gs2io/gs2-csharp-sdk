@@ -364,6 +364,58 @@ namespace Gs2.Gs2Idle.Domain.Model
         }
         #endif
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> SetMaximumIdleMinutesFuture(
+            SetMaximumIdleMinutesByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain> self)
+            {
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithCategoryName(this.CategoryName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.SetMaximumIdleMinutesByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.StatusDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Idle.Domain.Model.StatusDomain> SetMaximumIdleMinutesAsync(
+            #else
+        public async Task<Gs2.Gs2Idle.Domain.Model.StatusDomain> SetMaximumIdleMinutesAsync(
+            #endif
+            SetMaximumIdleMinutesByUserIdRequest request
+        ) {
+            request = request
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithCategoryName(this.CategoryName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                () => this._client.SetMaximumIdleMinutesByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+        #endif
+
     }
 
     public partial class StatusDomain {

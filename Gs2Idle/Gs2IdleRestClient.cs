@@ -3652,6 +3652,134 @@ namespace Gs2.Gs2Idle
 #endif
 
 
+        public class SetMaximumIdleMinutesByUserIdTask : Gs2RestSessionTask<SetMaximumIdleMinutesByUserIdRequest, SetMaximumIdleMinutesByUserIdResult>
+        {
+            public SetMaximumIdleMinutesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SetMaximumIdleMinutesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetMaximumIdleMinutesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "idle")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/model/{categoryName}/maximumIdle";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{categoryName}", !string.IsNullOrEmpty(request.CategoryName) ? request.CategoryName.ToString() : "null");
+
+                var sessionRequest = Factory.Put(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.MaximumIdleMinutes != null)
+                {
+                    jsonWriter.WritePropertyName("maximumIdleMinutes");
+                    jsonWriter.Write(request.MaximumIdleMinutes.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetMaximumIdleMinutesByUserId(
+                Request.SetMaximumIdleMinutesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.SetMaximumIdleMinutesByUserIdResult>> callback
+        )
+		{
+			var task = new SetMaximumIdleMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetMaximumIdleMinutesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetMaximumIdleMinutesByUserIdResult> SetMaximumIdleMinutesByUserIdFuture(
+                Request.SetMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+			return new SetMaximumIdleMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetMaximumIdleMinutesByUserIdResult> SetMaximumIdleMinutesByUserIdAsync(
+                Request.SetMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.SetMaximumIdleMinutesByUserIdResult> result = null;
+			await SetMaximumIdleMinutesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetMaximumIdleMinutesByUserIdTask SetMaximumIdleMinutesByUserIdAsync(
+                Request.SetMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+			return new SetMaximumIdleMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetMaximumIdleMinutesByUserIdResult> SetMaximumIdleMinutesByUserIdAsync(
+                Request.SetMaximumIdleMinutesByUserIdRequest request
+        )
+		{
+			var task = new SetMaximumIdleMinutesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class IncreaseMaximumIdleMinutesByStampSheetTask : Gs2RestSessionTask<IncreaseMaximumIdleMinutesByStampSheetRequest, IncreaseMaximumIdleMinutesByStampSheetResult>
         {
             public IncreaseMaximumIdleMinutesByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, IncreaseMaximumIdleMinutesByStampSheetRequest request) : base(session, factory, request)
@@ -3893,6 +4021,131 @@ namespace Gs2.Gs2Idle
         )
 		{
 			var task = new DecreaseMaximumIdleMinutesByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SetMaximumIdleMinutesByStampSheetTask : Gs2RestSessionTask<SetMaximumIdleMinutesByStampSheetRequest, SetMaximumIdleMinutesByStampSheetResult>
+        {
+            public SetMaximumIdleMinutesByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SetMaximumIdleMinutesByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetMaximumIdleMinutesByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "idle")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/status/maximumIdleMinutes/set";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetMaximumIdleMinutesByStampSheet(
+                Request.SetMaximumIdleMinutesByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetMaximumIdleMinutesByStampSheetResult>> callback
+        )
+		{
+			var task = new SetMaximumIdleMinutesByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetMaximumIdleMinutesByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetMaximumIdleMinutesByStampSheetResult> SetMaximumIdleMinutesByStampSheetFuture(
+                Request.SetMaximumIdleMinutesByStampSheetRequest request
+        )
+		{
+			return new SetMaximumIdleMinutesByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetMaximumIdleMinutesByStampSheetResult> SetMaximumIdleMinutesByStampSheetAsync(
+                Request.SetMaximumIdleMinutesByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SetMaximumIdleMinutesByStampSheetResult> result = null;
+			await SetMaximumIdleMinutesByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetMaximumIdleMinutesByStampSheetTask SetMaximumIdleMinutesByStampSheetAsync(
+                Request.SetMaximumIdleMinutesByStampSheetRequest request
+        )
+		{
+			return new SetMaximumIdleMinutesByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetMaximumIdleMinutesByStampSheetResult> SetMaximumIdleMinutesByStampSheetAsync(
+                Request.SetMaximumIdleMinutesByStampSheetRequest request
+        )
+		{
+			var task = new SetMaximumIdleMinutesByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

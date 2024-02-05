@@ -509,6 +509,12 @@ namespace Gs2.Gs2Idle.Domain
         public static Action<string, IncreaseMaximumIdleMinutesByUserIdRequest, IncreaseMaximumIdleMinutesByUserIdResult> IncreaseMaximumIdleMinutesByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetMaximumIdleMinutesByUserIdRequest, SetMaximumIdleMinutesByUserIdResult> SetMaximumIdleMinutesByUserIdComplete = new UnityEvent<string, SetMaximumIdleMinutesByUserIdRequest, SetMaximumIdleMinutesByUserIdResult>();
+    #else
+        public static Action<string, SetMaximumIdleMinutesByUserIdRequest, SetMaximumIdleMinutesByUserIdResult> SetMaximumIdleMinutesByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
@@ -527,6 +533,23 @@ namespace Gs2.Gs2Idle.Domain
                         );
 
                         IncreaseMaximumIdleMinutesByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "SetMaximumIdleMinutesByUserId": {
+                        var requestModel = SetMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetMaximumIdleMinutesByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        SetMaximumIdleMinutesByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -586,6 +609,23 @@ namespace Gs2.Gs2Idle.Domain
                     );
 
                     IncreaseMaximumIdleMinutesByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "set_maximum_idle_minutes_by_user_id": {
+                    var requestModel = SetMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetMaximumIdleMinutesByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    SetMaximumIdleMinutesByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel
