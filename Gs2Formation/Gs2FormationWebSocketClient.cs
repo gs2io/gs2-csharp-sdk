@@ -87,6 +87,11 @@ namespace Gs2.Gs2Formation
                     jsonWriter.WritePropertyName("updateFormScript");
                     request.UpdateFormScript.WriteJson(jsonWriter);
                 }
+                if (request.UpdatePropertyFormScript != null)
+                {
+                    jsonWriter.WritePropertyName("updatePropertyFormScript");
+                    request.UpdatePropertyFormScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -317,6 +322,11 @@ namespace Gs2.Gs2Formation
                 {
                     jsonWriter.WritePropertyName("updateFormScript");
                     request.UpdateFormScript.WriteJson(jsonWriter);
+                }
+                if (request.UpdatePropertyFormScript != null)
+                {
+                    jsonWriter.WritePropertyName("updatePropertyFormScript");
+                    request.UpdatePropertyFormScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

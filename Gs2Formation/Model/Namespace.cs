@@ -37,6 +37,7 @@ namespace Gs2.Gs2Formation.Model
         public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
+        public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; }
         public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Formation.Model
         }
         public Namespace WithUpdateFormScript(Gs2.Gs2Formation.Model.ScriptSetting updateFormScript) {
             this.UpdateFormScript = updateFormScript;
+            return this;
+        }
+        public Namespace WithUpdatePropertyFormScript(Gs2.Gs2Formation.Model.ScriptSetting updatePropertyFormScript) {
+            this.UpdatePropertyFormScript = updatePropertyFormScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Formation.Model.LogSetting logSetting) {
@@ -148,6 +153,7 @@ namespace Gs2.Gs2Formation.Model
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Formation.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithUpdateMoldScript(!data.Keys.Contains("updateMoldScript") || data["updateMoldScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateMoldScript"]))
                 .WithUpdateFormScript(!data.Keys.Contains("updateFormScript") || data["updateFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateFormScript"]))
+                .WithUpdatePropertyFormScript(!data.Keys.Contains("updatePropertyFormScript") || data["updatePropertyFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updatePropertyFormScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Formation.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -163,6 +169,7 @@ namespace Gs2.Gs2Formation.Model
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["updateMoldScript"] = UpdateMoldScript?.ToJson(),
                 ["updateFormScript"] = UpdateFormScript?.ToJson(),
+                ["updatePropertyFormScript"] = UpdatePropertyFormScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -196,6 +203,10 @@ namespace Gs2.Gs2Formation.Model
             if (UpdateFormScript != null) {
                 writer.WritePropertyName("updateFormScript");
                 UpdateFormScript.WriteJson(writer);
+            }
+            if (UpdatePropertyFormScript != null) {
+                writer.WritePropertyName("updatePropertyFormScript");
+                UpdatePropertyFormScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -268,6 +279,14 @@ namespace Gs2.Gs2Formation.Model
             {
                 diff += UpdateFormScript.CompareTo(other.UpdateFormScript);
             }
+            if (UpdatePropertyFormScript == null && UpdatePropertyFormScript == other.UpdatePropertyFormScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += UpdatePropertyFormScript.CompareTo(other.UpdatePropertyFormScript);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -334,6 +353,8 @@ namespace Gs2.Gs2Formation.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "formation.namespace.createdAt.error.invalid"),
@@ -379,6 +400,7 @@ namespace Gs2.Gs2Formation.Model
                 TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2Formation.Model.TransactionSetting,
                 UpdateMoldScript = UpdateMoldScript.Clone() as Gs2.Gs2Formation.Model.ScriptSetting,
                 UpdateFormScript = UpdateFormScript.Clone() as Gs2.Gs2Formation.Model.ScriptSetting,
+                UpdatePropertyFormScript = UpdatePropertyFormScript.Clone() as Gs2.Gs2Formation.Model.ScriptSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Formation.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

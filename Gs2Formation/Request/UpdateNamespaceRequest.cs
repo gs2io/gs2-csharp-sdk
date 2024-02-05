@@ -38,6 +38,7 @@ namespace Gs2.Gs2Formation.Request
          public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; }
          public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
          public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
+         public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; }
          public Gs2.Gs2Formation.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Formation.Request
             this.UpdateFormScript = updateFormScript;
             return this;
         }
+        public UpdateNamespaceRequest WithUpdatePropertyFormScript(Gs2.Gs2Formation.Model.ScriptSetting updatePropertyFormScript) {
+            this.UpdatePropertyFormScript = updatePropertyFormScript;
+            return this;
+        }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Formation.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -78,6 +83,7 @@ namespace Gs2.Gs2Formation.Request
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Formation.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithUpdateMoldScript(!data.Keys.Contains("updateMoldScript") || data["updateMoldScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateMoldScript"]))
                 .WithUpdateFormScript(!data.Keys.Contains("updateFormScript") || data["updateFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateFormScript"]))
+                .WithUpdatePropertyFormScript(!data.Keys.Contains("updatePropertyFormScript") || data["updatePropertyFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updatePropertyFormScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Formation.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Formation.Request
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["updateMoldScript"] = UpdateMoldScript?.ToJson(),
                 ["updateFormScript"] = UpdateFormScript?.ToJson(),
+                ["updatePropertyFormScript"] = UpdatePropertyFormScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -113,6 +120,9 @@ namespace Gs2.Gs2Formation.Request
             if (UpdateFormScript != null) {
                 UpdateFormScript.WriteJson(writer);
             }
+            if (UpdatePropertyFormScript != null) {
+                UpdatePropertyFormScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -126,6 +136,7 @@ namespace Gs2.Gs2Formation.Request
             key += TransactionSetting + ":";
             key += UpdateMoldScript + ":";
             key += UpdateFormScript + ":";
+            key += UpdatePropertyFormScript + ":";
             key += LogSetting + ":";
             return key;
         }
