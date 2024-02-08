@@ -95,7 +95,7 @@ var LibraryWebSocket = {
 	 */
 	WebSocketAllocate: function(url) {
 
-		var urlStr = Pointer_stringify(url);
+		var urlStr = UTF8ToString(url);
 		var id = webSocketState.lastId++;
 
 		webSocketState.instances[id] = {
@@ -155,7 +155,7 @@ var LibraryWebSocket = {
 				console.log("[JSLIB WebSocket] Connected.");
 
 			if (webSocketState.onOpen)
-				Runtime.dynCall('vi', webSocketState.onOpen, [ instanceId ]);
+				Module["dynCall_vi"](webSocketState.onOpen, instanceId);
 
 		};
 
@@ -175,7 +175,7 @@ var LibraryWebSocket = {
 				HEAPU8.set(dataBuffer, buffer);
 
 				try {
-					Runtime.dynCall('viii', webSocketState.onMessageBinary, [ instanceId, buffer, dataBuffer.length ]);
+                    Module["dynCall_viii"](webSocketState.onMessageBinary, instanceId, buffer, dataBuffer.length);
 				} finally {
 					_free(buffer);
 				}
@@ -189,7 +189,7 @@ var LibraryWebSocket = {
             	stringToUTF8(msg, msgBuffer, msgBytes);
 
 	            try {
-    	            Runtime.dynCall('vii', webSocketState.onMessage, [ instanceId, msgBuffer ]);
+                    Module["dynCall_vii"](webSocketState.onMessage, instanceId, msgBuffer);
         	    } finally {
             	    _free(msgBuffer);
             	}
@@ -209,7 +209,7 @@ var LibraryWebSocket = {
 				stringToUTF8(msg, msgBuffer, msgBytes);
 
 				try {
-					Runtime.dynCall('vii', webSocketState.onError, [ instanceId, msgBuffer ]);
+                    Module["dynCall_viii"](webSocketState.onError, instanceId, msgBuffer);
 				} finally {
 					_free(msgBuffer);
 				}
@@ -224,7 +224,7 @@ var LibraryWebSocket = {
 				console.log("[JSLIB WebSocket] Closed.");
 
 			if (webSocketState.onClose)
-				Runtime.dynCall('vii', webSocketState.onClose, [ instanceId, ev.code ]);
+                Module["dynCall_vii"](webSocketState.onClose, instanceId, ev.code);
 
 			delete instance.ws;
 
@@ -255,8 +255,8 @@ var LibraryWebSocket = {
 		if (instance.ws.readyState === 3)
 			return -5;
 
-		var reason = ( reasonPtr ? Pointer_stringify(reasonPtr) : undefined );
-		
+		var reason = ( reasonPtr ? UTF8ToString(reasonPtr) : undefined );
+
 		try {
 			instance.ws.close(code, reason);
 		} catch(err) {
@@ -275,18 +275,18 @@ var LibraryWebSocket = {
 	 * @param length Length of the message in the buffer
 	 */
 	WebSocketSend: function(instanceId, dataPtr) {
-	
+
 		var instance = webSocketState.instances[instanceId];
 		if (!instance) return -1;
-		
+
 		if (instance.ws === null)
 			return -3;
 
 		if (instance.ws.readyState !== 1)
 			return -6;
 
-		var data = ( dataPtr ? Pointer_stringify(dataPtr) : undefined );
-		
+		var data = ( dataPtr ? UTF8ToString(dataPtr) : undefined );
+
 		instance.ws.send(data);
 
 		return 0;
@@ -301,10 +301,10 @@ var LibraryWebSocket = {
 	 * @param length Length of the message in the buffer
 	 */
 	WebSocketSendBinary: function(instanceId, bufferPtr, length) {
-	
+
 		var instance = webSocketState.instances[instanceId];
 		if (!instance) return -1;
-		
+
 		if (instance.ws === null)
 			return -3;
 
@@ -316,7 +316,7 @@ var LibraryWebSocket = {
 		return 0;
 
 	},
-	
+
 	/**
 	 * Return WebSocket readyState
 	 * 

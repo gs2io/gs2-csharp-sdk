@@ -91,7 +91,7 @@ namespace Gs2.Core.Net
 #if UNITY_2017_1_OR_NEWER
                             new RestSessionRequestFactory(() => new UnityRestSessionRequest(_checkCertificateRevocation)),
 #else
-                        new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                            new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 #endif
                             new LoginRequest {
                                 ClientId = Credential.ClientId,
