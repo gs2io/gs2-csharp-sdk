@@ -33,7 +33,13 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampSheetWithoutNamespaceResult : IResult
 	{
+        public int? StatusCode { set; get; }
         public string Result { set; get; }
+
+        public RunStampSheetWithoutNamespaceResult WithStatusCode(int? statusCode) {
+            this.StatusCode = statusCode;
+            return this;
+        }
 
         public RunStampSheetWithoutNamespaceResult WithResult(string result) {
             this.Result = result;
@@ -49,12 +55,14 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new RunStampSheetWithoutNamespaceResult()
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
+                ["statusCode"] = StatusCode,
                 ["result"] = Result,
             };
         }
@@ -62,6 +70,10 @@ namespace Gs2.Gs2Distributor.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (StatusCode != null) {
+                writer.WritePropertyName("statusCode");
+                writer.Write((StatusCode.ToString().Contains(".") ? (int)double.Parse(StatusCode.ToString()) : int.Parse(StatusCode.ToString())));
+            }
             if (Result != null) {
                 writer.WritePropertyName("result");
                 writer.Write(Result.ToString());

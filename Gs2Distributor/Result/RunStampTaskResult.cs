@@ -34,10 +34,16 @@ namespace Gs2.Gs2Distributor.Result
 	public class RunStampTaskResult : IResult
 	{
         public string ContextStack { set; get; }
+        public int? StatusCode { set; get; }
         public string Result { set; get; }
 
         public RunStampTaskResult WithContextStack(string contextStack) {
             this.ContextStack = contextStack;
+            return this;
+        }
+
+        public RunStampTaskResult WithStatusCode(int? statusCode) {
+            this.StatusCode = statusCode;
             return this;
         }
 
@@ -56,6 +62,7 @@ namespace Gs2.Gs2Distributor.Result
             }
             return new RunStampTaskResult()
                 .WithContextStack(!data.Keys.Contains("contextStack") || data["contextStack"] == null ? null : data["contextStack"].ToString())
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString());
         }
 
@@ -63,6 +70,7 @@ namespace Gs2.Gs2Distributor.Result
         {
             return new JsonData {
                 ["contextStack"] = ContextStack,
+                ["statusCode"] = StatusCode,
                 ["result"] = Result,
             };
         }
@@ -73,6 +81,10 @@ namespace Gs2.Gs2Distributor.Result
             if (ContextStack != null) {
                 writer.WritePropertyName("contextStack");
                 writer.Write(ContextStack.ToString());
+            }
+            if (StatusCode != null) {
+                writer.WritePropertyName("statusCode");
+                writer.Write((StatusCode.ToString().Contains(".") ? (int)double.Parse(StatusCode.ToString()) : int.Parse(StatusCode.ToString())));
             }
             if (Result != null) {
                 writer.WritePropertyName("result");

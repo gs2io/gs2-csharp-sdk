@@ -490,10 +490,6 @@ namespace Gs2.Core.Domain
             {
                 return;
             }
-            if (result.StartsWith("{\"message\":\""))
-            {
-                throw Gs2Exception.ExtractError(result, 999);
-            }
 
             if (action.Contains(":"))
             {
@@ -642,11 +638,6 @@ namespace Gs2.Core.Domain
             string result
         )
         {
-            if (result != null && result.StartsWith("{\"message\":\""))
-            {
-                throw Gs2Exception.ExtractError(result, 999);
-            }
-
             if (action.Contains(":"))
             {
                 var service = action.Substring(0, action.IndexOf(':'));

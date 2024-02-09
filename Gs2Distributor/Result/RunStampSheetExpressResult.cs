@@ -33,11 +33,23 @@ namespace Gs2.Gs2Distributor.Result
 	[System.Serializable]
 	public class RunStampSheetExpressResult : IResult
 	{
+        public int[] TaskResultCodes { set; get; }
         public string[] TaskResults { set; get; }
+        public int? SheetResultCode { set; get; }
         public string SheetResult { set; get; }
+
+        public RunStampSheetExpressResult WithTaskResultCodes(int[] taskResultCodes) {
+            this.TaskResultCodes = taskResultCodes;
+            return this;
+        }
 
         public RunStampSheetExpressResult WithTaskResults(string[] taskResults) {
             this.TaskResults = taskResults;
+            return this;
+        }
+
+        public RunStampSheetExpressResult WithSheetResultCode(int? sheetResultCode) {
+            this.SheetResultCode = sheetResultCode;
             return this;
         }
 
@@ -55,14 +67,27 @@ namespace Gs2.Gs2Distributor.Result
                 return null;
             }
             return new RunStampSheetExpressResult()
+                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => {
+                    return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
+                }).ToArray())
                 .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
+                .WithSheetResultCode(!data.Keys.Contains("sheetResultCode") || data["sheetResultCode"] == null ? null : (int?)(data["sheetResultCode"].ToString().Contains(".") ? (int)double.Parse(data["sheetResultCode"].ToString()) : int.Parse(data["sheetResultCode"].ToString())))
                 .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString());
         }
 
         public JsonData ToJson()
         {
+            JsonData taskResultCodesJsonData = null;
+            if (TaskResultCodes != null && TaskResultCodes.Length > 0)
+            {
+                taskResultCodesJsonData = new JsonData();
+                foreach (var taskResultCode in TaskResultCodes)
+                {
+                    taskResultCodesJsonData.Add(taskResultCode);
+                }
+            }
             JsonData taskResultsJsonData = null;
             if (TaskResults != null && TaskResults.Length > 0)
             {
@@ -73,7 +98,9 @@ namespace Gs2.Gs2Distributor.Result
                 }
             }
             return new JsonData {
+                ["taskResultCodes"] = taskResultCodesJsonData,
                 ["taskResults"] = taskResultsJsonData,
+                ["sheetResultCode"] = SheetResultCode,
                 ["sheetResult"] = SheetResult,
             };
         }
@@ -81,6 +108,15 @@ namespace Gs2.Gs2Distributor.Result
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
+            if (TaskResultCodes != null) {
+                writer.WritePropertyName("taskResultCodes");
+                writer.WriteArrayStart();
+                foreach (var taskResultCode in TaskResultCodes)
+                {
+                    writer.Write((taskResultCode.ToString().Contains(".") ? (int)double.Parse(taskResultCode.ToString()) : int.Parse(taskResultCode.ToString())));
+                }
+                writer.WriteArrayEnd();
+            }
             if (TaskResults != null) {
                 writer.WritePropertyName("taskResults");
                 writer.WriteArrayStart();
@@ -91,6 +127,10 @@ namespace Gs2.Gs2Distributor.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (SheetResultCode != null) {
+                writer.WritePropertyName("sheetResultCode");
+                writer.Write((SheetResultCode.ToString().Contains(".") ? (int)double.Parse(SheetResultCode.ToString()) : int.Parse(SheetResultCode.ToString())));
             }
             if (SheetResult != null) {
                 writer.WritePropertyName("sheetResult");

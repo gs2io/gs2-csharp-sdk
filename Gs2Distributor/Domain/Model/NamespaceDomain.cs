@@ -67,7 +67,10 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public string Status { get; set; }
         public string Result { get; set; }
         public string ContextStack { get; set; }
+        public int? StatusCode { get; set; }
+        public int[] TaskResultCodes { get; set; }
         public string[] TaskResults { get; set; }
+        public int? SheetResultCode { get; set; }
         public string SheetResult { get; set; }
         public string NextPageToken { get; set; }
 

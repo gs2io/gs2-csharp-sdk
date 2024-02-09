@@ -36,7 +36,9 @@ namespace Gs2.Gs2Distributor.Model
         public string TransactionId { set; get; }
         public Gs2.Core.Model.ConsumeAction[] TaskRequests { set; get; }
         public Gs2.Core.Model.AcquireAction SheetRequest { set; get; }
+        public int[] TaskResultCodes { set; get; }
         public string[] TaskResults { set; get; }
+        public int? SheetResultCode { set; get; }
         public string SheetResult { set; get; }
         public string NextTransactionId { set; get; }
         public long? CreatedAt { set; get; }
@@ -61,8 +63,16 @@ namespace Gs2.Gs2Distributor.Model
             this.SheetRequest = sheetRequest;
             return this;
         }
+        public StampSheetResult WithTaskResultCodes(int[] taskResultCodes) {
+            this.TaskResultCodes = taskResultCodes;
+            return this;
+        }
         public StampSheetResult WithTaskResults(string[] taskResults) {
             this.TaskResults = taskResults;
+            return this;
+        }
+        public StampSheetResult WithSheetResultCode(int? sheetResultCode) {
+            this.SheetResultCode = sheetResultCode;
             return this;
         }
         public StampSheetResult WithSheetResult(string sheetResult) {
@@ -183,9 +193,13 @@ namespace Gs2.Gs2Distributor.Model
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithSheetRequest(!data.Keys.Contains("sheetRequest") || data["sheetRequest"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["sheetRequest"]))
+                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => {
+                    return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
+                }).ToArray())
                 .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
+                .WithSheetResultCode(!data.Keys.Contains("sheetResultCode") || data["sheetResultCode"] == null ? null : (int?)(data["sheetResultCode"].ToString().Contains(".") ? (int)double.Parse(data["sheetResultCode"].ToString()) : int.Parse(data["sheetResultCode"].ToString())))
                 .WithSheetResult(!data.Keys.Contains("sheetResult") || data["sheetResult"] == null ? null : data["sheetResult"].ToString())
                 .WithNextTransactionId(!data.Keys.Contains("nextTransactionId") || data["nextTransactionId"] == null ? null : data["nextTransactionId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -203,6 +217,15 @@ namespace Gs2.Gs2Distributor.Model
                     taskRequestsJsonData.Add(taskRequest.ToJson());
                 }
             }
+            JsonData taskResultCodesJsonData = null;
+            if (TaskResultCodes != null && TaskResultCodes.Length > 0)
+            {
+                taskResultCodesJsonData = new JsonData();
+                foreach (var taskResultCode in TaskResultCodes)
+                {
+                    taskResultCodesJsonData.Add(taskResultCode);
+                }
+            }
             JsonData taskResultsJsonData = null;
             if (TaskResults != null && TaskResults.Length > 0)
             {
@@ -218,7 +241,9 @@ namespace Gs2.Gs2Distributor.Model
                 ["transactionId"] = TransactionId,
                 ["taskRequests"] = taskRequestsJsonData,
                 ["sheetRequest"] = SheetRequest?.ToJson(),
+                ["taskResultCodes"] = taskResultCodesJsonData,
                 ["taskResults"] = taskResultsJsonData,
+                ["sheetResultCode"] = SheetResultCode,
                 ["sheetResult"] = SheetResult,
                 ["nextTransactionId"] = NextTransactionId,
                 ["createdAt"] = CreatedAt,
@@ -256,6 +281,15 @@ namespace Gs2.Gs2Distributor.Model
                 writer.WritePropertyName("sheetRequest");
                 SheetRequest.WriteJson(writer);
             }
+            if (TaskResultCodes != null) {
+                writer.WritePropertyName("taskResultCodes");
+                writer.WriteArrayStart();
+                foreach (var taskResultCode in TaskResultCodes)
+                {
+                    writer.Write((taskResultCode.ToString().Contains(".") ? (int)double.Parse(taskResultCode.ToString()) : int.Parse(taskResultCode.ToString())));
+                }
+                writer.WriteArrayEnd();
+            }
             if (TaskResults != null) {
                 writer.WritePropertyName("taskResults");
                 writer.WriteArrayStart();
@@ -266,6 +300,10 @@ namespace Gs2.Gs2Distributor.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (SheetResultCode != null) {
+                writer.WritePropertyName("sheetResultCode");
+                writer.Write((SheetResultCode.ToString().Contains(".") ? (int)double.Parse(SheetResultCode.ToString()) : int.Parse(SheetResultCode.ToString())));
             }
             if (SheetResult != null) {
                 writer.WritePropertyName("sheetResult");
@@ -334,6 +372,18 @@ namespace Gs2.Gs2Distributor.Model
             {
                 diff += SheetRequest.CompareTo(other.SheetRequest);
             }
+            if (TaskResultCodes == null && TaskResultCodes == other.TaskResultCodes)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TaskResultCodes.Length - other.TaskResultCodes.Length;
+                for (var i = 0; i < TaskResultCodes.Length; i++)
+                {
+                    diff += (int)(TaskResultCodes[i] - other.TaskResultCodes[i]);
+                }
+            }
             if (TaskResults == null && TaskResults == other.TaskResults)
             {
                 // null and null
@@ -345,6 +395,14 @@ namespace Gs2.Gs2Distributor.Model
                 {
                     diff += TaskResults[i].CompareTo(other.TaskResults[i]);
                 }
+            }
+            if (SheetResultCode == null && SheetResultCode == other.SheetResultCode)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(SheetResultCode - other.SheetResultCode);
             }
             if (SheetResult == null && SheetResult == other.SheetResult)
             {
@@ -418,9 +476,28 @@ namespace Gs2.Gs2Distributor.Model
             {
             }
             {
+                if (TaskResultCodes.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResultCodes.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (TaskResults.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResults.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (SheetResultCode < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.sheetResultCode.error.invalid"),
+                    });
+                }
+                if (SheetResultCode > 999) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stampSheetResult", "distributor.stampSheetResult.sheetResultCode.error.invalid"),
                     });
                 }
             }
@@ -476,7 +553,9 @@ namespace Gs2.Gs2Distributor.Model
                 TransactionId = TransactionId,
                 TaskRequests = TaskRequests.Clone() as Gs2.Core.Model.ConsumeAction[],
                 SheetRequest = SheetRequest.Clone() as Gs2.Core.Model.AcquireAction,
+                TaskResultCodes = TaskResultCodes.Clone() as int[],
                 TaskResults = TaskResults.Clone() as string[],
+                SheetResultCode = SheetResultCode,
                 SheetResult = SheetResult,
                 NextTransactionId = NextTransactionId,
                 CreatedAt = CreatedAt,

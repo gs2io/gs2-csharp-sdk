@@ -82,6 +82,9 @@ namespace Gs2.Core.Domain
                 for (var i = 0; i < result.TaskRequests.Length; i++) {
                     var stampTask = result.TaskRequests[i];
                     if (i < result.TaskResults.Length) {
+                        if (result.TaskResultCodes[i] / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.TaskResults[i], result.TaskResultCodes[i]);
+                        }
                         if (!skipCallback) {
                             Gs2.TransactionConfiguration.StampTaskEventHandler.Invoke(
                                 Gs2.Cache,
@@ -96,6 +99,9 @@ namespace Gs2.Core.Domain
             }
 
             if (result.SheetResult != null) {
+                if (result.SheetResultCode / 100 != 2) {
+                    throw Gs2Exception.ExtractError(result.SheetResult, result.SheetResultCode ?? 999);
+                }
                 if (!skipCallback) {
                     Gs2.TransactionConfiguration.StampSheetEventHandler.Invoke(
                         Gs2.Cache,

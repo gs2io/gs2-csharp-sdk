@@ -139,6 +139,9 @@ namespace Gs2.Core.Domain
                         }
                         var result = future.Result;
                         contextStack = result.ContextStack;
+                        if (result.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                        }
                         Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
@@ -176,6 +179,9 @@ namespace Gs2.Core.Domain
                         }
                         var result = future.Result;
                         contextStack = result.ContextStack;
+                        if (result.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                        }
                         Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
@@ -202,6 +208,9 @@ namespace Gs2.Core.Domain
                         yield break;
                     }
                     var result = future.Result;
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
                     Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
@@ -240,6 +249,9 @@ namespace Gs2.Core.Domain
                         yield break;
                     }
                     var result = future.Result;
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
                     Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
@@ -301,6 +313,9 @@ namespace Gs2.Core.Domain
                                 .WithKeyId(_stampSheetEncryptionKeyId)
                     );
                     contextStack = result.ContextStack;
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
                     Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
@@ -320,6 +335,9 @@ namespace Gs2.Core.Domain
                                 .WithKeyId(_stampSheetEncryptionKeyId)
                         );
                         contextStack = result.ContextStack;
+                        if (result.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                        }
                         Gs2.TransactionConfiguration?.StampTaskEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
@@ -347,6 +365,9 @@ namespace Gs2.Core.Domain
                         .WithStampSheet(_stampSheet)
                         .WithKeyId(_stampSheetEncryptionKeyId)
                 );
+                if (result.StatusCode / 100 != 2) {
+                    throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                }
                 Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                     Gs2.Cache,
                     stampSheetPayloadJson["transactionId"].ToString(),
@@ -367,6 +388,9 @@ namespace Gs2.Core.Domain
                             .WithStampSheet(_stampSheet)
                             .WithKeyId(_stampSheetEncryptionKeyId)
                     );
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
                     Gs2.TransactionConfiguration?.StampSheetEventHandler?.Invoke(
                         Gs2.Cache,
                         stampSheetPayloadJson["transactionId"].ToString(),
