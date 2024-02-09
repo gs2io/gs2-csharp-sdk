@@ -45,6 +45,12 @@ namespace Gs2.Gs2Idle.Model.Cache
             string userId,
             ReceiveRequest request
         ) {
+            self.Status.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                request.CategoryName
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

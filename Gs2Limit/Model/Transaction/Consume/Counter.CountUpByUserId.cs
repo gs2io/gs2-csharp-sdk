@@ -46,8 +46,8 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this Counter self,
             CountUpByUserIdRequest request
         ) {
-            var clone = self.Clone() as Counter;
-            if (clone == null) {
+            if (self.Clone() is not Counter clone)
+            {
                 throw new NullReferenceException();
             }
             clone.Count += request.CountUpValue;

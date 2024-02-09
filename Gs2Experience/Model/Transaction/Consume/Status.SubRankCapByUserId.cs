@@ -46,8 +46,8 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this Status self,
             SubRankCapByUserIdRequest request
         ) {
-            var clone = self.Clone() as Status;
-            if (clone == null) {
+            if (self.Clone() is not Status clone)
+            {
                 throw new NullReferenceException();
             }
             clone.RankCapValue -= request.RankCapValue;

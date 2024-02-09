@@ -34,6 +34,7 @@ namespace Gs2.Gs2Idle.Result
 	public class ReceiveByUserIdResult : IResult
 	{
         public Gs2.Core.Model.AcquireAction[] Items { set; get; }
+        public Gs2.Gs2Idle.Model.Status Status { set; get; }
         public string TransactionId { set; get; }
         public string StampSheet { set; get; }
         public string StampSheetEncryptionKeyId { set; get; }
@@ -41,6 +42,11 @@ namespace Gs2.Gs2Idle.Result
 
         public ReceiveByUserIdResult WithItems(Gs2.Core.Model.AcquireAction[] items) {
             this.Items = items;
+            return this;
+        }
+
+        public ReceiveByUserIdResult WithStatus(Gs2.Gs2Idle.Model.Status status) {
+            this.Status = status;
             return this;
         }
 
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Idle.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : Gs2.Gs2Idle.Model.Status.FromJson(data["status"]))
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
                 .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
@@ -95,6 +102,7 @@ namespace Gs2.Gs2Idle.Result
             }
             return new JsonData {
                 ["items"] = itemsJsonData,
+                ["status"] = Status?.ToJson(),
                 ["transactionId"] = TransactionId,
                 ["stampSheet"] = StampSheet,
                 ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
@@ -115,6 +123,9 @@ namespace Gs2.Gs2Idle.Result
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (Status != null) {
+                Status.WriteJson(writer);
             }
             if (TransactionId != null) {
                 writer.WritePropertyName("transactionId");
