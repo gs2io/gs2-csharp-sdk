@@ -65,6 +65,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         private readonly Gs2SkillTreeRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
+        public string NextPageToken { get; set; }
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -78,13 +79,89 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
         }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2SkillTree.Model.Status> Statuses(
+        )
+        {
+            return new DescribeStatusesByUserIdIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.UserId
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2SkillTree.Model.Status> StatusesAsync(
+            #else
+        public DescribeStatusesByUserIdIterator StatusesAsync(
+            #endif
+        )
+        {
+            return new DescribeStatusesByUserIdIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.UserId
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeStatuses(
+            Action<Gs2.Gs2SkillTree.Model.Status[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2SkillTree.Model.Status>(
+                (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeStatusesWithInitialCallAsync(
+            Action<Gs2.Gs2SkillTree.Model.Status[]> callback
+        )
+        {
+            var items = await StatusesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeStatuses(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeStatuses(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2SkillTree.Model.Status>(
+                (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callbackId
+            );
+        }
 
         public Gs2.Gs2SkillTree.Domain.Model.StatusDomain Status(
+            string propertyId
         ) {
             return new Gs2.Gs2SkillTree.Domain.Model.StatusDomain(
                 this._gs2,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                propertyId
             );
         }
 

@@ -35,12 +35,17 @@ namespace Gs2.Gs2SkillTree.Request
 	{
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
+         public string PropertyId { set; get; }
         public GetStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public GetStatusByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public GetStatusByUserIdRequest WithPropertyId(string propertyId) {
+            this.PropertyId = propertyId;
             return this;
         }
 
@@ -54,7 +59,8 @@ namespace Gs2.Gs2SkillTree.Request
             }
             return new GetStatusByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString());
         }
 
         public override JsonData ToJson()
@@ -62,6 +68,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["propertyId"] = PropertyId,
             };
         }
 
@@ -76,6 +83,10 @@ namespace Gs2.Gs2SkillTree.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -83,6 +94,7 @@ namespace Gs2.Gs2SkillTree.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += PropertyId + ":";
             return key;
         }
     }

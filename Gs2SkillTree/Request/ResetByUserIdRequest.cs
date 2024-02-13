@@ -35,6 +35,7 @@ namespace Gs2.Gs2SkillTree.Request
 	{
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
+         public string PropertyId { set; get; }
          public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
         public ResetByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -43,6 +44,10 @@ namespace Gs2.Gs2SkillTree.Request
         }
         public ResetByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public ResetByUserIdRequest WithPropertyId(string propertyId) {
+            this.PropertyId = propertyId;
             return this;
         }
         public ResetByUserIdRequest WithConfig(Gs2.Gs2SkillTree.Model.Config[] config) {
@@ -66,6 +71,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new ResetByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2SkillTree.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SkillTree.Model.Config.FromJson(v);
                 }).ToArray());
@@ -85,6 +91,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["propertyId"] = PropertyId,
                 ["config"] = configJsonData,
             };
         }
@@ -99,6 +106,10 @@ namespace Gs2.Gs2SkillTree.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
             }
             if (Config != null) {
                 writer.WritePropertyName("config");
@@ -118,6 +129,7 @@ namespace Gs2.Gs2SkillTree.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += PropertyId + ":";
             key += Config + ":";
             return key;
         }

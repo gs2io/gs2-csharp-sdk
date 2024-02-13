@@ -31,68 +31,51 @@ namespace Gs2.Gs2SkillTree.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class ResetRequest : Gs2Request<ResetRequest>
+	public class DescribeStatusesRequest : Gs2Request<DescribeStatusesRequest>
 	{
          public string NamespaceName { set; get; }
          public string AccessToken { set; get; }
-         public string PropertyId { set; get; }
-         public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
-        public string DuplicationAvoider { set; get; }
-        public ResetRequest WithNamespaceName(string namespaceName) {
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
+        public DescribeStatusesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public ResetRequest WithAccessToken(string accessToken) {
+        public DescribeStatusesRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
             return this;
         }
-        public ResetRequest WithPropertyId(string propertyId) {
-            this.PropertyId = propertyId;
+        public DescribeStatusesRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
             return this;
         }
-        public ResetRequest WithConfig(Gs2.Gs2SkillTree.Model.Config[] config) {
-            this.Config = config;
-            return this;
-        }
-
-        public ResetRequest WithDuplicationAvoider(string duplicationAvoider) {
-            this.DuplicationAvoider = duplicationAvoider;
+        public DescribeStatusesRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static ResetRequest FromJson(JsonData data)
+        public static DescribeStatusesRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new ResetRequest()
+            return new DescribeStatusesRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2SkillTree.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2SkillTree.Model.Config.FromJson(v);
-                }).ToArray());
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
         public override JsonData ToJson()
         {
-            JsonData configJsonData = null;
-            if (Config != null && Config.Length > 0)
-            {
-                configJsonData = new JsonData();
-                foreach (var confi in Config)
-                {
-                    configJsonData.Add(confi.ToJson());
-                }
-            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
-                ["propertyId"] = PropertyId,
-                ["config"] = configJsonData,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
@@ -107,20 +90,13 @@ namespace Gs2.Gs2SkillTree.Request
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
             }
-            if (PropertyId != null) {
-                writer.WritePropertyName("propertyId");
-                writer.Write(PropertyId.ToString());
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
             }
-            if (Config != null) {
-                writer.WritePropertyName("config");
-                writer.WriteArrayStart();
-                foreach (var confi in Config)
-                {
-                    if (confi != null) {
-                        confi.WriteJson(writer);
-                    }
-                }
-                writer.WriteArrayEnd();
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -129,8 +105,8 @@ namespace Gs2.Gs2SkillTree.Request
             var key = "";
             key += NamespaceName + ":";
             key += AccessToken + ":";
-            key += PropertyId + ":";
-            key += Config + ":";
+            key += PageToken + ":";
+            key += Limit + ":";
             return key;
         }
     }

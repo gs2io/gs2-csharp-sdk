@@ -52,9 +52,13 @@ namespace Gs2.Gs2SkillTree.Model.Cache
         }
 
         public static string CacheKey(
-            this Status self
+            this Status self,
+            string propertyId
         ) {
-            return "Singleton";
+            return string.Join(
+                ":",
+                propertyId
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -63,6 +67,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            string propertyId,
             Func<IFuture<Status>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<Status> self)
@@ -76,7 +81,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                         (null as Status).PutCache(
                             cache,
                             namespaceName,
-                            userId
+                            userId,
+                            propertyId
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "status") {
                             self.OnComplete(default);
@@ -90,7 +96,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId
+                    userId,
+                    propertyId
                 );
                 self.OnComplete(item);
             }
@@ -108,6 +115,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            string propertyId,
     #if UNITY_2017_1_OR_NEWER
             Func<UniTask<Status>> fetchImpl
     #else
@@ -120,6 +128,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                             userId
                        ),
                        self.CacheKey(
+                            propertyId
                        )
                    ).LockAsync()) {
                 try {
@@ -127,7 +136,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     item.PutCache(
                         cache,
                         namespaceName,
-                        userId
+                        userId,
+                        propertyId
                     );
                     return item;
                 }
@@ -135,7 +145,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     (null as Status).PutCache(
                         cache,
                         namespaceName,
-                        userId
+                        userId,
+                        propertyId
                     );
                     if (e.errors.Length == 0 || e.errors[0].component != "status") {
                         throw;
@@ -150,7 +161,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this Status self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            string propertyId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -161,6 +173,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     userId
                 ),
                 self.CacheKey(
+                    propertyId
                 )
             );
         }
@@ -169,7 +182,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this Status self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            string propertyId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -180,6 +194,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     userId
                 ),
                 self.CacheKey(
+                    propertyId
                 )
             );
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
@@ -191,6 +206,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     userId
                 ),
                 self.CacheKey(
+                    propertyId
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -201,7 +217,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             this Status self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            string propertyId
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -212,6 +229,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                     userId
                 ),
                 self.CacheKey(
+                    propertyId
                 )
             );
         }

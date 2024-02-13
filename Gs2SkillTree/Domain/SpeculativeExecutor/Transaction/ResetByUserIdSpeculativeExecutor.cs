@@ -66,6 +66,7 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                 ).AccessToken(
                     accessToken
                 ).Status(
+                    request.PropertyId
                 ).ModelFuture();
                 yield return future;
                 if (future.Error != null) {
@@ -79,7 +80,8 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                     item.DeleteCache(
                         domain.Cache,
                         request.NamespaceName,
-                        accessToken.UserId
+                        accessToken.UserId,
+                        request.PropertyId
                     );
                     return null;
                 });
@@ -105,6 +107,7 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
             ).AccessToken(
                 accessToken
             ).Status(
+                request.PropertyId
             ).ModelAsync();
 
             return () =>
@@ -112,7 +115,8 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                 item.DeleteCache(
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId
+                    accessToken.UserId,
+                    request.PropertyId
                 );
                 return null;
             };

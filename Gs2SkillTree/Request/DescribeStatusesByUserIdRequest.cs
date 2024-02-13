@@ -31,44 +31,51 @@ namespace Gs2.Gs2SkillTree.Request
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class GetStatusRequest : Gs2Request<GetStatusRequest>
+	public class DescribeStatusesByUserIdRequest : Gs2Request<DescribeStatusesByUserIdRequest>
 	{
          public string NamespaceName { set; get; }
-         public string AccessToken { set; get; }
-         public string PropertyId { set; get; }
-        public GetStatusRequest WithNamespaceName(string namespaceName) {
+         public string UserId { set; get; }
+         public string PageToken { set; get; }
+         public int? Limit { set; get; }
+        public DescribeStatusesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
-        public GetStatusRequest WithAccessToken(string accessToken) {
-            this.AccessToken = accessToken;
+        public DescribeStatusesByUserIdRequest WithUserId(string userId) {
+            this.UserId = userId;
             return this;
         }
-        public GetStatusRequest WithPropertyId(string propertyId) {
-            this.PropertyId = propertyId;
+        public DescribeStatusesByUserIdRequest WithPageToken(string pageToken) {
+            this.PageToken = pageToken;
+            return this;
+        }
+        public DescribeStatusesByUserIdRequest WithLimit(int? limit) {
+            this.Limit = limit;
             return this;
         }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static GetStatusRequest FromJson(JsonData data)
+        public static DescribeStatusesByUserIdRequest FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new GetStatusRequest()
+            return new DescribeStatusesByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
-                ["accessToken"] = AccessToken,
-                ["propertyId"] = PropertyId,
+                ["userId"] = UserId,
+                ["pageToken"] = PageToken,
+                ["limit"] = Limit,
             };
         }
 
@@ -79,13 +86,17 @@ namespace Gs2.Gs2SkillTree.Request
                 writer.WritePropertyName("namespaceName");
                 writer.Write(NamespaceName.ToString());
             }
-            if (AccessToken != null) {
-                writer.WritePropertyName("accessToken");
-                writer.Write(AccessToken.ToString());
+            if (UserId != null) {
+                writer.WritePropertyName("userId");
+                writer.Write(UserId.ToString());
             }
-            if (PropertyId != null) {
-                writer.WritePropertyName("propertyId");
-                writer.Write(PropertyId.ToString());
+            if (PageToken != null) {
+                writer.WritePropertyName("pageToken");
+                writer.Write(PageToken.ToString());
+            }
+            if (Limit != null) {
+                writer.WritePropertyName("limit");
+                writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -93,8 +104,9 @@ namespace Gs2.Gs2SkillTree.Request
         public override string UniqueKey() {
             var key = "";
             key += NamespaceName + ":";
-            key += AccessToken + ":";
-            key += PropertyId + ":";
+            key += UserId + ":";
+            key += PageToken + ":";
+            key += Limit + ":";
             return key;
         }
     }

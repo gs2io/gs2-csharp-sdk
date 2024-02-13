@@ -65,13 +65,15 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         private readonly Gs2SkillTreeRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
+        public string PropertyId { get; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
 
         public StatusDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            string userId
+            string userId,
+            string propertyId
         ) {
             this._gs2 = gs2;
             this._client = new Gs2SkillTreeRestClient(
@@ -79,6 +81,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.UserId = userId;
+            propertyId = propertyId?.Replace("{region}", gs2.RestSession.Region.DisplayName()).Replace("{ownerId}", gs2.RestSession.OwnerId ?? "").Replace("{userId}", UserId);
+            this.PropertyId = propertyId;
         }
 
     }
@@ -93,7 +97,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -123,7 +128,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -143,7 +149,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -188,7 +195,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -217,7 +225,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -247,7 +256,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -267,7 +277,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -312,7 +323,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -341,7 +353,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -369,7 +382,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -387,7 +401,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
+                    .WithUserId(this.UserId)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -432,7 +447,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId);
+                .WithUserId(this.UserId)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -465,7 +481,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SkillTree.Model.Status).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.PropertyId
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -475,6 +492,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.PropertyId,
                     () => this.GetFuture(
                         new GetStatusByUserIdRequest()
                     )
@@ -500,7 +518,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var (value, find) = (null as Gs2.Gs2SkillTree.Model.Status).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.PropertyId
             );
             if (find) {
                 return value;
@@ -509,6 +528,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
+                this.PropertyId,
                 () => this.GetAsync(
                     new GetStatusByUserIdRequest()
                 )
@@ -544,7 +564,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             (null as Gs2.Gs2SkillTree.Model.Status).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.PropertyId
             );
         }
 
@@ -556,6 +577,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
+                    this.PropertyId
                 ),
                 callback,
                 () =>
@@ -579,6 +601,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
+                    this.PropertyId
                 ),
                 callbackId
             );

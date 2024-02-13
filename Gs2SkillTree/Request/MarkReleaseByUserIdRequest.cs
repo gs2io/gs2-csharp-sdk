@@ -35,6 +35,7 @@ namespace Gs2.Gs2SkillTree.Request
 	{
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
+         public string PropertyId { set; get; }
          public string[] NodeModelNames { set; get; }
         public string DuplicationAvoider { set; get; }
         public MarkReleaseByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -43,6 +44,10 @@ namespace Gs2.Gs2SkillTree.Request
         }
         public MarkReleaseByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public MarkReleaseByUserIdRequest WithPropertyId(string propertyId) {
+            this.PropertyId = propertyId;
             return this;
         }
         public MarkReleaseByUserIdRequest WithNodeModelNames(string[] nodeModelNames) {
@@ -66,6 +71,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new MarkReleaseByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithNodeModelNames(!data.Keys.Contains("nodeModelNames") || data["nodeModelNames"] == null || !data["nodeModelNames"].IsArray ? new string[]{} : data["nodeModelNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());
@@ -85,6 +91,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["propertyId"] = PropertyId,
                 ["nodeModelNames"] = nodeModelNamesJsonData,
             };
         }
@@ -99,6 +106,10 @@ namespace Gs2.Gs2SkillTree.Request
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
             }
             if (NodeModelNames != null) {
                 writer.WritePropertyName("nodeModelNames");
@@ -116,6 +127,7 @@ namespace Gs2.Gs2SkillTree.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += PropertyId + ":";
             key += NodeModelNames + ":";
             return key;
         }

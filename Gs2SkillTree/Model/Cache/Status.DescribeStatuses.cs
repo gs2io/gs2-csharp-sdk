@@ -40,28 +40,31 @@ namespace Gs2.Gs2SkillTree.Model.Cache
     public static partial class StatusExt
     {
         public static void PutCache(
-            this RestrainByUserIdResult self,
+            this DescribeStatusesResult self,
             CacheDatabase cache,
             string userId,
-            RestrainByUserIdRequest request
+            DescribeStatusesRequest request
         ) {
-            self.Item.PutCache(
-                cache,
-                request.NamespaceName,
-                request.UserId,
-                request.PropertyId
-            );
+            foreach (var item in self.Items ?? Array.Empty<Status>())
+            {
+                item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    item.PropertyId
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<RestrainByUserIdResult> InvokeFuture(
-            this RestrainByUserIdRequest request,
+        public static IFuture<DescribeStatusesResult> InvokeFuture(
+            this DescribeStatusesRequest request,
             CacheDatabase cache,
             string userId,
-            Func<IFuture<RestrainByUserIdResult>> invokeImpl
+            Func<IFuture<DescribeStatusesResult>> invokeImpl
         )
         {
-            IEnumerator Impl(IFuture<RestrainByUserIdResult> self)
+            IEnumerator Impl(IFuture<DescribeStatusesResult> self)
             {
                 var future = invokeImpl();
                 yield return future;
@@ -78,23 +81,23 @@ namespace Gs2.Gs2SkillTree.Model.Cache
 
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<RestrainByUserIdResult>(Impl);
+            return new Gs2InlineFuture<DescribeStatusesResult>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<RestrainByUserIdResult> InvokeAsync(
+        public static async UniTask<DescribeStatusesResult> InvokeAsync(
     #else
-        public static async Task<RestrainByUserIdResult> InvokeAsync(
+        public static async Task<DescribeStatusesResult> InvokeAsync(
     #endif
-            this RestrainByUserIdRequest request,
+            this DescribeStatusesRequest request,
             CacheDatabase cache,
             string userId,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<RestrainByUserIdResult>> invokeImpl
+            Func<UniTask<DescribeStatusesResult>> invokeImpl
     #else
-            Func<Task<RestrainByUserIdResult>> invokeImpl
+            Func<Task<DescribeStatusesResult>> invokeImpl
     #endif
         )
         {

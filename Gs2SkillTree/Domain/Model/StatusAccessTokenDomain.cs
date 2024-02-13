@@ -66,13 +66,15 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
+        public string PropertyId { get; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
 
         public StatusAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string propertyId
         ) {
             this._gs2 = gs2;
             this._client = new Gs2SkillTreeRestClient(
@@ -80,6 +82,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
+            propertyId = propertyId?.Replace("{region}", gs2.RestSession.Region.DisplayName()).Replace("{ownerId}", gs2.RestSession.OwnerId ?? "").Replace("{userId}", UserId);
+            this.PropertyId = propertyId;
         }
 
         #if UNITY_2017_1_OR_NEWER
@@ -91,7 +95,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithPropertyId(this.PropertyId);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -153,7 +158,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithPropertyId(this.PropertyId);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.ReleaseByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -192,7 +198,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithPropertyId(this.PropertyId);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -254,7 +261,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithPropertyId(this.PropertyId);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.RestrainByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -292,7 +300,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithPropertyId(this.PropertyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -320,7 +329,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithPropertyId(this.PropertyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -339,7 +349,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithPropertyId(this.PropertyId);
 
                 if (speculativeExecute) {
                     var speculativeExecuteFuture = Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteFuture(
@@ -401,7 +412,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithPropertyId(this.PropertyId);
 
             if (speculativeExecute) {
                 var commit = await Transaction.SpeculativeExecutor.ResetByUserIdSpeculativeExecutor.ExecuteAsync(
@@ -439,7 +451,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 var (value, find) = (null as Gs2.Gs2SkillTree.Model.Status).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.PropertyId
                 );
                 if (find) {
                     self.OnComplete(value);
@@ -449,6 +462,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.PropertyId,
                     () => this.GetFuture(
                         new GetStatusRequest()
                     )
@@ -474,7 +488,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             var (value, find) = (null as Gs2.Gs2SkillTree.Model.Status).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.PropertyId
             );
             if (find) {
                 return value;
@@ -483,6 +498,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
+                this.PropertyId,
                 () => this.GetAsync(
                     new GetStatusRequest()
                 )
@@ -518,7 +534,8 @@ namespace Gs2.Gs2SkillTree.Domain.Model
             (null as Gs2.Gs2SkillTree.Model.Status).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.PropertyId
             );
         }
 
@@ -530,6 +547,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
+                    this.PropertyId
                 ),
                 callback,
                 () =>
@@ -553,6 +571,7 @@ namespace Gs2.Gs2SkillTree.Domain.Model
                     this.UserId
                 ),
                 (null as Gs2.Gs2SkillTree.Model.Status).CacheKey(
+                    this.PropertyId
                 ),
                 callbackId
             );

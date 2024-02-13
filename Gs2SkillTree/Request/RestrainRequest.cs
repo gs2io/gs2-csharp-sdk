@@ -35,6 +35,7 @@ namespace Gs2.Gs2SkillTree.Request
 	{
          public string NamespaceName { set; get; }
          public string AccessToken { set; get; }
+         public string PropertyId { set; get; }
          public string[] NodeModelNames { set; get; }
          public Gs2.Gs2SkillTree.Model.Config[] Config { set; get; }
         public string DuplicationAvoider { set; get; }
@@ -44,6 +45,10 @@ namespace Gs2.Gs2SkillTree.Request
         }
         public RestrainRequest WithAccessToken(string accessToken) {
             this.AccessToken = accessToken;
+            return this;
+        }
+        public RestrainRequest WithPropertyId(string propertyId) {
+            this.PropertyId = propertyId;
             return this;
         }
         public RestrainRequest WithNodeModelNames(string[] nodeModelNames) {
@@ -71,6 +76,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new RestrainRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithNodeModelNames(!data.Keys.Contains("nodeModelNames") || data["nodeModelNames"] == null || !data["nodeModelNames"].IsArray ? new string[]{} : data["nodeModelNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
@@ -102,6 +108,7 @@ namespace Gs2.Gs2SkillTree.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
+                ["propertyId"] = PropertyId,
                 ["nodeModelNames"] = nodeModelNamesJsonData,
                 ["config"] = configJsonData,
             };
@@ -117,6 +124,10 @@ namespace Gs2.Gs2SkillTree.Request
             if (AccessToken != null) {
                 writer.WritePropertyName("accessToken");
                 writer.Write(AccessToken.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
             }
             if (NodeModelNames != null) {
                 writer.WritePropertyName("nodeModelNames");
@@ -145,6 +156,7 @@ namespace Gs2.Gs2SkillTree.Request
             var key = "";
             key += NamespaceName + ":";
             key += AccessToken + ":";
+            key += PropertyId + ":";
             key += NodeModelNames + ":";
             key += Config + ":";
             return key;

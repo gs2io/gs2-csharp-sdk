@@ -33,6 +33,7 @@ namespace Gs2.Gs2SkillTree.Model
 	{
         public string StatusId { set; get; }
         public string UserId { set; get; }
+        public string PropertyId { set; get; }
         public string[] ReleasedNodeNames { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -43,6 +44,10 @@ namespace Gs2.Gs2SkillTree.Model
         }
         public Status WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public Status WithPropertyId(string propertyId) {
+            this.PropertyId = propertyId;
             return this;
         }
         public Status WithReleasedNodeNames(string[] releasedNodeNames) {
@@ -63,7 +68,7 @@ namespace Gs2.Gs2SkillTree.Model
         }
 
         private static System.Text.RegularExpressions.Regex _regionRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status:(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -80,7 +85,7 @@ namespace Gs2.Gs2SkillTree.Model
         }
 
         private static System.Text.RegularExpressions.Regex _ownerIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status:(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -97,7 +102,7 @@ namespace Gs2.Gs2SkillTree.Model
         }
 
         private static System.Text.RegularExpressions.Regex _namespaceNameRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status:(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -114,7 +119,7 @@ namespace Gs2.Gs2SkillTree.Model
         }
 
         private static System.Text.RegularExpressions.Regex _userIdRegex = new System.Text.RegularExpressions.Regex(
-                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status",
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status:(?<propertyId>.+)",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase
         );
 
@@ -130,6 +135,23 @@ namespace Gs2.Gs2SkillTree.Model
             return match.Groups["userId"].Value;
         }
 
+        private static System.Text.RegularExpressions.Regex _propertyIdRegex = new System.Text.RegularExpressions.Regex(
+                @"grn:gs2:(?<region>.+):(?<ownerId>.+):skillTree:(?<namespaceName>.+):user:(?<userId>.+):status:(?<propertyId>.+)",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        public static string GetPropertyIdFromGrn(
+            string grn
+        )
+        {
+            var match = _propertyIdRegex.Match(grn);
+            if (!match.Success || !match.Groups["propertyId"].Success)
+            {
+                return null;
+            }
+            return match.Groups["propertyId"].Value;
+        }
+
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
@@ -141,6 +163,7 @@ namespace Gs2.Gs2SkillTree.Model
             return new Status()
                 .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithReleasedNodeNames(!data.Keys.Contains("releasedNodeNames") || data["releasedNodeNames"] == null || !data["releasedNodeNames"].IsArray ? new string[]{} : data["releasedNodeNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
@@ -163,6 +186,7 @@ namespace Gs2.Gs2SkillTree.Model
             return new JsonData {
                 ["statusId"] = StatusId,
                 ["userId"] = UserId,
+                ["propertyId"] = PropertyId,
                 ["releasedNodeNames"] = releasedNodeNamesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -180,6 +204,10 @@ namespace Gs2.Gs2SkillTree.Model
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (PropertyId != null) {
+                writer.WritePropertyName("propertyId");
+                writer.Write(PropertyId.ToString());
             }
             if (ReleasedNodeNames != null) {
                 writer.WritePropertyName("releasedNodeNames");
@@ -226,6 +254,14 @@ namespace Gs2.Gs2SkillTree.Model
             else
             {
                 diff += UserId.CompareTo(other.UserId);
+            }
+            if (PropertyId == null && PropertyId == other.PropertyId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += PropertyId.CompareTo(other.PropertyId);
             }
             if (ReleasedNodeNames == null && ReleasedNodeNames == other.ReleasedNodeNames)
             {
@@ -282,6 +318,13 @@ namespace Gs2.Gs2SkillTree.Model
                 }
             }
             {
+                if (PropertyId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("status", "skillTree.status.propertyId.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (ReleasedNodeNames.Length > 1000) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("status", "skillTree.status.releasedNodeNames.error.tooMany"),
@@ -330,6 +373,7 @@ namespace Gs2.Gs2SkillTree.Model
             return new Status {
                 StatusId = StatusId,
                 UserId = UserId,
+                PropertyId = PropertyId,
                 ReleasedNodeNames = ReleasedNodeNames.Clone() as string[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

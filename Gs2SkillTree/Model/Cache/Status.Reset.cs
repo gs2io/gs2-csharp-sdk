@@ -48,7 +48,8 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             self.Item.PutCache(
                 cache,
                 request.NamespaceName,
-                userId
+                userId,
+                request.PropertyId
             );
         }
 

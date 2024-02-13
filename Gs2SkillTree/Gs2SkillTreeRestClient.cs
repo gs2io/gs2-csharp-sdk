@@ -2433,10 +2433,11 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/status/node/release/mark";
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}/node/release/mark";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2565,9 +2566,10 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/status/node/release";
+                    + "/{namespaceName}/user/me/status/{propertyId}/node/release";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2710,10 +2712,11 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/status/node/release";
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}/node/release";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2852,10 +2855,11 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/status/node/restrain/mark";
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}/node/restrain/mark";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -2984,9 +2988,10 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/status/node/restrain";
+                    + "/{namespaceName}/user/me/status/{propertyId}/node/restrain";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -3129,10 +3134,11 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/status/node/restrain";
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}/node/restrain";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -3260,6 +3266,231 @@ namespace Gs2.Gs2SkillTree
 #endif
 
 
+        public class DescribeStatusesTask : Gs2RestSessionTask<DescribeStatusesRequest, DescribeStatusesResult>
+        {
+            public DescribeStatusesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStatusesRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeStatusesRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "skill-tree")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeStatuses(
+                Request.DescribeStatusesRequest request,
+                UnityAction<AsyncResult<Result.DescribeStatusesResult>> callback
+        )
+		{
+			var task = new DescribeStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeStatusesResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeStatusesResult> DescribeStatusesFuture(
+                Request.DescribeStatusesRequest request
+        )
+		{
+			return new DescribeStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeStatusesResult> DescribeStatusesAsync(
+                Request.DescribeStatusesRequest request
+        )
+		{
+            AsyncResult<Result.DescribeStatusesResult> result = null;
+			await DescribeStatuses(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeStatusesTask DescribeStatusesAsync(
+                Request.DescribeStatusesRequest request
+        )
+		{
+			return new DescribeStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeStatusesResult> DescribeStatusesAsync(
+                Request.DescribeStatusesRequest request
+        )
+		{
+			var task = new DescribeStatusesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class DescribeStatusesByUserIdTask : Gs2RestSessionTask<DescribeStatusesByUserIdRequest, DescribeStatusesByUserIdResult>
+        {
+            public DescribeStatusesByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeStatusesByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeStatusesByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "skill-tree")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeStatusesByUserId(
+                Request.DescribeStatusesByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeStatusesByUserIdResult>> callback
+        )
+		{
+			var task = new DescribeStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.DescribeStatusesByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.DescribeStatusesByUserIdResult> DescribeStatusesByUserIdFuture(
+                Request.DescribeStatusesByUserIdRequest request
+        )
+		{
+			return new DescribeStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.DescribeStatusesByUserIdResult> DescribeStatusesByUserIdAsync(
+                Request.DescribeStatusesByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.DescribeStatusesByUserIdResult> result = null;
+			await DescribeStatusesByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public DescribeStatusesByUserIdTask DescribeStatusesByUserIdAsync(
+                Request.DescribeStatusesByUserIdRequest request
+        )
+		{
+			return new DescribeStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.DescribeStatusesByUserIdResult> DescribeStatusesByUserIdAsync(
+                Request.DescribeStatusesByUserIdRequest request
+        )
+		{
+			var task = new DescribeStatusesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class GetStatusTask : Gs2RestSessionTask<GetStatusRequest, GetStatusResult>
         {
             public GetStatusTask(IGs2Session session, RestSessionRequestFactory factory, GetStatusRequest request) : base(session, factory, request)
@@ -3271,9 +3502,10 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/status";
+                    + "/{namespaceName}/user/me/status/{propertyId}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
@@ -3379,10 +3611,11 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/status";
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Get(url);
                 if (request.ContextStack != null)
@@ -3484,9 +3717,10 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/status/reset";
+                    + "/{namespaceName}/user/me/status/{propertyId}/reset";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Post(url);
 
@@ -3619,10 +3853,11 @@ namespace Gs2.Gs2SkillTree
                 var url = Gs2RestSession.EndpointHost
                     .Replace("{service}", "skill-tree")
                     .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/{userId}/status/reset";
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}/reset";
 
                 url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
                 url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
 
                 var sessionRequest = Factory.Delete(url);
                 if (request.ContextStack != null)
