@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -51,14 +53,14 @@ namespace Gs2.Gs2Grade.Model.Cache
                 request.NamespaceName,
                 request.UserId,
                 request.GradeName,
-                request.PropertyId
+                self.Item.PropertyId
             );
             self.ExperienceStatus.PutCache(
                 cache,
-                request.NamespaceName,
+                self.ExperienceNamespaceName,
                 request.UserId,
                 self.ExperienceStatus?.ExperienceName,
-                request.PropertyId
+                self.ExperienceStatus?.PropertyId
             );
         }
 

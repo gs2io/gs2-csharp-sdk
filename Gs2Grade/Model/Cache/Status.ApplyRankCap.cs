@@ -53,14 +53,14 @@ namespace Gs2.Gs2Grade.Model.Cache
                 request.NamespaceName,
                 userId,
                 request.GradeName,
-                request.PropertyId
+                self.Item.PropertyId
             );
             self.ExperienceStatus.PutCache(
                 cache,
                 Gs2.Gs2Experience.Model.Status.GetNamespaceNameFromGrn(self.ExperienceStatus?.StatusId),
                 userId,
                 Gs2Experience.Model.Status.GetExperienceNameFromGrn(self.ExperienceStatus?.StatusId),
-                request.PropertyId
+                self.ExperienceStatus?.PropertyId
             );
         }
 
