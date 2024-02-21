@@ -60,7 +60,9 @@ namespace Gs2.Gs2Quest.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = CreateProgressByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2Quest.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (CreateProgressByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = CreateProgressByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await CreateProgressByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

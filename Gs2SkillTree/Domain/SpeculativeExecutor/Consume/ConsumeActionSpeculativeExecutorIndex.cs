@@ -60,7 +60,9 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (MarkRestrainByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = MarkRestrainByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (MarkRestrainByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await MarkRestrainByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

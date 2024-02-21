@@ -60,7 +60,9 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteTriggerByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DeleteTriggerByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
                 }
                 if (VerifyEventByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = VerifyEventByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteTriggerByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DeleteTriggerByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             }
             if (VerifyEventByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await VerifyEventByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

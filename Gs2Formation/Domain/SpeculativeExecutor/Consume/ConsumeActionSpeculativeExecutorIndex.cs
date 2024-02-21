@@ -60,7 +60,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (SubMoldCapacityByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = SubMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SubMoldCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (SubMoldCapacityByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = SubMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SubMoldCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

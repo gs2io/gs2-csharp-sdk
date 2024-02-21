@@ -1867,6 +1867,132 @@ namespace Gs2.Gs2Log
 #endif
 
 
+        public class QueryAccessLogWithTelemetryTask : Gs2RestSessionTask<QueryAccessLogWithTelemetryRequest, QueryAccessLogWithTelemetryResult>
+        {
+            public QueryAccessLogWithTelemetryTask(IGs2Session session, RestSessionRequestFactory factory, QueryAccessLogWithTelemetryRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(QueryAccessLogWithTelemetryRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "log")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/log/access/telemetry";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.UserId != null) {
+                    sessionRequest.AddQueryString("userId", $"{request.UserId}");
+                }
+                if (request.Begin != null) {
+                    sessionRequest.AddQueryString("begin", $"{request.Begin}");
+                }
+                if (request.End != null) {
+                    sessionRequest.AddQueryString("end", $"{request.End}");
+                }
+                if (request.LongTerm != null) {
+                    sessionRequest.AddQueryString("longTerm", $"{request.LongTerm}");
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator QueryAccessLogWithTelemetry(
+                Request.QueryAccessLogWithTelemetryRequest request,
+                UnityAction<AsyncResult<Result.QueryAccessLogWithTelemetryResult>> callback
+        )
+		{
+			var task = new QueryAccessLogWithTelemetryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.QueryAccessLogWithTelemetryResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.QueryAccessLogWithTelemetryResult> QueryAccessLogWithTelemetryFuture(
+                Request.QueryAccessLogWithTelemetryRequest request
+        )
+		{
+			return new QueryAccessLogWithTelemetryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.QueryAccessLogWithTelemetryResult> QueryAccessLogWithTelemetryAsync(
+                Request.QueryAccessLogWithTelemetryRequest request
+        )
+		{
+            AsyncResult<Result.QueryAccessLogWithTelemetryResult> result = null;
+			await QueryAccessLogWithTelemetry(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public QueryAccessLogWithTelemetryTask QueryAccessLogWithTelemetryAsync(
+                Request.QueryAccessLogWithTelemetryRequest request
+        )
+		{
+			return new QueryAccessLogWithTelemetryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.QueryAccessLogWithTelemetryResult> QueryAccessLogWithTelemetryAsync(
+                Request.QueryAccessLogWithTelemetryRequest request
+        )
+		{
+			var task = new QueryAccessLogWithTelemetryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class PutLogTask : Gs2RestSessionTask<PutLogRequest, PutLogResult>
         {
             public PutLogTask(IGs2Session session, RestSessionRequestFactory factory, PutLogRequest request) : base(session, factory, request)

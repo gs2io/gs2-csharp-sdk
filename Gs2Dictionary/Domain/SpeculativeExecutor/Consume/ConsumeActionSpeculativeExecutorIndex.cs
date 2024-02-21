@@ -60,7 +60,9 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteEntriesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DeleteEntriesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 }
                 if (VerifyEntryByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = VerifyEntryByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteEntriesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DeleteEntriesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             }
             if (VerifyEntryByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await VerifyEntryByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

@@ -60,7 +60,9 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DecreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DecreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DecreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

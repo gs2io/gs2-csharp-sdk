@@ -60,7 +60,9 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteReceiveStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DeleteReceiveStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
                 }
                 if (UnmarkReceivedByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = UnmarkReceivedByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteReceiveStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DeleteReceiveStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             }
             if (UnmarkReceivedByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await UnmarkReceivedByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

@@ -60,7 +60,9 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (IncreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = IncreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
                 }
                 if (SetMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (IncreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await IncreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             }
             if (SetMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

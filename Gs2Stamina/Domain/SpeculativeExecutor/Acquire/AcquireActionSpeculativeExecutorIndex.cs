@@ -60,7 +60,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (RecoverStaminaByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = RecoverStaminaByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 if (RaiseMaxValueByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = RaiseMaxValueByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -92,7 +96,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 if (SetMaxValueByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetMaxValueByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -108,7 +114,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 if (SetRecoverIntervalByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetRecoverIntervalByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -124,7 +132,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 }
                 if (SetRecoverValueByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetRecoverValueByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -162,7 +172,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (RecoverStaminaByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = RecoverStaminaByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await RecoverStaminaByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -171,7 +183,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             }
             if (RaiseMaxValueByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = RaiseMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await RaiseMaxValueByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -180,7 +194,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             }
             if (SetMaxValueByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetMaxValueByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -189,7 +205,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             }
             if (SetRecoverIntervalByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetRecoverIntervalByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetRecoverIntervalByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -198,7 +216,9 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             }
             if (SetRecoverValueByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetRecoverValueByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

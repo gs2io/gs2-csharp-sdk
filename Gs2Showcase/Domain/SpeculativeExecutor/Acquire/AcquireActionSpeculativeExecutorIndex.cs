@@ -60,7 +60,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DecrementPurchaseCountByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = DecrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DecrementPurchaseCountByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
                 }
                 if (ForceReDrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = ForceReDrawByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DecrementPurchaseCountByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DecrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DecrementPurchaseCountByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             }
             if (ForceReDrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await ForceReDrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

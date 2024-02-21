@@ -60,7 +60,9 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DrawByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
                 }
                 if (ResetBoxByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = ResetBoxByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             }
             if (ResetBoxByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ResetBoxByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await ResetBoxByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

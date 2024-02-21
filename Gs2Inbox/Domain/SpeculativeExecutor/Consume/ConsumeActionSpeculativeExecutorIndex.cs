@@ -60,7 +60,9 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (OpenMessageByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = OpenMessageByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
                 }
                 if (DeleteMessageByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteMessageByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DeleteMessageByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (OpenMessageByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = OpenMessageByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await OpenMessageByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Inbox.Domain.SpeculativeExecutor
             }
             if (DeleteMessageByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteMessageByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DeleteMessageByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

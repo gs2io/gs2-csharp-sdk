@@ -60,7 +60,9 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteProgressByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DeleteProgressByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteProgressByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DeleteProgressByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

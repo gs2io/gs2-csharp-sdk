@@ -60,7 +60,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (ReDrawBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = ReDrawBalanceParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 }
                 if (SetBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetBalanceParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -92,7 +96,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 }
                 if (ReDrawRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = ReDrawRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -108,7 +114,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 }
                 if (AddRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = AddRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -124,7 +132,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 }
                 if (SetRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -162,7 +172,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (ReDrawBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await ReDrawBalanceParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -171,7 +183,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             }
             if (SetBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetBalanceParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -180,7 +194,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             }
             if (ReDrawRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await ReDrawRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -189,7 +205,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             }
             if (AddRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await AddRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -198,7 +216,9 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             }
             if (SetRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetRarityParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

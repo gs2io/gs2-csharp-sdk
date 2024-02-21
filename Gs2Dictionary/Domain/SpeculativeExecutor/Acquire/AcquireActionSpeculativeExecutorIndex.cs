@@ -60,7 +60,9 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AddEntriesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AddEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = AddEntriesByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AddEntriesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AddEntriesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await AddEntriesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

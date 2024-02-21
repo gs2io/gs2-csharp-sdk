@@ -60,7 +60,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AddMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = AddMoldCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                 }
                 if (SetMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = SetMoldCapacityByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -92,7 +96,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                 }
                 if (AcquireActionsToFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -108,7 +114,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                 }
                 if (AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -146,7 +154,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AddMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AddMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await AddMoldCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -155,7 +165,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             }
             if (SetMoldCapacityByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await SetMoldCapacityByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -164,7 +176,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             }
             if (AcquireActionsToFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -173,7 +187,9 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             }
             if (AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

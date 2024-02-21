@@ -60,7 +60,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (IncrementPurchaseCountByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = IncrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = IncrementPurchaseCountByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (IncrementPurchaseCountByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = IncrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await IncrementPurchaseCountByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

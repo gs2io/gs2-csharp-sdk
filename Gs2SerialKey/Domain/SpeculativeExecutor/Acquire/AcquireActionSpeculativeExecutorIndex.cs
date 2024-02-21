@@ -60,7 +60,9 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (RevertUseByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = RevertUseByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = RevertUseByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (RevertUseByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = RevertUseByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await RevertUseByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
