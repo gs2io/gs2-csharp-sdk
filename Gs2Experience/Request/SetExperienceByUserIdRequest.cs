@@ -124,7 +124,6 @@ namespace Gs2.Gs2Experience.Request
             key += UserId + ":";
             key += ExperienceName + ":";
             key += PropertyId + ":";
-            key += ExperienceValue + ":";
             return key;
         }
     }

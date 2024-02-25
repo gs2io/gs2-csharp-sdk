@@ -510,6 +510,12 @@ namespace Gs2.Gs2Experience.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetExperienceByUserIdRequest, SetExperienceByUserIdResult> SetExperienceByUserIdComplete = new UnityEvent<string, SetExperienceByUserIdRequest, SetExperienceByUserIdResult>();
+    #else
+        public static Action<string, SetExperienceByUserIdRequest, SetExperienceByUserIdResult> SetExperienceByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, AddRankCapByUserIdRequest, AddRankCapByUserIdResult> AddRankCapByUserIdComplete = new UnityEvent<string, AddRankCapByUserIdRequest, AddRankCapByUserIdResult>();
     #else
         public static Action<string, AddRankCapByUserIdRequest, AddRankCapByUserIdResult> AddRankCapByUserIdComplete;
@@ -545,6 +551,23 @@ namespace Gs2.Gs2Experience.Domain
                         );
 
                         AddExperienceByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "SetExperienceByUserId": {
+                        var requestModel = SetExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        SetExperienceByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -724,6 +747,23 @@ namespace Gs2.Gs2Experience.Domain
                     );
 
                     AddExperienceByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "set_experience_by_user_id": {
+                    var requestModel = SetExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetExperienceByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    SetExperienceByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

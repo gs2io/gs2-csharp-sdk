@@ -5742,6 +5742,131 @@ namespace Gs2.Gs2Experience
 #endif
 
 
+        public class SetExperienceByStampSheetTask : Gs2RestSessionTask<SetExperienceByStampSheetRequest, SetExperienceByStampSheetResult>
+        {
+            public SetExperienceByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SetExperienceByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetExperienceByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "experience")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/experience/set";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetExperienceByStampSheet(
+                Request.SetExperienceByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetExperienceByStampSheetResult>> callback
+        )
+		{
+			var task = new SetExperienceByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetExperienceByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetExperienceByStampSheetResult> SetExperienceByStampSheetFuture(
+                Request.SetExperienceByStampSheetRequest request
+        )
+		{
+			return new SetExperienceByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetExperienceByStampSheetResult> SetExperienceByStampSheetAsync(
+                Request.SetExperienceByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SetExperienceByStampSheetResult> result = null;
+			await SetExperienceByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetExperienceByStampSheetTask SetExperienceByStampSheetAsync(
+                Request.SetExperienceByStampSheetRequest request
+        )
+		{
+			return new SetExperienceByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetExperienceByStampSheetResult> SetExperienceByStampSheetAsync(
+                Request.SetExperienceByStampSheetRequest request
+        )
+		{
+			var task = new SetExperienceByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class SubExperienceByStampTaskTask : Gs2RestSessionTask<SubExperienceByStampTaskRequest, SubExperienceByStampTaskResult>
         {
             public SubExperienceByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, SubExperienceByStampTaskRequest request) : base(session, factory, request)

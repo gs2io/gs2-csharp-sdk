@@ -46,6 +46,8 @@ namespace Gs2.Gs2Experience.Model
             switch (action.Action) {
                 case "Gs2Experience:AddExperienceByUserId":
                     return AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Experience:SetExperienceByUserId":
+                    return SetExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Experience:AddRankCapByUserId":
                     return AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Experience:SetRankCapByUserId":

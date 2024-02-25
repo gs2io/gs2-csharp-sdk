@@ -3458,6 +3458,114 @@ namespace Gs2.Gs2Experience
 #endif
 
 
+        public class SetExperienceByStampSheetTask : Gs2WebSocketSessionTask<Request.SetExperienceByStampSheetRequest, Result.SetExperienceByStampSheetResult>
+        {
+	        public SetExperienceByStampSheetTask(IGs2Session session, Request.SetExperienceByStampSheetRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SetExperienceByStampSheetRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet.ToString());
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "experience",
+                    "status",
+                    "setExperienceByStampSheet",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetExperienceByStampSheet(
+                Request.SetExperienceByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetExperienceByStampSheetResult>> callback
+        )
+		{
+			var task = new SetExperienceByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetExperienceByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetExperienceByStampSheetResult> SetExperienceByStampSheetFuture(
+                Request.SetExperienceByStampSheetRequest request
+        )
+		{
+			return new SetExperienceByStampSheetTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetExperienceByStampSheetResult> SetExperienceByStampSheetAsync(
+            Request.SetExperienceByStampSheetRequest request
+        )
+		{
+		    var task = new SetExperienceByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SetExperienceByStampSheetTask SetExperienceByStampSheetAsync(
+                Request.SetExperienceByStampSheetRequest request
+        )
+		{
+			return new SetExperienceByStampSheetTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetExperienceByStampSheetResult> SetExperienceByStampSheetAsync(
+            Request.SetExperienceByStampSheetRequest request
+        )
+		{
+		    var task = new SetExperienceByStampSheetTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class AddRankCapByStampSheetTask : Gs2WebSocketSessionTask<Request.AddRankCapByStampSheetRequest, Result.AddRankCapByStampSheetResult>
         {
 	        public AddRankCapByStampSheetTask(IGs2Session session, Request.AddRankCapByStampSheetRequest request) : base(session, request)
