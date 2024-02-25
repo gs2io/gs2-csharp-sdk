@@ -74,6 +74,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Realtime.Domain.Gs2Realtime Realtime;
         public readonly Gs2Schedule.Domain.Gs2Schedule Schedule;
         public readonly Gs2Script.Domain.Gs2Script Script;
+        public readonly Gs2SeasonRating.Domain.Gs2SeasonRating SeasonRating;
         public readonly Gs2SerialKey.Domain.Gs2SerialKey SerialKey;
         public readonly Gs2Showcase.Domain.Gs2Showcase Showcase;
         public readonly Gs2SkillTree.Domain.Gs2SkillTree SkillTree;
@@ -134,6 +135,7 @@ namespace Gs2.Core.Domain
             this.Realtime = new Gs2Realtime.Domain.Gs2Realtime(this);
             this.Schedule = new Gs2Schedule.Domain.Gs2Schedule(this);
             this.Script = new Gs2Script.Domain.Gs2Script(this);
+            this.SeasonRating = new Gs2SeasonRating.Domain.Gs2SeasonRating(this);
             this.SerialKey = new Gs2SerialKey.Domain.Gs2SerialKey(this);
             this.Showcase = new Gs2Showcase.Domain.Gs2Showcase(this);
             this.SkillTree = new Gs2SkillTree.Domain.Gs2SkillTree(this);
@@ -261,6 +263,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "Gs2Script":
                                 this.Script.HandleNotification(this._cache, method, message.payload);
+                                break;
+                            case "Gs2SeasonRating":
+                                this.SeasonRating.HandleNotification(this._cache, method, message.payload);
                                 break;
                             case "Gs2SerialKey":
                                 this.SerialKey.HandleNotification(this._cache, method, message.payload);
@@ -608,6 +613,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Script":
                         this.Script.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
+                    case "Gs2SeasonRating":
+                        this.SeasonRating.UpdateCacheFromStampSheet(transactionId, method, request, result);
+                        break;
                     case "Gs2SerialKey":
                         this.SerialKey.UpdateCacheFromStampSheet(transactionId, method, request, result);
                         break;
@@ -754,6 +762,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Script":
                         this.Script.UpdateCacheFromStampTask(taskId, method, request, result);
+                        break;
+                    case "Gs2SeasonRating":
+                        this.SeasonRating.UpdateCacheFromStampTask(taskId, method, request, result);
                         break;
                     case "Gs2SerialKey":
                         this.SerialKey.UpdateCacheFromStampTask(taskId, method, request, result);
@@ -911,6 +922,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "script":
                                 this.Script.UpdateCacheFromJobResult(method, job, result);
+                                break;
+                            case "season_rating":
+                                this.SeasonRating.UpdateCacheFromJobResult(method, job, result);
                                 break;
                             case "serial_key":
                                 this.SerialKey.UpdateCacheFromJobResult(method, job, result);

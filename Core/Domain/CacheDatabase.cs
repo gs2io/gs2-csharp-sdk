@@ -98,6 +98,9 @@ namespace Gs2.Core.Domain
             foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
                 (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
             }
+            foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values) {
+                callback.Item2.Invoke();
+            }
         }
 
         private static ulong _callbackId = 1;

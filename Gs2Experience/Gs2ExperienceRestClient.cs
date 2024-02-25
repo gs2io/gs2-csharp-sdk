@@ -4213,6 +4213,11 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("experienceValue");
                     jsonWriter.Write(request.ExperienceValue.ToString());
                 }
+                if (request.TruncateExperienceWhenRankUp != null)
+                {
+                    jsonWriter.WritePropertyName("truncateExperienceWhenRankUp");
+                    jsonWriter.Write(request.TruncateExperienceWhenRankUp.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

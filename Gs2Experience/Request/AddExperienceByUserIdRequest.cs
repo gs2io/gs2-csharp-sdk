@@ -38,6 +38,7 @@ namespace Gs2.Gs2Experience.Request
          public string ExperienceName { set; get; }
          public string PropertyId { set; get; }
          public long? ExperienceValue { set; get; }
+         public bool? TruncateExperienceWhenRankUp { set; get; }
         public string DuplicationAvoider { set; get; }
         public AddExperienceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Experience.Request
             this.ExperienceValue = experienceValue;
             return this;
         }
+        public AddExperienceByUserIdRequest WithTruncateExperienceWhenRankUp(bool? truncateExperienceWhenRankUp) {
+            this.TruncateExperienceWhenRankUp = truncateExperienceWhenRankUp;
+            return this;
+        }
 
         public AddExperienceByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Experience.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)(data["experienceValue"].ToString().Contains(".") ? (long)double.Parse(data["experienceValue"].ToString()) : long.Parse(data["experienceValue"].ToString())));
+                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)(data["experienceValue"].ToString().Contains(".") ? (long)double.Parse(data["experienceValue"].ToString()) : long.Parse(data["experienceValue"].ToString())))
+                .WithTruncateExperienceWhenRankUp(!data.Keys.Contains("truncateExperienceWhenRankUp") || data["truncateExperienceWhenRankUp"] == null ? null : (bool?)bool.Parse(data["truncateExperienceWhenRankUp"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Experience.Request
                 ["experienceName"] = ExperienceName,
                 ["propertyId"] = PropertyId,
                 ["experienceValue"] = ExperienceValue,
+                ["truncateExperienceWhenRankUp"] = TruncateExperienceWhenRankUp,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2Experience.Request
                 writer.WritePropertyName("experienceValue");
                 writer.Write((ExperienceValue.ToString().Contains(".") ? (long)double.Parse(ExperienceValue.ToString()) : long.Parse(ExperienceValue.ToString())));
             }
+            if (TruncateExperienceWhenRankUp != null) {
+                writer.WritePropertyName("truncateExperienceWhenRankUp");
+                writer.Write(bool.Parse(TruncateExperienceWhenRankUp.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -124,6 +135,7 @@ namespace Gs2.Gs2Experience.Request
             key += UserId + ":";
             key += ExperienceName + ":";
             key += PropertyId + ":";
+            key += TruncateExperienceWhenRankUp + ":";
             return key;
         }
     }
