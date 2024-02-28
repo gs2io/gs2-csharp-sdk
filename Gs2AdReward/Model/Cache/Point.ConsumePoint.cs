@@ -45,7 +45,7 @@ namespace Gs2.Gs2AdReward.Model.Cache
             string userId,
             ConsumePointRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId

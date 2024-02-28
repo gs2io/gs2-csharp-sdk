@@ -45,7 +45,7 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             string userId,
             GetCurrentCampaignMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

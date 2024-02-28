@@ -45,10 +45,10 @@ namespace Gs2.Gs2Schedule.Model.Cache
             string userId,
             CreateEventMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

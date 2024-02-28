@@ -48,10 +48,10 @@ namespace Gs2.Gs2Ranking.Model.Cache
             (null as SubscribeUser).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.CategoryName,
+                self.Item.UserId,
+                self.Item.CategoryName,
                 default,
-                request.TargetUserId
+                self.Item.TargetUserId
             );
         }
 

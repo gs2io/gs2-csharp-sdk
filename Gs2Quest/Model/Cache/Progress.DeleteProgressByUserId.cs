@@ -48,7 +48,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             (null as Progress).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId
+                self.Item.UserId
             );
         }
 

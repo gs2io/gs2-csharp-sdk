@@ -45,7 +45,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             UpdateCurrentItemModelMasterFromGitHubRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

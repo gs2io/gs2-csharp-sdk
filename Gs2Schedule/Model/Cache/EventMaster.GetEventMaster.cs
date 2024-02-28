@@ -45,7 +45,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             string userId,
             GetEventMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.EventName

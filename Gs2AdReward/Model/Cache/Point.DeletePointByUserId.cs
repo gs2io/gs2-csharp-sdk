@@ -48,7 +48,7 @@ namespace Gs2.Gs2AdReward.Model.Cache
             (null as Point).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId
+                self.Item.UserId
             );
         }
 

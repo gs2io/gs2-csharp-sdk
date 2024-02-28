@@ -49,7 +49,7 @@ namespace Gs2.Gs2Account.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                request.Type ?? default
+                self.Item.Type ?? default
             );
         }
 

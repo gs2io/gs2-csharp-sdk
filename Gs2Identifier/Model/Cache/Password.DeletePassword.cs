@@ -47,7 +47,7 @@ namespace Gs2.Gs2Identifier.Model.Cache
         ) {
             (null as Password).DeleteCache(
                 cache,
-                request.UserName
+                self.Item.UserName
             );
         }
 

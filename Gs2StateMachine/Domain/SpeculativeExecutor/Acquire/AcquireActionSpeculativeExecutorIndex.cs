@@ -60,7 +60,9 @@ namespace Gs2.Gs2StateMachine.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (StartStateMachineByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = StartStateMachineByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2StateMachine.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (StartStateMachineByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = StartStateMachineByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await StartStateMachineByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

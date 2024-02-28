@@ -45,9 +45,9 @@ namespace Gs2.Gs2Identifier.Model.Cache
             string userId,
             GetPasswordRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                request.UserName
+                self.Item.UserName
             );
         }
 

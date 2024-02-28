@@ -45,11 +45,11 @@ namespace Gs2.Gs2Money.Model.Cache
             string userId,
             RecordReceiptRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                self.Item?.TransactionId
+                self.Item.UserId,
+                self.Item.TransactionId
             );
         }
 

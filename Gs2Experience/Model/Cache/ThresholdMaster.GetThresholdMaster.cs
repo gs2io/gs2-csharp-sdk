@@ -45,7 +45,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             string userId,
             GetThresholdMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.ThresholdName

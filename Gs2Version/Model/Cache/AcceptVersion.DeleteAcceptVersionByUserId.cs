@@ -48,8 +48,8 @@ namespace Gs2.Gs2Version.Model.Cache
             (null as AcceptVersion).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.VersionName
+                self.Item.UserId,
+                self.Item.VersionName
             );
         }
 

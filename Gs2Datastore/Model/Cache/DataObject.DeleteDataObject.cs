@@ -45,7 +45,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string userId,
             DeleteDataObjectRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

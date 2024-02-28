@@ -45,10 +45,10 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             CreateSimpleInventoryModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

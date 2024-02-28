@@ -45,7 +45,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             string userId,
             GetCurrentEntryMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

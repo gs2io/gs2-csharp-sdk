@@ -45,7 +45,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             UpdateGatheringByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,

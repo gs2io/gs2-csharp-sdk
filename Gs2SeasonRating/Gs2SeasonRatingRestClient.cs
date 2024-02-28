@@ -198,6 +198,11 @@ namespace Gs2.Gs2SeasonRating
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
                 }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -532,6 +537,11 @@ namespace Gs2.Gs2SeasonRating
                 {
                     jsonWriter.WritePropertyName("description");
                     jsonWriter.Write(request.Description);
+                }
+                if (request.TransactionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSetting");
+                    request.TransactionSetting.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -2160,6 +2170,11 @@ namespace Gs2.Gs2SeasonRating
                     jsonWriter.WritePropertyName("experienceModelId");
                     jsonWriter.Write(request.ExperienceModelId);
                 }
+                if (request.ChallengePeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("challengePeriodEventId");
+                    jsonWriter.Write(request.ChallengePeriodEventId);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2407,6 +2422,11 @@ namespace Gs2.Gs2SeasonRating
                 {
                     jsonWriter.WritePropertyName("experienceModelId");
                     jsonWriter.Write(request.ExperienceModelId);
+                }
+                if (request.ChallengePeriodEventId != null)
+                {
+                    jsonWriter.WritePropertyName("challengePeriodEventId");
+                    jsonWriter.Write(request.ChallengePeriodEventId);
                 }
                 if (request.ContextStack != null)
                 {

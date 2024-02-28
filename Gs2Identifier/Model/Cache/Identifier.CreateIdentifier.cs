@@ -45,10 +45,10 @@ namespace Gs2.Gs2Identifier.Model.Cache
             string userId,
             CreateIdentifierRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                request.UserName,
-                self.Item?.ClientId
+                self.Item.UserName,
+                self.Item.ClientId
             );
         }
 

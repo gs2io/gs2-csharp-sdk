@@ -48,8 +48,8 @@ namespace Gs2.Gs2Stamina.Model.Cache
             (null as Stamina).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.StaminaName
+                self.Item.UserId,
+                self.Item.StaminaName
             );
         }
 

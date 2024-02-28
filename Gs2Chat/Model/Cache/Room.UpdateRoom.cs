@@ -45,7 +45,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             string userId,
             UpdateRoomRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

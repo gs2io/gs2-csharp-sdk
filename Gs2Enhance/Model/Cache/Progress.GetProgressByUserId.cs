@@ -45,10 +45,10 @@ namespace Gs2.Gs2Enhance.Model.Cache
             string userId,
             GetProgressByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId
+                self.Item.UserId
             );
         }
 

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Project.Model.Cache
             string userId,
             GetImportErrorLogRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 default,
                 default,

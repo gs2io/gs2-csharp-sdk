@@ -45,11 +45,11 @@ namespace Gs2.Gs2Money.Model.Cache
             string userId,
             GetWalletRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.Slot ?? default
+                self.Item.Slot ?? default
             );
         }
 

@@ -50,7 +50,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 request.NamespaceName,
                 userId,
                 request.MoldModelName,
-                request.Index ?? default
+                self.Item.Index ?? default
             );
             (null as Mold).DeleteCache(
                 cache,

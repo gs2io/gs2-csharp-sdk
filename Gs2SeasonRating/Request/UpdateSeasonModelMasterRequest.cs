@@ -39,6 +39,7 @@ namespace Gs2.Gs2SeasonRating.Request
          public string Metadata { set; get; }
          public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; }
          public string ExperienceModelId { set; get; }
+         public string ChallengePeriodEventId { set; get; }
         public UpdateSeasonModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -63,6 +64,10 @@ namespace Gs2.Gs2SeasonRating.Request
             this.ExperienceModelId = experienceModelId;
             return this;
         }
+        public UpdateSeasonModelMasterRequest WithChallengePeriodEventId(string challengePeriodEventId) {
+            this.ChallengePeriodEventId = challengePeriodEventId;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -80,7 +85,8 @@ namespace Gs2.Gs2SeasonRating.Request
                 .WithTiers(!data.Keys.Contains("tiers") || data["tiers"] == null || !data["tiers"].IsArray ? new Gs2.Gs2SeasonRating.Model.TierModel[]{} : data["tiers"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.TierModel.FromJson(v);
                 }).ToArray())
-                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString());
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());
         }
 
         public override JsonData ToJson()
@@ -101,6 +107,7 @@ namespace Gs2.Gs2SeasonRating.Request
                 ["metadata"] = Metadata,
                 ["tiers"] = tiersJsonData,
                 ["experienceModelId"] = ExperienceModelId,
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }
 
@@ -138,6 +145,10 @@ namespace Gs2.Gs2SeasonRating.Request
                 writer.WritePropertyName("experienceModelId");
                 writer.Write(ExperienceModelId.ToString());
             }
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -149,6 +160,7 @@ namespace Gs2.Gs2SeasonRating.Request
             key += Metadata + ":";
             key += Tiers + ":";
             key += ExperienceModelId + ":";
+            key += ChallengePeriodEventId + ":";
             return key;
         }
     }

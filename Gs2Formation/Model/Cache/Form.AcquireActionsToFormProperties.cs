@@ -45,14 +45,14 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             AcquireActionsToFormPropertiesRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
                 request.MoldModelName,
-                request.Index ?? default
+                self.Item.Index ?? default
             );
-            self.Mold.PutCache(
+            self.Mold?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,

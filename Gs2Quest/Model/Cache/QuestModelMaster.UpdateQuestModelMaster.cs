@@ -45,10 +45,10 @@ namespace Gs2.Gs2Quest.Model.Cache
             string userId,
             UpdateQuestModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.QuestGroupName,
+                self.Item.QuestGroupName,
                 request.QuestName
             );
         }

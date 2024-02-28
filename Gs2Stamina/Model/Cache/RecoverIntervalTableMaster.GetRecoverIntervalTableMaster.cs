@@ -45,7 +45,7 @@ namespace Gs2.Gs2Stamina.Model.Cache
             string userId,
             GetRecoverIntervalTableMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.RecoverIntervalTableName

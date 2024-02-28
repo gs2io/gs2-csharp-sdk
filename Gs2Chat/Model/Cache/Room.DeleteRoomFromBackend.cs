@@ -48,7 +48,7 @@ namespace Gs2.Gs2Chat.Model.Cache
             (null as Room).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.RoomName
             );
         }

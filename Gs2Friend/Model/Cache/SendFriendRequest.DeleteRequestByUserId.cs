@@ -48,8 +48,8 @@ namespace Gs2.Gs2Friend.Model.Cache
             (null as FriendRequest).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.TargetUserId
+                self.Item.UserId,
+                self.Item.TargetUserId
             );
         }
 

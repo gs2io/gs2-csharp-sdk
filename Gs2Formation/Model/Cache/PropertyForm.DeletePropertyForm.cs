@@ -50,7 +50,7 @@ namespace Gs2.Gs2Formation.Model.Cache
                 request.NamespaceName,
                 userId,
                 request.PropertyFormModelName,
-                request.PropertyId
+                self.Item.PropertyId
             );
             (null as PropertyFormModel).DeleteCache(
                 cache,

@@ -45,10 +45,10 @@ namespace Gs2.Gs2News.Model.Cache
             string userId,
             GetProgressRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UploadToken
+                self.Item.UploadToken
             );
         }
 

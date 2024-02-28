@@ -45,7 +45,7 @@ namespace Gs2.Gs2Realtime.Model.Cache
             string userId,
             GetRoomRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.RoomName

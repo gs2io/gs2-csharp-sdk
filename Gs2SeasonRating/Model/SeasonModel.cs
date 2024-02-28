@@ -36,6 +36,7 @@ namespace Gs2.Gs2SeasonRating.Model
         public string Metadata { set; get; }
         public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; }
         public string ExperienceModelId { set; get; }
+        public string ChallengePeriodEventId { set; get; }
         public SeasonModel WithSeasonModelId(string seasonModelId) {
             this.SeasonModelId = seasonModelId;
             return this;
@@ -54,6 +55,10 @@ namespace Gs2.Gs2SeasonRating.Model
         }
         public SeasonModel WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
+            return this;
+        }
+        public SeasonModel WithChallengePeriodEventId(string challengePeriodEventId) {
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
 
@@ -140,7 +145,8 @@ namespace Gs2.Gs2SeasonRating.Model
                 .WithTiers(!data.Keys.Contains("tiers") || data["tiers"] == null || !data["tiers"].IsArray ? new Gs2.Gs2SeasonRating.Model.TierModel[]{} : data["tiers"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2SeasonRating.Model.TierModel.FromJson(v);
                 }).ToArray())
-                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString());
+                .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());
         }
 
         public JsonData ToJson()
@@ -160,6 +166,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 ["metadata"] = Metadata,
                 ["tiers"] = tiersJsonData,
                 ["experienceModelId"] = ExperienceModelId,
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
             };
         }
 
@@ -192,6 +199,10 @@ namespace Gs2.Gs2SeasonRating.Model
             if (ExperienceModelId != null) {
                 writer.WritePropertyName("experienceModelId");
                 writer.Write(ExperienceModelId.ToString());
+            }
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
             }
             writer.WriteObjectEnd();
         }
@@ -244,6 +255,14 @@ namespace Gs2.Gs2SeasonRating.Model
             {
                 diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
             }
+            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
+            }
             return diff;
         }
 
@@ -288,6 +307,13 @@ namespace Gs2.Gs2SeasonRating.Model
                     });
                 }
             }
+            {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("seasonModel", "seasonRating.seasonModel.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -297,6 +323,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 Metadata = Metadata,
                 Tiers = Tiers.Clone() as Gs2.Gs2SeasonRating.Model.TierModel[],
                 ExperienceModelId = ExperienceModelId,
+                ChallengePeriodEventId = ChallengePeriodEventId,
             };
         }
     }

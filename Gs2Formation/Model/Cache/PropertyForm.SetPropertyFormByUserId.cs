@@ -45,14 +45,14 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             SetPropertyFormByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.PropertyFormModelName,
-                request.PropertyId
+                self.Item.PropertyId
             );
-            self.PropertyFormModel.PutCache(
+            self.PropertyFormModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.PropertyFormModelName

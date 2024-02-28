@@ -45,11 +45,11 @@ namespace Gs2.Gs2Account.Model.Cache
             string userId,
             CreateTakeOverRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.Type ?? default
+                self.Item.Type ?? default
             );
         }
 

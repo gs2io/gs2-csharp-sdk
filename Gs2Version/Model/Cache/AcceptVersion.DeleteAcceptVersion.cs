@@ -49,7 +49,7 @@ namespace Gs2.Gs2Version.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                request.VersionName
+                self.Item.VersionName
             );
         }
 

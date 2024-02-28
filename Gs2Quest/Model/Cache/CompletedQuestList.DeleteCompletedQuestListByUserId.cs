@@ -48,8 +48,8 @@ namespace Gs2.Gs2Quest.Model.Cache
             (null as CompletedQuestList).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.QuestGroupName
+                self.Item.UserId,
+                self.Item.QuestGroupName
             );
         }
 

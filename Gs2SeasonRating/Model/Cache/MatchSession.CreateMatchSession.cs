@@ -45,7 +45,7 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             string userId,
             CreateMatchSessionRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.SessionName

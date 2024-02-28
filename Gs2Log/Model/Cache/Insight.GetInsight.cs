@@ -45,7 +45,7 @@ namespace Gs2.Gs2Log.Model.Cache
             string userId,
             GetInsightRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InsightName

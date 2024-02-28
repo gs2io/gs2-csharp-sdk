@@ -45,10 +45,10 @@ namespace Gs2.Gs2Limit.Model.Cache
             string userId,
             CreateLimitModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

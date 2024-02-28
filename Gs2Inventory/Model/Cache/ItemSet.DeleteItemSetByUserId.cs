@@ -56,7 +56,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     item.Name
                 );
             }
-            self.Items.PutCache(
+            self.Items?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,

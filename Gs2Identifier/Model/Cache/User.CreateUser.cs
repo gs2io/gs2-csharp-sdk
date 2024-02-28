@@ -45,9 +45,9 @@ namespace Gs2.Gs2Identifier.Model.Cache
             string userId,
             CreateUserRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

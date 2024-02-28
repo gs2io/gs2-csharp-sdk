@@ -45,7 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             RegisterBlackListRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId

@@ -48,7 +48,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             (null as Mold).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.MoldModelName
             );
         }

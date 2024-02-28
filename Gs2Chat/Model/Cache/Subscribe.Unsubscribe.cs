@@ -49,7 +49,7 @@ namespace Gs2.Gs2Chat.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                request.RoomName
+                self.Item.RoomName
             );
         }
 

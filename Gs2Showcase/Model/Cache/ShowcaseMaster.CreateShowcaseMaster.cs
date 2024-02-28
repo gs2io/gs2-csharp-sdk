@@ -45,10 +45,10 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             CreateShowcaseMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

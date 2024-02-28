@@ -45,11 +45,11 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string userId,
             GetBoxRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.PrizeTableName
+                self.Item.PrizeTableName
             );
         }
 

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             GetCategoryModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.CategoryName

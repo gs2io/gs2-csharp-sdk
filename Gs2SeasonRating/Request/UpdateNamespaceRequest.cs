@@ -35,6 +35,7 @@ namespace Gs2.Gs2SeasonRating.Request
 	{
          public string NamespaceName { set; get; }
          public string Description { set; get; }
+         public Gs2.Gs2SeasonRating.Model.TransactionSetting TransactionSetting { set; get; }
          public Gs2.Gs2SeasonRating.Model.LogSetting LogSetting { set; get; }
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -42,6 +43,10 @@ namespace Gs2.Gs2SeasonRating.Request
         }
         public UpdateNamespaceRequest WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2SeasonRating.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2SeasonRating.Model.LogSetting logSetting) {
@@ -60,6 +65,7 @@ namespace Gs2.Gs2SeasonRating.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2SeasonRating.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2SeasonRating.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -68,6 +74,7 @@ namespace Gs2.Gs2SeasonRating.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -83,6 +90,9 @@ namespace Gs2.Gs2SeasonRating.Request
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
             }
+            if (TransactionSetting != null) {
+                TransactionSetting.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -93,6 +103,7 @@ namespace Gs2.Gs2SeasonRating.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
+            key += TransactionSetting + ":";
             key += LogSetting + ":";
             return key;
         }

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Limit.Model.Cache
             string userId,
             GetLimitModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.LimitName

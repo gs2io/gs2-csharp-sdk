@@ -45,11 +45,11 @@ namespace Gs2.Gs2Distributor.Model.Cache
             string userId,
             GetStampSheetResultByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.TransactionId
+                self.Item.UserId,
+                self.Item.TransactionId
             );
         }
 

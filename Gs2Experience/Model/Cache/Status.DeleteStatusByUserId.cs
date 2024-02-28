@@ -48,9 +48,9 @@ namespace Gs2.Gs2Experience.Model.Cache
             (null as Status).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.ExperienceName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.ExperienceName,
+                self.Item.PropertyId
             );
         }
 

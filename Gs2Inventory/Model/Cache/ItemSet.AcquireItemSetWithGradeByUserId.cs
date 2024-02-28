@@ -46,32 +46,32 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             AcquireItemSetWithGradeByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.InventoryName,
-                request.ItemName,
-                self.Item?.Name
+                self.Item.UserId,
+                self.Item.InventoryName,
+                self.Item.ItemName,
+                self.Item.Name
             );
-            self.Status.PutCache(
+            self.Status?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                self.Status?.GradeName,
-                self.Status?.PropertyId
+                self.Item.UserId,
+                self.Status.GradeName,
+                self.Status.PropertyId
             );
-            self.ItemModel.PutCache(
+            self.ItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.InventoryName,
-                request.ItemName
+                self.Item.InventoryName,
+                self.Item.ItemName
             );
-            self.Inventory.PutCache(
+            self.Inventory?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.InventoryName
+                self.Item.UserId,
+                self.Item.InventoryName
             );
         }
 

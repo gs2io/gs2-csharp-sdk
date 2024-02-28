@@ -48,7 +48,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             (null as Trigger).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.TriggerName
             );
         }

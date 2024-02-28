@@ -45,7 +45,7 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             string userId,
             UpdateCurrentTreeMasterFromGitHubRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

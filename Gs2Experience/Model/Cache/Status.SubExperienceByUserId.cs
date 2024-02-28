@@ -45,12 +45,12 @@ namespace Gs2.Gs2Experience.Model.Cache
             string userId,
             SubExperienceByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.ExperienceName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.ExperienceName,
+                self.Item.PropertyId
             );
         }
 

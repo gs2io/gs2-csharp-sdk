@@ -48,7 +48,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             (null as Profile).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId
+                self.Item.UserId
             );
         }
 

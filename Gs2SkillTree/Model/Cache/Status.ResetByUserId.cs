@@ -45,11 +45,11 @@ namespace Gs2.Gs2SkillTree.Model.Cache
             string userId,
             ResetByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.PropertyId
             );
         }
 

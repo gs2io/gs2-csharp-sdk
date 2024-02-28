@@ -45,11 +45,11 @@ namespace Gs2.Gs2Chat.Model.Cache
             string userId,
             CreateRoomRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

@@ -45,9 +45,9 @@ namespace Gs2.Gs2Project.Model.Cache
             string userId,
             GetProjectTokenByIdentifierRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                request.AccountName,
+                self.Item.AccountName,
                 request.ProjectName
             );
         }

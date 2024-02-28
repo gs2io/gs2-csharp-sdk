@@ -45,11 +45,11 @@ namespace Gs2.Gs2Limit.Model.Cache
             string userId,
             CountUpByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.LimitName,
+                self.Item.UserId,
+                self.Item.LimitName,
                 request.CounterName
             );
         }

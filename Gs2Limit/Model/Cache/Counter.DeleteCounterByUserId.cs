@@ -48,8 +48,8 @@ namespace Gs2.Gs2Limit.Model.Cache
             (null as Counter).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.LimitName,
+                self.Item.UserId,
+                self.Item.LimitName,
                 request.CounterName
             );
         }

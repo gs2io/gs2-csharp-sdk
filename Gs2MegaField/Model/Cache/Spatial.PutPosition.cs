@@ -45,12 +45,12 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string userId,
             PutPositionRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.AreaModelName,
-                request.LayerModelName
+                self.Item.AreaModelName,
+                self.Item.LayerModelName
             );
         }
 

@@ -47,7 +47,7 @@ namespace Gs2.Gs2Project.Model.Cache
         ) {
             (null as Project).DeleteCache(
                 cache,
-                default,
+                self.Item.AccountName,
                 request.ProjectName
             );
         }

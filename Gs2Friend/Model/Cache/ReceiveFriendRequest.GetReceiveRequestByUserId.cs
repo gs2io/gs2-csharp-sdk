@@ -45,11 +45,11 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             GetReceiveRequestByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                self.Item?.TargetUserId
+                self.Item.UserId,
+                self.Item.TargetUserId
             );
         }
 

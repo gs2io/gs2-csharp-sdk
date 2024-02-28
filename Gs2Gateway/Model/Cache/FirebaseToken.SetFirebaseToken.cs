@@ -45,7 +45,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             string userId,
             SetFirebaseTokenRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId

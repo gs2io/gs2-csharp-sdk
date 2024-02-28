@@ -45,13 +45,13 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             SubMoldCapacityByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.MoldModelName
             );
-            self.MoldModel.PutCache(
+            self.MoldModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.MoldModelName

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Distributor.Model.Cache
             string userId,
             GetCurrentDistributorMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

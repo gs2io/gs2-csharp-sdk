@@ -45,10 +45,10 @@ namespace Gs2.Gs2Gateway.Model.Cache
             string userId,
             SetUserIdByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                request.NamespaceName,
-                request.UserId
+                self.Item.NamespaceName,
+                self.Item.UserId
             );
         }
 

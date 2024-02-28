@@ -49,9 +49,9 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                request.CategoryName,
+                self.Item.CategoryName,
                 default,
-                request.TargetUserId
+                self.Item.TargetUserId
             );
         }
 

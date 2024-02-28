@@ -84,56 +84,6 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
     public partial class MatchSessionDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> CreateFuture(
-            CreateMatchSessionRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithSessionName(this.SessionName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    () => this._client.CreateMatchSessionFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> CreateAsync(
-            #else
-        public async Task<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> CreateAsync(
-            #endif
-            CreateMatchSessionRequest request
-        ) {
-            request = request
-                .WithNamespaceName(this.NamespaceName)
-                .WithSessionName(this.SessionName);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                null,
-                () => this._client.CreateMatchSessionAsync(request)
-            );
-            var domain = this;
-
-            return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2SeasonRating.Model.MatchSession> GetFuture(
             GetMatchSessionRequest request
         ) {

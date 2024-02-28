@@ -45,7 +45,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             GetFriendRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

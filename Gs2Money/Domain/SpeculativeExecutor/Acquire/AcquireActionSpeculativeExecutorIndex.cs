@@ -60,7 +60,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DepositByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DepositByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                 }
                 if (RevertRecordReceiptSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = RevertRecordReceiptSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DepositByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DepositByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DepositByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             }
             if (RevertRecordReceiptSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = RevertRecordReceiptRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await RevertRecordReceiptSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

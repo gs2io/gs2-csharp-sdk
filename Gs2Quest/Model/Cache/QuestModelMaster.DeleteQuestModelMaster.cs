@@ -48,7 +48,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             (null as QuestModelMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.QuestGroupName,
+                self.Item.QuestGroupName,
                 request.QuestName
             );
         }

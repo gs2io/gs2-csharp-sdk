@@ -48,9 +48,9 @@ namespace Gs2.Gs2Enchant.Model.Cache
             (null as BalanceParameterStatus).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.ParameterName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.ParameterName,
+                self.Item.PropertyId
             );
         }
 

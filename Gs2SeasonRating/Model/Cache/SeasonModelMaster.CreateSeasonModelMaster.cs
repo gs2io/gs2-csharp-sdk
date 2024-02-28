@@ -45,10 +45,10 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             string userId,
             CreateSeasonModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

@@ -45,25 +45,25 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             SetFormByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
                 request.MoldModelName,
-                request.Index ?? default
+                self.Item.Index ?? default
             );
-            self.Mold.PutCache(
+            self.Mold?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
                 request.MoldModelName
             );
-            self.MoldModel.PutCache(
+            self.MoldModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.MoldModelName
             );
-            self.FormModel.PutCache(
+            self.FormModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.MoldModelName

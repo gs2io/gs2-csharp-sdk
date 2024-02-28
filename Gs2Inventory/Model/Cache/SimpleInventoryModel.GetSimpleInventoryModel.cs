@@ -45,7 +45,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             GetSimpleInventoryModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName

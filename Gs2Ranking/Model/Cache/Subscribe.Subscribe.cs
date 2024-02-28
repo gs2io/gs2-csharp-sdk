@@ -45,13 +45,13 @@ namespace Gs2.Gs2Ranking.Model.Cache
             string userId,
             SubscribeRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.CategoryName,
+                self.Item.CategoryName,
                 default,
-                request.TargetUserId
+                self.Item.TargetUserId
             );
         }
 

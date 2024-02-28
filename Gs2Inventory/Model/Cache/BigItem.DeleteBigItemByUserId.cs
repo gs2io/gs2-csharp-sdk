@@ -48,9 +48,9 @@ namespace Gs2.Gs2Inventory.Model.Cache
             (null as BigItem).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.InventoryName,
-                request.ItemName
+                self.Item.ItemName
             );
         }
 

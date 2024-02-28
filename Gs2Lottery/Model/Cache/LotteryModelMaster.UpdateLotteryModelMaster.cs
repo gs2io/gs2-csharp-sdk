@@ -45,7 +45,7 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string userId,
             UpdateLotteryModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.LotteryName

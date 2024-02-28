@@ -45,7 +45,7 @@ namespace Gs2.Gs2Account.Model.Cache
             string userId,
             GetNamespaceRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

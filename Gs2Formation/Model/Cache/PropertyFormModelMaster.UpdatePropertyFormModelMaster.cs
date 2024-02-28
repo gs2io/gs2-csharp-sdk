@@ -45,7 +45,7 @@ namespace Gs2.Gs2Formation.Model.Cache
             string userId,
             UpdatePropertyFormModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.PropertyFormModelName

@@ -56,20 +56,20 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     item.Name
                 );
             }
-            self.Items.PutCache(
+            self.Items?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
                 request.InventoryName,
                 request.ItemName
             );
-            self.ItemModel.PutCache(
+            self.ItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
                 request.ItemName
             );
-            self.Inventory.PutCache(
+            self.Inventory?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

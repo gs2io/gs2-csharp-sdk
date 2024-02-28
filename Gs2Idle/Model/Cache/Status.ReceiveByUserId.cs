@@ -45,7 +45,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             string userId,
             ReceiveByUserIdRequest request
         ) {
-            self.Status.PutCache(
+            self.Status?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,

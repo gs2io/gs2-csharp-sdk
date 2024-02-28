@@ -48,7 +48,7 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             (null as Job).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.JobName
             );
         }

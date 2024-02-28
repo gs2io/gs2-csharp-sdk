@@ -45,10 +45,10 @@ namespace Gs2.Gs2Lottery.Model.Cache
             string userId,
             CreatePrizeTableMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

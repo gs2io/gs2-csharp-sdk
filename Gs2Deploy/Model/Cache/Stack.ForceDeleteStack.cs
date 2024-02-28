@@ -45,7 +45,7 @@ namespace Gs2.Gs2Deploy.Model.Cache
             string userId,
             ForceDeleteStackRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.StackName
             );

@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -35,6 +37,7 @@ using Gs2.Gs2SeasonRating.Domain.Iterator;
 using Gs2.Gs2SeasonRating.Model.Cache;
 using Gs2.Gs2SeasonRating.Request;
 using Gs2.Gs2SeasonRating.Result;
+using Gs2.Gs2SeasonRating.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
@@ -50,7 +53,7 @@ using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using System.Collections.Generic;
-    #endif
+#endif
 #else
 using System.Collections.Generic;
 using System.Threading;
@@ -66,13 +69,19 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-        public string Body { get; set; }
-        public string Signature { get; set; }
+        public string SeasonName { get; }
+        public string SessionName { get; }
+        public int? NumberOfPlayer { get; }
+        public string KeyId { get; }
 
         public BallotAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            AccessToken accessToken
+            AccessToken accessToken,
+            string seasonName,
+            string sessionName,
+            int? numberOfPlayer,
+            string keyId
         ) {
             this._gs2 = gs2;
             this._client = new Gs2SeasonRatingRestClient(
@@ -80,17 +89,25 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
+            this.SeasonName = seasonName;
+            this.SessionName = sessionName;
+            this.NumberOfPlayer = numberOfPlayer;
+            this.KeyId = keyId;
         }
 
         #if UNITY_2017_1_OR_NEWER
-        private IFuture<Gs2.Gs2SeasonRating.Model.Ballot> GetFuture(
+        private IFuture<Gs2.Gs2SeasonRating.Model.SignedBallot> GetFuture(
             GetBallotRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.Ballot> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.SignedBallot> self)
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
+                    .WithAccessToken(this.AccessToken?.Token)
+                    .WithSeasonName(this.SeasonName)
+                    .WithSessionName(this.SessionName)
+                    .WithNumberOfPlayer(this.NumberOfPlayer)
+                    .WithKeyId(this.KeyId);
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
@@ -102,50 +119,64 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                self.OnComplete(result?.Item);
+                self.OnComplete(new SignedBallot {
+                    Body = result.Body,
+                    Signature = result.Signature
+                });
             }
-            return new Gs2InlineFuture<Gs2.Gs2SeasonRating.Model.Ballot>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2SeasonRating.Model.SignedBallot>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        private async UniTask<Gs2.Gs2SeasonRating.Model.Ballot> GetAsync(
+        private async UniTask<Gs2.Gs2SeasonRating.Model.SignedBallot> GetAsync(
             #else
-        private async Task<Gs2.Gs2SeasonRating.Model.Ballot> GetAsync(
+        private async Task<Gs2.Gs2SeasonRating.Model.SignedBallot> GetAsync(
             #endif
             GetBallotRequest request
         ) {
             request = request
                 .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token);
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithSeasonName(this.SeasonName)
+                .WithSessionName(this.SessionName)
+                .WithNumberOfPlayer(this.NumberOfPlayer)
+                .WithKeyId(this.KeyId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
                 () => this._client.GetBallotAsync(request)
             );
-            return result?.Item;
+            return new SignedBallot {
+                Body = result.Body,
+                Signature = result.Signature
+            };
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2SeasonRating.Model.Ballot> ModelFuture()
+        public IFuture<Gs2.Gs2SeasonRating.Model.SignedBallot> ModelFuture()
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.Ballot> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Model.SignedBallot> self)
             {
-                var (value, find) = (null as Gs2.Gs2SeasonRating.Model.Ballot).GetCache(
+                var (value, find) = (null as Gs2.Gs2SeasonRating.Model.SignedBallot).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.UserId
+                    this.UserId,
+                    this.SeasonName,
+                    this.SessionName
                 );
                 if (find) {
                     self.OnComplete(value);
                     yield break;
                 }
-                var future = (null as Gs2.Gs2SeasonRating.Model.Ballot).FetchFuture(
+                var future = (null as Gs2.Gs2SeasonRating.Model.SignedBallot).FetchFuture(
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.SeasonName,
+                    this.SessionName,
                     () => this.GetFuture(
                         new GetBallotRequest()
                     )
@@ -157,29 +188,33 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 }
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<Gs2.Gs2SeasonRating.Model.Ballot>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2SeasonRating.Model.SignedBallot>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2SeasonRating.Model.Ballot> ModelAsync()
+        public async UniTask<Gs2.Gs2SeasonRating.Model.SignedBallot> ModelAsync()
             #else
-        public async Task<Gs2.Gs2SeasonRating.Model.Ballot> ModelAsync()
+        public async Task<Gs2.Gs2SeasonRating.Model.SignedBallot> ModelAsync()
             #endif
         {
-            var (value, find) = (null as Gs2.Gs2SeasonRating.Model.Ballot).GetCache(
+            var (value, find) = (null as Gs2.Gs2SeasonRating.Model.SignedBallot).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.SeasonName,
+                this.SessionName
             );
             if (find) {
                 return value;
             }
-            return await (null as Gs2.Gs2SeasonRating.Model.Ballot).FetchAsync(
+            return await (null as Gs2.Gs2SeasonRating.Model.SignedBallot).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
+                this.SeasonName,
+                this.SessionName,
                 () => this.GetAsync(
                     new GetBallotRequest()
                 )
@@ -190,20 +225,20 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2SeasonRating.Model.Ballot> Model()
+        public async UniTask<Gs2.Gs2SeasonRating.Model.SignedBallot> Model()
         {
             return await ModelAsync();
         }
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2SeasonRating.Model.Ballot> Model()
+        public IFuture<Gs2.Gs2SeasonRating.Model.SignedBallot> Model()
         {
             return ModelFuture();
         }
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2SeasonRating.Model.Ballot> Model()
+        public async Task<Gs2.Gs2SeasonRating.Model.SignedBallot> Model()
         {
             return await ModelAsync();
         }
@@ -212,21 +247,25 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
 
         public void Invalidate()
         {
-            (null as Gs2.Gs2SeasonRating.Model.Ballot).DeleteCache(
+            (null as Gs2.Gs2SeasonRating.Model.SignedBallot).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                this.SeasonName,
+                this.SessionName
             );
         }
 
-        public ulong Subscribe(Action<Gs2.Gs2SeasonRating.Model.Ballot> callback)
+        public ulong Subscribe(Action<Gs2.Gs2SeasonRating.Model.SignedBallot> callback)
         {
             return this._gs2.Cache.Subscribe(
-                (null as Gs2.Gs2SeasonRating.Model.Ballot).CacheParentKey(
+                (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
-                (null as Gs2.Gs2SeasonRating.Model.Ballot).CacheKey(
+                (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheKey(
+                    this.SeasonName,
+                    this.SessionName
                 ),
                 callback,
                 () =>
@@ -244,19 +283,21 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2SeasonRating.Model.Ballot>(
-                (null as Gs2.Gs2SeasonRating.Model.Ballot).CacheParentKey(
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2SeasonRating.Model.SignedBallot>(
+                (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheParentKey(
                     this.NamespaceName,
                     this.UserId
                 ),
-                (null as Gs2.Gs2SeasonRating.Model.Ballot).CacheKey(
+                (null as Gs2.Gs2SeasonRating.Model.SignedBallot).CacheKey(
+                    this.SeasonName,
+                    this.SessionName
                 ),
                 callbackId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2SeasonRating.Model.Ballot> callback)
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2SeasonRating.Model.SignedBallot> callback)
         {
             IEnumerator Impl(IFuture<ulong> self)
             {
@@ -277,9 +318,9 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2SeasonRating.Model.Ballot> callback)
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2SeasonRating.Model.SignedBallot> callback)
             #else
-        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2SeasonRating.Model.Ballot> callback)
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2SeasonRating.Model.SignedBallot> callback)
             #endif
         {
             var item = await ModelAsync();

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string userId,
             PrepareDownloadOwnDataByGenerationRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

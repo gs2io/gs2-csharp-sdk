@@ -45,7 +45,7 @@ namespace Gs2.Gs2Quest.Model.Cache
             string userId,
             GetQuestGroupModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.QuestGroupName

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Version.Model.Cache
             string userId,
             GetVersionModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.VersionName

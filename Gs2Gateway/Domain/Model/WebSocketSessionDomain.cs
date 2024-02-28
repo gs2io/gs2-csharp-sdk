@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -109,7 +111,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
                 var future = request.InvokeFuture(
                     _gs2.Cache,
                     this.UserId,
-                    () => this._client.SetUserIdByUserIdFuture(request)
+                    () => this._wsclient.SetUserIdByUserIdFuture(request)
                 );
                 yield return future;
                 if (future.Error != null) {
@@ -140,7 +142,7 @@ namespace Gs2.Gs2Gateway.Domain.Model
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
-                () => this._client.SetUserIdByUserIdAsync(request)
+                () => this._wsclient.SetUserIdByUserIdAsync(request)
             );
             var domain = this;
 

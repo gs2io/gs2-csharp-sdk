@@ -47,8 +47,8 @@ namespace Gs2.Gs2Identifier.Model.Cache
         ) {
             (null as Identifier).DeleteCache(
                 cache,
-                request.UserName,
-                request.ClientId
+                self.Item.UserName,
+                self.Item.ClientId
             );
         }
 

@@ -48,13 +48,13 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             (null as ReceiveStatus).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.BonusModelName
+                self.Item.UserId,
+                self.Item.BonusModelName
             );
             (null as BonusModel).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.BonusModelName
+                self.Item.BonusModelName
             );
         }
 

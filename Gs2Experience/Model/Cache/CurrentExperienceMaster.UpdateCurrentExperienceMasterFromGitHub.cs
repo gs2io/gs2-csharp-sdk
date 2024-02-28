@@ -45,7 +45,7 @@ namespace Gs2.Gs2Experience.Model.Cache
             string userId,
             UpdateCurrentExperienceMasterFromGitHubRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

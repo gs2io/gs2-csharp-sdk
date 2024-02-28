@@ -48,7 +48,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             (null as StateMachineMaster).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.Version ?? default
+                self.Item.Version ?? default
             );
         }
 

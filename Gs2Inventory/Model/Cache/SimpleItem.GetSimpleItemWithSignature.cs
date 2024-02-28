@@ -45,18 +45,18 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             GetSimpleItemWithSignatureRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
                 request.InventoryName,
-                request.ItemName
+                self.Item.ItemName
             );
-            self.SimpleItemModel.PutCache(
+            self.SimpleItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
-                request.ItemName
+                self.Item.ItemName
             );
         }
 

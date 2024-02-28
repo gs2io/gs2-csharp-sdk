@@ -45,12 +45,12 @@ namespace Gs2.Gs2Enchant.Model.Cache
             string userId,
             SetBalanceParameterStatusByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.ParameterName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.ParameterName,
+                self.Item.PropertyId
             );
         }
 

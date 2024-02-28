@@ -48,7 +48,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             (null as Await).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.AwaitName
             );
         }

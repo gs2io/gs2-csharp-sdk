@@ -45,10 +45,10 @@ namespace Gs2.Gs2Stamina.Model.Cache
             string userId,
             CreateRecoverIntervalTableMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

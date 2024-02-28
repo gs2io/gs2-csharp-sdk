@@ -45,10 +45,10 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string userId,
             PrepareReUploadByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.DataObjectName
             );
         }

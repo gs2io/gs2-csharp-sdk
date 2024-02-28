@@ -45,7 +45,7 @@ namespace Gs2.Gs2Idle.Model.Cache
             string userId,
             GetCategoryModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.CategoryName

@@ -49,7 +49,7 @@ namespace Gs2.Gs2Lock.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                request.PropertyId
+                self.Item.PropertyId
             );
         }
 

@@ -45,10 +45,10 @@ namespace Gs2.Gs2Project.Model.Cache
             string userId,
             CreateProjectRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                default,
-                self.Item?.Name
+                self.Item.AccountName,
+                self.Item.Name
             );
         }
 

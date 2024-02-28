@@ -48,8 +48,8 @@ namespace Gs2.Gs2Mission.Model.Cache
             (null as Complete).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.MissionGroupName
+                self.Item.UserId,
+                self.Item.MissionGroupName
             );
         }
 

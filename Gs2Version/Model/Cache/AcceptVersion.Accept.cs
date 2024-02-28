@@ -45,11 +45,11 @@ namespace Gs2.Gs2Version.Model.Cache
             string userId,
             AcceptRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.VersionName
+                self.Item.VersionName
             );
         }
 

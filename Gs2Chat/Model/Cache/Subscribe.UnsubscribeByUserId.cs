@@ -48,8 +48,8 @@ namespace Gs2.Gs2Chat.Model.Cache
             (null as Subscribe).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.RoomName
+                self.Item.UserId,
+                self.Item.RoomName
             );
         }
 

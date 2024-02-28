@@ -250,19 +250,19 @@ namespace Gs2.Gs2Distributor.Domain
                 string action,
                 string payload
         ) {
-    #if UNITY_2017_1_OR_NEWER
             switch (action) {
                 case "AutoRunStampSheetNotification": {
                     lock (_completedStampSheets)
                     {
                         var notification = AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload));
                         _completedStampSheets.Add(notification);
+    #if UNITY_2017_1_OR_NEWER
                         onAutoRunStampSheetNotification.Invoke(notification);
+    #endif
                     }
                     break;
                 }
             }
-    #endif
         }
 
     #if UNITY_2017_1_OR_NEWER
@@ -291,21 +291,24 @@ namespace Gs2.Gs2Distributor.Domain
                 foreach (var completedStampSheet in copiedCompletedStampSheets) {
                     if (completedStampSheet == null) continue;
                     {
-                        var future = _gs2.Distributor.Namespace(
-                            completedStampSheet.NamespaceName
-                        ).AccessToken(
-                            accessToken
-                        ).StampSheetResult(
-                            completedStampSheet.TransactionId
-                        ).ModelNoCacheFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        for (var i = 0; i < 3; i++) {
+                            var future = _gs2.Distributor.Namespace(
+                                completedStampSheet.NamespaceName
+                            ).AccessToken(
+                                accessToken
+                            ).StampSheetResult(
+                                completedStampSheet.TransactionId
+                            ).ModelNoCacheFuture();
+                            yield return future;
+                            if (future.Error != null) {
+                                if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                                }
+                                else {
+                                    self.OnError(future.Error);
+                                }
+                                yield break;
                             }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
+                            if (future.Result != null) break;
                         }
                     }
                     {

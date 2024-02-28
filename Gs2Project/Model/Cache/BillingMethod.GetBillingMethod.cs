@@ -45,9 +45,9 @@ namespace Gs2.Gs2Project.Model.Cache
             string userId,
             GetBillingMethodRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                default,
+                self.Item.AccountName,
                 request.BillingMethodName
             );
         }

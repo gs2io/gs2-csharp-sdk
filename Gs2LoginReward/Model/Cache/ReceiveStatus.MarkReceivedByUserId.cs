@@ -45,16 +45,16 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             string userId,
             MarkReceivedByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.BonusModelName
+                self.Item.UserId,
+                self.Item.BonusModelName
             );
-            self.BonusModel.PutCache(
+            self.BonusModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.BonusModelName
+                self.Item.BonusModelName
             );
         }
 

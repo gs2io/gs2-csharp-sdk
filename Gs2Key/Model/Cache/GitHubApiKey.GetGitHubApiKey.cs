@@ -45,7 +45,7 @@ namespace Gs2.Gs2Key.Model.Cache
             string userId,
             GetGitHubApiKeyRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.ApiKeyName

@@ -46,8 +46,8 @@ namespace Gs2.Gs2AdReward.Model.Transaction
             this Point self,
             AcquirePointByUserIdRequest request
         ) {
-            var clone = self.Clone() as Point;
-            if (clone == null) {
+            if (self.Clone() is not Point clone)
+            {
                 throw new NullReferenceException();
             }
             clone.Value += request.Point;

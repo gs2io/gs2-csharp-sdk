@@ -48,7 +48,7 @@ namespace Gs2.Gs2Account.Model.Cache
             (null as Account).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId
+                self.Item.UserId
             );
         }
 

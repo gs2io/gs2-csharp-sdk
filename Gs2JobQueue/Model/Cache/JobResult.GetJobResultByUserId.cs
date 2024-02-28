@@ -45,12 +45,12 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string userId,
             GetJobResultByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
                 request.JobName,
-                request.TryNumber ?? default
+                self.Item.TryNumber ?? default
             );
         }
 

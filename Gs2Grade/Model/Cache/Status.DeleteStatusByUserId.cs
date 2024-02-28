@@ -48,9 +48,9 @@ namespace Gs2.Gs2Grade.Model.Cache
             (null as Status).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.GradeName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.GradeName,
+                self.Item.PropertyId
             );
         }
 

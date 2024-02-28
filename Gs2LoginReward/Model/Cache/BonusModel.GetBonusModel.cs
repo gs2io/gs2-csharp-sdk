@@ -45,7 +45,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             string userId,
             GetBonusModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.BonusModelName

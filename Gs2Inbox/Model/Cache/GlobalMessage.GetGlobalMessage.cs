@@ -45,7 +45,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             string userId,
             GetGlobalMessageRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.GlobalMessageName

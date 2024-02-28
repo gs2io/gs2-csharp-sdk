@@ -47,7 +47,7 @@ namespace Gs2.Gs2Project.Model.Cache
         ) {
             (null as BillingMethod).DeleteCache(
                 cache,
-                default,
+                self.Item.AccountName,
                 request.BillingMethodName
             );
         }

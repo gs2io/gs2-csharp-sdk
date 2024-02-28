@@ -45,7 +45,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             GetReferenceOfByUserIdRequest request
         ) {
-            self.ItemSet.PutCache(
+            self.ItemSet?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
@@ -53,13 +53,13 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.ItemName,
                 request.ItemSetName
             );
-            self.ItemModel.PutCache(
+            self.ItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
                 request.ItemName
             );
-            self.Inventory.PutCache(
+            self.Inventory?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,

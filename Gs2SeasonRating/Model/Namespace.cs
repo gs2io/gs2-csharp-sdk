@@ -34,6 +34,7 @@ namespace Gs2.Gs2SeasonRating.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public Gs2.Gs2SeasonRating.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2SeasonRating.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -48,6 +49,10 @@ namespace Gs2.Gs2SeasonRating.Model
         }
         public Namespace WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public Namespace WithTransactionSetting(Gs2.Gs2SeasonRating.Model.TransactionSetting transactionSetting) {
+            this.TransactionSetting = transactionSetting;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2SeasonRating.Model.LogSetting logSetting) {
@@ -130,6 +135,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2SeasonRating.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2SeasonRating.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -142,6 +148,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -163,6 +170,10 @@ namespace Gs2.Gs2SeasonRating.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (TransactionSetting != null) {
+                writer.WritePropertyName("transactionSetting");
+                TransactionSetting.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -210,6 +221,14 @@ namespace Gs2.Gs2SeasonRating.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += TransactionSetting.CompareTo(other.TransactionSetting);
             }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
@@ -271,6 +290,8 @@ namespace Gs2.Gs2SeasonRating.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "seasonRating.namespace.createdAt.error.invalid"),
@@ -313,6 +334,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 NamespaceId = NamespaceId,
                 Name = Name,
                 Description = Description,
+                TransactionSetting = TransactionSetting.Clone() as Gs2.Gs2SeasonRating.Model.TransactionSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2SeasonRating.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

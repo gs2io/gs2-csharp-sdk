@@ -45,7 +45,7 @@ namespace Gs2.Gs2Exchange.Model.Cache
             string userId,
             GetIncrementalRateModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.RateName

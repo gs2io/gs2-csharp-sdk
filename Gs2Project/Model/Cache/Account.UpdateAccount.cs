@@ -45,9 +45,9 @@ namespace Gs2.Gs2Project.Model.Cache
             string userId,
             UpdateAccountRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

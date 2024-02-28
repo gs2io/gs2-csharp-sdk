@@ -45,16 +45,16 @@ namespace Gs2.Gs2Stamina.Model.Cache
             string userId,
             SetRecoverIntervalByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.StaminaName
+                self.Item.UserId,
+                self.Item.StaminaName
             );
-            self.StaminaModel.PutCache(
+            self.StaminaModel?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.StaminaName
+                self.Item.StaminaName
             );
         }
 

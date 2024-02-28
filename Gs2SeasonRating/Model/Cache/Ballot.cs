@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -35,10 +37,10 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2SeasonRating.Model.Cache
 {
-    public static partial class BallotExt
+    public static partial class SignedBallotExt
     {
         public static string CacheParentKey(
-            this Ballot self,
+            this SignedBallot self,
             string namespaceName,
             string userId
         ) {
@@ -47,25 +49,33 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 "seasonRating",
                 namespaceName,
                 userId,
-                "Ballot"
+                "SignedBallot"
             );
         }
 
         public static string CacheKey(
-            this Ballot self
+            this SignedBallot self,
+            string seasonName,
+            string sessionName
         ) {
-            return "Singleton";
+            return string.Join(
+                ":",
+                seasonName,
+                sessionName
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<Ballot> FetchFuture(
-            this Ballot self,
+        public static IFuture<SignedBallot> FetchFuture(
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            Func<IFuture<Ballot>> fetchImpl
+            string seasonName,
+            string sessionName,
+            Func<IFuture<SignedBallot>> fetchImpl
         ) {
-            IEnumerator Impl(IFuture<Ballot> self)
+            IEnumerator Impl(IFuture<SignedBallot> self)
             {
                 var future = fetchImpl();
                 yield return future;
@@ -73,10 +83,12 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 {
                     if (future.Error is Gs2.Core.Exception.NotFoundException e)
                     {
-                        (null as Ballot).PutCache(
+                        (null as SignedBallot).PutCache(
                             cache,
                             namespaceName,
-                            userId
+                            userId,
+                            seasonName,
+                            sessionName
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "ballot") {
                             self.OnComplete(default);
@@ -90,36 +102,42 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                 item.PutCache(
                     cache,
                     namespaceName,
-                    userId
+                    userId,
+                    seasonName,
+                    sessionName
                 );
                 self.OnComplete(item);
             }
-            return new Gs2InlineFuture<Ballot>(Impl);
+            return new Gs2InlineFuture<SignedBallot>(Impl);
         }
 #endif
 
 #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if UNITY_2017_1_OR_NEWER
-        public static async UniTask<Ballot> FetchAsync(
+        public static async UniTask<SignedBallot> FetchAsync(
     #else
-        public static async Task<Ballot> FetchAsync(
+        public static async Task<SignedBallot> FetchAsync(
     #endif
-            this Ballot self,
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            string seasonName,
+            string sessionName,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<Ballot>> fetchImpl
+            Func<UniTask<SignedBallot>> fetchImpl
     #else
-            Func<Task<Ballot>> fetchImpl
+            Func<Task<SignedBallot>> fetchImpl
     #endif
         ) {
-            using (await cache.GetLockObject<Ballot>(
+            using (await cache.GetLockObject<SignedBallot>(
                        self.CacheParentKey(
                             namespaceName,
                             userId
                        ),
                        self.CacheKey(
+                            seasonName,
+                            sessionName
                        )
                    ).LockAsync()) {
                 try {
@@ -127,15 +145,19 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     item.PutCache(
                         cache,
                         namespaceName,
-                        userId
+                        userId,
+                        seasonName,
+                        sessionName
                     );
                     return item;
                 }
                 catch (Gs2.Core.Exception.NotFoundException e) {
-                    (null as Ballot).PutCache(
+                    (null as SignedBallot).PutCache(
                         cache,
                         namespaceName,
-                        userId
+                        userId,
+                        seasonName,
+                        sessionName
                     );
                     if (e.errors.Length == 0 || e.errors[0].component != "ballot") {
                         throw;
@@ -146,30 +168,36 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         }
 #endif
 
-        public static Tuple<Ballot, bool> GetCache(
-            this Ballot self,
+        public static Tuple<SignedBallot, bool> GetCache(
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            string seasonName,
+            string sessionName
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            return cache.Get<Ballot>(
+            return cache.Get<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
                 ),
                 self.CacheKey(
+                    seasonName,
+                    sessionName
                 )
             );
         }
 
         public static void PutCache(
-            this Ballot self,
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            string seasonName,
+            string sessionName
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
@@ -180,6 +208,8 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
                     userId
                 ),
                 self.CacheKey(
+                    seasonName,
+                    sessionName
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
@@ -187,32 +217,36 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         }
 
         public static void DeleteCache(
-            this Ballot self,
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
-            string userId
+            string userId,
+            string seasonName,
+            string sessionName
         ) {
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            cache.Delete<Ballot>(
+            cache.Delete<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
                 ),
                 self.CacheKey(
+                    seasonName,
+                    sessionName
                 )
             );
         }
 
         public static void ListSubscribe(
-            this Ballot self,
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            Action<Ballot[]> callback
+            Action<SignedBallot[]> callback
         ) {
-            cache.ListSubscribe<Ballot>(
+            cache.ListSubscribe<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
                     userId
@@ -222,13 +256,13 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         }
 
         public static void ListUnsubscribe(
-            this Ballot self,
+            this SignedBallot self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             ulong callbackId
         ) {
-            cache.ListUnsubscribe<Ballot>(
+            cache.ListUnsubscribe<SignedBallot>(
                 self.CacheParentKey(
                     namespaceName,
                     userId

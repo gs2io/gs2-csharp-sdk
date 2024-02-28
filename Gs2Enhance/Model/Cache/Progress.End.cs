@@ -45,7 +45,7 @@ namespace Gs2.Gs2Enhance.Model.Cache
             string userId,
             EndRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId

@@ -45,7 +45,7 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             string userId,
             ReportRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

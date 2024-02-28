@@ -60,7 +60,9 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (DeleteJobByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = DeleteJobByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = DeleteJobByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteJobByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = DeleteJobByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await DeleteJobByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

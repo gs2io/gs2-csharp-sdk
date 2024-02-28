@@ -45,10 +45,10 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             string userId,
             GetDeadLetterJobByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.DeadLetterJobName
             );
         }

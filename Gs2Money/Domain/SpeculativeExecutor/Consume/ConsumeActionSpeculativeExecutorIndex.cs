@@ -60,7 +60,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (WithdrawByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = WithdrawByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -76,7 +78,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
                 }
                 if (RecordReceiptSpeculativeExecutor.Action() == consumeAction.Action) {
                     var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = RecordReceiptSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -114,7 +118,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (WithdrawByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = WithdrawByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await WithdrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -123,7 +129,9 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             }
             if (RecordReceiptSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = RecordReceiptRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await RecordReceiptSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

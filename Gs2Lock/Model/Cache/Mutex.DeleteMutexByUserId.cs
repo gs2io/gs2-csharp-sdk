@@ -48,8 +48,8 @@ namespace Gs2.Gs2Lock.Model.Cache
             (null as Mutex).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.PropertyId
             );
         }
 

@@ -45,7 +45,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             string userId,
             UpdateRatingModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.RatingName

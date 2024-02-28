@@ -45,10 +45,10 @@ namespace Gs2.Gs2Exchange.Model.Cache
             string userId,
             SkipByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.AwaitName
             );
         }

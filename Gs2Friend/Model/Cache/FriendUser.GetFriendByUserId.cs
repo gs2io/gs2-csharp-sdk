@@ -45,10 +45,10 @@ namespace Gs2.Gs2Friend.Model.Cache
             string userId,
             GetFriendByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.WithProfile ?? default,
                 request.TargetUserId
             );

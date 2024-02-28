@@ -45,11 +45,11 @@ namespace Gs2.Gs2Quest.Model.Cache
             string userId,
             GetCompletedQuestListByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.QuestGroupName
+                self.Item.UserId,
+                self.Item.QuestGroupName
             );
         }
 

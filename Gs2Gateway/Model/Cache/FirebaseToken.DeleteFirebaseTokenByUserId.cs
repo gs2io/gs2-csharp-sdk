@@ -48,7 +48,7 @@ namespace Gs2.Gs2Gateway.Model.Cache
             (null as FirebaseToken).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId
+                self.Item.UserId
             );
         }
 

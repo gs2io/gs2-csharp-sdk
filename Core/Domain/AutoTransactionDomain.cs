@@ -12,6 +12,8 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -157,7 +159,7 @@ namespace Gs2.Core.Domain
                     yield break;
                 }
                 var future = Gs2.Distributor.Namespace(
-                    Gs2.TransactionConfiguration.NamespaceName
+                    Gs2.TransactionConfiguration.NamespaceName ?? "default"
                 ).User(
                     UserId
                 ).StampSheetResult(
@@ -217,7 +219,7 @@ namespace Gs2.Core.Domain
             var result = await new Gs2Distributor.Domain.Gs2Distributor(
                 Gs2
             ).Namespace(
-                Gs2.TransactionConfiguration.NamespaceName
+                Gs2.TransactionConfiguration.NamespaceName ?? "default"
             ).User(
                 UserId
             ).StampSheetResult(

@@ -45,10 +45,10 @@ namespace Gs2.Gs2StateMachine.Model.Cache
             string userId,
             UpdateStateMachineMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item?.Version
+                self.Item.Version ?? default
             );
         }
 

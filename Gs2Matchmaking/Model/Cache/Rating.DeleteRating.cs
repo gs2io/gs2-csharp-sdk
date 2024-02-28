@@ -48,7 +48,7 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             (null as Rating).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.RatingName
             );
         }

@@ -45,11 +45,11 @@ namespace Gs2.Gs2Project.Model.Cache
             string userId,
             GetImportProgressRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 default,
                 default,
-                request.TransactionId
+                self.Item.TransactionId
             );
         }
 

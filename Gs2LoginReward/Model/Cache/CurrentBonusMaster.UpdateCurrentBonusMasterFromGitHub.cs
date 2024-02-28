@@ -45,7 +45,7 @@ namespace Gs2.Gs2LoginReward.Model.Cache
             string userId,
             UpdateCurrentBonusMasterFromGitHubRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

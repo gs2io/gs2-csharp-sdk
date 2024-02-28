@@ -45,11 +45,11 @@ namespace Gs2.Gs2SerialKey.Model.Cache
             string userId,
             IssueRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.CampaignModelName,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

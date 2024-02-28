@@ -48,9 +48,9 @@ namespace Gs2.Gs2Formation.Model.Cache
             (null as PropertyForm).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.PropertyFormModelName,
-                request.PropertyId
+                self.Item.PropertyId
             );
             (null as PropertyFormModel).DeleteCache(
                 cache,

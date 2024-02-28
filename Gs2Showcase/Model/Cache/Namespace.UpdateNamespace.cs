@@ -45,7 +45,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             UpdateNamespaceRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

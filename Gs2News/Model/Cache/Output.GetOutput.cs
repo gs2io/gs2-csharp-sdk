@@ -45,7 +45,7 @@ namespace Gs2.Gs2News.Model.Cache
             string userId,
             GetOutputRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UploadToken,

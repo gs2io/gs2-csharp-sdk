@@ -45,12 +45,12 @@ namespace Gs2.Gs2Datastore.Model.Cache
             string userId,
             GetDataObjectHistoryByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
-                request.DataObjectName,
-                request.Generation
+                self.Item.DataObjectName,
+                self.Item.Generation
             );
         }
 

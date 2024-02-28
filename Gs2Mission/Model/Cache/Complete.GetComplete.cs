@@ -45,11 +45,11 @@ namespace Gs2.Gs2Mission.Model.Cache
             string userId,
             GetCompleteRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.MissionGroupName
+                self.Item.MissionGroupName
             );
         }
 

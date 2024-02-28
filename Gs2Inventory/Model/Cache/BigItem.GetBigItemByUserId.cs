@@ -45,18 +45,18 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             GetBigItemByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.InventoryName,
-                request.ItemName
+                self.Item.ItemName
             );
-            self.ItemModel.PutCache(
+            self.ItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
-                request.ItemName
+                self.Item.ItemName
             );
         }
 

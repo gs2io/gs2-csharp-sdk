@@ -45,9 +45,9 @@ namespace Gs2.Gs2Deploy.Model.Cache
             string userId,
             CreateStackFromGitHubRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                self.Item?.Name
+                self.Item.Name
             );
         }
 

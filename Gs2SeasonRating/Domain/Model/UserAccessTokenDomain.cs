@@ -81,11 +81,19 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         }
 
         public Gs2.Gs2SeasonRating.Domain.Model.BallotAccessTokenDomain Ballot(
+            string seasonName,
+            string sessionName,
+            int? numberOfPlayer,
+            string keyId
         ) {
             return new Gs2.Gs2SeasonRating.Domain.Model.BallotAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
-                this.AccessToken
+                this.AccessToken,
+                seasonName,
+                sessionName,
+                numberOfPlayer,
+                keyId
             );
         }
 

@@ -45,10 +45,10 @@ namespace Gs2.Gs2Schedule.Model.Cache
             string userId,
             GetTriggerByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.TriggerName
             );
         }

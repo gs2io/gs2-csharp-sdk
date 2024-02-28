@@ -45,11 +45,11 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             string userId,
             GetEntryByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                self.Item?.Name
+                self.Item.UserId,
+                self.Item.Name
             );
         }
 

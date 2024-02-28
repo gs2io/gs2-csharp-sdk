@@ -45,21 +45,21 @@ namespace Gs2.Gs2Quest.Model.Cache
             string userId,
             GetProgressRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId
             );
-            self.QuestGroup.PutCache(
+            self.QuestGroup?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.QuestGroup?.Name
+                self.QuestGroup.Name
             );
-            self.Quest.PutCache(
+            self.Quest?.PutCache(
                 cache,
                 request.NamespaceName,
                 default,
-                self.Quest?.Name
+                self.Quest.Name
             );
         }
 

@@ -46,19 +46,19 @@ namespace Gs2.Gs2Grade.Model.Cache
             string userId,
             ApplyRankCapByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.GradeName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.GradeName,
+                self.Item.PropertyId
             );
-            self.ExperienceStatus.PutCache(
+            self.ExperienceStatus?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                self.ExperienceStatus?.ExperienceName,
-                request.PropertyId
+                self.Item.UserId,
+                self.ExperienceStatus.ExperienceName,
+                self.Item.PropertyId
             );
         }
 

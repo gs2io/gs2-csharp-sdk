@@ -45,7 +45,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string userId,
             UpdateCurrentFieldMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName
             );

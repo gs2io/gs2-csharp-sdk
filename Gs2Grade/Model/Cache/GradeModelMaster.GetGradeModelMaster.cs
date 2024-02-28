@@ -45,7 +45,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             string userId,
             GetGradeModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.GradeName

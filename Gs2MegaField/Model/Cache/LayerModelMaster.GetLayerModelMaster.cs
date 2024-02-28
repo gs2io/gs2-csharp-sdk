@@ -45,7 +45,7 @@ namespace Gs2.Gs2MegaField.Model.Cache
             string userId,
             GetLayerModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.AreaModelName,

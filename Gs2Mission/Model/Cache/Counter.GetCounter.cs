@@ -45,7 +45,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             string userId,
             GetCounterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,

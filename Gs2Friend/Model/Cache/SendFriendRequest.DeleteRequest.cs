@@ -49,7 +49,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 cache,
                 request.NamespaceName,
                 userId,
-                request.TargetUserId
+                self.Item.TargetUserId
             );
         }
 

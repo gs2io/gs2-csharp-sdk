@@ -37,6 +37,7 @@ namespace Gs2.Gs2SeasonRating.Model
         public string Description { set; get; }
         public Gs2.Gs2SeasonRating.Model.TierModel[] Tiers { set; get; }
         public string ExperienceModelId { set; get; }
+        public string ChallengePeriodEventId { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
@@ -62,6 +63,10 @@ namespace Gs2.Gs2SeasonRating.Model
         }
         public SeasonModelMaster WithExperienceModelId(string experienceModelId) {
             this.ExperienceModelId = experienceModelId;
+            return this;
+        }
+        public SeasonModelMaster WithChallengePeriodEventId(string challengePeriodEventId) {
+            this.ChallengePeriodEventId = challengePeriodEventId;
             return this;
         }
         public SeasonModelMaster WithCreatedAt(long? createdAt) {
@@ -162,6 +167,7 @@ namespace Gs2.Gs2SeasonRating.Model
                     return Gs2.Gs2SeasonRating.Model.TierModel.FromJson(v);
                 }).ToArray())
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
+                .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -185,6 +191,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 ["description"] = Description,
                 ["tiers"] = tiersJsonData,
                 ["experienceModelId"] = ExperienceModelId,
+                ["challengePeriodEventId"] = ChallengePeriodEventId,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -224,6 +231,10 @@ namespace Gs2.Gs2SeasonRating.Model
             if (ExperienceModelId != null) {
                 writer.WritePropertyName("experienceModelId");
                 writer.Write(ExperienceModelId.ToString());
+            }
+            if (ChallengePeriodEventId != null) {
+                writer.WritePropertyName("challengePeriodEventId");
+                writer.Write(ChallengePeriodEventId.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -295,6 +306,14 @@ namespace Gs2.Gs2SeasonRating.Model
             else
             {
                 diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
+            }
+            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
             }
             if (CreatedAt == null && CreatedAt == other.CreatedAt)
             {
@@ -372,6 +391,13 @@ namespace Gs2.Gs2SeasonRating.Model
                 }
             }
             {
+                if (ChallengePeriodEventId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("seasonModelMaster", "seasonRating.seasonModelMaster.challengePeriodEventId.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("seasonModelMaster", "seasonRating.seasonModelMaster.createdAt.error.invalid"),
@@ -417,6 +443,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 Description = Description,
                 Tiers = Tiers.Clone() as Gs2.Gs2SeasonRating.Model.TierModel[],
                 ExperienceModelId = ExperienceModelId,
+                ChallengePeriodEventId = ChallengePeriodEventId,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

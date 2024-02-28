@@ -60,7 +60,9 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 if (AcquirePointByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AcquirePointByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    request = request.Rate(rate);
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
                     var future = AcquirePointByUserIdSpeculativeExecutor.ExecuteFuture(
                         domain,
                         accessToken,
@@ -98,7 +100,9 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (AcquirePointByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AcquirePointByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                request = request.Rate(rate);
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
                 return await AcquirePointByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

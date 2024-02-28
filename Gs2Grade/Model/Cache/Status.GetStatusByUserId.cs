@@ -45,12 +45,12 @@ namespace Gs2.Gs2Grade.Model.Cache
             string userId,
             GetStatusByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.GradeName,
-                request.PropertyId
+                self.Item.UserId,
+                self.Item.GradeName,
+                self.Item.PropertyId
             );
         }
 

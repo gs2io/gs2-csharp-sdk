@@ -48,8 +48,8 @@ namespace Gs2.Gs2Account.Model.Cache
             (null as TakeOver).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                request.Type ?? default
+                self.Item.UserId,
+                self.Item.Type ?? default
             );
         }
 

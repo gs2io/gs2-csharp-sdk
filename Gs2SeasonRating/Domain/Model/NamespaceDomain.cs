@@ -614,6 +614,62 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> CreateMatchSessionFuture(
+            CreateMatchSessionRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> self)
+            {
+                request = request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateMatchSessionFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> CreateMatchSessionAsync(
+            #else
+        public async Task<Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain> CreateMatchSessionAsync(
+            #endif
+            CreateMatchSessionRequest request
+        ) {
+            request = request
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateMatchSessionAsync(request)
+            );
+            var domain = new Gs2.Gs2SeasonRating.Domain.Model.MatchSessionDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SeasonRating.Domain.Model.BallotDomain> VoteFuture(
             VoteRequest request
         ) {
@@ -635,7 +691,11 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var domain = new Gs2.Gs2SeasonRating.Domain.Model.BallotDomain(
                     this._gs2,
                     this.NamespaceName,
-                    result?.Item?.UserId
+                    result?.Item?.UserId,
+                    result?.Item?.SeasonName,
+                    result?.Item?.SessionName,
+                    result?.Item?.NumberOfPlayer,
+                    request.KeyId
                 );
 
                 self.OnComplete(domain);
@@ -662,7 +722,11 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             var domain = new Gs2.Gs2SeasonRating.Domain.Model.BallotDomain(
                 this._gs2,
                 this.NamespaceName,
-                result?.Item?.UserId
+                result?.Item?.UserId,
+                result?.Item?.SeasonName,
+                result?.Item?.SessionName,
+                result?.Item?.NumberOfPlayer,
+                request.KeyId
             );
 
             return domain;
@@ -691,7 +755,11 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
                 var domain = new Gs2.Gs2SeasonRating.Domain.Model.BallotDomain(
                     this._gs2,
                     this.NamespaceName,
-                    result?.Item?.UserId
+                    result?.Item?.UserId,
+                    result?.Item?.SeasonName,
+                    result?.Item?.SessionName,
+                    result?.Item?.NumberOfPlayer,
+                    request.KeyId
                 );
 
                 self.OnComplete(domain);
@@ -718,7 +786,11 @@ namespace Gs2.Gs2SeasonRating.Domain.Model
             var domain = new Gs2.Gs2SeasonRating.Domain.Model.BallotDomain(
                 this._gs2,
                 this.NamespaceName,
-                result?.Item?.UserId
+                result?.Item?.UserId,
+                result?.Item?.SeasonName,
+                result?.Item?.SessionName,
+                result?.Item?.NumberOfPlayer,
+                request.KeyId
             );
 
             return domain;

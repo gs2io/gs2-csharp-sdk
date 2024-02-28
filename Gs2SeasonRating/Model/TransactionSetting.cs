@@ -31,20 +31,10 @@ namespace Gs2.Gs2SeasonRating.Model
 #endif
 	public class TransactionSetting : IComparable
 	{
-        public bool? EnableAutoRun { set; get; }
         public string DistributorNamespaceId { set; get; }
-        public string KeyId { set; get; }
         public string QueueNamespaceId { set; get; }
-        public TransactionSetting WithEnableAutoRun(bool? enableAutoRun) {
-            this.EnableAutoRun = enableAutoRun;
-            return this;
-        }
         public TransactionSetting WithDistributorNamespaceId(string distributorNamespaceId) {
             this.DistributorNamespaceId = distributorNamespaceId;
-            return this;
-        }
-        public TransactionSetting WithKeyId(string keyId) {
-            this.KeyId = keyId;
             return this;
         }
         public TransactionSetting WithQueueNamespaceId(string queueNamespaceId) {
@@ -61,18 +51,14 @@ namespace Gs2.Gs2SeasonRating.Model
                 return null;
             }
             return new TransactionSetting()
-                .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : (bool?)bool.Parse(data["enableAutoRun"].ToString()))
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString());
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
-                ["enableAutoRun"] = EnableAutoRun,
                 ["distributorNamespaceId"] = DistributorNamespaceId,
-                ["keyId"] = KeyId,
                 ["queueNamespaceId"] = QueueNamespaceId,
             };
         }
@@ -80,17 +66,9 @@ namespace Gs2.Gs2SeasonRating.Model
         public void WriteJson(JsonWriter writer)
         {
             writer.WriteObjectStart();
-            if (EnableAutoRun != null) {
-                writer.WritePropertyName("enableAutoRun");
-                writer.Write(bool.Parse(EnableAutoRun.ToString()));
-            }
             if (DistributorNamespaceId != null) {
                 writer.WritePropertyName("distributorNamespaceId");
                 writer.Write(DistributorNamespaceId.ToString());
-            }
-            if (KeyId != null) {
-                writer.WritePropertyName("keyId");
-                writer.Write(KeyId.ToString());
             }
             if (QueueNamespaceId != null) {
                 writer.WritePropertyName("queueNamespaceId");
@@ -103,14 +81,6 @@ namespace Gs2.Gs2SeasonRating.Model
         {
             var other = obj as TransactionSetting;
             var diff = 0;
-            if (EnableAutoRun == null && EnableAutoRun == other.EnableAutoRun)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableAutoRun == other.EnableAutoRun ? 0 : 1;
-            }
             if (DistributorNamespaceId == null && DistributorNamespaceId == other.DistributorNamespaceId)
             {
                 // null and null
@@ -118,14 +88,6 @@ namespace Gs2.Gs2SeasonRating.Model
             else
             {
                 diff += DistributorNamespaceId.CompareTo(other.DistributorNamespaceId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
             }
             if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
             {
@@ -140,18 +102,9 @@ namespace Gs2.Gs2SeasonRating.Model
 
         public void Validate() {
             {
-            }
-            {
                 if (DistributorNamespaceId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("transactionSetting", "seasonRating.transactionSetting.distributorNamespaceId.error.tooLong"),
-                    });
-                }
-            }
-            {
-                if (KeyId.Length > 1024) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("transactionSetting", "seasonRating.transactionSetting.keyId.error.tooLong"),
                     });
                 }
             }
@@ -166,9 +119,7 @@ namespace Gs2.Gs2SeasonRating.Model
 
         public object Clone() {
             return new TransactionSetting {
-                EnableAutoRun = EnableAutoRun,
                 DistributorNamespaceId = DistributorNamespaceId,
-                KeyId = KeyId,
                 QueueNamespaceId = QueueNamespaceId,
             };
         }

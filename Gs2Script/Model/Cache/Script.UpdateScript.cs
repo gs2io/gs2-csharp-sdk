@@ -45,7 +45,7 @@ namespace Gs2.Gs2Script.Model.Cache
             string userId,
             UpdateScriptRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.ScriptName

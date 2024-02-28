@@ -45,7 +45,7 @@ namespace Gs2.Gs2Enchant.Model.Cache
             string userId,
             GetRarityParameterModelRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.ParameterName

@@ -45,9 +45,9 @@ namespace Gs2.Gs2Gateway.Model.Cache
             string userId,
             SetUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
-                request.NamespaceName,
+                self.Item.NamespaceName,
                 userId
             );
         }

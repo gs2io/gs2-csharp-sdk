@@ -48,7 +48,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
             (null as Message).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.MessageName
             );
         }

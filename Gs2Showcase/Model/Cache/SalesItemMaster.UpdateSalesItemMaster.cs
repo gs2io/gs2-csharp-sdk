@@ -45,7 +45,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
             string userId,
             UpdateSalesItemMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.SalesItemName

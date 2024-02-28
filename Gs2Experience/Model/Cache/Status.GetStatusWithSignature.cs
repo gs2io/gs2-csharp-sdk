@@ -45,12 +45,12 @@ namespace Gs2.Gs2Experience.Model.Cache
             string userId,
             GetStatusWithSignatureRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                request.ExperienceName,
-                request.PropertyId
+                self.Item.ExperienceName,
+                self.Item.PropertyId
             );
         }
 

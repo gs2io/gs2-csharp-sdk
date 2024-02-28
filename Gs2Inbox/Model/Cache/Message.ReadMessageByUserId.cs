@@ -45,10 +45,10 @@ namespace Gs2.Gs2Inbox.Model.Cache
             string userId,
             ReadMessageByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.MessageName
             );
         }

@@ -45,11 +45,11 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string userId,
             CreateItemModelMasterRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.InventoryName,
-                self.Item?.Name
+                self.Item.InventoryName,
+                self.Item.Name
             );
         }
 

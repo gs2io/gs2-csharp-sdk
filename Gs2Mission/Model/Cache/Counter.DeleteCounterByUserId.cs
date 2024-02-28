@@ -48,7 +48,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             (null as Counter).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self.Item.UserId,
                 request.CounterName
             );
         }
