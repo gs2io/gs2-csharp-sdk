@@ -233,6 +233,21 @@ namespace Gs2.Gs2Matchmaking
                     jsonWriter.WritePropertyName("completeMatchmakingTriggerScriptId");
                     jsonWriter.Write(request.CompleteMatchmakingTriggerScriptId);
                 }
+                if (request.EnableCollaborateSeasonRating != null)
+                {
+                    jsonWriter.WritePropertyName("enableCollaborateSeasonRating");
+                    jsonWriter.Write(request.EnableCollaborateSeasonRating);
+                }
+                if (request.CollaborateSeasonRatingNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("collaborateSeasonRatingNamespaceId");
+                    jsonWriter.Write(request.CollaborateSeasonRatingNamespaceId);
+                }
+                if (request.CollaborateSeasonRatingTtl != null)
+                {
+                    jsonWriter.WritePropertyName("collaborateSeasonRatingTtl");
+                    jsonWriter.Write(request.CollaborateSeasonRatingTtl.ToString());
+                }
                 if (request.ChangeRatingScript != null)
                 {
                     jsonWriter.WritePropertyName("changeRatingScript");
@@ -627,6 +642,21 @@ namespace Gs2.Gs2Matchmaking
                 {
                     jsonWriter.WritePropertyName("completeMatchmakingTriggerScriptId");
                     jsonWriter.Write(request.CompleteMatchmakingTriggerScriptId);
+                }
+                if (request.EnableCollaborateSeasonRating != null)
+                {
+                    jsonWriter.WritePropertyName("enableCollaborateSeasonRating");
+                    jsonWriter.Write(request.EnableCollaborateSeasonRating);
+                }
+                if (request.CollaborateSeasonRatingNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("collaborateSeasonRatingNamespaceId");
+                    jsonWriter.Write(request.CollaborateSeasonRatingNamespaceId);
+                }
+                if (request.CollaborateSeasonRatingTtl != null)
+                {
+                    jsonWriter.WritePropertyName("collaborateSeasonRatingTtl");
+                    jsonWriter.Write(request.CollaborateSeasonRatingTtl.ToString());
                 }
                 if (request.ChangeRatingScript != null)
                 {

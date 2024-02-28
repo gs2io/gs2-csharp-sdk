@@ -42,6 +42,9 @@ namespace Gs2.Gs2Matchmaking.Request
          public string CompleteMatchmakingTriggerType { set; get; }
          public string CompleteMatchmakingTriggerRealtimeNamespaceId { set; get; }
          public string CompleteMatchmakingTriggerScriptId { set; get; }
+         public string EnableCollaborateSeasonRating { set; get; }
+         public string CollaborateSeasonRatingNamespaceId { set; get; }
+         public int? CollaborateSeasonRatingTtl { set; get; }
          public Gs2.Gs2Matchmaking.Model.ScriptSetting ChangeRatingScript { set; get; }
          public Gs2.Gs2Matchmaking.Model.NotificationSetting JoinNotification { set; get; }
          public Gs2.Gs2Matchmaking.Model.NotificationSetting LeaveNotification { set; get; }
@@ -82,6 +85,18 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public UpdateNamespaceRequest WithCompleteMatchmakingTriggerScriptId(string completeMatchmakingTriggerScriptId) {
             this.CompleteMatchmakingTriggerScriptId = completeMatchmakingTriggerScriptId;
+            return this;
+        }
+        public UpdateNamespaceRequest WithEnableCollaborateSeasonRating(string enableCollaborateSeasonRating) {
+            this.EnableCollaborateSeasonRating = enableCollaborateSeasonRating;
+            return this;
+        }
+        public UpdateNamespaceRequest WithCollaborateSeasonRatingNamespaceId(string collaborateSeasonRatingNamespaceId) {
+            this.CollaborateSeasonRatingNamespaceId = collaborateSeasonRatingNamespaceId;
+            return this;
+        }
+        public UpdateNamespaceRequest WithCollaborateSeasonRatingTtl(int? collaborateSeasonRatingTtl) {
+            this.CollaborateSeasonRatingTtl = collaborateSeasonRatingTtl;
             return this;
         }
         public UpdateNamespaceRequest WithChangeRatingScript(Gs2.Gs2Matchmaking.Model.ScriptSetting changeRatingScript) {
@@ -127,6 +142,9 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithCompleteMatchmakingTriggerType(!data.Keys.Contains("completeMatchmakingTriggerType") || data["completeMatchmakingTriggerType"] == null ? null : data["completeMatchmakingTriggerType"].ToString())
                 .WithCompleteMatchmakingTriggerRealtimeNamespaceId(!data.Keys.Contains("completeMatchmakingTriggerRealtimeNamespaceId") || data["completeMatchmakingTriggerRealtimeNamespaceId"] == null ? null : data["completeMatchmakingTriggerRealtimeNamespaceId"].ToString())
                 .WithCompleteMatchmakingTriggerScriptId(!data.Keys.Contains("completeMatchmakingTriggerScriptId") || data["completeMatchmakingTriggerScriptId"] == null ? null : data["completeMatchmakingTriggerScriptId"].ToString())
+                .WithEnableCollaborateSeasonRating(!data.Keys.Contains("enableCollaborateSeasonRating") || data["enableCollaborateSeasonRating"] == null ? null : data["enableCollaborateSeasonRating"].ToString())
+                .WithCollaborateSeasonRatingNamespaceId(!data.Keys.Contains("collaborateSeasonRatingNamespaceId") || data["collaborateSeasonRatingNamespaceId"] == null ? null : data["collaborateSeasonRatingNamespaceId"].ToString())
+                .WithCollaborateSeasonRatingTtl(!data.Keys.Contains("collaborateSeasonRatingTtl") || data["collaborateSeasonRatingTtl"] == null ? null : (int?)(data["collaborateSeasonRatingTtl"].ToString().Contains(".") ? (int)double.Parse(data["collaborateSeasonRatingTtl"].ToString()) : int.Parse(data["collaborateSeasonRatingTtl"].ToString())))
                 .WithChangeRatingScript(!data.Keys.Contains("changeRatingScript") || data["changeRatingScript"] == null ? null : Gs2.Gs2Matchmaking.Model.ScriptSetting.FromJson(data["changeRatingScript"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["leaveNotification"]))
@@ -147,6 +165,9 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["completeMatchmakingTriggerType"] = CompleteMatchmakingTriggerType,
                 ["completeMatchmakingTriggerRealtimeNamespaceId"] = CompleteMatchmakingTriggerRealtimeNamespaceId,
                 ["completeMatchmakingTriggerScriptId"] = CompleteMatchmakingTriggerScriptId,
+                ["enableCollaborateSeasonRating"] = EnableCollaborateSeasonRating,
+                ["collaborateSeasonRatingNamespaceId"] = CollaborateSeasonRatingNamespaceId,
+                ["collaborateSeasonRatingTtl"] = CollaborateSeasonRatingTtl,
                 ["changeRatingScript"] = ChangeRatingScript?.ToJson(),
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
@@ -195,6 +216,18 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("completeMatchmakingTriggerScriptId");
                 writer.Write(CompleteMatchmakingTriggerScriptId.ToString());
             }
+            if (EnableCollaborateSeasonRating != null) {
+                writer.WritePropertyName("enableCollaborateSeasonRating");
+                writer.Write(EnableCollaborateSeasonRating.ToString());
+            }
+            if (CollaborateSeasonRatingNamespaceId != null) {
+                writer.WritePropertyName("collaborateSeasonRatingNamespaceId");
+                writer.Write(CollaborateSeasonRatingNamespaceId.ToString());
+            }
+            if (CollaborateSeasonRatingTtl != null) {
+                writer.WritePropertyName("collaborateSeasonRatingTtl");
+                writer.Write((CollaborateSeasonRatingTtl.ToString().Contains(".") ? (int)double.Parse(CollaborateSeasonRatingTtl.ToString()) : int.Parse(CollaborateSeasonRatingTtl.ToString())));
+            }
             if (ChangeRatingScript != null) {
                 ChangeRatingScript.WriteJson(writer);
             }
@@ -227,6 +260,9 @@ namespace Gs2.Gs2Matchmaking.Request
             key += CompleteMatchmakingTriggerType + ":";
             key += CompleteMatchmakingTriggerRealtimeNamespaceId + ":";
             key += CompleteMatchmakingTriggerScriptId + ":";
+            key += EnableCollaborateSeasonRating + ":";
+            key += CollaborateSeasonRatingNamespaceId + ":";
+            key += CollaborateSeasonRatingTtl + ":";
             key += ChangeRatingScript + ":";
             key += JoinNotification + ":";
             key += LeaveNotification + ":";
