@@ -3592,6 +3592,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("parameterCount");
                     jsonWriter.Write(request.ParameterCount.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3734,6 +3739,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("parameterCount");
                     jsonWriter.Write(request.ParameterCount.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {

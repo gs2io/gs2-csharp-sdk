@@ -4993,6 +4993,11 @@ namespace Gs2.Gs2Inventory
                     jsonWriter.WritePropertyName("currentInventoryMaxCapacity");
                     jsonWriter.Write(request.CurrentInventoryMaxCapacity.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -5125,6 +5130,11 @@ namespace Gs2.Gs2Inventory
                 {
                     jsonWriter.WritePropertyName("currentInventoryMaxCapacity");
                     jsonWriter.Write(request.CurrentInventoryMaxCapacity.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -5623,6 +5633,11 @@ namespace Gs2.Gs2Inventory
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -5765,6 +5780,11 @@ namespace Gs2.Gs2Inventory
                 {
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -6366,6 +6386,11 @@ namespace Gs2.Gs2Inventory
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -6503,6 +6528,11 @@ namespace Gs2.Gs2Inventory
                 {
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -7564,6 +7594,11 @@ namespace Gs2.Gs2Inventory
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -7701,6 +7736,11 @@ namespace Gs2.Gs2Inventory
                 {
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {

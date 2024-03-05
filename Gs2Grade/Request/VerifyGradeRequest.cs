@@ -39,6 +39,7 @@ namespace Gs2.Gs2Grade.Request
          public string VerifyType { set; get; }
          public string PropertyId { set; get; }
          public long? GradeValue { set; get; }
+         public bool? MultiplyValueSpecifyingQuantity { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyGradeRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Grade.Request
             this.GradeValue = gradeValue;
             return this;
         }
+        public VerifyGradeRequest WithMultiplyValueSpecifyingQuantity(bool? multiplyValueSpecifyingQuantity) {
+            this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
+            return this;
+        }
 
         public VerifyGradeRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Grade.Request
                 .WithGradeName(!data.Keys.Contains("gradeName") || data["gradeName"] == null ? null : data["gradeName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithGradeValue(!data.Keys.Contains("gradeValue") || data["gradeValue"] == null ? null : (long?)(data["gradeValue"].ToString().Contains(".") ? (long)double.Parse(data["gradeValue"].ToString()) : long.Parse(data["gradeValue"].ToString())));
+                .WithGradeValue(!data.Keys.Contains("gradeValue") || data["gradeValue"] == null ? null : (long?)(data["gradeValue"].ToString().Contains(".") ? (long)double.Parse(data["gradeValue"].ToString()) : long.Parse(data["gradeValue"].ToString())))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Grade.Request
                 ["verifyType"] = VerifyType,
                 ["propertyId"] = PropertyId,
                 ["gradeValue"] = GradeValue,
+                ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Grade.Request
                 writer.WritePropertyName("gradeValue");
                 writer.Write((GradeValue.ToString().Contains(".") ? (long)double.Parse(GradeValue.ToString()) : long.Parse(GradeValue.ToString())));
             }
+            if (MultiplyValueSpecifyingQuantity != null) {
+                writer.WritePropertyName("multiplyValueSpecifyingQuantity");
+                writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -137,6 +148,7 @@ namespace Gs2.Gs2Grade.Request
             key += VerifyType + ":";
             key += PropertyId + ":";
             key += GradeValue + ":";
+            key += MultiplyValueSpecifyingQuantity + ":";
             return key;
         }
     }

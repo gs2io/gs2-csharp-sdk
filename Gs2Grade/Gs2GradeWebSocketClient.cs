@@ -2201,6 +2201,11 @@ namespace Gs2.Gs2Grade
                     jsonWriter.WritePropertyName("gradeValue");
                     jsonWriter.Write(request.GradeValue.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2338,6 +2343,11 @@ namespace Gs2.Gs2Grade
                 {
                     jsonWriter.WritePropertyName("gradeValue");
                     jsonWriter.Write(request.GradeValue.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {

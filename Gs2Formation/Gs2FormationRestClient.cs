@@ -7232,6 +7232,131 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class SetFormByStampSheetTask : Gs2RestSessionTask<SetFormByStampSheetRequest, SetFormByStampSheetResult>
+        {
+            public SetFormByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SetFormByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SetFormByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/form/set";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SetFormByStampSheet(
+                Request.SetFormByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SetFormByStampSheetResult>> callback
+        )
+		{
+			var task = new SetFormByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SetFormByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SetFormByStampSheetResult> SetFormByStampSheetFuture(
+                Request.SetFormByStampSheetRequest request
+        )
+		{
+			return new SetFormByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SetFormByStampSheetResult> SetFormByStampSheetAsync(
+                Request.SetFormByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SetFormByStampSheetResult> result = null;
+			await SetFormByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SetFormByStampSheetTask SetFormByStampSheetAsync(
+                Request.SetFormByStampSheetRequest request
+        )
+		{
+			return new SetFormByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SetFormByStampSheetResult> SetFormByStampSheetAsync(
+                Request.SetFormByStampSheetRequest request
+        )
+		{
+			var task = new SetFormByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DescribePropertyFormsTask : Gs2RestSessionTask<DescribePropertyFormsRequest, DescribePropertyFormsResult>
         {
             public DescribePropertyFormsTask(IGs2Session session, RestSessionRequestFactory factory, DescribePropertyFormsRequest request) : base(session, factory, request)

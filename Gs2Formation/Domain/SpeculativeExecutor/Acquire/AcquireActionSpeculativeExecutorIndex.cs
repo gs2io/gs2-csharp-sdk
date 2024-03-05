@@ -112,6 +112,24 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                     result.OnComplete(future.Result);
                     yield break;
                 }
+                if (SetFormByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                    var request = SetFormByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                    if (rate != 1) {
+                        request = request.Rate(rate);
+                    }
+                    var future = SetFormByUserIdSpeculativeExecutor.ExecuteFuture(
+                        domain,
+                        accessToken,
+                        request
+                    );
+                    yield return future;
+                    if (future.Error != null) {
+                        result.OnError(future.Error);
+                        yield break;
+                    }
+                    result.OnComplete(future.Result);
+                    yield break;
+                }
                 if (AcquireActionsToPropertyFormPropertiesSpeculativeExecutor.Action() == acquireAction.Action) {
                     var request = AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                     if (rate != 1) {
@@ -180,6 +198,17 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await AcquireActionsToFormPropertiesSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (SetFormByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+                var request = SetFormByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await SetFormByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

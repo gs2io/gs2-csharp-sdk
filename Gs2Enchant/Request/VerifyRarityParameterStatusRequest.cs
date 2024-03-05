@@ -40,6 +40,7 @@ namespace Gs2.Gs2Enchant.Request
          public string VerifyType { set; get; }
          public string ParameterValueName { set; get; }
          public int? ParameterCount { set; get; }
+         public bool? MultiplyValueSpecifyingQuantity { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyRarityParameterStatusRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Enchant.Request
             this.ParameterCount = parameterCount;
             return this;
         }
+        public VerifyRarityParameterStatusRequest WithMultiplyValueSpecifyingQuantity(bool? multiplyValueSpecifyingQuantity) {
+            this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
+            return this;
+        }
 
         public VerifyRarityParameterStatusRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -90,7 +95,8 @@ namespace Gs2.Gs2Enchant.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithParameterValueName(!data.Keys.Contains("parameterValueName") || data["parameterValueName"] == null ? null : data["parameterValueName"].ToString())
-                .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : (int?)(data["parameterCount"].ToString().Contains(".") ? (int)double.Parse(data["parameterCount"].ToString()) : int.Parse(data["parameterCount"].ToString())));
+                .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : (int?)(data["parameterCount"].ToString().Contains(".") ? (int)double.Parse(data["parameterCount"].ToString()) : int.Parse(data["parameterCount"].ToString())))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -103,6 +109,7 @@ namespace Gs2.Gs2Enchant.Request
                 ["verifyType"] = VerifyType,
                 ["parameterValueName"] = ParameterValueName,
                 ["parameterCount"] = ParameterCount,
+                ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
         }
 
@@ -137,6 +144,10 @@ namespace Gs2.Gs2Enchant.Request
                 writer.WritePropertyName("parameterCount");
                 writer.Write((ParameterCount.ToString().Contains(".") ? (int)double.Parse(ParameterCount.ToString()) : int.Parse(ParameterCount.ToString())));
             }
+            if (MultiplyValueSpecifyingQuantity != null) {
+                writer.WritePropertyName("multiplyValueSpecifyingQuantity");
+                writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -149,6 +160,7 @@ namespace Gs2.Gs2Enchant.Request
             key += VerifyType + ":";
             key += ParameterValueName + ":";
             key += ParameterCount + ":";
+            key += MultiplyValueSpecifyingQuantity + ":";
             return key;
         }
     }

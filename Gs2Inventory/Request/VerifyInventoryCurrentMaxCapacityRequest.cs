@@ -38,6 +38,7 @@ namespace Gs2.Gs2Inventory.Request
          public string InventoryName { set; get; }
          public string VerifyType { set; get; }
          public int? CurrentInventoryMaxCapacity { set; get; }
+         public bool? MultiplyValueSpecifyingQuantity { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyInventoryCurrentMaxCapacityRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Inventory.Request
             this.CurrentInventoryMaxCapacity = currentInventoryMaxCapacity;
             return this;
         }
+        public VerifyInventoryCurrentMaxCapacityRequest WithMultiplyValueSpecifyingQuantity(bool? multiplyValueSpecifyingQuantity) {
+            this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
+            return this;
+        }
 
         public VerifyInventoryCurrentMaxCapacityRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
-                .WithCurrentInventoryMaxCapacity(!data.Keys.Contains("currentInventoryMaxCapacity") || data["currentInventoryMaxCapacity"] == null ? null : (int?)(data["currentInventoryMaxCapacity"].ToString().Contains(".") ? (int)double.Parse(data["currentInventoryMaxCapacity"].ToString()) : int.Parse(data["currentInventoryMaxCapacity"].ToString())));
+                .WithCurrentInventoryMaxCapacity(!data.Keys.Contains("currentInventoryMaxCapacity") || data["currentInventoryMaxCapacity"] == null ? null : (int?)(data["currentInventoryMaxCapacity"].ToString().Contains(".") ? (int)double.Parse(data["currentInventoryMaxCapacity"].ToString()) : int.Parse(data["currentInventoryMaxCapacity"].ToString())))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["inventoryName"] = InventoryName,
                 ["verifyType"] = VerifyType,
                 ["currentInventoryMaxCapacity"] = CurrentInventoryMaxCapacity,
+                ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("currentInventoryMaxCapacity");
                 writer.Write((CurrentInventoryMaxCapacity.ToString().Contains(".") ? (int)double.Parse(CurrentInventoryMaxCapacity.ToString()) : int.Parse(CurrentInventoryMaxCapacity.ToString())));
             }
+            if (MultiplyValueSpecifyingQuantity != null) {
+                writer.WritePropertyName("multiplyValueSpecifyingQuantity");
+                writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -125,6 +136,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += VerifyType + ":";
             key += CurrentInventoryMaxCapacity + ":";
+            key += MultiplyValueSpecifyingQuantity + ":";
             return key;
         }
     }

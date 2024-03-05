@@ -44,6 +44,8 @@ namespace Gs2.Gs2Formation.Model
                     return SetMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Formation:AcquireActionsToFormProperties":
                     return AcquireActionsToFormPropertiesRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Formation:SetFormByUserId":
+                    return SetFormByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Formation:AcquireActionsToPropertyFormProperties":
                     return AcquireActionsToPropertyFormPropertiesRequest.FromJson(JsonMapper.ToObject(action.Request));
             }

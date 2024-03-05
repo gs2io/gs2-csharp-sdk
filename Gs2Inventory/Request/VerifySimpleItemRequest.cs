@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inventory.Request
          public string ItemName { set; get; }
          public string VerifyType { set; get; }
          public long? Count { set; get; }
+         public bool? MultiplyValueSpecifyingQuantity { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifySimpleItemRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Inventory.Request
             this.Count = count;
             return this;
         }
+        public VerifySimpleItemRequest WithMultiplyValueSpecifyingQuantity(bool? multiplyValueSpecifyingQuantity) {
+            this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
+            return this;
+        }
 
         public VerifySimpleItemRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)(data["count"].ToString().Contains(".") ? (long)double.Parse(data["count"].ToString()) : long.Parse(data["count"].ToString())));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)(data["count"].ToString().Contains(".") ? (long)double.Parse(data["count"].ToString()) : long.Parse(data["count"].ToString())))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["itemName"] = ItemName,
                 ["verifyType"] = VerifyType,
                 ["count"] = Count,
+                ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("count");
                 writer.Write((Count.ToString().Contains(".") ? (long)double.Parse(Count.ToString()) : long.Parse(Count.ToString())));
             }
+            if (MultiplyValueSpecifyingQuantity != null) {
+                writer.WritePropertyName("multiplyValueSpecifyingQuantity");
+                writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -137,6 +148,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemName + ":";
             key += VerifyType + ":";
             key += Count + ":";
+            key += MultiplyValueSpecifyingQuantity + ":";
             return key;
         }
     }

@@ -522,6 +522,12 @@ namespace Gs2.Gs2Formation.Domain
     #endif
 
     #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SetFormByUserIdRequest, SetFormByUserIdResult> SetFormByUserIdComplete = new UnityEvent<string, SetFormByUserIdRequest, SetFormByUserIdResult>();
+    #else
+        public static Action<string, SetFormByUserIdRequest, SetFormByUserIdResult> SetFormByUserIdComplete;
+    #endif
+
+    #if UNITY_2017_1_OR_NEWER
         public static UnityEvent<string, AcquireActionsToPropertyFormPropertiesRequest, AcquireActionsToPropertyFormPropertiesResult> AcquireActionsToPropertyFormPropertiesComplete = new UnityEvent<string, AcquireActionsToPropertyFormPropertiesRequest, AcquireActionsToPropertyFormPropertiesResult>();
     #else
         public static Action<string, AcquireActionsToPropertyFormPropertiesRequest, AcquireActionsToPropertyFormPropertiesResult> AcquireActionsToPropertyFormPropertiesComplete;
@@ -579,6 +585,23 @@ namespace Gs2.Gs2Formation.Domain
                         );
 
                         AcquireActionsToFormPropertiesComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "SetFormByUserId": {
+                        var requestModel = SetFormByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SetFormByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        SetFormByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -689,6 +712,23 @@ namespace Gs2.Gs2Formation.Domain
                     );
 
                     AcquireActionsToFormPropertiesComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "set_form_by_user_id": {
+                    var requestModel = SetFormByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SetFormByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    SetFormByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

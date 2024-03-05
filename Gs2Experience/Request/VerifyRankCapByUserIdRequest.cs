@@ -39,6 +39,7 @@ namespace Gs2.Gs2Experience.Request
          public string VerifyType { set; get; }
          public string PropertyId { set; get; }
          public long? RankCapValue { set; get; }
+         public bool? MultiplyValueSpecifyingQuantity { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyRankCapByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Experience.Request
             this.RankCapValue = rankCapValue;
             return this;
         }
+        public VerifyRankCapByUserIdRequest WithMultiplyValueSpecifyingQuantity(bool? multiplyValueSpecifyingQuantity) {
+            this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
+            return this;
+        }
 
         public VerifyRankCapByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Experience.Request
                 .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : (long?)(data["rankCapValue"].ToString().Contains(".") ? (long)double.Parse(data["rankCapValue"].ToString()) : long.Parse(data["rankCapValue"].ToString())));
+                .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : (long?)(data["rankCapValue"].ToString().Contains(".") ? (long)double.Parse(data["rankCapValue"].ToString()) : long.Parse(data["rankCapValue"].ToString())))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Experience.Request
                 ["verifyType"] = VerifyType,
                 ["propertyId"] = PropertyId,
                 ["rankCapValue"] = RankCapValue,
+                ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Experience.Request
                 writer.WritePropertyName("rankCapValue");
                 writer.Write((RankCapValue.ToString().Contains(".") ? (long)double.Parse(RankCapValue.ToString()) : long.Parse(RankCapValue.ToString())));
             }
+            if (MultiplyValueSpecifyingQuantity != null) {
+                writer.WritePropertyName("multiplyValueSpecifyingQuantity");
+                writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -137,6 +148,7 @@ namespace Gs2.Gs2Experience.Request
             key += VerifyType + ":";
             key += PropertyId + ":";
             key += RankCapValue + ":";
+            key += MultiplyValueSpecifyingQuantity + ":";
             return key;
         }
     }

@@ -1965,6 +1965,11 @@ namespace Gs2.Gs2Limit
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2102,6 +2107,11 @@ namespace Gs2.Gs2Limit
                 {
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {

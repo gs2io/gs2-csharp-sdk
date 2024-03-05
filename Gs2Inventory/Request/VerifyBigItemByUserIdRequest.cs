@@ -40,6 +40,7 @@ namespace Gs2.Gs2Inventory.Request
          public string ItemName { set; get; }
          public string VerifyType { set; get; }
          public string Count { set; get; }
+         public bool? MultiplyValueSpecifyingQuantity { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyBigItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -65,6 +66,10 @@ namespace Gs2.Gs2Inventory.Request
             this.Count = count;
             return this;
         }
+        public VerifyBigItemByUserIdRequest WithMultiplyValueSpecifyingQuantity(bool? multiplyValueSpecifyingQuantity) {
+            this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
+            return this;
+        }
 
         public VerifyBigItemByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -85,7 +90,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : data["count"].ToString());
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : data["count"].ToString())
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()
@@ -97,6 +103,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["itemName"] = ItemName,
                 ["verifyType"] = VerifyType,
                 ["count"] = Count,
+                ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
             };
         }
 
@@ -127,6 +134,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("count");
                 writer.Write(Count.ToString());
             }
+            if (MultiplyValueSpecifyingQuantity != null) {
+                writer.WritePropertyName("multiplyValueSpecifyingQuantity");
+                writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
+            }
             writer.WriteObjectEnd();
         }
 
@@ -137,6 +148,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += ItemName + ":";
             key += VerifyType + ":";
+            key += MultiplyValueSpecifyingQuantity + ":";
             return key;
         }
     }

@@ -5107,6 +5107,11 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("rankValue");
                     jsonWriter.Write(request.RankValue.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -5245,6 +5250,11 @@ namespace Gs2.Gs2Experience
                     jsonWriter.WritePropertyName("rankValue");
                     jsonWriter.Write(request.RankValue.ToString());
                 }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -5377,6 +5387,11 @@ namespace Gs2.Gs2Experience
                 {
                     jsonWriter.WritePropertyName("rankCapValue");
                     jsonWriter.Write(request.RankCapValue.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -5515,6 +5530,11 @@ namespace Gs2.Gs2Experience
                 {
                     jsonWriter.WritePropertyName("rankCapValue");
                     jsonWriter.Write(request.RankCapValue.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
                 if (request.ContextStack != null)
                 {
