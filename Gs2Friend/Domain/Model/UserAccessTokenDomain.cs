@@ -159,7 +159,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<string> BlackLists(
+        public Gs2Iterator<string> BlackListUsers(
         )
         {
             return new DescribeBlackListIterator(
@@ -173,9 +173,9 @@ namespace Gs2.Gs2Friend.Domain.Model
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<string> BlackListsAsync(
+        public IUniTaskAsyncEnumerable<string> BlackListUsersAsync(
             #else
-        public DescribeBlackListIterator BlackListsAsync(
+        public DescribeBlackListIterator BlackListUsersAsync(
             #endif
         )
         {
