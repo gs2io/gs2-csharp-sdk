@@ -66,6 +66,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { get; set; }
         public string NextPageToken { get; set; }
 
         public UserAccessTokenDomain(
@@ -79,91 +80,6 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
-        }
-        #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Mission.Model.Counter> Counters(
-        )
-        {
-            return new DescribeCountersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName,
-                this.AccessToken
-            );
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Counter> CountersAsync(
-            #else
-        public DescribeCountersIterator CountersAsync(
-            #endif
-        )
-        {
-            return new DescribeCountersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName,
-                this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        }
-        #endif
-
-        public ulong SubscribeCounters(
-            Action<Gs2.Gs2Mission.Model.Counter[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Counter>(
-                (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeCountersWithInitialCallAsync(
-            Action<Gs2.Gs2Mission.Model.Counter[]> callback
-        )
-        {
-            var items = await CountersAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeCounters(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeCounters(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Counter>(
-                (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                callbackId
-            );
-        }
-
-        public Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain Counter(
-            string counterName
-        ) {
-            return new Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.AccessToken,
-                counterName
-            );
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Mission.Model.Complete> Completes(
@@ -248,6 +164,91 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 missionGroupName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Mission.Model.Counter> Counters(
+        )
+        {
+            return new DescribeCountersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.AccessToken
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.Counter> CountersAsync(
+            #else
+        public DescribeCountersIterator CountersAsync(
+            #endif
+        )
+        {
+            return new DescribeCountersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.AccessToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeCounters(
+            Action<Gs2.Gs2Mission.Model.Counter[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.Counter>(
+                (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCountersWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.Counter[]> callback
+        )
+        {
+            var items = await CountersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCounters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCounters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.Counter>(
+                (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain Counter(
+            string counterName
+        ) {
+            return new Gs2.Gs2Mission.Domain.Model.CounterAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                counterName
             );
         }
 

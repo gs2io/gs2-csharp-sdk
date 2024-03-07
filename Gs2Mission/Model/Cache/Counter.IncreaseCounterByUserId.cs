@@ -51,6 +51,15 @@ namespace Gs2.Gs2Mission.Model.Cache
                 self.Item.UserId,
                 request.CounterName
             );
+            foreach (var item in self.ChangedCompletes ?? Array.Empty<Complete>())
+            {
+                item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.UserId,
+                    item.MissionGroupName
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -66,6 +66,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         public string NamespaceName { get; }
         public string UserId { get; }
         public string CounterName { get; }
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { get; set; }
 
         public CounterDomain(
             Gs2.Core.Domain.Gs2 gs2,

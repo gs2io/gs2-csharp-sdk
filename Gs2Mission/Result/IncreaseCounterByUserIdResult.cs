@@ -34,9 +34,15 @@ namespace Gs2.Gs2Mission.Result
 	public class IncreaseCounterByUserIdResult : IResult
 	{
         public Gs2.Gs2Mission.Model.Counter Item { set; get; }
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { set; get; }
 
         public IncreaseCounterByUserIdResult WithItem(Gs2.Gs2Mission.Model.Counter item) {
             this.Item = item;
+            return this;
+        }
+
+        public IncreaseCounterByUserIdResult WithChangedCompletes(Gs2.Gs2Mission.Model.Complete[] changedCompletes) {
+            this.ChangedCompletes = changedCompletes;
             return this;
         }
 
@@ -49,13 +55,26 @@ namespace Gs2.Gs2Mission.Result
                 return null;
             }
             return new IncreaseCounterByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["item"]));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Mission.Model.Counter.FromJson(data["item"]))
+                .WithChangedCompletes(!data.Keys.Contains("changedCompletes") || data["changedCompletes"] == null || !data["changedCompletes"].IsArray ? new Gs2.Gs2Mission.Model.Complete[]{} : data["changedCompletes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Mission.Model.Complete.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
         {
+            JsonData changedCompletesJsonData = null;
+            if (ChangedCompletes != null && ChangedCompletes.Length > 0)
+            {
+                changedCompletesJsonData = new JsonData();
+                foreach (var changedComplete in ChangedCompletes)
+                {
+                    changedCompletesJsonData.Add(changedComplete.ToJson());
+                }
+            }
             return new JsonData {
                 ["item"] = Item?.ToJson(),
+                ["changedCompletes"] = changedCompletesJsonData,
             };
         }
 
@@ -64,6 +83,17 @@ namespace Gs2.Gs2Mission.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
+            }
+            if (ChangedCompletes != null) {
+                writer.WritePropertyName("changedCompletes");
+                writer.WriteArrayStart();
+                foreach (var changedComplete in ChangedCompletes)
+                {
+                    if (changedComplete != null) {
+                        changedComplete.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }

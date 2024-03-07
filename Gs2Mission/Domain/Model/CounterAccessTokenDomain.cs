@@ -67,6 +67,7 @@ namespace Gs2.Gs2Mission.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string CounterName { get; }
+        public Gs2.Gs2Mission.Model.Complete[] ChangedCompletes { get; set; }
 
         public CounterAccessTokenDomain(
             Gs2.Core.Domain.Gs2 gs2,
