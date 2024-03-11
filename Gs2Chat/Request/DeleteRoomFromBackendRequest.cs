@@ -36,6 +36,7 @@ namespace Gs2.Gs2Chat.Request
          public string NamespaceName { set; get; }
          public string RoomName { set; get; }
          public string UserId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteRoomFromBackendRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Chat.Request
         }
         public DeleteRoomFromBackendRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public DeleteRoomFromBackendRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Chat.Request
             return new DeleteRoomFromBackendRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Chat.Request
                 ["namespaceName"] = NamespaceName,
                 ["roomName"] = RoomName,
                 ["userId"] = UserId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Chat.Request
             key += NamespaceName + ":";
             key += RoomName + ":";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

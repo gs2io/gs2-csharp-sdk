@@ -37,6 +37,7 @@ namespace Gs2.Gs2Formation.Request
          public string UserId { set; get; }
          public string MoldModelName { set; get; }
          public int? Capacity { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SubMoldCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Formation.Request
         }
         public SubMoldCapacityByUserIdRequest WithCapacity(int? capacity) {
             this.Capacity = capacity;
+            return this;
+        }
+        public SubMoldCapacityByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Formation.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
-                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)(data["capacity"].ToString().Contains(".") ? (int)double.Parse(data["capacity"].ToString()) : int.Parse(data["capacity"].ToString())));
+                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)(data["capacity"].ToString().Contains(".") ? (int)double.Parse(data["capacity"].ToString()) : int.Parse(data["capacity"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Formation.Request
                 ["userId"] = UserId,
                 ["moldModelName"] = MoldModelName,
                 ["capacity"] = Capacity,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("capacity");
                 writer.Write((Capacity.ToString().Contains(".") ? (int)double.Parse(Capacity.ToString()) : int.Parse(Capacity.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -112,6 +123,7 @@ namespace Gs2.Gs2Formation.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += MoldModelName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

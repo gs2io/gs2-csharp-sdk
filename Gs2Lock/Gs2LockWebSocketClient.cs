@@ -652,6 +652,11 @@ namespace Gs2.Gs2Lock
                     jsonWriter.WritePropertyName("ttl");
                     jsonWriter.Write(request.Ttl.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -903,6 +908,11 @@ namespace Gs2.Gs2Lock
                     jsonWriter.WritePropertyName("transactionId");
                     jsonWriter.Write(request.TransactionId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1139,6 +1149,11 @@ namespace Gs2.Gs2Lock
                     jsonWriter.WritePropertyName("propertyId");
                     jsonWriter.Write(request.PropertyId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1251,6 +1266,11 @@ namespace Gs2.Gs2Lock
                 {
                     jsonWriter.WritePropertyName("propertyId");
                     jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {

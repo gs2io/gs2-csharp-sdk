@@ -67,6 +67,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -174,6 +179,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -283,6 +293,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -390,6 +405,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -504,6 +524,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("uploadToken");
                     jsonWriter.Write(request.UploadToken.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -616,6 +641,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("uploadToken");
                     jsonWriter.Write(request.UploadToken.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -842,6 +872,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1099,6 +1134,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("friendProfile");
                     jsonWriter.Write(request.FriendProfile.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1211,6 +1251,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1458,6 +1503,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("withProfile");
                     jsonWriter.Write(request.WithProfile.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1693,6 +1743,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("targetUserId");
                     jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -1934,6 +1989,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("targetUserId");
                     jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2181,6 +2241,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("withProfile");
                     jsonWriter.Write(request.WithProfile.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2416,6 +2481,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("targetUserId");
                     jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2653,6 +2723,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("targetUserId");
                     jsonWriter.Write(request.TargetUserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2888,6 +2963,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("targetUserId");
                     jsonWriter.Write(request.TargetUserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -3130,6 +3210,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("targetUserId");
                     jsonWriter.Write(request.TargetUserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3366,6 +3451,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("fromUserId");
                     jsonWriter.Write(request.FromUserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3601,6 +3691,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("fromUserId");
                     jsonWriter.Write(request.FromUserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -3843,6 +3938,11 @@ namespace Gs2.Gs2Friend
                     jsonWriter.WritePropertyName("fromUserId");
                     jsonWriter.Write(request.FromUserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3955,6 +4055,11 @@ namespace Gs2.Gs2Friend
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {

@@ -99,6 +99,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryName(
+            string timeOffsetToken = null
         )
         {
             return new DescribeSubscribesByCategoryNameAndUserIdIterator(
@@ -106,7 +107,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -117,6 +119,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             #else
         public DescribeSubscribesByCategoryNameAndUserIdIterator SubscribesByCategoryNameAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeSubscribesByCategoryNameAndUserIdIterator(
@@ -124,7 +127,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.CategoryName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -192,6 +196,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> Rankings(
+            string timeOffsetToken = null
         )
         {
             return new DescribeRankingsByUserIdIterator(
@@ -200,7 +205,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.NamespaceName,
                 this.CategoryName,
                 this.UserId,
-                this.AdditionalScopeName
+                this.AdditionalScopeName,
+                timeOffsetToken
             );
         }
         #endif
@@ -211,6 +217,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
             #else
         public DescribeRankingsByUserIdIterator RankingsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeRankingsByUserIdIterator(
@@ -219,7 +226,8 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.NamespaceName,
                 this.CategoryName,
                 this.UserId,
-                this.AdditionalScopeName
+                this.AdditionalScopeName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

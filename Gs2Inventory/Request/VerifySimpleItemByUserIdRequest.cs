@@ -40,6 +40,7 @@ namespace Gs2.Gs2Inventory.Request
          public string VerifyType { set; get; }
          public long? Count { set; get; }
          public bool? MultiplyValueSpecifyingQuantity { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifySimpleItemByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Inventory.Request
             this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
             return this;
         }
+        public VerifySimpleItemByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public VerifySimpleItemByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -90,7 +95,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)(data["count"].ToString().Contains(".") ? (long)double.Parse(data["count"].ToString()) : long.Parse(data["count"].ToString())))
-                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -103,6 +109,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["verifyType"] = VerifyType,
                 ["count"] = Count,
                 ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -137,6 +144,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("multiplyValueSpecifyingQuantity");
                 writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -148,6 +159,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemName + ":";
             key += VerifyType + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

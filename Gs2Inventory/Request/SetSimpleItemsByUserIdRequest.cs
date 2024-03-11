@@ -37,6 +37,7 @@ namespace Gs2.Gs2Inventory.Request
          public string InventoryName { set; get; }
          public string UserId { set; get; }
          public Gs2.Gs2Inventory.Model.HeldCount[] Counts { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SetSimpleItemsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Inventory.Request
         }
         public SetSimpleItemsByUserIdRequest WithCounts(Gs2.Gs2Inventory.Model.HeldCount[] counts) {
             this.Counts = counts;
+            return this;
+        }
+        public SetSimpleItemsByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -74,7 +79,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCounts(!data.Keys.Contains("counts") || data["counts"] == null || !data["counts"].IsArray ? new Gs2.Gs2Inventory.Model.HeldCount[]{} : data["counts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.HeldCount.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -93,6 +99,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["inventoryName"] = InventoryName,
                 ["userId"] = UserId,
                 ["counts"] = countsJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -122,6 +129,10 @@ namespace Gs2.Gs2Inventory.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += UserId + ":";
             key += Counts + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

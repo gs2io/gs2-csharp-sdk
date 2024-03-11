@@ -40,6 +40,7 @@ namespace Gs2.Gs2Datastore.Request
          public string Scope { set; get; }
          public string[] AllowUserIds { set; get; }
          public bool? UpdateIfExists { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public PrepareUploadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Datastore.Request
             this.UpdateIfExists = updateIfExists;
             return this;
         }
+        public PrepareUploadByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public PrepareUploadByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -92,7 +97,8 @@ namespace Gs2.Gs2Datastore.Request
                 .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithUpdateIfExists(!data.Keys.Contains("updateIfExists") || data["updateIfExists"] == null ? null : (bool?)bool.Parse(data["updateIfExists"].ToString()));
+                .WithUpdateIfExists(!data.Keys.Contains("updateIfExists") || data["updateIfExists"] == null ? null : (bool?)bool.Parse(data["updateIfExists"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -114,6 +120,7 @@ namespace Gs2.Gs2Datastore.Request
                 ["scope"] = Scope,
                 ["allowUserIds"] = allowUserIdsJsonData,
                 ["updateIfExists"] = UpdateIfExists,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -153,6 +160,10 @@ namespace Gs2.Gs2Datastore.Request
                 writer.WritePropertyName("updateIfExists");
                 writer.Write(bool.Parse(UpdateIfExists.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -165,6 +176,7 @@ namespace Gs2.Gs2Datastore.Request
             key += Scope + ":";
             key += AllowUserIds + ":";
             key += UpdateIfExists + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

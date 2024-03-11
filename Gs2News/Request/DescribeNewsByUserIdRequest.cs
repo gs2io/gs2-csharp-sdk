@@ -35,12 +35,17 @@ namespace Gs2.Gs2News.Request
 	{
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public DescribeNewsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
         }
         public DescribeNewsByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public DescribeNewsByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -54,7 +59,8 @@ namespace Gs2.Gs2News.Request
             }
             return new DescribeNewsByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -62,6 +68,7 @@ namespace Gs2.Gs2News.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -76,6 +83,10 @@ namespace Gs2.Gs2News.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -83,6 +94,7 @@ namespace Gs2.Gs2News.Request
             var key = "";
             key += NamespaceName + ":";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
          public string Payload { set; get; }
          public bool? EnableTransferMobileNotification { set; get; }
          public string Sound { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SendNotificationRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Gateway.Request
             this.Sound = sound;
             return this;
         }
+        public SendNotificationRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public SendNotificationRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Gateway.Request
                 .WithSubject(!data.Keys.Contains("subject") || data["subject"] == null ? null : data["subject"].ToString())
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString())
                 .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()))
-                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString());
+                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["payload"] = Payload,
                 ["enableTransferMobileNotification"] = EnableTransferMobileNotification,
                 ["sound"] = Sound,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("sound");
                 writer.Write(Sound.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -137,6 +148,7 @@ namespace Gs2.Gs2Gateway.Request
             key += Payload + ":";
             key += EnableTransferMobileNotification + ":";
             key += Sound + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

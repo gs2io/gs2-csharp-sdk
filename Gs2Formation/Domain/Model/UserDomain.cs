@@ -83,13 +83,15 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Formation.Model.Mold> Molds(
+            string timeOffsetToken = null
         )
         {
             return new DescribeMoldsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -100,13 +102,15 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
         public DescribeMoldsByUserIdIterator MoldsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeMoldsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -168,7 +172,8 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Formation.Model.PropertyForm> PropertyForms(
-            string propertyFormModelName
+            string propertyFormModelName,
+            string timeOffsetToken = null
         )
         {
             return new DescribePropertyFormsByUserIdIterator(
@@ -176,7 +181,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                propertyFormModelName
+                propertyFormModelName,
+                timeOffsetToken
             );
         }
         #endif
@@ -187,7 +193,8 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
         public DescribePropertyFormsByUserIdIterator PropertyFormsAsync(
             #endif
-            string propertyFormModelName
+            string propertyFormModelName,
+            string timeOffsetToken = null
         )
         {
             return new DescribePropertyFormsByUserIdIterator(
@@ -195,7 +202,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                propertyFormModelName
+                propertyFormModelName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

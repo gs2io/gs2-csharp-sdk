@@ -37,6 +37,7 @@ namespace Gs2.Gs2Idle.Request
          public string UserId { set; get; }
          public string CategoryName { set; get; }
          public int? DecreaseMinutes { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DecreaseMaximumIdleMinutesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Idle.Request
         }
         public DecreaseMaximumIdleMinutesByUserIdRequest WithDecreaseMinutes(int? decreaseMinutes) {
             this.DecreaseMinutes = decreaseMinutes;
+            return this;
+        }
+        public DecreaseMaximumIdleMinutesByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Idle.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithDecreaseMinutes(!data.Keys.Contains("decreaseMinutes") || data["decreaseMinutes"] == null ? null : (int?)(data["decreaseMinutes"].ToString().Contains(".") ? (int)double.Parse(data["decreaseMinutes"].ToString()) : int.Parse(data["decreaseMinutes"].ToString())));
+                .WithDecreaseMinutes(!data.Keys.Contains("decreaseMinutes") || data["decreaseMinutes"] == null ? null : (int?)(data["decreaseMinutes"].ToString().Contains(".") ? (int)double.Parse(data["decreaseMinutes"].ToString()) : int.Parse(data["decreaseMinutes"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Idle.Request
                 ["userId"] = UserId,
                 ["categoryName"] = CategoryName,
                 ["decreaseMinutes"] = DecreaseMinutes,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Idle.Request
                 writer.WritePropertyName("decreaseMinutes");
                 writer.Write((DecreaseMinutes.ToString().Contains(".") ? (int)double.Parse(DecreaseMinutes.ToString()) : int.Parse(DecreaseMinutes.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -112,6 +123,7 @@ namespace Gs2.Gs2Idle.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += CategoryName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

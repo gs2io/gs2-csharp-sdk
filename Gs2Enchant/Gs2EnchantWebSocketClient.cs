@@ -509,6 +509,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -616,6 +621,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -725,6 +735,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -832,6 +847,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -946,6 +966,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("uploadToken");
                     jsonWriter.Write(request.UploadToken.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1058,6 +1083,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("uploadToken");
                     jsonWriter.Write(request.UploadToken.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2013,6 +2043,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("propertyId");
                     jsonWriter.Write(request.PropertyId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2130,6 +2165,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("propertyId");
                     jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2263,6 +2303,11 @@ namespace Gs2.Gs2Enchant
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2504,6 +2549,11 @@ namespace Gs2.Gs2Enchant
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -2859,6 +2909,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("propertyId");
                     jsonWriter.Write(request.PropertyId.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2976,6 +3031,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("propertyId");
                     jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -3109,6 +3169,11 @@ namespace Gs2.Gs2Enchant
                         jsonWriter.Write(item);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -3345,6 +3410,11 @@ namespace Gs2.Gs2Enchant
                 {
                     jsonWriter.WritePropertyName("count");
                     jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -3745,6 +3815,11 @@ namespace Gs2.Gs2Enchant
                     jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
                     jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3877,6 +3952,11 @@ namespace Gs2.Gs2Enchant
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
                 }
                 if (request.ContextStack != null)
                 {

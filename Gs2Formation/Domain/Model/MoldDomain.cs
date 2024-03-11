@@ -86,6 +86,7 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Formation.Model.Form> Forms(
+            string timeOffsetToken = null
         )
         {
             return new DescribeFormsByUserIdIterator(
@@ -93,7 +94,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.MoldModelName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -104,6 +106,7 @@ namespace Gs2.Gs2Formation.Domain.Model
             #else
         public DescribeFormsByUserIdIterator FormsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeFormsByUserIdIterator(
@@ -111,7 +114,8 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.MoldModelName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

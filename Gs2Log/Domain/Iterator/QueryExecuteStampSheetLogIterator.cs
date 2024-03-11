@@ -76,6 +76,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         public long? Begin { get; }
         public long? End { get; }
         public bool? LongTerm { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -93,7 +94,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
             string action = null,
             long? begin = null,
             long? end = null,
-            bool? longTerm = null
+            bool? longTerm = null,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
@@ -105,6 +107,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
             this.Begin = begin;
             this.End = end;
             this.LongTerm = longTerm;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Log.Model.ExecuteStampSheetLog[]{};

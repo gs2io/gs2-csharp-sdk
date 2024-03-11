@@ -37,6 +37,7 @@ namespace Gs2.Gs2Exchange.Request
          public string RateName { set; get; }
          public string UserId { set; get; }
          public string LockTransactionId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public UnlockIncrementalExchangeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Exchange.Request
         }
         public UnlockIncrementalExchangeByUserIdRequest WithLockTransactionId(string lockTransactionId) {
             this.LockTransactionId = lockTransactionId;
+            return this;
+        }
+        public UnlockIncrementalExchangeByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Exchange.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithLockTransactionId(!data.Keys.Contains("lockTransactionId") || data["lockTransactionId"] == null ? null : data["lockTransactionId"].ToString());
+                .WithLockTransactionId(!data.Keys.Contains("lockTransactionId") || data["lockTransactionId"] == null ? null : data["lockTransactionId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["rateName"] = RateName,
                 ["userId"] = UserId,
                 ["lockTransactionId"] = LockTransactionId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("lockTransactionId");
                 writer.Write(LockTransactionId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Exchange.Request
             key += RateName + ":";
             key += UserId + ":";
             key += LockTransactionId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

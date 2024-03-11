@@ -41,6 +41,7 @@ namespace Gs2.Gs2Enchant.Request
          public string ParameterValueName { set; get; }
          public int? ParameterCount { set; get; }
          public bool? MultiplyValueSpecifyingQuantity { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -74,6 +75,10 @@ namespace Gs2.Gs2Enchant.Request
             this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
             return this;
         }
+        public VerifyRarityParameterStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public VerifyRarityParameterStatusByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -96,7 +101,8 @@ namespace Gs2.Gs2Enchant.Request
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithParameterValueName(!data.Keys.Contains("parameterValueName") || data["parameterValueName"] == null ? null : data["parameterValueName"].ToString())
                 .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : (int?)(data["parameterCount"].ToString().Contains(".") ? (int)double.Parse(data["parameterCount"].ToString()) : int.Parse(data["parameterCount"].ToString())))
-                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -110,6 +116,7 @@ namespace Gs2.Gs2Enchant.Request
                 ["parameterValueName"] = ParameterValueName,
                 ["parameterCount"] = ParameterCount,
                 ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -148,6 +155,10 @@ namespace Gs2.Gs2Enchant.Request
                 writer.WritePropertyName("multiplyValueSpecifyingQuantity");
                 writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -160,6 +171,7 @@ namespace Gs2.Gs2Enchant.Request
             key += ParameterValueName + ":";
             key += ParameterCount + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

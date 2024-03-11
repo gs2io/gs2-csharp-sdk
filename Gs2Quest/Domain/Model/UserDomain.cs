@@ -83,13 +83,15 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Quest.Model.Progress> Progresses(
+            string timeOffsetToken = null
         )
         {
             return new DescribeProgressesByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -100,13 +102,15 @@ namespace Gs2.Gs2Quest.Domain.Model
             #else
         public DescribeProgressesByUserIdIterator ProgressesAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeProgressesByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -166,13 +170,15 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
+            string timeOffsetToken = null
         )
         {
             return new DescribeCompletedQuestListsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -183,13 +189,15 @@ namespace Gs2.Gs2Quest.Domain.Model
             #else
         public DescribeCompletedQuestListsByUserIdIterator CompletedQuestListsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeCompletedQuestListsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

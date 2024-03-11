@@ -38,6 +38,7 @@ namespace Gs2.Gs2Lock.Request
          public string UserId { set; get; }
          public string TransactionId { set; get; }
          public long? Ttl { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public LockByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Lock.Request
             this.Ttl = ttl;
             return this;
         }
+        public LockByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public LockByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Lock.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (long?)(data["ttl"].ToString().Contains(".") ? (long)double.Parse(data["ttl"].ToString()) : long.Parse(data["ttl"].ToString())));
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (long?)(data["ttl"].ToString().Contains(".") ? (long)double.Parse(data["ttl"].ToString()) : long.Parse(data["ttl"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Lock.Request
                 ["userId"] = UserId,
                 ["transactionId"] = TransactionId,
                 ["ttl"] = Ttl,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2Lock.Request
                 writer.WritePropertyName("ttl");
                 writer.Write((Ttl.ToString().Contains(".") ? (long)double.Parse(Ttl.ToString()) : long.Parse(Ttl.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -125,6 +136,7 @@ namespace Gs2.Gs2Lock.Request
             key += UserId + ":";
             key += TransactionId + ":";
             key += Ttl + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

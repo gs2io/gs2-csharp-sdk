@@ -40,6 +40,7 @@ namespace Gs2.Gs2Inventory.Request
          public string ItemSetName { set; get; }
          public string ReferenceOf { set; get; }
          public string VerifyType { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyReferenceOfByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Inventory.Request
             this.VerifyType = verifyType;
             return this;
         }
+        public VerifyReferenceOfByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public VerifyReferenceOfByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -90,7 +95,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString())
                 .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? null : data["referenceOf"].ToString())
-                .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString());
+                .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -103,6 +109,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["itemSetName"] = ItemSetName,
                 ["referenceOf"] = ReferenceOf,
                 ["verifyType"] = VerifyType,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -137,6 +144,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("verifyType");
                 writer.Write(VerifyType.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -148,6 +159,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemName + ":";
             key += ItemSetName + ":";
             key += VerifyType + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

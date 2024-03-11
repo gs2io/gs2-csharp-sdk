@@ -36,6 +36,7 @@ namespace Gs2.Gs2Schedule.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string TriggerName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetTriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Schedule.Request
         }
         public GetTriggerByUserIdRequest WithTriggerName(string triggerName) {
             this.TriggerName = triggerName;
+            return this;
+        }
+        public GetTriggerByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Schedule.Request
             return new GetTriggerByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString());
+                .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Schedule.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["triggerName"] = TriggerName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("triggerName");
                 writer.Write(TriggerName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Schedule.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += TriggerName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

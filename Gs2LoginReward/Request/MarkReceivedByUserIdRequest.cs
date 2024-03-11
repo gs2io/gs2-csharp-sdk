@@ -37,6 +37,7 @@ namespace Gs2.Gs2LoginReward.Request
          public string BonusModelName { set; get; }
          public string UserId { set; get; }
          public int? StepNumber { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public MarkReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2LoginReward.Request
         }
         public MarkReceivedByUserIdRequest WithStepNumber(int? stepNumber) {
             this.StepNumber = stepNumber;
+            return this;
+        }
+        public MarkReceivedByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2LoginReward.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithBonusModelName(!data.Keys.Contains("bonusModelName") || data["bonusModelName"] == null ? null : data["bonusModelName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : (int?)(data["stepNumber"].ToString().Contains(".") ? (int)double.Parse(data["stepNumber"].ToString()) : int.Parse(data["stepNumber"].ToString())));
+                .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : (int?)(data["stepNumber"].ToString().Contains(".") ? (int)double.Parse(data["stepNumber"].ToString()) : int.Parse(data["stepNumber"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2LoginReward.Request
                 ["bonusModelName"] = BonusModelName,
                 ["userId"] = UserId,
                 ["stepNumber"] = StepNumber,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2LoginReward.Request
                 writer.WritePropertyName("stepNumber");
                 writer.Write((StepNumber.ToString().Contains(".") ? (int)double.Parse(StepNumber.ToString()) : int.Parse(StepNumber.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -113,6 +124,7 @@ namespace Gs2.Gs2LoginReward.Request
             key += BonusModelName + ":";
             key += UserId + ":";
             key += StepNumber + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

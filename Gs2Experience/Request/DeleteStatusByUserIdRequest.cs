@@ -37,6 +37,7 @@ namespace Gs2.Gs2Experience.Request
          public string UserId { set; get; }
          public string ExperienceName { set; get; }
          public string PropertyId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Experience.Request
         }
         public DeleteStatusByUserIdRequest WithPropertyId(string propertyId) {
             this.PropertyId = propertyId;
+            return this;
+        }
+        public DeleteStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Experience.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
-                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString());
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Experience.Request
                 ["userId"] = UserId,
                 ["experienceName"] = ExperienceName,
                 ["propertyId"] = PropertyId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Experience.Request
                 writer.WritePropertyName("propertyId");
                 writer.Write(PropertyId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -113,6 +124,7 @@ namespace Gs2.Gs2Experience.Request
             key += UserId + ":";
             key += ExperienceName + ":";
             key += PropertyId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -71,6 +71,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         public string NamespaceName { get; }
         public string UserId { get; }
         public bool? WithProfile { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -83,13 +84,15 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             Gs2FriendRestClient client,
             string namespaceName,
             string userId,
-            bool? withProfile = null
+            bool? withProfile = null,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.WithProfile = withProfile;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Friend.Model.FriendUser[]{};

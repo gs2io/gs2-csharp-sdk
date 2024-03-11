@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inventory.Request
          public string ItemName { set; get; }
          public string ItemSetName { set; get; }
          public string ReferenceOf { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetReferenceOfByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Inventory.Request
             this.ReferenceOf = referenceOf;
             return this;
         }
+        public GetReferenceOfByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString())
-                .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? null : data["referenceOf"].ToString());
+                .WithReferenceOf(!data.Keys.Contains("referenceOf") || data["referenceOf"] == null ? null : data["referenceOf"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -90,6 +96,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["itemName"] = ItemName,
                 ["itemSetName"] = ItemSetName,
                 ["referenceOf"] = ReferenceOf,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -120,6 +127,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("referenceOf");
                 writer.Write(ReferenceOf.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ItemName + ":";
             key += ItemSetName + ":";
             key += ReferenceOf + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

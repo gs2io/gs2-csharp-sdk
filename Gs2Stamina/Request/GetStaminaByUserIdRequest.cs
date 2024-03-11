@@ -36,6 +36,7 @@ namespace Gs2.Gs2Stamina.Request
          public string NamespaceName { set; get; }
          public string StaminaName { set; get; }
          public string UserId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetStaminaByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Stamina.Request
         }
         public GetStaminaByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public GetStaminaByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Stamina.Request
             return new GetStaminaByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Stamina.Request
                 ["namespaceName"] = NamespaceName,
                 ["staminaName"] = StaminaName,
                 ["userId"] = UserId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Stamina.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Stamina.Request
             key += NamespaceName + ":";
             key += StaminaName + ":";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

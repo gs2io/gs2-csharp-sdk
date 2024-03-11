@@ -41,6 +41,7 @@ namespace Gs2.Gs2Matchmaking.Request
          public string[] AllowUserIds { set; get; }
          public long? ExpiresAt { set; get; }
          public Gs2.Gs2Matchmaking.Model.TimeSpan_ ExpiresAtTimeSpan { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CreateGatheringByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -74,6 +75,10 @@ namespace Gs2.Gs2Matchmaking.Request
             this.ExpiresAtTimeSpan = expiresAtTimeSpan;
             return this;
         }
+        public CreateGatheringByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public CreateGatheringByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -102,7 +107,8 @@ namespace Gs2.Gs2Matchmaking.Request
                     return v.ToString();
                 }).ToArray())
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
-                .WithExpiresAtTimeSpan(!data.Keys.Contains("expiresAtTimeSpan") || data["expiresAtTimeSpan"] == null ? null : Gs2.Gs2Matchmaking.Model.TimeSpan_.FromJson(data["expiresAtTimeSpan"]));
+                .WithExpiresAtTimeSpan(!data.Keys.Contains("expiresAtTimeSpan") || data["expiresAtTimeSpan"] == null ? null : Gs2.Gs2Matchmaking.Model.TimeSpan_.FromJson(data["expiresAtTimeSpan"]))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -143,6 +149,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["allowUserIds"] = allowUserIdsJsonData,
                 ["expiresAt"] = ExpiresAt,
                 ["expiresAtTimeSpan"] = ExpiresAtTimeSpan?.ToJson(),
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -198,6 +205,10 @@ namespace Gs2.Gs2Matchmaking.Request
             if (ExpiresAtTimeSpan != null) {
                 ExpiresAtTimeSpan.WriteJson(writer);
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -211,6 +222,7 @@ namespace Gs2.Gs2Matchmaking.Request
             key += AllowUserIds + ":";
             key += ExpiresAt + ":";
             key += ExpiresAtTimeSpan + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

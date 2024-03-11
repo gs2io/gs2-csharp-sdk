@@ -38,6 +38,7 @@ namespace Gs2.Gs2Datastore.Request
          public string UserId { set; get; }
          public string Scope { set; get; }
          public string[] AllowUserIds { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public UpdateDataObjectByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Datastore.Request
         }
         public UpdateDataObjectByUserIdRequest WithAllowUserIds(string[] allowUserIds) {
             this.AllowUserIds = allowUserIds;
+            return this;
+        }
+        public UpdateDataObjectByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -80,7 +85,8 @@ namespace Gs2.Gs2Datastore.Request
                 .WithScope(!data.Keys.Contains("scope") || data["scope"] == null ? null : data["scope"].ToString())
                 .WithAllowUserIds(!data.Keys.Contains("allowUserIds") || data["allowUserIds"] == null || !data["allowUserIds"].IsArray ? new string[]{} : data["allowUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -100,6 +106,7 @@ namespace Gs2.Gs2Datastore.Request
                 ["userId"] = UserId,
                 ["scope"] = Scope,
                 ["allowUserIds"] = allowUserIdsJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -131,6 +138,10 @@ namespace Gs2.Gs2Datastore.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -141,6 +152,7 @@ namespace Gs2.Gs2Datastore.Request
             key += UserId + ":";
             key += Scope + ":";
             key += AllowUserIds + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

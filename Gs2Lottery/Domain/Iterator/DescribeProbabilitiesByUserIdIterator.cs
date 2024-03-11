@@ -73,6 +73,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         public string NamespaceName { get; }
         public string LotteryName { get; }
         public string UserId { get; }
+        public string TimeOffsetToken { get; }
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Lottery.Model.Probability[] _result;
@@ -84,13 +85,15 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
             Gs2LotteryRestClient client,
             string namespaceName,
             string lotteryName,
-            string userId
+            string userId,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.LotteryName = lotteryName;
             this.UserId = userId;
+            this.TimeOffsetToken = timeOffsetToken;
             this._last = false;
             this._result = new Gs2.Gs2Lottery.Model.Probability[]{};
 
@@ -114,7 +117,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                     (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                         NamespaceName,
                         UserId,
-                        this.LotteryName
+                        LotteryName
                     ),
                     out var list
             )) {
@@ -150,7 +153,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                         this._cache,
                         NamespaceName,
                         UserId,
-                        this.LotteryName,
+                        LotteryName,
                         item.Prize.PrizeId
                     );
                 }
@@ -160,7 +163,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
                         (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            this.LotteryName
+                            LotteryName
                         )
                     );
                 }

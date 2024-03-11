@@ -36,6 +36,7 @@ namespace Gs2.Gs2JobQueue.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public Gs2.Gs2JobQueue.Model.JobEntry[] Jobs { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public PushByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2JobQueue.Request
         }
         public PushByUserIdRequest WithJobs(Gs2.Gs2JobQueue.Model.JobEntry[] jobs) {
             this.Jobs = jobs;
+            return this;
+        }
+        public PushByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -68,7 +73,8 @@ namespace Gs2.Gs2JobQueue.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithJobs(!data.Keys.Contains("jobs") || data["jobs"] == null || !data["jobs"].IsArray ? new Gs2.Gs2JobQueue.Model.JobEntry[]{} : data["jobs"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.JobEntry.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -86,6 +92,7 @@ namespace Gs2.Gs2JobQueue.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["jobs"] = jobsJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -111,6 +118,10 @@ namespace Gs2.Gs2JobQueue.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -119,6 +130,7 @@ namespace Gs2.Gs2JobQueue.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Jobs + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

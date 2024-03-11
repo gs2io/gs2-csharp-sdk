@@ -37,6 +37,7 @@ namespace Gs2.Gs2JobQueue.Request
          public string UserId { set; get; }
          public string JobName { set; get; }
          public int? TryNumber { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetJobResultByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2JobQueue.Request
             this.TryNumber = tryNumber;
             return this;
         }
+        public GetJobResultByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2JobQueue.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString())
-                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)(data["tryNumber"].ToString().Contains(".") ? (int)double.Parse(data["tryNumber"].ToString()) : int.Parse(data["tryNumber"].ToString())));
+                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)(data["tryNumber"].ToString().Contains(".") ? (int)double.Parse(data["tryNumber"].ToString()) : int.Parse(data["tryNumber"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2JobQueue.Request
                 ["userId"] = UserId,
                 ["jobName"] = JobName,
                 ["tryNumber"] = TryNumber,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -98,6 +105,10 @@ namespace Gs2.Gs2JobQueue.Request
                 writer.WritePropertyName("tryNumber");
                 writer.Write((TryNumber.ToString().Contains(".") ? (int)double.Parse(TryNumber.ToString()) : int.Parse(TryNumber.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -107,6 +118,7 @@ namespace Gs2.Gs2JobQueue.Request
             key += UserId + ":";
             key += JobName + ":";
             key += TryNumber + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

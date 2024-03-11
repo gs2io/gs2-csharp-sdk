@@ -36,6 +36,7 @@ namespace Gs2.Gs2Account.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public int? Type { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetTakeOverByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Account.Request
         }
         public GetTakeOverByUserIdRequest WithType(int? type) {
             this.Type = type;
+            return this;
+        }
+        public GetTakeOverByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Account.Request
             return new GetTakeOverByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())));
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Account.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["type"] = Type,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("type");
                 writer.Write((Type.ToString().Contains(".") ? (int)double.Parse(Type.ToString()) : int.Parse(Type.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Account.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Type + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

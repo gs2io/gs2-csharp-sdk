@@ -36,6 +36,7 @@ namespace Gs2.Gs2Inbox.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string[] ReceivedGlobalMessageNames { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public UpdateReceivedByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Inbox.Request
         }
         public UpdateReceivedByUserIdRequest WithReceivedGlobalMessageNames(string[] receivedGlobalMessageNames) {
             this.ReceivedGlobalMessageNames = receivedGlobalMessageNames;
+            return this;
+        }
+        public UpdateReceivedByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -68,7 +73,8 @@ namespace Gs2.Gs2Inbox.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithReceivedGlobalMessageNames(!data.Keys.Contains("receivedGlobalMessageNames") || data["receivedGlobalMessageNames"] == null || !data["receivedGlobalMessageNames"].IsArray ? new string[]{} : data["receivedGlobalMessageNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -86,6 +92,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["receivedGlobalMessageNames"] = receivedGlobalMessageNamesJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -109,6 +116,10 @@ namespace Gs2.Gs2Inbox.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -117,6 +128,7 @@ namespace Gs2.Gs2Inbox.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += ReceivedGlobalMessageNames + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

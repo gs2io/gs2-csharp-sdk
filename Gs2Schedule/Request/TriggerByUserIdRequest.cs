@@ -38,6 +38,7 @@ namespace Gs2.Gs2Schedule.Request
          public string UserId { set; get; }
          public string TriggerStrategy { set; get; }
          public int? Ttl { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public TriggerByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Schedule.Request
             this.Ttl = ttl;
             return this;
         }
+        public TriggerByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public TriggerByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Schedule.Request
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTriggerStrategy(!data.Keys.Contains("triggerStrategy") || data["triggerStrategy"] == null ? null : data["triggerStrategy"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)(data["ttl"].ToString().Contains(".") ? (int)double.Parse(data["ttl"].ToString()) : int.Parse(data["ttl"].ToString())));
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)(data["ttl"].ToString().Contains(".") ? (int)double.Parse(data["ttl"].ToString()) : int.Parse(data["ttl"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Schedule.Request
                 ["userId"] = UserId,
                 ["triggerStrategy"] = TriggerStrategy,
                 ["ttl"] = Ttl,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2Schedule.Request
                 writer.WritePropertyName("ttl");
                 writer.Write((Ttl.ToString().Contains(".") ? (int)double.Parse(Ttl.ToString()) : int.Parse(Ttl.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -125,6 +136,7 @@ namespace Gs2.Gs2Schedule.Request
             key += UserId + ":";
             key += TriggerStrategy + ":";
             key += Ttl + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

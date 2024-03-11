@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inbox.Request
          public Gs2.Core.Model.AcquireAction[] ReadAcquireActions { set; get; }
          public long? ExpiresAt { set; get; }
          public Gs2.Gs2Inbox.Model.TimeSpan_ ExpiresTimeSpan { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SendMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Inbox.Request
             this.ExpiresTimeSpan = expiresTimeSpan;
             return this;
         }
+        public SendMessageByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public SendMessageByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -86,7 +91,8 @@ namespace Gs2.Gs2Inbox.Request
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
-                .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]));
+                .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresAt"] = ExpiresAt,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -143,6 +150,10 @@ namespace Gs2.Gs2Inbox.Request
             if (ExpiresTimeSpan != null) {
                 ExpiresTimeSpan.WriteJson(writer);
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -154,6 +165,7 @@ namespace Gs2.Gs2Inbox.Request
             key += ReadAcquireActions + ":";
             key += ExpiresAt + ":";
             key += ExpiresTimeSpan + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

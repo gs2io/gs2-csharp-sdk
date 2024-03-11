@@ -41,6 +41,7 @@ namespace Gs2.Gs2Inventory.Request
          public long? ExpiresAt { set; get; }
          public bool? CreateNewItemSet { set; get; }
          public string ItemSetName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public AcquireItemSetByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -74,6 +75,10 @@ namespace Gs2.Gs2Inventory.Request
             this.ItemSetName = itemSetName;
             return this;
         }
+        public AcquireItemSetByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public AcquireItemSetByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -96,7 +101,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithAcquireCount(!data.Keys.Contains("acquireCount") || data["acquireCount"] == null ? null : (long?)(data["acquireCount"].ToString().Contains(".") ? (long)double.Parse(data["acquireCount"].ToString()) : long.Parse(data["acquireCount"].ToString())))
                 .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
                 .WithCreateNewItemSet(!data.Keys.Contains("createNewItemSet") || data["createNewItemSet"] == null ? null : (bool?)bool.Parse(data["createNewItemSet"].ToString()))
-                .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString());
+                .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -110,6 +116,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["expiresAt"] = ExpiresAt,
                 ["createNewItemSet"] = CreateNewItemSet,
                 ["itemSetName"] = ItemSetName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -148,6 +155,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("itemSetName");
                 writer.Write(ItemSetName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -160,6 +171,7 @@ namespace Gs2.Gs2Inventory.Request
             key += ExpiresAt + ":";
             key += CreateNewItemSet + ":";
             key += ItemSetName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

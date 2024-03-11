@@ -37,6 +37,7 @@ namespace Gs2.Gs2Chat.Request
          public string RoomName { set; get; }
          public string UserId { set; get; }
          public Gs2.Gs2Chat.Model.NotificationType[] NotificationTypes { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Chat.Request
         }
         public SubscribeByUserIdRequest WithNotificationTypes(Gs2.Gs2Chat.Model.NotificationType[] notificationTypes) {
             this.NotificationTypes = notificationTypes;
+            return this;
+        }
+        public SubscribeByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -74,7 +79,8 @@ namespace Gs2.Gs2Chat.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithNotificationTypes(!data.Keys.Contains("notificationTypes") || data["notificationTypes"] == null || !data["notificationTypes"].IsArray ? new Gs2.Gs2Chat.Model.NotificationType[]{} : data["notificationTypes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Chat.Model.NotificationType.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -93,6 +99,7 @@ namespace Gs2.Gs2Chat.Request
                 ["roomName"] = RoomName,
                 ["userId"] = UserId,
                 ["notificationTypes"] = notificationTypesJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -122,6 +129,10 @@ namespace Gs2.Gs2Chat.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Chat.Request
             key += RoomName + ":";
             key += UserId + ":";
             key += NotificationTypes + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Enchant.Request
          public string UserId { set; get; }
          public string ParameterName { set; get; }
          public string PropertyId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Enchant.Request
             this.PropertyId = propertyId;
             return this;
         }
+        public GetRarityParameterStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Enchant.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithParameterName(!data.Keys.Contains("parameterName") || data["parameterName"] == null ? null : data["parameterName"].ToString())
-                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString());
+                .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Enchant.Request
                 ["userId"] = UserId,
                 ["parameterName"] = ParameterName,
                 ["propertyId"] = PropertyId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -98,6 +105,10 @@ namespace Gs2.Gs2Enchant.Request
                 writer.WritePropertyName("propertyId");
                 writer.Write(PropertyId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -107,6 +118,7 @@ namespace Gs2.Gs2Enchant.Request
             key += UserId + ":";
             key += ParameterName + ":";
             key += PropertyId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

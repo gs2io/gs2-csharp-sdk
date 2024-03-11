@@ -38,6 +38,7 @@ namespace Gs2.Gs2Chat.Request
          public string MessageName { set; get; }
          public string Password { set; get; }
          public string UserId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetMessageByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -58,6 +59,10 @@ namespace Gs2.Gs2Chat.Request
             this.UserId = userId;
             return this;
         }
+        public GetMessageByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Chat.Request
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -83,6 +89,7 @@ namespace Gs2.Gs2Chat.Request
                 ["messageName"] = MessageName,
                 ["password"] = Password,
                 ["userId"] = UserId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -109,6 +116,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -119,6 +130,7 @@ namespace Gs2.Gs2Chat.Request
             key += MessageName + ":";
             key += Password + ":";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

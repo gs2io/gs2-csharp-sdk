@@ -38,6 +38,7 @@ namespace Gs2.Gs2Quest.Request
          public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
          public bool? IsComplete { set; get; }
          public Gs2.Gs2Quest.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public EndByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Quest.Request
         }
         public EndByUserIdRequest WithConfig(Gs2.Gs2Quest.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public EndByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -82,7 +87,8 @@ namespace Gs2.Gs2Quest.Request
                 .WithIsComplete(!data.Keys.Contains("isComplete") || data["isComplete"] == null ? null : (bool?)bool.Parse(data["isComplete"].ToString()))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Quest.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -111,6 +117,7 @@ namespace Gs2.Gs2Quest.Request
                 ["rewards"] = rewardsJsonData,
                 ["isComplete"] = IsComplete,
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -151,6 +158,10 @@ namespace Gs2.Gs2Quest.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -161,6 +172,7 @@ namespace Gs2.Gs2Quest.Request
             key += Rewards + ":";
             key += IsComplete + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

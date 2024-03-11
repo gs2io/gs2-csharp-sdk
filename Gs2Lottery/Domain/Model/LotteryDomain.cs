@@ -85,6 +85,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> Probabilities(
+            string timeOffsetToken = null
         )
         {
             return new DescribeProbabilitiesByUserIdIterator(
@@ -92,7 +93,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.LotteryName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -103,6 +105,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
             #else
         public DescribeProbabilitiesByUserIdIterator ProbabilitiesAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeProbabilitiesByUserIdIterator(
@@ -110,7 +113,8 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.LotteryName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

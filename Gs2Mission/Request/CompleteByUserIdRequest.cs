@@ -38,6 +38,7 @@ namespace Gs2.Gs2Mission.Request
          public string MissionTaskName { set; get; }
          public string UserId { set; get; }
          public Gs2.Gs2Mission.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Mission.Request
         }
         public CompleteByUserIdRequest WithConfig(Gs2.Gs2Mission.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public CompleteByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -80,7 +85,8 @@ namespace Gs2.Gs2Mission.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Mission.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Mission.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -100,6 +106,7 @@ namespace Gs2.Gs2Mission.Request
                 ["missionTaskName"] = MissionTaskName,
                 ["userId"] = UserId,
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -133,6 +140,10 @@ namespace Gs2.Gs2Mission.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -143,6 +154,7 @@ namespace Gs2.Gs2Mission.Request
             key += MissionTaskName + ":";
             key += UserId + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

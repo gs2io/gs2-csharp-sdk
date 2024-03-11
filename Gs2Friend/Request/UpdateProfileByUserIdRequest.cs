@@ -38,6 +38,7 @@ namespace Gs2.Gs2Friend.Request
          public string PublicProfile { set; get; }
          public string FollowerProfile { set; get; }
          public string FriendProfile { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public UpdateProfileByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Friend.Request
             this.FriendProfile = friendProfile;
             return this;
         }
+        public UpdateProfileByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public UpdateProfileByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Friend.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPublicProfile(!data.Keys.Contains("publicProfile") || data["publicProfile"] == null ? null : data["publicProfile"].ToString())
                 .WithFollowerProfile(!data.Keys.Contains("followerProfile") || data["followerProfile"] == null ? null : data["followerProfile"].ToString())
-                .WithFriendProfile(!data.Keys.Contains("friendProfile") || data["friendProfile"] == null ? null : data["friendProfile"].ToString());
+                .WithFriendProfile(!data.Keys.Contains("friendProfile") || data["friendProfile"] == null ? null : data["friendProfile"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Friend.Request
                 ["publicProfile"] = PublicProfile,
                 ["followerProfile"] = FollowerProfile,
                 ["friendProfile"] = FriendProfile,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2Friend.Request
                 writer.WritePropertyName("friendProfile");
                 writer.Write(FriendProfile.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -125,6 +136,7 @@ namespace Gs2.Gs2Friend.Request
             key += PublicProfile + ":";
             key += FollowerProfile + ":";
             key += FriendProfile + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

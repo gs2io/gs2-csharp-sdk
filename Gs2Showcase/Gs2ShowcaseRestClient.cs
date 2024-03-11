@@ -801,6 +801,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -908,6 +912,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -1030,6 +1038,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -1137,6 +1149,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -1258,6 +1274,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -1385,6 +1405,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -1493,6 +1517,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -3989,6 +4017,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -4203,6 +4235,10 @@ namespace Gs2.Gs2Showcase
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -4484,6 +4520,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -5254,6 +5294,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -5382,6 +5426,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -5743,6 +5791,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -6083,6 +6135,10 @@ namespace Gs2.Gs2Showcase
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -6299,6 +6355,10 @@ namespace Gs2.Gs2Showcase
                 if (request.RequestId != null)
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -6580,6 +6640,10 @@ namespace Gs2.Gs2Showcase
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(

@@ -38,6 +38,7 @@ namespace Gs2.Gs2LoginReward.Request
          public string UserId { set; get; }
          public int? StepNumber { set; get; }
          public Gs2.Gs2LoginReward.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public MissedReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2LoginReward.Request
         }
         public MissedReceiveByUserIdRequest WithConfig(Gs2.Gs2LoginReward.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public MissedReceiveByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -80,7 +85,8 @@ namespace Gs2.Gs2LoginReward.Request
                 .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : (int?)(data["stepNumber"].ToString().Contains(".") ? (int)double.Parse(data["stepNumber"].ToString()) : int.Parse(data["stepNumber"].ToString())))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2LoginReward.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2LoginReward.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -100,6 +106,7 @@ namespace Gs2.Gs2LoginReward.Request
                 ["userId"] = UserId,
                 ["stepNumber"] = StepNumber,
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -133,6 +140,10 @@ namespace Gs2.Gs2LoginReward.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -143,6 +154,7 @@ namespace Gs2.Gs2LoginReward.Request
             key += UserId + ":";
             key += StepNumber + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

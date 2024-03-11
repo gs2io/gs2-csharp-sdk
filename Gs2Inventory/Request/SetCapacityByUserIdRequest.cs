@@ -37,6 +37,7 @@ namespace Gs2.Gs2Inventory.Request
          public string InventoryName { set; get; }
          public string UserId { set; get; }
          public int? NewCapacityValue { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SetCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Inventory.Request
         }
         public SetCapacityByUserIdRequest WithNewCapacityValue(int? newCapacityValue) {
             this.NewCapacityValue = newCapacityValue;
+            return this;
+        }
+        public SetCapacityByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithNewCapacityValue(!data.Keys.Contains("newCapacityValue") || data["newCapacityValue"] == null ? null : (int?)(data["newCapacityValue"].ToString().Contains(".") ? (int)double.Parse(data["newCapacityValue"].ToString()) : int.Parse(data["newCapacityValue"].ToString())));
+                .WithNewCapacityValue(!data.Keys.Contains("newCapacityValue") || data["newCapacityValue"] == null ? null : (int?)(data["newCapacityValue"].ToString().Contains(".") ? (int)double.Parse(data["newCapacityValue"].ToString()) : int.Parse(data["newCapacityValue"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["inventoryName"] = InventoryName,
                 ["userId"] = UserId,
                 ["newCapacityValue"] = NewCapacityValue,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("newCapacityValue");
                 writer.Write((NewCapacityValue.ToString().Contains(".") ? (int)double.Parse(NewCapacityValue.ToString()) : int.Parse(NewCapacityValue.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -112,6 +123,7 @@ namespace Gs2.Gs2Inventory.Request
             key += NamespaceName + ":";
             key += InventoryName + ":";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

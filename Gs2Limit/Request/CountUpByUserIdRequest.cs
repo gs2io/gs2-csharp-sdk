@@ -39,6 +39,7 @@ namespace Gs2.Gs2Limit.Request
          public string UserId { set; get; }
          public int? CountUpValue { set; get; }
          public int? MaxValue { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CountUpByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Limit.Request
             this.MaxValue = maxValue;
             return this;
         }
+        public CountUpByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public CountUpByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Limit.Request
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCountUpValue(!data.Keys.Contains("countUpValue") || data["countUpValue"] == null ? null : (int?)(data["countUpValue"].ToString().Contains(".") ? (int)double.Parse(data["countUpValue"].ToString()) : int.Parse(data["countUpValue"].ToString())))
-                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)(data["maxValue"].ToString().Contains(".") ? (int)double.Parse(data["maxValue"].ToString()) : int.Parse(data["maxValue"].ToString())));
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)(data["maxValue"].ToString().Contains(".") ? (int)double.Parse(data["maxValue"].ToString()) : int.Parse(data["maxValue"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Limit.Request
                 ["userId"] = UserId,
                 ["countUpValue"] = CountUpValue,
                 ["maxValue"] = MaxValue,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Limit.Request
                 writer.WritePropertyName("maxValue");
                 writer.Write((MaxValue.ToString().Contains(".") ? (int)double.Parse(MaxValue.ToString()) : int.Parse(MaxValue.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -136,6 +147,7 @@ namespace Gs2.Gs2Limit.Request
             key += CounterName + ":";
             key += UserId + ":";
             key += MaxValue + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

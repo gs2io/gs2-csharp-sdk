@@ -99,13 +99,15 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<string> BlackListUsers(
+            string timeOffsetToken = null
         )
         {
             return new DescribeBlackListByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -116,13 +118,15 @@ namespace Gs2.Gs2Friend.Domain.Model
             #else
         public DescribeBlackListByUserIdIterator BlackListUsersAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeBlackListByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -152,7 +156,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> Friends(
-            bool? withProfile = null
+            bool? withProfile = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeFriendsByUserIdIterator(
@@ -160,7 +165,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                withProfile
+                withProfile,
+                timeOffsetToken
             );
         }
         #endif
@@ -171,7 +177,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             #else
         public DescribeFriendsByUserIdIterator FriendsAsync(
             #endif
-            bool? withProfile = null
+            bool? withProfile = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeFriendsByUserIdIterator(
@@ -179,7 +186,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                withProfile
+                withProfile,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -248,13 +256,15 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> SendRequests(
+            string timeOffsetToken = null
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -265,13 +275,15 @@ namespace Gs2.Gs2Friend.Domain.Model
             #else
         public DescribeSendRequestsByUserIdIterator SendRequestsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -333,13 +345,15 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest> ReceiveRequests(
+            string timeOffsetToken = null
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -350,13 +364,15 @@ namespace Gs2.Gs2Friend.Domain.Model
             #else
         public DescribeReceiveRequestsByUserIdIterator ReceiveRequestsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

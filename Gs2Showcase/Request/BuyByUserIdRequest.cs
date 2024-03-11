@@ -39,6 +39,7 @@ namespace Gs2.Gs2Showcase.Request
          public string UserId { set; get; }
          public int? Quantity { set; get; }
          public Gs2.Gs2Showcase.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public BuyByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Showcase.Request
             this.Config = config;
             return this;
         }
+        public BuyByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public BuyByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -86,7 +91,8 @@ namespace Gs2.Gs2Showcase.Request
                 .WithQuantity(!data.Keys.Contains("quantity") || data["quantity"] == null ? null : (int?)(data["quantity"].ToString().Contains(".") ? (int)double.Parse(data["quantity"].ToString()) : int.Parse(data["quantity"].ToString())))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Showcase.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["userId"] = UserId,
                 ["quantity"] = Quantity,
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -144,6 +151,10 @@ namespace Gs2.Gs2Showcase.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -155,6 +166,7 @@ namespace Gs2.Gs2Showcase.Request
             key += UserId + ":";
             key += Quantity + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

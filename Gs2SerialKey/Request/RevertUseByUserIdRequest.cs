@@ -36,6 +36,7 @@ namespace Gs2.Gs2SerialKey.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string Code { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public RevertUseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2SerialKey.Request
         }
         public RevertUseByUserIdRequest WithCode(string code) {
             this.Code = code;
+            return this;
+        }
+        public RevertUseByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2SerialKey.Request
             return new RevertUseByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : data["code"].ToString());
+                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : data["code"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2SerialKey.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["code"] = Code,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2SerialKey.Request
                 writer.WritePropertyName("code");
                 writer.Write(Code.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2SerialKey.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Code + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Matchmaking.Request
          public string UserId { set; get; }
          public int? NumberOfPlayer { set; get; }
          public string KeyId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetBallotByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Matchmaking.Request
             this.KeyId = keyId;
             return this;
         }
+        public GetBallotByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithNumberOfPlayer(!data.Keys.Contains("numberOfPlayer") || data["numberOfPlayer"] == null ? null : (int?)(data["numberOfPlayer"].ToString().Contains(".") ? (int)double.Parse(data["numberOfPlayer"].ToString()) : int.Parse(data["numberOfPlayer"].ToString())))
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -90,6 +96,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["userId"] = UserId,
                 ["numberOfPlayer"] = NumberOfPlayer,
                 ["keyId"] = KeyId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -120,6 +127,10 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Matchmaking.Request
             key += UserId + ":";
             key += NumberOfPlayer + ":";
             key += KeyId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

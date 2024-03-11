@@ -37,6 +37,7 @@ namespace Gs2.Gs2Ranking.Request
          public string CategoryName { set; get; }
          public string UserId { set; get; }
          public string TargetUserId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetSubscribeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Ranking.Request
             this.TargetUserId = targetUserId;
             return this;
         }
+        public GetSubscribeByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Ranking.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Ranking.Request
                 ["categoryName"] = CategoryName,
                 ["userId"] = UserId,
                 ["targetUserId"] = TargetUserId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -98,6 +105,10 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("targetUserId");
                 writer.Write(TargetUserId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -107,6 +118,7 @@ namespace Gs2.Gs2Ranking.Request
             key += CategoryName + ":";
             key += UserId + ":";
             key += TargetUserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

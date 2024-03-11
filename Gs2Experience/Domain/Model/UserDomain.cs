@@ -83,7 +83,8 @@ namespace Gs2.Gs2Experience.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Experience.Model.Status> Statuses(
-            string experienceName = null
+            string experienceName = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeStatusesByUserIdIterator(
@@ -91,7 +92,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                experienceName
+                experienceName,
+                timeOffsetToken
             );
         }
         #endif
@@ -102,7 +104,8 @@ namespace Gs2.Gs2Experience.Domain.Model
             #else
         public DescribeStatusesByUserIdIterator StatusesAsync(
             #endif
-            string experienceName = null
+            string experienceName = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeStatusesByUserIdIterator(
@@ -110,7 +113,8 @@ namespace Gs2.Gs2Experience.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                experienceName
+                experienceName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

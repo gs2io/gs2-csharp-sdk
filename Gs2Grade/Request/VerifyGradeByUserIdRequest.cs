@@ -40,6 +40,7 @@ namespace Gs2.Gs2Grade.Request
          public string PropertyId { set; get; }
          public long? GradeValue { set; get; }
          public bool? MultiplyValueSpecifyingQuantity { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyGradeByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2Grade.Request
             this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
             return this;
         }
+        public VerifyGradeByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public VerifyGradeByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -90,7 +95,8 @@ namespace Gs2.Gs2Grade.Request
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithGradeValue(!data.Keys.Contains("gradeValue") || data["gradeValue"] == null ? null : (long?)(data["gradeValue"].ToString().Contains(".") ? (long)double.Parse(data["gradeValue"].ToString()) : long.Parse(data["gradeValue"].ToString())))
-                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -103,6 +109,7 @@ namespace Gs2.Gs2Grade.Request
                 ["propertyId"] = PropertyId,
                 ["gradeValue"] = GradeValue,
                 ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -137,6 +144,10 @@ namespace Gs2.Gs2Grade.Request
                 writer.WritePropertyName("multiplyValueSpecifyingQuantity");
                 writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -149,6 +160,7 @@ namespace Gs2.Gs2Grade.Request
             key += PropertyId + ":";
             key += GradeValue + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

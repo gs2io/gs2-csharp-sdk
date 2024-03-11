@@ -70,6 +70,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         private readonly Gs2DictionaryRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -81,12 +82,14 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
             CacheDatabase cache,
             Gs2DictionaryRestClient client,
             string namespaceName,
-            string userId
+            string userId,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Dictionary.Model.Entry[]{};

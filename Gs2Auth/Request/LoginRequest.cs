@@ -35,12 +35,17 @@ namespace Gs2.Gs2Auth.Request
 	{
          public string UserId { set; get; }
          public int? TimeOffset { set; get; }
+         public string TimeOffsetToken { set; get; }
         public LoginRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public LoginRequest WithTimeOffset(int? timeOffset) {
             this.TimeOffset = timeOffset;
+            return this;
+        }
+        public LoginRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -54,7 +59,8 @@ namespace Gs2.Gs2Auth.Request
             }
             return new LoginRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())));
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -62,6 +68,7 @@ namespace Gs2.Gs2Auth.Request
             return new JsonData {
                 ["userId"] = UserId,
                 ["timeOffset"] = TimeOffset,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -76,6 +83,10 @@ namespace Gs2.Gs2Auth.Request
                 writer.WritePropertyName("timeOffset");
                 writer.Write((TimeOffset.ToString().Contains(".") ? (int)double.Parse(TimeOffset.ToString()) : int.Parse(TimeOffset.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -83,6 +94,7 @@ namespace Gs2.Gs2Auth.Request
             var key = "";
             key += UserId + ":";
             key += TimeOffset + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Dictionary.Request
          public string UserId { set; get; }
          public string EntryModelName { set; get; }
          public string KeyId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetEntryWithSignatureByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Dictionary.Request
             this.KeyId = keyId;
             return this;
         }
+        public GetEntryWithSignatureByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Dictionary.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithEntryModelName(!data.Keys.Contains("entryModelName") || data["entryModelName"] == null ? null : data["entryModelName"].ToString())
-                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString());
+                .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Dictionary.Request
                 ["userId"] = UserId,
                 ["entryModelName"] = EntryModelName,
                 ["keyId"] = KeyId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -98,6 +105,10 @@ namespace Gs2.Gs2Dictionary.Request
                 writer.WritePropertyName("keyId");
                 writer.Write(KeyId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -107,6 +118,7 @@ namespace Gs2.Gs2Dictionary.Request
             key += UserId + ":";
             key += EntryModelName + ":";
             key += KeyId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

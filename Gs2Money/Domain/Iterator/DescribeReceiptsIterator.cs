@@ -73,6 +73,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         public int? Slot { get; }
         public long? Begin { get; }
         public long? End { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -87,7 +88,8 @@ namespace Gs2.Gs2Money.Domain.Iterator
             string userId,
             int? slot = null,
             long? begin = null,
-            long? end = null
+            long? end = null,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
@@ -96,6 +98,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
             this.Slot = slot;
             this.Begin = begin;
             this.End = end;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Money.Model.Receipt[]{};

@@ -35,12 +35,17 @@ namespace Gs2.Gs2Distributor.Request
 	{
          public string UserId { set; get; }
          public Gs2.Gs2Distributor.Model.DistributeResource DistributeResource { set; get; }
+         public string TimeOffsetToken { set; get; }
         public DistributeWithoutOverflowProcessRequest WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public DistributeWithoutOverflowProcessRequest WithDistributeResource(Gs2.Gs2Distributor.Model.DistributeResource distributeResource) {
             this.DistributeResource = distributeResource;
+            return this;
+        }
+        public DistributeWithoutOverflowProcessRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -54,7 +59,8 @@ namespace Gs2.Gs2Distributor.Request
             }
             return new DistributeWithoutOverflowProcessRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]));
+                .WithDistributeResource(!data.Keys.Contains("distributeResource") || data["distributeResource"] == null ? null : Gs2.Gs2Distributor.Model.DistributeResource.FromJson(data["distributeResource"]))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -62,6 +68,7 @@ namespace Gs2.Gs2Distributor.Request
             return new JsonData {
                 ["userId"] = UserId,
                 ["distributeResource"] = DistributeResource?.ToJson(),
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -75,6 +82,10 @@ namespace Gs2.Gs2Distributor.Request
             if (DistributeResource != null) {
                 DistributeResource.WriteJson(writer);
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -82,6 +93,7 @@ namespace Gs2.Gs2Distributor.Request
             var key = "";
             key += UserId + ":";
             key += DistributeResource + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

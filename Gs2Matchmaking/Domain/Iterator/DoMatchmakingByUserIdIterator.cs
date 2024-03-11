@@ -71,6 +71,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         public string NamespaceName { get; }
         public string UserId { get; }
         public Gs2.Gs2Matchmaking.Model.Player Player { get; }
+        public string TimeOffsetToken { get; }
         private string _matchmakingContextToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -83,13 +84,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
             Gs2MatchmakingRestClient client,
             string namespaceName,
             string userId,
-            Gs2.Gs2Matchmaking.Model.Player player
+            Gs2.Gs2Matchmaking.Model.Player player,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.Player = player;
+            this.TimeOffsetToken = timeOffsetToken;
             this._matchmakingContextToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Matchmaking.Model.Gathering[]{};

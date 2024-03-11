@@ -37,6 +37,7 @@ namespace Gs2.Gs2Inventory.Request
          public string InventoryName { set; get; }
          public string UserId { set; get; }
          public Gs2.Gs2Inventory.Model.ConsumeCount[] ConsumeCounts { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public ConsumeSimpleItemsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Inventory.Request
         }
         public ConsumeSimpleItemsByUserIdRequest WithConsumeCounts(Gs2.Gs2Inventory.Model.ConsumeCount[] consumeCounts) {
             this.ConsumeCounts = consumeCounts;
+            return this;
+        }
+        public ConsumeSimpleItemsByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -74,7 +79,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithConsumeCounts(!data.Keys.Contains("consumeCounts") || data["consumeCounts"] == null || !data["consumeCounts"].IsArray ? new Gs2.Gs2Inventory.Model.ConsumeCount[]{} : data["consumeCounts"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.ConsumeCount.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -93,6 +99,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["inventoryName"] = InventoryName,
                 ["userId"] = UserId,
                 ["consumeCounts"] = consumeCountsJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -122,6 +129,10 @@ namespace Gs2.Gs2Inventory.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += UserId + ":";
             key += ConsumeCounts + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

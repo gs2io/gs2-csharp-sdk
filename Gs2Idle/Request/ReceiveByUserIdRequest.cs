@@ -37,6 +37,7 @@ namespace Gs2.Gs2Idle.Request
          public string UserId { set; get; }
          public string CategoryName { set; get; }
          public Gs2.Gs2Idle.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public ReceiveByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Idle.Request
         }
         public ReceiveByUserIdRequest WithConfig(Gs2.Gs2Idle.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public ReceiveByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -74,7 +79,8 @@ namespace Gs2.Gs2Idle.Request
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Idle.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Idle.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -93,6 +99,7 @@ namespace Gs2.Gs2Idle.Request
                 ["userId"] = UserId,
                 ["categoryName"] = CategoryName,
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -122,6 +129,10 @@ namespace Gs2.Gs2Idle.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Idle.Request
             key += UserId + ":";
             key += CategoryName + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

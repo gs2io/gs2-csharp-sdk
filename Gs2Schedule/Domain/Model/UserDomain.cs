@@ -81,13 +81,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Schedule.Model.Trigger> Triggers(
+            string timeOffsetToken = null
         )
         {
             return new DescribeTriggersByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -98,13 +100,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
             #else
         public DescribeTriggersByUserIdIterator TriggersAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeTriggersByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -166,13 +170,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Schedule.Model.Event> Events(
+            string timeOffsetToken = null
         )
         {
             return new DescribeEventsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -183,13 +189,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
             #else
         public DescribeEventsByUserIdIterator EventsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeEventsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

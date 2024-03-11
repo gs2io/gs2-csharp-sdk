@@ -71,6 +71,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         public string NamespaceName { get; }
         public string CategoryName { get; }
         public string UserId { get; }
+        public string TimeOffsetToken { get; }
         private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Ranking.Model.SubscribeUser[] _result;
@@ -82,13 +83,15 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             Gs2RankingRestClient client,
             string namespaceName,
             string categoryName,
-            string userId
+            string userId,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.CategoryName = categoryName;
             this.UserId = userId;
+            this.TimeOffsetToken = timeOffsetToken;
             this._last = false;
             this._result = new Gs2.Gs2Ranking.Model.SubscribeUser[]{};
 

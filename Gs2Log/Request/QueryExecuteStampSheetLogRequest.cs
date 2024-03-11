@@ -43,6 +43,7 @@ namespace Gs2.Gs2Log.Request
          public bool? LongTerm { set; get; }
          public string PageToken { set; get; }
          public int? Limit { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public QueryExecuteStampSheetLogRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -84,6 +85,10 @@ namespace Gs2.Gs2Log.Request
             this.Limit = limit;
             return this;
         }
+        public QueryExecuteStampSheetLogRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public QueryExecuteStampSheetLogRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -108,7 +113,8 @@ namespace Gs2.Gs2Log.Request
                 .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())))
                 .WithLongTerm(!data.Keys.Contains("longTerm") || data["longTerm"] == null ? null : (bool?)bool.Parse(data["longTerm"].ToString()))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -124,6 +130,7 @@ namespace Gs2.Gs2Log.Request
                 ["longTerm"] = LongTerm,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -170,6 +177,10 @@ namespace Gs2.Gs2Log.Request
                 writer.WritePropertyName("limit");
                 writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -185,6 +196,7 @@ namespace Gs2.Gs2Log.Request
             key += LongTerm + ":";
             key += PageToken + ":";
             key += Limit + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

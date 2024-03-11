@@ -36,6 +36,7 @@ namespace Gs2.Gs2Account.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string BanStatusName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public RemoveBanRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Account.Request
         }
         public RemoveBanRequest WithBanStatusName(string banStatusName) {
             this.BanStatusName = banStatusName;
+            return this;
+        }
+        public RemoveBanRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Account.Request
             return new RemoveBanRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithBanStatusName(!data.Keys.Contains("banStatusName") || data["banStatusName"] == null ? null : data["banStatusName"].ToString());
+                .WithBanStatusName(!data.Keys.Contains("banStatusName") || data["banStatusName"] == null ? null : data["banStatusName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Account.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["banStatusName"] = BanStatusName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("banStatusName");
                 writer.Write(BanStatusName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Account.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += BanStatusName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

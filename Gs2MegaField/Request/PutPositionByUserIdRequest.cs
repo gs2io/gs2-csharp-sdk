@@ -40,6 +40,7 @@ namespace Gs2.Gs2MegaField.Request
          public Gs2.Gs2MegaField.Model.Position Position { set; get; }
          public Gs2.Gs2MegaField.Model.Vector Vector { set; get; }
          public float? R { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public PutPositionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -69,6 +70,10 @@ namespace Gs2.Gs2MegaField.Request
             this.R = r;
             return this;
         }
+        public PutPositionByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public PutPositionByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -90,7 +95,8 @@ namespace Gs2.Gs2MegaField.Request
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
                 .WithPosition(!data.Keys.Contains("position") || data["position"] == null ? null : Gs2.Gs2MegaField.Model.Position.FromJson(data["position"]))
                 .WithVector(!data.Keys.Contains("vector") || data["vector"] == null ? null : Gs2.Gs2MegaField.Model.Vector.FromJson(data["vector"]))
-                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()));
+                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -103,6 +109,7 @@ namespace Gs2.Gs2MegaField.Request
                 ["position"] = Position?.ToJson(),
                 ["vector"] = Vector?.ToJson(),
                 ["r"] = R,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -135,6 +142,10 @@ namespace Gs2.Gs2MegaField.Request
                 writer.WritePropertyName("r");
                 writer.Write(float.Parse(R.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -147,6 +158,7 @@ namespace Gs2.Gs2MegaField.Request
             key += Position + ":";
             key += Vector + ":";
             key += R + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

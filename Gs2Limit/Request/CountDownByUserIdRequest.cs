@@ -38,6 +38,7 @@ namespace Gs2.Gs2Limit.Request
          public string CounterName { set; get; }
          public string UserId { set; get; }
          public int? CountDownValue { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CountDownByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2Limit.Request
             this.CountDownValue = countDownValue;
             return this;
         }
+        public CountDownByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public CountDownByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Limit.Request
                 .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCountDownValue(!data.Keys.Contains("countDownValue") || data["countDownValue"] == null ? null : (int?)(data["countDownValue"].ToString().Contains(".") ? (int)double.Parse(data["countDownValue"].ToString()) : int.Parse(data["countDownValue"].ToString())));
+                .WithCountDownValue(!data.Keys.Contains("countDownValue") || data["countDownValue"] == null ? null : (int?)(data["countDownValue"].ToString().Contains(".") ? (int)double.Parse(data["countDownValue"].ToString()) : int.Parse(data["countDownValue"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2Limit.Request
                 ["counterName"] = CounterName,
                 ["userId"] = UserId,
                 ["countDownValue"] = CountDownValue,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2Limit.Request
                 writer.WritePropertyName("countDownValue");
                 writer.Write((CountDownValue.ToString().Contains(".") ? (int)double.Parse(CountDownValue.ToString()) : int.Parse(CountDownValue.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -124,6 +135,7 @@ namespace Gs2.Gs2Limit.Request
             key += LimitName + ":";
             key += CounterName + ":";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

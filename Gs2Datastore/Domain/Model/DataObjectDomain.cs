@@ -87,6 +87,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Datastore.Model.DataObjectHistory> DataObjectHistories(
+            string timeOffsetToken = null
         )
         {
             return new DescribeDataObjectHistoriesByUserIdIterator(
@@ -94,7 +95,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                this.DataObjectName
+                this.DataObjectName,
+                timeOffsetToken
             );
         }
         #endif
@@ -105,6 +107,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
             #else
         public DescribeDataObjectHistoriesByUserIdIterator DataObjectHistoriesAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeDataObjectHistoriesByUserIdIterator(
@@ -112,7 +115,8 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                this.DataObjectName
+                this.DataObjectName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

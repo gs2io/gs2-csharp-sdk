@@ -35,6 +35,7 @@ namespace Gs2.Gs2Lottery.Request
 	{
          public string UserId { set; get; }
          public string UploadToken { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CheckImportUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
@@ -42,6 +43,10 @@ namespace Gs2.Gs2Lottery.Request
         }
         public CheckImportUserDataByUserIdRequest WithUploadToken(string uploadToken) {
             this.UploadToken = uploadToken;
+            return this;
+        }
+        public CheckImportUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Lottery.Request
             }
             return new CheckImportUserDataByUserIdRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString());
+                .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -68,6 +74,7 @@ namespace Gs2.Gs2Lottery.Request
             return new JsonData {
                 ["userId"] = UserId,
                 ["uploadToken"] = UploadToken,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -82,6 +89,10 @@ namespace Gs2.Gs2Lottery.Request
                 writer.WritePropertyName("uploadToken");
                 writer.Write(UploadToken.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -89,6 +100,7 @@ namespace Gs2.Gs2Lottery.Request
             var key = "";
             key += UserId + ":";
             key += UploadToken + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -83,6 +83,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomDisplayItem> RandomDisplayItems(
+            string timeOffsetToken = null
         )
         {
             return new DescribeRandomDisplayItemsByUserIdIterator(
@@ -90,7 +91,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.ShowcaseName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -101,6 +103,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
             #else
         public DescribeRandomDisplayItemsByUserIdIterator RandomDisplayItemsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeRandomDisplayItemsByUserIdIterator(
@@ -108,7 +111,8 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.ShowcaseName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

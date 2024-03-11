@@ -37,6 +37,7 @@ namespace Gs2.Gs2Script.Request
          public string UserId { set; get; }
          public string Args { set; get; }
          public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
+         public string TimeOffsetToken { set; get; }
         public InvokeScriptRequest WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
@@ -53,6 +54,10 @@ namespace Gs2.Gs2Script.Request
             this.RandomStatus = randomStatus;
             return this;
         }
+        public InvokeScriptRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Script.Request
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]));
+                .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -76,6 +82,7 @@ namespace Gs2.Gs2Script.Request
                 ["userId"] = UserId,
                 ["args"] = Args,
                 ["randomStatus"] = RandomStatus?.ToJson(),
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -97,6 +104,10 @@ namespace Gs2.Gs2Script.Request
             if (RandomStatus != null) {
                 RandomStatus.WriteJson(writer);
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -106,6 +117,7 @@ namespace Gs2.Gs2Script.Request
             key += UserId + ":";
             key += Args + ":";
             key += RandomStatus + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -38,6 +38,7 @@ namespace Gs2.Gs2StateMachine.Request
          public string StatusName { set; get; }
          public string EventName { set; get; }
          public string Args { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public EmitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -59,6 +60,10 @@ namespace Gs2.Gs2StateMachine.Request
             this.Args = args;
             return this;
         }
+        public EmitByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public EmitByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -78,7 +83,8 @@ namespace Gs2.Gs2StateMachine.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithStatusName(!data.Keys.Contains("statusName") || data["statusName"] == null ? null : data["statusName"].ToString())
                 .WithEventName(!data.Keys.Contains("eventName") || data["eventName"] == null ? null : data["eventName"].ToString())
-                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString());
+                .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -89,6 +95,7 @@ namespace Gs2.Gs2StateMachine.Request
                 ["statusName"] = StatusName,
                 ["eventName"] = EventName,
                 ["args"] = Args,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -115,6 +122,10 @@ namespace Gs2.Gs2StateMachine.Request
                 writer.WritePropertyName("args");
                 writer.Write(Args.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -125,6 +136,7 @@ namespace Gs2.Gs2StateMachine.Request
             key += StatusName + ":";
             key += EventName + ":";
             key += Args + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

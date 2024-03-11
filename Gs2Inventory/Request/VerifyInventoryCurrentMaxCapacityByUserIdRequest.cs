@@ -39,6 +39,7 @@ namespace Gs2.Gs2Inventory.Request
          public string VerifyType { set; get; }
          public int? CurrentInventoryMaxCapacity { set; get; }
          public bool? MultiplyValueSpecifyingQuantity { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Inventory.Request
             this.MultiplyValueSpecifyingQuantity = multiplyValueSpecifyingQuantity;
             return this;
         }
+        public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public VerifyInventoryCurrentMaxCapacityByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithCurrentInventoryMaxCapacity(!data.Keys.Contains("currentInventoryMaxCapacity") || data["currentInventoryMaxCapacity"] == null ? null : (int?)(data["currentInventoryMaxCapacity"].ToString().Contains(".") ? (int)double.Parse(data["currentInventoryMaxCapacity"].ToString()) : int.Parse(data["currentInventoryMaxCapacity"].ToString())))
-                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Inventory.Request
                 ["verifyType"] = VerifyType,
                 ["currentInventoryMaxCapacity"] = CurrentInventoryMaxCapacity,
                 ["multiplyValueSpecifyingQuantity"] = MultiplyValueSpecifyingQuantity,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Inventory.Request
                 writer.WritePropertyName("multiplyValueSpecifyingQuantity");
                 writer.Write(bool.Parse(MultiplyValueSpecifyingQuantity.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -136,6 +147,7 @@ namespace Gs2.Gs2Inventory.Request
             key += InventoryName + ":";
             key += VerifyType + ":";
             key += MultiplyValueSpecifyingQuantity + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

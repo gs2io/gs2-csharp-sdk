@@ -39,6 +39,7 @@ namespace Gs2.Gs2MegaField.Request
          public string LayerModelName { set; get; }
          public Gs2.Gs2MegaField.Model.MyPosition Position { set; get; }
          public Gs2.Gs2MegaField.Model.Scope[] Scopes { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public ActionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2MegaField.Request
             this.Scopes = scopes;
             return this;
         }
+        public ActionByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public ActionByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -86,7 +91,8 @@ namespace Gs2.Gs2MegaField.Request
                 .WithPosition(!data.Keys.Contains("position") || data["position"] == null ? null : Gs2.Gs2MegaField.Model.MyPosition.FromJson(data["position"]))
                 .WithScopes(!data.Keys.Contains("scopes") || data["scopes"] == null || !data["scopes"].IsArray ? new Gs2.Gs2MegaField.Model.Scope[]{} : data["scopes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2MegaField.Model.Scope.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2MegaField.Request
                 ["layerModelName"] = LayerModelName,
                 ["position"] = Position?.ToJson(),
                 ["scopes"] = scopesJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -143,6 +150,10 @@ namespace Gs2.Gs2MegaField.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -154,6 +165,7 @@ namespace Gs2.Gs2MegaField.Request
             key += LayerModelName + ":";
             key += Position + ":";
             key += Scopes + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

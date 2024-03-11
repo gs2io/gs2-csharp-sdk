@@ -38,6 +38,7 @@ namespace Gs2.Gs2Enchant.Request
          public string ParameterName { set; get; }
          public string PropertyId { set; get; }
          public Gs2.Gs2Enchant.Model.BalanceParameterValue[] ParameterValues { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SetBalanceParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Enchant.Request
         }
         public SetBalanceParameterStatusByUserIdRequest WithParameterValues(Gs2.Gs2Enchant.Model.BalanceParameterValue[] parameterValues) {
             this.ParameterValues = parameterValues;
+            return this;
+        }
+        public SetBalanceParameterStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -80,7 +85,8 @@ namespace Gs2.Gs2Enchant.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithParameterValues(!data.Keys.Contains("parameterValues") || data["parameterValues"] == null || !data["parameterValues"].IsArray ? new Gs2.Gs2Enchant.Model.BalanceParameterValue[]{} : data["parameterValues"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.BalanceParameterValue.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -100,6 +106,7 @@ namespace Gs2.Gs2Enchant.Request
                 ["parameterName"] = ParameterName,
                 ["propertyId"] = PropertyId,
                 ["parameterValues"] = parameterValuesJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -133,6 +140,10 @@ namespace Gs2.Gs2Enchant.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -142,6 +153,7 @@ namespace Gs2.Gs2Enchant.Request
             key += UserId + ":";
             key += ParameterName + ":";
             key += PropertyId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

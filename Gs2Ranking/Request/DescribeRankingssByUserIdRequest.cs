@@ -40,6 +40,7 @@ namespace Gs2.Gs2Ranking.Request
          public long? StartIndex { set; get; }
          public string PageToken { set; get; }
          public int? Limit { set; get; }
+         public string TimeOffsetToken { set; get; }
         public DescribeRankingssByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -68,6 +69,10 @@ namespace Gs2.Gs2Ranking.Request
             this.Limit = limit;
             return this;
         }
+        public DescribeRankingssByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Ranking.Request
                 .WithAdditionalScopeName(!data.Keys.Contains("additionalScopeName") || data["additionalScopeName"] == null ? null : data["additionalScopeName"].ToString())
                 .WithStartIndex(!data.Keys.Contains("startIndex") || data["startIndex"] == null ? null : (long?)(data["startIndex"].ToString().Contains(".") ? (long)double.Parse(data["startIndex"].ToString()) : long.Parse(data["startIndex"].ToString())))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -97,6 +103,7 @@ namespace Gs2.Gs2Ranking.Request
                 ["startIndex"] = StartIndex,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -131,6 +138,10 @@ namespace Gs2.Gs2Ranking.Request
                 writer.WritePropertyName("limit");
                 writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -143,6 +154,7 @@ namespace Gs2.Gs2Ranking.Request
             key += StartIndex + ":";
             key += PageToken + ":";
             key += Limit + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

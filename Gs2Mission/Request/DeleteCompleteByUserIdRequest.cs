@@ -36,6 +36,7 @@ namespace Gs2.Gs2Mission.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string MissionGroupName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteCompleteByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Mission.Request
         }
         public DeleteCompleteByUserIdRequest WithMissionGroupName(string missionGroupName) {
             this.MissionGroupName = missionGroupName;
+            return this;
+        }
+        public DeleteCompleteByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Mission.Request
             return new DeleteCompleteByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString());
+                .WithMissionGroupName(!data.Keys.Contains("missionGroupName") || data["missionGroupName"] == null ? null : data["missionGroupName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Mission.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["missionGroupName"] = MissionGroupName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Mission.Request
                 writer.WritePropertyName("missionGroupName");
                 writer.Write(MissionGroupName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Mission.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += MissionGroupName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

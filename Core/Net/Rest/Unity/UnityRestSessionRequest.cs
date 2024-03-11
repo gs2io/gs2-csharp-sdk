@@ -116,8 +116,8 @@ namespace Gs2.Core.Net
 #endif
         }
 
-        public override IEnumerator Action()
-        {
+        public override IEnumerator Action() {
+            
             var uri = QueryStrings.Count == 0 ? 
                 Url : 
                 Url + '?' + string.Join("&", QueryStrings.Select(

@@ -36,6 +36,7 @@ namespace Gs2.Gs2Project.Request
          public string TransactionId { set; get; }
          public string UserId { set; get; }
          public string MicroserviceName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public WaitImportUserDataRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Project.Request
         }
         public WaitImportUserDataRequest WithMicroserviceName(string microserviceName) {
             this.MicroserviceName = microserviceName;
+            return this;
+        }
+        public WaitImportUserDataRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Project.Request
             return new WaitImportUserDataRequest()
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMicroserviceName(!data.Keys.Contains("microserviceName") || data["microserviceName"] == null ? null : data["microserviceName"].ToString());
+                .WithMicroserviceName(!data.Keys.Contains("microserviceName") || data["microserviceName"] == null ? null : data["microserviceName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Project.Request
                 ["transactionId"] = TransactionId,
                 ["userId"] = UserId,
                 ["microserviceName"] = MicroserviceName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Project.Request
                 writer.WritePropertyName("microserviceName");
                 writer.Write(MicroserviceName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Project.Request
             key += TransactionId + ":";
             key += UserId + ":";
             key += MicroserviceName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

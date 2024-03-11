@@ -108,6 +108,10 @@ namespace Gs2.Gs2Auth
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -308,6 +312,135 @@ namespace Gs2.Gs2Auth
         )
 		{
 			var task = new LoginBySignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class IssueTimeOffsetTokenByUserIdTask : Gs2RestSessionTask<IssueTimeOffsetTokenByUserIdRequest, IssueTimeOffsetTokenByUserIdResult>
+        {
+            public IssueTimeOffsetTokenByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IssueTimeOffsetTokenByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IssueTimeOffsetTokenByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "auth")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/timeoffset/token";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId);
+                }
+                if (request.TimeOffset != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffset");
+                    jsonWriter.Write(request.TimeOffset.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IssueTimeOffsetTokenByUserId(
+                Request.IssueTimeOffsetTokenByUserIdRequest request,
+                UnityAction<AsyncResult<Result.IssueTimeOffsetTokenByUserIdResult>> callback
+        )
+		{
+			var task = new IssueTimeOffsetTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.IssueTimeOffsetTokenByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdFuture(
+                Request.IssueTimeOffsetTokenByUserIdRequest request
+        )
+		{
+			return new IssueTimeOffsetTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdAsync(
+                Request.IssueTimeOffsetTokenByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.IssueTimeOffsetTokenByUserIdResult> result = null;
+			await IssueTimeOffsetTokenByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public IssueTimeOffsetTokenByUserIdTask IssueTimeOffsetTokenByUserIdAsync(
+                Request.IssueTimeOffsetTokenByUserIdRequest request
+        )
+		{
+			return new IssueTimeOffsetTokenByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdAsync(
+                Request.IssueTimeOffsetTokenByUserIdRequest request
+        )
+		{
+			var task = new IssueTimeOffsetTokenByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

@@ -39,6 +39,7 @@ namespace Gs2.Gs2Grade.Request
          public string VerifyType { set; get; }
          public string PropertyId { set; get; }
          public string MaterialPropertyId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public VerifyGradeUpMaterialByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Grade.Request
             this.MaterialPropertyId = materialPropertyId;
             return this;
         }
+        public VerifyGradeUpMaterialByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public VerifyGradeUpMaterialByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Grade.Request
                 .WithGradeName(!data.Keys.Contains("gradeName") || data["gradeName"] == null ? null : data["gradeName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithMaterialPropertyId(!data.Keys.Contains("materialPropertyId") || data["materialPropertyId"] == null ? null : data["materialPropertyId"].ToString());
+                .WithMaterialPropertyId(!data.Keys.Contains("materialPropertyId") || data["materialPropertyId"] == null ? null : data["materialPropertyId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -96,6 +102,7 @@ namespace Gs2.Gs2Grade.Request
                 ["verifyType"] = VerifyType,
                 ["propertyId"] = PropertyId,
                 ["materialPropertyId"] = MaterialPropertyId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -126,6 +133,10 @@ namespace Gs2.Gs2Grade.Request
                 writer.WritePropertyName("materialPropertyId");
                 writer.Write(MaterialPropertyId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -137,6 +148,7 @@ namespace Gs2.Gs2Grade.Request
             key += VerifyType + ":";
             key += PropertyId + ":";
             key += MaterialPropertyId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Util;
 using Gs2.Core.Util;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine;
+    #if GS2_ENABLE_UNITASK
+using Cysharp.Threading.Tasks;
+    #endif
+#endif
 
 namespace Gs2.Core.Domain
 {
@@ -95,12 +101,20 @@ namespace Gs2.Core.Domain
         public void Delete<TKind>(string parentKey, string key)
         {
             this._cache.Get(typeof(TKind))?.Get(parentKey)?.Remove(key);
-            foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
-                (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+            async UniTaskVoid Invoke() {
+                await UniTask.SwitchToMainThread();
+#endif
+                foreach (var callback in this._listCacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey)) {
+                    (callback.Value as Action<TKind[]>)?.Invoke(List<TKind>(parentKey));
+                }
+                foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values) {
+                    callback.Item2.Invoke();
+                }
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             }
-            foreach (var callback in this._cacheUpdateCallback.Ensure(typeof(TKind)).Ensure(parentKey).Ensure(key).Values) {
-                callback.Item2.Invoke();
-            }
+            Invoke().Forget();
+#endif
         }
 
         private static ulong _callbackId = 1;

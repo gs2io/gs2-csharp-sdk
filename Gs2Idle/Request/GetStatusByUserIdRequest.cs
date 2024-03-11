@@ -36,6 +36,7 @@ namespace Gs2.Gs2Idle.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string CategoryName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Idle.Request
         }
         public GetStatusByUserIdRequest WithCategoryName(string categoryName) {
             this.CategoryName = categoryName;
+            return this;
+        }
+        public GetStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Idle.Request
             return new GetStatusByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString());
+                .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Idle.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["categoryName"] = CategoryName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Idle.Request
                 writer.WritePropertyName("categoryName");
                 writer.Write(CategoryName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Idle.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += CategoryName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

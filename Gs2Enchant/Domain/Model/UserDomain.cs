@@ -81,7 +81,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterStatus> BalanceParameterStatuses(
-            string parameterName = null
+            string parameterName = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeBalanceParameterStatusesByUserIdIterator(
@@ -89,7 +90,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                parameterName
+                parameterName,
+                timeOffsetToken
             );
         }
         #endif
@@ -100,7 +102,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             #else
         public DescribeBalanceParameterStatusesByUserIdIterator BalanceParameterStatusesAsync(
             #endif
-            string parameterName = null
+            string parameterName = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeBalanceParameterStatusesByUserIdIterator(
@@ -108,7 +111,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                parameterName
+                parameterName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -177,7 +181,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Enchant.Model.RarityParameterStatus> RarityParameterStatuses(
-            string parameterName = null
+            string parameterName = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeRarityParameterStatusesByUserIdIterator(
@@ -185,7 +190,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                parameterName
+                parameterName,
+                timeOffsetToken
             );
         }
         #endif
@@ -196,7 +202,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
             #else
         public DescribeRarityParameterStatusesByUserIdIterator RarityParameterStatusesAsync(
             #endif
-            string parameterName = null
+            string parameterName = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeRarityParameterStatusesByUserIdIterator(
@@ -204,7 +211,8 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                parameterName
+                parameterName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

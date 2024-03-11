@@ -39,6 +39,7 @@ namespace Gs2.Gs2Formation.Request
          public string PropertyId { set; get; }
          public Gs2.Core.Model.AcquireAction AcquireAction { set; get; }
          public Gs2.Gs2Formation.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public AcquireActionsToPropertyFormPropertiesRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Formation.Request
             this.Config = config;
             return this;
         }
+        public AcquireActionsToPropertyFormPropertiesRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public AcquireActionsToPropertyFormPropertiesRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -86,7 +91,8 @@ namespace Gs2.Gs2Formation.Request
                 .WithAcquireAction(!data.Keys.Contains("acquireAction") || data["acquireAction"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["acquireAction"]))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Formation.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Formation.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Formation.Request
                 ["propertyId"] = PropertyId,
                 ["acquireAction"] = AcquireAction?.ToJson(),
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -143,6 +150,10 @@ namespace Gs2.Gs2Formation.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -154,6 +165,7 @@ namespace Gs2.Gs2Formation.Request
             key += PropertyId + ":";
             key += AcquireAction + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

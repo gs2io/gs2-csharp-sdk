@@ -36,6 +36,7 @@ namespace Gs2.Gs2Distributor.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string TransactionId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetStampSheetResultByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Distributor.Request
         }
         public GetStampSheetResultByUserIdRequest WithTransactionId(string transactionId) {
             this.TransactionId = transactionId;
+            return this;
+        }
+        public GetStampSheetResultByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Distributor.Request
             return new GetStampSheetResultByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString());
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Distributor.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["transactionId"] = TransactionId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Distributor.Request
                 writer.WritePropertyName("transactionId");
                 writer.Write(TransactionId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Distributor.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += TransactionId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

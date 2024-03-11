@@ -39,6 +39,7 @@ namespace Gs2.Gs2Experience.Request
          public string PropertyId { set; get; }
          public string RateName { set; get; }
          public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public MultiplyAcquireActionsByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Experience.Request
             this.AcquireActions = acquireActions;
             return this;
         }
+        public MultiplyAcquireActionsByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public MultiplyAcquireActionsByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -86,7 +91,8 @@ namespace Gs2.Gs2Experience.Request
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Experience.Request
                 ["propertyId"] = PropertyId,
                 ["rateName"] = RateName,
                 ["acquireActions"] = acquireActionsJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -144,6 +151,10 @@ namespace Gs2.Gs2Experience.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -155,6 +166,7 @@ namespace Gs2.Gs2Experience.Request
             key += PropertyId + ":";
             key += RateName + ":";
             key += AcquireActions + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

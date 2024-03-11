@@ -72,6 +72,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         public string RoomName { get; }
         public string Password { get; }
         public string UserId { get; }
+        public string TimeOffsetToken { get; }
         private long? _startAt;
         private bool _isCacheChecked;
         private bool _last;
@@ -85,7 +86,8 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             string namespaceName,
             string roomName,
             string password = null,
-            string userId = null
+            string userId = null,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
@@ -93,6 +95,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             this.RoomName = roomName;
             this.Password = password;
             this.UserId = userId;
+            this.TimeOffsetToken = timeOffsetToken;
             this._startAt = null;
             this._last = false;
             this._result = new Gs2.Gs2Chat.Model.Message[]{};

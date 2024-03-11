@@ -36,6 +36,7 @@ namespace Gs2.Gs2Money.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string Receipt { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public RevertRecordReceiptRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Money.Request
         }
         public RevertRecordReceiptRequest WithReceipt(string receipt) {
             this.Receipt = receipt;
+            return this;
+        }
+        public RevertRecordReceiptRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Money.Request
             return new RevertRecordReceiptRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithReceipt(!data.Keys.Contains("receipt") || data["receipt"] == null ? null : data["receipt"].ToString());
+                .WithReceipt(!data.Keys.Contains("receipt") || data["receipt"] == null ? null : data["receipt"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Money.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["receipt"] = Receipt,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Money.Request
                 writer.WritePropertyName("receipt");
                 writer.Write(Receipt.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Money.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Receipt + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

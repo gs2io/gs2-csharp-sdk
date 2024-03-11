@@ -71,6 +71,7 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
         public string NamespaceName { get; }
         public string UserId { get; }
         public string RateName { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -83,13 +84,15 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
             Gs2ExchangeRestClient client,
             string namespaceName,
             string userId,
-            string rateName = null
+            string rateName = null,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.RateName = rateName;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Exchange.Model.Await[]{};

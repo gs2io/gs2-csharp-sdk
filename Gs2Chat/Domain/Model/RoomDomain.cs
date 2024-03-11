@@ -86,6 +86,7 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Chat.Model.Message> Messages(
+            string timeOffsetToken = null
         )
         {
             return new DescribeMessagesByUserIdIterator(
@@ -94,7 +95,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.NamespaceName,
                 this.RoomName,
                 this.Password,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -105,6 +107,7 @@ namespace Gs2.Gs2Chat.Domain.Model
             #else
         public DescribeMessagesByUserIdIterator MessagesAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeMessagesByUserIdIterator(
@@ -113,7 +116,8 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.NamespaceName,
                 this.RoomName,
                 this.Password,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

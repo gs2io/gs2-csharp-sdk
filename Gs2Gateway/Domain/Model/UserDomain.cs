@@ -86,13 +86,15 @@ namespace Gs2.Gs2Gateway.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(
+            string timeOffsetToken = null
         )
         {
             return new DescribeWebSocketSessionsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -103,13 +105,15 @@ namespace Gs2.Gs2Gateway.Domain.Model
             #else
         public DescribeWebSocketSessionsByUserIdIterator WebSocketSessionsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeWebSocketSessionsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

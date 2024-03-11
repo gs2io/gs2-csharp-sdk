@@ -208,6 +208,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -487,6 +491,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -611,6 +619,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -734,6 +746,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -950,6 +966,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -1059,6 +1079,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -3398,6 +3422,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -3505,6 +3533,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -3627,6 +3659,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -3734,6 +3770,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -3855,6 +3895,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -3982,6 +4026,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -4090,6 +4138,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -4316,6 +4368,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -4443,6 +4499,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -4581,6 +4641,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(
@@ -4807,6 +4871,10 @@ namespace Gs2.Gs2Mission
                 {
                     sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
 
                 AddHeader(
                     Session.Credential,
@@ -4916,6 +4984,10 @@ namespace Gs2.Gs2Mission
                 if (request.DuplicationAvoider != null)
                 {
                     sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
                 }
 
                 AddHeader(

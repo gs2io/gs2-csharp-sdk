@@ -36,6 +36,7 @@ namespace Gs2.Gs2StateMachine.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string StatusName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2StateMachine.Request
         }
         public DeleteStatusByUserIdRequest WithStatusName(string statusName) {
             this.StatusName = statusName;
+            return this;
+        }
+        public DeleteStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2StateMachine.Request
             return new DeleteStatusByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithStatusName(!data.Keys.Contains("statusName") || data["statusName"] == null ? null : data["statusName"].ToString());
+                .WithStatusName(!data.Keys.Contains("statusName") || data["statusName"] == null ? null : data["statusName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2StateMachine.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["statusName"] = StatusName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2StateMachine.Request
                 writer.WritePropertyName("statusName");
                 writer.Write(StatusName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2StateMachine.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += StatusName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

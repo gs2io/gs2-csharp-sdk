@@ -37,6 +37,7 @@ namespace Gs2.Gs2SkillTree.Request
          public string UserId { set; get; }
          public string PropertyId { set; get; }
          public string[] NodeModelNames { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public MarkReleaseByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2SkillTree.Request
         }
         public MarkReleaseByUserIdRequest WithNodeModelNames(string[] nodeModelNames) {
             this.NodeModelNames = nodeModelNames;
+            return this;
+        }
+        public MarkReleaseByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -74,7 +79,8 @@ namespace Gs2.Gs2SkillTree.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithNodeModelNames(!data.Keys.Contains("nodeModelNames") || data["nodeModelNames"] == null || !data["nodeModelNames"].IsArray ? new string[]{} : data["nodeModelNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -93,6 +99,7 @@ namespace Gs2.Gs2SkillTree.Request
                 ["userId"] = UserId,
                 ["propertyId"] = PropertyId,
                 ["nodeModelNames"] = nodeModelNamesJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -120,6 +127,10 @@ namespace Gs2.Gs2SkillTree.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -129,6 +140,7 @@ namespace Gs2.Gs2SkillTree.Request
             key += UserId + ":";
             key += PropertyId + ":";
             key += NodeModelNames + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

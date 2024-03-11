@@ -40,6 +40,7 @@ namespace Gs2.Gs2Money.Request
          public long? End { set; get; }
          public string PageToken { set; get; }
          public int? Limit { set; get; }
+         public string TimeOffsetToken { set; get; }
         public DescribeReceiptsRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -68,6 +69,10 @@ namespace Gs2.Gs2Money.Request
             this.Limit = limit;
             return this;
         }
+        public DescribeReceiptsRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -84,7 +89,8 @@ namespace Gs2.Gs2Money.Request
                 .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)(data["begin"].ToString().Contains(".") ? (long)double.Parse(data["begin"].ToString()) : long.Parse(data["begin"].ToString())))
                 .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -97,6 +103,7 @@ namespace Gs2.Gs2Money.Request
                 ["end"] = End,
                 ["pageToken"] = PageToken,
                 ["limit"] = Limit,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -131,6 +138,10 @@ namespace Gs2.Gs2Money.Request
                 writer.WritePropertyName("limit");
                 writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -143,6 +154,7 @@ namespace Gs2.Gs2Money.Request
             key += End + ":";
             key += PageToken + ":";
             key += Limit + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

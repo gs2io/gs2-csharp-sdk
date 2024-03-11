@@ -36,6 +36,7 @@ namespace Gs2.Gs2Version.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string VersionName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteAcceptVersionByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Version.Request
         }
         public DeleteAcceptVersionByUserIdRequest WithVersionName(string versionName) {
             this.VersionName = versionName;
+            return this;
+        }
+        public DeleteAcceptVersionByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Version.Request
             return new DeleteAcceptVersionByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString());
+                .WithVersionName(!data.Keys.Contains("versionName") || data["versionName"] == null ? null : data["versionName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Version.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["versionName"] = VersionName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Version.Request
                 writer.WritePropertyName("versionName");
                 writer.Write(VersionName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Version.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += VersionName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

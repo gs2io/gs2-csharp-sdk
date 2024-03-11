@@ -37,6 +37,7 @@ namespace Gs2.Gs2Idle.Request
          public string UserId { set; get; }
          public string CategoryName { set; get; }
          public int? MaximumIdleMinutes { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SetMaximumIdleMinutesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Idle.Request
         }
         public SetMaximumIdleMinutesByUserIdRequest WithMaximumIdleMinutes(int? maximumIdleMinutes) {
             this.MaximumIdleMinutes = maximumIdleMinutes;
+            return this;
+        }
+        public SetMaximumIdleMinutesByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Idle.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : (int?)(data["maximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["maximumIdleMinutes"].ToString()) : int.Parse(data["maximumIdleMinutes"].ToString())));
+                .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : (int?)(data["maximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["maximumIdleMinutes"].ToString()) : int.Parse(data["maximumIdleMinutes"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Idle.Request
                 ["userId"] = UserId,
                 ["categoryName"] = CategoryName,
                 ["maximumIdleMinutes"] = MaximumIdleMinutes,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -104,6 +111,10 @@ namespace Gs2.Gs2Idle.Request
                 writer.WritePropertyName("maximumIdleMinutes");
                 writer.Write((MaximumIdleMinutes.ToString().Contains(".") ? (int)double.Parse(MaximumIdleMinutes.ToString()) : int.Parse(MaximumIdleMinutes.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -112,6 +123,7 @@ namespace Gs2.Gs2Idle.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += CategoryName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

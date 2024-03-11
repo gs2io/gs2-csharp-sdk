@@ -39,6 +39,7 @@ namespace Gs2.Gs2Chat.Request
          public string UserId { set; get; }
          public long? StartAt { set; get; }
          public int? Limit { set; get; }
+         public string TimeOffsetToken { set; get; }
         public DescribeMessagesByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Chat.Request
             this.Limit = limit;
             return this;
         }
+        public DescribeMessagesByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -78,7 +83,8 @@ namespace Gs2.Gs2Chat.Request
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)(data["startAt"].ToString().Contains(".") ? (long)double.Parse(data["startAt"].ToString()) : long.Parse(data["startAt"].ToString())))
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -90,6 +96,7 @@ namespace Gs2.Gs2Chat.Request
                 ["userId"] = UserId,
                 ["startAt"] = StartAt,
                 ["limit"] = Limit,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -120,6 +127,10 @@ namespace Gs2.Gs2Chat.Request
                 writer.WritePropertyName("limit");
                 writer.Write((Limit.ToString().Contains(".") ? (int)double.Parse(Limit.ToString()) : int.Parse(Limit.ToString())));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -131,6 +142,7 @@ namespace Gs2.Gs2Chat.Request
             key += UserId + ":";
             key += StartAt + ":";
             key += Limit + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

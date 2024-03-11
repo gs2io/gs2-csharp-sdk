@@ -82,13 +82,15 @@ namespace Gs2.Gs2Money.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Money.Model.Wallet> Wallets(
+            string timeOffsetToken = null
         )
         {
             return new DescribeWalletsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             );
         }
         #endif
@@ -99,13 +101,15 @@ namespace Gs2.Gs2Money.Domain.Model
             #else
         public DescribeWalletsByUserIdIterator WalletsAsync(
             #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeWalletsByUserIdIterator(
                 this._gs2.Cache,
                 this._client,
                 this.NamespaceName,
-                this.UserId
+                this.UserId,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
@@ -169,7 +173,8 @@ namespace Gs2.Gs2Money.Domain.Model
         public Gs2Iterator<Gs2.Gs2Money.Model.Receipt> Receipts(
             int? slot = null,
             long? begin = null,
-            long? end = null
+            long? end = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeReceiptsIterator(
@@ -179,7 +184,8 @@ namespace Gs2.Gs2Money.Domain.Model
                 this.UserId,
                 slot,
                 begin,
-                end
+                end,
+                timeOffsetToken
             );
         }
         #endif
@@ -192,7 +198,8 @@ namespace Gs2.Gs2Money.Domain.Model
             #endif
             int? slot = null,
             long? begin = null,
-            long? end = null
+            long? end = null,
+            string timeOffsetToken = null
         )
         {
             return new DescribeReceiptsIterator(
@@ -202,7 +209,8 @@ namespace Gs2.Gs2Money.Domain.Model
                 this.UserId,
                 slot,
                 begin,
-                end
+                end,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else

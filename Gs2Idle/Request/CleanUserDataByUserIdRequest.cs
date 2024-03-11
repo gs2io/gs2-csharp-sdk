@@ -34,9 +34,14 @@ namespace Gs2.Gs2Idle.Request
 	public class CleanUserDataByUserIdRequest : Gs2Request<CleanUserDataByUserIdRequest>
 	{
          public string UserId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CleanUserDataByUserIdRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public CleanUserDataByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -54,13 +59,15 @@ namespace Gs2.Gs2Idle.Request
                 return null;
             }
             return new CleanUserDataByUserIdRequest()
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
             return new JsonData {
                 ["userId"] = UserId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -71,12 +78,17 @@ namespace Gs2.Gs2Idle.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
         public override string UniqueKey() {
             var key = "";
             key += UserId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

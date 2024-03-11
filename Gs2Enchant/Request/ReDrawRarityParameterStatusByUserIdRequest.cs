@@ -38,6 +38,7 @@ namespace Gs2.Gs2Enchant.Request
          public string ParameterName { set; get; }
          public string PropertyId { set; get; }
          public string[] FixedParameterNames { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public ReDrawRarityParameterStatusByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Enchant.Request
         }
         public ReDrawRarityParameterStatusByUserIdRequest WithFixedParameterNames(string[] fixedParameterNames) {
             this.FixedParameterNames = fixedParameterNames;
+            return this;
+        }
+        public ReDrawRarityParameterStatusByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -80,7 +85,8 @@ namespace Gs2.Gs2Enchant.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithFixedParameterNames(!data.Keys.Contains("fixedParameterNames") || data["fixedParameterNames"] == null || !data["fixedParameterNames"].IsArray ? new string[]{} : data["fixedParameterNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -100,6 +106,7 @@ namespace Gs2.Gs2Enchant.Request
                 ["parameterName"] = ParameterName,
                 ["propertyId"] = PropertyId,
                 ["fixedParameterNames"] = fixedParameterNamesJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -131,6 +138,10 @@ namespace Gs2.Gs2Enchant.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -141,6 +152,7 @@ namespace Gs2.Gs2Enchant.Request
             key += ParameterName + ":";
             key += PropertyId + ":";
             key += FixedParameterNames + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

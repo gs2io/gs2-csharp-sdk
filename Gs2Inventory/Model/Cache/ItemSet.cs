@@ -397,6 +397,9 @@ namespace Gs2.Gs2Inventory.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
+            if (self == null) {
+                return;
+            }
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,

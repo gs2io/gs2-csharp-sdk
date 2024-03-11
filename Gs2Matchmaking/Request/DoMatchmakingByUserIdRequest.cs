@@ -37,6 +37,7 @@ namespace Gs2.Gs2Matchmaking.Request
          public string UserId { set; get; }
          public Gs2.Gs2Matchmaking.Model.Player Player { set; get; }
          public string MatchmakingContextToken { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DoMatchmakingByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -52,6 +53,10 @@ namespace Gs2.Gs2Matchmaking.Request
         }
         public DoMatchmakingByUserIdRequest WithMatchmakingContextToken(string matchmakingContextToken) {
             this.MatchmakingContextToken = matchmakingContextToken;
+            return this;
+        }
+        public DoMatchmakingByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -72,7 +77,8 @@ namespace Gs2.Gs2Matchmaking.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPlayer(!data.Keys.Contains("player") || data["player"] == null ? null : Gs2.Gs2Matchmaking.Model.Player.FromJson(data["player"]))
-                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString());
+                .WithMatchmakingContextToken(!data.Keys.Contains("matchmakingContextToken") || data["matchmakingContextToken"] == null ? null : data["matchmakingContextToken"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -82,6 +88,7 @@ namespace Gs2.Gs2Matchmaking.Request
                 ["userId"] = UserId,
                 ["player"] = Player?.ToJson(),
                 ["matchmakingContextToken"] = MatchmakingContextToken,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -103,6 +110,10 @@ namespace Gs2.Gs2Matchmaking.Request
                 writer.WritePropertyName("matchmakingContextToken");
                 writer.Write(MatchmakingContextToken.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -112,6 +123,7 @@ namespace Gs2.Gs2Matchmaking.Request
             key += UserId + ":";
             key += Player + ":";
             key += MatchmakingContextToken + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

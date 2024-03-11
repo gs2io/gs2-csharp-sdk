@@ -36,6 +36,7 @@ namespace Gs2.Gs2Exchange.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string AwaitName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DeleteAwaitByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Exchange.Request
         }
         public DeleteAwaitByUserIdRequest WithAwaitName(string awaitName) {
             this.AwaitName = awaitName;
+            return this;
+        }
+        public DeleteAwaitByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Exchange.Request
             return new DeleteAwaitByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithAwaitName(!data.Keys.Contains("awaitName") || data["awaitName"] == null ? null : data["awaitName"].ToString());
+                .WithAwaitName(!data.Keys.Contains("awaitName") || data["awaitName"] == null ? null : data["awaitName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["awaitName"] = AwaitName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("awaitName");
                 writer.Write(AwaitName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Exchange.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += AwaitName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

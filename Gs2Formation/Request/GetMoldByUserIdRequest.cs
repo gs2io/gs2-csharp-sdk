@@ -36,6 +36,7 @@ namespace Gs2.Gs2Formation.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string MoldModelName { set; get; }
+         public string TimeOffsetToken { set; get; }
         public GetMoldByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -46,6 +47,10 @@ namespace Gs2.Gs2Formation.Request
         }
         public GetMoldByUserIdRequest WithMoldModelName(string moldModelName) {
             this.MoldModelName = moldModelName;
+            return this;
+        }
+        public GetMoldByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -60,7 +65,8 @@ namespace Gs2.Gs2Formation.Request
             return new GetMoldByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString());
+                .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -69,6 +75,7 @@ namespace Gs2.Gs2Formation.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["moldModelName"] = MoldModelName,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -87,6 +94,10 @@ namespace Gs2.Gs2Formation.Request
                 writer.WritePropertyName("moldModelName");
                 writer.Write(MoldModelName.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -95,6 +106,7 @@ namespace Gs2.Gs2Formation.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += MoldModelName + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

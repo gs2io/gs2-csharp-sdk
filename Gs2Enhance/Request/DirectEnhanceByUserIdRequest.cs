@@ -39,6 +39,7 @@ namespace Gs2.Gs2Enhance.Request
          public string TargetItemSetId { set; get; }
          public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
          public Gs2.Gs2Enhance.Model.Config[] Config { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public DirectEnhanceByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -62,6 +63,10 @@ namespace Gs2.Gs2Enhance.Request
         }
         public DirectEnhanceByUserIdRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public DirectEnhanceByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -88,7 +93,8 @@ namespace Gs2.Gs2Enhance.Request
                 }).ToArray())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Enhance.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.Config.FromJson(v);
-                }).ToArray());
+                }).ToArray())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -118,6 +124,7 @@ namespace Gs2.Gs2Enhance.Request
                 ["targetItemSetId"] = TargetItemSetId,
                 ["materials"] = materialsJsonData,
                 ["config"] = configJsonData,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -162,6 +169,10 @@ namespace Gs2.Gs2Enhance.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -173,6 +184,7 @@ namespace Gs2.Gs2Enhance.Request
             key += TargetItemSetId + ":";
             key += Materials + ":";
             key += Config + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

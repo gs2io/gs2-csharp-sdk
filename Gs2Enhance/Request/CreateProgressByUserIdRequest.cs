@@ -39,6 +39,7 @@ namespace Gs2.Gs2Enhance.Request
          public string TargetItemSetId { set; get; }
          public Gs2.Gs2Enhance.Model.Material[] Materials { set; get; }
          public bool? Force { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public CreateProgressByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Enhance.Request
             this.Force = force;
             return this;
         }
+        public CreateProgressByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
 
         public CreateProgressByUserIdRequest WithDuplicationAvoider(string duplicationAvoider) {
             this.DuplicationAvoider = duplicationAvoider;
@@ -86,7 +91,8 @@ namespace Gs2.Gs2Enhance.Request
                 .WithMaterials(!data.Keys.Contains("materials") || data["materials"] == null || !data["materials"].IsArray ? new Gs2.Gs2Enhance.Model.Material[]{} : data["materials"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.Material.FromJson(v);
                 }).ToArray())
-                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()));
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()))
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -107,6 +113,7 @@ namespace Gs2.Gs2Enhance.Request
                 ["targetItemSetId"] = TargetItemSetId,
                 ["materials"] = materialsJsonData,
                 ["force"] = Force,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -144,6 +151,10 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("force");
                 writer.Write(bool.Parse(Force.ToString()));
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -155,6 +166,7 @@ namespace Gs2.Gs2Enhance.Request
             key += TargetItemSetId + ":";
             key += Materials + ":";
             key += Force + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

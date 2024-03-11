@@ -74,6 +74,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         public string CategoryName { get; }
         public string UserId { get; }
         public string ScorerUserId { get; }
+        public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -87,7 +88,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             string namespaceName,
             string categoryName,
             string userId,
-            string scorerUserId
+            string scorerUserId,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
@@ -95,6 +97,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             this.CategoryName = categoryName;
             this.UserId = userId;
             this.ScorerUserId = scorerUserId;
+            this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Ranking.Model.Score[]{};
@@ -161,8 +164,8 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                 foreach (var item in r.Items) {
                     item.PutCache(
                         this._cache,
-                        this.NamespaceName,
-                        this.ScorerUserId,
+                        NamespaceName,
+                        item.ScorerUserId,
                         item.CategoryName,
                         item.UniqueId
                     );

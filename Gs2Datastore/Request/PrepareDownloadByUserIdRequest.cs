@@ -36,6 +36,7 @@ namespace Gs2.Gs2Datastore.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string DataObjectId { set; get; }
+         public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public PrepareDownloadByUserIdRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -47,6 +48,10 @@ namespace Gs2.Gs2Datastore.Request
         }
         public PrepareDownloadByUserIdRequest WithDataObjectId(string dataObjectId) {
             this.DataObjectId = dataObjectId;
+            return this;
+        }
+        public PrepareDownloadByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
+            this.TimeOffsetToken = timeOffsetToken;
             return this;
         }
 
@@ -66,7 +71,8 @@ namespace Gs2.Gs2Datastore.Request
             return new PrepareDownloadByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithDataObjectId(!data.Keys.Contains("dataObjectId") || data["dataObjectId"] == null ? null : data["dataObjectId"].ToString());
+                .WithDataObjectId(!data.Keys.Contains("dataObjectId") || data["dataObjectId"] == null ? null : data["dataObjectId"].ToString())
+                .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
@@ -75,6 +81,7 @@ namespace Gs2.Gs2Datastore.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["dataObjectId"] = DataObjectId,
+                ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
 
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Datastore.Request
                 writer.WritePropertyName("dataObjectId");
                 writer.Write(DataObjectId.ToString());
             }
+            if (TimeOffsetToken != null) {
+                writer.WritePropertyName("timeOffsetToken");
+                writer.Write(TimeOffsetToken.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -101,6 +112,7 @@ namespace Gs2.Gs2Datastore.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += DataObjectId + ":";
+            key += TimeOffsetToken + ":";
             return key;
         }
     }

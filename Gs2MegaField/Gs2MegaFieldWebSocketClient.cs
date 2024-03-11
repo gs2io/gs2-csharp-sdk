@@ -1709,6 +1709,11 @@ namespace Gs2.Gs2MegaField
                     jsonWriter.WritePropertyName("r");
                     jsonWriter.Write(request.R.ToString());
                 }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
