@@ -39,6 +39,7 @@ namespace Gs2.Gs2Exchange.Request
          public bool? EnableDirectExchange { set; get; }
          public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; }
          public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; }
+         public Gs2.Gs2Exchange.Model.ScriptSetting IncrementalExchangeScript { set; get; }
          public Gs2.Gs2Exchange.Model.LogSetting LogSetting { set; get; }
         [Obsolete("This method is deprecated")]
          public string QueueNamespaceId { set; get; }
@@ -66,6 +67,10 @@ namespace Gs2.Gs2Exchange.Request
         }
         public CreateNamespaceRequest WithExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting exchangeScript) {
             this.ExchangeScript = exchangeScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithIncrementalExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting incrementalExchangeScript) {
+            this.IncrementalExchangeScript = incrementalExchangeScript;
             return this;
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Exchange.Model.LogSetting logSetting) {
@@ -98,6 +103,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithEnableDirectExchange(!data.Keys.Contains("enableDirectExchange") || data["enableDirectExchange"] == null ? null : (bool?)bool.Parse(data["enableDirectExchange"].ToString()))
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
+                .WithIncrementalExchangeScript(!data.Keys.Contains("incrementalExchangeScript") || data["incrementalExchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["incrementalExchangeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Exchange.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -110,6 +116,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["enableDirectExchange"] = EnableDirectExchange,
                 ["transactionSetting"] = TransactionSetting?.ToJson(),
                 ["exchangeScript"] = ExchangeScript?.ToJson(),
+                ["incrementalExchangeScript"] = IncrementalExchangeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -139,6 +146,9 @@ namespace Gs2.Gs2Exchange.Request
             if (ExchangeScript != null) {
                 ExchangeScript.WriteJson(writer);
             }
+            if (IncrementalExchangeScript != null) {
+                IncrementalExchangeScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -161,6 +171,7 @@ namespace Gs2.Gs2Exchange.Request
             key += EnableDirectExchange + ":";
             key += TransactionSetting + ":";
             key += ExchangeScript + ":";
+            key += IncrementalExchangeScript + ":";
             key += LogSetting + ":";
             return key;
         }

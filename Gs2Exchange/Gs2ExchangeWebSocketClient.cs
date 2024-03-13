@@ -92,6 +92,11 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("exchangeScript");
                     request.ExchangeScript.WriteJson(jsonWriter);
                 }
+                if (request.IncrementalExchangeScript != null)
+                {
+                    jsonWriter.WritePropertyName("incrementalExchangeScript");
+                    request.IncrementalExchangeScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -327,6 +332,11 @@ namespace Gs2.Gs2Exchange
                 {
                     jsonWriter.WritePropertyName("exchangeScript");
                     request.ExchangeScript.WriteJson(jsonWriter);
+                }
+                if (request.IncrementalExchangeScript != null)
+                {
+                    jsonWriter.WritePropertyName("incrementalExchangeScript");
+                    request.IncrementalExchangeScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {

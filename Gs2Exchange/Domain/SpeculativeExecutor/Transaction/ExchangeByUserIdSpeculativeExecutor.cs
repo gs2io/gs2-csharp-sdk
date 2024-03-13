@@ -29,6 +29,7 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
@@ -73,8 +74,20 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
                 var item = future.Result;
 
                 var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                    item?.ConsumeActions ?? new ConsumeAction[]{},
-                    item?.AcquireActions ?? new AcquireAction[]{},
+                    item?.ConsumeActions.Select(v =>
+                    {
+                        foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Exchange.Model.Config>()) {
+                            v = v.ApplyConfig(config.Key, config.Value);
+                        }
+                        return v;
+                    }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
+                    item?.AcquireActions.Select(v =>
+                    {
+                        foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Exchange.Model.Config>()) {
+                            v = v.ApplyConfig(config.Key, config.Value);
+                        }
+                        return v;
+                    }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
                     request.Count ?? 1.0
                 ).ExecuteFuture(
                     domain,
@@ -116,8 +129,20 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
             ).ModelAsync();
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions ?? new ConsumeAction[]{},
-                item?.AcquireActions ?? new AcquireAction[]{},
+                item?.ConsumeActions.Select(v =>
+                {
+                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Exchange.Model.Config>()) {
+                        v = v.ApplyConfig(config.Key, config.Value);
+                    }
+                    return v;
+                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
+                item?.AcquireActions.Select(v =>
+                {
+                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Exchange.Model.Config>()) {
+                        v = v.ApplyConfig(config.Key, config.Value);
+                    }
+                    return v;
+                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
                 request.Count ?? 1.0
             ).ExecuteAsync(
                 domain,

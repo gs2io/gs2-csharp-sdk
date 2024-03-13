@@ -46,20 +46,19 @@ namespace Gs2.Gs2Idle.Model.Transaction
             this Status self,
             SetMaximumIdleMinutesByUserIdRequest request
         ) {
-            if (self.Clone() is not Status clone)
-            {
-                throw new NullReferenceException();
-            }
-            clone.MaximumIdleMinutes = request.MaximumIdleMinutes;
-            return clone;
+#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Idle:SetMaximumIdleMinutesByUserId");
+#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Idle:SetMaximumIdleMinutesByUserId");
+#endif
+            return self.Clone() as Status;
         }
 
         public static SetMaximumIdleMinutesByUserIdRequest Rate(
             this SetMaximumIdleMinutesByUserIdRequest request,
             double rate
         ) {
-            request.MaximumIdleMinutes = (int?) (request.MaximumIdleMinutes * rate);
-            return request;
+            throw new NotSupportedException($"not supported rate action Gs2Idle:SetMaximumIdleMinutesByUserId");
         }
     }
 
@@ -69,8 +68,7 @@ namespace Gs2.Gs2Idle.Model.Transaction
             this SetMaximumIdleMinutesByUserIdRequest request,
             BigInteger rate
         ) {
-            request.MaximumIdleMinutes = (int?) ((request.MaximumIdleMinutes ?? 0) * rate);
-            return request;
+            throw new NotSupportedException($"not supported rate action Gs2Idle:SetMaximumIdleMinutesByUserId");
         }
     }
 }

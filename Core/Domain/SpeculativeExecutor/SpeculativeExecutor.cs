@@ -1499,15 +1499,6 @@ namespace Gs2.Core.SpeculativeExecutor
             AccessToken accessToken = null
         ) {
             var commit = new List<Func<object>>();
-            if (this._rate == BigInteger.One) {
-                return () =>
-                {
-                    foreach (var c in commit) {
-                        c?.Invoke();
-                    }
-                    return null;
-                };
-            }
             if (this._consumeActions != null) {
                 foreach (var consumeAction in this._consumeActions) {
                     {
@@ -1667,6 +1658,19 @@ namespace Gs2.Core.SpeculativeExecutor
                     }
                     {
                         var c = await Gs2.Gs2Gateway.Domain.SpeculativeExecutor
+                            .ConsumeActionSpeculativeExecutorIndex.ExecuteAsync(
+                                domain,
+                                accessToken,
+                                consumeAction,
+                                this._rate
+                            );
+                        if (c != null) {
+                            commit.Add(c);
+                            continue;
+                        }
+                    }
+                    {
+                        var c = await Gs2.Gs2Grade.Domain.SpeculativeExecutor
                             .ConsumeActionSpeculativeExecutorIndex.ExecuteAsync(
                                 domain,
                                 accessToken,
@@ -2183,6 +2187,19 @@ namespace Gs2.Core.SpeculativeExecutor
                     }
                     {
                         var c = await Gs2.Gs2Gateway.Domain.SpeculativeExecutor
+                            .AcquireActionSpeculativeExecutorIndex.ExecuteAsync(
+                                domain,
+                                accessToken,
+                                acquireAction,
+                                this._rate
+                            );
+                        if (c != null) {
+                            commit.Add(c);
+                            continue;
+                        }
+                    }
+                    {
+                        var c = await Gs2.Gs2Grade.Domain.SpeculativeExecutor
                             .AcquireActionSpeculativeExecutorIndex.ExecuteAsync(
                                 domain,
                                 accessToken,

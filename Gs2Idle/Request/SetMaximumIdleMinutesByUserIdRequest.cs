@@ -123,6 +123,7 @@ namespace Gs2.Gs2Idle.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += CategoryName + ":";
+            key += MaximumIdleMinutes + ":";
             key += TimeOffsetToken + ":";
             return key;
         }
