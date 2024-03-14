@@ -49,16 +49,6 @@ namespace Gs2.Core.SpeculativeExecutor
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
                 var commit = new List<Func<object>>();
-                if (this._rate == BigInteger.One) {
-                    result.OnComplete(() =>
-                    {
-                        foreach (var c in commit) {
-                            c?.Invoke();
-                        }
-                        return null;
-                    });
-                    yield break;
-                }
                 if (this._consumeActions != null) {
                     foreach (var consumeAction in this._consumeActions) {
                         {

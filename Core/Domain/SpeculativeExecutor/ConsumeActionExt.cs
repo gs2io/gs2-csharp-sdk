@@ -22,7 +22,7 @@ namespace Gs2.Core.SpeculativeExecutor
         public static ConsumeAction ApplyConfig(this ConsumeAction self, string key, string value) {
             return new ConsumeAction()
                 .WithAction(self.Action)
-                .WithRequest(self.Request.Replace($"#{{{key}}}", value));
+                .WithRequest(self.Request.Replace($"#{{{key}}}", System.Text.RegularExpressions.Regex.Replace(value, "(?<!\\\\)\"", "\\\"")));
         }
     }
 }
