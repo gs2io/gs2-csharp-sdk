@@ -39,6 +39,8 @@ namespace Gs2.Gs2Inventory.Model
         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemAcquireScript { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemConsumeScript { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting BigItemAcquireScript { set; get; }
+        public Gs2.Gs2Inventory.Model.ScriptSetting BigItemConsumeScript { set; get; }
         public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -73,6 +75,14 @@ namespace Gs2.Gs2Inventory.Model
         }
         public Namespace WithSimpleItemConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting simpleItemConsumeScript) {
             this.SimpleItemConsumeScript = simpleItemConsumeScript;
+            return this;
+        }
+        public Namespace WithBigItemAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting bigItemAcquireScript) {
+            this.BigItemAcquireScript = bigItemAcquireScript;
+            return this;
+        }
+        public Namespace WithBigItemConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting bigItemConsumeScript) {
+            this.BigItemConsumeScript = bigItemConsumeScript;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
@@ -160,6 +170,8 @@ namespace Gs2.Gs2Inventory.Model
                 .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
                 .WithSimpleItemAcquireScript(!data.Keys.Contains("simpleItemAcquireScript") || data["simpleItemAcquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemAcquireScript"]))
                 .WithSimpleItemConsumeScript(!data.Keys.Contains("simpleItemConsumeScript") || data["simpleItemConsumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemConsumeScript"]))
+                .WithBigItemAcquireScript(!data.Keys.Contains("bigItemAcquireScript") || data["bigItemAcquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["bigItemAcquireScript"]))
+                .WithBigItemConsumeScript(!data.Keys.Contains("bigItemConsumeScript") || data["bigItemConsumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["bigItemConsumeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inventory.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -177,6 +189,8 @@ namespace Gs2.Gs2Inventory.Model
                 ["consumeScript"] = ConsumeScript?.ToJson(),
                 ["simpleItemAcquireScript"] = SimpleItemAcquireScript?.ToJson(),
                 ["simpleItemConsumeScript"] = SimpleItemConsumeScript?.ToJson(),
+                ["bigItemAcquireScript"] = BigItemAcquireScript?.ToJson(),
+                ["bigItemConsumeScript"] = BigItemConsumeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -218,6 +232,14 @@ namespace Gs2.Gs2Inventory.Model
             if (SimpleItemConsumeScript != null) {
                 writer.WritePropertyName("simpleItemConsumeScript");
                 SimpleItemConsumeScript.WriteJson(writer);
+            }
+            if (BigItemAcquireScript != null) {
+                writer.WritePropertyName("bigItemAcquireScript");
+                BigItemAcquireScript.WriteJson(writer);
+            }
+            if (BigItemConsumeScript != null) {
+                writer.WritePropertyName("bigItemConsumeScript");
+                BigItemConsumeScript.WriteJson(writer);
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -306,6 +328,22 @@ namespace Gs2.Gs2Inventory.Model
             {
                 diff += SimpleItemConsumeScript.CompareTo(other.SimpleItemConsumeScript);
             }
+            if (BigItemAcquireScript == null && BigItemAcquireScript == other.BigItemAcquireScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += BigItemAcquireScript.CompareTo(other.BigItemAcquireScript);
+            }
+            if (BigItemConsumeScript == null && BigItemConsumeScript == other.BigItemConsumeScript)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += BigItemConsumeScript.CompareTo(other.BigItemConsumeScript);
+            }
             if (LogSetting == null && LogSetting == other.LogSetting)
             {
                 // null and null
@@ -376,6 +414,10 @@ namespace Gs2.Gs2Inventory.Model
             {
             }
             {
+            }
+            {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "inventory.namespace.createdAt.error.invalid"),
@@ -423,6 +465,8 @@ namespace Gs2.Gs2Inventory.Model
                 ConsumeScript = ConsumeScript.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
                 SimpleItemAcquireScript = SimpleItemAcquireScript.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
                 SimpleItemConsumeScript = SimpleItemConsumeScript.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
+                BigItemAcquireScript = BigItemAcquireScript.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
+                BigItemConsumeScript = BigItemConsumeScript.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
                 LogSetting = LogSetting.Clone() as Gs2.Gs2Inventory.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

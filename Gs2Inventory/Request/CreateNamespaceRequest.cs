@@ -40,6 +40,8 @@ namespace Gs2.Gs2Inventory.Request
          public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
          public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemAcquireScript { set; get; }
          public Gs2.Gs2Inventory.Model.ScriptSetting SimpleItemConsumeScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting BigItemAcquireScript { set; get; }
+         public Gs2.Gs2Inventory.Model.ScriptSetting BigItemConsumeScript { set; get; }
          public Gs2.Gs2Inventory.Model.LogSetting LogSetting { set; get; }
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -69,6 +71,14 @@ namespace Gs2.Gs2Inventory.Request
             this.SimpleItemConsumeScript = simpleItemConsumeScript;
             return this;
         }
+        public CreateNamespaceRequest WithBigItemAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting bigItemAcquireScript) {
+            this.BigItemAcquireScript = bigItemAcquireScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithBigItemConsumeScript(Gs2.Gs2Inventory.Model.ScriptSetting bigItemConsumeScript) {
+            this.BigItemConsumeScript = bigItemConsumeScript;
+            return this;
+        }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Inventory.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -90,6 +100,8 @@ namespace Gs2.Gs2Inventory.Request
                 .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
                 .WithSimpleItemAcquireScript(!data.Keys.Contains("simpleItemAcquireScript") || data["simpleItemAcquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemAcquireScript"]))
                 .WithSimpleItemConsumeScript(!data.Keys.Contains("simpleItemConsumeScript") || data["simpleItemConsumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["simpleItemConsumeScript"]))
+                .WithBigItemAcquireScript(!data.Keys.Contains("bigItemAcquireScript") || data["bigItemAcquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["bigItemAcquireScript"]))
+                .WithBigItemConsumeScript(!data.Keys.Contains("bigItemConsumeScript") || data["bigItemConsumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["bigItemConsumeScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Inventory.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -103,6 +115,8 @@ namespace Gs2.Gs2Inventory.Request
                 ["consumeScript"] = ConsumeScript?.ToJson(),
                 ["simpleItemAcquireScript"] = SimpleItemAcquireScript?.ToJson(),
                 ["simpleItemConsumeScript"] = SimpleItemConsumeScript?.ToJson(),
+                ["bigItemAcquireScript"] = BigItemAcquireScript?.ToJson(),
+                ["bigItemConsumeScript"] = BigItemConsumeScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -133,6 +147,12 @@ namespace Gs2.Gs2Inventory.Request
             if (SimpleItemConsumeScript != null) {
                 SimpleItemConsumeScript.WriteJson(writer);
             }
+            if (BigItemAcquireScript != null) {
+                BigItemAcquireScript.WriteJson(writer);
+            }
+            if (BigItemConsumeScript != null) {
+                BigItemConsumeScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -148,6 +168,8 @@ namespace Gs2.Gs2Inventory.Request
             key += ConsumeScript + ":";
             key += SimpleItemAcquireScript + ":";
             key += SimpleItemConsumeScript + ":";
+            key += BigItemAcquireScript + ":";
+            key += BigItemConsumeScript + ":";
             key += LogSetting + ":";
             return key;
         }
