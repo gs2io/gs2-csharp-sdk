@@ -37,6 +37,7 @@ namespace Gs2.Gs2Quest.Model
         public string QuestModelId { set; get; }
         public long? RandomSeed { set; get; }
         public Gs2.Gs2Quest.Model.Reward[] Rewards { set; get; }
+        public Gs2.Gs2Quest.Model.Reward[] FailedRewards { set; get; }
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -63,6 +64,10 @@ namespace Gs2.Gs2Quest.Model
         }
         public Progress WithRewards(Gs2.Gs2Quest.Model.Reward[] rewards) {
             this.Rewards = rewards;
+            return this;
+        }
+        public Progress WithFailedRewards(Gs2.Gs2Quest.Model.Reward[] failedRewards) {
+            this.FailedRewards = failedRewards;
             return this;
         }
         public Progress WithMetadata(string metadata) {
@@ -167,6 +172,9 @@ namespace Gs2.Gs2Quest.Model
                 .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null || !data["rewards"].IsArray ? new Gs2.Gs2Quest.Model.Reward[]{} : data["rewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Reward.FromJson(v);
                 }).ToArray())
+                .WithFailedRewards(!data.Keys.Contains("failedRewards") || data["failedRewards"] == null || !data["failedRewards"].IsArray ? new Gs2.Gs2Quest.Model.Reward[]{} : data["failedRewards"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Quest.Model.Reward.FromJson(v);
+                }).ToArray())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -184,6 +192,15 @@ namespace Gs2.Gs2Quest.Model
                     rewardsJsonData.Add(reward.ToJson());
                 }
             }
+            JsonData failedRewardsJsonData = null;
+            if (FailedRewards != null && FailedRewards.Length > 0)
+            {
+                failedRewardsJsonData = new JsonData();
+                foreach (var failedReward in FailedRewards)
+                {
+                    failedRewardsJsonData.Add(failedReward.ToJson());
+                }
+            }
             return new JsonData {
                 ["progressId"] = ProgressId,
                 ["userId"] = UserId,
@@ -191,6 +208,7 @@ namespace Gs2.Gs2Quest.Model
                 ["questModelId"] = QuestModelId,
                 ["randomSeed"] = RandomSeed,
                 ["rewards"] = rewardsJsonData,
+                ["failedRewards"] = failedRewardsJsonData,
                 ["metadata"] = Metadata,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -228,6 +246,17 @@ namespace Gs2.Gs2Quest.Model
                 {
                     if (reward != null) {
                         reward.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (FailedRewards != null) {
+                writer.WritePropertyName("failedRewards");
+                writer.WriteArrayStart();
+                foreach (var failedReward in FailedRewards)
+                {
+                    if (failedReward != null) {
+                        failedReward.WriteJson(writer);
                     }
                 }
                 writer.WriteArrayEnd();
@@ -305,6 +334,18 @@ namespace Gs2.Gs2Quest.Model
                 for (var i = 0; i < Rewards.Length; i++)
                 {
                     diff += Rewards[i].CompareTo(other.Rewards[i]);
+                }
+            }
+            if (FailedRewards == null && FailedRewards == other.FailedRewards)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += FailedRewards.Length - other.FailedRewards.Length;
+                for (var i = 0; i < FailedRewards.Length; i++)
+                {
+                    diff += FailedRewards[i].CompareTo(other.FailedRewards[i]);
                 }
             }
             if (Metadata == null && Metadata == other.Metadata)
@@ -391,6 +432,13 @@ namespace Gs2.Gs2Quest.Model
                 }
             }
             {
+                if (FailedRewards.Length > 1000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("progress", "quest.progress.failedRewards.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (Metadata.Length > 256) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("progress", "quest.progress.metadata.error.tooLong"),
@@ -443,6 +491,7 @@ namespace Gs2.Gs2Quest.Model
                 QuestModelId = QuestModelId,
                 RandomSeed = RandomSeed,
                 Rewards = Rewards.Clone() as Gs2.Gs2Quest.Model.Reward[],
+                FailedRewards = FailedRewards.Clone() as Gs2.Gs2Quest.Model.Reward[],
                 Metadata = Metadata,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
