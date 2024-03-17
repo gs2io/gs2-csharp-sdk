@@ -1995,21 +1995,6 @@ namespace Gs2.Gs2Exchange
                     jsonWriter.WritePropertyName("lockTime");
                     jsonWriter.Write(request.LockTime.ToString());
                 }
-                if (request.EnableSkip != null)
-                {
-                    jsonWriter.WritePropertyName("enableSkip");
-                    jsonWriter.Write(request.EnableSkip.ToString());
-                }
-                if (request.SkipConsumeActions != null)
-                {
-                    jsonWriter.WritePropertyName("skipConsumeActions");
-                    jsonWriter.WriteArrayStart();
-                    foreach(var item in request.SkipConsumeActions)
-                    {
-                        item.WriteJson(jsonWriter);
-                    }
-                    jsonWriter.WriteArrayEnd();
-                }
                 if (request.AcquireActions != null)
                 {
                     jsonWriter.WritePropertyName("acquireActions");
@@ -2272,21 +2257,6 @@ namespace Gs2.Gs2Exchange
                 {
                     jsonWriter.WritePropertyName("lockTime");
                     jsonWriter.Write(request.LockTime.ToString());
-                }
-                if (request.EnableSkip != null)
-                {
-                    jsonWriter.WritePropertyName("enableSkip");
-                    jsonWriter.Write(request.EnableSkip.ToString());
-                }
-                if (request.SkipConsumeActions != null)
-                {
-                    jsonWriter.WritePropertyName("skipConsumeActions");
-                    jsonWriter.WriteArrayStart();
-                    foreach(var item in request.SkipConsumeActions)
-                    {
-                        item.WriteJson(jsonWriter);
-                    }
-                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.AcquireActions != null)
                 {
@@ -5920,142 +5890,6 @@ namespace Gs2.Gs2Exchange
 #endif
 
 
-        public class SkipTask : Gs2RestSessionTask<SkipRequest, SkipResult>
-        {
-            public SkipTask(IGs2Session session, RestSessionRequestFactory factory, SkipRequest request) : base(session, factory, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(SkipRequest request)
-            {
-                var url = Gs2RestSession.EndpointHost
-                    .Replace("{service}", "exchange")
-                    .Replace("{region}", Session.Region.DisplayName())
-                    + "/{namespaceName}/user/me/exchange/await/{awaitName}/skip";
-
-                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
-                url = url.Replace("{awaitName}", !string.IsNullOrEmpty(request.AwaitName) ? request.AwaitName.ToString() : "null");
-
-                var sessionRequest = Factory.Post(url);
-
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-                jsonWriter.WriteObjectStart();
-                if (request.Config != null)
-                {
-                    jsonWriter.WritePropertyName("config");
-                    jsonWriter.WriteArrayStart();
-                    foreach(var item in request.Config)
-                    {
-                        item.WriteJson(jsonWriter);
-                    }
-                    jsonWriter.WriteArrayEnd();
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                jsonWriter.WriteObjectEnd();
-
-                var body = stringBuilder.ToString();
-                if (!string.IsNullOrEmpty(body))
-                {
-                    sessionRequest.Body = body;
-                }
-                sessionRequest.AddHeader("Content-Type", "application/json");
-
-                if (request.RequestId != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
-                }
-                if (request.AccessToken != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
-                }
-                if (request.DuplicationAvoider != null)
-                {
-                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    sessionRequest
-                );
-
-                return sessionRequest;
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-		public IEnumerator Skip(
-                Request.SkipRequest request,
-                UnityAction<AsyncResult<Result.SkipResult>> callback
-        )
-		{
-			var task = new SkipTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SkipResult>(task.Result, task.Error));
-        }
-
-		public IFuture<Result.SkipResult> SkipFuture(
-                Request.SkipRequest request
-        )
-		{
-			return new SkipTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-                request
-			);
-        }
-
-    #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SkipResult> SkipAsync(
-                Request.SkipRequest request
-        )
-		{
-            AsyncResult<Result.SkipResult> result = null;
-			await Skip(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
-    #else
-		public SkipTask SkipAsync(
-                Request.SkipRequest request
-        )
-		{
-			return new SkipTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
-			    request
-            );
-        }
-    #endif
-#else
-		public async Task<Result.SkipResult> SkipAsync(
-                Request.SkipRequest request
-        )
-		{
-			var task = new SkipTask(
-                Gs2RestSession,
-                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
-#endif
-
-
         public class SkipByUserIdTask : Gs2RestSessionTask<SkipByUserIdRequest, SkipByUserIdResult>
         {
             public SkipByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, SkipByUserIdRequest request) : base(session, factory, request)
@@ -6078,15 +5912,20 @@ namespace Gs2.Gs2Exchange
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
-                if (request.Config != null)
+                if (request.SkipType != null)
                 {
-                    jsonWriter.WritePropertyName("config");
-                    jsonWriter.WriteArrayStart();
-                    foreach(var item in request.Config)
-                    {
-                        item.WriteJson(jsonWriter);
-                    }
-                    jsonWriter.WriteArrayEnd();
+                    jsonWriter.WritePropertyName("skipType");
+                    jsonWriter.Write(request.SkipType);
+                }
+                if (request.Minutes != null)
+                {
+                    jsonWriter.WritePropertyName("minutes");
+                    jsonWriter.Write(request.Minutes.ToString());
+                }
+                if (request.Rate != null)
+                {
+                    jsonWriter.WritePropertyName("rate");
+                    jsonWriter.Write(request.Rate.ToString());
                 }
                 if (request.ContextStack != null)
                 {
@@ -6536,6 +6375,131 @@ namespace Gs2.Gs2Exchange
         )
 		{
 			var task = new CreateAwaitByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class SkipByStampSheetTask : Gs2RestSessionTask<SkipByStampSheetRequest, SkipByStampSheetResult>
+        {
+            public SkipByStampSheetTask(IGs2Session session, RestSessionRequestFactory factory, SkipByStampSheetRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(SkipByStampSheetRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "exchange")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/await/skip";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampSheet != null)
+                {
+                    jsonWriter.WritePropertyName("stampSheet");
+                    jsonWriter.Write(request.StampSheet);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SkipByStampSheet(
+                Request.SkipByStampSheetRequest request,
+                UnityAction<AsyncResult<Result.SkipByStampSheetResult>> callback
+        )
+		{
+			var task = new SkipByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SkipByStampSheetResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SkipByStampSheetResult> SkipByStampSheetFuture(
+                Request.SkipByStampSheetRequest request
+        )
+		{
+			return new SkipByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SkipByStampSheetResult> SkipByStampSheetAsync(
+                Request.SkipByStampSheetRequest request
+        )
+		{
+            AsyncResult<Result.SkipByStampSheetResult> result = null;
+			await SkipByStampSheet(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public SkipByStampSheetTask SkipByStampSheetAsync(
+                Request.SkipByStampSheetRequest request
+        )
+		{
+			return new SkipByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SkipByStampSheetResult> SkipByStampSheetAsync(
+                Request.SkipByStampSheetRequest request
+        )
+		{
+			var task = new SkipByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
 			    request

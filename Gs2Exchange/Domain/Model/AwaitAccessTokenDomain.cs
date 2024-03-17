@@ -67,7 +67,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
         public string AwaitName { get; }
-        public long? UnlockAt { get; set; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
 
@@ -221,109 +220,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 _gs2.Cache,
                 this.UserId,
                 () => this._client.AcquireAsync(request)
-            );
-            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                this._gs2,
-                this.AccessToken,
-                result.AutoRunStampSheet ?? false,
-                result.TransactionId,
-                result.StampSheet,
-                result.StampSheetEncryptionKeyId
-            );
-            if (result.StampSheet != null) {
-                await transaction.WaitAsync(true);
-            }
-            return transaction;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> SkipFuture(
-            SkipRequest request,
-            bool speculativeExecute = true
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithAwaitName(this.AwaitName);
-
-                if (speculativeExecute) {
-                    var speculativeExecuteFuture = Transaction.SpeculativeExecutor.SkipByUserIdSpeculativeExecutor.ExecuteFuture(
-                        this._gs2,
-                        AccessToken,
-                        SkipByUserIdRequest.FromJson(request.ToJson())
-                    );
-                    yield return speculativeExecuteFuture;
-                    if (speculativeExecuteFuture.Error != null)
-                    {
-                        self.OnError(speculativeExecuteFuture.Error);
-                        yield break;
-                    }
-                    var commit = speculativeExecuteFuture.Result;
-                    commit?.Invoke();
-                }
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    () => this._client.SkipFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.AccessToken,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> SkipAsync(
-            #else
-        public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> SkipAsync(
-            #endif
-            SkipRequest request,
-            bool speculativeExecute = true
-        ) {
-            request = request
-                .WithNamespaceName(this.NamespaceName)
-                .WithAccessToken(this.AccessToken?.Token)
-                .WithAwaitName(this.AwaitName);
-
-            if (speculativeExecute) {
-                var commit = await Transaction.SpeculativeExecutor.SkipByUserIdSpeculativeExecutor.ExecuteAsync(
-                    this._gs2,
-                    AccessToken,
-                    SkipByUserIdRequest.FromJson(request.ToJson())
-                );
-                commit?.Invoke();
-            }
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                () => this._client.SkipAsync(request)
             );
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,

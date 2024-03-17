@@ -31,11 +31,11 @@ namespace Gs2.Gs2Exchange.Result
 	[Preserve]
 #endif
 	[System.Serializable]
-	public class CreateAwaitByStampSheetResult : IResult
+	public class SkipByStampSheetResult : IResult
 	{
         public Gs2.Gs2Exchange.Model.Await Item { set; get; }
 
-        public CreateAwaitByStampSheetResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
+        public SkipByStampSheetResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
             this.Item = item;
             return this;
         }
@@ -43,12 +43,12 @@ namespace Gs2.Gs2Exchange.Result
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
 #endif
-        public static CreateAwaitByStampSheetResult FromJson(JsonData data)
+        public static SkipByStampSheetResult FromJson(JsonData data)
         {
             if (data == null) {
                 return null;
             }
-            return new CreateAwaitByStampSheetResult()
+            return new SkipByStampSheetResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.Await.FromJson(data["item"]));
         }
 

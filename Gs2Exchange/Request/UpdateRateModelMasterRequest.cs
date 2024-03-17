@@ -39,8 +39,6 @@ namespace Gs2.Gs2Exchange.Request
          public string Metadata { set; get; }
          public string TimingType { set; get; }
          public int? LockTime { set; get; }
-         public bool? EnableSkip { set; get; }
-         public Gs2.Core.Model.ConsumeAction[] SkipConsumeActions { set; get; }
          public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
          public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public UpdateRateModelMasterRequest WithNamespaceName(string namespaceName) {
@@ -67,14 +65,6 @@ namespace Gs2.Gs2Exchange.Request
             this.LockTime = lockTime;
             return this;
         }
-        public UpdateRateModelMasterRequest WithEnableSkip(bool? enableSkip) {
-            this.EnableSkip = enableSkip;
-            return this;
-        }
-        public UpdateRateModelMasterRequest WithSkipConsumeActions(Gs2.Core.Model.ConsumeAction[] skipConsumeActions) {
-            this.SkipConsumeActions = skipConsumeActions;
-            return this;
-        }
         public UpdateRateModelMasterRequest WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
             return this;
@@ -99,10 +89,6 @@ namespace Gs2.Gs2Exchange.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithTimingType(!data.Keys.Contains("timingType") || data["timingType"] == null ? null : data["timingType"].ToString())
                 .WithLockTime(!data.Keys.Contains("lockTime") || data["lockTime"] == null ? null : (int?)(data["lockTime"].ToString().Contains(".") ? (int)double.Parse(data["lockTime"].ToString()) : int.Parse(data["lockTime"].ToString())))
-                .WithEnableSkip(!data.Keys.Contains("enableSkip") || data["enableSkip"] == null ? null : (bool?)bool.Parse(data["enableSkip"].ToString()))
-                .WithSkipConsumeActions(!data.Keys.Contains("skipConsumeActions") || data["skipConsumeActions"] == null || !data["skipConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["skipConsumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
-                }).ToArray())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
@@ -113,15 +99,6 @@ namespace Gs2.Gs2Exchange.Request
 
         public override JsonData ToJson()
         {
-            JsonData skipConsumeActionsJsonData = null;
-            if (SkipConsumeActions != null && SkipConsumeActions.Length > 0)
-            {
-                skipConsumeActionsJsonData = new JsonData();
-                foreach (var skipConsumeAction in SkipConsumeActions)
-                {
-                    skipConsumeActionsJsonData.Add(skipConsumeAction.ToJson());
-                }
-            }
             JsonData acquireActionsJsonData = null;
             if (AcquireActions != null && AcquireActions.Length > 0)
             {
@@ -147,8 +124,6 @@ namespace Gs2.Gs2Exchange.Request
                 ["metadata"] = Metadata,
                 ["timingType"] = TimingType,
                 ["lockTime"] = LockTime,
-                ["enableSkip"] = EnableSkip,
-                ["skipConsumeActions"] = skipConsumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
             };
@@ -180,21 +155,6 @@ namespace Gs2.Gs2Exchange.Request
             if (LockTime != null) {
                 writer.WritePropertyName("lockTime");
                 writer.Write((LockTime.ToString().Contains(".") ? (int)double.Parse(LockTime.ToString()) : int.Parse(LockTime.ToString())));
-            }
-            if (EnableSkip != null) {
-                writer.WritePropertyName("enableSkip");
-                writer.Write(bool.Parse(EnableSkip.ToString()));
-            }
-            if (SkipConsumeActions != null) {
-                writer.WritePropertyName("skipConsumeActions");
-                writer.WriteArrayStart();
-                foreach (var skipConsumeAction in SkipConsumeActions)
-                {
-                    if (skipConsumeAction != null) {
-                        skipConsumeAction.WriteJson(writer);
-                    }
-                }
-                writer.WriteArrayEnd();
             }
             if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
@@ -229,8 +189,6 @@ namespace Gs2.Gs2Exchange.Request
             key += Metadata + ":";
             key += TimingType + ":";
             key += LockTime + ":";
-            key += EnableSkip + ":";
-            key += SkipConsumeActions + ":";
             key += AcquireActions + ":";
             key += ConsumeActions + ":";
             return key;

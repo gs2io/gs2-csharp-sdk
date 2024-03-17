@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,14 +26,17 @@
 #pragma warning disable 1998
 
 using System;
+using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-using Gs2.Core.Model;
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
+using Gs2.Gs2Exchange.Model.Cache;
+using Gs2.Gs2Exchange.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
     #if GS2_ENABLE_UNITASK
@@ -45,7 +46,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 #endif
 
-namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
+namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
 {
     public static class SkipByUserIdSpeculativeExecutor {
 
@@ -60,7 +61,6 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
             SkipByUserIdRequest request
         ) {
             IEnumerator Impl(Gs2Future<Func<object>> result) {
-
                 var future = domain.Exchange.Namespace(
                     request.NamespaceName
                 ).AccessToken(
@@ -75,38 +75,28 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
                 }
                 var item = future.Result;
 
-                var future3 = domain.Exchange.Namespace(
-                    request.NamespaceName
-                ).RateModel(
-                    item.RateName
-                ).ModelFuture();
-                yield return future3;
-                if (future3.Error != null) {
-                    result.OnError(future3.Error);
+                if (item == null) {
+                    result.OnComplete(() => null);
                     yield break;
                 }
-                var model = future3.Result;
+                try {
+                    item = item.SpeculativeExecution(request);
 
-                var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                    model.SkipConsumeActions,
-                    Array.Empty<AcquireAction>(),
-                    item.Count ?? 1.0
-                ).ExecuteFuture(
-                    domain,
-                    accessToken
-                );
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
+                    result.OnComplete(() =>
+                    {
+                        item.PutCache(
+                            domain.Cache,
+                            request.NamespaceName,
+                            accessToken.UserId,
+                            request.AwaitName
+                        );
+                        return null;
+                    });
+                }
+                catch (Gs2Exception e) {
+                    result.OnError(e);
                     yield break;
                 }
-                var commit = future2.Result;
-
-                result.OnComplete(() =>
-                {
-                    commit?.Invoke();
-                    return null;
-                });
                 yield return null;
             }
 
@@ -132,24 +122,19 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
                 request.AwaitName
             ).ModelAsync();
 
-            var model = await domain.Exchange.Namespace(
-                request.NamespaceName
-            ).RateModel(
-                item.RateName
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                model.SkipConsumeActions,
-                Array.Empty<AcquireAction>(),
-                item.Count ?? 1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
+            if (item == null) {
+                return () => null;
+            }
+            item = item.SpeculativeExecution(request);
 
             return () =>
             {
-                commit?.Invoke();
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    accessToken.UserId,
+                    request.AwaitName
+                );
                 return null;
             };
         }

@@ -34,33 +34,9 @@ namespace Gs2.Gs2Exchange.Result
 	public class SkipByUserIdResult : IResult
 	{
         public Gs2.Gs2Exchange.Model.Await Item { set; get; }
-        public string TransactionId { set; get; }
-        public string StampSheet { set; get; }
-        public string StampSheetEncryptionKeyId { set; get; }
-        public bool? AutoRunStampSheet { set; get; }
 
         public SkipByUserIdResult WithItem(Gs2.Gs2Exchange.Model.Await item) {
             this.Item = item;
-            return this;
-        }
-
-        public SkipByUserIdResult WithTransactionId(string transactionId) {
-            this.TransactionId = transactionId;
-            return this;
-        }
-
-        public SkipByUserIdResult WithStampSheet(string stampSheet) {
-            this.StampSheet = stampSheet;
-            return this;
-        }
-
-        public SkipByUserIdResult WithStampSheetEncryptionKeyId(string stampSheetEncryptionKeyId) {
-            this.StampSheetEncryptionKeyId = stampSheetEncryptionKeyId;
-            return this;
-        }
-
-        public SkipByUserIdResult WithAutoRunStampSheet(bool? autoRunStampSheet) {
-            this.AutoRunStampSheet = autoRunStampSheet;
             return this;
         }
 
@@ -73,21 +49,13 @@ namespace Gs2.Gs2Exchange.Result
                 return null;
             }
             return new SkipByUserIdResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.Await.FromJson(data["item"]))
-                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithStampSheet(!data.Keys.Contains("stampSheet") || data["stampSheet"] == null ? null : data["stampSheet"].ToString())
-                .WithStampSheetEncryptionKeyId(!data.Keys.Contains("stampSheetEncryptionKeyId") || data["stampSheetEncryptionKeyId"] == null ? null : data["stampSheetEncryptionKeyId"].ToString())
-                .WithAutoRunStampSheet(!data.Keys.Contains("autoRunStampSheet") || data["autoRunStampSheet"] == null ? null : (bool?)bool.Parse(data["autoRunStampSheet"].ToString()));
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Exchange.Model.Await.FromJson(data["item"]));
         }
 
         public JsonData ToJson()
         {
             return new JsonData {
                 ["item"] = Item?.ToJson(),
-                ["transactionId"] = TransactionId,
-                ["stampSheet"] = StampSheet,
-                ["stampSheetEncryptionKeyId"] = StampSheetEncryptionKeyId,
-                ["autoRunStampSheet"] = AutoRunStampSheet,
             };
         }
 
@@ -96,22 +64,6 @@ namespace Gs2.Gs2Exchange.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 Item.WriteJson(writer);
-            }
-            if (TransactionId != null) {
-                writer.WritePropertyName("transactionId");
-                writer.Write(TransactionId.ToString());
-            }
-            if (StampSheet != null) {
-                writer.WritePropertyName("stampSheet");
-                writer.Write(StampSheet.ToString());
-            }
-            if (StampSheetEncryptionKeyId != null) {
-                writer.WritePropertyName("stampSheetEncryptionKeyId");
-                writer.Write(StampSheetEncryptionKeyId.ToString());
-            }
-            if (AutoRunStampSheet != null) {
-                writer.WritePropertyName("autoRunStampSheet");
-                writer.Write(bool.Parse(AutoRunStampSheet.ToString()));
             }
             writer.WriteObjectEnd();
         }

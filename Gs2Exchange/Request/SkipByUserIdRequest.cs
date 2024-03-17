@@ -36,7 +36,9 @@ namespace Gs2.Gs2Exchange.Request
          public string NamespaceName { set; get; }
          public string UserId { set; get; }
          public string AwaitName { set; get; }
-         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
+         public string SkipType { set; get; }
+         public int? Minutes { set; get; }
+         public float? Rate { set; get; }
          public string TimeOffsetToken { set; get; }
         public string DuplicationAvoider { set; get; }
         public SkipByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -51,8 +53,16 @@ namespace Gs2.Gs2Exchange.Request
             this.AwaitName = awaitName;
             return this;
         }
-        public SkipByUserIdRequest WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
-            this.Config = config;
+        public SkipByUserIdRequest WithSkipType(string skipType) {
+            this.SkipType = skipType;
+            return this;
+        }
+        public SkipByUserIdRequest WithMinutes(int? minutes) {
+            this.Minutes = minutes;
+            return this;
+        }
+        public SkipByUserIdRequest WithRate(float? rate) {
+            this.Rate = rate;
             return this;
         }
         public SkipByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -77,28 +87,21 @@ namespace Gs2.Gs2Exchange.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithAwaitName(!data.Keys.Contains("awaitName") || data["awaitName"] == null ? null : data["awaitName"].ToString())
-                .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Exchange.Model.Config.FromJson(v);
-                }).ToArray())
+                .WithSkipType(!data.Keys.Contains("skipType") || data["skipType"] == null ? null : data["skipType"].ToString())
+                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : (int?)(data["minutes"].ToString().Contains(".") ? (int)double.Parse(data["minutes"].ToString()) : int.Parse(data["minutes"].ToString())))
+                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
-            JsonData configJsonData = null;
-            if (Config != null && Config.Length > 0)
-            {
-                configJsonData = new JsonData();
-                foreach (var confi in Config)
-                {
-                    configJsonData.Add(confi.ToJson());
-                }
-            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["awaitName"] = AwaitName,
-                ["config"] = configJsonData,
+                ["skipType"] = SkipType,
+                ["minutes"] = Minutes,
+                ["rate"] = Rate,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -118,16 +121,17 @@ namespace Gs2.Gs2Exchange.Request
                 writer.WritePropertyName("awaitName");
                 writer.Write(AwaitName.ToString());
             }
-            if (Config != null) {
-                writer.WritePropertyName("config");
-                writer.WriteArrayStart();
-                foreach (var confi in Config)
-                {
-                    if (confi != null) {
-                        confi.WriteJson(writer);
-                    }
-                }
-                writer.WriteArrayEnd();
+            if (SkipType != null) {
+                writer.WritePropertyName("skipType");
+                writer.Write(SkipType.ToString());
+            }
+            if (Minutes != null) {
+                writer.WritePropertyName("minutes");
+                writer.Write((Minutes.ToString().Contains(".") ? (int)double.Parse(Minutes.ToString()) : int.Parse(Minutes.ToString())));
+            }
+            if (Rate != null) {
+                writer.WritePropertyName("rate");
+                writer.Write(float.Parse(Rate.ToString()));
             }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
@@ -141,7 +145,9 @@ namespace Gs2.Gs2Exchange.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += AwaitName + ":";
-            key += Config + ":";
+            key += SkipType + ":";
+            key += Minutes + ":";
+            key += Rate + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

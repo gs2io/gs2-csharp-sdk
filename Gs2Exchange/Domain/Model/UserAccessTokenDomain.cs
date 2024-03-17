@@ -68,7 +68,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string UserId => this.AccessToken.UserId;
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public long? UnlockAt { get; set; }
         public string NextPageToken { get; set; }
 
         public UserAccessTokenDomain(

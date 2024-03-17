@@ -36,7 +36,9 @@ namespace Gs2.Gs2Exchange.Model
         public string RateName { set; get; }
         public string Name { set; get; }
         public int? Count { set; get; }
+        public int? SkipSeconds { set; get; }
         public Gs2.Gs2Exchange.Model.Config[] Config { set; get; }
+        public long? AcquirableAt { set; get; }
         public long? ExchangedAt { set; get; }
         public long? Revision { set; get; }
         public Await WithAwaitId(string awaitId) {
@@ -59,8 +61,16 @@ namespace Gs2.Gs2Exchange.Model
             this.Count = count;
             return this;
         }
+        public Await WithSkipSeconds(int? skipSeconds) {
+            this.SkipSeconds = skipSeconds;
+            return this;
+        }
         public Await WithConfig(Gs2.Gs2Exchange.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public Await WithAcquirableAt(long? acquirableAt) {
+            this.AcquirableAt = acquirableAt;
             return this;
         }
         public Await WithExchangedAt(long? exchangedAt) {
@@ -171,9 +181,11 @@ namespace Gs2.Gs2Exchange.Model
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
+                .WithSkipSeconds(!data.Keys.Contains("skipSeconds") || data["skipSeconds"] == null ? null : (int?)(data["skipSeconds"].ToString().Contains(".") ? (int)double.Parse(data["skipSeconds"].ToString()) : int.Parse(data["skipSeconds"].ToString())))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? new Gs2.Gs2Exchange.Model.Config[]{} : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.Config.FromJson(v);
                 }).ToArray())
+                .WithAcquirableAt(!data.Keys.Contains("acquirableAt") || data["acquirableAt"] == null ? null : (long?)(data["acquirableAt"].ToString().Contains(".") ? (long)double.Parse(data["acquirableAt"].ToString()) : long.Parse(data["acquirableAt"].ToString())))
                 .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : (long?)(data["exchangedAt"].ToString().Contains(".") ? (long)double.Parse(data["exchangedAt"].ToString()) : long.Parse(data["exchangedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
@@ -195,7 +207,9 @@ namespace Gs2.Gs2Exchange.Model
                 ["rateName"] = RateName,
                 ["name"] = Name,
                 ["count"] = Count,
+                ["skipSeconds"] = SkipSeconds,
                 ["config"] = configJsonData,
+                ["acquirableAt"] = AcquirableAt,
                 ["exchangedAt"] = ExchangedAt,
                 ["revision"] = Revision,
             };
@@ -224,6 +238,10 @@ namespace Gs2.Gs2Exchange.Model
                 writer.WritePropertyName("count");
                 writer.Write((Count.ToString().Contains(".") ? (int)double.Parse(Count.ToString()) : int.Parse(Count.ToString())));
             }
+            if (SkipSeconds != null) {
+                writer.WritePropertyName("skipSeconds");
+                writer.Write((SkipSeconds.ToString().Contains(".") ? (int)double.Parse(SkipSeconds.ToString()) : int.Parse(SkipSeconds.ToString())));
+            }
             if (Config != null) {
                 writer.WritePropertyName("config");
                 writer.WriteArrayStart();
@@ -234,6 +252,10 @@ namespace Gs2.Gs2Exchange.Model
                     }
                 }
                 writer.WriteArrayEnd();
+            }
+            if (AcquirableAt != null) {
+                writer.WritePropertyName("acquirableAt");
+                writer.Write((AcquirableAt.ToString().Contains(".") ? (long)double.Parse(AcquirableAt.ToString()) : long.Parse(AcquirableAt.ToString())));
             }
             if (ExchangedAt != null) {
                 writer.WritePropertyName("exchangedAt");
@@ -290,6 +312,14 @@ namespace Gs2.Gs2Exchange.Model
             {
                 diff += (int)(Count - other.Count);
             }
+            if (SkipSeconds == null && SkipSeconds == other.SkipSeconds)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(SkipSeconds - other.SkipSeconds);
+            }
             if (Config == null && Config == other.Config)
             {
                 // null and null
@@ -301,6 +331,14 @@ namespace Gs2.Gs2Exchange.Model
                 {
                     diff += Config[i].CompareTo(other.Config[i]);
                 }
+            }
+            if (AcquirableAt == null && AcquirableAt == other.AcquirableAt)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(AcquirableAt - other.AcquirableAt);
             }
             if (ExchangedAt == null && ExchangedAt == other.ExchangedAt)
             {
@@ -363,9 +401,33 @@ namespace Gs2.Gs2Exchange.Model
                 }
             }
             {
+                if (SkipSeconds < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.skipSeconds.error.invalid"),
+                    });
+                }
+                if (SkipSeconds > 2147483646) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.skipSeconds.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (Config.Length > 32) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("await", "exchange.await.config.error.tooMany"),
+                    });
+                }
+            }
+            {
+                if (AcquirableAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.acquirableAt.error.invalid"),
+                    });
+                }
+                if (AcquirableAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("await", "exchange.await.acquirableAt.error.invalid"),
                     });
                 }
             }
@@ -402,7 +464,9 @@ namespace Gs2.Gs2Exchange.Model
                 RateName = RateName,
                 Name = Name,
                 Count = Count,
+                SkipSeconds = SkipSeconds,
                 Config = Config.Clone() as Gs2.Gs2Exchange.Model.Config[],
+                AcquirableAt = AcquirableAt,
                 ExchangedAt = ExchangedAt,
                 Revision = Revision,
             };

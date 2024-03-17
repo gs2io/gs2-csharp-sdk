@@ -66,7 +66,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string NamespaceName { get; }
         public string UserId { get; }
         public string AwaitName { get; }
-        public long? UnlockAt { get; set; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
 
@@ -290,10 +289,10 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Core.Domain.TransactionDomain> SkipFuture(
+        public IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> SkipFuture(
             SkipByUserIdRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> self)
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
@@ -310,34 +309,19 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.UserId,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
+                var domain = this;
+
+                self.OnComplete(domain);
             }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.AwaitDomain>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Core.Domain.TransactionDomain> SkipAsync(
+        public async UniTask<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> SkipAsync(
             #else
-        public async Task<Gs2.Core.Domain.TransactionDomain> SkipAsync(
+        public async Task<Gs2.Gs2Exchange.Domain.Model.AwaitDomain> SkipAsync(
             #endif
             SkipByUserIdRequest request
         ) {
@@ -350,18 +334,9 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this.UserId,
                 () => this._client.SkipByUserIdAsync(request)
             );
-            var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                this._gs2,
-                this.UserId,
-                result.AutoRunStampSheet ?? false,
-                result.TransactionId,
-                result.StampSheet,
-                result.StampSheetEncryptionKeyId
-            );
-            if (result.StampSheet != null) {
-                await transaction.WaitAsync(true);
-            }
-            return transaction;
+            var domain = this;
+
+            return domain;
         }
         #endif
 

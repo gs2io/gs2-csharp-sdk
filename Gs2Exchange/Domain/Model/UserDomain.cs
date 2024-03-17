@@ -67,7 +67,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
         public string UserId { get; }
         public string TransactionId { get; set; }
         public bool? AutoRunStampSheet { get; set; }
-        public long? UnlockAt { get; set; }
         public string NextPageToken { get; set; }
 
         public UserDomain(
@@ -220,7 +219,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     result?.Item?.UserId,
                     result?.Item?.Name
                 );
-                domain.UnlockAt = result?.UnlockAt;
 
                 self.OnComplete(domain);
             }
@@ -250,7 +248,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 result?.Item?.UserId,
                 result?.Item?.Name
             );
-            domain.UnlockAt = result?.UnlockAt;
 
             return domain;
         }

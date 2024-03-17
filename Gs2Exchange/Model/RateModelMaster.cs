@@ -38,8 +38,6 @@ namespace Gs2.Gs2Exchange.Model
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public string TimingType { set; get; }
         public int? LockTime { set; get; }
-        public bool? EnableSkip { set; get; }
-        public Gs2.Core.Model.ConsumeAction[] SkipConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -70,14 +68,6 @@ namespace Gs2.Gs2Exchange.Model
         }
         public RateModelMaster WithLockTime(int? lockTime) {
             this.LockTime = lockTime;
-            return this;
-        }
-        public RateModelMaster WithEnableSkip(bool? enableSkip) {
-            this.EnableSkip = enableSkip;
-            return this;
-        }
-        public RateModelMaster WithSkipConsumeActions(Gs2.Core.Model.ConsumeAction[] skipConsumeActions) {
-            this.SkipConsumeActions = skipConsumeActions;
             return this;
         }
         public RateModelMaster WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
@@ -183,10 +173,6 @@ namespace Gs2.Gs2Exchange.Model
                 }).ToArray())
                 .WithTimingType(!data.Keys.Contains("timingType") || data["timingType"] == null ? null : data["timingType"].ToString())
                 .WithLockTime(!data.Keys.Contains("lockTime") || data["lockTime"] == null ? null : (int?)(data["lockTime"].ToString().Contains(".") ? (int)double.Parse(data["lockTime"].ToString()) : int.Parse(data["lockTime"].ToString())))
-                .WithEnableSkip(!data.Keys.Contains("enableSkip") || data["enableSkip"] == null ? null : (bool?)bool.Parse(data["enableSkip"].ToString()))
-                .WithSkipConsumeActions(!data.Keys.Contains("skipConsumeActions") || data["skipConsumeActions"] == null || !data["skipConsumeActions"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["skipConsumeActions"].Cast<JsonData>().Select(v => {
-                    return Gs2.Core.Model.ConsumeAction.FromJson(v);
-                }).ToArray())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? new Gs2.Core.Model.AcquireAction[]{} : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
@@ -206,15 +192,6 @@ namespace Gs2.Gs2Exchange.Model
                     consumeActionsJsonData.Add(consumeAction.ToJson());
                 }
             }
-            JsonData skipConsumeActionsJsonData = null;
-            if (SkipConsumeActions != null && SkipConsumeActions.Length > 0)
-            {
-                skipConsumeActionsJsonData = new JsonData();
-                foreach (var skipConsumeAction in SkipConsumeActions)
-                {
-                    skipConsumeActionsJsonData.Add(skipConsumeAction.ToJson());
-                }
-            }
             JsonData acquireActionsJsonData = null;
             if (AcquireActions != null && AcquireActions.Length > 0)
             {
@@ -232,8 +209,6 @@ namespace Gs2.Gs2Exchange.Model
                 ["consumeActions"] = consumeActionsJsonData,
                 ["timingType"] = TimingType,
                 ["lockTime"] = LockTime,
-                ["enableSkip"] = EnableSkip,
-                ["skipConsumeActions"] = skipConsumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -278,21 +253,6 @@ namespace Gs2.Gs2Exchange.Model
             if (LockTime != null) {
                 writer.WritePropertyName("lockTime");
                 writer.Write((LockTime.ToString().Contains(".") ? (int)double.Parse(LockTime.ToString()) : int.Parse(LockTime.ToString())));
-            }
-            if (EnableSkip != null) {
-                writer.WritePropertyName("enableSkip");
-                writer.Write(bool.Parse(EnableSkip.ToString()));
-            }
-            if (SkipConsumeActions != null) {
-                writer.WritePropertyName("skipConsumeActions");
-                writer.WriteArrayStart();
-                foreach (var skipConsumeAction in SkipConsumeActions)
-                {
-                    if (skipConsumeAction != null) {
-                        skipConsumeAction.WriteJson(writer);
-                    }
-                }
-                writer.WriteArrayEnd();
             }
             if (AcquireActions != null) {
                 writer.WritePropertyName("acquireActions");
@@ -383,26 +343,6 @@ namespace Gs2.Gs2Exchange.Model
             else
             {
                 diff += (int)(LockTime - other.LockTime);
-            }
-            if (EnableSkip == null && EnableSkip == other.EnableSkip)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableSkip == other.EnableSkip ? 0 : 1;
-            }
-            if (SkipConsumeActions == null && SkipConsumeActions == other.SkipConsumeActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SkipConsumeActions.Length - other.SkipConsumeActions.Length;
-                for (var i = 0; i < SkipConsumeActions.Length; i++)
-                {
-                    diff += SkipConsumeActions[i].CompareTo(other.SkipConsumeActions[i]);
-                }
             }
             if (AcquireActions == null && AcquireActions == other.AcquireActions)
             {
@@ -502,15 +442,6 @@ namespace Gs2.Gs2Exchange.Model
                     });
                 }
             }
-            if (TimingType == "await") {
-            }
-            {
-                if (SkipConsumeActions.Length > 10) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("rateModelMaster", "exchange.rateModelMaster.skipConsumeActions.error.tooMany"),
-                    });
-                }
-            }
             {
                 if (AcquireActions.Length > 100) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
@@ -565,8 +496,6 @@ namespace Gs2.Gs2Exchange.Model
                 ConsumeActions = ConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
                 TimingType = TimingType,
                 LockTime = LockTime,
-                EnableSkip = EnableSkip,
-                SkipConsumeActions = SkipConsumeActions.Clone() as Gs2.Core.Model.ConsumeAction[],
                 AcquireActions = AcquireActions.Clone() as Gs2.Core.Model.AcquireAction[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

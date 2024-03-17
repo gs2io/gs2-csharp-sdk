@@ -46,6 +46,8 @@ namespace Gs2.Gs2Exchange.Model
                     return UnlockIncrementalExchangeByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
                 case "Gs2Exchange:CreateAwaitByUserId":
                     return CreateAwaitByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Exchange:SkipByUserId":
+                    return SkipByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

@@ -527,6 +527,12 @@ namespace Gs2.Gs2Exchange.Domain
         public static Action<string, CreateAwaitByUserIdRequest, CreateAwaitByUserIdResult> CreateAwaitByUserIdComplete;
     #endif
 
+    #if UNITY_2017_1_OR_NEWER
+        public static UnityEvent<string, SkipByUserIdRequest, SkipByUserIdResult> SkipByUserIdComplete = new UnityEvent<string, SkipByUserIdRequest, SkipByUserIdResult>();
+    #else
+        public static Action<string, SkipByUserIdRequest, SkipByUserIdResult> SkipByUserIdComplete;
+    #endif
+
         public void UpdateCacheFromStampSheet(
                 string transactionId,
                 string method,
@@ -578,6 +584,23 @@ namespace Gs2.Gs2Exchange.Domain
                         );
 
                         CreateAwaitByUserIdComplete?.Invoke(
+                            transactionId,
+                            requestModel,
+                            resultModel
+                        );
+                        break;
+                    }
+                    case "SkipByUserId": {
+                        var requestModel = SkipByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = SkipByUserIdResult.FromJson(JsonMapper.ToObject(result));
+
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            requestModel
+                        );
+
+                        SkipByUserIdComplete?.Invoke(
                             transactionId,
                             requestModel,
                             resultModel
@@ -670,6 +693,23 @@ namespace Gs2.Gs2Exchange.Domain
                     );
 
                     CreateAwaitByUserIdComplete?.Invoke(
+                        job.JobId,
+                        requestModel,
+                        resultModel
+                    );
+                    break;
+                }
+                case "skip_by_user_id": {
+                    var requestModel = SkipByUserIdRequest.FromJson(JsonMapper.ToObject(job.Args));
+                    var resultModel = SkipByUserIdResult.FromJson(JsonMapper.ToObject(result.Result));
+
+                    resultModel.PutCache(
+                        _gs2.Cache,
+                        requestModel.UserId,
+                        requestModel
+                    );
+
+                    SkipByUserIdComplete?.Invoke(
                         job.JobId,
                         requestModel,
                         resultModel

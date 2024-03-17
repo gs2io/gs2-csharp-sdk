@@ -40,6 +40,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -160,6 +161,54 @@ namespace Gs2.Gs2Auth.Domain.Model
                 _gs2.Cache,
                 null,
                 () => this._client.LoginBySignatureAsync(request)
+            );
+            var domain = this;
+            this.Token = domain.Token = result?.Token;
+            this.UserId = domain.UserId = result?.UserId;
+            this.Expire = domain.Expire = result?.Expire;
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenFuture(
+            IssueTimeOffsetTokenByUserIdRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
+            {
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.IssueTimeOffsetTokenByUserIdFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = this;
+                this.Token = domain.Token = result?.Token;
+                this.UserId = domain.UserId = result?.UserId;
+                this.Expire = domain.Expire = result?.Expire;
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenAsync(
+            #else
+        public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenAsync(
+            #endif
+            IssueTimeOffsetTokenByUserIdRequest request
+        ) {
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.IssueTimeOffsetTokenByUserIdAsync(request)
             );
             var domain = this;
             this.Token = domain.Token = result?.Token;
