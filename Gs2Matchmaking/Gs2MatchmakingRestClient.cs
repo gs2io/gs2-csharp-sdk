@@ -3185,6 +3185,233 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
+        public class EarlyCompleteTask : Gs2RestSessionTask<EarlyCompleteRequest, EarlyCompleteResult>
+        {
+            public EarlyCompleteTask(IGs2Session session, RestSessionRequestFactory factory, EarlyCompleteRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(EarlyCompleteRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/gathering/{gatheringName}/user/me/early";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{gatheringName}", !string.IsNullOrEmpty(request.GatheringName) ? request.GatheringName.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator EarlyComplete(
+                Request.EarlyCompleteRequest request,
+                UnityAction<AsyncResult<Result.EarlyCompleteResult>> callback
+        )
+		{
+			var task = new EarlyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EarlyCompleteResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.EarlyCompleteResult> EarlyCompleteFuture(
+                Request.EarlyCompleteRequest request
+        )
+		{
+			return new EarlyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EarlyCompleteResult> EarlyCompleteAsync(
+                Request.EarlyCompleteRequest request
+        )
+		{
+            AsyncResult<Result.EarlyCompleteResult> result = null;
+			await EarlyComplete(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EarlyCompleteTask EarlyCompleteAsync(
+                Request.EarlyCompleteRequest request
+        )
+		{
+			return new EarlyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.EarlyCompleteResult> EarlyCompleteAsync(
+                Request.EarlyCompleteRequest request
+        )
+		{
+			var task = new EarlyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
+        public class EarlyCompleteByUserIdTask : Gs2RestSessionTask<EarlyCompleteByUserIdRequest, EarlyCompleteByUserIdResult>
+        {
+            public EarlyCompleteByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, EarlyCompleteByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(EarlyCompleteByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/gathering/{gatheringName}/user/{userId}/early";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{gatheringName}", !string.IsNullOrEmpty(request.GatheringName) ? request.GatheringName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+
+                if (request.RequestId != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-REQUEST-ID", request.RequestId);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator EarlyCompleteByUserId(
+                Request.EarlyCompleteByUserIdRequest request,
+                UnityAction<AsyncResult<Result.EarlyCompleteByUserIdResult>> callback
+        )
+		{
+			var task = new EarlyCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.EarlyCompleteByUserIdResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.EarlyCompleteByUserIdResult> EarlyCompleteByUserIdFuture(
+                Request.EarlyCompleteByUserIdRequest request
+        )
+		{
+			return new EarlyCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.EarlyCompleteByUserIdResult> EarlyCompleteByUserIdAsync(
+                Request.EarlyCompleteByUserIdRequest request
+        )
+		{
+            AsyncResult<Result.EarlyCompleteByUserIdResult> result = null;
+			await EarlyCompleteByUserId(
+                request,
+                r => result = r
+            );
+            if (result.Error != null)
+            {
+                throw result.Error;
+            }
+            return result.Result;
+        }
+    #else
+		public EarlyCompleteByUserIdTask EarlyCompleteByUserIdAsync(
+                Request.EarlyCompleteByUserIdRequest request
+        )
+		{
+			return new EarlyCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.EarlyCompleteByUserIdResult> EarlyCompleteByUserIdAsync(
+                Request.EarlyCompleteByUserIdRequest request
+        )
+		{
+			var task = new EarlyCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+			    request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class DeleteGatheringTask : Gs2RestSessionTask<DeleteGatheringRequest, DeleteGatheringResult>
         {
             public DeleteGatheringTask(IGs2Session session, RestSessionRequestFactory factory, DeleteGatheringRequest request) : base(session, factory, request)
