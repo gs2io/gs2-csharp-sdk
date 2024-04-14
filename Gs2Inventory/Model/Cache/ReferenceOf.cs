@@ -80,7 +80,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string itemName,
             string itemSetName,
             string referenceOf,
-            Func<IFuture<string[]>> fetchImpl
+            Func<IFuture<string>> fetchImpl
         ) {
             IEnumerator Impl(IFuture<string> self)
             {
@@ -107,7 +107,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     self.OnError(future.Error);
                     yield break;
                 }
-                var value = future.Result == null || future.Result.Length == 0 ? null : future.Result.FirstOrDefault();
+                var value = future.Result;
                 if (value != null) {
                     new ReferenceOf {
                         Name = value,
@@ -142,9 +142,9 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string itemSetName,
             string referenceOf,
     #if UNITY_2017_1_OR_NEWER
-            Func<UniTask<string[]>> fetchImpl
+            Func<UniTask<string>> fetchImpl
     #else
-            Func<Task<string[]>> fetchImpl
+            Func<Task<string>> fetchImpl
     #endif
         ) {
             using (await cache.GetLockObject<ReferenceOf>(
@@ -161,7 +161,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                    ).LockAsync()) {
                 try {
                     var result = await fetchImpl();
-                    var value = result == null || result.Length == 0 ? null : result.FirstOrDefault();
+                    var value = result;
                     if (value != null) {
                         new ReferenceOf {
                             Name = value,

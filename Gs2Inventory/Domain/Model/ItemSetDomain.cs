@@ -41,6 +41,7 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Util.LitJson;
 using Gs2.Core;
 using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -64,19 +65,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
     public partial class ItemSetDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
-        private readonly string _namespaceName;
-        private readonly string _userId;
-        private readonly string _inventoryName;
-        private readonly string _itemName;
-        private readonly string _itemSetName;
+        public string NamespaceName { get; }
+        public string UserId { get; }
+        public string InventoryName { get; }
+        public string ItemName { get; }
+        public string ItemSetName { get; }
         public string Body { get; set; }
         public string Signature { get; set; }
         public long? OverflowCount { get; set; }
-        public string NamespaceName => _namespaceName;
-        public string UserId => _userId;
-        public string InventoryName => _inventoryName;
-        public string ItemName => _itemName;
-        public string ItemSetName => _itemSetName;
 
         public ItemSetDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -90,15 +86,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this._client = new Gs2InventoryRestClient(
                 gs2.RestSession
             );
-            this._namespaceName = namespaceName;
-            this._userId = userId;
-            this._inventoryName = inventoryName;
-            this._itemName = itemName;
-            this._itemSetName = itemSetName;
+            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.InventoryName = inventoryName;
+            this.ItemName = itemName;
+            this.ItemSetName = itemSetName;
         }
         #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
         public Gs2Iterator<string> ReferenceOves(
+            string timeOffsetToken = null
         )
         {
             return new DescribeReferenceOfByUserIdIterator(
@@ -108,17 +104,19 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.UserId,
                 this.ItemName,
-                this.ItemSetName
+                this.ItemSetName,
+                timeOffsetToken
             );
         }
+        #endif
 
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<string> ReferenceOvesAsync(
             #else
-        public Gs2Iterator<string> ReferenceOves(
-            #endif
-        #else
         public DescribeReferenceOfByUserIdIterator ReferenceOvesAsync(
-        #endif
+            #endif
+            string timeOffsetToken = null
         )
         {
             return new DescribeReferenceOfByUserIdIterator(
@@ -128,17 +126,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.UserId,
                 this.ItemName,
-                this.ItemSetName
-        #if UNITY_2017_1_OR_NEWER
+                this.ItemSetName,
+                timeOffsetToken
             #if GS2_ENABLE_UNITASK
             ).GetAsyncEnumerator();
             #else
             );
             #endif
-        #else
-            );
-        #endif
         }
+        #endif
 
         public Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain ReferenceOf(
             string referenceOf
@@ -397,8 +393,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 );
                 yield return future;
                 if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
+                    if (!(future.Error is NotFoundException)) {
+                        self.OnError(future.Error);
+                        yield break;
+                    }
                 }
                 var result = future.Result;
                 var domain = this;
@@ -416,17 +414,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
             #endif
             DeleteItemSetByUserIdRequest request
         ) {
-            request = request
-                .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
-                .WithInventoryName(this.InventoryName)
-                .WithItemName(this.ItemName)
-                .WithItemSetName(this.ItemSetName);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                this.UserId,
-                () => this._client.DeleteItemSetByUserIdAsync(request)
-            );
+            try {
+                request = request
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithInventoryName(this.InventoryName)
+                    .WithItemName(this.ItemName)
+                    .WithItemSetName(this.ItemSetName);
+                var result = await request.InvokeAsync(
+                    _gs2.Cache,
+                    this.UserId,
+                    () => this._client.DeleteItemSetByUserIdAsync(request)
+                );
+            }
+            catch (NotFoundException e) {}
             var domain = this;
             return domain;
         }
@@ -487,10 +488,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[]> AddReferenceOfFuture(
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain> AddReferenceOfFuture(
             AddReferenceOfByUserIdRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[]> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain> self)
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
@@ -509,26 +510,27 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                var domain = result?.Item?.Select(v => new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
-                    _gs2,
+                var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
+                    this._gs2,
                     this.NamespaceName,
                     this.UserId,
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    v
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain>();
+                    request.ReferenceOf
+                );
+
                 self.OnComplete(domain);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[]> AddReferenceOfAsync(
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain> AddReferenceOfAsync(
             #else
-        public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain[]> AddReferenceOfAsync(
+        public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain> AddReferenceOfAsync(
             #endif
             AddReferenceOfByUserIdRequest request
         ) {
@@ -543,15 +545,16 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.UserId,
                 () => this._client.AddReferenceOfByUserIdAsync(request)
             );
-            var domain = result?.Item?.Select(v => new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
-                _gs2,
+            var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain(
+                this._gs2,
                 this.NamespaceName,
                 this.UserId,
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                v
-            )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.ReferenceOfDomain>();
+                request.ReferenceOf
+            );
+
             return domain;
         }
         #endif

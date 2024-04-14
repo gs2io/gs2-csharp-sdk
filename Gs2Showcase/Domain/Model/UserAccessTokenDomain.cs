@@ -79,28 +79,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
         }
-
-        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseAccessTokenDomain RandomShowcase(
-            string showcaseName
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.AccessToken,
-                showcaseName
-            );
-        }
-
-        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusAccessTokenDomain RandomShowcaseStatus(
-            string showcaseName
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusAccessTokenDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.AccessToken,
-                showcaseName
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.Showcase> Showcases(
         )
@@ -180,6 +158,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
             string showcaseName
         ) {
             return new Gs2.Gs2Showcase.Domain.Model.ShowcaseAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                showcaseName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseAccessTokenDomain RandomShowcase(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                showcaseName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusAccessTokenDomain RandomShowcaseStatus(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusAccessTokenDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.AccessToken,

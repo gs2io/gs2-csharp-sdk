@@ -33,13 +33,13 @@ namespace Gs2.Gs2Inventory.Result
 	[System.Serializable]
 	public class VerifyReferenceOfByStampTaskResult : IResult
 	{
-        public string[] Item { set; get; }
+        public string Item { set; get; }
         public Gs2.Gs2Inventory.Model.ItemSet ItemSet { set; get; }
         public Gs2.Gs2Inventory.Model.ItemModel ItemModel { set; get; }
         public Gs2.Gs2Inventory.Model.Inventory Inventory { set; get; }
         public string NewContextStack { set; get; }
 
-        public VerifyReferenceOfByStampTaskResult WithItem(string[] item) {
+        public VerifyReferenceOfByStampTaskResult WithItem(string item) {
             this.Item = item;
             return this;
         }
@@ -73,9 +73,7 @@ namespace Gs2.Gs2Inventory.Result
                 return null;
             }
             return new VerifyReferenceOfByStampTaskResult()
-                .WithItem(!data.Keys.Contains("item") || data["item"] == null || !data["item"].IsArray ? new string[]{} : data["item"].Cast<JsonData>().Select(v => {
-                    return v.ToString();
-                }).ToArray())
+                .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : data["item"].ToString())
                 .WithItemSet(!data.Keys.Contains("itemSet") || data["itemSet"] == null ? null : Gs2.Gs2Inventory.Model.ItemSet.FromJson(data["itemSet"]))
                 .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
                 .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]))
@@ -84,17 +82,8 @@ namespace Gs2.Gs2Inventory.Result
 
         public JsonData ToJson()
         {
-            JsonData itemJsonData = null;
-            if (Item != null && Item.Length > 0)
-            {
-                itemJsonData = new JsonData();
-                foreach (var ite in Item)
-                {
-                    itemJsonData.Add(ite);
-                }
-            }
             return new JsonData {
-                ["item"] = itemJsonData,
+                ["item"] = Item,
                 ["itemSet"] = ItemSet?.ToJson(),
                 ["itemModel"] = ItemModel?.ToJson(),
                 ["inventory"] = Inventory?.ToJson(),
@@ -107,14 +96,7 @@ namespace Gs2.Gs2Inventory.Result
             writer.WriteObjectStart();
             if (Item != null) {
                 writer.WritePropertyName("item");
-                writer.WriteArrayStart();
-                foreach (var ite in Item)
-                {
-                    if (ite != null) {
-                        writer.Write(ite.ToString());
-                    }
-                }
-                writer.WriteArrayEnd();
+                writer.Write(Item.ToString());
             }
             if (ItemSet != null) {
                 ItemSet.WriteJson(writer);

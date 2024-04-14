@@ -275,6 +275,114 @@ namespace Gs2.Gs2Project
 #endif
 
 
+        public class SignInTask : Gs2WebSocketSessionTask<Request.SignInRequest, Result.SignInResult>
+        {
+	        public SignInTask(IGs2Session session, Request.SignInRequest request) : base(session, request)
+	        {
+	        }
+
+            protected override IGs2SessionRequest CreateRequest(Request.SignInRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.Email != null)
+                {
+                    jsonWriter.WritePropertyName("email");
+                    jsonWriter.Write(request.Email.ToString());
+                }
+                if (request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(request.Password.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.RequestId != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2RequestId");
+                    jsonWriter.Write(request.RequestId);
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "project",
+                    "account",
+                    "signIn",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator SignIn(
+                Request.SignInRequest request,
+                UnityAction<AsyncResult<Result.SignInResult>> callback
+        )
+		{
+			var task = new SignInTask(
+			    Gs2WebSocketSession,
+			    request
+            );
+            yield return task;
+            callback.Invoke(new AsyncResult<Result.SignInResult>(task.Result, task.Error));
+        }
+
+		public IFuture<Result.SignInResult> SignInFuture(
+                Request.SignInRequest request
+        )
+		{
+			return new SignInTask(
+			    Gs2WebSocketSession,
+			    request
+			);
+        }
+
+    #if GS2_ENABLE_UNITASK
+		public async UniTask<Result.SignInResult> SignInAsync(
+            Request.SignInRequest request
+        )
+		{
+		    var task = new SignInTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+    #else
+		public SignInTask SignInAsync(
+                Request.SignInRequest request
+        )
+		{
+			return new SignInTask(
+                Gs2WebSocketSession,
+			    request
+            );
+        }
+    #endif
+#else
+		public async Task<Result.SignInResult> SignInAsync(
+            Request.SignInRequest request
+        )
+		{
+		    var task = new SignInTask(
+		        Gs2WebSocketSession,
+		        request
+            );
+			return await task.Invoke();
+        }
+#endif
+
+
         public class ForgetTask : Gs2WebSocketSessionTask<Request.ForgetRequest, Result.ForgetResult>
         {
 	        public ForgetTask(IGs2Session session, Request.ForgetRequest request) : base(session, request)

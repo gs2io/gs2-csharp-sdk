@@ -76,6 +76,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         public string UserId { get; }
         public string ItemName { get; }
         public string ItemSetName { get; }
+        public string TimeOffsetToken { get; }
         private bool _isCacheChecked;
         private bool _last;
         private string[] _result;
@@ -89,7 +90,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             string inventoryName,
             string userId,
             string itemName,
-            string itemSetName
+            string itemSetName = null,
+            string timeOffsetToken = null
         ) {
             this._cache = cache;
             this._client = client;
@@ -98,6 +100,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             this.UserId = userId;
             this.ItemName = itemName;
             this.ItemSetName = itemSetName;
+            this.TimeOffsetToken = timeOffsetToken;
             this._last = false;
             this._result = new string[]{};
 

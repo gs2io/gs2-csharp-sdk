@@ -168,6 +168,26 @@ namespace Gs2.Gs2Mission.Domain.Model
                 missionGroupName
             );
         }
+
+        public Gs2.Gs2Mission.Domain.Model.UserDomain User(
+            string userId
+        ) {
+            return new Gs2.Gs2Mission.Domain.Model.UserDomain(
+                this._gs2,
+                this.NamespaceName,
+                userId
+            );
+        }
+
+        public UserAccessTokenDomain AccessToken(
+            AccessToken accessToken
+        ) {
+            return new UserAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                accessToken
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Mission.Model.CounterModel> CounterModels(
         )
@@ -248,24 +268,84 @@ namespace Gs2.Gs2Mission.Domain.Model
                 counterName
             );
         }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Mission.Model.CounterModelMaster> CounterModelMasters(
+        )
+        {
+            return new DescribeCounterModelMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
 
-        public Gs2.Gs2Mission.Domain.Model.UserDomain User(
-            string userId
-        ) {
-            return new Gs2.Gs2Mission.Domain.Model.UserDomain(
-                this._gs2,
-                this.NamespaceName,
-                userId
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.CounterModelMaster> CounterModelMastersAsync(
+            #else
+        public DescribeCounterModelMastersIterator CounterModelMastersAsync(
+            #endif
+        )
+        {
+            return new DescribeCounterModelMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeCounterModelMasters(
+            Action<Gs2.Gs2Mission.Model.CounterModelMaster[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
             );
         }
 
-        public UserAccessTokenDomain AccessToken(
-            AccessToken accessToken
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeCounterModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Mission.Model.CounterModelMaster[]> callback
+        )
+        {
+            var items = await CounterModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeCounterModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeCounterModelMasters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
+                (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain CounterModelMaster(
+            string counterName
         ) {
-            return new UserAccessTokenDomain(
+            return new Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain(
                 this._gs2,
                 this.NamespaceName,
-                accessToken
+                counterName
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -346,86 +426,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 missionGroupName
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Mission.Model.CounterModelMaster> CounterModelMasters(
-        )
-        {
-            return new DescribeCounterModelMastersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName
-            );
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.CounterModelMaster> CounterModelMastersAsync(
-            #else
-        public DescribeCounterModelMastersIterator CounterModelMastersAsync(
-            #endif
-        )
-        {
-            return new DescribeCounterModelMastersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        }
-        #endif
-
-        public ulong SubscribeCounterModelMasters(
-            Action<Gs2.Gs2Mission.Model.CounterModelMaster[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
-                (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
-                    this.NamespaceName
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeCounterModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Mission.Model.CounterModelMaster[]> callback
-        )
-        {
-            var items = await CounterModelMastersAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeCounterModelMasters(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeCounterModelMasters(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Mission.Model.CounterModelMaster>(
-                (null as Gs2.Gs2Mission.Model.CounterModelMaster).CacheParentKey(
-                    this.NamespaceName
-                ),
-                callbackId
-            );
-        }
-
-        public Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain CounterModelMaster(
-            string counterName
-        ) {
-            return new Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain(
-                this._gs2,
-                this.NamespaceName,
-                counterName
             );
         }
 
@@ -626,62 +626,6 @@ namespace Gs2.Gs2Mission.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> CreateMissionGroupModelMasterFuture(
-            CreateMissionGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    () => this._client.CreateMissionGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> CreateMissionGroupModelMasterAsync(
-            #else
-        public async Task<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> CreateMissionGroupModelMasterAsync(
-            #endif
-            CreateMissionGroupModelMasterRequest request
-        ) {
-            request = request
-                .WithNamespaceName(this.NamespaceName);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                null,
-                () => this._client.CreateMissionGroupModelMasterAsync(request)
-            );
-            var domain = new Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain(
-                this._gs2,
-                this.NamespaceName,
-                result?.Item?.Name
-            );
-
-            return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain> CreateCounterModelMasterFuture(
             CreateCounterModelMasterRequest request
         ) {
@@ -728,6 +672,62 @@ namespace Gs2.Gs2Mission.Domain.Model
                 () => this._client.CreateCounterModelMasterAsync(request)
             );
             var domain = new Gs2.Gs2Mission.Domain.Model.CounterModelMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> CreateMissionGroupModelMasterFuture(
+            CreateMissionGroupModelMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> self)
+            {
+                request = request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateMissionGroupModelMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> CreateMissionGroupModelMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> CreateMissionGroupModelMasterAsync(
+            #endif
+            CreateMissionGroupModelMasterRequest request
+        ) {
+            request = request
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateMissionGroupModelMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain(
                 this._gs2,
                 this.NamespaceName,
                 result?.Item?.Name

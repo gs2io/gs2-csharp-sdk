@@ -80,84 +80,12 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
             this.NamespaceName = namespaceName;
         }
-        #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMasters(
-        )
-        {
-            return new DescribeRandomShowcaseMastersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName
-            );
-        }
-        #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMastersAsync(
-            #else
-        public DescribeRandomShowcaseMastersIterator RandomShowcaseMastersAsync(
-            #endif
-        )
-        {
-            return new DescribeRandomShowcaseMastersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        }
-        #endif
-
-        public ulong SubscribeRandomShowcaseMasters(
-            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
-                    this.NamespaceName
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeRandomShowcaseMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
-        )
-        {
-            var items = await RandomShowcaseMastersAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeRandomShowcaseMasters(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeRandomShowcaseMasters(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
-                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
-                    this.NamespaceName
-                ),
-                callbackId
-            );
-        }
-
-        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain RandomShowcaseMaster(
-            string showcaseName
+        public Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain CurrentShowcaseMaster(
         ) {
-            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
+            return new Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain(
                 this._gs2,
-                this.NamespaceName,
-                showcaseName
+                this.NamespaceName
             );
         }
         #if UNITY_2017_1_OR_NEWER
@@ -321,14 +249,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
         }
 
-        public Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain CurrentShowcaseMaster(
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.CurrentShowcaseMasterDomain(
-                this._gs2,
-                this.NamespaceName
-            );
-        }
-
         public Gs2.Gs2Showcase.Domain.Model.UserDomain User(
             string userId
         ) {
@@ -423,6 +343,86 @@ namespace Gs2.Gs2Showcase.Domain.Model
             string showcaseName
         ) {
             return new Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                showcaseName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMasters(
+        )
+        {
+            return new DescribeRandomShowcaseMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> RandomShowcaseMastersAsync(
+            #else
+        public DescribeRandomShowcaseMastersIterator RandomShowcaseMastersAsync(
+            #endif
+        )
+        {
+            return new DescribeRandomShowcaseMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeRandomShowcaseMasters(
+            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeRandomShowcaseMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Showcase.Model.RandomShowcaseMaster[]> callback
+        )
+        {
+            var items = await RandomShowcaseMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeRandomShowcaseMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeRandomShowcaseMasters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>(
+                (null as Gs2.Gs2Showcase.Model.RandomShowcaseMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain RandomShowcaseMaster(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
                 this._gs2,
                 this.NamespaceName,
                 showcaseName
@@ -626,62 +626,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterFuture(
-            CreateRandomShowcaseMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    () => this._client.CreateRandomShowcaseMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterAsync(
-            #else
-        public async Task<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterAsync(
-            #endif
-            CreateRandomShowcaseMasterRequest request
-        ) {
-            request = request
-                .WithNamespaceName(this.NamespaceName);
-            var result = await request.InvokeAsync(
-                _gs2.Cache,
-                null,
-                () => this._client.CreateRandomShowcaseMasterAsync(request)
-            );
-            var domain = new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
-                this._gs2,
-                this.NamespaceName,
-                result?.Item?.Name
-            );
-
-            return domain;
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Domain.Model.SalesItemMasterDomain> CreateSalesItemMasterFuture(
             CreateSalesItemMasterRequest request
         ) {
@@ -840,6 +784,62 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 () => this._client.CreateShowcaseMasterAsync(request)
             );
             var domain = new Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.Name
+            );
+
+            return domain;
+        }
+        #endif
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterFuture(
+            CreateRandomShowcaseMasterRequest request
+        ) {
+            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> self)
+            {
+                request = request
+                    .WithNamespaceName(this.NamespaceName);
+                var future = request.InvokeFuture(
+                    _gs2.Cache,
+                    null,
+                    () => this._client.CreateRandomShowcaseMasterFuture(request)
+                );
+                yield return future;
+                if (future.Error != null) {
+                    self.OnError(future.Error);
+                    yield break;
+                }
+                var result = future.Result;
+                var domain = new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
+                    this._gs2,
+                    this.NamespaceName,
+                    result?.Item?.Name
+                );
+
+                self.OnComplete(domain);
+            }
+            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain>(Impl);
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if UNITY_2017_1_OR_NEWER
+        public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterAsync(
+            #else
+        public async Task<Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain> CreateRandomShowcaseMasterAsync(
+            #endif
+            CreateRandomShowcaseMasterRequest request
+        ) {
+            request = request
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                () => this._client.CreateRandomShowcaseMasterAsync(request)
+            );
+            var domain = new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseMasterDomain(
                 this._gs2,
                 this.NamespaceName,
                 result?.Item?.Name

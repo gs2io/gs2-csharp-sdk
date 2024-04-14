@@ -170,7 +170,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         public Gs2.Gs2Inventory.Domain.Model.UserDomain User(
-            string userId
+            string userId = null
         ) {
             return new Gs2.Gs2Inventory.Domain.Model.UserDomain(
                 this._gs2,
@@ -349,86 +349,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
         }
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> BigInventoryModelMasters(
-        )
-        {
-            return new DescribeBigInventoryModelMastersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName
-            );
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> BigInventoryModelMastersAsync(
-            #else
-        public DescribeBigInventoryModelMastersIterator BigInventoryModelMastersAsync(
-            #endif
-        )
-        {
-            return new DescribeBigInventoryModelMastersIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        }
-        #endif
-
-        public ulong SubscribeBigInventoryModelMasters(
-            Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
-                (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
-                    this.NamespaceName
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeBigInventoryModelMastersWithInitialCallAsync(
-            Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]> callback
-        )
-        {
-            var items = await BigInventoryModelMastersAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeBigInventoryModelMasters(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeBigInventoryModelMasters(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
-                (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
-                    this.NamespaceName
-                ),
-                callbackId
-            );
-        }
-
-        public Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain BigInventoryModelMaster(
-            string inventoryName
-        ) {
-            return new Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain(
-                this._gs2,
-                this.NamespaceName,
-                inventoryName
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Inventory.Model.BigInventoryModel> BigInventoryModels(
         )
         {
@@ -503,6 +423,86 @@ namespace Gs2.Gs2Inventory.Domain.Model
             string inventoryName
         ) {
             return new Gs2.Gs2Inventory.Domain.Model.BigInventoryModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                inventoryName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> BigInventoryModelMasters(
+        )
+        {
+            return new DescribeBigInventoryModelMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> BigInventoryModelMastersAsync(
+            #else
+        public DescribeBigInventoryModelMastersIterator BigInventoryModelMastersAsync(
+            #endif
+        )
+        {
+            return new DescribeBigInventoryModelMastersIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeBigInventoryModelMasters(
+            Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeBigInventoryModelMastersWithInitialCallAsync(
+            Action<Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]> callback
+        )
+        {
+            var items = await BigInventoryModelMastersAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeBigInventoryModelMasters(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeBigInventoryModelMasters(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
+                    this.NamespaceName
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain BigInventoryModelMaster(
+            string inventoryName
+        ) {
+            return new Gs2.Gs2Inventory.Domain.Model.BigInventoryModelMasterDomain(
                 this._gs2,
                 this.NamespaceName,
                 inventoryName

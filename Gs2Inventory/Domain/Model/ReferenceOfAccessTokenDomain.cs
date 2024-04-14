@@ -12,8 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -95,10 +93,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        private IFuture<string[]> GetFuture(
+        private IFuture<string> GetFuture(
             GetReferenceOfRequest request
         ) {
-            IEnumerator Impl(IFuture<string[]> self)
+            IEnumerator Impl(IFuture<string> self)
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
@@ -120,15 +118,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 var result = future.Result;
                 self.OnComplete(result?.Item);
             }
-            return new Gs2InlineFuture<string[]>(Impl);
+            return new Gs2InlineFuture<string>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        private async UniTask<string[]> GetAsync(
+        private async UniTask<string> GetAsync(
             #else
-        private async Task<string[]> GetAsync(
+        private async Task<string> GetAsync(
             #endif
             GetReferenceOfRequest request
         ) {
@@ -149,10 +147,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> VerifyFuture(
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> VerifyFuture(
             VerifyReferenceOfRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> self)
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
@@ -172,26 +170,27 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     yield break;
                 }
                 var result = future.Result;
-                var domain = result?.Item?.Select(v => new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
-                    _gs2,
+                var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
+                    this._gs2,
                     this.NamespaceName,
                     this.AccessToken,
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    v
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>();
+                    request.ReferenceOf
+                );
+
                 self.OnComplete(domain);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> VerifyAsync(
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> VerifyAsync(
             #else
-        public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> VerifyAsync(
+        public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> VerifyAsync(
             #endif
             VerifyReferenceOfRequest request
         ) {
@@ -207,24 +206,25 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.UserId,
                 () => this._client.VerifyReferenceOfAsync(request)
             );
-            var domain = result?.Item?.Select(v => new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
-                _gs2,
+            var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
+                this._gs2,
                 this.NamespaceName,
                 this.AccessToken,
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                v
-            )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>();
+                request.ReferenceOf
+            );
+
             return domain;
         }
         #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> DeleteFuture(
+        public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> DeleteFuture(
             DeleteReferenceOfRequest request
         ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> self)
+            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> self)
             {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
@@ -246,30 +246,30 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     }
                 }
                 var result = future.Result;
-                var domain = result?.Item?.Select(v => new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
-                    _gs2,
+                var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
+                    this._gs2,
                     this.NamespaceName,
                     this.AccessToken,
                     this.InventoryName,
                     this.ItemName,
                     this.ItemSetName,
-                    v
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>();
+                    request.ReferenceOf
+                );
+
                 self.OnComplete(domain);
             }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]>(Impl);
+            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>(Impl);
         }
         #endif
 
         #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> DeleteAsync(
+        public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> DeleteAsync(
             #else
-        public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain[]> DeleteAsync(
+        public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> DeleteAsync(
             #endif
             DeleteReferenceOfRequest request
         ) {
-            string[] items = null;
             try {
                 request = request
                     .WithNamespaceName(this.NamespaceName)
@@ -283,18 +283,17 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.UserId,
                     () => this._client.DeleteReferenceOfAsync(request)
                 );
-                items = result?.Item;
             }
             catch (NotFoundException e) {}
-            var domain = items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
-                _gs2,
+            var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
+                this._gs2,
                 this.NamespaceName,
                 this.AccessToken,
                 this.InventoryName,
                 this.ItemName,
                 this.ItemSetName,
-                v
-            )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>();
+                request.ReferenceOf
+            );
             return domain;
         }
         #endif

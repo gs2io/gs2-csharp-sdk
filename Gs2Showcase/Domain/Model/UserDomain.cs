@@ -78,28 +78,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
         }
-
-        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain RandomShowcase(
-            string showcaseName
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.UserId,
-                showcaseName
-            );
-        }
-
-        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusDomain RandomShowcaseStatus(
-            string showcaseName
-        ) {
-            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.UserId,
-                showcaseName
-            );
-        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Showcase.Model.Showcase> Showcases(
             string timeOffsetToken = null
@@ -183,6 +161,28 @@ namespace Gs2.Gs2Showcase.Domain.Model
             string showcaseName
         ) {
             return new Gs2.Gs2Showcase.Domain.Model.ShowcaseDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                showcaseName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain RandomShowcase(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId,
+                showcaseName
+            );
+        }
+
+        public Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusDomain RandomShowcaseStatus(
+            string showcaseName
+        ) {
+            return new Gs2.Gs2Showcase.Domain.Model.RandomShowcaseStatusDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId,

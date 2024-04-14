@@ -147,7 +147,7 @@ namespace Gs2.Gs2Version.Model
                 }
             }
             {
-                if (NamespaceName.Length > 128) {
+                if (NamespaceName.Length > 32) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("signTargetVersion", "version.signTargetVersion.namespaceName.error.tooLong"),
                     });

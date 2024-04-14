@@ -82,93 +82,6 @@ namespace Gs2.Gs2Quest.Domain.Model
             this.UserId = userId;
         }
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Iterator<Gs2.Gs2Quest.Model.Progress> Progresses(
-            string timeOffsetToken = null
-        )
-        {
-            return new DescribeProgressesByUserIdIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName,
-                this.UserId,
-                timeOffsetToken
-            );
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.Progress> ProgressesAsync(
-            #else
-        public DescribeProgressesByUserIdIterator ProgressesAsync(
-            #endif
-            string timeOffsetToken = null
-        )
-        {
-            return new DescribeProgressesByUserIdIterator(
-                this._gs2.Cache,
-                this._client,
-                this.NamespaceName,
-                this.UserId,
-                timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
-            );
-            #endif
-        }
-        #endif
-
-        public ulong SubscribeProgresses(
-            Action<Gs2.Gs2Quest.Model.Progress[]> callback
-        )
-        {
-            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.Progress>(
-                (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                callback
-            );
-        }
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask<ulong> SubscribeProgressesWithInitialCallAsync(
-            Action<Gs2.Gs2Quest.Model.Progress[]> callback
-        )
-        {
-            var items = await ProgressesAsync(
-            ).ToArrayAsync();
-            var callbackId = SubscribeProgresses(
-                callback
-            );
-            callback.Invoke(items);
-            return callbackId;
-        }
-        #endif
-
-        public void UnsubscribeProgresses(
-            ulong callbackId
-        )
-        {
-            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Progress>(
-                (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
-                    this.NamespaceName,
-                    this.UserId
-                ),
-                callbackId
-            );
-        }
-
-        public Gs2.Gs2Quest.Domain.Model.ProgressDomain Progress(
-        ) {
-            return new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.UserId
-            );
-        }
-        #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Quest.Model.CompletedQuestList> CompletedQuestLists(
             string timeOffsetToken = null
         )
@@ -255,6 +168,93 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 questGroupName
+            );
+        }
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Quest.Model.Progress> Progresses(
+            string timeOffsetToken = null
+        )
+        {
+            return new DescribeProgressesByUserIdIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.UserId,
+                timeOffsetToken
+            );
+        }
+        #endif
+
+        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.Progress> ProgressesAsync(
+            #else
+        public DescribeProgressesByUserIdIterator ProgressesAsync(
+            #endif
+            string timeOffsetToken = null
+        )
+        {
+            return new DescribeProgressesByUserIdIterator(
+                this._gs2.Cache,
+                this._client,
+                this.NamespaceName,
+                this.UserId,
+                timeOffsetToken
+            #if GS2_ENABLE_UNITASK
+            ).GetAsyncEnumerator();
+            #else
+            );
+            #endif
+        }
+        #endif
+
+        public ulong SubscribeProgresses(
+            Action<Gs2.Gs2Quest.Model.Progress[]> callback
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Quest.Model.Progress>(
+                (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callback
+            );
+        }
+
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeProgressesWithInitialCallAsync(
+            Action<Gs2.Gs2Quest.Model.Progress[]> callback
+        )
+        {
+            var items = await ProgressesAsync(
+            ).ToArrayAsync();
+            var callbackId = SubscribeProgresses(
+                callback
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+        #endif
+
+        public void UnsubscribeProgresses(
+            ulong callbackId
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Quest.Model.Progress>(
+                (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId
+                ),
+                callbackId
+            );
+        }
+
+        public Gs2.Gs2Quest.Domain.Model.ProgressDomain Progress(
+        ) {
+            return new Gs2.Gs2Quest.Domain.Model.ProgressDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId
             );
         }
 

@@ -68,17 +68,16 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.UserId,
                 request.InventoryName
             );
-            foreach (var referenceOf in self.Item.Select(v => new ReferenceOf().WithName(v))) {
-                referenceOf.PutCache(
-                    cache,
-                    request.NamespaceName,
-                    request.UserId,
-                    request.InventoryName,
-                    request.ItemName,
-                    request.ItemSetName,
-                    referenceOf.Name
-                );
-            }
+            var referenceOf = new ReferenceOf().WithName(request.ReferenceOf);
+            referenceOf.PutCache(
+                cache,
+                request.NamespaceName,
+                request.UserId,
+                request.InventoryName,
+                request.ItemName,
+                request.ItemSetName,
+                referenceOf.Name
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

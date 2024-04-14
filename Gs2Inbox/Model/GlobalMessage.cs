@@ -289,7 +289,7 @@ namespace Gs2.Gs2Inbox.Model
                 }
             }
             {
-                if (ReadAcquireActions.Length > 1000) {
+                if (ReadAcquireActions.Length > 100) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("globalMessage", "inbox.globalMessage.readAcquireActions.error.tooMany"),
                     });

@@ -38,6 +38,7 @@ namespace Gs2.Gs2Script.Request
          public string Args { set; get; }
          public Gs2.Gs2Script.Model.RandomStatus RandomStatus { set; get; }
          public string TimeOffsetToken { set; get; }
+        public string DuplicationAvoider { set; get; }
         public InvokeScriptRequest WithScriptId(string scriptId) {
             this.ScriptId = scriptId;
             return this;
@@ -56,6 +57,11 @@ namespace Gs2.Gs2Script.Request
         }
         public InvokeScriptRequest WithTimeOffsetToken(string timeOffsetToken) {
             this.TimeOffsetToken = timeOffsetToken;
+            return this;
+        }
+
+        public InvokeScriptRequest WithDuplicationAvoider(string duplicationAvoider) {
+            this.DuplicationAvoider = duplicationAvoider;
             return this;
         }
 

@@ -84,7 +84,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
             Gs2DatastoreRestClient client,
             string namespaceName,
             AccessToken accessToken,
-            string dataObjectName
+            string dataObjectName = null
         ) {
             this._cache = cache;
             this._client = client;
@@ -115,7 +115,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
                     (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        DataObjectName
+                        DataObjectName ?? default
                     ),
                     out var list
             )) {
@@ -155,7 +155,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
                         this._cache,
                         NamespaceName,
                         AccessToken?.UserId,
-                        DataObjectName,
+                        DataObjectName ?? default,
                         item.Generation
                     );
                 }
@@ -165,7 +165,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
                         (null as Gs2.Gs2Datastore.Model.DataObjectHistory).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            DataObjectName
+                            DataObjectName ?? default
                         )
                     );
                 }

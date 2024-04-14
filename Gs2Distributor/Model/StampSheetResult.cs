@@ -467,7 +467,7 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (TaskRequests.Length > 1000) {
+                if (TaskRequests.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskRequests.error.tooMany"),
                     });
@@ -476,14 +476,14 @@ namespace Gs2.Gs2Distributor.Model
             {
             }
             {
-                if (TaskResultCodes.Length > 1000) {
+                if (TaskResultCodes.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResultCodes.error.tooMany"),
                     });
                 }
             }
             {
-                if (TaskResults.Length > 1000) {
+                if (TaskResults.Length > 10) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResults.error.tooMany"),
                     });
